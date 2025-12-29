@@ -13,6 +13,7 @@ export default function SEOServicesPage() {
       icon={Search}
       title="SEO Services"
       description="Get found by customers actively searching for your services. Our comprehensive SEO approach combines technical expertise with strategic content optimization to improve your search rankings and drive qualified traffic."
+      serviceUrl="https://yourdedicatedmarketer.com/services/seo"
       included={[
         'Comprehensive technical SEO audit',
         'On-page optimization for all key pages',

@@ -25,6 +25,7 @@ export interface ServiceDetailProps {
     href: string
   }[]
   faqs: AccordionItem[]
+  serviceUrl?: string
 }
 
 export default function ServiceDetailLayout({
@@ -36,9 +37,58 @@ export default function ServiceDetailLayout({
   whoItsFor,
   pricing,
   faqs,
+  serviceUrl,
 }: ServiceDetailProps) {
+  // Structured data for Service
+  const serviceStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: title,
+    description: description,
+    provider: {
+      '@type': 'Organization',
+      name: 'Your Dedicated Marketer',
+      url: 'https://yourdedicatedmarketer.com',
+    },
+    url: serviceUrl || `https://yourdedicatedmarketer.com/services`,
+    serviceType: title,
+    areaServed: {
+      '@type': 'Country',
+      name: 'United States',
+    },
+    offers: pricing.map((tier) => ({
+      '@type': 'Offer',
+      name: `${title} - ${tier.tier}`,
+      description: tier.description,
+      url: `https://yourdedicatedmarketer.com${tier.href}`,
+    })),
+  }
+
+  // Structured data for FAQs
+  const faqStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceStructuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+      />
+
       {/* Hero Section */}
       <Section className="bg-gradient-to-b from-charcoal to-charcoal/95 text-white">
         <Container>

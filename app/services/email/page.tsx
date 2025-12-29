@@ -13,6 +13,7 @@ export default function EmailMarketingPage() {
       icon={Mail}
       title="Email Marketing"
       description="Nurture leads and drive conversions with targeted email campaigns. We create strategic email programs that build relationships with your audience and turn subscribers into customers."
+      serviceUrl="https://yourdedicatedmarketer.com/services/email"
       included={[
         'Email campaign strategy and planning',
         'Professional email copywriting',

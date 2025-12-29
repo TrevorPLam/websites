@@ -13,6 +13,7 @@ export default function SocialMediaPage() {
       icon={Share2}
       title="Social Media Management"
       description="Build community and brand awareness across social platforms. We handle strategy, content creation, posting, and engagement so you can focus on running your business while maintaining an active social presence."
+      serviceUrl="https://yourdedicatedmarketer.com/services/social"
       included={[
         'Platform strategy development',
         'Monthly content calendar creation',

@@ -13,6 +13,7 @@ export default function ContentMarketingPage() {
       icon={FileText}
       title="Content Marketing"
       description="Attract and engage your audience with strategic, high-quality content. We handle everything from planning to publishing, creating content that educates, converts, and builds your brand authority."
+      serviceUrl="https://yourdedicatedmarketer.com/services/content"
       included={[
         'Monthly content calendar planning',
         'Blog post creation (SEO-optimized)',
