@@ -1,0 +1,131 @@
+# Your Dedicated Marketer
+
+## Purpose
+Marketing website for Your Dedicated Marketer, a digital marketing services brand under YD Firms. This site showcases services, case studies, and provides contact forms for prospective clients.
+
+## Problem Statement
+Need a professional, high-performing marketing site that converts visitors into leads while maintaining fast load times and excellent SEO.
+
+## Technical Stack
+- **Frontend**: Next.js 14 (App Router) with TypeScript
+- **Styling**: Tailwind CSS
+- **Forms**: React Hook Form with Zod validation
+- **Email**: Resend API for contact form submissions
+- **Infrastructure**: Cloudflare Pages (static site deployment)
+- **Key Dependencies**: 
+  - next-themes for dark mode
+  - react-hook-form for forms
+  - zod for validation
+  - tailwindcss for styling
+
+## Architecture
+```
+Static Site (Next.js SSG)
+    ↓
+Cloudflare Pages CDN
+    ↓
+Resend API (contact forms)
+```
+
+## Design Principles
+- Performance-first: Lighthouse scores above 90 across all metrics
+- Mobile-first: Responsive design optimized for mobile devices
+- SEO-optimized: Semantic HTML, meta tags, structured data
+- Accessibility: WCAG 2.1 AA compliance minimum
+- Fast builds: Static generation for all pages
+
+## Project Status
+- [ ] Site design and wireframes
+- [ ] Component library setup
+- [ ] Homepage
+- [ ] Services pages
+- [ ] About page
+- [ ] Contact form
+- [ ] Blog setup
+- [ ] SEO optimization
+- [ ] Production deployment
+
+## Quick Start
+
+### Prerequisites
+- Node.js 20.x or higher
+- pnpm 8.x or higher
+
+### Installation
+```bash
+# Clone and setup
+git clone https://github.com/ydFirms/your-dedicated-marketer-site.git
+cd your-dedicated-marketer-site
+
+# Install dependencies
+pnpm install
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your values
+
+# Start development server
+pnpm dev
+```
+
+Application will be running at: http://localhost:3000
+
+## Testing
+```bash
+# Run all tests
+pnpm test
+
+# Run with coverage
+pnpm test:coverage
+
+# Run E2E tests
+pnpm test:e2e
+```
+
+## Common Tasks
+```bash
+# Linting
+pnpm lint
+
+# Format code
+pnpm format
+
+# Build for production
+pnpm build
+
+# Preview production build
+pnpm preview
+
+# Deploy to Cloudflare Pages
+pnpm deploy
+```
+
+## Project Scope
+
+### In Scope
+- Marketing site pages (home, services, about, contact)
+- Blog with MDX support
+- Contact form with email notifications
+- SEO optimization
+- Performance optimization
+- Responsive design
+
+### Out of Scope
+- Client dashboard or portal
+- E-commerce functionality
+- User authentication
+- Backend API (except contact form endpoint)
+- Content management system
+
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and guidelines.
+
+## Security
+Report security vulnerabilities via [SECURITY.md](SECURITY.md).
+
+## Documentation
+- [Architecture decisions](docs/ARCHITECTURE.md)
+- [Development setup](docs/SETUP.md)
+
+## License
+Proprietary - All rights reserved by YD Firms LLC
