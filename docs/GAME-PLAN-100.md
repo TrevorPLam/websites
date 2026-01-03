@@ -1,5 +1,11 @@
 # Game Plan: Achieving 100/100 in All Categories
 
+> **Last Updated:** 2026-01-03  
+> **Canonical Status:** Supporting  
+> **Purpose:** Quality improvement planning and tracking for site metrics  
+> **Note:** This document contains reference checklists for planning. For actionable tasks, see [TODO.md](../TODO.md).  
+> **See Also:** [DOCS_INDEX.md](./DOCS_INDEX.md)
+
 ## Current Status Overview
 
 | Category | Current | Target | Gap | Priority |

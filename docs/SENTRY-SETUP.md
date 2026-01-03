@@ -1,5 +1,10 @@
 # Sentry Setup Guide
 
+> **Last Updated:** 2026-01-03  
+> **Canonical Status:** Canonical  
+> **Purpose:** Sentry error monitoring configuration guide  
+> **See Also:** [DOCS_INDEX.md](./DOCS_INDEX.md), [SECURITY_REVIEW.md](../SECURITY_REVIEW.md)
+
 This guide walks you through setting up Sentry for error monitoring in production.
 
 ## Why Sentry?

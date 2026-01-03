@@ -1,5 +1,10 @@
 # PWA Icons Guide
 
+> **Last Updated:** 2026-01-03  
+> **Canonical Status:** Canonical  
+> **Purpose:** PWA icon specifications and setup instructions  
+> **See Also:** [DOCS_INDEX.md](./DOCS_INDEX.md)
+
 ## Overview
 
 This project is configured as a Progressive Web App (PWA). To complete the setup, you need to generate and add the following icon files to the `/public` directory.

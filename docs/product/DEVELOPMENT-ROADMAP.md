@@ -1,5 +1,11 @@
 # Development Roadmap
 
+> **Last Updated:** 2026-01-03  
+> **Canonical Status:** Supporting  
+> **Purpose:** Historical development phases and completed milestones  
+> **Note:** This document contains reference checklists showing planned work. Most items are completed. For current active tasks, see [TODO.md](../../TODO.md).  
+> **See Also:** [DOCS_INDEX.md](../DOCS_INDEX.md), [DEVELOPMENT-ROADMAP.md](./DEVELOPMENT-ROADMAP.md)
+
 ## Phase 1: Foundation (Week 1-2)
 
 ### Goals
