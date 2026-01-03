@@ -228,8 +228,6 @@ This prevents future churn and re-arguing.
 
 ## Dependency Health Summary (Append Below Each Review)
 
----
-
 ## Dependency Health Summary — 2026-01-03
 
 ### Inventory:

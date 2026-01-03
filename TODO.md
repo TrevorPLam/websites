@@ -198,13 +198,13 @@ Some dependencies are using caret (^) version ranges which could auto-update to 
 **Acceptance Criteria:**
 - [ ] Review security-critical dependencies: zod, @sentry/nextjs, resend, next
 - [ ] Consider exact version pinning (no ^ or ~) for security-critical deps
-- [ ] Document dependency update cadence in DEPENDENCY_HEALTH.md.md (COMPLETED 2026-01-03)
+- [x] Document dependency update cadence in DEPENDENCY_HEALTH.md.md
 - [ ] Set up Dependabot or Renovate for automated security updates
 - [ ] Add "npm audit" to CI/CD or pre-deployment checklist
 
 **Files:**
 - `package.json`
-- `DEPENDENCY_HEALTH.md.md` (policy now documented)
+- `DEPENDENCY_HEALTH.md.md`
 
 **Updates:**
 - 2026-01-03: Dependency health review completed. Update policy now documented in DEPENDENCY_HEALTH.md.md
