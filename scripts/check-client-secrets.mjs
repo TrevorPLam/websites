@@ -27,7 +27,7 @@ const clientFiles = walkFiles(clientBundleDir)
 
 if (clientFiles.length === 0) {
   console.warn('⚠️ No client bundle files found. Run `npm run build` before this check.')
-  process.exit(0)
+  process.exit(1)
 }
 
 const findings = []
