@@ -23,8 +23,8 @@ export async function GET() {
       return `
         <item>
           <title>${escapeXml(post.title)}</title>
-          <link>${postUrl}</link>
-          <guid>${postUrl}</guid>
+            <link>${escapeXml(postUrl)}</link>
+            <guid>${escapeXml(postUrl)}</guid>
           <pubDate>${toRssDate(post.date)}</pubDate>
           <description>${escapeXml(post.description)}</description>
         </item>
