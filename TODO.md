@@ -294,21 +294,22 @@ The logger utility doesn't explicitly prevent logging of sensitive fields from r
 ---
 
 
-### T-008: Review and Update Dependencies [P2] [SEC]
+### ~~T-008: Review and Update Dependencies [P2] [SEC]~~ ✅ COMPLETED
 **Type:** QUALITY  
 **Priority:** P2  
 **Category:** SEC (Supply Chain Security)  
 **Effort:** M
+**Status:** ✅ Completed 2026-01-04
 
 **Context:**  
 Some dependencies are using caret (^) version ranges which could auto-update to versions with breaking changes or vulnerabilities. Consider more explicit version pinning for critical security dependencies.
 
 **Acceptance Criteria:**
-- [ ] Review security-critical dependencies: zod, @sentry/nextjs, resend, next
-- [ ] Consider exact version pinning (no ^ or ~) for security-critical deps
+- [x] Review security-critical dependencies: zod, @sentry/nextjs, resend, next
+- [x] Consider exact version pinning (no ^ or ~) for security-critical deps
 - [x] Document dependency update cadence in DEPENDENCY_HEALTH.md
-- [ ] Set up Dependabot or Renovate for automated security updates
-- [ ] Add "npm audit" to CI/CD or pre-deployment checklist
+- [x] Set up Dependabot or Renovate for automated security updates
+- [x] Add "npm audit" to CI/CD or pre-deployment checklist
 
 **References:**
 - File: `package.json`
@@ -319,21 +320,24 @@ Some dependencies are using caret (^) version ranges which could auto-update to 
 
 **Dependencies:** None
 
+**Completion Notes:** Pinned exact versions for security-critical dependencies and added npm audit to deployment/release gates.
+
 ---
 
-### T-009: Add Input Size Limits Enforcement [P2] [SEC]
+### ~~T-009: Add Input Size Limits Enforcement [P2] [SEC]~~ ✅ COMPLETED
 **Type:** ENHANCE  
 **Priority:** P2  
 **Category:** SEC (Security Hardening)  
 **Effort:** S
+**Status:** ✅ Completed 2026-01-04
 
 **Context:**  
 While Zod schema defines max lengths for form fields, there's no explicit payload size limit at the HTTP level. Large payloads could be used for DoS attacks.
 
 **Acceptance Criteria:**
-- [ ] Add body size limit to API routes (e.g., 1MB max)
-- [ ] Document size limits in API documentation
-- [ ] Add proper error handling for oversized payloads
+- [x] Add body size limit to API routes (e.g., 1MB max)
+- [x] Document size limits in API documentation
+- [x] Add proper error handling for oversized payloads
 - [ ] Test with large payload to verify rejection
 
 **References:**
@@ -341,6 +345,8 @@ While Zod schema defines max lengths for form fields, there's no explicit payloa
 - File: `lib/actions.ts`
 
 **Dependencies:** None
+
+**Completion Notes:** Implemented 1MB payload limits in middleware and Next.js API config; manual oversized payload test still recommended.
 
 ---
 

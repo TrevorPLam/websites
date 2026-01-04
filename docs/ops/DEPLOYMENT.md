@@ -114,9 +114,11 @@ Add these to your deployment platform:
 
 ### 4. Testing
 - [ ] Run `npm run build` successfully
+- [ ] Run `npm audit` and resolve high/critical findings
 - [ ] Test contact form locally
 - [ ] Check all pages in production build (`npm run start`)
 - [ ] Verify SEO tags with browser dev tools
+- [ ] Verify security headers with `curl -I https://yourdomain.com` (CSP, HSTS, etc.)
 - [ ] Test on mobile devices
 
 ## Deployment Options

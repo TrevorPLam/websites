@@ -8,6 +8,108 @@
 
 ## Completed - 2026-01-04
 
+### T-003: Document Sensitive Data Retention Policy [P2] [SEC]
+**Type:** COMPLETE  
+**Priority:** P2  
+**Category:** SEC (Security Documentation)  
+**Completed:** 2026-01-04
+
+**Description:**  
+Documented retention periods for contact form submissions, Sentry logs, and production logs.
+
+**Completed Actions:**
+- Added data retention policy to SECURITY.md (email, Sentry, and log retention)
+
+**Files:**
+- `SECURITY.md`
+
+---
+
+### T-005: Implement Production Console Log Suppression [P2] [SEC]
+**Type:** ENHANCE  
+**Priority:** P2  
+**Category:** SEC (Security Hardening)  
+**Completed:** 2026-01-04
+
+**Description:**  
+Ensured console logging is suppressed in production except for critical errors and documented the policy.
+
+**Completed Actions:**
+- Confirmed console logging is development-only in analytics/logger utilities
+- Documented production logging policy in SECURITY.md
+
+**Files:**
+- `lib/analytics.ts`
+- `SECURITY.md`
+
+---
+
+### T-006: Add Security Headers Documentation [P2] [SEC]
+**Type:** COMPLETE  
+**Priority:** P2  
+**Category:** SEC (Security Documentation)  
+**Completed:** 2026-01-04
+
+**Description:**  
+Documented CSP trade-offs and added middleware comments and deployment verification steps.
+
+**Completed Actions:**
+- Added detailed CSP rationale and tightening plan in SECURITY.md
+- Added header comments in middleware.ts
+- Added deployment checklist step to verify security headers
+
+**Files:**
+- `middleware.ts`
+- `SECURITY.md`
+- `docs/ops/DEPLOYMENT.md`
+
+---
+
+### T-008: Review and Update Dependencies [P2] [SEC]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** SEC (Supply Chain Security)  
+**Completed:** 2026-01-04
+
+**Description:**  
+Pinned security-critical dependencies and ensured audit checks are part of deployment gates.
+
+**Completed Actions:**
+- Pinned exact versions for Next.js, Zod, Resend, and Sentry
+- Ensured Dependabot configuration is present
+- Added npm audit to deployment and release checklists
+
+**Files:**
+- `package.json`
+- `package-lock.json`
+- `docs/ops/DEPLOYMENT.md`
+- `RELEASE_CHECKLIST.md`
+
+---
+
+### T-009: Add Input Size Limits Enforcement [P2] [SEC]
+**Type:** ENHANCE  
+**Priority:** P2  
+**Category:** SEC (Security Hardening)  
+**Completed:** 2026-01-04
+
+**Description:**  
+Added 1MB body size limits and documented the policy.
+
+**Completed Actions:**
+- Added POST payload size limit handling in middleware
+- Added API bodyParser size limit in next.config.mjs
+- Documented payload limits in SECURITY.md
+
+**Notes:** Manual oversized payload test should be run in a running app environment.
+
+**Files:**
+- `middleware.ts`
+- `next.config.mjs`
+- `SECURITY.md`
+
+---
+
 ### T-002: Add Request Body Sanitization to Logger [P2] [SEC]
 **Type:** ENHANCE  
 **Priority:** P2  

@@ -1,9 +1,19 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const MAX_BODY_SIZE_BYTES = 1024 * 1024 // 1MB payload limit for POST requests
+
 export function middleware(request: NextRequest) {
   // Clone the response
   const response = NextResponse.next()
+
+  // Block oversized payloads early to reduce DoS risk.
+  if (request.method === 'POST') {
+    const contentLength = request.headers.get('content-length')
+    if (contentLength && Number(contentLength) > MAX_BODY_SIZE_BYTES) {
+      return new NextResponse('Payload too large', { status: 413 })
+    }
+  }
 
   // Security Headers
   const headers = response.headers
@@ -55,11 +65,10 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }

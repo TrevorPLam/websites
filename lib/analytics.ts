@@ -3,7 +3,7 @@
  * Centralized analytics tracking for consistent event monitoring
  */
 
-import { isDevelopment } from './env'
+import { isDevelopment, isTest } from './env'
 
 interface AnalyticsEvent {
   action: string
@@ -17,7 +17,7 @@ interface AnalyticsEvent {
  * Supports Google Analytics, Plausible, or custom analytics
  */
 export function trackEvent({ action, category, label, value }: AnalyticsEvent) {
-  if (isDevelopment()) {
+  if (isDevelopment() || isTest()) {
     console.log('[Analytics]', { action, category, label, value })
     return
   }
@@ -51,7 +51,7 @@ export function trackEvent({ action, category, label, value }: AnalyticsEvent) {
  * Track page view
  */
 export function trackPageView(url: string) {
-  if (isDevelopment()) {
+  if (isDevelopment() || isTest()) {
     console.log('[Analytics] Page view:', url)
     return
   }

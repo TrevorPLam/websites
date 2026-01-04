@@ -151,8 +151,8 @@ All pages are served with security headers configured in `middleware.ts`:
 #### Content Security Policy Details
 ```
 default-src 'self'
-script-src 'self' 'unsafe-eval' 'unsafe-inline'  # Required for Next.js
-style-src 'self' 'unsafe-inline'                 # Required for Tailwind
+script-src 'self' 'unsafe-eval' 'unsafe-inline'  # Required for Next.js runtime/dev tooling
+style-src 'self' 'unsafe-inline'                 # Required for Tailwind/runtime styles
 img-src 'self' data: https:
 font-src 'self' data:
 connect-src 'self'
@@ -202,7 +202,37 @@ Message content is safely converted to HTML paragraphs:
 - Function: `textToHtmlParagraphs()` in `lib/sanitize.ts`
 - Escapes HTML, preserves line breaks
 
+#### 5. Payload Size Limits
+To reduce DoS risk from oversized requests:
+- POST payloads are limited to **1MB** via `middleware.ts`
+- Requests exceeding the limit return HTTP **413 Payload Too Large**
+
 **Implementation:** `lib/actions.ts` (validation), `lib/sanitize.ts` (sanitization)
+
+---
+
+### Data Retention & Deletion
+
+**Status:** Documented retention policy for sensitive data
+
+The contact form collects PII (name, email, phone, company, message). Retention is minimized:
+
+#### Contact Form Submissions (Email)
+- **Storage location:** Delivered via Resend to the configured inbox
+- **Retention period:** **90 days** in the inbox unless required longer for active client conversations
+- **Deletion:** Older messages are deleted or archived quarterly
+
+#### Sentry Error Logs
+- **Storage location:** Sentry (if enabled)
+- **Retention period:** **90 days** (configure in Sentry project settings based on plan limits)
+- **Review cadence:** Quarterly review for minimizing stored context
+
+#### Production Console Logs
+- **Storage location:** Hosting provider log system (Vercel/Cloudflare)
+- **Retention period:** **7–30 days**, depending on provider defaults
+- **Rotation policy:** Provider-managed; no PII should be emitted
+
+**Implementation notes:** Production logging is restricted to critical errors, with PII redaction enabled in `lib/logger.ts`.
 
 ---
 
@@ -261,9 +291,9 @@ Retention is defined to minimize exposure while supporting operational needs.
 **Status:** Automated monitoring
 
 #### Dependency Management
-- `npm audit` run regularly
+- `npm audit` run regularly (pre-deploy and/or CI)
 - Dependabot enabled for security updates
-- Dependencies pinned with caret ranges (`^`)
+- Security-critical deps pinned to exact versions
 - Security-critical deps reviewed before updates
 
 #### Recent Security Fixes

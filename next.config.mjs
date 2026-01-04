@@ -20,6 +20,11 @@ if (process.env.ANALYZE === 'true') {
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb',
+    },
+  },
   images: {
     formats: ['image/webp'],
     remotePatterns: [],

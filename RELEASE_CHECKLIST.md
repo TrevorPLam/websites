@@ -256,6 +256,7 @@ Because you may not run tests/lint locally, do these “static gates”:
 * No accidental large deletions of critical files.
 * No debug code left behind (obvious console.log, “TEMP”, “REMOVE ME”).
 * No commented-out large blocks used as “feature toggles” (unless explicitly intended).
+* Run `npm audit` (address high/critical issues before release).
 
 1. Error handling & UX sanity
 
