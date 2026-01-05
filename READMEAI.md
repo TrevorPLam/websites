@@ -1,8 +1,46 @@
-# READMEAI - Repository Entrypoint
+# READMEAI - AI Operating Console (Root)
 
-> **Last Updated:** 2026-01-07
-> **Status:** Canonical  
-> **Purpose:** Primary navigation hub for developers and operators working in this repository
+Document Type: Governance
+Version: 3.1.0
+Last Updated: 2026-01-07
+Status: Canonical
+Purpose: Make work in this repo deterministic, auditable, and agent-executable while staying readable for a non-coder owner.
+
+## 📋 Document Precedence
+1. **CODEBASECONSTITUTION.md** (foundational rules)
+2. **READMEAI.md** (this file)
+3. **TODO.md** (task truth source) → **TODOCOMPLETED.md** (archive)
+4. Audit runbooks: **CODEAUDIT.md**, **SECURITYAUDIT.md**, **DEPENDENCYAUDIT.md**, **RELEASEAUDIT.md**, **DOCSAUDIT.md**
+5. Supporting docs/specs (specs/, docs/, DECISIONS.md, etc.)
+
+## 🎯 Start Here (required read order)
+1. `CODEBASECONSTITUTION.md`
+2. `AGENTS.md`
+3. `TODO.md` (task truth source)
+4. Runbooks (use when instructed): `CODEAUDIT.md`, `SECURITYAUDIT.md`, `DEPENDENCYAUDIT.md`, `RELEASEAUDIT.md`, `DOCSAUDIT.md`
+5. `repo.manifest.yaml` (how to run/verify this repo)
+6. `PROJECT_STATUS.md` (current state + next step)
+
+## 🧭 Task Truth Model
+- **Authoritative:** `TODO.md`
+- **Archive:** `TODOCOMPLETED.md`
+- **Non-binding notes:** `specs/` (must be converted into tasks to be actionable)
+- Optional helper: scripts may generate `TODO.generated.md` (informational only)
+
+## 🛠️ Modes
+- **Planner:** propose plan + questions; no code edits
+- **Builder:** implement exactly one task (or a small, linked set)
+- **Auditor:** inspect + create tasks; do not refactor blindly
+- **Status-Sync:** update `PROJECT_STATUS.md` and move completed tasks to `TODOCOMPLETED.md`
+- **Emergency:** stop-the-bleed (secrets/auth/payment)
+
+## ✅ Verification (minimum)
+- Prefer existing repo commands (see `repo.manifest.yaml`).
+- If commands are missing, record **UNKNOWN** and create a task to add them.
+- For UI changes: verify **mobile** behavior explicitly.
+
+## 🚦 GitHub Actions (cost control)
+GitHub Actions are stored under `githubactions/` and are **disabled by default**. See `githubactions/README.md` to enable/disable.
 
 ---
 
@@ -45,20 +83,20 @@ npm run check:npm-registry
 ## 📚 Essential Documentation
 
 ### Core Documents
-- **[CODEBASECONSTITUTION.md](CODEBASECONSTITUTION.md)** - Repository rules and standards *(if exists)*
+- **[CODEBASECONSTITUTION.md](CODEBASECONSTITUTION.md)** - Repository rules and standards
 - **[DECISIONS.md](DECISIONS.md)** - Architecture Decision Records (ADRs)
-- **[CODE_AUDIT.md](CODE_AUDIT.md)** - Code audit pipeline and process
-- **[DOCS_ROOT.md](DOCS_ROOT.md)** - Documentation management rules
+- **[CODEAUDIT.md](CODEAUDIT.md)** - Code audit pipeline and process
+- **[DOCSAUDIT.md](DOCSAUDIT.md)** - Documentation management rules
 
 ### Task Management
 - **[TODO.md](TODO.md)** - Active task backlog (source of truth)
-- **[TODO_COMPLETED.md](TODO_COMPLETED.md)** - Completed tasks archive
+- **[TODOCOMPLETED.md](TODOCOMPLETED.md)** - Completed tasks archive
 
 ### Security & Operations
 - **[SECURITY.md](SECURITY.md)** - Security policy and best practices
 - **[SECURITY_REVIEW.md](SECURITY_REVIEW.md)** - Security review findings
-- **[DEPENDENCY_HEALTH.md](DEPENDENCY_HEALTH.md)** - Dependency management policy
-- **[RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)** - Pre-deployment checklist
+- **[DEPENDENCYAUDIT.md](DEPENDENCYAUDIT.md)** (and legacy **DEPENDENCY_HEALTH.md**) - Dependency management policy
+- **[RELEASEAUDIT.md](RELEASEAUDIT.md)** (and legacy **RELEASE_CHECKLIST.md**) - Pre-deployment checklist
 
 ### Changes & History
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history and notable changes
@@ -72,7 +110,7 @@ Your-Dedicated-Marketer/
 ├── READMEAI.md              ← You are here (entrypoint)
 ├── DOCS_ROOT.md             ← Documentation governance
 ├── TODO.md                  ← Task backlog
-├── TODO_COMPLETED.md        ← Completed tasks
+├── TODOCOMPLETED.md         ← Completed tasks
 ├── DECISIONS.md             ← Architecture decisions
 ├── SECURITY.md              ← Security policy
 ├── docs/
@@ -122,48 +160,10 @@ npm run type-check
 
 # Testing
 npm test
-npm run test:coverage  # requires @vitest/coverage-v8
-
-# E2E tests
 npm run test:e2e
 ```
-`npm run test:coverage` exits early with guidance if `@vitest/coverage-v8` is not installed.
 
-### Pre-commit Hooks
-```bash
-# Install hook scripts once
-pre-commit install
-
-# Run the hooks manually (uses npm run type-check)
-pre-commit run --all-files
-```
-
-### Building for Production
-```bash
-# Build the application
-npm run build
-
-# Start production server
-npm run start
-```
-
-**More details:** [Project README - Deployment](docs/start-here/README.md#deployment)
-
----
-
-## 🎯 Working with Tasks
-
-### Viewing Tasks
-- **All tasks:** See [TODO.md](TODO.md)
-- **Completed tasks:** See [TODO_COMPLETED.md](TODO_COMPLETED.md)
-- **Task format:** Defined in [CODE_AUDIT.md](CODE_AUDIT.md)
-
-### Task Priorities
-- **P0 (Critical):** Build failures, security vulnerabilities, blockers
-- **P1 (High):** Production readiness, core security, maintainability
-- **P2 (Medium):** Hardening, polish, documentation, enhancements
-
-### Task Categories
+### Task Categories (legacy reference)
 - **SEC:** Security-related
 - **DEP:** Dependency health
 - **REL:** Reliability
@@ -208,7 +208,7 @@ This project uses Next.js 14 with the App Router, featuring:
 - **Setup & Installation:** [Project README](docs/start-here/README.md)
 - **Architecture Decisions:** [DECISIONS.md](DECISIONS.md)
 - **Security Practices:** [SECURITY.md](SECURITY.md)
-- **Code Standards:** [CODE_AUDIT.md](CODE_AUDIT.md)
+- **Code Standards:** [CODEAUDIT.md](CODEAUDIT.md)
 - **Workflows:** [docs/workflows/](docs/workflows/)
 - **Deployment:** [docs/ops/](docs/ops/)
 
@@ -226,24 +226,13 @@ For complete documentation index: **[docs/DOCS_INDEX.md](docs/DOCS_INDEX.md)**
 
 ### Common Issues
 1. **Build errors:** Check [Project README - Troubleshooting](docs/start-here/README.md#troubleshooting)
-2. **ESLint warnings:** Review [CODE_AUDIT.md](CODE_AUDIT.md)
-3. **Dependency or npm registry issues:** Run `npm run check:npm-registry` to verify connectivity/proxy settings, then review [DEPENDENCY_HEALTH.md](DEPENDENCY_HEALTH.md) and TODO_COMPLETED entries (T-030, T-031) if connectivity errors (e.g., 403, `ENETUNREACH`) persist.
+2. **ESLint warnings:** Review [CODEAUDIT.md](CODEAUDIT.md)
+3. **Dependency or npm registry issues:** Run `npm run check:npm-registry` to verify connectivity/proxy settings, then review [DEPENDENCY_HEALTH.md](DEPENDENCY_HEALTH.md) and TODO_COMPLETED entries (T-030, T-031) if connectivity errors persist.
 4. **Security concerns:** Follow [SECURITY.md](SECURITY.md) reporting process
 
 ### Support
 - Email: contact@yourdedicatedmarketer.com
 - Security issues: security@ydFirms.com (parent company security team)
-
----
-
-## 📋 Document Precedence
-
-When information conflicts between documents, follow this precedence order:
-
-1. **CODEBASECONSTITUTION.md** (if exists) - Foundational rules
-2. **READMEAI.md** (this file) - Navigation and structure
-3. **specs/*** - Specifications and requirements
-4. **Other documentation** - Supporting materials
 
 ---
 
