@@ -8,28 +8,6 @@
 
 ## P0 - Critical (Correctness, Security, Blockers)
 
-### T-029: Complete Manual Smoke Tests in Preview Deployment [P0] [QUALITY]
-**Type:** QUALITY  
-**Priority:** P0  
-**Category:** REL (Release Gate)  
-**Effort:** S
-
-**Context:**  
-Release 2026.01.05 smoke tests could not fully complete in the local environment due to Playwright/browser instability and font fetch errors. Manual smoke verification is required in a stable Preview Deployment or live environment.
-Local Playwright attempts in this environment still crash the browser process; complete this in a Preview Deployment.
-
-**Acceptance Criteria:**
-- [ ] Verify Universal UI tests in Preview Deployment (app loads, nav works, happy path completes, error state triggers, mobile layout usable)
-- [ ] Verify contact form validation errors surface correctly when submitting invalid inputs
-- [ ] Record results in the next Release Record
-
-**References:**
-- Doc: `RELEASE_CHECKLIST.md`
-
-**Dependencies:** None
-
----
-
 ## P1 - High (Reliability, Core UX, Maintainability)
 
 ## P2 - Medium (Hardening, Polish, Documentation)

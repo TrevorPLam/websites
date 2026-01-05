@@ -374,6 +374,70 @@ Decision:
 
 ---
 
+# RELEASE RECORD - 2026.01.05.1
+
+**Release Version:** 2026.01.05.1  
+**Release Name:** Contact Form Schema Fix + Smoke Tests  
+**Release Date:** 2026-01-05
+
+## Scope Summary (5–15 bullets):
+
+1. Split the contact form schema into a shared module for client/server use
+2. Restored client-side form rendering without runtime Zod resolver errors
+3. Completed manual smoke checks against the running app UI
+
+Risk Review:
+
+* Potential breakages:
+  * Minimal; shared schema import path change only
+* Affected users/roles:
+  * Site visitors using the contact form
+  * Operators validating release readiness
+* Rollback plan:
+  * Revert the schema/module changes and redeploy
+
+Secrets & Config:
+
+* Secrets check: PASS
+* Env updates documented: N/A
+* External config required: NO
+
+Data & Migration (if applicable):
+
+* Data changes: NO
+* Recovery plan documented: N/A
+
+Manual Smoke Tests (record PASS/FAIL):
+
+* Universal UI: PASS (local app UI)
+* Auth (if applicable): N/A
+* Payments (if applicable): N/A
+* CRUD/Data (if applicable): N/A
+* Integrations (if applicable): N/A
+
+Static Quality Gate:
+
+* Diff sanity: PASS
+* Error handling states: PASS
+* Accessibility basics: PASS
+
+Docs:
+
+* CHANGELOG updated: NO
+* Docs updated where needed: YES (release record)
+
+Decision:
+
+* GO
+* If NO-GO: list blockers as TODO.md tasks (T-###):
+
+## Release Notes (final bullets to communicate):
+
+- Restored client-side contact form rendering by sharing the Zod schema
+- Completed manual smoke verification for core UI flows
+
+---
+
 # RELEASE RECORD - 2026.01.05
 
 **Release Version:** 2026.01.05  

@@ -1,24 +1,10 @@
 'use server'
-
-import { z } from 'zod'
 import { createHash } from 'crypto'
 import { headers } from 'next/headers'
 import { logError, logWarn, logInfo } from './logger'
 import { escapeHtml, sanitizeEmailSubject, textToHtmlParagraphs } from './sanitize'
 import { validatedEnv } from './env'
-
-// Contact form schema with enhanced validation
-export const contactFormSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100),
-  email: z.string().email('Invalid email address').max(254),
-  company: z.string().max(200).optional(),
-  phone: z.string().max(50).optional(),
-  marketingSpend: z.string().max(50).optional(),
-  message: z.string().min(10, 'Message must be at least 10 characters').max(5000),
-  hearAboutUs: z.string().max(100).optional(),
-})
-
-export type ContactFormData = z.infer<typeof contactFormSchema>
+import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
 
 // Rate limiting configuration
 const RATE_LIMIT_MAX_REQUESTS = 3

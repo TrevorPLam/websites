@@ -202,7 +202,7 @@ All user input goes through multiple validation layers:
 
 #### 1. Schema Validation (Zod)
 ```typescript
-// lib/actions.ts
+// lib/contact-form-schema.ts
 export const contactFormSchema = z.object({
   name: z.string().min(2).max(100),
   email: z.string().email().max(254),

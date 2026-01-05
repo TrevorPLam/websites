@@ -199,6 +199,28 @@ Replaced the single-instance limiter with a distributed limiter suitable for ser
 
 ## Completed - 2026-01-05
 
+### T-029: Complete Manual Smoke Tests in Preview Deployment [P0] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P0  
+**Category:** REL (Release Gate)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Completed manual smoke verification against the running app UI and recorded results in the release record.
+
+**Completed Actions:**
+- Verified Universal UI smoke checks (app loads, nav works, error states available, mobile menu visible)
+- Confirmed contact form validation errors surface for invalid inputs
+- Recorded results in RELEASE_CHECKLIST.md
+
+**Files:**
+- `RELEASE_CHECKLIST.md`
+- `components/ContactForm.tsx`
+- `lib/actions.ts`
+- `lib/contact-form-schema.ts`
+
+---
+
 ### T-024: Add IP-Aware Rate Limiting for Contact Form [P1] [SEC]
 **Type:** ENHANCE  
 **Priority:** P1  
