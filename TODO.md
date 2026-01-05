@@ -28,7 +28,7 @@ Current environment returns npm registry 403; rerun where registry access is per
 - [ ] Confirm no other dependency drift is introduced
 - [ ] Status note added if blocked due to registry access
 
-**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment.
+**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment. Re-attempted with proxy variables cleared and alternate registries on 2026-01-05; still receiving 403 responses.
 
 **References:**
 - File: `package-lock.json`
@@ -53,7 +53,7 @@ Current environment returns npm registry 403; add the dependency and regenerate 
 - [ ] Verify `npm run test:coverage` runs without prompting
 - [ ] Status note added if blocked due to registry access
 
-**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment.
+**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment. Re-attempted with proxy variables cleared and alternate registries on 2026-01-05; still receiving 403 responses.
 
 **References:**
 - File: `package.json`

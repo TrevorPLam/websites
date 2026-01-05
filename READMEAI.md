@@ -14,6 +14,7 @@
 2. **[docs/DOCS_INDEX.md](docs/DOCS_INDEX.md)** - Complete documentation navigation
 3. **[docs/REPO_MAP.md](docs/REPO_MAP.md)** - Repository structure overview
 4. **[TODO.md](TODO.md)** - Current task backlog and priorities
+5. **Node version:** Use Node.js 20.x (`.nvmrc` provided; run `nvm use`)
 
 **Package manager:** npm (use `package-lock.json` as the canonical lockfile)
 
@@ -87,6 +88,10 @@ npm run dev
 
 ### Running Quality Checks
 ```bash
+# Formatting
+npm run format:check
+npm run format
+
 # Linting
 npm run lint
 
@@ -95,10 +100,12 @@ npm run type-check
 
 # Testing
 npm test
+npm run test:coverage  # requires @vitest/coverage-v8
 
 # E2E tests
 npm run test:e2e
 ```
+`npm run test:coverage` exits early with guidance if `@vitest/coverage-v8` is not installed.
 
 ### Pre-commit Hooks
 ```bash

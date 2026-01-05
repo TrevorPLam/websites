@@ -70,16 +70,18 @@ npm run test:e2e
 npm run lint
 
 # Format code
+npm run format:check
 npm run format
 ```
 
 **Coverage guidance**
 - Requires the dev dependency `@vitest/coverage-v8`
 - Coverage reports are written to `coverage/` (open `coverage/index.html` for HTML output)
+- `npm run test:coverage` fails fast with guidance if the provider is missing (see TODO.md task T-031)
 
 ## Before Submitting PR
 1. Rebase on latest `main`
-2. Run all checks: `npm run lint && npm run type-check && npm test`
+2. Run all checks: `npm run format:check && npm run lint && npm run type-check && npm test`
 3. Test production build: `npm run build && npm run start`
 4. Write clear PR description
 
