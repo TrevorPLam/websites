@@ -26,10 +26,10 @@ npm install --legacy-peer-deps
 # Start development server
 npm run dev
 
-# Lint and type-check
+# Lint, format, and type-check
 npm run lint
+npm run format:check
 npm run type-check
-
 # Run tests
 npm test
 npm run test:e2e
