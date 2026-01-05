@@ -15,7 +15,7 @@
 3. **[docs/REPO_MAP.md](docs/REPO_MAP.md)** - Repository structure overview
 4. **[TODO.md](TODO.md)** - Current task backlog and priorities
 5. **Node version:** Use Node.js 20.x (`.nvmrc` provided; run `nvm use`)
-6. **Registry check (if installs fail):** `npm run check:npm-registry` (current environment returns HTTP 403 to npm ping; see TODO tasks)
+6. **Registry check (if installs fail):** `npm run check:npm-registry` (current environment returns HTTP 403 to npm ping; see `DEPENDENCY_HEALTH.md` for details)
 
 **Package manager:** npm (use `package-lock.json` as the canonical lockfile)
 
