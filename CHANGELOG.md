@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+- Added hashed IP + email rate limiting for contact form submissions
+
+### Changed
+- Removed deprecated `api` and `sentry` keys from `next.config.mjs`
+- Documented npm as the canonical package manager and lockfile
+
+### Dependencies
+- Aligned `@next/mdx` to the Next.js 14.x line
+- Moved `@types/mdx` to devDependencies
+- Removed `pnpm-lock.yaml` in favor of `package-lock.json`
+
 ## [2026.01.05] - 2026-01-05
 
 ### Added

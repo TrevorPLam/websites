@@ -1,6 +1,6 @@
 # READMEAI - Repository Entrypoint
 
-> **Last Updated:** 2026-01-03  
+> **Last Updated:** 2026-01-05  
 > **Status:** Canonical  
 > **Purpose:** Primary navigation hub for developers and operators working in this repository
 
@@ -14,6 +14,8 @@
 2. **[docs/DOCS_INDEX.md](docs/DOCS_INDEX.md)** - Complete documentation navigation
 3. **[docs/REPO_MAP.md](docs/REPO_MAP.md)** - Repository structure overview
 4. **[TODO.md](TODO.md)** - Current task backlog and priorities
+
+**Package manager:** npm (use `package-lock.json` as the canonical lockfile)
 
 ---
 

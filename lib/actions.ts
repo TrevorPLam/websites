@@ -1,6 +1,8 @@
 'use server'
 
 import { z } from 'zod'
+import { createHash } from 'crypto'
+import { headers } from 'next/headers'
 import { logError, logWarn, logInfo } from './logger'
 import { escapeHtml, sanitizeEmailSubject, textToHtmlParagraphs } from './sanitize'
 import { validatedEnv } from './env'
@@ -29,6 +31,27 @@ type RateLimiter = {
 }
 let rateLimiter: RateLimiter | null | false = null
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>() // Fallback
+
+const IP_HASH_SALT = 'contact_form_ip'
+
+function hashIdentifier(value: string): string {
+  return createHash('sha256').update(`${IP_HASH_SALT}:${value}`).digest('hex')
+}
+
+function getClientIp(): string {
+  const requestHeaders = headers()
+  const forwardedFor =
+    requestHeaders.get('x-forwarded-for') ||
+    requestHeaders.get('x-vercel-forwarded-for') ||
+    requestHeaders.get('x-real-ip') ||
+    requestHeaders.get('cf-connecting-ip')
+
+  if (!forwardedFor) {
+    return 'unknown'
+  }
+
+  return forwardedFor.split(',')[0]?.trim() || 'unknown'
+}
 
 // Initialize rate limiter
 async function getRateLimiter() {
@@ -71,19 +94,19 @@ async function getRateLimiter() {
 }
 
 // In-memory rate limiting fallback
-function checkRateLimitInMemory(email: string): boolean {
+function checkRateLimitInMemory(identifier: string): boolean {
   const now = Date.now()
-  const limit = rateLimitMap.get(email)
+  const limit = rateLimitMap.get(identifier)
 
   // Clean up expired entries
   if (limit && now > limit.resetAt) {
-    rateLimitMap.delete(email)
+    rateLimitMap.delete(identifier)
   }
 
-  const existing = rateLimitMap.get(email)
+  const existing = rateLimitMap.get(identifier)
 
   if (!existing) {
-    rateLimitMap.set(email, { count: 1, resetAt: now + 60 * 60 * 1000 }) // 1 hour
+    rateLimitMap.set(identifier, { count: 1, resetAt: now + 60 * 60 * 1000 }) // 1 hour
     return true
   }
 
@@ -96,17 +119,28 @@ function checkRateLimitInMemory(email: string): boolean {
 }
 
 // Unified rate limiting check
-async function checkRateLimit(email: string): Promise<boolean> {
+async function checkRateLimit(email: string, clientIp: string): Promise<boolean> {
   const limiter = await getRateLimiter()
+  const emailIdentifier = `email:${email}`
+  const ipIdentifier = `ip:${hashIdentifier(clientIp)}`
 
   if (limiter) {
     // Use Upstash distributed rate limiting
-    const identifier = email
-    const { success } = await limiter.limit(identifier)
-    return success
+    const emailLimit = await limiter.limit(emailIdentifier)
+    if (!emailLimit.success) {
+      return false
+    }
+
+    const ipLimit = await limiter.limit(ipIdentifier)
+    return ipLimit.success
   } else {
     // Fall back to in-memory rate limiting
-    return checkRateLimitInMemory(email)
+    const emailAllowed = checkRateLimitInMemory(emailIdentifier)
+    if (!emailAllowed) {
+      return false
+    }
+
+    return checkRateLimitInMemory(ipIdentifier)
   }
 }
 
@@ -114,11 +148,13 @@ export async function submitContactForm(data: ContactFormData) {
   try {
     // Validate the data
     const validatedData = contactFormSchema.parse(data)
+    const clientIp = getClientIp()
+    const hashedIp = hashIdentifier(clientIp)
 
     // Rate limiting check
-    const rateLimitPassed = await checkRateLimit(validatedData.email)
+    const rateLimitPassed = await checkRateLimit(validatedData.email, clientIp)
     if (!rateLimitPassed) {
-      logWarn('Rate limit exceeded for contact form', { email: validatedData.email })
+      logWarn('Rate limit exceeded for contact form', { email: validatedData.email, ip: hashedIp })
       return {
         success: false,
         message: 'Too many submissions. Please try again later.',

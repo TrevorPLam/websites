@@ -199,6 +199,102 @@ Replaced the single-instance limiter with a distributed limiter suitable for ser
 
 ## Completed - 2026-01-05
 
+### T-024: Add IP-Aware Rate Limiting for Contact Form [P1] [SEC]
+**Type:** ENHANCE  
+**Priority:** P1  
+**Category:** SEC (Abuse Prevention)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Added IP-aware throttling to contact form submissions, combining email and hashed IP keys across Upstash and in-memory rate limiting.
+
+**Completed Actions:**
+- Added client IP extraction using trusted proxy headers with hashed identifiers
+- Applied combined email/IP rate limiting for both distributed and in-memory paths
+- Added tests for email limits when IP changes and for new email/IP combinations
+- Documented privacy-aware rate limiting in SECURITY.md
+
+**Files:**
+- `lib/actions.ts`
+- `__tests__/lib/actions.rate-limit.test.ts`
+- `SECURITY.md`
+
+---
+
+### T-025: Align @next/mdx Version With Next.js [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DEP (Dependency Health)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Aligned @next/mdx with Next.js 14.x and updated lockfile metadata where possible.
+
+**Completed Actions:**
+- Set @next/mdx to ^14.2.18 in package.json
+- Updated package-lock.json references for @next/mdx (integrity requires regeneration with registry access)
+- Logged follow-up lockfile regeneration task in TODO.md
+
+**Files:**
+- `package.json`
+- `package-lock.json`
+- `TODO.md`
+
+---
+
+### T-026: Move @types/mdx to devDependencies [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DEP (Dependency Health)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Shifted @types/mdx to devDependencies to reduce production install surface area.
+
+**Completed Actions:**
+- Moved @types/mdx to devDependencies in package.json
+- Marked @types/mdx as dev-only in package-lock.json
+
+**Files:**
+- `package.json`
+- `package-lock.json`
+
+---
+
+### T-027: Consolidate to a Single Package Manager Lockfile [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DEP (Dependency Health)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Chose npm as the canonical package manager and removed the pnpm lockfile.
+
+**Completed Actions:**
+- Removed pnpm-lock.yaml
+- Documented npm as the canonical package manager in READMEAI.md
+
+**Files:**
+- `pnpm-lock.yaml` (removed)
+- `READMEAI.md`
+
+---
+
+### T-028: Remove Invalid next.config.mjs Keys [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** REL (Reliability)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Removed unsupported Next.js configuration keys to avoid runtime warnings.
+
+**Completed Actions:**
+- Removed deprecated api and sentry keys from next.config.mjs
+
+**Files:**
+- `next.config.mjs`
+
 ### T-010: Verify Environment Variable Leakage Prevention [P2] [SEC]
 **Type:** QUALITY  
 **Priority:** P2  

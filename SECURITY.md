@@ -115,20 +115,22 @@ This application uses Next.js 14 Server Actions for all form submissions, which 
 
 ### Rate Limiting
 
-**Status:** Basic in-memory rate limiting (MVP)
+**Status:** IP + email rate limiting (Upstash optional)
 
 The contact form includes rate limiting to prevent abuse:
 
 #### Current Implementation
-- **Mechanism:** In-memory Map tracking submissions by email
-- **Limit:** 3 submissions per hour per email address
+- **Mechanism:** In-memory Map or Upstash Redis sliding window
+- **Limit:** 3 submissions per hour per email address + hashed IP
 - **Scope:** Single server instance only
 - **Storage:** Volatile (resets on server restart)
+- **Privacy:** IPs are hashed before storage/logging
 
 #### Configuration
 ```typescript
 // lib/actions.ts
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+// Keys: email:<email> and ip:<sha256 hash>
 // Limit: 3 submissions per hour
 ```
 
@@ -136,8 +138,7 @@ const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 - ⚠️ **Not suitable for production at scale**
 - Does not persist across server restarts
 - Does not work across multiple instances (serverless/edge)
-- Can be bypassed by changing email addresses
-- No IP-based limiting
+- Can be bypassed by rotating both email + IP
 
 #### Production Recommendations
 For production deployment, implement persistent rate limiting:
