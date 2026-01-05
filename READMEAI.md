@@ -205,7 +205,7 @@ For complete documentation index: **[docs/DOCS_INDEX.md](docs/DOCS_INDEX.md)**
 ### Common Issues
 1. **Build errors:** Check [Project README - Troubleshooting](docs/start-here/README.md#troubleshooting)
 2. **ESLint warnings:** Review [CODE_AUDIT.md](CODE_AUDIT.md)
-3. **Dependency issues:** See [DEPENDENCY_HEALTH.md](DEPENDENCY_HEALTH.md)
+3. **Dependency or npm registry issues:** Run `npm run check:npm-registry` to verify connectivity/proxy settings, then review [DEPENDENCY_HEALTH.md](DEPENDENCY_HEALTH.md) and TODO tasks (T-030, T-031) if 403 errors persist.
 4. **Security concerns:** Follow [SECURITY.md](SECURITY.md) reporting process
 
 ### Support

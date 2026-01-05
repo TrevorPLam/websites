@@ -778,6 +778,66 @@ Prevented `npm run test:coverage` from prompting interactively by checking for t
 
 ---
 
+### T-047: Add npm Registry Diagnostic Script [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Add a repeatable registry diagnostic to surface proxy variables and HTTP status codes before running dependency commands.
+
+**Completed Actions:**
+- Added `scripts/npm-registry-check.mjs` to ping the npm registry and report proxy environment variables with next steps.
+- Added `npm run check:npm-registry` to package scripts for quick diagnostics.
+- Recorded the new diagnostic utility in the Unreleased changelog.
+
+**Files:**
+- `scripts/npm-registry-check.mjs`
+- `package.json`
+- `CHANGELOG.md`
+
+---
+
+### T-048: Document Registry Diagnostic Workflow [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Surface the new registry diagnostic command in contributor-facing documentation to unblock dependency tasks.
+
+**Completed Actions:**
+- Updated READMEAI Common Issues to direct contributors to `npm run check:npm-registry` and relevant TODO tasks when 403 errors appear.
+- Added the diagnostic command to the npm registry 403 guidance in docs/workflows/SETUP.md.
+
+**Files:**
+- `READMEAI.md`
+- `docs/workflows/SETUP.md`
+
+---
+
+### T-049: Refresh Dependency Health Status After Registry Retry [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DEP (Dependency Health)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Capture the latest registry retry results for lockfile regeneration and coverage dependency installation.
+
+**Completed Actions:**
+- Re-attempted lockfile regeneration and @vitest/coverage-v8 installation with proxy variables cleared and explicit registry; both returned npm registry 403 errors.
+- Updated TODO task statuses (T-030, T-031) with the new retry results and guidance to run `npm run check:npm-registry`.
+- Added dependency health notes highlighting the new diagnostic command and pre-install checklist.
+
+**Files:**
+- `TODO.md`
+- `DEPENDENCY_HEALTH.md`
+
+---
+
 ## Completed - 2026-01-03 (P1/P2)
 
 ### T-004: Add CSRF Token Support Documentation [P1] [SEC]

@@ -382,13 +382,14 @@ This prevents future churn and re-arguing.
 - **Issue:** `npm run test:coverage` prompts for `@vitest/coverage-v8`, which is not yet installed.
 - **Risk:** Low-Medium - coverage runs fail locally and in CI until the provider is added.
 - **Recommendation:** Add `@vitest/coverage-v8` as a dev dependency and regenerate `package-lock.json` with registry access.
-- **Status:** Pending (blocked by npm registry 403; tracked in T-031)
+- **Status:** Pending (registry 403 persists as of 2026-01-05 even with proxy variables cleared; use `npm run check:npm-registry` before the next install attempt; tracked in T-031)
 
 ### Positive Findings:
 
 - **Pinned Critical Versions:** next, zod, resend, and @sentry/nextjs are pinned to exact versions.
 - **No Obvious Dependency Overlap:** Dependencies are scoped to distinct responsibilities.
 - **Modern Tooling:** Testing and build tooling (Vitest, Playwright, TypeScript) are current and well-scoped.
+- **Operational Guardrails:** Added `npm run check:npm-registry` to surface proxy/registry blockers before running install or lockfile tasks.
 
 ### Tasks Created (Completed):
 
@@ -415,7 +416,7 @@ This prevents future churn and re-arguing.
 ### Recommended Actions:
 
 1. **Short-term (P2):**
-   - Add `@vitest/coverage-v8` and regenerate `package-lock.json` when registry access is available (T-031, T-030).
+   - Add `@vitest/coverage-v8` and regenerate `package-lock.json` when registry access is available (T-031, T-030). Run `npm run check:npm-registry` before retrying to confirm reachability and proxy settings.
 
 ### Notes / Assumptions:
 
