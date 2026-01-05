@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@next/mdx": "^14.2.18",
+    "@next/mdx": "^16.1.1",
     "@sentry/nextjs": "10.32.1",
     "@upstash/ratelimit": "^2.0.7",
     "@upstash/redis": "^1.36.0",
