@@ -20,7 +20,7 @@
 
 **Context:**  
 Registry access was blocked during the @next/mdx alignment, so the lockfile needs regeneration in an environment with npm registry access to restore the correct integrity metadata.
-Current environment returns npm registry 403; rerun where registry access is permitted.
+Current environment cannot reach the npm registry (`ENETUNREACH` even with proxy vars cleared); rerun where registry access is permitted.
 
 **Acceptance Criteria:**
 - [ ] Run `npm install --package-lock-only` in an environment with registry access
@@ -28,7 +28,7 @@ Current environment returns npm registry 403; rerun where registry access is per
 - [ ] Confirm no other dependency drift is introduced
 - [ ] Status note added if blocked due to registry access
 
-**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment. Re-attempted with proxy variables cleared and explicit registry on 2026-01-05; still receiving 403 responses for https://registry.npmjs.org/next. Use `npm run check:npm-registry` before re-attempting.
+**Status:** Blocked in this environment (2026-01-05). Registry calls return `ENETUNREACH` even after clearing HTTP(S)_PROXY/NO_PROXY via env overrides and forcing the registry during `npm install --package-lock-only` and `npm ping`. Retry when outbound access is available; run `npm run check:npm-registry` first.
 
 **References:**
 - File: `package-lock.json`
@@ -45,7 +45,7 @@ Current environment returns npm registry 403; rerun where registry access is per
 
 **Context:**  
 Running `npm run test:coverage` prompts for `@vitest/coverage-v8`, indicating the coverage provider is missing.
-Current environment returns npm registry 403; add the dependency and regenerate the lockfile where registry access is permitted.
+Current environment cannot reach the npm registry (`ENETUNREACH` even with proxy vars cleared); add the dependency and regenerate the lockfile where registry access is permitted.
 
 **Acceptance Criteria:**
 - [ ] Add `@vitest/coverage-v8` as a dev dependency
@@ -53,7 +53,7 @@ Current environment returns npm registry 403; add the dependency and regenerate 
 - [ ] Verify `npm run test:coverage` runs without prompting
 - [ ] Status note added if blocked due to registry access
 
-**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment. Re-attempted with proxy variables cleared and explicit registry on 2026-01-05; still receiving 403 responses for https://registry.npmjs.org/@vitest%2fcoverage-v8. Use `npm run check:npm-registry` before re-attempting.
+**Status:** Blocked in this environment (2026-01-05). Registry access fails with `ENETUNREACH` even after clearing HTTP(S)_PROXY/NO_PROXY via env overrides and forcing the registry during `npm install --package-lock-only` and `npm ping`. Retry once outbound connectivity is restored; confirm with `npm run check:npm-registry`.
 
 **References:**
 - File: `package.json`
