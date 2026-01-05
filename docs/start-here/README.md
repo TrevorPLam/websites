@@ -7,6 +7,7 @@ A modern, SEO-optimized marketing website built with Next.js 14, featuring a blo
 - **Modern Stack**: Next.js 14 with App Router, TypeScript, and Tailwind CSS
 - **Blog System**: MDX-powered blog with syntax highlighting and rich formatting
 - **Case Studies**: Detailed client success stories with metrics and testimonials
+- **Site Search**: Fast client-side search for blog posts and key pages (Cmd/Ctrl + K)
 - **SEO Optimized**: Comprehensive meta tags, structured data, sitemap, and robots.txt
 - **Contact Form**: Functional form with email integration via Resend
 - **Responsive Design**: Mobile-first, fully responsive across all devices
@@ -26,6 +27,7 @@ A modern, SEO-optimized marketing website built with Next.js 14, featuring a blo
 - **Contact** (`/contact`) - Contact form with validation
 - **Case Studies** (`/case-studies`) - Client success stories
 - **Blog** (`/blog`) - MDX-powered blog with 5 initial posts
+- **Search** (`/search`) - Search blog posts and key pages
 
 ## 🚀 Getting Started
 

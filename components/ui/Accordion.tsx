@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useId, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -16,6 +16,7 @@ export interface AccordionProps {
 
 export default function Accordion({ items, className }: AccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const accordionId = useId()
 
   const toggleItem = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
@@ -28,9 +29,18 @@ export default function Accordion({ items, className }: AccordionProps) {
           key={index}
           className="bg-off-white rounded-lg border border-gray-200 overflow-hidden"
         >
+          {(() => {
+            const buttonId = `${accordionId}-button-${index}`
+            const panelId = `${accordionId}-panel-${index}`
+
+            return (
+              <>
           <button
+            id={buttonId}
             onClick={() => toggleItem(index)}
             className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+            aria-expanded={openIndex === index}
+            aria-controls={panelId}
           >
             <span className="font-semibold text-charcoal pr-4">{item.question}</span>
             <ChevronDown
@@ -41,10 +51,18 @@ export default function Accordion({ items, className }: AccordionProps) {
             />
           </button>
           {openIndex === index && (
-            <div className="px-6 pb-4">
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              className="px-6 pb-4"
+            >
               <p className="text-slate leading-relaxed">{item.answer}</p>
             </div>
           )}
+              </>
+            )
+          })()}
         </div>
       ))}
     </div>

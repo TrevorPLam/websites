@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import Button from '@/components/ui/Button'
+import SearchDialog from '@/components/SearchDialog'
+import type { SearchItem } from '@/lib/search'
 
 const navLinks = [
   { href: '/services', label: 'Services' },
@@ -14,7 +16,11 @@ const navLinks = [
   { href: '/about', label: 'About' },
 ]
 
-export default function Navigation() {
+interface NavigationProps {
+  searchItems: SearchItem[]
+}
+
+export default function Navigation({ searchItems }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const toggleMobileMenu = () => {
@@ -52,6 +58,7 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
+            <SearchDialog items={searchItems} />
             <Link href="/contact">
               <Button variant="primary" size="small">
                 Get Started
@@ -59,16 +66,19 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={toggleMobileMenu}
-            className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            aria-label="Toggle mobile menu"
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile Actions */}
+          <div className="flex items-center gap-2 md:hidden">
+            <SearchDialog items={searchItems} variant="mobile" />
+            <button
+              onClick={toggleMobileMenu}
+              className="text-white p-2 hover:bg-white/10 rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              aria-label="Toggle mobile menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 

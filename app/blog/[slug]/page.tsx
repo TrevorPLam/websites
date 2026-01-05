@@ -1,12 +1,14 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { getAllPosts, getPostBySlug } from '@/lib/blog'
 import { Calendar, Clock, ArrowLeft, ArrowRight } from 'lucide-react'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import remarkGfm from 'remark-gfm'
-import rehypeSlug from 'rehype-slug'
-import rehypePrettyCode from 'rehype-pretty-code'
+
+const BlogPostContent = dynamic(() => import('@/components/BlogPostContent'), {
+  loading: () => <div className="sr-only">Loading article content…</div>,
+  ssr: true,
+})
 
 interface Props {
   params: { slug: string }
@@ -130,26 +132,7 @@ export default function BlogPostPage({ params }: Props) {
             </div>
 
             {/* Content */}
-            <div className="prose prose-lg max-w-none mt-12">
-              <MDXRemote
-                source={post.content}
-                options={{
-                  mdxOptions: {
-                    remarkPlugins: [remarkGfm],
-                    rehypePlugins: [
-                      rehypeSlug,
-                      [
-                        rehypePrettyCode,
-                        {
-                          theme: 'github-dark',
-                          keepBackground: false,
-                        },
-                      ],
-                    ],
-                  },
-                }}
-              />
-            </div>
+            <BlogPostContent content={post.content} />
           </div>
         </div>
       </article>

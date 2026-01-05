@@ -48,6 +48,8 @@ New to the project? Start with these essential documents:
 - [DEPLOYMENT.md](./ops/DEPLOYMENT.md) - Deployment guide
 - [IMPROVEMENTS-SUMMARY.md](./ops/IMPROVEMENTS-SUMMARY.md) - System improvements
 - [CODE_AUDIT_SUMMARY.md](./ops/CODE_AUDIT_SUMMARY.md) - Latest code audit results
+- [ACCESSIBILITY-AUDIT-2026-01-05.md](./ops/ACCESSIBILITY-AUDIT-2026-01-05.md) - Accessibility audit report
+- [BUNDLE-OPTIMIZATION-2026-01-05.md](./ops/BUNDLE-OPTIMIZATION-2026-01-05.md) - Bundle optimization notes
 - [RELEASE_CHECKLIST.md](../RELEASE_CHECKLIST.md) - Release checklist
 
 ### Technical Guides
@@ -57,6 +59,7 @@ New to the project? Start with these essential documents:
 
 ### Workflows & Processes
 - [USERTODO.md](./workflows/USERTODO.md) - User workflow tasks
+- [SEARCH.md](./workflows/SEARCH.md) - Site search workflow
 - [CONTRIBUTING.md](./workflows/CONTRIBUTING.md) - Contribution guidelines
 - [SETUP.md](./workflows/SETUP.md) - Local development setup
 - [READMEAI.md](../READMEAI.md) - Repository entrypoint and navigation
@@ -109,9 +112,12 @@ These are the single source of truth for their respective topics:
 ### Operations
 - **[DEPLOYMENT.md](./ops/DEPLOYMENT.md)** - Deployment procedures
 - **[IMPROVEMENTS-SUMMARY.md](./ops/IMPROVEMENTS-SUMMARY.md)** - System improvements
+- **[ACCESSIBILITY-AUDIT-2026-01-05.md](./ops/ACCESSIBILITY-AUDIT-2026-01-05.md)** - Accessibility audit report
+- **[BUNDLE-OPTIMIZATION-2026-01-05.md](./ops/BUNDLE-OPTIMIZATION-2026-01-05.md)** - Bundle optimization notes
 
 ### Workflows
 - **[USERTODO.md](./workflows/USERTODO.md)** - User workflows
+- **[SEARCH.md](./workflows/SEARCH.md)** - Site search workflow
 - **[CONTRIBUTING.md](./workflows/CONTRIBUTING.md)** - Contribution guidelines
 - **[SETUP.md](./workflows/SETUP.md)** - Development setup
 - **[Project README](./start-here/README.md)** - User-facing overview and setup

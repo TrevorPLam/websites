@@ -33,133 +33,6 @@ Release 2026.01.05 smoke tests could not fully complete in the local environment
 
 ## P2 - Medium (Hardening, Polish, Documentation)
 
-### T-017: Increase Test Coverage [P2] [QUALITY]
-**Type:** ENHANCE  
-**Priority:** P2  
-**Category:** DX (Developer Experience)  
-**Effort:** L
-
-**Context:**  
-Current test coverage is low. Need to add tests for core functionality to ensure reliability and enable confident refactoring.
-
-**Acceptance Criteria:**
-- [ ] Add tests for `lib/blog.ts`
-- [ ] Add tests for `lib/case-studies.ts`
-- [ ] Add tests for all UI components in `components/ui/`
-- [ ] Add tests for page components
-- [ ] Target: 70%+ coverage
-- [ ] Run coverage report: `npm run test:coverage`
-
-**References:**
-- Doc: `docs/workflows/USERTODO.md` (Item #9)
-- Dir: `__tests__/`
-- Dir: `tests/`
-
-**Dependencies:** None
-
----
-
-### T-018: Add E2E Tests for Critical Flows [P2] [QUALITY]
-**Type:** ENHANCE  
-**Priority:** P2  
-**Category:** REL (Reliability)  
-**Effort:** M
-
-**Context:**  
-No E2E tests exist for critical user journeys. Adding E2E tests will catch integration issues and prevent regressions in key flows.
-
-**Acceptance Criteria:**
-- [ ] Homepage → Services → Contact form submission flow
-- [ ] Blog listing → Blog post → CTA click flow
-- [ ] Mobile navigation flow
-- [ ] Contact form validation and submission
-- [ ] 404 page handling
-- [ ] Run tests: `npm run test:e2e`
-
-**References:**
-- Doc: `docs/workflows/USERTODO.md` (Item #10)
-- Dir: `tests/e2e/`
-- Config: `playwright.config.ts`
-
-**Dependencies:** None
-
----
-
-### T-019: Optimize Bundle Size [P2] [ENHANCE]
-**Type:** ENHANCE  
-**Priority:** P2  
-**Category:** PERF (Performance)  
-**Effort:** M
-
-**Context:**  
-Current build output is ~276MB. Need to analyze and optimize bundle size to improve load times and reduce bandwidth usage.
-
-**Acceptance Criteria:**
-- [ ] Run bundle analyzer: `ANALYZE=true npm run build`
-- [ ] Check for duplicate dependencies
-- [ ] Lazy load heavy components (MDX processing)
-- [ ] Use dynamic imports for below-fold content
-- [ ] Review Sentry bundle size
-- [ ] Consider removing unused dependencies
-- [ ] Document optimization results
-
-**References:**
-- Doc: `docs/workflows/USERTODO.md` (Item #11)
-- File: `next.config.mjs`
-
-**Dependencies:** None
-
----
-
-### T-021: Accessibility Audit [P2] [ENHANCE]
-**Type:** ENHANCE  
-**Priority:** P2  
-**Category:** UX (User Experience)  
-**Effort:** M
-
-**Context:**  
-No comprehensive accessibility audit has been performed. Need to ensure WCAG 2.1 AA compliance for inclusive user experience.
-
-**Acceptance Criteria:**
-- [ ] Use axe DevTools browser extension for automated checks
-- [ ] Test with screen reader (VoiceOver/NVDA)
-- [ ] Check keyboard navigation
-- [ ] Verify color contrast ratios
-- [ ] Test focus management
-- [ ] Document findings and fixes
-- [ ] Target: WCAG 2.1 AA compliance
-
-**References:**
-- Doc: `docs/workflows/USERTODO.md` (Item #12)
-
-**Dependencies:** None
-
----
-
-### T-023: Add Search Functionality [P2] [ENHANCE]
-**Type:** ENHANCE  
-**Priority:** P2  
-**Category:** UX (User Experience)  
-**Effort:** M
-
-**Context:**  
-No search functionality exists for blog posts or site content. Adding search improves content discoverability and user experience.
-
-**Acceptance Criteria:**
-- [ ] Choose search solution (Algolia DocSearch, Pagefind, or custom)
-- [ ] Implement search UI component
-- [ ] Index blog posts and key pages
-- [ ] Add search keyboard shortcut (Cmd/Ctrl + K)
-- [ ] Test search relevance and performance
-- [ ] Document search configuration
-
-**References:**
-- Doc: `docs/workflows/USERTODO.md` (Item #17)
-
-**Dependencies:** None
-
----
-
 ### T-030: Regenerate package-lock.json for @next/mdx Alignment [P2] [QUALITY]
 **Type:** QUALITY  
 **Priority:** P2  
@@ -176,6 +49,28 @@ Registry access was blocked during the @next/mdx alignment, so the lockfile need
 
 **References:**
 - File: `package-lock.json`
+
+**Dependencies:** None
+
+---
+
+### T-031: Add Vitest Coverage Dependency [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Effort:** S
+
+**Context:**  
+Running `npm run test:coverage` prompts for `@vitest/coverage-v8`, indicating the coverage provider is missing.
+
+**Acceptance Criteria:**
+- [ ] Add `@vitest/coverage-v8` as a dev dependency
+- [ ] Update `package-lock.json` with registry-backed integrity data
+- [ ] Verify `npm run test:coverage` runs without prompting
+
+**References:**
+- File: `package.json`
+- Config: `vitest.config.ts`
 
 **Dependencies:** None
 

@@ -5,9 +5,10 @@ import './globals.css'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import SkipToContent from '@/components/SkipToContent'
-import InstallPrompt from '@/components/InstallPrompt'
+import { getSearchIndex } from '@/lib/search'
 
 const Providers = dynamic(() => import('@/app/providers'), { ssr: false })
+const InstallPrompt = dynamic(() => import('@/components/InstallPrompt'), { ssr: false })
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 const plexSans = IBM_Plex_Sans({
@@ -79,6 +80,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const searchItems = getSearchIndex()
+
   return (
     <html lang="en" className={`${inter.variable} ${plexSans.variable}`}>
       <head>
@@ -144,7 +147,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans bg-off-white text-charcoal">
         <SkipToContent />
-        <Navigation />
+        <Navigation searchItems={searchItems} />
         <Providers>
           <main id="main-content" tabIndex={-1} className="focus-visible:outline-none">
             {children}

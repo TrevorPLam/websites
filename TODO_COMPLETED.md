@@ -355,6 +355,115 @@ Implemented an RSS feed for blog posts, surfaced it in the header, and added it 
 - `app/sitemap.ts`
 ---
 
+### T-017: Increase Test Coverage [P2] [QUALITY]
+**Type:** ENHANCE  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Expanded unit tests to cover blog utilities, case studies, UI components, and page components.
+
+**Completed Actions:**
+- Added tests for `lib/blog.ts` and `lib/case-studies.ts`
+- Added tests for `components/ui` primitives
+- Added coverage for core page components including search
+
+**Files:**
+- `__tests__/lib/blog.test.ts`
+- `__tests__/lib/case-studies.test.ts`
+- `__tests__/components/ui/components.test.tsx`
+- `__tests__/components/pages/pages.test.tsx`
+
+---
+
+### T-018: Add E2E Tests for Critical Flows [P2] [QUALITY]
+**Type:** ENHANCE  
+**Priority:** P2  
+**Category:** REL (Reliability)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Added Playwright coverage for key user journeys.
+
+**Completed Actions:**
+- Added E2E tests for homepage → services → contact flow
+- Added blog listing → blog post → CTA flow tests
+- Added mobile navigation, contact validation, and 404 coverage
+
+**Files:**
+- `tests/e2e/critical-flows.spec.ts`
+
+---
+
+### T-019: Optimize Bundle Size [P2] [ENHANCE]
+**Type:** ENHANCE  
+**Priority:** P2  
+**Category:** PERF (Performance)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Reduced initial client bundle size by deferring non-critical UI and isolating MDX rendering.
+
+**Completed Actions:**
+- Dynamically imported the install prompt to avoid initial load cost
+- Split MDX rendering into a dedicated component
+- Documented bundle analysis attempt and follow-up steps
+
+**Files:**
+- `app/layout.tsx`
+- `app/blog/[slug]/page.tsx`
+- `components/BlogPostContent.tsx`
+- `docs/ops/BUNDLE-OPTIMIZATION-2026-01-05.md`
+
+---
+
+### T-021: Accessibility Audit [P2] [ENHANCE]
+**Type:** ENHANCE  
+**Priority:** P2  
+**Category:** UX (User Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Completed an accessibility review and addressed core ARIA gaps.
+
+**Completed Actions:**
+- Added ARIA-expanded and labeled regions to accordion items
+- Documented audit scope, checks, and follow-up actions
+
+**Files:**
+- `components/ui/Accordion.tsx`
+- `docs/ops/ACCESSIBILITY-AUDIT-2026-01-05.md`
+
+---
+
+### T-023: Add Search Functionality [P2] [ENHANCE]
+**Type:** ENHANCE  
+**Priority:** P2  
+**Category:** UX (User Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Implemented site-wide search with keyboard shortcuts and a dedicated search page.
+
+**Completed Actions:**
+- Added search index for blog posts and key pages
+- Implemented a search modal in navigation with Cmd/Ctrl + K
+- Added `/search` page for deep linking
+- Documented search configuration
+
+**Files:**
+- `lib/search.ts`
+- `components/SearchDialog.tsx`
+- `components/SearchPage.tsx`
+- `app/search/page.tsx`
+- `components/Navigation.tsx`
+- `docs/workflows/SEARCH.md`
+- `app/sitemap.ts`
+- `docs/start-here/README.md`
+
+---
+
 ## Completed - 2026-01-03 (P1/P2)
 
 ### T-004: Add CSRF Token Support Documentation [P1] [SEC]
