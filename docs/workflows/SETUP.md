@@ -1,39 +1,39 @@
 # Local Development Setup
 
-> **Last Updated:** 2026-01-03  
+> **Last Updated:** 2026-01-05  
 > **Canonical Status:** Canonical  
 > **Purpose:** Step-by-step local development setup guide  
 > **See Also:** [Project README](../start-here/README.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [DOCS_INDEX.md](../DOCS_INDEX.md)
 
 ## Prerequisites
 - Node.js 20.x LTS or higher
-- pnpm 8.x or higher
+- npm (use `package-lock.json`)
 - Git
 
 ## Installation
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/ydFirms/your-dedicated-marketer-site.git
-cd your-dedicated-marketer-site
+git clone https://github.com/ydFirms/Your-Dedicated-Marketer.git
+cd Your-Dedicated-Marketer
 ```
 
 ### 2. Install Dependencies
 ```bash
-pnpm install
+npm install --legacy-peer-deps
 ```
 
 ### 3. Environment Configuration
 ```bash
-cp .env.example .env
-# Edit .env with required values:
+cp env.example .env.local
+# Edit .env.local with required values:
 # - RESEND_API_KEY: Get from Resend dashboard
 # - CONTACT_EMAIL: Email address to receive contact form submissions
 ```
 
 ### 4. Start Development Server
 ```bash
-pnpm dev
+npm run dev
 ```
 
 ## Verification
@@ -43,24 +43,24 @@ pnpm dev
 
 ## Common Issues
 
-**Problem**: `pnpm install` fails with permission errors  
-**Solution**: Run `sudo chown -R $USER ~/.pnpm-store` to fix permissions
+**Problem**: `npm install` fails with permission errors  
+**Solution**: Ensure you have write access to the project directory and retry
 
 **Problem**: Images not loading in development  
 **Solution**: Check that images are in `public/` directory and referenced with leading slash
 
 **Problem**: Build fails with TypeScript errors  
-**Solution**: Run `pnpm type-check` to see full error details
+**Solution**: Run `npm run type-check` to see full error details
 
 **Problem**: Contact form doesn't send emails  
 **Solution**: Verify RESEND_API_KEY is set correctly in .env
 
 ## Additional Tools
-- **Linting**: `pnpm lint` (ESLint + TypeScript)
-- **Type checking**: `pnpm type-check` (TypeScript compiler)
-- **Testing**: `pnpm test` (Jest + React Testing Library)
-- **Building**: `pnpm build` (Next.js production build)
-- **Preview build**: `pnpm preview` (Test production build locally)
+- **Linting**: `npm run lint` (ESLint + TypeScript)
+- **Type checking**: `npm run type-check` (TypeScript compiler)
+- **Testing**: `npm test` (Vitest)
+- **Building**: `npm run build` (Next.js production build)
+- **Local production run**: `npm run start` (after build)
 
 ## Development Workflow
 
@@ -84,8 +84,8 @@ touch content/blog/post-title.mdx
 ### Deploying to Production
 ```bash
 # Build and test locally first
-pnpm build
-pnpm preview
+npm run build
+npm run start
 
 # Push to main branch
 git push origin main
@@ -95,7 +95,7 @@ git push origin main
 
 ## Project Structure
 ```
-your-dedicated-marketer-site/
+Your-Dedicated-Marketer/
 ├── app/                  # Next.js App Router pages
 ├── components/           # React components
 ├── content/             # MDX blog posts

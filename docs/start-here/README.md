@@ -33,8 +33,8 @@ A modern, SEO-optimized marketing website built with Next.js 14, featuring a blo
 
 ### Prerequisites
 
-- Node.js 18.x or higher
-- npm, yarn, or pnpm
+- Node.js 20.x LTS or higher
+- npm (use `package-lock.json`)
 
 ### Installation
 
@@ -88,6 +88,9 @@ A modern, SEO-optimized marketing website built with Next.js 14, featuring a blo
 - `npm run lint` - Run ESLint
 - `npm run format` - Format code with Prettier
 - `npm run type-check` - Check TypeScript types
+- `npm test` - Run Vitest unit tests
+- `npm run test:coverage` - Generate coverage report
+- `npm run test:e2e` - Run Playwright E2E tests
 
 ### Project Structure
 

@@ -1,6 +1,6 @@
 # Contributing
 
-> **Last Updated:** 2026-01-03  
+> **Last Updated:** 2026-01-05  
 > **Canonical Status:** Canonical  
 > **Purpose:** Development workflow and contribution guidelines  
 > **See Also:** [SETUP.md](./SETUP.md), [DOCS_INDEX.md](../DOCS_INDEX.md)
@@ -20,10 +20,10 @@
 - Write meaningful commit messages using Conventional Commits format
 
 ## Pull Request Requirements
-- [ ] All tests pass (`pnpm test`)
-- [ ] No TypeScript errors (`pnpm type-check`)
-- [ ] No ESLint warnings (`pnpm lint`)
-- [ ] Production build succeeds (`pnpm build`)
+- [ ] All tests pass (`npm test`)
+- [ ] No TypeScript errors (`npm run type-check`)
+- [ ] No ESLint warnings (`npm run lint`)
+- [ ] Production build succeeds (`npm run build`)
 - [ ] Documentation updated for user-facing changes
 - [ ] Lighthouse scores remain >90 for affected pages
 
@@ -55,25 +55,25 @@ docs(readme): update installation instructions
 ## Testing
 ```bash
 # Run test suite
-pnpm test
+npm test
 
-# Run tests in watch mode
-pnpm test:watch
+# Run tests in UI mode
+npm run test:ui
 
 # Run E2E tests
-pnpm test:e2e
+npm run test:e2e
 
 # Run linting
-pnpm lint
+npm run lint
 
-# Fix auto-fixable issues
-pnpm lint:fix
+# Format code
+npm run format
 ```
 
 ## Before Submitting PR
 1. Rebase on latest `main`
-2. Run all checks: `pnpm check`
-3. Test production build: `pnpm build && pnpm preview`
+2. Run all checks: `npm run lint && npm run type-check && npm test`
+3. Test production build: `npm run build && npm run start`
 4. Write clear PR description
 
 ## Questions?

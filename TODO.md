@@ -16,6 +16,7 @@
 
 **Context:**  
 Release 2026.01.05 smoke tests could not fully complete in the local environment due to Playwright/browser instability and font fetch errors. Manual smoke verification is required in a stable Preview Deployment or live environment.
+Local Playwright attempts in this environment still crash the browser process; complete this in a Preview Deployment.
 
 **Acceptance Criteria:**
 - [ ] Verify Universal UI tests in Preview Deployment (app loads, nav works, happy path completes, error state triggers, mobile layout usable)
@@ -41,6 +42,7 @@ Release 2026.01.05 smoke tests could not fully complete in the local environment
 
 **Context:**  
 Registry access was blocked during the @next/mdx alignment, so the lockfile needs regeneration in an environment with npm registry access to restore the correct integrity metadata.
+Current environment returns npm registry 403; rerun where registry access is permitted.
 
 **Acceptance Criteria:**
 - [ ] Run `npm install --package-lock-only` in an environment with registry access
@@ -62,6 +64,7 @@ Registry access was blocked during the @next/mdx alignment, so the lockfile need
 
 **Context:**  
 Running `npm run test:coverage` prompts for `@vitest/coverage-v8`, indicating the coverage provider is missing.
+Current environment returns npm registry 403; add the dependency and regenerate the lockfile where registry access is permitted.
 
 **Acceptance Criteria:**
 - [ ] Add `@vitest/coverage-v8` as a dev dependency

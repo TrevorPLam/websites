@@ -232,7 +232,7 @@ This prevents future churn and re-arguing.
 
 ### Inventory:
 
-**Ecosystem(s):** JavaScript/TypeScript (npm/pnpm)
+**Ecosystem(s):** JavaScript/TypeScript (npm)
 
 **Total Dependencies:**
 - Production: 22 packages
@@ -256,6 +256,7 @@ This prevents future churn and re-arguing.
 - **Issue:** next-pwa@^5.6.0 is outdated and no longer actively maintained. Last significant update was in 2022. May have compatibility issues with Next.js 14.
 - **Risk:** Medium - PWA features may break with future Next.js updates
 - **Recommendation:** Evaluate if PWA features are critical. If yes, consider migration to @ducanh2912/next-pwa (maintained fork) or remove if not actively used.
+- **Status:** Resolved (next-pwa removed in 2026.01.05; static assets retained)
 
 **(P2) Dependency Version Pinning Strategy**
 - **Issue:** All dependencies use caret (^) ranges, which allows automatic minor/patch updates. This is generally safe but can introduce unexpected breaking changes, especially for security-critical dependencies.
@@ -325,8 +326,8 @@ This prevents future churn and re-arguing.
 ### Notes / Assumptions:
 
 - Analysis performed without installing dependencies (based on package.json and code inspection)
-- Repository uses pnpm as package manager (pnpm-lock.yaml present)
-- PWA functionality configured but may not be actively tested/used
+- Repository uses npm as the package manager (package-lock.json)
+- PWA functionality uses static assets only (next-pwa removed)
 - Both @next/mdx and next-mdx-remote are intentionally used for different purposes:
   - @next/mdx: Local .mdx files in pages (build-time compilation)
   - next-mdx-remote: Dynamic blog content from /content directory (runtime)
@@ -340,7 +341,7 @@ This prevents future churn and re-arguing.
 
 ### Inventory:
 
-**Ecosystem(s):** JavaScript/TypeScript (npm/pnpm)
+**Ecosystem(s):** JavaScript/TypeScript (npm)
 
 **Total Dependencies:**
 - Production: 24 packages
@@ -351,7 +352,7 @@ This prevents future churn and re-arguing.
 - **Framework:** next@14.2.18, react@^18.3.1, react-dom@^18.3.1
 - **External Services:** @sentry/nextjs@10.32.1 (error tracking), resend@6.6.0 (email), @upstash/redis@^1.36.0 (rate limiting storage)
 - **Validation & Forms:** zod@4.2.1, react-hook-form@^7.54.2, @hookform/resolvers@^5.2.2
-- **Content Processing:** @next/mdx@^16.1.1, next-mdx-remote@^5.0.0, shiki@^3.20.0, gray-matter@^4.0.3
+- **Content Processing:** @next/mdx@^14.2.18, next-mdx-remote@^5.0.0, shiki@^3.20.0, gray-matter@^4.0.3
 - **Styling:** tailwindcss@^3.4.17, tailwind-merge@^2.6.0
 
 **Duplicates/Overlap Suspected:**
@@ -360,19 +361,22 @@ This prevents future churn and re-arguing.
 ### Findings:
 
 **(P2) Next.js / MDX Version Alignment**
-- **Issue:** next@14.2.18 is paired with @next/mdx@^16.1.1, which may target a different Next.js major line. This could introduce build-time incompatibilities when Next.js updates.
+- **Issue:** next@14.2.18 was paired with @next/mdx@^16.1.1, which could target a different Next.js major line. This risked build-time incompatibilities when Next.js updates.
 - **Risk:** Medium - potential MDX build failures or subtle incompatibilities after updates.
 - **Recommendation:** Verify @next/mdx compatibility with Next 14.2.18 and align to a matching major version if needed. Capture decision and update lockfiles.
+- **Status:** Resolved (@next/mdx aligned to 14.2.18; see T-025)
 
 **(P2) Type-Only Dependency in Production**
-- **Issue:** @types/mdx is listed under production dependencies. Type packages are not needed at runtime and can be moved to devDependencies to keep production installs leaner.
+- **Issue:** @types/mdx was listed under production dependencies. Type packages are not needed at runtime and can be moved to devDependencies to keep production installs leaner.
 - **Risk:** Low - slightly larger production dependency tree.
 - **Recommendation:** Move @types/mdx to devDependencies and update lockfiles.
+- **Status:** Resolved (@types/mdx moved to devDependencies; see T-026)
 
 **(P2) Dual Lockfiles Present**
-- **Issue:** Both package-lock.json and pnpm-lock.yaml exist. This can cause drift and ambiguity in dependency resolution.
+- **Issue:** Both package-lock.json and pnpm-lock.yaml existed. This could cause drift and ambiguity in dependency resolution.
 - **Risk:** Low-Medium - inconsistent installs across environments.
 - **Recommendation:** Decide on a single package manager (npm or pnpm), remove the other lockfile, and document the choice.
+- **Status:** Resolved (npm + package-lock.json only; see T-027)
 
 ### Positive Findings:
 
@@ -380,31 +384,29 @@ This prevents future churn and re-arguing.
 - **No Obvious Dependency Overlap:** Dependencies are scoped to distinct responsibilities.
 - **Modern Tooling:** Testing and build tooling (Vitest, Playwright, TypeScript) are current and well-scoped.
 
-### Tasks Created:
+### Tasks Created (Completed):
 
-**T-025:** Align @next/mdx version with Next.js (documented in TODO.md)  
+**T-025:** Align @next/mdx version with Next.js (see TODO_COMPLETED.md)  
 **Priority:** P2  
 **Type:** QUALITY  
 
-**T-026:** Move @types/mdx to devDependencies (documented in TODO.md)  
+**T-026:** Move @types/mdx to devDependencies (see TODO_COMPLETED.md)  
 **Priority:** P2  
 **Type:** QUALITY  
 
-**T-027:** Consolidate lockfiles to a single package manager (documented in TODO.md)  
+**T-027:** Consolidate lockfiles to a single package manager (see TODO_COMPLETED.md)  
 **Priority:** P2  
 **Type:** QUALITY  
 
 ### Recommended Actions:
 
 1. **Short-term (P2):**
-   - Verify @next/mdx compatibility and align versions (T-025)
-   - Move type-only deps to devDependencies (T-026)
-   - Decide on npm vs pnpm and remove the other lockfile (T-027)
+   - None. Items from this review have been completed (T-025, T-026, T-027).
 
 ### Notes / Assumptions:
 
 - Analysis performed without running package managers (inspection only).
 - @next/mdx usage confirmed in next.config.mjs; version alignment should be validated with build tests.
-- Both npm and pnpm lockfiles present; decision needed to avoid drift.
+- npm is the canonical package manager (package-lock.json present).
 
 ---

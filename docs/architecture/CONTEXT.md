@@ -1,6 +1,6 @@
 # Development Context
 
-> **Last Updated:** 2026-01-03  
+> **Last Updated:** 2026-01-05  
 > **Canonical Status:** Canonical  
 > **Purpose:** Project constraints, requirements, and technical decisions  
 > **See Also:** [DECISIONS.md](../../DECISIONS.md), [DOCS_INDEX.md](../DOCS_INDEX.md)
@@ -13,6 +13,7 @@
 
 ## Technical Requirements
 - **Language**: TypeScript 5.x, Node.js 20.x LTS
+- **Package manager**: npm (package-lock.json)
 - **Framework**: Next.js 14 (App Router), React 18
 - **Browser/Runtime support**: Last 2 versions of major browsers
 - **Accessibility**: WCAG 2.1 AA minimum

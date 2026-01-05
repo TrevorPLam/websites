@@ -295,6 +295,100 @@ Removed unsupported Next.js configuration keys to avoid runtime warnings.
 **Files:**
 - `next.config.mjs`
 
+---
+
+### T-032: Update Setup Guide to Use npm Commands [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Aligned the local setup guide with npm usage, correct environment file naming, and available scripts.
+
+**Completed Actions:**
+- Switched prerequisites and install steps to npm and package-lock.json
+- Updated environment setup to use `.env.local`
+- Replaced pnpm script references with npm run equivalents
+- Corrected local production run guidance to `npm run build` + `npm run start`
+
+**Files:**
+- `docs/workflows/SETUP.md`
+
+---
+
+### T-033: Align Contributing Guide With npm Scripts [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Updated contribution requirements and testing commands to match the npm-based script set.
+
+**Completed Actions:**
+- Replaced pnpm commands with npm equivalents in PR requirements
+- Updated testing commands to match existing npm scripts
+- Removed references to non-existent `check`, `preview`, and `lint:fix` scripts
+
+**Files:**
+- `docs/workflows/CONTRIBUTING.md`
+
+---
+
+### T-034: Refresh Start-Here README for npm + Testing Scripts [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Ensured onboarding documentation reflects npm usage and available test commands.
+
+**Completed Actions:**
+- Updated prerequisites to Node.js 20.x LTS and npm usage
+- Added unit, coverage, and E2E test script references
+
+**Files:**
+- `docs/start-here/README.md`
+
+---
+
+### T-035: Refresh Dependency Health Notes for npm-Only State [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DEP (Dependency Health)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Updated dependency health notes to reflect the npm-only lockfile and resolved findings.
+
+**Completed Actions:**
+- Corrected ecosystem references to npm-only usage
+- Marked prior MDX alignment, @types/mdx, and lockfile issues as resolved
+- Updated content processing version references and assumptions
+
+**Files:**
+- `DEPENDENCY_HEALTH.md`
+
+---
+
+### T-036: Document npm Requirement in Architecture Context [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Recorded npm as the canonical package manager in the architecture context.
+
+**Completed Actions:**
+- Added npm requirement to technical requirements
+- Updated the document timestamp
+
+**Files:**
+- `docs/architecture/CONTEXT.md`
+
 ### T-010: Verify Environment Variable Leakage Prevention [P2] [SEC]
 **Type:** QUALITY  
 **Priority:** P2  
