@@ -1,6 +1,10 @@
 {
   "name": "your-dedicated-marketer",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=20 <23",
+    "npm": ">=10"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,11 +12,12 @@
     "postbuild": "node scripts/check-client-secrets.mjs",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,cjs,mjs,cts,mts,json,md,mdx,yml,yaml,css,scss}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,cjs,mjs,cts,mts,json,md,mdx,yml,yaml,css,scss}\"",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
+    "test:coverage": "node scripts/ensure-vitest-coverage.mjs && vitest --coverage",
     "test:e2e": "playwright test"
   },
   "dependencies": {

@@ -18,12 +18,18 @@ git clone https://github.com/ydFirms/Your-Dedicated-Marketer.git
 cd Your-Dedicated-Marketer
 ```
 
-### 2. Install Dependencies
+### 2. Select Node Version
+```bash
+nvm use             # Uses .nvmrc (Node.js 20.x)
+nvm install         # Run if Node.js 20.x is not installed locally
+```
+
+### 3. Install Dependencies
 ```bash
 npm install --legacy-peer-deps
 ```
 
-### 3. Environment Configuration
+### 4. Environment Configuration
 ```bash
 cp env.example .env.local
 # Edit .env.local with required values:
@@ -31,7 +37,7 @@ cp env.example .env.local
 # - CONTACT_EMAIL: Email address to receive contact form submissions
 ```
 
-### 4. Start Development Server
+### 5. Start Development Server
 ```bash
 npm run dev
 ```
@@ -55,7 +61,12 @@ npm run dev
 **Problem**: Contact form doesn't send emails  
 **Solution**: Verify RESEND_API_KEY is set correctly in .env
 
+**Problem**: `npm install` returns 403 or registry access errors  
+**Solution**: Ensure proxy variables are unset (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`) or pointed at a working proxy, set registry explicitly (`npm config set registry https://registry.npmjs.org/`), and retry. If network egress is blocked in the current environment, rerun dependency commands where the npm registry is reachable (see TODO.md tasks T-030 and T-031).
+
 ## Additional Tools
+- **Formatting (write)**: `npm run format`
+- **Formatting (check)**: `npm run format:check`
 - **Linting**: `npm run lint` (ESLint + TypeScript)
 - **Type checking**: `npm run type-check` (TypeScript compiler)
 - **Testing**: `npm test` (Vitest)

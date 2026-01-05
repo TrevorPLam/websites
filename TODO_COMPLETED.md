@@ -673,6 +673,111 @@ Surface the npm-based pre-commit workflow in the repository entrypoint documenta
 
 ---
 
+### T-042: Enforce Node Version via .nvmrc and Engines [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Environment Consistency)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Standardized the Node.js runtime to 20.x to reduce install and build discrepancies across contributors.
+
+**Completed Actions:**
+- Added `.nvmrc` pinning Node.js 20.19.5 and enforced engines in `package.json`/`package-lock.json`
+- Documented the required Node.js version in READMEAI quick start guidance
+- Updated setup steps to use `nvm use` before installing dependencies
+
+**Files:**
+- `.nvmrc`
+- `package.json`
+- `package-lock.json`
+- `READMEAI.md`
+- `docs/workflows/SETUP.md`
+
+---
+
+### T-043: Expand Prettier Coverage to Common Config Formats [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Broadened Prettier formatting to include configuration, documentation, and style files to keep changes consistent.
+
+**Completed Actions:**
+- Expanded the `npm run format` glob to cover `.cjs`, `.mjs`, `.cts`, `.mts`, `.mdx`, `.yml/.yaml`, and stylesheet files
+- Reflected the updated formatting coverage in READMEAI and setup guidance
+
+**Files:**
+- `package.json`
+- `READMEAI.md`
+- `docs/workflows/SETUP.md`
+- `docs/workflows/CONTRIBUTING.md`
+
+---
+
+### T-044: Add Format Check Script for Contributor Workflow [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Added a non-mutating format check to help contributors validate formatting in CI and pre-submit flows.
+
+**Completed Actions:**
+- Introduced `npm run format:check` and documented it in READMEAI, SETUP, and CONTRIBUTING
+- Updated contributor checklists to include the new format verification step
+
+**Files:**
+- `package.json`
+- `READMEAI.md`
+- `docs/workflows/SETUP.md`
+- `docs/workflows/CONTRIBUTING.md`
+
+---
+
+### T-045: Document npm Registry Troubleshooting for Blocked Installs [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Provided guidance for resolving npm registry 403 errors to unblock dependency installation tasks.
+
+**Completed Actions:**
+- Added Common Issues guidance for clearing proxy variables and enforcing the npm registry
+- Linked guidance to existing tasks T-030 and T-031 for environments still blocked
+
+**Files:**
+- `docs/workflows/SETUP.md`
+
+---
+
+### T-046: Add Coverage Dependency Guardrail [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Prevented `npm run test:coverage` from prompting interactively by checking for the coverage provider before running.
+
+**Completed Actions:**
+- Added `scripts/ensure-vitest-coverage.mjs` to check for `@vitest/coverage-v8`
+- Updated the coverage script to fail fast with installation guidance
+- Documented the new guardrail in READMEAI and CONTRIBUTING
+
+**Files:**
+- `scripts/ensure-vitest-coverage.mjs`
+- `package.json`
+- `READMEAI.md`
+- `docs/workflows/CONTRIBUTING.md`
+
+---
+
 ## Completed - 2026-01-03 (P1/P2)
 
 ### T-004: Add CSRF Token Support Documentation [P1] [SEC]
