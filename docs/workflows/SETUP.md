@@ -59,6 +59,7 @@ npm run dev
 - **Linting**: `npm run lint` (ESLint + TypeScript)
 - **Type checking**: `npm run type-check` (TypeScript compiler)
 - **Testing**: `npm test` (Vitest)
+- **Coverage**: `npm run test:coverage` (requires `@vitest/coverage-v8`, outputs to `coverage/`)
 - **Building**: `npm run build` (Next.js production build)
 - **Local production run**: `npm run start` (after build)
 

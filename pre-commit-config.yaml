@@ -46,7 +46,7 @@ repos:
     hooks:
       - id: typescript
         name: TypeScript type check
-        entry: pnpm type-check
+        entry: npm run type-check
         language: system
         types: [ts, tsx]
         pass_filenames: false

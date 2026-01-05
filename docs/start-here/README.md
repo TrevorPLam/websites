@@ -92,6 +92,10 @@ A modern, SEO-optimized marketing website built with Next.js 14, featuring a blo
 - `npm run test:coverage` - Generate coverage report
 - `npm run test:e2e` - Run Playwright E2E tests
 
+**Coverage notes**
+- Requires the dev dependency `@vitest/coverage-v8`
+- Reports are written to the `coverage/` directory (open `coverage/index.html` for HTML output)
+
 ### Project Structure
 
 ```

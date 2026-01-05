@@ -580,6 +580,99 @@ Implemented site-wide search with keyboard shortcuts and a dedicated search page
 
 ---
 
+### T-037: Update Pre-commit Type Check Hook to npm [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Aligned the pre-commit TypeScript hook with the npm-based workflow to avoid pnpm dependency failures.
+
+**Completed Actions:**
+- Updated the local TypeScript hook entry to run `npm run type-check`
+- Documented the change in the Unreleased changelog
+
+**Files:**
+- `pre-commit-config.yaml`
+- `CHANGELOG.md`
+
+---
+
+### T-038: Document Coverage Workflow and Dependency [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Added guidance for running coverage with the Vitest V8 provider across contributor-facing docs.
+
+**Completed Actions:**
+- Documented coverage requirements and outputs in the start-here guide
+- Added coverage command notes and dependency callout to SETUP instructions
+
+**Files:**
+- `docs/start-here/README.md`
+- `docs/workflows/SETUP.md`
+
+---
+
+### T-039: Record Dependency Updates in Changelog and Health Notes [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DEP (Dependency Health)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Captured upcoming dependency changes and lockfile regeneration needs in the changelog and dependency health report.
+
+**Completed Actions:**
+- Added Unreleased changelog notes for the coverage dependency and npm pre-commit hook
+- Updated dependency health summary with the pending coverage provider and lockfile regeneration tasks
+
+**Files:**
+- `CHANGELOG.md`
+- `DEPENDENCY_HEALTH.md`
+
+---
+
+### T-040: Add Coverage Guidance to CONTRIBUTING [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Ensured contributors understand how to run and review coverage reports locally.
+
+**Completed Actions:**
+- Added coverage command and output location to CONTRIBUTING testing instructions
+- Clarified the dependency on `@vitest/coverage-v8`
+
+**Files:**
+- `docs/workflows/CONTRIBUTING.md`
+
+---
+
+### T-041: Document Pre-commit Usage in READMEAI [P2] [QUALITY]
+**Type:** QUALITY  
+**Priority:** P2  
+**Category:** DX (Developer Experience)  
+**Completed:** 2026-01-05
+
+**Description:**  
+Surface the npm-based pre-commit workflow in the repository entrypoint documentation.
+
+**Completed Actions:**
+- Added pre-commit install and run commands to READMEAI
+- Highlighted that hooks rely on `npm run type-check`
+
+**Files:**
+- `READMEAI.md`
+
+---
+
 ## Completed - 2026-01-03 (P1/P2)
 
 ### T-004: Add CSRF Token Support Documentation [P1] [SEC]

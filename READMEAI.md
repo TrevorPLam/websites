@@ -100,6 +100,15 @@ npm test
 npm run test:e2e
 ```
 
+### Pre-commit Hooks
+```bash
+# Install hook scripts once
+pre-commit install
+
+# Run the hooks manually (uses npm run type-check)
+pre-commit run --all-files
+```
+
 ### Building for Production
 ```bash
 # Build the application

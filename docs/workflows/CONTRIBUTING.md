@@ -57,6 +57,9 @@ docs(readme): update installation instructions
 # Run test suite
 npm test
 
+# Run coverage (writes to coverage/)
+npm run test:coverage
+
 # Run tests in UI mode
 npm run test:ui
 
@@ -69,6 +72,10 @@ npm run lint
 # Format code
 npm run format
 ```
+
+**Coverage guidance**
+- Requires the dev dependency `@vitest/coverage-v8`
+- Coverage reports are written to `coverage/` (open `coverage/index.html` for HTML output)
 
 ## Before Submitting PR
 1. Rebase on latest `main`

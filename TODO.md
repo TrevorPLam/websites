@@ -26,6 +26,9 @@ Current environment returns npm registry 403; rerun where registry access is per
 - [ ] Run `npm install --package-lock-only` in an environment with registry access
 - [ ] Ensure @next/mdx resolves to 14.2.18 with valid integrity data
 - [ ] Confirm no other dependency drift is introduced
+- [ ] Status note added if blocked due to registry access
+
+**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment.
 
 **References:**
 - File: `package-lock.json`
@@ -48,6 +51,9 @@ Current environment returns npm registry 403; add the dependency and regenerate 
 - [ ] Add `@vitest/coverage-v8` as a dev dependency
 - [ ] Update `package-lock.json` with registry-backed integrity data
 - [ ] Verify `npm run test:coverage` runs without prompting
+- [ ] Status note added if blocked due to registry access
+
+**Status:** Blocked in this environment (2026-01-05) due to npm registry 403 responses. Re-run in a network-allowed environment.
 
 **References:**
 - File: `package.json`

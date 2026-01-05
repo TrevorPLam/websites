@@ -378,6 +378,12 @@ This prevents future churn and re-arguing.
 - **Recommendation:** Decide on a single package manager (npm or pnpm), remove the other lockfile, and document the choice.
 - **Status:** Resolved (npm + package-lock.json only; see T-027)
 
+**(P2) Coverage Provider Dependency Missing**
+- **Issue:** `npm run test:coverage` prompts for `@vitest/coverage-v8`, which is not yet installed.
+- **Risk:** Low-Medium - coverage runs fail locally and in CI until the provider is added.
+- **Recommendation:** Add `@vitest/coverage-v8` as a dev dependency and regenerate `package-lock.json` with registry access.
+- **Status:** Pending (blocked by npm registry 403; tracked in T-031)
+
 ### Positive Findings:
 
 - **Pinned Critical Versions:** next, zod, resend, and @sentry/nextjs are pinned to exact versions.
@@ -398,10 +404,18 @@ This prevents future churn and re-arguing.
 **Priority:** P2  
 **Type:** QUALITY  
 
+**T-031:** Add Vitest Coverage Dependency (see TODO.md)  
+**Priority:** P2  
+**Type:** QUALITY  
+
+**T-030:** Regenerate package-lock.json for @next/mdx Alignment (see TODO.md)  
+**Priority:** P2  
+**Type:** QUALITY  
+
 ### Recommended Actions:
 
 1. **Short-term (P2):**
-   - None. Items from this review have been completed (T-025, T-026, T-027).
+   - Add `@vitest/coverage-v8` and regenerate `package-lock.json` when registry access is available (T-031, T-030).
 
 ### Notes / Assumptions:
 

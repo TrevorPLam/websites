@@ -13,11 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Removed deprecated `api` and `sentry` keys from `next.config.mjs`
 - Documented npm as the canonical package manager and lockfile
+- Updated pre-commit TypeScript hook to use npm instead of pnpm
 
 ### Dependencies
 - Aligned `@next/mdx` to the Next.js 14.x line
 - Moved `@types/mdx` to devDependencies
 - Removed `pnpm-lock.yaml` in favor of `package-lock.json`
+- Planned `@vitest/coverage-v8` addition for coverage reporting (install + lockfile regeneration pending registry access)
 
 ## [2026.01.05] - 2026-01-05
 
