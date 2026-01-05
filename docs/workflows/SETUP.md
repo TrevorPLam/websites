@@ -62,7 +62,7 @@ npm run dev
 **Solution**: Verify RESEND_API_KEY is set correctly in .env
 
 **Problem**: `npm install` returns 403 or registry access errors  
-**Solution**: Ensure proxy variables are unset (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`) or pointed at a working proxy, set registry explicitly (`npm config set registry https://registry.npmjs.org/`), and retry. If network egress is blocked in the current environment, rerun dependency commands where the npm registry is reachable (see TODO.md tasks T-030 and T-031).
+**Solution**: Run `npm run check:npm-registry` to confirm registry reachability and detect proxy variables. Ensure proxy variables are unset (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`) or pointed at a working proxy, set registry explicitly (`npm config set registry https://registry.npmjs.org/`), and retry. If network egress is blocked in the current environment, rerun dependency commands where the npm registry is reachable (see TODO.md tasks T-030 and T-031).
 
 ## Additional Tools
 - **Formatting (write)**: `npm run format`

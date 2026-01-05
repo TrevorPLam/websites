@@ -14,6 +14,7 @@
     "lint": "next lint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,cjs,mjs,cts,mts,json,md,mdx,yml,yaml,css,scss}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,cjs,mjs,cts,mts,json,md,mdx,yml,yaml,css,scss}\"",
+    "check:npm-registry": "node scripts/npm-registry-check.mjs",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",

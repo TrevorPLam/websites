@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added `npm run check:npm-registry` to diagnose registry connectivity and proxy issues before running dependency commands
+
 ### Security
 - Added hashed IP + email rate limiting for contact form submissions
 
