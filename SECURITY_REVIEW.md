@@ -432,3 +432,23 @@ All findings documented in TODO.md with detailed acceptance criteria:
 - Or immediately if any P0/P1 issues arise from external reports
 
 ---
+
+## Security Review Summary — 2026-01-05
+
+## Scope reviewed:
+
+Targeted re-review of contact form abuse protections, rate limiting, environment variable handling, and logging practices. Confirmed no new secrets added.
+
+Top findings:
+
+* (P0) None identified
+* (P1) Rate limiting lacks IP-based dimension; per-email only, enabling bypass via throwaway addresses
+* (P2) None identified
+
+* Tasks created:
+* T-024 Add IP-aware rate limiting for contact form
+
+* Notes / assumptions:
+* Rate limiting currently uses Upstash Redis when configured and falls back to in-memory; both only key on email.
+* App runs behind a proxy/CDN (e.g., Vercel); trustworthy client IP extraction must be handled explicitly.
+* No secrets were found in repo files during this review; env.example remains placeholder-only.

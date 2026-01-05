@@ -203,6 +203,31 @@ The .env.local file has been created with development defaults, but production d
 
 ---
 
+### T-024: Add IP-Aware Rate Limiting for Contact Form [P1] [SEC]
+**Type:** ENHANCE  
+**Priority:** P1  
+**Category:** SEC (Abuse Prevention)  
+**Effort:** M
+
+**Context:**  
+Rate limiting currently keys solely on the submitted email address. Attackers can rotate throwaway email values to bypass limits and flood the contact form, causing alert fatigue and potential Resend cost increases. Upstash-backed distributed limiting and the in-memory fallback both need client IP awareness to meaningfully throttle abusive traffic across instances.
+
+**Acceptance Criteria:**
+- [ ] Add IP-based throttling for contact form submissions (hash IPs for privacy) and combine with existing per-email limits
+- [ ] Extract client IP using trusted headers (`x-forwarded-for`/`x-real-ip`) with sane fallbacks when running on Vercel or similar proxies
+- [ ] Apply IP-aware keys to both Upstash rate limiter and in-memory fallback; document window/thresholds alongside privacy considerations
+- [ ] Update SECURITY.md or DECISIONS.md to record the rate limiting strategy and IP handling trade-offs
+- [ ] Add tests (unit or integration) covering enforcement when only IP changes vs when both email and IP change
+
+**References:**
+- File: `lib/actions.ts`
+- Doc: `SECURITY.md`
+- Doc: `DECISIONS.md`
+
+**Dependencies:** None
+
+---
+
 ### ~~T-016: Implement Distributed Rate Limiting [P1] [ENHANCE]~~ ✅ COMPLETED
 **Type:** ENHANCE
 **Priority:** P1
