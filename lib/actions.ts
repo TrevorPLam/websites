@@ -1,3 +1,27 @@
+/**
+ * Server actions for contact form submission with rate limiting and email delivery.
+ * 
+ * **Features:**
+ * - Distributed rate limiting via Upstash Redis (production) or in-memory fallback (development)
+ * - Input sanitization to prevent XSS and email header injection attacks
+ * - IP address hashing for privacy (SHA-256)
+ * - Email delivery via Resend API with graceful fallback
+ * 
+ * **Security:**
+ * - All user inputs sanitized with escapeHtml() before use
+ * - Email subjects sanitized to prevent header injection
+ * - IP addresses hashed before storage (never logged in plain text)
+ * - Rate limits enforced per email address AND per IP address
+ * - Payload size limited by middleware (1MB max)
+ * 
+ * **Error Handling:**
+ * - Validation errors return user-friendly messages
+ * - Rate limit errors return "try again later" message
+ * - Network/API errors logged to Sentry, return generic error message
+ * 
+ * @module lib/actions
+ */
+
 'use server'
 import { createHash } from 'crypto'
 import { headers } from 'next/headers'
@@ -6,24 +30,63 @@ import { escapeHtml, sanitizeEmailSubject, textToHtmlParagraphs } from './saniti
 import { validatedEnv } from './env'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
 
-// Rate limiting configuration
+/**
+ * Rate limiting configuration.
+ * - 3 requests per hour per email address
+ * - 3 requests per hour per IP address
+ */
 const RATE_LIMIT_MAX_REQUESTS = 3
 const RATE_LIMIT_WINDOW = '1 h' // 1 hour
 
-// Distributed rate limiting with Upstash Redis (production)
-// Falls back to in-memory rate limiting if Upstash is not configured
+/**
+ * Rate limiter interface for distributed (Upstash) rate limiting.
+ */
 type RateLimiter = {
   limit: (identifier: string) => Promise<{ success: boolean }>
 }
-let rateLimiter: RateLimiter | null | false = null
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>() // Fallback
 
+/**
+ * Rate limiter instance (null = not initialized, false = fallback to in-memory).
+ */
+let rateLimiter: RateLimiter | null | false = null
+
+/**
+ * In-memory rate limit tracking (fallback when Upstash is not configured).
+ * Maps identifier to request count and reset timestamp.
+ */
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+
+/**
+ * Salt for IP address hashing to prevent rainbow table attacks.
+ */
 const IP_HASH_SALT = 'contact_form_ip'
 
+/**
+ * Hash an identifier (email or IP) for privacy and storage.
+ * 
+ * Uses SHA-256 with salt to prevent rainbow table attacks.
+ * IP addresses are NEVER stored or logged in plain text.
+ * 
+ * @param value - The value to hash (email or IP address)
+ * @returns Hex-encoded SHA-256 hash
+ */
 function hashIdentifier(value: string): string {
   return createHash('sha256').update(`${IP_HASH_SALT}:${value}`).digest('hex')
 }
 
+/**
+ * Get client IP address from request headers.
+ * 
+ * Checks multiple headers in order of preference:
+ * 1. x-forwarded-for (standard proxy header)
+ * 2. x-vercel-forwarded-for (Vercel-specific)
+ * 3. x-real-ip (nginx)
+ * 4. cf-connecting-ip (Cloudflare)
+ * 
+ * If multiple IPs are present (comma-separated), returns the first one.
+ * 
+ * @returns Client IP address or 'unknown' if not available
+ */
 function getClientIp(): string {
   const requestHeaders = headers()
   const forwardedFor =
@@ -39,7 +102,21 @@ function getClientIp(): string {
   return forwardedFor.split(',')[0]?.trim() || 'unknown'
 }
 
-// Initialize rate limiter
+/**
+ * Initialize rate limiter with Upstash Redis (distributed) or fallback to in-memory.
+ * 
+ * **Distributed (Production):**
+ * - Uses Upstash Redis for multi-instance rate limiting
+ * - Sliding window algorithm (3 requests per hour)
+ * - Analytics enabled for monitoring
+ * 
+ * **In-Memory (Development/Fallback):**
+ * - Uses Map for single-instance rate limiting
+ * - Not suitable for production (does not sync across instances)
+ * - Used when UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN not set
+ * 
+ * @returns RateLimiter instance or null for in-memory fallback
+ */
 async function getRateLimiter() {
   if (rateLimiter !== null) {
     return rateLimiter
@@ -79,7 +156,22 @@ async function getRateLimiter() {
   return null
 }
 
-// In-memory rate limiting fallback
+/**
+ * Check rate limit using in-memory storage (fallback when Upstash unavailable).
+ * 
+ * **Algorithm:**
+ * - Fixed window: 1 hour sliding
+ * - Automatically cleans up expired entries
+ * - Stores count and reset timestamp per identifier
+ * 
+ * **Limitations:**
+ * - NOT suitable for production (single-instance only)
+ * - Does not sync across multiple server instances
+ * - Memory usage grows with unique identifiers (auto-cleaned on expiry)
+ * 
+ * @param identifier - Unique identifier (email:xxx or ip:hash)
+ * @returns true if request allowed, false if rate limit exceeded
+ */
 function checkRateLimitInMemory(identifier: string): boolean {
   const now = Date.now()
   const limit = rateLimitMap.get(identifier)
@@ -89,7 +181,22 @@ function checkRateLimitInMemory(identifier: string): boolean {
     rateLimitMap.delete(identifier)
   }
 
-  const existing = rateLimitMap.get(identifier)
+ **
+ * Check rate limits for both email and IP address.
+ * 
+ * **Dual Rate Limiting:**
+ * - Enforces limits per email address (prevents single user spam)
+ * - Enforces limits per IP address (prevents distributed attacks)
+ * - BOTH limits must pass for request to be allowed
+ * 
+ * **Implementation:**
+ * - Uses Upstash Redis if configured (production)
+ * - Falls back to in-memory if not configured (development)
+ * 
+ * @param email - User's email address (not hashed for email-based limiting)
+ * @param clientIp - Client IP address (hashed before storage)
+ * @returns true if both limits pass, false if either limit exceeded
+ */p.get(identifier)
 
   if (!existing) {
     rateLimitMap.set(identifier, { count: 1, resetAt: now + 60 * 60 * 1000 }) // 1 hour
@@ -115,6 +222,66 @@ async function checkRateLimit(email: string, clientIp: string): Promise<boolean>
     const emailLimit = await limiter.limit(emailIdentifier)
     if (!emailLimit.success) {
       return false
+/**
+ * Submit contact form with validation, rate limiting, sanitization, and email delivery.
+ * 
+ * **Flow:**
+ * 1. Validate input with Zod schema (contactFormSchema)
+ * 2. Check rate limits (email + IP)
+ * 3. Sanitize all inputs to prevent XSS
+ * 4. Send email via Resend API (if configured)
+ * 5. Log result to Sentry (errors) and logger (info/warn)
+ * 
+ * **Rate Limiting:**
+ * - 3 requests per hour per email address
+ * - 3 requests per hour per IP address
+ * - Uses Upstash Redis (distributed) or in-memory fallback
+ * - Returns "Too many submissions" message on limit exceeded
+ * 
+ * **Security:**
+ * - All inputs sanitized with escapeHtml() to prevent XSS
+ * - Email subject sanitized to prevent header injection
+ * - IP addresses hashed before storage (SHA-256 with salt)
+ * - Payload size limited by middleware (1MB max)
+ * - No user data stored (immediately forwarded via email)
+ * 
+ * **Email Delivery:**
+ * - Sends via Resend API if RESEND_API_KEY configured
+ * - Falls back to logging in development (no email sent)
+ * - HTML email with inline styles for broad client compatibility
+ * - Errors logged to Sentry in production
+ * 
+ * **Error Handling:**
+ * - Validation errors (Zod): Returns field-specific error messages
+ * - Rate limit errors: Returns "try again later" message
+ * - Network/API errors: Returns generic error, logs to Sentry
+ * - Never exposes internal error details to users
+ * 
+ * @param data - Contact form data (validated against contactFormSchema)
+ * @returns Success response with message or error response with details
+ * 
+ * @throws Never throws - all errors caught and returned as response objects
+ * 
+ * @example
+ * ```typescript
+ * const result = await submitContactForm({
+ *   name: 'John Doe',
+ *   email: 'john@example.com',
+ *   message: 'I need help with SEO',
+ *   company: 'Acme Corp', // optional
+ * });
+ * 
+ * if (result.success) {
+ *   console.log(result.message); // "Thank you for your message!"
+ * } else {
+ *   console.error(result.message); // User-friendly error message
+ *   if (result.errors) {
+ *     // Zod validation errors
+ *     result.errors.forEach(err => console.error(err.message));
+ *   }
+ * }
+ * ```
+ */
     }
 
     const ipLimit = await limiter.limit(ipIdentifier)
