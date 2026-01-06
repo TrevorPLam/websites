@@ -1,140 +1,148 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-07
+Last Updated: 2026-01-06
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
 
-## Task schema (required)
-- **ID**: `T-###` (unique)
+## Task Schema (Required)
+- **ID**: `T-###` (unique, sequential)
 - **Priority**: `P0 | P1 | P2 | P3`
 - **Type**: `SECURITY | RELEASE | DEPENDENCY | DOCS | QUALITY | BUG | FEATURE | CHORE`
 - **Owner**: `AGENT | Trevor`
-- **Status**: `READY | BLOCKED | IN-PROGRESS | IN-REVIEW`
+- **Status**: `READY | BLOCKED | IN-PROGRESS | IN-REVIEW | DONE`
 - **Context**: why the task exists (1–5 bullets)
-- **Acceptance Criteria**: verifiable checklist
+- **Acceptance Criteria**: verifiable checklist (broken into subtasks T-###.#)
 - **References**: file paths and/or links inside this repo
 - **Dependencies**: task IDs (if any)
-- **Effort**: `S | M | L` (relative; explain if unclear)
+- **Effort**: `XS | S | M | L | XL` (XS = < 30 min, S = < 2 hr, M = < 4 hr, L = < 1 day, XL = > 1 day)
 
-### Priority meaning
-- **P0**: blocks production readiness or causes security/data loss
-- **P1**: high impact; do within 7 days
-- **P2**: important but not urgent; do within 30 days
-- **P3**: backlog/tech debt; do when convenient
+### Priority Meaning
+- **P0**: BLOCKS BUILD or causes security/data loss — fix immediately
+- **P1**: High impact; do within 7 days
+- **P2**: Important but not urgent; do within 30 days
+- **P3**: Backlog/tech debt; do when convenient
 
-### Ownership rule
-- **Owner: AGENT** means the task can be executed by a coding agent in-repo.
-- **Owner: Trevor** means it requires external actions (provider dashboards, DNS, billing, approvals).
+### Ownership Rule
+- **Owner: AGENT** — task can be executed by Codex/Claude Code/Copilot in-repo
+- **Owner: Trevor** — requires external actions (provider dashboards, DNS, billing, approvals)
 
-## Active tasks (fill in)
-> Keep tasks small and independently executable. Prefer ≤ 1 day per task.
+---
 
-### T-001: Add input validation to OG image route
-Priority: P2
+## 🔴 PHASE 0: Build Blockers (P0)
+> These MUST be fixed before any other work. Build is currently broken.
+
+### T-001: Fix corrupted JSDoc and syntax in lib/actions.ts
+Priority: P0
+Type: BUG
+Owner: AGENT
+Status: READY
+Context:
+- **BUILD BLOCKER**: `lib/actions.ts` has corrupted JSDoc comments breaking TypeScript compilation
+- Line 184: ` **` should be `/**` (missing opening slash)
+- Line 200: `*/p.get(identifier)` — comment end merged with code `rateLimitMap.get(identifier)`
+- Missing function body for `checkRateLimitInMemory` (last ~10 lines got overwritten by JSDoc)
+- Discovered during deep-dive audit 2026-01-06
+Acceptance Criteria:
+- [ ] T-001.1: Fix line 184 JSDoc opening (`/**` not ` **`)
+- [ ] T-001.2: Restore line 200 — separate `*/` from `rateLimitMap.get(identifier)`
+- [ ] T-001.3: Restore missing function body for `checkRateLimitInMemory`
+- [ ] T-001.4: Run `npm run type-check` — must pass with 0 errors
+- [ ] T-001.5: Run `npm run build` — must succeed
+References:
+- `/lib/actions.ts` (lines 175-215)
+Dependencies: None
+Effort: S
+
+### T-002: Add missing Zod import to lib/actions.ts
+Priority: P0
+Type: BUG
+Owner: AGENT
+Status: READY
+Context:
+- **BUILD BLOCKER**: `z.ZodError` used on line 390 but `z` is not imported
+- Only `contactFormSchema` is imported from `@/lib/contact-form-schema`
+- Causes TypeScript error: `Cannot find name 'z'`
+Acceptance Criteria:
+- [ ] T-002.1: Add `import { z } from 'zod'` to imports section
+- [ ] T-002.2: Verify no other unresolved references
+- [ ] T-002.3: Run `npm run type-check` — must pass
+References:
+- `/lib/actions.ts` (line 390)
+Dependencies: T-001
+Effort: XS
+
+### T-003: Verify and fix React/React-DOM version mismatch
+Priority: P0
+Type: DEPENDENCY
+Owner: AGENT
+Status: READY
+Context:
+- `react: ^19.2.3` but `react-dom: ^18.3.1` — major version mismatch
+- `@types/react: ^19.2.7` but `@types/react-dom: ^18.3.17` — type mismatch
+- May cause runtime hydration errors or undefined behavior
+- Should be same major version
+Acceptance Criteria:
+- [ ] T-003.1: Update `react-dom` to `^19.x` to match `react`
+- [ ] T-003.2: Update `@types/react-dom` to match React 19
+- [ ] T-003.3: Run `npm install` and verify no peer dep warnings
+- [ ] T-003.4: Run `npm run build` — must succeed
+- [ ] T-003.5: Run `npm run test` — existing tests must pass
+References:
+- `/package.json` (lines 36-37, 55-56)
+Dependencies: T-001, T-002
+Effort: S
+
+---
+
+## 🟠 PHASE 1: Security & Stability (P1)
+> Fix security issues and stabilize production readiness.
+
+### T-004: Add input validation to OG image route
+Priority: P1
 Type: SECURITY
 Owner: AGENT
 Status: READY
 Context:
-- The `/app/api/og/route.tsx` endpoint accepts title and description query params without validation
-- Could potentially be exploited for XSS in generated OG images (low risk but defense-in-depth)
+- `/app/api/og/route.tsx` accepts `title` and `subtitle` query params without validation
+- Could cause memory issues with very long strings
+- Defense-in-depth: sanitize even low-risk inputs
 - Found during SECURITYAUDIT.md run
 Acceptance Criteria:
-- [ ] Add max length validation for title param (200 chars)
-- [ ] Add max length validation for description param (500 chars)
-- [ ] Sanitize params using `escapeHtml` from `lib/sanitize.ts`
-- [ ] Test with malicious inputs to verify sanitization works
+- [ ] T-004.1: Add Zod schema for query params with max lengths (title: 200, subtitle: 500)
+- [ ] T-004.2: Import and use `escapeHtml` from `lib/sanitize.ts`
+- [ ] T-004.3: Return 400 error for invalid inputs
+- [ ] T-004.4: Add unit test for validation
+- [ ] T-004.5: Test manually with malicious inputs
 References:
 - `/app/api/og/route.tsx`
 - `/lib/sanitize.ts`
-Dependencies: None
+Dependencies: T-001, T-002, T-003
 Effort: S
 
-### T-002: Document production deployment details
+### T-005: Add honeypot field for spam prevention
 Priority: P1
-Type: DOCS
-Owner: Trevor
-Status: READY
-Context:
-- `docs/DEPLOYMENT.md` is currently a template
-- Production deployment to Vercel needs to be documented
-- Rollback procedures need to be defined
-- Found during RELEASEAUDIT.md run
-Acceptance Criteria:
-- [ ] Fill in target environments section (local/staging/production URLs)
-- [ ] Document Vercel deployment process
-- [ ] Document environment variable requirements
-- [ ] Define rollback plan (Vercel dashboard + git revert)
-- [ ] Document DNS and domain configuration if applicable
-References:
-- `/docs/DEPLOYMENT.md`
-Dependencies: None
-Effort: M
-
-### T-003: Create mobile-first smoke test checklist
-Priority: P1
-Type: RELEASE
+Type: SECURITY
 Owner: AGENT
 Status: READY
 Context:
-- No documented smoke test checklist exists for pre-release validation
-- Marketing site should be verified on mobile devices first (mobile-first design)
-- Found during RELEASEAUDIT.md run
+- Rate limiting exists but honeypot provides zero-cost spam reduction
+- Hidden field that bots fill but humans don't see
+- Industry standard anti-spam technique
 Acceptance Criteria:
-- [ ] Create smoke test checklist in `docs/RELEASE_CHECKLIST.md`
-- [ ] Include mobile viewport tests for key pages (home, services, pricing, contact)
-- [ ] Include contact form submission test
-- [ ] Include SEO metadata verification (title, description, OG tags)
-- [ ] Include performance check (Lighthouse mobile score)
-- [ ] Include broken link check
+- [ ] T-005.1: Add hidden `website` field to contact form schema (must be empty)
+- [ ] T-005.2: Add visually hidden input to ContactForm component
+- [ ] T-005.3: Reject submissions where honeypot is filled in `lib/actions.ts`
+- [ ] T-005.4: Add unit test for honeypot rejection
+- [ ] T-005.5: Document in SECURITY.md
 References:
-- Create `/docs/RELEASE_CHECKLIST.md`
-Dependencies: None
+- `/components/ContactForm.tsx`
+- `/lib/contact-form-schema.ts`
+- `/lib/actions.ts`
+- `/SECURITY.md`
+Dependencies: T-001, T-002
 Effort: S
-
-### T-004: Add README to ARCHIVE explaining archived files
-Priority: P3
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- `docs/ARCHIVE/` contains old audit files and docs that may confuse agents
-- No explanation exists for why files are archived
-- Found during DOCSAUDIT.md run
-Acceptance Criteria:
-- [ ] Create `docs/ARCHIVE/README.md`
-- [ ] Explain that these are historical/superseded documents
-- [ ] Reference the authoritative current versions in root/docs
-- [ ] Add "Do not use these for new work" warning
-References:
-- Create `/docs/ARCHIVE/README.md`
-- `/docs/ARCHIVE/`
-Dependencies: None
-Effort: S
-
-### T-005: Add image optimization with next/image
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Currently no usage of Next.js Image component found in codebase
-- Images should use next/image for automatic optimization, lazy loading, and responsive sizing
-- This improves performance scores and reduces bandwidth usage
-- Part of "Diamond Standard" initiative for performance optimization
-Acceptance Criteria:
-- [ ] Audit all <img> tags in components and convert to next/image
-- [ ] Add proper width/height/alt attributes to all images
-- [ ] Verify images are lazy-loaded by default
-- [ ] Add priority prop to above-the-fold hero images
-- [ ] Document image optimization guidelines in UI_DESIGN_SYSTEM.md
-References:
-- `/components/**/*.tsx`
-- `/app/**/*.tsx`
-- `/docs/UI_DESIGN_SYSTEM.md`
-Dependencies: None
-Effort: M
 
 ### T-006: Implement comprehensive accessibility audit
 Priority: P1
@@ -142,863 +150,597 @@ Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
+- WCAG 2.1 AA compliance required for Diamond Standard
 - Found aria-labels in SearchDialog, Footer, Breadcrumbs ✅
-- Need to verify WCAG 2.1 AA compliance across all pages
-- Missing skip-to-content links verification
-- Need keyboard navigation testing for all interactive elements
-- Part of "Diamond Standard" for accessibility (WCAG 2.1 AA minimum)
+- Missing: systematic audit, keyboard navigation testing, color contrast verification
 Acceptance Criteria:
-- [ ] Run axe-core or similar a11y scanner on all pages
-- [ ] Verify all interactive elements have focus indicators
-- [ ] Test keyboard navigation for forms, modals, navigation
-- [ ] Verify color contrast ratios meet WCAG AA (4.5:1 for normal text)
-- [ ] Add alt text audit for all images
-- [ ] Document accessibility standards in UI_DESIGN_SYSTEM.md
-- [ ] Add a11y tests to CI/CD pipeline (npm script)
+- [ ] T-006.1: Install axe-core devDependency for automated scanning
+- [ ] T-006.2: Create `scripts/a11y-audit.sh` to run axe on all pages
+- [ ] T-006.3: Verify all interactive elements have visible focus indicators
+- [ ] T-006.4: Test keyboard navigation for forms, modals, navigation
+- [ ] T-006.5: Verify color contrast ratios (4.5:1 minimum)
+- [ ] T-006.6: Document a11y standards in `docs/UI_DESIGN_SYSTEM.md`
+- [ ] T-006.7: Add `npm run a11y` script to package.json
 References:
 - All components and pages
 - `/docs/UI_DESIGN_SYSTEM.md`
-Dependencies: None
-Effort: L
-
-### T-007: Add E2E tests for error states and edge cases
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Existing E2E tests cover happy paths ✅
-- Missing tests for: loading states, error states, network failures
-- Missing tests for: empty states (no blog posts, no search results)
-- Part of "Diamond Standard" for testing coverage
-Acceptance Criteria:
-- [ ] Add E2E test for network failure on contact form submission
-- [ ] Add E2E test for rate limiting (3 submissions in 1 hour)
-- [ ] Add E2E test for 404 and 500 error pages
-- [ ] Add E2E test for search with no results
-- [ ] Add E2E test for blog/case studies with loading states
-- [ ] Document E2E testing strategy in TESTING_STRATEGY.md
-References:
-- `/tests/e2e/`
-- `/docs/TESTING_STRATEGY.md`
-Dependencies: None
+Dependencies: T-003
 Effort: M
 
-### T-008: Implement performance monitoring and budgets
+### T-007: Implement performance monitoring and budgets
 Priority: P1
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
 - No Lighthouse CI or performance budgets configured
-- No bundle size monitoring in place
-- Part of "Diamond Standard" for performance (Core Web Vitals targets)
-- Should aim for: LCP < 2.5s, FID < 100ms, CLS < 0.1, FCP < 1.8s
+- Diamond Standard requires: LCP < 2.5s, FID < 100ms, CLS < 0.1
+- @next/bundle-analyzer already available
 Acceptance Criteria:
-- [ ] Add Lighthouse CI configuration (lighthouserc.json)
-- [ ] Define performance budgets (LCP, FID, CLS, bundle size)
-- [ ] Add npm script to run Lighthouse locally
-- [ ] Document performance targets in docs/OBSERVABILITY.md
-- [ ] Add bundle analysis script (already have @next/bundle-analyzer support)
-- [ ] Consider adding performance monitoring to Sentry
+- [ ] T-007.1: Create `lighthouserc.json` with Core Web Vitals budgets
+- [ ] T-007.2: Add `npm run lighthouse` script for local testing
+- [ ] T-007.3: Add bundle size budget (main JS < 200KB gzipped)
+- [ ] T-007.4: Document targets in `docs/OBSERVABILITY.md`
+- [ ] T-007.5: Add `npm run analyze` script using bundle-analyzer
 References:
 - Create `/lighthouserc.json`
+- `/next.config.mjs`
 - `/docs/OBSERVABILITY.md`
-- `/next.config.mjs` (bundle analyzer)
-Dependencies: None
+Dependencies: T-003
 Effort: M
 
-### T-009: Add comprehensive unit test coverage
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Unit tests exist for lib/ functions ✅
-- Missing tests for: components/Hero, ValueProps, ServicesOverview, CaseStudyHighlight, FinalCTA
-- Missing tests for: app route handlers (currently no API routes except /api/og)
-- Target: 80%+ coverage for critical paths
-- Part of "Diamond Standard" for testing
-Acceptance Criteria:
-- [ ] Add unit tests for all untested components
-- [ ] Add unit tests for OG image route
-- [ ] Achieve 80%+ coverage on lib/ and components/
-- [ ] Add coverage threshold enforcement to vitest.config.ts
-- [ ] Document coverage requirements in TESTING_STRATEGY.md
-References:
-- `/__tests__/`
-- `/vitest.config.ts`
-- `/docs/TESTING_STRATEGY.md`
-Dependencies: None
-Effort: L
-
-### T-010: Implement structured data for SEO
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Found Organization JSON-LD schema in layout.tsx ✅
-- Missing: Article schema for blog posts
-- Missing: Service schema for service pages
-- Missing: BreadcrumbList schema
-- Part of "Diamond Standard" for SEO optimization
-Acceptance Criteria:
-- [ ] Add Article schema to blog post pages
-- [ ] Add Service schema to service detail pages
-- [ ] Add BreadcrumbList schema to all pages with breadcrumbs
-- [ ] Add FAQPage schema if FAQ sections exist
-- [ ] Validate schemas with Google Rich Results Test
-- [ ] Document schema.org implementation in SEO guide
-References:
-- `/app/blog/[slug]/page.tsx`
-- `/app/services/*/page.tsx`
-- `/app/layout.tsx`
-Dependencies: None
-Effort: M
-
-### T-011: Add comprehensive error tracking and monitoring
+### T-008: Add comprehensive error tracking
 Priority: P1
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- Sentry is configured ✅
-- Missing: Custom error boundaries for specific sections
-- Missing: Performance transaction tracking
-- Missing: User feedback mechanism
-- Part of "Diamond Standard" for observability
+- Sentry configured but basic
+- Missing: granular error boundaries, performance transactions
 Acceptance Criteria:
-- [ ] Add error boundaries for major page sections (not just root)
-- [ ] Add Sentry performance monitoring for critical flows
-- [ ] Add user feedback widget for error states
-- [ ] Configure Sentry source maps for production
-- [ ] Add alerting rules for critical errors
-- [ ] Document monitoring strategy in docs/OBSERVABILITY.md
+- [ ] T-008.1: Add error boundaries to major page sections (not just root)
+- [ ] T-008.2: Configure Sentry source maps for production builds
+- [ ] T-008.3: Add performance monitoring for form submissions
+- [ ] T-008.4: Document monitoring strategy in `docs/OBSERVABILITY.md`
 References:
 - `/components/ErrorBoundary.tsx`
 - `/docs/OBSERVABILITY.md`
 - `/docs/SENTRY-SETUP.md`
+Dependencies: T-003
+Effort: M
+
+### T-009: Document production deployment details (Trevor)
+Priority: P1
+Type: DOCS
+Owner: Trevor
+Status: READY
+Context:
+- `docs/DEPLOYMENT.md` is a template with no actual deployment info
+- Rollback procedures undefined
+- Required for production readiness
+Acceptance Criteria:
+- [ ] T-009.1: Fill target environments (local/staging/production URLs)
+- [ ] T-009.2: Document Cloudflare Pages deployment process
+- [ ] T-009.3: Document environment variables needed
+- [ ] T-009.4: Define rollback plan
+- [ ] T-009.5: Document DNS/domain configuration
+References:
+- `/docs/DEPLOYMENT.md`
 Dependencies: None
 Effort: M
 
-### T-012: Implement progressive enhancement strategy
+---
+
+## 🟡 PHASE 2: Quality & Testing (P2)
+> Improve test coverage, code quality, and documentation.
+
+### T-010: Add E2E tests for error states
 Priority: P2
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- SearchDialog, SocialProof, etc. use dynamic imports ✅
-- Need systematic approach to progressive enhancement
-- Ensure critical functionality works without JavaScript
-- Part of "Diamond Standard" for resilience
+- Existing E2E tests cover happy paths only
+- Missing: error states, network failures, edge cases
 Acceptance Criteria:
-- [ ] Audit all forms to ensure they work with JS disabled
-- [ ] Add noscript tags for critical content
-- [ ] Document which features require JavaScript
-- [ ] Test site with JavaScript disabled
-- [ ] Add fallback content for dynamic imports
-- [ ] Document progressive enhancement strategy
+- [ ] T-010.1: Add E2E test for network failure on contact form
+- [ ] T-010.2: Add E2E test for rate limiting behavior
+- [ ] T-010.3: Add E2E test for 404 page
+- [ ] T-010.4: Add E2E test for search with no results
+- [ ] T-010.5: Update `docs/TESTING_STRATEGY.md` with E2E patterns
 References:
-- `/app/page.tsx`
-- `/components/**/*.tsx`
+- `/tests/e2e/`
+- `/docs/TESTING_STRATEGY.md`
+Dependencies: T-003
+Effort: M
+
+### T-011: Add unit tests for untested components
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Context:
+- Target: 80%+ coverage for critical paths
+- Missing tests: Hero, ValueProps, ServicesOverview, ServiceDetailLayout, SocialProof
+Acceptance Criteria:
+- [ ] T-011.1: Add tests for Hero component
+- [ ] T-011.2: Add tests for ValueProps component
+- [ ] T-011.3: Add tests for ServicesOverview component
+- [ ] T-011.4: Add tests for ServiceDetailLayout component
+- [ ] T-011.5: Add tests for SocialProof component
+- [ ] T-011.6: Add coverage threshold to vitest.config.ts (80% lines)
+References:
+- `/__tests__/components/`
+- `/vitest.config.ts`
+Dependencies: T-003
+Effort: L
+
+### T-012: Implement structured data for SEO
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Context:
+- Organization JSON-LD exists in layout.tsx ✅
+- Missing: Article, Service, BreadcrumbList schemas
+Acceptance Criteria:
+- [ ] T-012.1: Add Article schema to blog post pages
+- [ ] T-012.2: Add Service schema to service detail pages
+- [ ] T-012.3: Add BreadcrumbList schema to pages with breadcrumbs
+- [ ] T-012.4: Validate with Google Rich Results Test
+- [ ] T-012.5: Document schema patterns in repo
+References:
+- `/app/blog/[slug]/page.tsx`
+- `/app/services/*/page.tsx`
+- `/components/Breadcrumbs.tsx`
+Dependencies: T-003
+Effort: M
+
+### T-013: Fix vitest.setup.tsx `any` type usage
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Context:
+- Line 28: `({ src, alt, ...props }: any)` uses `any` type
+- Should use explicit ImageProps or custom interface
+- Violates strict typing standards
+Acceptance Criteria:
+- [ ] T-013.1: Create proper interface for mock Image component props
+- [ ] T-013.2: Replace `any` with typed interface
+- [ ] T-013.3: Verify tests still pass
+References:
+- `/vitest.setup.tsx` (line 28)
+Dependencies: T-003
+Effort: XS
+
+### T-014: Replace console.log with logger in analytics.ts
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Context:
+- `lib/analytics.ts` uses console.log for development logging
+- Should use `logInfo` from `lib/logger.ts` for consistency
+- Found on lines 64, 98
+Acceptance Criteria:
+- [ ] T-014.1: Import `logInfo` from `lib/logger.ts`
+- [ ] T-014.2: Replace `console.log('[Analytics]'...)` with `logInfo('Analytics...')`
+- [ ] T-014.3: Verify analytics events still log in dev mode
+References:
+- `/lib/analytics.ts` (lines 64, 98)
+- `/lib/logger.ts`
+Dependencies: None
+Effort: XS
+
+### T-015: Centralize hardcoded domain to env
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Context:
+- Domain `yourdedicatedmarketer.com` hardcoded in multiple files
+- Should use `NEXT_PUBLIC_SITE_URL` from env
+Acceptance Criteria:
+- [ ] T-015.1: Update `app/layout.tsx` to use env variable
+- [ ] T-015.2: Update `app/sitemap.ts` to use env variable
+- [ ] T-015.3: Update `app/robots.ts` to use env variable
+- [ ] T-015.4: Verify all metadata URLs use centralized config
+References:
+- `/app/layout.tsx`
+- `/app/sitemap.ts`
+- `/app/robots.ts`
+- `/lib/env.ts`
 Dependencies: None
 Effort: S
 
-### T-013: Add internationalization (i18n) foundation
-Priority: P3
-Type: FEATURE
+### T-016: Create mobile-first smoke test checklist
+Priority: P2
+Type: RELEASE
 Owner: AGENT
 Status: READY
 Context:
-- Currently hardcoded to English (lang="en")
-- Future-proofing for potential multi-language support
-- Part of "Diamond Standard" for scalability
+- No documented smoke test checklist for pre-release
+- Marketing site is mobile-first
 Acceptance Criteria:
-- [ ] Add next-intl or similar i18n library
-- [ ] Extract all user-facing strings to translation files
-- [ ] Add language switcher component (initially just en)
-- [ ] Configure routing for future language support
-- [ ] Document i18n architecture in docs/
-- [ ] Add locale detection from Accept-Language header
+- [ ] T-016.1: Create `docs/RELEASE_CHECKLIST.md`
+- [ ] T-016.2: Include mobile viewport tests (home, services, pricing, contact)
+- [ ] T-016.3: Include contact form submission test
+- [ ] T-016.4: Include SEO metadata verification
+- [ ] T-016.5: Include Lighthouse mobile score check
+- [ ] T-016.6: Include broken link check
 References:
-- `/app/layout.tsx`
-- Create `/locales/` directory
+- Create `/docs/RELEASE_CHECKLIST.md`
 Dependencies: None
-Effort: L
+Effort: S
 
-### T-014: Implement comprehensive security headers audit
-Priority: P1
-Type: SECURITY
-Owner: AGENT
-Status: READY
-Context:
-- Security headers exist in middleware.ts ✅
-- Need to verify against OWASP recommendations
-- Missing: Permissions-Policy header
-- CSP allows unsafe-inline (documented as necessary for Next.js)
-- Part of "Diamond Standard" for security
-Acceptance Criteria:
-- [ ] Add Permissions-Policy header (camera, microphone, geolocation, etc.)
-- [ ] Document rationale for CSP unsafe-inline in SECURITY.md
-- [ ] Run securityheaders.com scan and address findings
-- [ ] Add Strict-Transport-Security header (HSTS)
-- [ ] Consider upgrading CSP to stricter policy with nonces
-- [ ] Document security headers in docs/SECURITY_BASELINE.md
-References:
-- `/middleware.ts`
-- `/docs/SECURITY_BASELINE.md`
-- `/SECURITY.md`
-Dependencies: None
-Effort: M
-
-### T-015: Add comprehensive logging and debugging infrastructure
+### T-017: Add comprehensive form validation UX
 Priority: P2
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- Logger exists with logInfo, logWarn, logError ✅
-- Missing: Structured logging with consistent format
-- Missing: Request ID tracking across server actions
-- Missing: Debug mode for development
-- Part of "Diamond Standard" for observability
+- Contact form has Zod validation but UX could be improved
+- Missing: real-time field validation, accessible error announcements
 Acceptance Criteria:
-- [ ] Add request ID generation and propagation
-- [ ] Implement structured logging (JSON format)
-- [ ] Add log levels configuration (DEBUG, INFO, WARN, ERROR)
-- [ ] Add sensitive data redaction (emails, IPs)
-- [ ] Add query logging for debugging
-- [ ] Document logging standards in docs/OBSERVABILITY.md
+- [ ] T-017.1: Add onBlur validation to contact form fields
+- [ ] T-017.2: Add aria-live region for error announcements
+- [ ] T-017.3: Add success indicators for valid fields
+- [ ] T-017.4: Add character counter to message textarea
 References:
-- `/lib/logger.ts`
-- `/docs/OBSERVABILITY.md`
-Dependencies: None
+- `/components/ContactForm.tsx`
+- `/lib/contact-form-schema.ts`
+Dependencies: T-003
 Effort: M
 
-### T-016: Implement automated visual regression testing
-Priority: P3
+### T-018: Implement visual regression testing
+Priority: P2
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- Playwright configured but no visual regression tests
+- Playwright configured but no visual tests
 - Need to catch unintended UI changes
-- Part of "Diamond Standard" for UI quality assurance
 Acceptance Criteria:
-- [ ] Configure Playwright screenshot testing
-- [ ] Add visual regression tests for key pages (home, services, pricing)
-- [ ] Add visual tests for different viewports (mobile, tablet, desktop)
-- [ ] Set up baseline screenshots
-- [ ] Add npm script for updating baselines
-- [ ] Document visual testing process in TESTING_STRATEGY.md
+- [ ] T-018.1: Configure Playwright screenshot testing
+- [ ] T-018.2: Add visual tests for home, services, pricing pages
+- [ ] T-018.3: Add tests for mobile/tablet/desktop viewports
+- [ ] T-018.4: Create baseline screenshots
+- [ ] T-018.5: Add `npm run test:visual` script
+- [ ] T-018.6: Document in TESTING_STRATEGY.md
 References:
 - `/tests/e2e/`
 - `/playwright.config.ts`
 - `/docs/TESTING_STRATEGY.md`
-Dependencies: None
+Dependencies: T-003
 Effort: M
 
-### T-017: Add comprehensive form validation and UX improvements
+### T-019: Implement advanced caching strategy
 Priority: P2
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- Contact form has Zod validation ✅
-- Missing: Real-time field validation
-- Missing: Accessible error messages
-- Missing: Field-level success indicators
-- Part of "Diamond Standard" for user experience
+- Next.js default caching active
+- Missing: explicit ISR for blog, cache headers optimization
 Acceptance Criteria:
-- [ ] Add real-time validation (onBlur) to contact form
-- [ ] Add accessible error announcements (aria-live)
-- [ ] Add success indicators for valid fields
-- [ ] Add character counters for text areas
-- [ ] Add "saving" state indicators
-- [ ] Add form analytics (field interaction tracking)
-References:
-- `/components/ContactForm.tsx`
-- `/lib/contact-form-schema.ts`
-Dependencies: None
-Effort: M
-
-### T-018: Implement content security and anti-spam measures
-Priority: P1
-Type: SECURITY
-Owner: AGENT
-Status: READY
-Context:
-- Rate limiting exists (3 req/hour) ✅
-- Missing: Honeypot field for spam prevention
-- Missing: Content validation for malicious payloads
-- Missing: IP reputation checking
-- Part of "Diamond Standard" for security
-Acceptance Criteria:
-- [ ] Add honeypot field to contact form (hidden from users)
-- [ ] Add content pattern detection (spam keywords, URLs)
-- [ ] Add configurable rate limit thresholds
-- [ ] Add IP blocklist support
-- [ ] Add CAPTCHA integration (optional, for high traffic)
-- [ ] Document anti-spam strategy in SECURITY.md
-References:
-- `/lib/actions.ts`
-- `/components/ContactForm.tsx`
-- `/SECURITY.md`
-Dependencies: None
-Effort: M
-
-### T-019: Add comprehensive analytics and conversion tracking
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Analytics placeholder exists (NEXT_PUBLIC_ANALYTICS_ID) ✅
-- Missing: Event tracking implementation
-- Missing: Conversion goal tracking
-- Missing: Performance monitoring
-- Part of "Diamond Standard" for business metrics
-Acceptance Criteria:
-- [ ] Implement Google Analytics 4 or Plausible
-- [ ] Add event tracking for: form submissions, CTA clicks, navigation
-- [ ] Add conversion goal tracking (contact form success)
-- [ ] Add custom events for user engagement
-- [ ] Add privacy-compliant cookie consent
-- [ ] Document analytics strategy in docs/
-References:
-- `/lib/analytics.ts`
-- `/app/layout.tsx`
-Dependencies: T-002 (Trevor needs to provide analytics ID)
-Effort: M
-
-### T-020: Implement advanced caching strategy
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Next.js default caching active ✅
-- Missing: Explicit cache control for dynamic content
-- Missing: Revalidation strategy for blog/case studies
-- Missing: CDN cache headers
-- Part of "Diamond Standard" for performance
-Acceptance Criteria:
-- [ ] Configure revalidate times for static pages
-- [ ] Add cache headers for API routes
-- [ ] Implement ISR (Incremental Static Regeneration) for blog
-- [ ] Add cache-control headers in middleware for static assets
-- [ ] Document caching strategy in docs/
-- [ ] Add cache monitoring/analytics
+- [ ] T-019.1: Configure revalidate times for static pages
+- [ ] T-019.2: Implement ISR for blog posts (revalidate: 3600)
+- [ ] T-019.3: Add cache-control headers for static assets in middleware
+- [ ] T-019.4: Document caching strategy
 References:
 - `/app/**/page.tsx`
 - `/middleware.ts`
 - `/next.config.mjs`
-Dependencies: None
+Dependencies: T-003
 Effort: M
 
-### T-021: Add comprehensive documentation for developers
+### T-020: Implement analytics and conversion tracking (Trevor)
 Priority: P2
-Type: DOCS
+Type: QUALITY
+Owner: Trevor
+Status: BLOCKED
+Context:
+- Analytics placeholder exists but no implementation
+- Needs provider account setup (GA4 or Plausible)
+Acceptance Criteria:
+- [ ] T-020.1: Choose analytics provider (GA4 or Plausible)
+- [ ] T-020.2: Provide NEXT_PUBLIC_ANALYTICS_ID
+- [ ] T-020.3: Agent implements tracking after ID provided
+References:
+- `/lib/analytics.ts`
+Dependencies: Trevor provides analytics ID
+Effort: S (Agent), External (Trevor)
+
+### T-021: Add image optimization with next/image
+Priority: P2
+Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- Governance docs exist (Constitution, READMEAI) ✅
-- Missing: Component library documentation
-- Missing: Architecture decision records (ADRs)
-- Missing: API documentation
-- Part of "Diamond Standard" for maintainability
+- Verify all images use Next.js Image component
+- Ensure optimization, lazy loading, responsive sizing
 Acceptance Criteria:
-- [ ] Add component library docs (Storybook or similar)
-- [ ] Create ADRs for key architectural decisions
-- [ ] Document API routes and server actions
-- [ ] Add contributing guidelines (CONTRIBUTING.md)
-- [ ] Add local development setup guide
-- [ ] Add troubleshooting guide
+- [ ] T-021.1: Audit all `<img>` tags and convert to next/image
+- [ ] T-021.2: Add proper width/height/alt to all images
+- [ ] T-021.3: Add priority prop to above-fold hero images
+- [ ] T-021.4: Document image guidelines in UI_DESIGN_SYSTEM.md
 References:
-- Create `/docs/CONTRIBUTING.md`
-- `/docs/adr/`
-- `/docs/COMPONENT_LIBRARY.md`
+- `/components/**/*.tsx`
+- `/app/**/*.tsx`
+- `/docs/UI_DESIGN_SYSTEM.md`
 Dependencies: None
-Effort: L
+Effort: M
 
-## Backlog
-<!-- Add future tasks here. -->
+---
 
-### T-025: Add JSDoc to lib/actions.ts (submitContactForm)
+## 📚 PHASE 3: Documentation (P1-P2)
+> Critical documentation for security-critical code.
+
+### T-022: Add JSDoc to lib/actions.ts (submitContactForm)
+Priority: P1
+Type: DOCS
+Owner: AGENT
+Status: BLOCKED
+Context:
+- Server action is security-critical (rate limiting, sanitization, email)
+- Complex error handling needs explanation
+- Current code comment score: 4/10
+Acceptance Criteria:
+- [ ] T-022.1: Verify existing JSDoc is accurate after T-001 fix
+- [ ] T-022.2: Document rate limiting strategy
+- [ ] T-022.3: Document security measures (XSS, IP hashing)
+- [ ] T-022.4: Add usage example with error handling
+- [ ] T-022.5: Document all return types
+References:
+- `/lib/actions.ts`
+Dependencies: T-001, T-002
+Effort: S
+
+### T-023: Document middleware.ts security headers
 Priority: P1
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
-- Server action has NO documentation (233 lines)
-- Security-critical: rate limiting, input sanitization, email delivery
-- Complex error handling and fallback logic needs explanation
-- Current code comment score: 4/10 per CODEBASE-ANALYSIS.md
-- Blocks AI understanding of security guarantees
+- Security perimeter with minimal documentation
+- CSP rules need rationale explanation
+- 'unsafe-inline' needs justification
 Acceptance Criteria:
-- [ ] Add comprehensive JSDoc to submitContactForm function
-- [ ] Document rate limiting strategy (Upstash vs in-memory)
-- [ ] Document security measures (XSS prevention, IP hashing)
-- [ ] Document email delivery flow and fallbacks
-- [ ] Add usage example with error handling
-- [ ] Document all thrown errors and return types
+- [ ] T-023.1: Add JSDoc to middleware function
+- [ ] T-023.2: Document each security header's purpose
+- [ ] T-023.3: Explain CSP directives (why unsafe-inline)
+- [ ] T-023.4: Document production vs development differences
+- [ ] T-023.5: Add future hardening notes (nonce-based CSP)
 References:
-- `/lib/actions.ts` (lines 133-233)
-- Industry standard: JSDoc with @param, @returns, @throws, @example
+- `/middleware.ts`
 Dependencies: None
 Effort: S
 
-### T-026: Enhance lib/sanitize.ts security documentation
+### T-024: Enhance lib/sanitize.ts security docs
 Priority: P1
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
 - Security-critical XSS prevention code
-- Has basic JSDoc but missing attack examples
-- Needs clearer security guarantees and usage scenarios
-- AI agents need to understand what attacks each function prevents
+- Missing attack examples and usage scenarios
 Acceptance Criteria:
-- [ ] Enhance escapeHtml JSDoc with XSS attack examples
-- [ ] Add documentation for HTML entity encoding specifics
-- [ ] Add examples of dangerous inputs that are neutralized
-- [ ] Document when to use escapeHtml vs other sanitization
-- [ ] Add references to OWASP XSS prevention guidelines
+- [ ] T-024.1: Add XSS attack examples to escapeHtml JSDoc
+- [ ] T-024.2: Document HTML entity encoding specifics
+- [ ] T-024.3: Add references to OWASP guidelines
+- [ ] T-024.4: Document when to use each function
 References:
-- `/lib/sanitize.ts` (60 lines, all functions)
-- Industry standard: Security functions need threat model documentation
+- `/lib/sanitize.ts`
 Dependencies: None
 Effort: S
 
-### T-027: Document middleware.ts security headers
+### T-025: Add JSDoc to lib/env.ts
 Priority: P1
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
-- Security perimeter has NO documentation (75 lines)
-- Complex CSP rules need rationale explanation
-- 'unsafe-inline' and 'unsafe-eval' need justification
-- Production vs development differences unclear
-- Payload size limits and DoS prevention undocumented
+- Environment validation is critical for deployment
+- Helper functions lack usage docs
 Acceptance Criteria:
-- [ ] Add comprehensive middleware function JSDoc
-- [ ] Document each security header and its purpose
-- [ ] Explain CSP directives with rationale (why 'unsafe-inline', etc.)
-- [ ] Document payload size limits and DoS prevention
-- [ ] Add future hardening roadmap notes (nonce-based CSP)
-- [ ] Document production vs development differences
+- [ ] T-025.1: Document env schema validation rules
+- [ ] T-025.2: Document behavior on validation failure
+- [ ] T-025.3: Add JSDoc to getBaseUrl and other helpers
+- [ ] T-025.4: Add examples for different environments
 References:
-- `/middleware.ts` (lines 1-75)
-- Industry standard: OWASP Secure Headers Project
+- `/lib/env.ts`
 Dependencies: None
 Effort: S
 
-### T-028: Add JSDoc to lib/env.ts environment validation
-Priority: P1
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Environment validation logic undocumented (48 lines)
-- Unclear what happens on validation failure
-- Helper functions lack usage documentation
-- Critical for deployment understanding
-Acceptance Criteria:
-- [ ] Add JSDoc to env schema explaining validation rules
-- [ ] Document behavior on validation failure (throw vs default)
-- [ ] Add JSDoc to helper functions (getBaseUrl, etc.)
-- [ ] Document when to use each helper function
-- [ ] Add examples for local, staging, production environments
-References:
-- `/lib/env.ts` (lines 1-48)
-- Industry standard: Zod schema documentation patterns
-Dependencies: None
-Effort: S
-
-### T-029: Document lib/sanitize.ts PII redaction logic
-Priority: P1
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Contact form sanitization logic undocumented (60 lines)
-- Redaction patterns for PII not explained
-- GDPR/CCPA compliance implications unclear
-- Critical for privacy understanding
-Acceptance Criteria:
-- [ ] Add JSDoc to contact form sanitization functions
-- [ ] Document what PII patterns are redacted and why
-- [ ] Add GDPR/CCPA compliance notes
-- [ ] Explain redaction vs deletion trade-offs
-- [ ] Add examples of before/after sanitization
-References:
-- `/lib/sanitize.ts` (redaction functions)
-Dependencies: T-026
-Effort: S
-
-### T-030: Add JSDoc to components/ContactForm.tsx
-Priority: P1
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Complex form component with NO documentation (182 lines)
-- React Hook Form + Zod validation strategy unclear
-- Async state management patterns undocumented
-- Sentry integration purpose not explained
-- Blocks AI understanding of validation flow
-Acceptance Criteria:
-- [ ] Add component-level JSDoc explaining features
-- [ ] Document validation rules and strategy
-- [ ] Document state machine (idle, submitting, success, error)
-- [ ] Document Sentry context tracking
-- [ ] Add accessibility features documentation (ARIA, labels)
-- [ ] Add usage example
-References:
-- `/components/ContactForm.tsx` (182 lines)
-- Industry standard: React component JSDoc patterns
-Dependencies: T-025
-Effort: M
-
-### T-031: Document components/SearchDialog.tsx keyboard navigation
-Priority: P1
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Complex search component with NO documentation (150 lines)
-- Keyboard navigation logic unclear
-- Search algorithm (filtering, ranking) undocumented
-- Focus management and accessibility features not explained
-Acceptance Criteria:
-- [ ] Add component-level JSDoc
-- [ ] Document keyboard shortcuts (Cmd+K, Arrow keys, Escape, Enter)
-- [ ] Document search filtering algorithm
-- [ ] Document accessibility features (ARIA, focus management)
-- [ ] Document memoization strategy for performance
-- [ ] Add usage example
-References:
-- `/components/SearchDialog.tsx` (150 lines)
-- Industry standard: Accessible component documentation patterns
-Dependencies: None
-Effort: M
-
-### T-032: Add JSDoc to components/Navigation.tsx mobile handling
-Priority: P1
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Navigation component undocumented (116 lines)
-- Mobile menu behavior not explained
-- Keyboard handling logic unclear
-- Focus trap implementation undocumented
-Acceptance Criteria:
-- [ ] Add component-level JSDoc
-- [ ] Document mobile menu toggle behavior
-- [ ] Document keyboard navigation handlers
-- [ ] Document focus trap when menu open
-- [ ] Document accessibility strategy
-References:
-- `/components/Navigation.tsx` (116 lines)
-Dependencies: None
-Effort: S
-
-### T-033: Enhance lib/sentry-sanitize.ts with examples
-Priority: P1
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Has good JSDoc but missing detailed examples (137 lines)
-- Sensitive data sanitization algorithm unclear
-- What gets redacted and why needs more clarity
-Acceptance Criteria:
-- [ ] Add detailed examples of sanitized vs unsanitized data
-- [ ] Document regex patterns for sensitive data detection
-- [ ] Add PII categories (email, phone, credit cards, SSN)
-- [ ] Document performance implications of sanitization
-References:
-- `/lib/sentry-sanitize.ts` (lines 50-95)
-Dependencies: T-026, T-029
-Effort: S
-
-### T-034: Enhance lib/analytics.ts integration documentation
-Priority: P1
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Has good JSDoc but missing integration examples (110 lines)
-- How to add new analytics providers unclear
-- Testing strategy not documented
-Acceptance Criteria:
-- [ ] Add examples for adding new analytics providers
-- [ ] Document testing strategy for analytics events
-- [ ] Add provider comparison notes (Vercel vs others)
-- [ ] Document event naming conventions
-- [ ] Add troubleshooting section
-References:
-- `/lib/analytics.ts` (lines 12-35)
-Dependencies: None
-Effort: S
-
-### T-035: Add JSDoc to lib/blog.ts file structure expectations
+### T-026: Add JSDoc to ContactForm component
 Priority: P2
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
-- Blog data handling undocumented (81 lines)
-- Expected directory structure unclear
-- Frontmatter schema not documented
-- Error handling for missing files unclear
+- Complex form with React Hook Form + Zod
+- State machine and Sentry integration undocumented
 Acceptance Criteria:
-- [ ] Add JSDoc to all exported functions
-- [ ] Document expected directory structure (content/blog/)
-- [ ] Document frontmatter schema requirements
-- [ ] Document error handling behavior
-- [ ] Add usage examples
+- [ ] T-026.1: Add component-level JSDoc
+- [ ] T-026.2: Document validation flow
+- [ ] T-026.3: Document state machine (idle → submitting → success/error)
+- [ ] T-026.4: Document accessibility features
 References:
-- `/lib/blog.ts` (all functions)
-Dependencies: None
+- `/components/ContactForm.tsx`
+Dependencies: T-022
 Effort: S
 
-### T-036: Document lib/case-studies.ts data structure
+### T-027: Document SearchDialog keyboard navigation
 Priority: P2
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
-- Case study data hardcoded without documentation (167 lines)
-- CaseStudy interface not documented
-- Why hardcoded vs CMS not explained
-- Future migration path unclear
+- Complex search with keyboard nav undocumented
+- Accessibility features not explained
 Acceptance Criteria:
-- [ ] Add JSDoc to CaseStudy interface
-- [ ] Document why data is hardcoded (vs CMS)
-- [ ] Add migration notes for future CMS integration
-- [ ] Document helper functions
-- [ ] Add examples of adding new case studies
+- [ ] T-027.1: Add component-level JSDoc
+- [ ] T-027.2: Document keyboard shortcuts (Cmd+K, arrows, Escape, Enter)
+- [ ] T-027.3: Document search filtering algorithm
+- [ ] T-027.4: Document ARIA implementation
 References:
-- `/lib/case-studies.ts` (lines 1-200)
+- `/components/SearchDialog.tsx`
 Dependencies: None
 Effort: S
 
-### T-037: Add JSDoc to lib/search.ts indexing algorithm
+### T-028: Add JSDoc to Navigation mobile handling
 Priority: P2
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
-- Search implementation undocumented (75 lines)
-- Index generation unclear
-- Search algorithm (filtering, ranking) not explained
-- How to extend with new content types unclear
+- Mobile menu behavior undocumented
+- Focus trap implementation unclear
 Acceptance Criteria:
-- [ ] Add JSDoc to search index generation
-- [ ] Document search algorithm and ranking logic
-- [ ] Document how to add new content types
-- [ ] Add performance notes (O(n) complexity)
-- [ ] Add future enhancement ideas (fuzzy search)
+- [ ] T-028.1: Document mobile menu toggle
+- [ ] T-028.2: Document keyboard navigation
+- [ ] T-028.3: Document focus trap when menu open
 References:
-- `/lib/search.ts` (all functions)
+- `/components/Navigation.tsx`
 Dependencies: None
 Effort: S
 
-### T-038: Document components/InstallPrompt.tsx PWA flow
+### T-029: Create UI component JSDoc template
 Priority: P2
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
-- PWA installation flow undocumented (110 lines)
-- beforeinstallprompt event handling unclear
-- localStorage strategy not explained
-- Browser compatibility unclear
+- 9 UI components in components/ui/ lack documentation
+- Need standardized template for consistency
 Acceptance Criteria:
-- [ ] Add component-level JSDoc
-- [ ] Document PWA installation flow
-- [ ] Document localStorage strategy (dismissal tracking)
-- [ ] Document browser compatibility
-- [ ] Add user behavior tracking explanation
-References:
-- `/components/InstallPrompt.tsx` (110 lines)
-Dependencies: None
-Effort: S
-
-### T-039: Add JSDoc to components/ServiceDetailLayout.tsx props
-Priority: P2
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Service detail layout undocumented (221 lines)
-- ServiceDetailProps not documented
-- Structured data implementation unclear
-- SEO benefits not explained
-Acceptance Criteria:
-- [ ] Add JSDoc to ServiceDetailProps interface
-- [ ] Document structured data (Schema.org) implementation
-- [ ] Document SEO benefits
-- [ ] Add usage example for new services
-References:
-- `/components/ServiceDetailLayout.tsx` (lines 1-30)
-Dependencies: None
-Effort: S
-
-### T-040: Create UI component JSDoc documentation pattern
-Priority: P2
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- 9 UI components in components/ui/ lack documentation (95% gap)
-- Need standardized JSDoc template for consistency
-- Variant systems, accessibility, validation states undocumented
-Acceptance Criteria:
-- [ ] Create JSDoc template for UI components
-- [ ] Document variant system pattern (Button, Card)
-- [ ] Document accessibility requirements (ARIA)
-- [ ] Document validation state patterns (Input, Select)
-- [ ] Add usage examples to template
+- [ ] T-029.1: Create `/docs/UI_COMPONENT_JSDOC_TEMPLATE.md`
+- [ ] T-029.2: Include variant system patterns
+- [ ] T-029.3: Include accessibility requirements
+- [ ] T-029.4: Include validation state patterns
 References:
 - Create `/docs/UI_COMPONENT_JSDOC_TEMPLATE.md`
-- `/components/ui/` (all files)
+- `/components/ui/`
 Dependencies: None
 Effort: S
 
-### T-041: Document components/ui/accordion.tsx ARIA implementation
-Priority: P2
-Type: DOCS
-Owner: AGENT
-Status: READY
-Context:
-- Complex ARIA accordion pattern undocumented
-- Keyboard navigation not explained
-- Accessibility requirements unclear
-Acceptance Criteria:
-- [ ] Add component JSDoc following UI template
-- [ ] Document ARIA roles and attributes
-- [ ] Document keyboard navigation (Arrow keys, Home, End)
-- [ ] Add accessibility compliance notes (WCAG 2.1)
-- [ ] Add usage example
-References:
-- `/components/ui/accordion.tsx`
-Dependencies: T-040
-Effort: S
-
-### T-042: Add JSDoc to components/ui/ components (Button, Card, Input, Select)
+### T-030: Add JSDoc to UI components (Button, Card, Input, Select)
 Priority: P2
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
 - Core UI components lack documentation
-- Variant systems not explained (Button has multiple variants)
-- Validation states not documented (Input, Select)
+- Variant systems not explained
 Acceptance Criteria:
-- [ ] Add JSDoc to Button (variants, sizes, disabled state)
-- [ ] Add JSDoc to Card (variant system, layout)
-- [ ] Add JSDoc to Input (validation states, accessibility)
-- [ ] Add JSDoc to Select (validation states, options handling)
-- [ ] Follow UI component template from T-040
+- [ ] T-030.1: Add JSDoc to Button (variants, sizes, disabled)
+- [ ] T-030.2: Add JSDoc to Card (variant system, layout)
+- [ ] T-030.3: Add JSDoc to Input (validation states)
+- [ ] T-030.4: Add JSDoc to Select (options handling)
 References:
 - `/components/ui/button.tsx`
 - `/components/ui/card.tsx`
 - `/components/ui/input.tsx`
 - `/components/ui/select.tsx`
-Dependencies: T-040
+Dependencies: T-029
 Effort: M
 
-### T-043: Document remaining components/ui/ components (Dialog, Label, Separator, Textarea)
-Priority: P3
+### T-031: Add README to docs/ARCHIVE
+Priority: P2
 Type: DOCS
 Owner: AGENT
 Status: READY
 Context:
-- Remaining UI components need documentation for completeness
-- Lower priority than core interactive components
+- ARCHIVE contains old docs that may confuse agents
+- No explanation for why files are archived
 Acceptance Criteria:
-- [ ] Add JSDoc to Dialog (overlay, accessibility)
-- [ ] Add JSDoc to Label (accessibility, form association)
-- [ ] Add JSDoc to Separator (spacing, semantic HTML)
-- [ ] Add JSDoc to Textarea (validation, auto-resize)
-- [ ] Follow UI component template from T-040
+- [ ] T-031.1: Create `docs/ARCHIVE/README.md`
+- [ ] T-031.2: Explain these are historical/superseded documents
+- [ ] T-031.3: Add "Do not use for new work" warning
 References:
-- `/components/ui/dialog.tsx`
-- `/components/ui/label.tsx`
-- `/components/ui/separator.tsx`
-- `/components/ui/textarea.tsx`
-Dependencies: T-040
-Effort: M
+- Create `/docs/ARCHIVE/README.md`
+Dependencies: None
+Effort: XS
 
-### T-044: Update CODEBASE-ANALYSIS.md with new JSDoc coverage score
-Priority: P2
-Type: DOCS
+---
+
+## 🔵 PHASE 4: Enhancements (P3)
+> Nice-to-have improvements for Diamond Standard.
+
+### T-032: Implement i18n foundation
+Priority: P3
+Type: FEATURE
 Owner: AGENT
-Status: BLOCKED
+Status: READY
 Context:
-- Current code comment score: 4/10
-- After completing JSDoc tasks, score should be 9/10
-- Need to update docs/architecture/CODEBASE-ANALYSIS.md
+- Currently hardcoded to English
+- Future-proofing for potential multi-language
 Acceptance Criteria:
-- [ ] Update code comment score from 4/10 to new score
-- [ ] Document files that received JSDoc
-- [ ] Update recommendations section
-- [ ] Add "Last Updated" date
+- [ ] T-032.1: Add next-intl library
+- [ ] T-032.2: Extract user-facing strings to translation files
+- [ ] T-032.3: Add language switcher (en only initially)
+- [ ] T-032.4: Document i18n architecture
 References:
-- `/docs/architecture/CODEBASE-ANALYSIS.md` (lines 448-470)
-Dependencies: T-025 through T-043
+- `/app/layout.tsx`
+- Create `/locales/`
+Dependencies: None
+Effort: L
+
+### T-033: Implement feature flags system
+Priority: P3
+Type: FEATURE
+Owner: AGENT
+Status: READY
+Context:
+- No feature flag system exists
+- Would enable safer rollouts and A/B testing
+Acceptance Criteria:
+- [ ] T-033.1: Add simple env-based feature flags (lib/feature-flags.ts)
+- [ ] T-033.2: Document feature flag patterns
+- [ ] T-033.3: Add example usage
+References:
+- Create `/lib/feature-flags.ts`
+Dependencies: None
 Effort: S
 
-### T-022: Implement advanced SEO features
+### T-034: Advanced SEO features
 Priority: P3
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- Basic SEO (metadata, OG tags) exists ✅
-- Missing: XML sitemap generation (sitemap.ts exists but need to verify)
-- Missing: robots.txt customization
-- Missing: Canonical URLs for pagination
-- Part of "Diamond Standard" for discoverability
+- Basic SEO exists
+- Missing: dynamic sitemap for blog, canonical URLs
 Acceptance Criteria:
-- [ ] Verify sitemap.ts generates all pages
-- [ ] Add dynamic sitemap for blog posts and case studies
-- [ ] Add lastmod dates to sitemap
-- [ ] Customize robots.txt for crawl optimization
-- [ ] Add canonical URLs for paginated content
-- [ ] Document SEO strategy
+- [ ] T-034.1: Verify sitemap.ts generates all pages
+- [ ] T-034.2: Add lastmod dates to sitemap
+- [ ] T-034.3: Add canonical URLs for paginated content
 References:
 - `/app/sitemap.ts`
 - `/app/robots.ts`
 Dependencies: None
 Effort: S
 
-### T-023: Implement feature flags system
+### T-035: Add progressive enhancement audit
 Priority: P3
 Type: QUALITY
 Owner: AGENT
 Status: READY
 Context:
-- No feature flag system exists
-- Would enable safer rollouts and A/B testing
-- Part of "Diamond Standard" for deployment safety
+- Ensure critical functionality works without JavaScript
 Acceptance Criteria:
-- [ ] Add feature flag library (e.g., PostHog, LaunchDarkly, or simple env-based)
-- [ ] Create feature flag management UI/config
-- [ ] Add examples of feature-flagged components
-- [ ] Document feature flag strategy
-- [ ] Add gradual rollout capability
+- [ ] T-035.1: Audit forms for no-JS functionality
+- [ ] T-035.2: Add noscript tags for critical content
+- [ ] T-035.3: Document which features require JS
+- [ ] T-035.4: Test site with JS disabled
 References:
-- Create `/lib/feature-flags.ts`
+- `/app/page.tsx`
+- `/components/**/*.tsx`
 Dependencies: None
-Effort: M
+Effort: S
 
-### T-024: Add comprehensive performance profiling
+### T-036: Performance profiling setup
 Priority: P3
 Type: QUALITY
 Owner: AGENT
@@ -1006,18 +748,202 @@ Status: READY
 Context:
 - No performance profiling in place
 - Would help identify bottlenecks
-- Part of "Diamond Standard" for performance
 Acceptance Criteria:
-- [ ] Add React DevTools Profiler integration
-- [ ] Add server-side performance metrics
-- [ ] Add database query performance tracking (if applicable)
-- [ ] Create performance dashboard
-- [ ] Document performance optimization guide
+- [ ] T-036.1: Add React DevTools Profiler integration
+- [ ] T-036.2: Document performance optimization guide
 References:
 - `/docs/OBSERVABILITY.md`
-Dependencies: T-008 (Performance monitoring)
+Dependencies: T-007
+Effort: M
+
+### T-037: Document remaining UI components (Dialog, Label, etc.)
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- Remaining UI components need docs for completeness
+Acceptance Criteria:
+- [ ] T-037.1: Add JSDoc to Dialog
+- [ ] T-037.2: Add JSDoc to Label
+- [ ] T-037.3: Add JSDoc to Separator
+- [ ] T-037.4: Add JSDoc to Textarea
+- [ ] T-037.5: Add JSDoc to Accordion
+References:
+- `/components/ui/dialog.tsx`
+- `/components/ui/label.tsx`
+- `/components/ui/separator.tsx`
+- `/components/ui/textarea.tsx`
+- `/components/ui/accordion.tsx`
+Dependencies: T-029
+Effort: M
+
+### T-038: Document blog.ts and case-studies.ts
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- Content handling undocumented
+- Frontmatter schema unclear
+Acceptance Criteria:
+- [ ] T-038.1: Add JSDoc to blog.ts functions
+- [ ] T-038.2: Document expected directory structure
+- [ ] T-038.3: Document frontmatter schema
+- [ ] T-038.4: Add JSDoc to case-studies.ts
+References:
+- `/lib/blog.ts`
+- `/lib/case-studies.ts`
+Dependencies: None
+Effort: S
+
+### T-039: Document InstallPrompt PWA flow
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- PWA installation flow undocumented
+- Browser compatibility unclear
+Acceptance Criteria:
+- [ ] T-039.1: Add component-level JSDoc
+- [ ] T-039.2: Document PWA installation flow
+- [ ] T-039.3: Document browser compatibility
+References:
+- `/components/InstallPrompt.tsx`
+Dependencies: None
+Effort: S
+
+### T-040: Document search.ts indexing algorithm
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- Search implementation undocumented
+- Algorithm and ranking not explained
+Acceptance Criteria:
+- [ ] T-040.1: Document search index generation
+- [ ] T-040.2: Document search algorithm
+- [ ] T-040.3: Add future enhancement notes (fuzzy search)
+References:
+- `/lib/search.ts`
+Dependencies: None
+Effort: S
+
+### T-041: Document ServiceDetailLayout props
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- Service layout props undocumented
+- SEO benefits not explained
+Acceptance Criteria:
+- [ ] T-041.1: Add JSDoc to ServiceDetailProps
+- [ ] T-041.2: Document Schema.org implementation
+- [ ] T-041.3: Add usage example
+References:
+- `/components/ServiceDetailLayout.tsx`
+Dependencies: None
+Effort: S
+
+### T-042: Enhance sentry-sanitize.ts with examples
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- Has JSDoc but missing detailed examples
+- What gets redacted needs clarity
+Acceptance Criteria:
+- [ ] T-042.1: Add sanitized vs unsanitized examples
+- [ ] T-042.2: Document PII categories
+References:
+- `/lib/sentry-sanitize.ts`
+Dependencies: None
+Effort: S
+
+### T-043: Enhance analytics.ts integration docs
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- Has JSDoc but missing integration examples
+Acceptance Criteria:
+- [ ] T-043.1: Add provider integration examples
+- [ ] T-043.2: Document event naming conventions
+- [ ] T-043.3: Add testing strategy
+References:
+- `/lib/analytics.ts`
+Dependencies: None
+Effort: S
+
+### T-044: Update CODEBASE-ANALYSIS.md after JSDoc work
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: BLOCKED
+Context:
+- Code comment score: 4/10 needs update after JSDoc tasks
+Acceptance Criteria:
+- [ ] T-044.1: Update code comment score
+- [ ] T-044.2: Document which files received JSDoc
+- [ ] T-044.3: Update recommendations section
+References:
+- `/docs/architecture/CODEBASE-ANALYSIS.md`
+Dependencies: T-022 through T-043
+Effort: S
+
+### T-045: Add component library documentation (Storybook)
+Priority: P3
+Type: DOCS
+Owner: AGENT
+Status: READY
+Context:
+- No interactive component documentation
+- Would improve developer experience
+Acceptance Criteria:
+- [ ] T-045.1: Install and configure Storybook
+- [ ] T-045.2: Add stories for UI components
+- [ ] T-045.3: Add `npm run storybook` script
+References:
+- `/components/ui/`
+Dependencies: T-029, T-030
 Effort: L
 
+---
+
+## Task Summary
+
+| Phase | Priority | Count | Focus |
+|-------|----------|-------|-------|
+| 0 | P0 | 3 | Build blockers — MUST FIX FIRST |
+| 1 | P1 | 6 | Security & stability |
+| 2 | P2 | 12 | Quality & testing |
+| 3 | P1-P2 | 10 | Documentation |
+| 4 | P3 | 14 | Enhancements |
+| **Total** | | **45** | |
+
+### Critical Path
+```
+T-001 (fix actions.ts syntax)
+  └→ T-002 (add zod import)
+      └→ T-003 (fix react-dom version)
+          └→ T-004+ (all other tasks)
+```
+
+### Owner Summary
+| Owner | Count | Notes |
+|-------|-------|-------|
+| AGENT | 42 | Codex/Claude Code/Copilot executable |
+| Trevor | 3 | T-009, T-020 (external setup required) |
+
+---
+
 ## References
-- Legacy priority/category codes are preserved for context: SEC, DEP, REL, PERF, UX, DX.
-- No automation is allowed to rewrite this file; optional scripts may generate `TODO.generated.md` for convenience only.
+- Authority order: `CODEBASECONSTITUTION.md` > `READMEAI.md` > `TODO.md`
+- No automation may rewrite this file; scripts may generate `TODO.generated.md` (informational only)
+- When completing tasks, move to `TODOCOMPLETED.md` with completion date
+
