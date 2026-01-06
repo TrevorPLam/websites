@@ -53,6 +53,7 @@ import './globals.css'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import SkipToContent from '@/components/SkipToContent'
+import { getBaseUrl } from '@/lib/env'
 import { getSearchIndex } from '@/lib/search'
 
 // Dynamic imports for client-only components
@@ -68,6 +69,9 @@ const plexSans = IBM_Plex_Sans({
   weight: ['400', '600', '700'],
 })
 
+const siteUrl = getBaseUrl()
+const ogImageUrl = new URL('/api/og?title=Your%20Dedicated%20Marketer', siteUrl).toString()
+
 /**
  * Global metadata applied to all pages.
  * Child pages can override with their own metadata export.
@@ -77,7 +81,7 @@ const plexSans = IBM_Plex_Sans({
  * - Example: "SEO Services | Your Dedicated Marketer"
  */
 export const metadata: Metadata = {
-  metadataBase: new URL('https://yourdedicatedmarketer.com'),
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'Your Dedicated Marketer | Digital Marketing Services That Drive Results',
     template: '%s | Your Dedicated Marketer',
@@ -104,19 +108,19 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: '/',
+    canonical: siteUrl,
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://yourdedicatedmarketer.com',
+    url: siteUrl,
     siteName: 'Your Dedicated Marketer',
     title: 'Your Dedicated Marketer | Digital Marketing Services That Drive Results',
     description:
       'Expert digital marketing services for businesses that want to grow. We specialize in SEO, content marketing, social media, and email marketing that delivers real ROI.',
     images: [
       {
-        url: '/api/og?title=Your%20Dedicated%20Marketer',
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: 'Your Dedicated Marketer brand preview image',
@@ -128,7 +132,7 @@ export const metadata: Metadata = {
     title: 'Your Dedicated Marketer | Digital Marketing Services That Drive Results',
     description:
       'Expert digital marketing services for businesses that want to grow. SEO, content, social media, and email marketing that delivers ROI.',
-    images: ['/api/og?title=Your%20Dedicated%20Marketer'],
+    images: [ogImageUrl],
     creator: '@yourdedicatedmarketer',
   },
 }
@@ -161,8 +165,8 @@ export default function RootLayout({
               '@type': 'Organization',
               name: 'Your Dedicated Marketer',
               description: 'Expert digital marketing services for businesses that want to grow.',
-              url: 'https://yourdedicatedmarketer.com',
-              logo: 'https://yourdedicatedmarketer.com/logo.png',
+              url: siteUrl,
+              logo: new URL('/logo.png', siteUrl).toString(),
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'Customer Service',
@@ -193,10 +197,10 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
               name: 'Your Dedicated Marketer',
-              url: 'https://yourdedicatedmarketer.com',
+              url: siteUrl,
               potentialAction: {
                 '@type': 'SearchAction',
-                target: 'https://yourdedicatedmarketer.com/search?q={search_term_string}',
+                target: `${siteUrl}/search?q={search_term_string}`,
                 'query-input': 'required name=search_term_string',
               },
             }),
