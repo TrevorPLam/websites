@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home } from 'lucide-react'
 
+import { getPublicBaseUrl } from '@/lib/env.public'
+
 function titleize(segment: string) {
   return segment
     .split('-')
@@ -27,6 +29,7 @@ export default function Breadcrumbs() {
 
   if (!crumbs.length) return null
 
+  const baseUrl = getPublicBaseUrl().replace(/\/$/, '')
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -35,13 +38,13 @@ export default function Breadcrumbs() {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://yourdedicatedmarketer.com',
+        item: baseUrl,
       },
       ...crumbs.map((crumb, index) => ({
         '@type': 'ListItem',
         position: index + 2,
         name: crumb.label,
-        item: `https://yourdedicatedmarketer.com${crumb.href}`,
+        item: `${baseUrl}${crumb.href}`,
       })),
     ],
   }

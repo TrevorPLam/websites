@@ -138,3 +138,48 @@ References:
 - `/lib/env.ts`
 Dependencies: None
 Effort: S
+
+### T-056: Add input validation to OG image route
+Priority: P1
+Type: SECURITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-07
+Context:
+- OG route accepts query params without bounds
+- Diamond Standard requires defense-in-depth validation
+Acceptance Criteria:
+- [x] T-056.1: Add Zod schema for query params with max lengths (title: 200, subtitle: 500)
+- [x] T-056.2: Sanitize with `escapeHtml` from `/lib/sanitize.ts`
+- [x] T-056.3: Return 400 for invalid inputs
+- [x] T-056.4: Add unit test for validation
+References:
+- /app/api/og/route.tsx
+- /lib/sanitize.ts
+Dependencies: T-050
+Effort: S
+Notes:
+- Verified with `npm test -- __tests__/app/og-route.test.ts`
+
+### T-071: Fix hardcoded URLs in structured data
+Priority: P1
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-07
+Context:
+- Breadcrumbs.tsx and blog/[slug]/page.tsx use hardcoded "yourdedicatedmarketer.com" in schema.org data
+- Should use getPublicBaseUrl() for environment-aware URLs
+- Affects SEO structured data accuracy
+Acceptance Criteria:
+- [x] T-071.1: Update Breadcrumbs.tsx to use getPublicBaseUrl() in structuredData
+- [x] T-071.2: Update blog/[slug]/page.tsx articleStructuredData to use getPublicBaseUrl()
+- [ ] T-071.3: Verify structured data renders correctly with Rich Results Test
+References:
+- /components/Breadcrumbs.tsx
+- /app/blog/[slug]/page.tsx
+- /lib/env.public.ts
+Dependencies: None
+Effort: XS
+Notes:
+- Rich Results Test not run (no external tooling configured).

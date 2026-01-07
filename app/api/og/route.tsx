@@ -1,14 +1,32 @@
 import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
+import { z } from 'zod'
+
+import { escapeHtml } from '@/lib/sanitize'
 
 export const runtime = 'edge'
 
+const ogQuerySchema = z.object({
+  title: z.string().max(200).optional(),
+  description: z.string().max(500).optional(),
+})
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const title = searchParams.get('title') || 'Your Dedicated Marketer'
-  const description =
-    searchParams.get('description') ||
-    'Digital marketing services that drive growth through SEO, content, and performance campaigns.'
+  const parseResult = ogQuerySchema.safeParse({
+    title: searchParams.get('title') ?? undefined,
+    description: searchParams.get('description') ?? undefined,
+  })
+
+  if (!parseResult.success) {
+    return new Response('Invalid query parameters', { status: 400 })
+  }
+
+  const title = escapeHtml(parseResult.data.title ?? 'Your Dedicated Marketer')
+  const description = escapeHtml(
+    parseResult.data.description ??
+      'Digital marketing services that drive growth through SEO, content, and performance campaigns.'
+  )
 
   return new ImageResponse(
     (

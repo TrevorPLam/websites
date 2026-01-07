@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { getAllPosts, getPostBySlug } from '@/lib/blog'
+import { getPublicBaseUrl } from '@/lib/env.public'
 import { Calendar, Clock, ArrowLeft, ArrowRight } from 'lucide-react'
 
 const BlogPostContent = dynamic(() => import('@/components/BlogPostContent'), {
@@ -45,13 +46,15 @@ export default async function BlogPostPage({ params }: Props) {
     notFound()
   }
 
+  const baseUrl = getPublicBaseUrl().replace(/\/$/, '')
+
   // Structured data for article
   const articleStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    image: `https://yourdedicatedmarketer.com/blog/${post.slug}.jpg`,
+    image: `${baseUrl}/blog/${post.slug}.jpg`,
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -63,12 +66,12 @@ export default async function BlogPostPage({ params }: Props) {
       name: 'Your Dedicated Marketer',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://yourdedicatedmarketer.com/logo.png',
+        url: `${baseUrl}/logo.png`,
       },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://yourdedicatedmarketer.com/blog/${post.slug}`,
+      '@id': `${baseUrl}/blog/${post.slug}`,
     },
     articleSection: post.category,
   }

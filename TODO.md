@@ -172,27 +172,6 @@ References:
 Dependencies: None
 Effort: XS
 
-### T-056: Add input validation to OG image route
-Priority: P1
-Type: SECURITY
-Owner: AGENT
-Status: READY
-Context:
-- OG route accepts query params without bounds
-- Diamond Standard requires defense-in-depth validation
-Acceptance Criteria:
-- [ ] T-056.1: Add Zod schema for query params with max lengths (title: 200, subtitle: 500)
-- [ ] T-056.2: Sanitize with `escapeHtml` from `/lib/sanitize.ts`
-- [ ] T-056.3: Return 400 for invalid inputs
-- [ ] T-056.4: Add unit test for validation
-References:
-- /app/api/og/route.tsx
-- /lib/sanitize.ts
-Dependencies: T-050
-Effort: S
-
----
-
 ## 🟡 PHASE 2: Diamond Standard Quality (P2)
 > Accessibility, performance, observability, and testing.
 
@@ -484,7 +463,6 @@ References:
 - /lib/env.public.ts
 Dependencies: None
 Effort: XS
-
 ### T-072: Create missing legal pages (privacy, terms)
 Priority: P2
 Type: FEATURE
