@@ -263,7 +263,7 @@ try {
 - [ ] Auth token set (for source maps)
 - [ ] Environment set to 'production'
 - [ ] Sample rate configured (0.1 - 0.2 recommended)
-- [ ] Source maps enabled (optional)
+- [ ] Source maps enabled and restricted to Sentry uploads
 - [ ] Alerts configured
 - [ ] Team members invited
 - [ ] Test error submitted
@@ -381,3 +381,16 @@ The following has been implemented:
 4. Deploy to production - errors will automatically be tracked!
 
 **Note**: Sentry is disabled in development mode by default to avoid noise. Set `NEXT_PUBLIC_SENTRY_DEBUG=true` in your `.env.local` to test Sentry locally.
+
+## Performance Instrumentation (Contact Submissions)
+
+Client-side contact submissions are wrapped in a dedicated Sentry span for latency tracking. The span name is `contact_form.submit` with `op="ui.action"`.
+
+To extend instrumentation:
+1. Use `withSentrySpan()` in `lib/sentry-client.ts` for additional client-side flows.
+2. Keep spans focused on user-visible actions (submit, search, navigation).
+
+## Source Maps Safety
+
+- `productionBrowserSourceMaps` is enabled so Sentry can map stack traces.
+- Ensure Sentry auth token, org, and project are set in production builds so source maps are uploaded and **not** served publicly.

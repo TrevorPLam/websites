@@ -41,3 +41,14 @@
 * **Mobile First:** All layouts must be verified on small screen sizes first.
 * **Aria Labels:** All interactive elements must have descriptive labels for screen readers.
 * **Contrast:** Ensure text color meets WCAG AA standards against backgrounds.
+* **Keyboard & Focus:** Every interactive element must have a visible focus state and be reachable via keyboard navigation.
+* **Landmarks & Headings:** Use semantic landmarks (`header`, `nav`, `main`, `footer`) and a single `<h1>` per page.
+* **Icon Semantics:** Decorative icons must be `aria-hidden="true"`; informative icons require accessible labels.
+
+#### WCAG 2.1 AA Audit (Repeatable)
+1. Start the site locally (`npm run dev` or `npm run start` after build).
+2. Run the axe audit script for core pages:
+   ```bash
+   npm run audit:a11y
+   ```
+3. Fix any violations on core pages (home/services/pricing/contact) before shipping.

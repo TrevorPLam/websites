@@ -107,7 +107,7 @@ import Select from '@/components/ui/Select'
 import Textarea from '@/components/ui/Textarea'
 import Button from '@/components/ui/Button'
 import { Loader2 } from 'lucide-react'
-import { setSentryContext, setSentryUser } from '@/lib/sentry-client'
+import { setSentryContext, setSentryUser, withSentrySpan } from '@/lib/sentry-client'
 
 /**
  * Contact form with full validation and server submission.
@@ -137,7 +137,10 @@ export default function ContactForm() {
     setSubmitStatus({ type: null, message: '' })
 
     try {
-      const result = await submitContactForm(data)
+      const result = await withSentrySpan(
+        { name: 'contact_form.submit', op: 'ui.action', attributes: { route: '/contact' } },
+        () => submitContactForm(data),
+      )
 
       if (result.success) {
         await setSentryUser({ email: data.email, name: data.name })

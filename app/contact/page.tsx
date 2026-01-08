@@ -4,6 +4,7 @@ import Container from '@/components/ui/Container'
 import Section from '@/components/ui/Section'
 import Card from '@/components/ui/Card'
 import ContactForm from '@/components/ContactForm'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 export const metadata: Metadata = {
   title: 'Contact Us | Your Dedicated Marketer',
@@ -37,7 +38,22 @@ export default function ContactPage() {
               <p className="text-slate mb-8">
                 Fill out the form below and we'll get back to you within 24 hours (usually much faster!).
               </p>
-              <ContactForm />
+              <ErrorBoundary
+                fallback={(
+                  <div className="rounded-lg border border-error/20 bg-error/5 p-4 text-error">
+                    We're having trouble loading the form. Please email us at{' '}
+                    <a
+                      href="mailto:contact@yourdedicatedmarketer.com"
+                      className="underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-error"
+                    >
+                      contact@yourdedicatedmarketer.com
+                    </a>
+                    .
+                  </div>
+                )}
+              >
+                <ContactForm />
+              </ErrorBoundary>
             </div>
 
             {/* Contact Information */}
@@ -48,7 +64,7 @@ export default function ContactPage() {
                 <Card variant="default">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-6 h-6 text-teal" />
+                      <Mail className="w-6 h-6 text-teal" aria-hidden="true" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-charcoal mb-1">Email</h3>
@@ -65,7 +81,7 @@ export default function ContactPage() {
                 <Card variant="default">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-6 h-6 text-teal" />
+                      <Phone className="w-6 h-6 text-teal" aria-hidden="true" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-charcoal mb-1">Phone</h3>
@@ -82,7 +98,7 @@ export default function ContactPage() {
                 <Card variant="default">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-6 h-6 text-teal" />
+                      <Clock className="w-6 h-6 text-teal" aria-hidden="true" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-charcoal mb-1">Office Hours</h3>
@@ -136,14 +152,14 @@ export default function ContactPage() {
                 href="mailto:contact@yourdedicatedmarketer.com"
                 className="inline-flex items-center justify-center bg-teal hover:bg-teal-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
-                <Mail className="w-5 h-5 mr-2" />
+                <Mail className="w-5 h-5 mr-2" aria-hidden="true" />
                 Email Us
               </a>
               <a
                 href="tel:+15551234567"
                 className="inline-flex items-center justify-center bg-transparent hover:bg-off-white text-charcoal font-semibold py-3 px-6 rounded-lg border-2 border-charcoal transition-colors"
               >
-                <Phone className="w-5 h-5 mr-2" />
+                <Phone className="w-5 h-5 mr-2" aria-hidden="true" />
                 Call Us
               </a>
             </div>

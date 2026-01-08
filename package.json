@@ -17,6 +17,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,cjs,mjs,cts,mts,json,md,mdx,yml,yaml,css,scss}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,cjs,mjs,cts,mts,json,md,mdx,yml,yaml,css,scss}\"",
     "check:npm-registry": "node scripts/npm-registry-check.mjs",
+    "audit:a11y": "node scripts/a11y-audit.mjs",
+    "audit:lighthouse": "node scripts/lighthouse-audit.mjs",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",

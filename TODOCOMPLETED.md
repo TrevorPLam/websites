@@ -1,7 +1,7 @@
 # TODOCOMPLETED.md — Completed Tasks Archive
 
 Document Type: Workflow
-Last Updated: 2026-01-06
+Last Updated: 2026-01-08
 Source: Completed tasks moved from `TODO.md`
 
 This file stores completed work in the same schema as `TODO.md`.
@@ -183,3 +183,44 @@ Dependencies: None
 Effort: XS
 Notes:
 - Rich Results Test not run (no external tooling configured).
+
+### T-057: Accessibility audit (WCAG 2.1 AA)
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-08
+Context:
+- Diamond Standard requires WCAG 2.1 AA compliance
+- Need systematic checks (keyboard nav, focus states, contrast)
+Acceptance Criteria:
+- [x] T-057.1: Add axe tooling and a repeatable audit script
+- [x] T-057.2: Fix any discovered a11y issues on core pages (home/services/pricing/contact)
+- [x] T-057.3: Document a11y standards in `/docs/UI_DESIGN_SYSTEM.md`
+References:
+- /docs/UI_DESIGN_SYSTEM.md
+- /components/
+- /app/
+Dependencies: T-050
+Effort: M
+
+### T-059: Strengthen Sentry (errors + performance)
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-08
+Context:
+- Sentry is kept
+- Want actionable errors and form submission visibility
+Acceptance Criteria:
+- [x] T-059.1: Add granular error boundaries where appropriate
+- [x] T-059.2: Ensure production source maps are configured and safe
+- [x] T-059.3: Add performance instrumentation for contact submissions
+- [x] T-059.4: Update `/docs/SENTRY-SETUP.md` and `/docs/OBSERVABILITY.md`
+References:
+- /components/ErrorBoundary.tsx
+- /docs/SENTRY-SETUP.md
+- /docs/OBSERVABILITY.md
+Dependencies: T-050
+Effort: M

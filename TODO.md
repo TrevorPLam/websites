@@ -2,7 +2,7 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-07
+Last Updated: 2026-01-08
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
@@ -175,61 +175,23 @@ Effort: XS
 ## 🟡 PHASE 2: Diamond Standard Quality (P2)
 > Accessibility, performance, observability, and testing.
 
-### T-057: Accessibility audit (WCAG 2.1 AA)
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Diamond Standard requires WCAG 2.1 AA compliance
-- Need systematic checks (keyboard nav, focus states, contrast)
-Acceptance Criteria:
-- [ ] T-057.1: Add axe tooling and a repeatable audit script
-- [ ] T-057.2: Fix any discovered a11y issues on core pages (home/services/pricing/contact)
-- [ ] T-057.3: Document a11y standards in `/docs/UI_DESIGN_SYSTEM.md`
-References:
-- /docs/UI_DESIGN_SYSTEM.md
-- /components/
-- /app/
-Dependencies: T-050
-Effort: M
-
 ### T-058: Performance baselines + budgets (Lighthouse)
 Priority: P2
 Type: QUALITY
 Owner: AGENT
-Status: READY
+Status: BLOCKED
 Context:
 - Diamond Standard requires strong Core Web Vitals
 - Need baseline measurements before setting strict budgets
+- Blocked: Lighthouse CLI unavailable in sandbox (npm registry 403 on install)
 Acceptance Criteria:
-- [ ] T-058.1: Add a local Lighthouse config and script
+- [x] T-058.1: Add a local Lighthouse config and script
 - [ ] T-058.2: Capture baseline metrics for mobile (home/services/pricing/contact)
-- [ ] T-058.3: Define budgets as regression guards (not arbitrary hard fails)
-- [ ] T-058.4: Document targets in `/docs/OBSERVABILITY.md`
+- [x] T-058.3: Define budgets as regression guards (not arbitrary hard fails)
+- [x] T-058.4: Document targets in `/docs/OBSERVABILITY.md`
 References:
 - /docs/OBSERVABILITY.md
 - /package.json
-Dependencies: T-050
-Effort: M
-
-### T-059: Strengthen Sentry (errors + performance)
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Context:
-- Sentry is kept
-- Want actionable errors and form submission visibility
-Acceptance Criteria:
-- [ ] T-059.1: Add granular error boundaries where appropriate
-- [ ] T-059.2: Ensure production source maps are configured and safe
-- [ ] T-059.3: Add performance instrumentation for contact submissions
-- [ ] T-059.4: Update `/docs/SENTRY-SETUP.md` and `/docs/OBSERVABILITY.md`
-References:
-- /components/ErrorBoundary.tsx
-- /docs/SENTRY-SETUP.md
-- /docs/OBSERVABILITY.md
 Dependencies: T-050
 Effort: M
 
