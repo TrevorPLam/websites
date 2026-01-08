@@ -19,7 +19,6 @@ Use the following values when creating the Pages project:
 
 ### Local preview
 ```bash
-npm run pages:build
 npm run pages:preview
 ```
 
