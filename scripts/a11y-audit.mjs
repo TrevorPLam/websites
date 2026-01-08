@@ -11,6 +11,7 @@ const slugifyRoute = (route) => (route === '/' ? 'home' : route.replaceAll('/', 
 
 const timestamp = new Date().toISOString()
 const browser = await chromium.launch()
+let hasErrors = false
 let hasViolations = false
 
 await mkdir(outputDir, { recursive: true })
@@ -46,6 +47,10 @@ for (const route of routes) {
     } else {
       console.info(`No axe violations for ${url}`)
     }
+  } catch (error) {
+    hasErrors = true
+    console.error(`A11y audit failed for ${url}`)
+    console.error(error)
   } finally {
     await context.close()
   }
@@ -53,6 +58,6 @@ for (const route of routes) {
 
 await browser.close()
 
-if (hasViolations) {
+if (hasViolations || hasErrors) {
   process.exitCode = 1
 }
