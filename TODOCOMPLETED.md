@@ -199,6 +199,28 @@ Effort: S
 Notes:
 - Verified with `npm test -- __tests__/app/og-route.test.ts`
 
+### T-062: Structured data for SEO (Article/Service/Breadcrumb)
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-08
+Context:
+- Diamond Standard SEO: structured data improves rich results + clarity
+Acceptance Criteria:
+- [x] T-062.1: Add Article schema to blog posts
+- [x] T-062.2: Add Service schema to service pages
+- [x] T-062.3: Add BreadcrumbList schema where breadcrumbs exist
+- [ ] T-062.4: Validate via Google Rich Results Test
+References:
+- /app/blog/
+- /app/services/
+- /components/Breadcrumbs.tsx
+Dependencies: T-050
+Effort: M
+Notes:
+- Rich Results Test validation not run in this environment.
+
 ### T-071: Fix hardcoded URLs in structured data
 Priority: P1
 Type: BUG

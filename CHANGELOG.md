@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added repeatable accessibility and Lighthouse audit scripts for local QA
 - Added Playwright coverage for contact submission success, rate limiting, and search empty states
 - Added unit tests for Hero, ValueProps, ServicesOverview, and SocialProof sections
+- Added Article and Service structured data on blog posts and service pages for richer SEO signals
 
 ### Security
 - Added hashed IP + email rate limiting for contact form submissions

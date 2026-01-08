@@ -51,7 +51,7 @@ export default async function BlogPostPage({ params }: Props) {
   // Structured data for article
   const articleStructuredData = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
+    '@type': 'Article',
     headline: post.title,
     description: post.description,
     image: `${baseUrl}/blog/${post.slug}.jpg`,
@@ -60,6 +60,11 @@ export default async function BlogPostPage({ params }: Props) {
     author: {
       '@type': 'Person',
       name: post.author,
+    },
+    isPartOf: {
+      '@type': 'Blog',
+      name: 'Your Dedicated Marketer Blog',
+      url: `${baseUrl}/blog`,
     },
     publisher: {
       '@type': 'Organization',
