@@ -30,36 +30,41 @@ for (const route of routes) {
   const url = new URL(route, baseUrl).toString()
   const reportPath = path.join(outputDir, `${slugifyRoute(route)}.json`)
 
-  await execFileAsync(lighthouseBin, [
-    url,
-    '--quiet',
-    '--output',
-    'json',
-    '--output-path',
-    reportPath,
-    '--only-categories=performance,accessibility,best-practices,seo',
-    '--form-factor=mobile',
-    '--config-path',
-    path.resolve('.lighthouserc.json'),
-  ])
+  try {
+    await execFileAsync(lighthouseBin, [
+      url,
+      '--quiet',
+      '--output',
+      'json',
+      '--output-path',
+      reportPath,
+      '--only-categories=performance,accessibility,best-practices,seo',
+      '--form-factor=mobile',
+      '--config-path',
+      path.resolve('.lighthouserc.json'),
+    ])
 
-  const report = JSON.parse(await readFile(reportPath, 'utf8'))
-  summaries.push({
-    url,
-    scores: {
-      performance: Math.round((report.categories.performance.score ?? 0) * 100),
-      accessibility: Math.round((report.categories.accessibility.score ?? 0) * 100),
-      bestPractices: Math.round((report.categories['best-practices'].score ?? 0) * 100),
-      seo: Math.round((report.categories.seo.score ?? 0) * 100),
-    },
-    vitals: {
-      fcpMs: report.audits['first-contentful-paint'].numericValue,
-      lcpMs: report.audits['largest-contentful-paint'].numericValue,
-      cls: report.audits['cumulative-layout-shift'].numericValue,
-      tbtMs: report.audits['total-blocking-time'].numericValue,
-      siMs: report.audits['speed-index'].numericValue,
-    },
-  })
+    const report = JSON.parse(await readFile(reportPath, 'utf8'))
+    summaries.push({
+      url,
+      scores: {
+        performance: Math.round((report.categories.performance.score ?? 0) * 100),
+        accessibility: Math.round((report.categories.accessibility.score ?? 0) * 100),
+        bestPractices: Math.round((report.categories['best-practices'].score ?? 0) * 100),
+        seo: Math.round((report.categories.seo.score ?? 0) * 100),
+      },
+      vitals: {
+        fcpMs: report.audits['first-contentful-paint'].numericValue,
+        lcpMs: report.audits['largest-contentful-paint'].numericValue,
+        cls: report.audits['cumulative-layout-shift'].numericValue,
+        tbtMs: report.audits['total-blocking-time'].numericValue,
+        siMs: report.audits['speed-index'].numericValue,
+      },
+    })
+  } catch (error) {
+    console.error(`Lighthouse audit failed for ${url}`)
+    console.error(error)
+  }
 }
 
 const summaryPath = path.resolve('reports', 'lighthouse', 'mobile-summary.json')
