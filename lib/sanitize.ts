@@ -22,6 +22,7 @@
  * | textToHtmlParagraphs() | Multi-line text → HTML | Message body in emails |
  * | sanitizeEmail() | Email validation+clean | Contact form emails |
  * | sanitizeName() | Name validation+clean | Contact form names |
+ * | sanitizeUrl() | User text → safe URL | Future link inputs |
  *
  * **AI ITERATION HINTS**:
  * - Adding new sanitizer? Follow escapeHtml pattern (pure function, no side effects)
@@ -37,7 +38,7 @@
  * - [x] HTML special chars (&<>"'/)
  * - [x] Email header injection (\r\n)
  * - [x] Subject length limits (200 chars)
- * - [ ] TODO: Add URL sanitization for future link inputs
+ * - [x] URL sanitization for future link inputs
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  *
@@ -263,4 +264,40 @@ export function sanitizeEmail(email: string): string {
  */
 export function sanitizeName(name: string): string {
   return escapeHtml(name.trim().slice(0, 100))
+}
+
+/**
+ * Sanitize URLs for safe use in links.
+ *
+ * **Purpose:**
+ * - Prevent javascript: or other dangerous URL schemes
+ * - Normalize URLs for storage or rendering
+ *
+ * **What it does:**
+ * - Trims whitespace
+ * - Requires a valid absolute URL
+ * - Allows only http/https protocols
+ *
+ * **When to use:**
+ * - User-provided URLs displayed as links
+ * - URLs stored for later rendering in HTML
+ *
+ * @param url - User-provided URL
+ * @returns Sanitized URL string, or empty string if invalid/unsafe
+ */
+export function sanitizeUrl(url: string): string {
+  const trimmed = url.trim()
+  if (!trimmed) {
+    return ''
+  }
+
+  try {
+    const parsed = new URL(trimmed)
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return ''
+    }
+    return parsed.toString()
+  } catch {
+    return ''
+  }
 }

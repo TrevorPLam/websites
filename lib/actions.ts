@@ -15,7 +15,7 @@
  * - Runs server-side only (no API route needed)
  * - Returns { success, message, errors? } response object
  *
- * **CURRENT STATE (as of T-053)**: Email-based. TODO: Migrate to Supabase+HubSpot
+ * **CURRENT STATE**: Email-based. Tracked in TODO: T-080, T-081, T-082
  * - RESEND_API_KEY present → sends email
  * - RESEND_API_KEY absent → logs only (dev mode)
  *
@@ -45,7 +45,7 @@
  * - [ ] Errors return generic messages (no internal details)
  *
  * **KNOWN ISSUES / TECH DEBT**:
- * - [ ] T-053: Email flow to be replaced with Supabase+HubSpot
+ * - [ ] T-080/T-081/T-082: Email flow to be replaced with Supabase+HubSpot
  * - [ ] In-memory rate limiter not suitable for multi-instance production
  * - [ ] No retry logic for email delivery failures
  *
