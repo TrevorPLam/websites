@@ -124,6 +124,7 @@ export default function Navigation({ searchItems }: NavigationProps) {
   const pathname = usePathname()
   const mobileMenuRef = useRef<HTMLDivElement | null>(null)
   const lastFocusedElementRef = useRef<HTMLElement | null>(null)
+  const mobileToggleButtonRef = useRef<HTMLButtonElement | null>(null)
 
   const normalizePath = (path: string) => {
     const [cleanPath] = path.split(/[?#]/)
@@ -179,9 +180,8 @@ export default function Navigation({ searchItems }: NavigationProps) {
 
   useEffect(() => {
     if (!isMobileMenuOpen) {
-      if (lastFocusedElementRef.current) {
-        lastFocusedElementRef.current.focus()
-      }
+      const focusTarget = mobileToggleButtonRef.current ?? lastFocusedElementRef.current
+      focusTarget?.focus()
       return
     }
 
@@ -226,6 +226,7 @@ export default function Navigation({ searchItems }: NavigationProps) {
             <SearchDialog items={searchItems} variant="mobile" />
             <button
               onClick={toggleMobileMenu}
+              ref={mobileToggleButtonRef}
               className="text-white p-2 hover:bg-white/10 rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               aria-label="Toggle mobile menu"
               aria-expanded={isMobileMenuOpen}
