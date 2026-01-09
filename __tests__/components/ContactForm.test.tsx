@@ -68,6 +68,7 @@ describe('ContactForm', () => {
     // Fill in required fields
     await user.type(screen.getByLabelText(/name/i), 'John Smith')
     await user.type(screen.getByLabelText(/email/i), 'john@example.com')
+    await user.type(screen.getByLabelText(/phone/i), '555-123-4567')
     await user.type(
       screen.getByRole('textbox', { name: /message/i }),
       'I would like to learn more about your services'
@@ -81,6 +82,7 @@ describe('ContactForm', () => {
         expect.objectContaining({
           name: 'John Smith',
           email: 'john@example.com',
+          phone: '555-123-4567',
           message: 'I would like to learn more about your services',
         })
       )
@@ -99,6 +101,7 @@ describe('ContactForm', () => {
 
     await user.type(screen.getByLabelText(/name/i), 'John Smith')
     await user.type(screen.getByLabelText(/email/i), 'john@example.com')
+    await user.type(screen.getByLabelText(/phone/i), '555-123-4567')
     await user.type(screen.getByRole('textbox', { name: /message/i }), 'Test message with enough characters')
 
     await user.click(screen.getByRole('button', { name: /send message/i }))
@@ -120,6 +123,7 @@ describe('ContactForm', () => {
 
     await user.type(screen.getByLabelText(/name/i), 'John Smith')
     await user.type(screen.getByLabelText(/email/i), 'john@example.com')
+    await user.type(screen.getByLabelText(/phone/i), '555-123-4567')
     await user.type(screen.getByRole('textbox', { name: /message/i }), 'Test message with enough characters')
 
     await user.click(screen.getByRole('button', { name: /send message/i }))
@@ -140,6 +144,7 @@ describe('ContactForm', () => {
 
     await user.type(screen.getByLabelText(/name/i), 'John Smith')
     await user.type(screen.getByLabelText(/email/i), 'john@example.com')
+    await user.type(screen.getByLabelText(/phone/i), '555-123-4567')
     await user.type(screen.getByRole('textbox', { name: /message/i }), 'Test message with enough characters')
 
     const submitButton = screen.getByRole('button', { name: /send message/i })
@@ -165,10 +170,12 @@ describe('ContactForm', () => {
 
     const nameInput = screen.getByLabelText(/name/i) as HTMLInputElement
     const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement
+    const phoneInput = screen.getByLabelText(/phone/i) as HTMLInputElement
     const messageInput = screen.getByRole('textbox', { name: /message/i }) as HTMLTextAreaElement
 
     await user.type(nameInput, 'John Smith')
     await user.type(emailInput, 'john@example.com')
+    await user.type(phoneInput, '555-123-4567')
     await user.type(messageInput, 'Test message with enough characters')
 
     await user.click(screen.getByRole('button', { name: /send message/i }))
@@ -176,6 +183,7 @@ describe('ContactForm', () => {
     await waitFor(() => {
       expect(nameInput.value).toBe('')
       expect(emailInput.value).toBe('')
+      expect(phoneInput.value).toBe('')
       expect(messageInput.value).toBe('')
     })
   })

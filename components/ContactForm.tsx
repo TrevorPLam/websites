@@ -28,14 +28,14 @@
  * | name | ✅ | min 2 chars |
  * | email | ✅ | valid email |
  * | company | ❌ | optional |
- * | phone | ❌ | optional (T-053 will make required) |
+ * | phone | ✅ | required |
  * | marketingSpend | ❌ | dropdown |
  * | message | ✅ | min 10 chars |
  * | hearAboutUs | ❌ | dropdown |
  *
  * **AI ITERATION HINTS**:
  * - Adding field? Update contact-form-schema.ts FIRST, then add Input here
- * - T-053 changes: name/email/phone will all be required
+ * - Required fields: name, email, phone, message
  * - Use same pattern: register() + error display + isValid green check
  * - Test with __tests__/components/ContactForm.test.tsx
  *
@@ -68,7 +68,7 @@
  * - Name (required)
  * - Email (required, validated)
  * - Company (optional)
- * - Phone (optional)
+ * - Phone (required)
  * - Marketing Spend (dropdown)
  * - Message (required)
  * - How did you hear about us (dropdown)
@@ -215,8 +215,9 @@ export default function ContactForm() {
         label="Phone"
         type="tel"
         placeholder="(555) 123-4567"
+        required
         error={errors.phone?.message}
-        isValid={touchedFields.phone && dirtyFields.phone && !errors.phone}
+        isValid={touchedFields.phone && !errors.phone}
         {...register('phone')}
       />
 

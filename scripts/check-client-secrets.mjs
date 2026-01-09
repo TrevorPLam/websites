@@ -7,6 +7,9 @@ const forbiddenTokens = [
   'CONTACT_EMAIL',
   'UPSTASH_REDIS_REST_URL',
   'UPSTASH_REDIS_REST_TOKEN',
+  'SUPABASE_URL',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'HUBSPOT_PRIVATE_APP_TOKEN',
 ]
 
 const walkFiles = (dirPath) => {

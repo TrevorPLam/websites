@@ -25,7 +25,7 @@
  * 5. Update docs/DEPLOYMENT.md env var list
  *
  * **AI ITERATION HINTS**:
- * - T-053 will add SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, HUBSPOT_PRIVATE_APP_TOKEN
+ * - Supabase + HubSpot vars are required for the lead pipeline
  * - Keep server vars here, public vars in env.public.ts (twin pattern)
  * - Use .optional() for vars with graceful fallback, no modifier for required
  *
@@ -39,9 +39,11 @@
  * | CONTACT_EMAIL | email | defaults | Form submission recipient |
  * | UPSTASH_REDIS_REST_URL | string | optional | Rate limiting |
  * | UPSTASH_REDIS_REST_TOKEN | string | optional | Rate limiting |
+ * | SUPABASE_URL | url | required | Supabase project URL |
+ * | SUPABASE_SERVICE_ROLE_KEY | string | required | Server-only service role key |
+ * | HUBSPOT_PRIVATE_APP_TOKEN | string | required | HubSpot private app token |
  *
  * **KNOWN ISSUES**:
- * - [ ] T-053: Add Supabase + HubSpot vars when implementing lead pipeline
  * - [ ] No runtime validation for env changes (restart required)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
@@ -165,6 +167,26 @@ const envSchema = z.object({
    * @optional
    */
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+
+  /**
+   * Supabase project URL (required).
+   * Used for server-side lead storage.
+   * 
+   * @example 'https://xyzcompany.supabase.co'
+   */
+  SUPABASE_URL: z.string().url(),
+
+  /**
+   * Supabase service role key (required, server-only).
+   * Grants elevated access; never expose to the client.
+   */
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+
+  /**
+   * HubSpot private app token (required, server-only).
+   * Used for CRM sync.
+   */
+  HUBSPOT_PRIVATE_APP_TOKEN: z.string().min(1),
 })
 
 /**
@@ -198,6 +220,9 @@ const env = envSchema.safeParse({
   NODE_ENV: process.env.NODE_ENV,
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  HUBSPOT_PRIVATE_APP_TOKEN: process.env.HUBSPOT_PRIVATE_APP_TOKEN,
 })
 
 if (!env.success) {

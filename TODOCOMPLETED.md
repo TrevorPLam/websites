@@ -1,7 +1,7 @@
 # TODOCOMPLETED.md — Completed Tasks Archive
 
 Document Type: Workflow
-Last Updated: 2026-01-08
+Last Updated: 2026-01-09
 Source: Completed tasks moved from `TODO.md`
 
 This file stores completed work in the same schema as `TODO.md`.
@@ -402,6 +402,30 @@ Dependencies: None
 Effort: S
 Notes:
 - Moved from TODO.md; completion date not recorded in task history.
+
+### T-079: Update contact form requirements + env validation for Supabase/HubSpot
+Priority: P1
+Type: FEATURE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-09
+Context:
+- Pipeline shifts to Supabase + HubSpot, so form validation must align with required fields
+- Server-only secrets must be validated and blocked from client exposure
+Acceptance Criteria:
+- [x] T-079.1: Update contact form schema so Name/Email/Phone are required (keep message required)
+- [x] T-079.2: Update `ContactForm` UI to match required fields and error messaging
+- [x] T-079.3: Add env validation for `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `HUBSPOT_PRIVATE_APP_TOKEN`
+- [x] T-079.4: Update `scripts/check-client-secrets.mjs` to forbid new server-only env names
+- [x] T-079.5: Update `/env.example` with the new server-only env vars and notes
+References:
+- /lib/contact-form-schema.ts
+- /components/ContactForm.tsx
+- /lib/env.ts
+- /scripts/check-client-secrets.mjs
+- /env.example
+Dependencies: None
+Effort: S
 
 ### T-051: Unblock npm registry access (if installs fail)
 Priority: P0

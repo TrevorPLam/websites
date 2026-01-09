@@ -17,6 +17,7 @@ vi.mock('next/headers', () => ({
 const buildPayload = (email: string) => ({
   name: 'Test User',
   email,
+  phone: '555-123-4567',
   website: '',
   message: 'This is a sufficiently long message for validation.',
 })

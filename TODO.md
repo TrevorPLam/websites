@@ -1,7 +1,7 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-08
+Last Updated: 2026-01-09
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
@@ -88,30 +88,6 @@ References:
 - /env.example
 Dependencies: None
 Effort: XS
-
-### T-079: Update contact form requirements + env validation for Supabase/HubSpot
-Priority: P1
-Type: FEATURE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Pipeline shifts to Supabase + HubSpot, so form validation must align with required fields
-- Server-only secrets must be validated and blocked from client exposure
-Acceptance Criteria:
-- [ ] T-079.1: Update contact form schema so Name/Email/Phone are required (keep message required)
-- [ ] T-079.2: Update `ContactForm` UI to match required fields and error messaging
-- [ ] T-079.3: Add env validation for `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `HUBSPOT_PRIVATE_APP_TOKEN`
-- [ ] T-079.4: Update `scripts/check-client-secrets.mjs` to forbid new server-only env names
-- [ ] T-079.5: Update `/env.example` with the new server-only env vars and notes
-References:
-- /lib/contact-form-schema.ts
-- /components/ContactForm.tsx
-- /lib/env.ts
-- /scripts/check-client-secrets.mjs
-- /env.example
-Dependencies: None
-Effort: S
 
 ### T-080: Store leads in Supabase with suspicion metadata
 Priority: P1
