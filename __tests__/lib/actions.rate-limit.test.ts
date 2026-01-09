@@ -71,9 +71,7 @@ describe('contact form rate limiting', () => {
     })
 
     expect(response.success).toBe(false)
-    expect(logWarn).toHaveBeenCalledWith(
-      expect.stringContaining('Honeypot field triggered'),
-    )
+    expect(logWarn).toHaveBeenCalledWith('Honeypot field triggered for contact form submission')
     expect(logError).not.toHaveBeenCalled()
   })
 })

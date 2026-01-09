@@ -352,13 +352,7 @@ async function checkRateLimit(email: string, clientIp: string): Promise<boolean>
  */
 export async function submitContactForm(data: ContactFormData) {
   try {
-    const honeypotValue =
-      data && typeof data === 'object' && 'website' in data ? data.website : undefined
-    if (
-      honeypotValue !== undefined &&
-      honeypotValue !== null &&
-      (typeof honeypotValue === 'string' ? honeypotValue.trim().length > 0 : true)
-    ) {
+    if (data.website) {
       logWarn('Honeypot field triggered for contact form submission')
       return {
         success: false,
