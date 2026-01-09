@@ -347,7 +347,7 @@ async function checkRateLimit(email: string, clientIp: string): Promise<boolean>
  */
 export async function submitContactForm(data: ContactFormData) {
   try {
-    if (data && typeof data.website === 'string' && data.website.length > 0) {
+    if (data.website) {
       logWarn('Honeypot field triggered for contact form submission')
       return {
         success: false,
