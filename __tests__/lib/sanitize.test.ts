@@ -5,6 +5,7 @@ import {
   textToHtmlParagraphs,
   sanitizeEmail,
   sanitizeName,
+  sanitizeUrl,
 } from '@/lib/sanitize'
 
 describe('sanitize utilities', () => {
@@ -131,6 +132,32 @@ describe('sanitize utilities', () => {
     it('should preserve international characters', () => {
       const input = 'José García'
       expect(sanitizeName(input)).toBe('José García')
+    })
+  })
+
+  describe('sanitizeUrl', () => {
+    it('should allow https URLs', () => {
+      const input = 'https://example.com/path'
+      expect(sanitizeUrl(input)).toBe('https://example.com/path')
+    })
+
+    it('should allow http URLs', () => {
+      const input = 'http://example.com'
+      expect(sanitizeUrl(input)).toBe('http://example.com/')
+    })
+
+    it('should trim whitespace', () => {
+      const input = '  https://example.com  '
+      expect(sanitizeUrl(input)).toBe('https://example.com/')
+    })
+
+    it('should reject javascript URLs', () => {
+      const input = 'javascript:alert(1)'
+      expect(sanitizeUrl(input)).toBe('')
+    })
+
+    it('should reject invalid URLs', () => {
+      expect(sanitizeUrl('not a url')).toBe('')
     })
   })
 })

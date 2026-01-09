@@ -1,7 +1,7 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-09
+Last Updated: 2026-01-10
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
@@ -231,6 +231,25 @@ References:
 - /app/
 Dependencies: None
 Effort: M
+
+### T-083: Add URL sanitization helper for user-provided links
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Blockers: None
+Context:
+- Prevent unsafe URL schemes in future link inputs
+- Remove inline TODO in lib/sanitize.ts by implementing the helper
+Acceptance Criteria:
+- [x] T-083.1: Add sanitizeUrl() in lib/sanitize.ts with http/https allowlist
+- [x] T-083.2: Add unit tests for sanitizeUrl() edge cases
+- [x] T-083.3: Update sanitize.ts coverage checklist to reflect completion
+References:
+- /lib/sanitize.ts
+- /__tests__/lib/sanitize.test.ts
+Dependencies: None
+Effort: XS
 
 ## 🟦 PHASE 3: Enhancements (P3)
 > Nice-to-have improvements for Diamond Standard.
