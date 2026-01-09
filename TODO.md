@@ -235,24 +235,6 @@ Effort: M
 ## 🟦 PHASE 3: Enhancements (P3)
 > Nice-to-have improvements for Diamond Standard.
 
-### T-074: Add active link highlighting to Navigation
-Priority: P3
-Type: FEATURE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Navigation links don't indicate current page
-- Improves UX by showing user where they are
-Acceptance Criteria:
-- [ ] T-074.1: Use usePathname() to detect current route
-- [ ] T-074.2: Add active styles to matching nav link
-- [ ] T-074.3: Test on all pages
-References:
-- /components/Navigation.tsx
-Dependencies: None
-Effort: XS
-
 ### T-075: Add case studies to search index
 Priority: P3
 Type: FEATURE

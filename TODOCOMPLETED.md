@@ -508,6 +508,24 @@ Effort: XS
 Notes:
 - Moved from TODO.md; completion date not recorded in task history.
 
+### T-074: Add active link highlighting to Navigation
+Priority: P3
+Type: FEATURE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-09
+Context:
+- Navigation links don't indicate current page
+- Improves UX by showing user where they are
+Acceptance Criteria:
+- [x] T-074.1: Use usePathname() to detect current route
+- [x] T-074.2: Add active styles to matching nav link
+- [x] T-074.3: Test on all pages
+References:
+- /components/Navigation.tsx
+Dependencies: None
+Effort: XS
+
 ### T-052: Enable Cloudflare Pages build (GitHub integration)
 Priority: P0
 Type: RELEASE
