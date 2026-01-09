@@ -1,7 +1,7 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-10
+Last Updated: 2026-01-09
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
@@ -231,28 +231,6 @@ References:
 - /app/
 Dependencies: None
 Effort: M
-
-### T-076: Fix honeypot logging as error
-Priority: P2
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Honeypot field triggers ZodError which logs as error in actions.ts
-- Should be handled as spam detection (warn level), not error
-- Creates noise in error monitoring
-Acceptance Criteria:
-- [ ] T-076.1: Decide on implementation path (pre-Zod check or specific error catch).
-- [ ] T-076.2: Implement the chosen solution to ensure honeypot submissions are logged as warnings.
-- [ ] T-076.3: Add a unit test to verify the new logging behavior.
-References:
-- /lib/actions.ts
-- /__tests__/lib/actions.rate-limit.test.ts
-Dependencies: None
-Effort: XS
-
----
 
 ## 🟦 PHASE 3: Enhancements (P3)
 > Nice-to-have improvements for Diamond Standard.

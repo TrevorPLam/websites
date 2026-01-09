@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { submitContactForm } from '@/lib/actions'
+import { logError, logWarn } from '@/lib/logger'
 
 let currentIp = '203.0.113.1'
 
@@ -14,6 +15,12 @@ vi.mock('next/headers', () => ({
   }),
 }))
 
+vi.mock('@/lib/logger', () => ({
+  logError: vi.fn(),
+  logInfo: vi.fn(),
+  logWarn: vi.fn(),
+}))
+
 const buildPayload = (email: string) => ({
   name: 'Test User',
   email,
@@ -24,6 +31,7 @@ const buildPayload = (email: string) => ({
 
 describe('contact form rate limiting', () => {
   beforeEach(() => {
+    vi.clearAllMocks()
     currentIp = '203.0.113.1'
   })
 
@@ -63,5 +71,7 @@ describe('contact form rate limiting', () => {
     })
 
     expect(response.success).toBe(false)
+    expect(logWarn).toHaveBeenCalledWith('Honeypot field triggered for contact form submission')
+    expect(logError).not.toHaveBeenCalled()
   })
 })

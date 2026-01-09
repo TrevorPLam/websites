@@ -347,18 +347,18 @@ async function checkRateLimit(email: string, clientIp: string): Promise<boolean>
  */
 export async function submitContactForm(data: ContactFormData) {
   try {
-    // Validate the data
-    const validatedData = contactFormSchema.parse(data)
-    const clientIp = await getClientIp()
-    const hashedIp = hashIdentifier(clientIp)
-
-    if (validatedData.website && validatedData.website.length > 0) {
+    if (data && typeof data.website === 'string' && data.website.length > 0) {
       logWarn('Honeypot field triggered for contact form submission')
       return {
         success: false,
         message: 'Unable to submit your message. Please try again.',
       }
     }
+
+    // Validate the data
+    const validatedData = contactFormSchema.parse(data)
+    const clientIp = await getClientIp()
+    const hashedIp = hashIdentifier(clientIp)
 
     // Rate limiting check
     const rateLimitPassed = await checkRateLimit(validatedData.email, clientIp)
