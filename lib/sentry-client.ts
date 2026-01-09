@@ -1,6 +1,6 @@
 let sentryPromise: Promise<typeof import('@sentry/nextjs')> | null = null
-type SpanAttributeValue = string | number | boolean
-type SpanAttributes = Record<string, SpanAttributeValue | undefined>
+export type SpanAttributeValue = string | number | boolean;
+export type SpanAttributes = Record<string, SpanAttributeValue | undefined>;
 
 function loadSentry() {
   if (!sentryPromise) {
