@@ -174,25 +174,6 @@ References:
 Dependencies: None
 Effort: M
 
-### T-063: Image optimization audit (next/image)
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Images are a common performance bottleneck
-Acceptance Criteria:
-- [ ] T-063.1: Convert any `<img>` tags to `next/image` where appropriate
-- [ ] T-063.2: Ensure explicit sizes + lazy loading + `priority` for above-fold hero
-- [ ] T-063.3: Document guidelines in `/docs/UI_DESIGN_SYSTEM.md`
-References:
-- /components/
-- /app/
-- /docs/UI_DESIGN_SYSTEM.md
-Dependencies: None
-Effort: M
-
 ### T-064: Analytics provider selection and rollout
 Priority: P2
 Type: QUALITY

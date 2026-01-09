@@ -427,6 +427,25 @@ References:
 Dependencies: None
 Effort: S
 
+### T-063: Image optimization audit (next/image)
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-09
+Context:
+- Images are a common performance bottleneck
+Acceptance Criteria:
+- [x] T-063.1: Convert any `<img>` tags to `next/image` where appropriate
+- [x] T-063.2: Ensure explicit sizes + lazy loading + `priority` for above-fold hero
+- [x] T-063.3: Document guidelines in `/docs/UI_DESIGN_SYSTEM.md`
+References:
+- /components/
+- /app/
+- /docs/UI_DESIGN_SYSTEM.md
+Dependencies: None
+Effort: M
+
 ### T-051: Unblock npm registry access (if installs fail)
 Priority: P0
 Type: DEPENDENCY

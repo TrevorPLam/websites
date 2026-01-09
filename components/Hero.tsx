@@ -70,6 +70,7 @@ export default function Hero() {
                 alt="Stylized bar chart climbing upward to represent marketing growth"
                 width={640}
                 height={640}
+                sizes="(min-width: 1280px) 592px, (min-width: 1024px) 50vw, 0px"
                 priority
                 className="h-full w-full object-contain"
               />

@@ -52,3 +52,12 @@
    npm run audit:a11y
    ```
 3. Fix any violations on core pages (home/services/pricing/contact) before shipping.
+
+---
+
+### 5. IMAGE OPTIMIZATION (Next/Image)
+* **Rule:** Do not use raw `<img>` tags in production UI (tests may mock images). Use `next/image`.
+* **Sizing:** Always set explicit `width`, `height`, and `sizes` props to prevent layout shift.
+* **Priority:** Set `priority` only for above-the-fold, LCP-critical images (e.g., the homepage hero).
+* **Lazy Loading:** Let `next/image` handle lazy loading for non-critical images (default behavior).
+* **Alt Text:** Provide meaningful alt text for informative imagery.
