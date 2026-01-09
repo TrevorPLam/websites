@@ -36,23 +36,23 @@ All secrets must be configured in Cloudflare Pages → Settings → Environment 
 ### Server-only (secrets)
 | Variable | Required | Description |
 | --- | --- | --- |
-| `RESEND_API_KEY` | ✅ | Required for the current email-based contact flow. Will be removed after T-053. |
-| `CONTACT_EMAIL` | ✅ | Destination for contact form submissions. Will be removed after T-053. |
-| `UPSTASH_REDIS_REST_URL` | ⚪ | Distributed rate limiting (recommended for production). |
-| `UPSTASH_REDIS_REST_TOKEN` | ⚪ | Distributed rate limiting (recommended for production). |
-| `SENTRY_AUTH_TOKEN` | ⚪ | Required if uploading source maps/releases. |
-| `SENTRY_ORG` | ⚪ | Required if uploading source maps/releases. |
-| `SENTRY_PROJECT` | ⚪ | Required if uploading source maps/releases. |
-| `SENTRY_ENVIRONMENT` | ⚪ | Optional environment label for Sentry. |
+| `RESEND_API_KEY` | ⚪ | Optional: Resend API key for email delivery. If not set, contact form logs to console (development mode). |
+| `CONTACT_EMAIL` | ✅ | Required: Destination for contact form submissions. Defaults to `contact@yourdedicatedmarketer.com` if not set. |
+| `UPSTASH_REDIS_REST_URL` | ⚪ | Optional: Distributed rate limiting (recommended for production). Falls back to in-memory if not set. |
+| `UPSTASH_REDIS_REST_TOKEN` | ⚪ | Optional: Distributed rate limiting (recommended for production). Must be set with `UPSTASH_REDIS_REST_URL`. |
+| `SENTRY_AUTH_TOKEN` | ⚪ | Optional: Required only if uploading source maps/releases. |
+| `SENTRY_ORG` | ⚪ | Optional: Required only if uploading source maps/releases. |
+| `SENTRY_PROJECT` | ⚪ | Optional: Required only if uploading source maps/releases. |
+| `SENTRY_ENVIRONMENT` | ⚪ | Optional: Environment label for Sentry. |
 
-### Lead capture pipeline (blocked by T-053/T-054/T-055)
-These become required when the Supabase + HubSpot pipeline is enabled:
+### Lead capture pipeline (future - T-080/T-081)
+These are currently optional and will become required when the Supabase + HubSpot pipeline is implemented:
 
 | Variable | Required | Description |
 | --- | --- | --- |
-| `SUPABASE_URL` | ✅ | Supabase project URL. |
-| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Server-only service role key. |
-| `HUBSPOT_PRIVATE_APP_TOKEN` | ✅ | HubSpot private app token. |
+| `SUPABASE_URL` | 🔮 Future | Supabase project URL. Currently optional. |
+| `SUPABASE_SERVICE_ROLE_KEY` | 🔮 Future | Server-only service role key. Currently optional. |
+| `HUBSPOT_PRIVATE_APP_TOKEN` | 🔮 Future | HubSpot private app token. Currently optional. |
 
 ## Pre-deploy checklist
 - [ ] Confirm `npm run build` completes locally.

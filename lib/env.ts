@@ -35,13 +35,13 @@
  * | NEXT_PUBLIC_SITE_URL | url | defaults | Base URL for meta tags |
  * | NEXT_PUBLIC_SITE_NAME | string | defaults | Site name for branding |
  * | NEXT_PUBLIC_ANALYTICS_ID | string | optional | GA4/Plausible ID |
- * | RESEND_API_KEY | string | optional | Email delivery (T-053: removing) |
+ * | RESEND_API_KEY | string | optional | Email delivery (current flow) |
  * | CONTACT_EMAIL | email | defaults | Form submission recipient |
  * | UPSTASH_REDIS_REST_URL | string | optional | Rate limiting |
  * | UPSTASH_REDIS_REST_TOKEN | string | optional | Rate limiting |
- * | SUPABASE_URL | url | required | Supabase project URL |
- * | SUPABASE_SERVICE_ROLE_KEY | string | required | Server-only service role key |
- * | HUBSPOT_PRIVATE_APP_TOKEN | string | required | HubSpot private app token |
+ * | SUPABASE_URL | url | optional (future) | Supabase project URL (T-080/T-081) |
+ * | SUPABASE_SERVICE_ROLE_KEY | string | optional (future) | Server-only service role key (T-080/T-081) |
+ * | HUBSPOT_PRIVATE_APP_TOKEN | string | optional (future) | HubSpot private app token (T-080/T-081) |
  *
  * **KNOWN ISSUES**:
  * - [ ] No runtime validation for env changes (restart required)
@@ -169,24 +169,32 @@ const envSchema = z.object({
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
   /**
-   * Supabase project URL (required).
+   * Supabase project URL (optional, future).
    * Used for server-side lead storage.
+   * Currently optional until T-080/T-081 implementation.
    * 
+   * @optional
    * @example 'https://xyzcompany.supabase.co'
    */
-  SUPABASE_URL: z.string().trim().url(),
+  SUPABASE_URL: z.string().trim().url().optional(),
 
   /**
-   * Supabase service role key (required, server-only).
+   * Supabase service role key (optional, future, server-only).
    * Grants elevated access; never expose to the client.
+   * Currently optional until T-080/T-081 implementation.
+   * 
+   * @optional
    */
-  SUPABASE_SERVICE_ROLE_KEY: z.string().trim().min(1),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().trim().min(1).optional(),
 
   /**
-   * HubSpot private app token (required, server-only).
+   * HubSpot private app token (optional, future, server-only).
    * Used for CRM sync.
+   * Currently optional until T-080/T-081 implementation.
+   * 
+   * @optional
    */
-  HUBSPOT_PRIVATE_APP_TOKEN: z.string().trim().min(1),
+  HUBSPOT_PRIVATE_APP_TOKEN: z.string().trim().min(1).optional(),
 })
 
 /**
@@ -220,9 +228,9 @@ const env = envSchema.safeParse({
   NODE_ENV: process.env.NODE_ENV,
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
-  SUPABASE_URL: process.env.SUPABASE_URL || undefined,
-  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || undefined,
-  HUBSPOT_PRIVATE_APP_TOKEN: process.env.HUBSPOT_PRIVATE_APP_TOKEN || undefined,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  HUBSPOT_PRIVATE_APP_TOKEN: process.env.HUBSPOT_PRIVATE_APP_TOKEN,
 })
 
 if (!env.success) {

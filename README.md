@@ -1,7 +1,7 @@
 # Your Dedicated Marketer
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black)
+![Next.js](https://img.shields.io/badge/Next.js-15.5.9-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
 ![Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare%20Pages-orange)
 ![Diamond Standard](https://img.shields.io/badge/Standard-Diamond-b91c1c)
@@ -22,7 +22,7 @@ This repository adheres to a strict "Diamond Standard" of engineering excellence
 
 ## 🚀 Key Features
 
-*   **Next.js App Router**: Utilizing the latest React Server Components architecture (downgraded to 15.5.2 for compatibility).
+*   **Next.js App Router**: Utilizing the latest React Server Components architecture (version 15.5.9, compatible with Cloudflare Pages adapter).
 *   **Content Engine**: MDX-powered blog and case studies with static generation.
 *   **Client-Side Search**: Zero-latency, pre-indexed search functionality (`lib/search.ts`).
 *   **Performance First**: 
