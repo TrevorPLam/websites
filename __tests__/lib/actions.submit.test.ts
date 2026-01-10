@@ -46,8 +46,8 @@ const buildPayload = (email: string) => ({
 
 describe('contact form email pipeline', () => {
   beforeEach(() => {
-    vi.resetModules()
-    vi.clearAllMocks()
+  beforeEach(() => {
+    vi.resetAllMocks()
   })
 
   it('sends a sanitized email when Resend is configured', async () => {
