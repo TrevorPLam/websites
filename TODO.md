@@ -693,14 +693,14 @@ Effort: XS
 Priority: P3
 Type: QUALITY
 Owner: AGENT
-Status: READY
+Status: DONE
 Blockers: None
 Context:
 - Expand coverage for lead pipeline, rate limiting, and contact flow
 Acceptance Criteria:
-- [ ] T-103.1: Add unit tests for lead pipeline integrations
-- [ ] T-103.2: Add an E2E test for contact submit on preview deploy
-- [ ] T-103.3: Add rate limit test coverage for Upstash path
+- [x] T-103.1: Add unit tests for lead pipeline integrations
+- [x] T-103.2: Add an E2E test for contact submit on preview deploy
+- [x] T-103.3: Add rate limit test coverage for Upstash path
 References:
 - /__tests__/lib/actions.rate-limit.test.ts
 - /lib/actions.ts

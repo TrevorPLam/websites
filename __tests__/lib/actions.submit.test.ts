@@ -46,7 +46,6 @@ const buildPayload = (email: string) => ({
 
 describe('contact form email pipeline', () => {
   beforeEach(() => {
-  beforeEach(() => {
     vi.resetAllMocks()
   })
 
