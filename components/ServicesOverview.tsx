@@ -38,10 +38,10 @@ export default function ServicesOverview() {
       <Container>
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-            Marketing Services That Drive Growth
+            Marketing leadership I run with your team
           </h2>
           <p className="text-lg text-slate max-w-2xl mx-auto">
-            Comprehensive marketing solutions designed to help small businesses scale effectively
+            I focus on the channels that matter most right now so founders and teams get momentum without extra management.
           </p>
         </div>
 

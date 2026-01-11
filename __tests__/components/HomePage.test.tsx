@@ -5,8 +5,8 @@ describe('HomePage', () => {
   it('renders hero and CTA content', async () => {
     render(<HomePage />)
 
-    expect(screen.getByRole('heading', { name: /growth-focused marketing/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /schedule free consultation/i })).toBeInTheDocument()
-    expect(await screen.findByText(/trusted by growing businesses/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /your dedicated marketer/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /book a free strategy call/i })).toBeInTheDocument()
+    expect(await screen.findByText(/trusted by founders and teams/i)).toBeInTheDocument()
   })
 })

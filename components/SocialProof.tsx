@@ -11,7 +11,7 @@ const testimonials = [
     title: 'CEO',
   },
   {
-    quote: "Finally, a marketing team that actually understands small business needs. No fluff, just results-driven strategies that work.",
+    quote: "Finally, a marketing partner that actually understands founder and team realities. No fluff, just results-driven strategies that work.",
     author: 'Michael Chen',
     company: 'Local Services Co.',
     title: 'Founder',
@@ -36,10 +36,10 @@ function SocialProof() {
       <Container>
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-            Trusted by Growing Businesses
+            Trusted by founders and teams I work with
           </h2>
           <p className="text-lg text-slate max-w-2xl mx-auto">
-            See what our clients have to say about working with us
+            Here’s what people say about having me embedded in their marketing
           </p>
         </div>
 

@@ -10,8 +10,8 @@
  * - Single column on mobile (text only, image hidden)
  * 
  * **CTAs:**
- * - Primary: "Schedule Free Consultation" → /contact
- * - Secondary: "View Services" → /services
+ * - Primary: "Book a Free Strategy Call" → /contact
+ * - Secondary: "Get a Free Marketing Plan" → /contact
  * 
  * **Image:**
  * - Location: /public/images/hero-growth.svg
@@ -43,23 +43,26 @@ export default function Hero() {
           {/* Left Column - Text Content */}
           <div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal mb-6 leading-tight">
-              Growth-Focused Marketing for Small Businesses
+              Your dedicated marketer — that means I’m part of your team.
             </h1>
             <p className="text-lg md:text-xl text-slate-800 mb-8 leading-relaxed">
-              Strategic marketing services that drive real results - without the agency overhead
+              I work alongside founders and teams who want clear strategy, honest execution, and a marketer who takes ownership — not a detached agency.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact">
                 <Button variant="primary" size="large">
-                  Schedule Free Consultation
+                  Book a Free Strategy Call
                 </Button>
               </Link>
-              <Link href="/services">
+              <Link href="/contact">
                 <Button variant="secondary" size="large">
-                  View Services
+                  Get a Free Marketing Plan
                 </Button>
               </Link>
             </div>
+            <p className="text-sm text-slate mt-4">
+              No contracts · Cancel anytime · Free consultation, no obligation
+            </p>
           </div>
 
           {/* Right Column - Hero Image/Illustration */}
