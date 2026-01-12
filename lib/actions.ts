@@ -171,7 +171,8 @@ async function insertLead(payload: Record<string, unknown>): Promise<SupabaseLea
   })
 
   if (!response.ok) {
-    throw new Error(`Supabase insert failed with status ${response.status}`)
+    const errorText = await response.text();
+    throw new Error(`Supabase insert failed with status ${response.status}: ${errorText}`)
   }
 
   const data = (await response.json()) as SupabaseLeadRow[]
