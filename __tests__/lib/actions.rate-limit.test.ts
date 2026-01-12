@@ -136,9 +136,9 @@ describe('contact form rate limiting', () => {
   it('stores a lead marked suspicious when rate limiting is exceeded', async () => {
     const email = 'ratelimit@example.com'
 
-    await submitContactForm(buildPayload(email))
-    await submitContactForm(buildPayload(email))
-    await submitContactForm(buildPayload(email))
+    for (let i = 0; i < 3; i++) {
+      await submitContactForm(buildPayload(email));
+    }
 
     const fourth = await submitContactForm(buildPayload(email))
 
