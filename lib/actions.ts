@@ -225,26 +225,23 @@ async function upsertHubSpotContact(properties: Record<string, string>) {
 
   const searchData = (await searchResponse.json()) as HubSpotSearchResponse
   const existingId = searchData.results[0]?.id
-  const contactResponse = existingId
-    ? await fetch(`${HUBSPOT_API_BASE_URL}/crm/v3/objects/contacts/${existingId}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ properties }),
-      })
-    : await fetch(`${HUBSPOT_API_BASE_URL}/crm/v3/objects/contacts`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ properties }),
-      })
+  const url = existingId
+    ? `${HUBSPOT_API_BASE_URL}/crm/v3/objects/contacts/${existingId}`
+    : `${HUBSPOT_API_BASE_URL}/crm/v3/objects/contacts`;
+  const method = existingId ? 'PATCH' : 'POST';
+
+  const contactResponse = await fetch(url, {
+    method,
+    headers: {
+      Authorization: `Bearer ${validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ properties }),
+  });
 
   if (!contactResponse.ok) {
-    throw new Error(`HubSpot upsert failed with status ${contactResponse.status}`)
+    const errorText = await contactResponse.text();
+    throw new Error(`HubSpot upsert failed with status ${contactResponse.status}: ${errorText}`)
   }
 
   return (await contactResponse.json()) as HubSpotContactResponse
