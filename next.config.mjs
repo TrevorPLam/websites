@@ -24,8 +24,18 @@ const nextConfig = {
   images: {
     formats: ['image/webp'],
     remotePatterns: [],
+    // Cloudflare Pages doesn't support the default Next.js Image Optimization API
+    // Use unoptimized images or set up a custom loader
+    unoptimized: process.env.CLOUDFLARE_BUILD === 'true',
   },
   productionBrowserSourceMaps: true,
+  // Ensure output is compatible with Cloudflare Pages
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
 }
 
 const withMDX = createMDX({

@@ -1,7 +1,7 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-11
+Last Updated: 2026-01-12
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
@@ -126,8 +126,34 @@ References:
 - /docs/LAUNCH-SMOKE-TEST.md
 - /docs/ROLLBACK.md
 - /docs/LAUNCH-VERIFICATION.md
-Dependencies: T-086, T-088, T-089, T-090, T-092, T-093, T-094
+Dependencies: T-086, T-088, T-089, T-090, T-092, T-093, T-094, T-107
 Effort: XS
+
+### T-107: Configure Cloudflare Pages deployment
+Priority: P0
+Type: RELEASE
+Owner: Trevor
+Status: READY
+Blockers: None
+Context:
+- Cloudflare Pages configuration complete, needs dashboard setup
+- wrangler.toml and deployment docs created
+- Build scripts already exist in package.json
+Acceptance Criteria:
+- [ ] T-107.1: Log in to Cloudflare Dashboard and create Pages project
+- [ ] T-107.2: Connect GitHub repository (TrevorPLam/your-dedicated-marketer)
+- [ ] T-107.3: Configure build settings (command: npm run pages:build, output: .vercel/output/static)
+- [ ] T-107.4: Set NODE_VERSION=20 and CLOUDFLARE_BUILD=true in environment variables
+- [ ] T-107.5: Add all required secrets (UPSTASH_REDIS_REST_TOKEN, RESEND_API_KEY, SENTRY_AUTH_TOKEN)
+- [ ] T-107.6: Add all required environment variables (UPSTASH_REDIS_REST_URL, SENTRY_DSN, SENTRY_ORG, SENTRY_PROJECT)
+- [ ] T-107.7: Trigger first deployment and verify build succeeds
+- [ ] T-107.8: Configure custom domain if applicable
+References:
+- /docs/CLOUDFLARE_DEPLOYMENT.md
+- /wrangler.toml
+- /.dev.vars.example
+Dependencies: None
+Effort: M
 
 ## 🟠 PHASE 1: Lead Capture Pipeline (Supabase + HubSpot) (P1)
 > Replace email delivery with DB + CRM while preserving spam controls.
