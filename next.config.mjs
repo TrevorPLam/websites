@@ -28,7 +28,9 @@ const nextConfig = {
     // Use unoptimized images or set up a custom loader
     unoptimized: process.env.CLOUDFLARE_BUILD === 'true',
   },
-  productionBrowserSourceMaps: true,
+  // Security: Disable public source maps (Issue #032 fixed)
+  // Source maps uploaded to Sentry via hideSourceMaps config below
+  productionBrowserSourceMaps: false,
   // Ensure output is compatible with Cloudflare Pages
   eslint: {
     ignoreDuringBuilds: false,
@@ -60,10 +62,13 @@ const sentryWebpackPluginOptions = {
   project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
   dryRun: !process.env.SENTRY_AUTH_TOKEN,
+  // Upload source maps to Sentry for debugging
+  widenClientFileUpload: true,
 }
 
 const compiledConfig = withBundleAnalyzer(withMDX(nextConfig))
 const sentryNextConfig = {
+  // Hide source maps from public (upload to Sentry only)
   hideSourceMaps: true,
   disableLogger: true,
 }

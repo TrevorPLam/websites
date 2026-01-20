@@ -48,3 +48,11 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Check client secrets
+        run: node scripts/check-client-secrets.mjs
+        # Security: Ensure no server-only secrets leaked to client bundle (Issue #018)
+
+      - name: Check bundle size
+        run: node scripts/check-bundle-size.mjs
+        # Performance: Enforce bundle size limits (Issue #031)
