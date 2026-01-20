@@ -45,8 +45,8 @@ function SocialProof() {
 
         {/* Testimonials Grid */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} variant="testimonial">
+          {testimonials.map((testimonial) => (
+            <Card key={testimonial.author} variant="testimonial">
               <p className="text-slate mb-6 italic leading-relaxed">{testimonial.quote}</p>
               <div>
                 <p className="font-semibold text-charcoal">{testimonial.author}</p>
@@ -58,8 +58,8 @@ function SocialProof() {
 
         {/* Metrics */}
         <div className="grid grid-cols-3 gap-8 text-center">
-          {metrics.map((metric, index) => (
-            <div key={index}>
+          {metrics.map((metric) => (
+            <div key={metric.label}>
               <div className="text-4xl md:text-5xl font-bold text-teal mb-2">{metric.value}</div>
               <div className="text-slate font-medium">{metric.label}</div>
             </div>

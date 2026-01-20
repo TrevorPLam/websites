@@ -42,12 +42,14 @@
  * | HUBSPOT_PRIVATE_APP_TOKEN | string | required | HubSpot private app token |
  *
  * **KNOWN ISSUES**:
+ * - [x] ~~In-memory rate limiter not suitable for multi-instance production~~ (FIXED: Issue #005)
+ *       Production now requires Upstash Redis at startup.
  * - [ ] No runtime validation for env changes (restart required)
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  * **Purpose:**
- * - Validate environment variables at startup
+ * - Validate environment variables at startup (fail-fast)
  * - Provide type-safe access to env vars
  * - Fail fast with clear error messages
  * - Document required vs optional variables
@@ -208,6 +210,49 @@ const env = envSchema.safeParse({
 if (!env.success) {
   console.error('❌ Invalid environment variables:', env.error.flatten().fieldErrors)
   throw new Error('Invalid environment variables')
+}
+
+/**
+ * Production safety check: Enforce Upstash Redis in production (Issue #005 - ENFORCED).
+ * 
+ * **Why This Check Exists:**
+ * In-memory rate limiters only work in single-instance deployments.
+ * Multi-instance production (load balanced) requires distributed rate limiting.
+ * Without Redis, rate limits can be bypassed by distributing requests across instances.
+ * 
+ * **Attack Scenario Without This Check:**
+ * 1. App deployed with 3 load-balanced instances
+ * 2. Rate limit: 3 requests/hour per email
+ * 3. Attacker sends 3 requests to each instance (9 total)
+ * 4. Each instance's in-memory Map shows only 3 requests
+ * 5. All requests pass (300% over limit!)
+ * 
+ * **This check prevents:**
+ * - Production deployment without distributed rate limiting
+ * - Rate limit bypass attacks in scaled deployments
+ * - Silent failures that allow spam/abuse
+ * 
+ * **How it fails:**
+ * - Process exits immediately at startup
+ * - Clear error message with required env vars
+ * - Blocks deployment in CI/CD pipeline
+ * 
+ * @throws {Error} If Redis not configured in production environment
+ */
+if (env.data.NODE_ENV === 'production') {
+  if (!env.data.UPSTASH_REDIS_REST_URL || !env.data.UPSTASH_REDIS_REST_TOKEN) {
+    console.error('❌ Production Error: Upstash Redis required for distributed rate limiting')
+    console.error('Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN in production')
+    console.error('\nWhy this is required:')
+    console.error('- In-memory rate limiting only works in single-instance deployments')
+    console.error('- Multi-instance production needs distributed rate limiting')
+    console.error('- Without Redis, rate limits can be bypassed across instances')
+    console.error('\nHow to fix:')
+    console.error('1. Create Upstash Redis database at https://upstash.com')
+    console.error('2. Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN')
+    console.error('3. Redeploy application')
+    throw new Error('Upstash Redis required in production for rate limiting')
+  }
 }
 
 /**

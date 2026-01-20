@@ -40,8 +40,15 @@ export default tseslint.config(
       "react/react-in-jsx-scope": "off",
       "react/no-unescaped-entities": "off",
       "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/ban-ts-comment": "warn"
+      // Type Safety: Block unsafe type usage (Issue #001, #002, #003)
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/ban-ts-comment": "error",
+      "@typescript-eslint/no-unsafe-assignment": "error",
+      "@typescript-eslint/no-unsafe-call": "error",
+      "@typescript-eslint/no-unsafe-member-access": "error",
+      "@typescript-eslint/no-unsafe-return": "error",
+      // React Safety: Block array index keys (Issue #024)
+      "react/no-array-index-key": "error"
     }
   }
 );

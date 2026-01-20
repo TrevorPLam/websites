@@ -66,10 +66,10 @@ function ValueProps() {
     <Section className="bg-white">
       <Container>
         <div className="grid md:grid-cols-3 gap-8">
-          {valueProps.map((prop, index) => {
+          {valueProps.map((prop) => {
             const Icon = prop.icon
             return (
-              <Card key={index} variant="default">
+              <Card key={prop.title} variant="default">
                 <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center mb-4">
                   <Icon className="w-6 h-6 text-teal" />
                 </div>

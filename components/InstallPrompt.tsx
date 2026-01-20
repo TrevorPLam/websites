@@ -9,11 +9,62 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
+/**
+ * Progressive Web App (PWA) install prompt component.
+ * 
+ * **Purpose:** Encourages users to install the site as a PWA on mobile devices.
+ * Shows after 3-second delay to avoid being intrusive on page load.
+ * 
+ * **Features:**
+ * - Listens for beforeinstallprompt event (browser triggers)
+ * - Dismissible (stores preference in localStorage)
+ * - Auto-hides if already installed
+ * - Memory-safe (proper timer cleanup)
+ * - SSR-safe (guards all localStorage/window access)
+ * 
+ * **Flow:**
+ * 1. Browser triggers beforeinstallprompt event
+ * 2. Component saves event and starts 3s timer
+ * 3. Timer shows prompt after delay
+ * 4. User clicks Install → triggers native prompt
+ * 5. Result saved to localStorage
+ * 
+ * **Browser Support:**
+ * - Chrome/Edge: Full support
+ * - Safari: Limited support
+ * - Firefox: No support (event never fires)
+ * 
+ * @example
+ * ```tsx
+ * <InstallPrompt /> // Renders conditionally based on browser support
+ * ```
+ */
+
+'use client'
+
+import React, { useEffect, useState } from 'react'
+import { X, Download } from 'lucide-react'
+import Button from './ui/Button'
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
+
+/**
+ * InstallPrompt component for PWA installation.
+ * 
+ * **Memory Safety:** All timers properly cleaned up on unmount.
+ * **SSR Safety:** All browser API access guarded with window checks.
+ */
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showPrompt, setShowPrompt] = useState(false)
 
   useEffect(() => {
+    // SSR Safety: Check if window is available (Issue #026 fixed)
+    if (typeof window === 'undefined') return
+    
     // Check if user has already dismissed the prompt
     const dismissed = localStorage.getItem('pwa-install-dismissed')
     const installed = localStorage.getItem('pwa-installed')
@@ -22,6 +73,9 @@ export default function InstallPrompt() {
       return
     }
 
+    // Timer ID for cleanup (Issue #025 fixed - proper cleanup scope)
+    let promptTimerId: NodeJS.Timeout | null = null
+
     const handler = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault()
@@ -29,7 +83,8 @@ export default function InstallPrompt() {
       setDeferredPrompt(e as BeforeInstallPromptEvent)
 
       // Show the install prompt after a delay (to not be too intrusive)
-      setTimeout(() => {
+      // Memory-safe: Timer will be cleaned up on unmount
+      promptTimerId = setTimeout(() => {
         setShowPrompt(true)
       }, 3000)
     }
@@ -42,13 +97,20 @@ export default function InstallPrompt() {
       localStorage.setItem('pwa-installed', 'true')
     }
 
+    // Cleanup: Remove event listener AND cancel timer
     return () => {
       window.removeEventListener('beforeinstallprompt', handler)
+      if (promptTimerId) {
+        clearTimeout(promptTimerId)
+      }
     }
   }, [])
 
   const handleInstall = async () => {
     if (!deferredPrompt) return
+    
+    // SSR Safety check
+    if (typeof window === 'undefined') return
 
     // Show the install prompt
     await deferredPrompt.prompt()
@@ -68,6 +130,9 @@ export default function InstallPrompt() {
   }
 
   const handleDismiss = () => {
+    // SSR Safety check
+    if (typeof window === 'undefined') return
+    
     localStorage.setItem('pwa-install-dismissed', 'true')
     setShowPrompt(false)
   }

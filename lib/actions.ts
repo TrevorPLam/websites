@@ -35,14 +35,26 @@
  * 3. Testing: See __tests__/lib/actions.rate-limit.test.ts for mocking pattern
  *
  * **SECURITY CHECKLIST** (verify after any changes):
- * - [ ] All user inputs pass through escapeHtml() before HTML context
- * - [ ] CRM payload uses sanitizeName() / sanitizeEmail()
- * - [ ] No raw IP addresses logged (use hashedIp)
- * - [ ] Errors return generic messages (no internal details)
+ * - [x] All user inputs pass through escapeHtml() before HTML context
+ * - [x] CRM payload uses sanitizeName() / sanitizeEmail()
+ * - [x] No raw IP addresses logged (use hashedIp)
+ * - [x] Errors return generic messages (no internal details)
+ * - [x] CSRF protection validates origin/referer headers
+ * - [x] IP validation only trusts known proxy headers
  *
- * **KNOWN ISSUES / TECH DEBT**:
- * - [ ] In-memory rate limiter not suitable for multi-instance production
- * - [ ] No retry logic for HubSpot sync failures
+ * **RESOLVED ISSUES** (completed in transformation):
+ * - [x] ~~In-memory rate limiter not suitable for multi-instance production~~ (FIXED: Issue #005)
+ *       Production now enforces Upstash Redis at startup (lib/env.ts)
+ * - [x] ~~No CSRF protection~~ (FIXED: Issue #010)
+ *       Origin validation added with defense-in-depth approach
+ * - [x] ~~IP header spoofing possible~~ (FIXED: Issue #011)
+ *       Only trusted proxy headers accepted in production
+ *
+ * **REMAINING TECH DEBT**:
+ * - [ ] No retry logic for HubSpot sync failures (tracked in Phase 5)
+ *       Workaround: Failed syncs marked as `needs_sync` in database
+ * - [ ] No performance monitoring for server action timing (tracked in Phase 4)
+ *       Workaround: Sentry captures errors with context
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  *
@@ -70,8 +82,188 @@ import { headers } from 'next/headers'
 import { z } from 'zod'
 import { logError, logWarn, logInfo } from './logger'
 import { escapeHtml, sanitizeEmail, sanitizeName } from './sanitize'
-import { validatedEnv } from './env'
+import { validatedEnv, isProduction } from './env'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
+
+/**
+ * Extract expected host from headers or fallback to configured site URL.
+ * 
+ * Helper function to centralize host extraction logic.
+ * 
+ * @param host - Host header value
+ * @returns Expected hostname without protocol
+ * 
+ * @example
+ * ```typescript
+ * getExpectedHost('example.com') // => 'example.com'
+ * getExpectedHost(null) // => 'yourdedicatedmarketer.com' (from env)
+ * ```
+ */
+function getExpectedHost(host: string | null): string {
+  return host || validatedEnv.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '')
+}
+
+/**
+ * Validate a single header URL against expected host.
+ * 
+ * Extracted helper to reduce duplication in validateOrigin().
+ * 
+ * @param headerValue - URL from origin or referer header
+ * @param expectedHost - Expected hostname
+ * @param headerName - Name of header for logging (origin/referer)
+ * @returns true if valid, false otherwise
+ * 
+ * @throws Never throws - catches and logs URL parsing errors
+ */
+function validateHeaderUrl(
+  headerValue: string,
+  expectedHost: string,
+  headerName: 'origin' | 'referer'
+): boolean {
+  try {
+    const url = new URL(headerValue)
+    if (url.host !== expectedHost) {
+      logWarn(`CSRF: ${headerName} mismatch`, { [headerName]: headerValue, expectedHost })
+      return false
+    }
+    return true
+  } catch {
+    logWarn(`CSRF: Invalid ${headerName} URL`, { [headerName]: headerValue })
+    return false
+  }
+}
+
+/**
+ * Validate request origin to prevent CSRF attacks (Issue #010 - Fixed).
+ * 
+ * **Security:** Checks that the request comes from our own domain.
+ * Requires at least one of origin/referer to be present.
+ * If both are present, BOTH must match (defense in depth).
+ * 
+ * **Why This Matters:**
+ * - Prevents cross-site form submissions
+ * - Blocks automated attacks from external domains
+ * - Complements rate limiting (different attack vector)
+ * 
+ * @param requestHeaders - Request headers from Next.js headers()
+ * @returns true if origin is valid, false if potentially malicious
+ * 
+ * @example
+ * ```typescript
+ * // Valid request from same domain
+ * validateOrigin(headers) // => true
+ * 
+ * // Attack from external site
+ * validateOrigin(headers) // => false, logs warning
+ * ```
+ */
+function validateOrigin(requestHeaders: Headers): boolean {
+  const origin = requestHeaders.get('origin')
+  const referer = requestHeaders.get('referer')
+  const host = requestHeaders.get('host')
+  
+  // If no origin/referer (direct API call), reject
+  if (!origin && !referer) {
+    logWarn('CSRF: No origin or referer header')
+    return false
+  }
+  
+  const expectedHost = getExpectedHost(host)
+  
+  // Check origin if present
+  if (origin && !validateHeaderUrl(origin, expectedHost, 'origin')) {
+    return false
+  }
+  
+  // Check referer if present (defense in depth)
+  if (referer && !validateHeaderUrl(referer, expectedHost, 'referer')) {
+    return false
+  }
+  
+  return true
+}
+
+/**
+ * Trusted proxy header configuration.
+ * 
+ * Maps environment to trusted headers in priority order.
+ * Production only trusts headers from known CDN/hosting providers.
+ */
+const TRUSTED_IP_HEADERS = {
+  production: [
+    'cf-connecting-ip',        // Cloudflare (most trustworthy)
+    'x-vercel-forwarded-for',  // Vercel Edge Network
+  ],
+  development: [
+    'x-forwarded-for',  // Standard proxy header
+    'x-real-ip',        // Nginx/other proxies
+  ],
+} as const
+
+/**
+ * Extract IP address from comma-separated header value.
+ * 
+ * Many proxies append IPs in chain: "client, proxy1, proxy2"
+ * We want the leftmost (original client) IP.
+ * 
+ * @param headerValue - Raw header value
+ * @returns First IP in chain, trimmed
+ * 
+ * @example
+ * ```typescript
+ * extractFirstIp('192.168.1.1, 10.0.0.1') // => '192.168.1.1'
+ * extractFirstIp('  192.168.1.1  ') // => '192.168.1.1'
+ * ```
+ */
+function extractFirstIp(headerValue: string): string {
+  return headerValue.split(',')[0]?.trim() || 'unknown'
+}
+
+/**
+ * Validate IP address from headers to prevent spoofing (Issue #011 - Enhanced).
+ * 
+ * **Security:** In production, only trusts headers from known proxies (Cloudflare/Vercel).
+ * In development, accepts standard proxy headers but still validates.
+ * 
+ * **Why This Matters:**
+ * - Prevents attackers from spoofing IP addresses
+ * - Ensures rate limiting works correctly
+ * - Different trust model per environment
+ * 
+ * **Trust Model:**
+ * - Production: Only CDN-set headers (cf-connecting-ip, x-vercel-forwarded-for)
+ * - Development: Standard proxy headers (x-forwarded-for, x-real-ip)
+ * 
+ * @param requestHeaders - Request headers from Next.js headers()
+ * @returns Validated client IP or 'unknown' if cannot determine
+ * 
+ * @example
+ * ```typescript
+ * // Production with Cloudflare
+ * getValidatedClientIp(headers) // => '203.0.113.1' (from CF-Connecting-IP)
+ * 
+ * // Development with nginx proxy
+ * getValidatedClientIp(headers) // => '192.168.1.1' (from X-Forwarded-For)
+ * 
+ * // No trusted headers present
+ * getValidatedClientIp(headers) // => 'unknown'
+ * ```
+ */
+function getValidatedClientIp(requestHeaders: Headers): string {
+  const environment = isProduction() ? 'production' : 'development'
+  const trustedHeaders = TRUSTED_IP_HEADERS[environment]
+  
+  // Check headers in priority order
+  for (const headerName of trustedHeaders) {
+    const headerValue = requestHeaders.get(headerName)
+    if (headerValue) {
+      return extractFirstIp(headerValue)
+    }
+  }
+  
+  // No trusted headers found
+  return 'unknown'
+}
 
 /**
  * Rate limiting configuration.
@@ -248,31 +440,16 @@ async function upsertHubSpotContact(properties: Record<string, string>) {
 }
 
 /**
- * Get client IP address from request headers.
+ * Get validated client IP address from request headers (Issue #011 fixed).
  * 
- * Checks multiple headers in order of preference:
- * 1. x-forwarded-for (standard proxy header)
- * 2. x-vercel-forwarded-for (Vercel-specific)
- * 3. x-real-ip (nginx)
- * 4. cf-connecting-ip (Cloudflare)
- * 
- * If multiple IPs are present (comma-separated), returns the first one.
+ * In production, only trusts headers from known proxies (Cloudflare/Vercel).
+ * Prevents IP spoofing attacks that bypass rate limiting.
  * 
  * @returns Client IP address or 'unknown' if not available
  */
 async function getClientIp(): Promise<string> {
   const requestHeaders = await headers()
-  const forwardedFor =
-    requestHeaders.get('x-forwarded-for') ||
-    requestHeaders.get('x-vercel-forwarded-for') ||
-    requestHeaders.get('x-real-ip') ||
-    requestHeaders.get('cf-connecting-ip')
-
-  if (!forwardedFor) {
-    return 'unknown'
-  }
-
-  return forwardedFor.split(',')[0]?.trim() || 'unknown'
+  return getValidatedClientIp(requestHeaders)
 }
 
 /**
@@ -469,6 +646,16 @@ async function checkRateLimit(email: string, clientIp: string): Promise<boolean>
  */
 export async function submitContactForm(data: ContactFormData) {
   try {
+    // CSRF Protection: Validate request origin (Issue #010 fixed)
+    const requestHeaders = await headers()
+    if (!validateOrigin(requestHeaders)) {
+      logError('CSRF: Invalid origin detected')
+      return {
+        success: false,
+        message: 'Invalid request. Please refresh the page and try again.',
+      }
+    }
+    
     if (data.website) {
       logWarn('Honeypot field triggered for contact form submission')
       return {

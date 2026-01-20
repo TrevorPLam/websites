@@ -25,9 +25,13 @@ export default function Accordion({ items, className }: AccordionProps) {
 
   return (
     <div className={cn('space-y-4', className)}>
-      {items.map((item, index) => (
+      {items.map((item, index) => {
+        // Use question as stable key (unique identifier)
+        const itemKey = item.question.slice(0, 50).replace(/[^a-zA-Z0-9]/g, '-')
+        
+        return (
         <div
-          key={index}
+          key={itemKey}
           className="bg-off-white rounded-lg border border-gray-200 overflow-hidden"
         >
           {(() => {

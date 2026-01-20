@@ -186,8 +186,8 @@ export default function ServiceDetailLayout({
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-charcoal mb-8 text-center">What's Included</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {included.map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
+              {included.map((item) => (
+                <div key={item} className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-teal/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Check className="w-4 h-4 text-teal" />
                   </div>
@@ -205,7 +205,7 @@ export default function ServiceDetailLayout({
           <h2 className="text-3xl font-bold text-charcoal mb-12 text-center">Our Process</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {process.map((step, index) => (
-              <Card key={index} variant="default">
+              <Card key={step.title} variant="default">
                 <div className="w-12 h-12 bg-teal rounded-lg flex items-center justify-center mb-4">
                   <span className="text-white font-bold text-xl">{index + 1}</span>
                 </div>
@@ -225,8 +225,8 @@ export default function ServiceDetailLayout({
               Who This Service Is For
             </h2>
             <div className="space-y-4">
-              {whoItsFor.map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
+              {whoItsFor.map((item) => (
+                <div key={item} className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-teal rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Check className="w-4 h-4 text-white" />
                   </div>
@@ -243,8 +243,8 @@ export default function ServiceDetailLayout({
         <Container>
           <h2 className="text-3xl font-bold text-charcoal mb-8 text-center">Pricing Options</h2>
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {pricing.map((tier, index) => (
-              <Card key={index} variant="default" className="text-center">
+            {pricing.map((tier) => (
+              <Card key={tier.tier} variant="default" className="text-center">
                 <h3 className="text-xl font-bold text-charcoal mb-2">{tier.tier}</h3>
                 <p className="text-slate mb-4">{tier.description}</p>
                 <Link href={tier.href}>
