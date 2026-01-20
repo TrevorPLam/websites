@@ -53,7 +53,7 @@
  */
 
 import * as Sentry from '@sentry/nextjs'
-import { getRequestId } from './request-context'
+import { getRequestId } from '@/lib/request-context'
 
 function isDevelopment(): boolean {
   return process.env.NODE_ENV === 'development'
