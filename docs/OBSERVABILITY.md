@@ -9,6 +9,22 @@ Applies to repos that run services (API, worker, cron, etc.). For libraries/CLI,
 - Include a correlation/request id on every request.
 - Never log secrets or full PII.
 
+### Log format
+Production logs are emitted as JSON with these fields:
+
+- `timestamp` — ISO8601 timestamp
+- `level` — `info`, `warn`, or `error`
+- `message` — human-readable log message
+- `context` — sanitized context object (optional)
+- `error` — serialized error metadata (optional)
+
+The correlation ID is stored in `context.request_id` when available.
+
+### Correlation ID headers
+Middleware assigns (or forwards) `x-correlation-id` on every request and echoes
+it on responses. Server actions read this header and inject it into log context
+for consistent tracing across logs and Sentry events.
+
 ## Metrics (recommended)
 - Request count, latency, error rate
 - Queue depth (workers)

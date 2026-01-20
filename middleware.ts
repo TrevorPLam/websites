@@ -78,6 +78,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const CORRELATION_ID_HEADER = 'x-correlation-id'
+
 /**
  * Maximum allowed payload size for POST requests (1MB).
  * 
@@ -93,6 +95,17 @@ import type { NextRequest } from 'next/server'
  * - Zip bomb attacks (if file uploads added later)
  */
 const MAX_BODY_SIZE_BYTES = 1024 * 1024 // 1MB payload limit for POST requests
+
+function getCorrelationId(request: NextRequest): string {
+  const existingId = request.headers.get(CORRELATION_ID_HEADER)
+  return existingId || crypto.randomUUID()
+}
+
+function buildRequestHeaders(request: NextRequest, correlationId: string): Headers {
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set(CORRELATION_ID_HEADER, correlationId)
+  return requestHeaders
+}
 
 /**
  * Apply security headers and validate requests.
@@ -111,14 +124,19 @@ const MAX_BODY_SIZE_BYTES = 1024 * 1024 // 1MB payload limit for POST requests
  * @returns Response with security headers applied
  */
 export function middleware(request: NextRequest) {
-  // Clone the response
-  const response = NextResponse.next()
+  const correlationId = getCorrelationId(request)
+  const requestHeaders = buildRequestHeaders(request, correlationId)
+  const response = NextResponse.next({ request: { headers: requestHeaders } })
+  response.headers.set(CORRELATION_ID_HEADER, correlationId)
 
   // Block oversized payloads early to reduce DoS risk.
   if (request.method === 'POST') {
     const contentLength = request.headers.get('content-length')
     if (contentLength && Number(contentLength) > MAX_BODY_SIZE_BYTES) {
-      return new NextResponse('Payload too large', { status: 413 })
+      return new NextResponse('Payload too large', {
+        status: 413,
+        headers: new Headers({ [CORRELATION_ID_HEADER]: correlationId }),
+      })
     }
   }
 

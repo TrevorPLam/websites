@@ -53,6 +53,7 @@
  */
 
 import * as Sentry from '@sentry/nextjs'
+import { getRequestId } from '@/lib/request-context'
 
 function isDevelopment(): boolean {
   return process.env.NODE_ENV === 'development'
@@ -66,6 +67,14 @@ type LogLevel = 'info' | 'warn' | 'error'
 
 interface LogContext {
   [key: string]: unknown
+}
+
+interface LogRecord {
+  timestamp: string
+  level: LogLevel
+  message: string
+  context?: LogContext
+  error?: unknown
 }
 
 const SENSITIVE_KEYS = new Set([
@@ -85,6 +94,57 @@ function normalizeKey(key: string): string {
 function isSensitiveKey(key: string): boolean {
   const normalized = normalizeKey(key)
   return SENSITIVE_KEYS.has(normalized)
+}
+
+function buildLogContext(context?: LogContext): LogContext | undefined {
+  const requestId = getRequestId()
+  const hasRequestId = Boolean(context?.request_id || context?.requestId)
+
+  if (!requestId || hasRequestId) {
+    return context
+  }
+
+  return { ...(context ?? {}), request_id: requestId }
+}
+
+function buildLogRecord(
+  level: LogLevel,
+  message: string,
+  context?: LogContext,
+  error?: unknown
+): LogRecord {
+  const record: LogRecord = {
+    timestamp: new Date().toISOString(),
+    level,
+    message,
+  }
+
+  if (context) {
+    record.context = context
+  }
+
+  if (error !== undefined) {
+    record.error = error
+  }
+
+  return record
+}
+
+function logJson(level: LogLevel, message: string, context?: LogContext, error?: unknown) {
+  const record = buildLogRecord(level, message, context, error)
+  const payload = JSON.stringify(record)
+
+  if (level === 'info') {
+    console.info(payload)
+    return
+  }
+
+  if (level === 'warn') {
+    console.warn(payload)
+    return
+  }
+
+  console.error(payload)
 }
 
 function sanitizeValue(value: unknown): unknown {
@@ -117,6 +177,22 @@ export function sanitizeLogContext(context?: LogContext): LogContext | undefined
   return sanitizeValue(context) as LogContext
 }
 
+function serializeError(error?: Error | unknown): unknown {
+  if (!error) {
+    return undefined
+  }
+
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    }
+  }
+
+  return sanitizeValue(error)
+}
+
 /**
  * Check if Sentry is properly configured and available
  */
@@ -129,11 +205,15 @@ function isSentryAvailable(): boolean {
  * In production, sends to Sentry
  */
 export function logInfo(message: string, context?: LogContext) {
-  const sanitizedContext = sanitizeLogContext(context)
+  const enrichedContext = sanitizeLogContext(buildLogContext(context))
   if (isDevelopment() || isTest()) {
-    console.info('[INFO]', message, sanitizedContext || '')
-  } else if (isSentryAvailable()) {
-    Sentry.captureMessage(message, { level: 'info', extra: sanitizedContext })
+    console.info('[INFO]', message, enrichedContext || '')
+    return
+  }
+
+  logJson('info', message, enrichedContext)
+  if (isSentryAvailable()) {
+    Sentry.captureMessage(message, { level: 'info', extra: enrichedContext })
   }
 }
 
@@ -142,11 +222,15 @@ export function logInfo(message: string, context?: LogContext) {
  * In production, sends to Sentry
  */
 export function logWarn(message: string, context?: LogContext) {
-  const sanitizedContext = sanitizeLogContext(context)
+  const enrichedContext = sanitizeLogContext(buildLogContext(context))
   if (isDevelopment() || isTest()) {
-    console.warn('[WARN]', message, sanitizedContext || '')
-  } else if (isSentryAvailable()) {
-    Sentry.captureMessage(message, { level: 'warning', extra: sanitizedContext })
+    console.warn('[WARN]', message, enrichedContext || '')
+    return
+  }
+
+  logJson('warn', message, enrichedContext)
+  if (isSentryAvailable()) {
+    Sentry.captureMessage(message, { level: 'warning', extra: enrichedContext })
   }
 }
 
@@ -155,21 +239,24 @@ export function logWarn(message: string, context?: LogContext) {
  * In production, sends to Sentry with full error details
  */
 export function logError(message: string, error?: Error | unknown, context?: LogContext) {
-  const sanitizedContext = sanitizeLogContext(context)
-  const sanitizedError = error instanceof Error ? error : sanitizeValue(error)
+  const enrichedContext = sanitizeLogContext(buildLogContext(context))
+  const serializedError = serializeError(error)
   if (isDevelopment() || isTest()) {
-    console.error('[ERROR]', message, sanitizedError, sanitizedContext || '')
-  } else if (isSentryAvailable()) {
+    console.error('[ERROR]', message, serializedError, enrichedContext || '')
+    return
+  }
+
+  logJson('error', message, enrichedContext, serializedError)
+  if (isSentryAvailable()) {
     if (error instanceof Error) {
-      Sentry.captureException(error, { extra: { message, ...sanitizedContext } })
+      Sentry.captureException(error, { extra: { message, ...enrichedContext } })
     } else {
       Sentry.captureMessage(message, {
         level: 'error',
-        extra: { error: sanitizeValue(error), ...sanitizedContext },
+        extra: { error: sanitizeValue(error), ...enrichedContext },
       })
     }
-  } else {
-    console.error('[ERROR]', message, sanitizedError, sanitizedContext || '')
+    return
   }
 }
 

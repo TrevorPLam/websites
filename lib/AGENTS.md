@@ -44,6 +44,7 @@ This folder contains all shared utility modules for the application. Many module
 | `analytics.ts` | Analytics event tracking abstraction |
 | `contact-form-schema.ts` | Zod schema for contact form validation |
 | `sentry-client.ts` | Client-side Sentry helpers |
+| `request-context.ts` | Request-scoped correlation ID storage |
 
 ---
 

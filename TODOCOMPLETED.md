@@ -10,6 +10,51 @@ Move tasks here when Acceptance Criteria are met.
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
 
+### T-109: Implement structured JSON logging for server-side logs
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-20
+Context:
+- Observability standards require structured JSON logs for services
+- Enables log aggregation and filtering by fields (level, request_id, route)
+- Aligns production logging with auditing requirements
+Acceptance Criteria:
+- [x] T-109.1: Update `lib/logger.ts` to emit JSON logs in production (keep readable logs in dev/test)
+- [x] T-109.2: Ensure sensitive fields remain redacted in structured output
+- [x] T-109.3: Add unit tests for log serialization and redaction behavior
+- [x] T-109.4: Document JSON log fields in `/docs/OBSERVABILITY.md`
+References:
+- /lib/logger.ts
+- /__tests__/lib
+- /docs/OBSERVABILITY.md
+Dependencies: T-108
+Effort: M
+
+### T-108: Add request correlation IDs across middleware and logging
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-20
+Context:
+- Observability requires a correlation/request ID on every request
+- Enables tracing across logs, Sentry events, and support investigations
+- Improves root-cause analysis for contact form submissions
+Acceptance Criteria:
+- [x] T-108.1: Generate/request a correlation ID in `middleware.ts` and attach it to responses
+- [x] T-108.2: Ensure server actions can read the correlation ID from headers
+- [x] T-108.3: Include the correlation ID in `lib/logger.ts` log context by default
+- [x] T-108.4: Document the correlation ID behavior in `/docs/OBSERVABILITY.md`
+References:
+- /middleware.ts
+- /lib/logger.ts
+- /lib/actions.ts
+- /docs/OBSERVABILITY.md
+Dependencies: None
+Effort: M
+
 ### T-108: Expand E2E coverage for contact phone validation
 Priority: P2
 Type: QUALITY

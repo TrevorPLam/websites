@@ -280,50 +280,7 @@ References:
 Dependencies: None
 Effort: XS
 
-### T-108: Add request correlation IDs across middleware and logging
-Priority: P1
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Observability requires a correlation/request ID on every request
-- Enables tracing across logs, Sentry events, and support investigations
-- Improves root-cause analysis for contact form submissions
-Acceptance Criteria:
-- [ ] T-108.1: Generate/request a correlation ID in `middleware.ts` and attach it to responses
-- [ ] T-108.2: Ensure server actions can read the correlation ID from headers
-- [ ] T-108.3: Include the correlation ID in `lib/logger.ts` log context by default
-- [ ] T-108.4: Document the correlation ID behavior in `/docs/OBSERVABILITY.md`
-References:
-- /middleware.ts
-- /lib/logger.ts
-- /lib/actions.ts
-- /docs/OBSERVABILITY.md
-Dependencies: None
-Effort: M
-
-### T-109: Implement structured JSON logging for server-side logs
-Priority: P1
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Observability standards require structured JSON logs for services
-- Enables log aggregation and filtering by fields (level, request_id, route)
-- Aligns production logging with auditing requirements
-Acceptance Criteria:
-- [ ] T-109.1: Update `lib/logger.ts` to emit JSON logs in production (keep readable logs in dev/test)
-- [ ] T-109.2: Ensure sensitive fields remain redacted in structured output
-- [ ] T-109.3: Add unit tests for log serialization and redaction behavior
-- [ ] T-109.4: Document JSON log fields in `/docs/OBSERVABILITY.md`
-References:
-- /lib/logger.ts
-- /__tests__/lib
-- /docs/OBSERVABILITY.md
-Dependencies: T-108
-Effort: M
+_Completed (moved to TODOCOMPLETED.md on 2026-01-20): T-108, T-109._
 
 ### T-110: Add Sentry tracing spans for server actions + external calls
 Priority: P1

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unit tests for Hero, ValueProps, ServicesOverview, and SocialProof sections
 - Added Article and Service structured data on blog posts and service pages for richer SEO signals
 - Added GA4 analytics script injection and conversion tracking for contact form submissions
+- Added request correlation IDs to middleware responses and server-side logs
 
 ### Security
 - Added hashed IP + email rate limiting for contact form submissions
@@ -37,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consolidated Cloudflare Pages deployment guidance, added mobile smoke test checklist, and archived legacy roadmaps
 - Documented rate limiting behavior differences between development and production environments
 - Documented GA4 analytics configuration, conversion events, and CSP allowlists
+- Documented correlation ID propagation and JSON log fields for observability
 
 ### Changed
 - Removed deprecated `api` and `sentry` keys from `next.config.mjs`
@@ -46,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Vitest coverage thresholds to enforce minimum unit coverage
 - Logged missing Upstash Redis keys before falling back to in-memory rate limiting
 - Enhanced npm registry diagnostics output with per-check context and summaries
+- Emitted structured JSON logs in production while keeping readable logs in dev/test
 
 ### Dependencies
 - Aligned `@next/mdx` to the Next.js 14.x line

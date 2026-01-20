@@ -1,4 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+
+const getRequestId = vi.hoisted(() => vi.fn())
+
+vi.mock('@/lib/request-context', () => ({
+  getRequestId,
+  runWithRequestId: (_requestId: string | undefined, fn: () => unknown) => fn(),
+}))
+
 import { logInfo, logWarn, logError, sanitizeLogContext } from '@/lib/logger'
 
 // Mock Sentry
@@ -23,6 +31,8 @@ describe('Logger', () => {
     consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
     consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    getRequestId.mockReset()
   })
 
   afterEach(() => {
@@ -62,7 +72,24 @@ describe('Logger', () => {
 
       logInfo('Test info message')
 
-      expect(consoleInfoSpy).not.toHaveBeenCalled()
+      expect(consoleInfoSpy).toHaveBeenCalledTimes(1)
+      const [payload] = consoleInfoSpy.mock.calls[0] ?? []
+      expect(JSON.parse(payload as string)).toMatchObject({
+        level: 'info',
+        message: 'Test info message',
+      })
+    })
+
+    it('should include request id in production logs when available', () => {
+      process.env.NODE_ENV = 'production'
+      getRequestId.mockReturnValue('req-123')
+
+      logInfo('Test info message', { userId: '123' })
+
+      const [payload] = consoleInfoSpy.mock.calls[0] ?? []
+      expect(JSON.parse(payload as string)).toMatchObject({
+        context: { userId: '123', request_id: 'req-123' },
+      })
     })
   })
 
@@ -90,7 +117,12 @@ describe('Logger', () => {
 
       logWarn('Test warning message')
 
-      expect(consoleWarnSpy).not.toHaveBeenCalled()
+      expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
+      const [payload] = consoleWarnSpy.mock.calls[0] ?? []
+      expect(JSON.parse(payload as string)).toMatchObject({
+        level: 'warn',
+        message: 'Test warning message',
+      })
     })
   })
 
@@ -129,7 +161,12 @@ describe('Logger', () => {
 
       logError('Test error message')
 
-      expect(consoleErrorSpy).not.toHaveBeenCalled()
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      const [payload] = consoleErrorSpy.mock.calls[0] ?? []
+      expect(JSON.parse(payload as string)).toMatchObject({
+        level: 'error',
+        message: 'Test error message',
+      })
     })
   })
 
@@ -161,6 +198,31 @@ describe('Logger', () => {
 
       logInfo(specialMessage)
       expect(consoleInfoSpy).toHaveBeenCalledWith('[INFO]', specialMessage, '')
+    })
+  })
+
+  describe('Structured JSON logs', () => {
+    it('should redact sensitive fields in production JSON logs', () => {
+      process.env.NODE_ENV = 'production'
+
+      logInfo('Sensitive log', { password: 'secret', safe: 'ok' })
+
+      const [payload] = consoleInfoSpy.mock.calls[0] ?? []
+      expect(JSON.parse(payload as string)).toMatchObject({
+        context: { password: '[REDACTED]', safe: 'ok' },
+      })
+    })
+
+    it('should serialize errors for production logs', () => {
+      process.env.NODE_ENV = 'production'
+      const error = new Error('Boom')
+
+      logError('Error log', error)
+
+      const [payload] = consoleErrorSpy.mock.calls[0] ?? []
+      expect(JSON.parse(payload as string)).toMatchObject({
+        error: { message: 'Boom', name: 'Error' },
+      })
     })
   })
 

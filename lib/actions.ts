@@ -84,6 +84,9 @@ import { logError, logWarn, logInfo } from './logger'
 import { escapeHtml, sanitizeEmail, sanitizeName } from './sanitize'
 import { validatedEnv, isProduction } from './env'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
+import { runWithRequestId } from './request-context.server'
+
+const CORRELATION_ID_HEADER = 'x-correlation-id'
 
 /**
  * Extract expected host from headers or fallback to configured site URL.
@@ -181,6 +184,10 @@ function validateOrigin(requestHeaders: Headers): boolean {
   }
   
   return true
+}
+
+function getCorrelationIdFromHeaders(requestHeaders: Headers): string | undefined {
+  return requestHeaders.get(CORRELATION_ID_HEADER) ?? undefined
 }
 
 /**
@@ -658,114 +665,118 @@ async function checkRateLimit(email: string, clientIp: string): Promise<boolean>
  * ```
  */
 export async function submitContactForm(data: ContactFormData) {
-  try {
-    // CSRF Protection: Validate request origin (Issue #010 fixed)
-    const requestHeaders = await headers()
-    if (!validateOrigin(requestHeaders)) {
-      logError('CSRF: Invalid origin detected')
-      return {
-        success: false,
-        message: 'Invalid request. Please refresh the page and try again.',
-      }
-    }
-    
-    if (data.website) {
-      logWarn('Honeypot field triggered for contact form submission')
-      return {
-        success: false,
-        message: 'Unable to submit your message. Please try again.',
-      }
-    }
+  const requestHeaders = await headers()
+  const correlationId = getCorrelationIdFromHeaders(requestHeaders)
 
-    // Validate the data
-    const validatedData = contactFormSchema.parse(data)
-    const clientIp = await getClientIp()
-    const hashedIp = hashIdentifier(clientIp)
-
-    const safeEmail = sanitizeEmail(validatedData.email)
-    const safeName = sanitizeName(validatedData.name)
-    const safePhone = validatedData.phone ? escapeHtml(validatedData.phone) : ''
-    const safeMessage = escapeHtml(validatedData.message)
-
-    // Rate limiting check
-    const rateLimitPassed = await checkRateLimit(safeEmail, clientIp)
-    const isSuspicious = !rateLimitPassed
-
-    const lead = await insertLead({
-      name: safeName,
-      email: safeEmail,
-      phone: safePhone,
-      message: safeMessage,
-      is_suspicious: isSuspicious,
-      suspicion_reason: isSuspicious ? 'rate_limit' : null,
-      hubspot_sync_status: 'pending',
-    })
-
-    if (isSuspicious) {
-      logWarn('Rate limit exceeded for contact form', {
-        emailHash: hashEmail(safeEmail),
-        ip: hashedIp,
-      })
-    }
-
-    const { firstName, lastName } = splitName(safeName)
-    const hubspotProperties: Record<string, string> = {
-      email: safeEmail,
-      firstname: firstName,
-    }
-
-    if (lastName) {
-      hubspotProperties.lastname = lastName
-    }
-
-    if (safePhone) {
-      hubspotProperties.phone = safePhone
-    }
-
-    const syncAttemptedAt = new Date().toISOString()
-
+  return runWithRequestId(correlationId, async () => {
     try {
-      const contact = await upsertHubSpotContact(hubspotProperties)
-      await updateLead(lead.id, {
-        hubspot_contact_id: contact.id,
-        hubspot_sync_status: 'synced',
-        hubspot_last_sync_attempt: syncAttemptedAt,
+      // CSRF Protection: Validate request origin (Issue #010 fixed)
+      if (!validateOrigin(requestHeaders)) {
+        logError('CSRF: Invalid origin detected')
+        return {
+          success: false,
+          message: 'Invalid request. Please refresh the page and try again.',
+        }
+      }
+      
+      if (data.website) {
+        logWarn('Honeypot field triggered for contact form submission')
+        return {
+          success: false,
+          message: 'Unable to submit your message. Please try again.',
+        }
+      }
+
+      // Validate the data
+      const validatedData = contactFormSchema.parse(data)
+      const clientIp = await getClientIp()
+      const hashedIp = hashIdentifier(clientIp)
+
+      const safeEmail = sanitizeEmail(validatedData.email)
+      const safeName = sanitizeName(validatedData.name)
+      const safePhone = validatedData.phone ? escapeHtml(validatedData.phone) : ''
+      const safeMessage = escapeHtml(validatedData.message)
+
+      // Rate limiting check
+      const rateLimitPassed = await checkRateLimit(safeEmail, clientIp)
+      const isSuspicious = !rateLimitPassed
+
+      const lead = await insertLead({
+        name: safeName,
+        email: safeEmail,
+        phone: safePhone,
+        message: safeMessage,
+        is_suspicious: isSuspicious,
+        suspicion_reason: isSuspicious ? 'rate_limit' : null,
+        hubspot_sync_status: 'pending',
       })
-      logInfo('HubSpot contact synced', { leadId: lead.id, emailHash: hashEmail(safeEmail) })
-    } catch (syncError) {
-      logError('HubSpot sync failed', syncError)
+
+      if (isSuspicious) {
+        logWarn('Rate limit exceeded for contact form', {
+          emailHash: hashEmail(safeEmail),
+          ip: hashedIp,
+        })
+      }
+
+      const { firstName, lastName } = splitName(safeName)
+      const hubspotProperties: Record<string, string> = {
+        email: safeEmail,
+        firstname: firstName,
+      }
+
+      if (lastName) {
+        hubspotProperties.lastname = lastName
+      }
+
+      if (safePhone) {
+        hubspotProperties.phone = safePhone
+      }
+
+      const syncAttemptedAt = new Date().toISOString()
+
       try {
+        const contact = await upsertHubSpotContact(hubspotProperties)
         await updateLead(lead.id, {
-          hubspot_sync_status: 'needs_sync',
+          hubspot_contact_id: contact.id,
+          hubspot_sync_status: 'synced',
           hubspot_last_sync_attempt: syncAttemptedAt,
         })
-      } catch (updateError) {
-        logError('Failed to update HubSpot sync status', updateError)
+        logInfo('HubSpot contact synced', { leadId: lead.id, emailHash: hashEmail(safeEmail) })
+      } catch (syncError) {
+        logError('HubSpot sync failed', syncError)
+        try {
+          await updateLead(lead.id, {
+            hubspot_sync_status: 'needs_sync',
+            hubspot_last_sync_attempt: syncAttemptedAt,
+          })
+        } catch (updateError) {
+          logError('Failed to update HubSpot sync status', updateError)
+        }
       }
-    }
 
-    if (!rateLimitPassed) {
+      if (!rateLimitPassed) {
+        return {
+          success: false,
+          message: 'Too many submissions. Please try again later.',
+        }
+      }
+
+      return { success: true, message: "Thank you for your message! We'll be in touch soon." }
+    } catch (error) {
+      logError('Contact form submission error', error)
+
+      if (error instanceof z.ZodError) {
+        return {
+          success: false,
+          message: 'Please check your form inputs and try again.',
+          errors: error.issues,
+        }
+      }
+
       return {
         success: false,
-        message: 'Too many submissions. Please try again later.',
+        message: 'Something went wrong. Please try again or email us directly.',
       }
     }
-
-    return { success: true, message: "Thank you for your message! We'll be in touch soon." }
-  } catch (error) {
-    logError('Contact form submission error', error)
-
-    if (error instanceof z.ZodError) {
-      return {
-        success: false,
-        message: 'Please check your form inputs and try again.',
-        errors: error.issues,
-      }
-    }
-
-    return {
-      success: false,
-      message: 'Something went wrong. Please try again or email us directly.',
-    }
-  }
+  })
 }
