@@ -69,7 +69,7 @@ export default function Accordion({ items, className }: AccordionProps) {
             )
           })()}
         </div>
-      ))}
+      )})}
     </div>
   )
 }

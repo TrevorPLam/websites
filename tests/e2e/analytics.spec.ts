@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test'
 
+// Extend Window interface for Google Analytics dataLayer
+declare global {
+  interface Window {
+    dataLayer: unknown[]
+  }
+}
+
 test('ga4 script is injected when analytics id is configured', async ({ page }) => {
   await page.goto('/')
 

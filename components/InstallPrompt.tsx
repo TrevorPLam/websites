@@ -10,48 +10,6 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 /**
- * Progressive Web App (PWA) install prompt component.
- * 
- * **Purpose:** Encourages users to install the site as a PWA on mobile devices.
- * Shows after 3-second delay to avoid being intrusive on page load.
- * 
- * **Features:**
- * - Listens for beforeinstallprompt event (browser triggers)
- * - Dismissible (stores preference in localStorage)
- * - Auto-hides if already installed
- * - Memory-safe (proper timer cleanup)
- * - SSR-safe (guards all localStorage/window access)
- * 
- * **Flow:**
- * 1. Browser triggers beforeinstallprompt event
- * 2. Component saves event and starts 3s timer
- * 3. Timer shows prompt after delay
- * 4. User clicks Install → triggers native prompt
- * 5. Result saved to localStorage
- * 
- * **Browser Support:**
- * - Chrome/Edge: Full support
- * - Safari: Limited support
- * - Firefox: No support (event never fires)
- * 
- * @example
- * ```tsx
- * <InstallPrompt /> // Renders conditionally based on browser support
- * ```
- */
-
-'use client'
-
-import React, { useEffect, useState } from 'react'
-import { X, Download } from 'lucide-react'
-import Button from './ui/Button'
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
-}
-
-/**
  * InstallPrompt component for PWA installation.
  * 
  * **Memory Safety:** All timers properly cleaned up on unmount.
