@@ -12,15 +12,18 @@ async function submitContactForm(
   {
     name,
     email,
+    phone,
     message,
   }: {
     name: string
     email: string
+    phone: string
     message: string
   }
 ) {
   await page.getByLabel('Name').fill(name)
   await page.getByLabel('Email').fill(email)
+  await page.getByLabel('Phone').fill(phone)
   await page.getByLabel('Message').fill(message)
   await page.getByRole('button', { name: /send message/i }).click()
 }
@@ -78,6 +81,7 @@ test('contact form submission success', async ({ page }) => {
   await submitContactForm(page, {
     name: 'Jamie Test',
     email: `jamie.${Date.now()}@example.com`,
+    phone: '(555) 010-1000',
     message: 'Looking for marketing strategy support for Q2 growth.',
   })
 
@@ -94,6 +98,7 @@ test('contact form rate limiting', async ({ page }) => {
     await submitContactForm(page, {
       name: `Rate Limit ${attempt + 1}`,
       email,
+      phone: '(555) 010-2000',
       message: `Submission attempt ${attempt + 1} to validate rate limiting.`,
     })
     await expect(page.getByRole('alert')).toContainText(/thank you for your message/i)
@@ -102,6 +107,7 @@ test('contact form rate limiting', async ({ page }) => {
   await submitContactForm(page, {
     name: 'Rate Limit 4',
     email,
+    phone: '(555) 010-2000',
     message: 'Submission attempt 4 should trigger rate limiting.',
   })
 
