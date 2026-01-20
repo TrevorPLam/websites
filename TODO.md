@@ -279,3 +279,158 @@ References:
 - /components/Navigation.tsx
 Dependencies: None
 Effort: XS
+
+### T-108: Add request correlation IDs across middleware and logging
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Blockers: None
+Context:
+- Observability requires a correlation/request ID on every request
+- Enables tracing across logs, Sentry events, and support investigations
+- Improves root-cause analysis for contact form submissions
+Acceptance Criteria:
+- [ ] T-108.1: Generate/request a correlation ID in `middleware.ts` and attach it to responses
+- [ ] T-108.2: Ensure server actions can read the correlation ID from headers
+- [ ] T-108.3: Include the correlation ID in `lib/logger.ts` log context by default
+- [ ] T-108.4: Document the correlation ID behavior in `/docs/OBSERVABILITY.md`
+References:
+- /middleware.ts
+- /lib/logger.ts
+- /lib/actions.ts
+- /docs/OBSERVABILITY.md
+Dependencies: None
+Effort: M
+
+### T-109: Implement structured JSON logging for server-side logs
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Blockers: None
+Context:
+- Observability standards require structured JSON logs for services
+- Enables log aggregation and filtering by fields (level, request_id, route)
+- Aligns production logging with auditing requirements
+Acceptance Criteria:
+- [ ] T-109.1: Update `lib/logger.ts` to emit JSON logs in production (keep readable logs in dev/test)
+- [ ] T-109.2: Ensure sensitive fields remain redacted in structured output
+- [ ] T-109.3: Add unit tests for log serialization and redaction behavior
+- [ ] T-109.4: Document JSON log fields in `/docs/OBSERVABILITY.md`
+References:
+- /lib/logger.ts
+- /__tests__/lib
+- /docs/OBSERVABILITY.md
+Dependencies: T-108
+Effort: M
+
+### T-110: Add Sentry tracing spans for server actions + external calls
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Blockers: None
+Context:
+- Sentry is already integrated; tracing adds performance visibility
+- Highlights slow external calls (Supabase/HubSpot) and bottlenecks
+- Supports SLA monitoring for contact submissions
+Acceptance Criteria:
+- [ ] T-110.1: Add Sentry spans to contact form submission flow in `lib/actions.ts`
+- [ ] T-110.2: Capture span attributes without PII (hashes only)
+- [ ] T-110.3: Document tracing coverage in `/docs/OBSERVABILITY.md`
+References:
+- /lib/actions.ts
+- /sentry.server.config.ts
+- /docs/OBSERVABILITY.md
+Dependencies: T-108
+Effort: S
+
+### T-111: Add bundle size regression guard
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: READY
+Blockers: None
+Context:
+- Prevents silent performance regressions as the bundle grows
+- Protects Core Web Vitals and Lighthouse scores
+- Supports Diamond Standard performance goals
+Acceptance Criteria:
+- [ ] T-111.1: Wire `scripts/check-bundle-size.mjs` into `package.json` (new script)
+- [ ] T-111.2: Document bundle size budget expectations in `/docs/OBSERVABILITY.md`
+- [ ] T-111.3: Add guidance to `scripts/README.md` for running the bundle size check
+References:
+- /scripts/check-bundle-size.mjs
+- /package.json
+- /scripts/README.md
+- /docs/OBSERVABILITY.md
+Dependencies: None
+Effort: S
+
+### T-112: Harden CSP with nonce-based script handling
+Priority: P1
+Type: SECURITY
+Owner: AGENT
+Status: READY
+Blockers: None
+Context:
+- Current CSP uses `unsafe-inline` for scripts; nonces strengthen XSS protection
+- Aligns with security best practices for modern Next.js apps
+- Reduces reliance on broad CSP exceptions
+Acceptance Criteria:
+- [ ] T-112.1: Implement CSP nonces in `middleware.ts` (or equivalent Next.js configuration)
+- [ ] T-112.2: Remove `unsafe-inline` for scripts once nonces are in place
+- [ ] T-112.3: Ensure GA4 scripts still load without CSP violations
+- [ ] T-112.4: Document nonce usage and testing steps in `/docs/SECURITY-CSP-ANALYTICS.md`
+References:
+- /middleware.ts
+- /app/layout.tsx
+- /docs/SECURITY-CSP-ANALYTICS.md
+Dependencies: None
+Effort: L
+
+### T-113: Add analytics consent gating (privacy compliance)
+Priority: P2
+Type: FEATURE
+Owner: AGENT
+Status: READY
+Blockers: None
+Context:
+- Analytics should honor consent requirements (GDPR/CCPA-ready)
+- Provides opt-in control without breaking existing tracking
+- Improves transparency for end users
+Acceptance Criteria:
+- [ ] T-113.1: Add consent state handling in client-side analytics init
+- [ ] T-113.2: Update `app/layout.tsx` to conditionally load GA4 based on consent
+- [ ] T-113.3: Provide UI or cookie-based preference storage for consent
+- [ ] T-113.4: Document consent behavior in `/docs/OBSERVABILITY.md` and `/docs/PRIVACY_POLICY_TEMPLATE.md`
+References:
+- /app/layout.tsx
+- /lib/analytics.ts
+- /docs/OBSERVABILITY.md
+- /docs/PRIVACY_POLICY_TEMPLATE.md
+Dependencies: None
+Effort: M
+
+### T-114: Add retry policy + idempotency for HubSpot sync
+Priority: P1
+Type: FEATURE
+Owner: AGENT
+Status: READY
+Blockers: None
+Context:
+- HubSpot sync failures should be retried automatically
+- Idempotency prevents duplicate contacts on retries
+- Reduces manual intervention for lead sync issues
+Acceptance Criteria:
+- [ ] T-114.1: Implement retry with backoff for HubSpot sync in `lib/actions.ts`
+- [ ] T-114.2: Add idempotency key logic to avoid duplicate upserts
+- [ ] T-114.3: Store retry attempts and final status in Supabase
+- [ ] T-114.4: Add tests covering retry behavior and idempotency
+References:
+- /lib/actions.ts
+- /__tests__/lib
+- /docs/DEPLOYMENT.md
+Dependencies: T-081
+Effort: M
