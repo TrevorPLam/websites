@@ -3,8 +3,9 @@ import { execSync } from 'node:child_process'
 /**
  * npm Registry Connectivity Check
  * - Purpose: verify npm registry reachability for dependency operations.
- * - Supports: general registry health + targeted package metadata checks.
+ * - Scope: health ping + representative package metadata probes.
  * - Related Task: TODO.md T-070 (Cloudflare adapter dependency monitoring).
+ * - Output: human-readable diagnostics with actionable next steps.
  */
 
 const DEFAULT_REGISTRY = 'https://registry.npmjs.org'
@@ -20,6 +21,7 @@ const PROXY_ENV_VARS = [
   'npm_config_http_proxy',
 ]
 const TIMEOUT_MS = 5000
+const REQUEST_HEADERS = { 'User-Agent': 'npm-registry-check' }
 
 const readRegistry = () => {
   const envRegistry = process.env.npm_config_registry
@@ -60,14 +62,22 @@ const withTimeout = (url) => {
   }
 }
 
-const checkEndpoint = async (path, label) => {
+const formatError = (error) => {
+  if (error?.name === 'AbortError') {
+    return `timeout after ${TIMEOUT_MS}ms`
+  }
+
+  return error?.message ?? 'unknown error'
+}
+
+const checkEndpoint = async (path, label, note) => {
   const url = `${registry}${path}`
   const { controller, cleanup } = withTimeout(url)
 
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'npm-registry-check' },
+      headers: REQUEST_HEADERS,
     })
     cleanup()
 
@@ -75,6 +85,7 @@ const checkEndpoint = async (path, label) => {
       ok: response.ok,
       status: response.status,
       label,
+      note,
       url,
     }
   } catch (error) {
@@ -83,16 +94,29 @@ const checkEndpoint = async (path, label) => {
       ok: false,
       label,
       url,
-      error: error.message,
+      note,
+      error: formatError(error),
     }
   }
 }
 
 const checks = [
-  { path: '/-/ping', label: 'Registry ping' },
-  { path: '/next', label: 'Package metadata (next)' },
-  // Track adapter metadata reachability for T-070 dependency monitoring.
-  { path: '/@cloudflare%2fnext-on-pages', label: 'Package metadata (@cloudflare/next-on-pages)' },
+  {
+    path: '/-/ping',
+    label: 'Registry ping',
+    note: 'Baseline availability check for the configured npm registry.',
+  },
+  {
+    path: '/next',
+    label: 'Package metadata (next)',
+    note: 'Representative package metadata probe for standard dependency fetches.',
+  },
+  {
+    // Track adapter metadata reachability for T-070 dependency monitoring.
+    path: '/@cloudflare%2fnext-on-pages',
+    label: 'Package metadata (@cloudflare/next-on-pages)',
+    note: 'Cloudflare adapter metadata probe for dependency monitoring.',
+  },
 ]
 
 const printProxyInfo = () => {
@@ -130,6 +154,12 @@ const printFailures = (results) => {
   )
 }
 
+const printSummary = (results) => {
+  const passed = results.filter((result) => result.ok).length
+  const failed = results.length - passed
+  console.log(`\nSummary: ${passed} passed, ${failed} failed`)
+}
+
 const run = async () => {
   console.log('🔎 npm registry diagnostics')
   console.log(`Registry: ${registry}`)
@@ -138,20 +168,25 @@ const run = async () => {
   const results = []
 
   for (const check of checks) {
-    const result = await checkEndpoint(check.path, check.label)
+    const result = await checkEndpoint(check.path, check.label, check.note)
     results.push(result)
     const statusLabel = result.ok ? '✅' : '❌'
     const detail = result.error ? result.error : `HTTP ${result.status}`
     console.log(`${statusLabel} ${check.label}: ${detail}`)
+    if (result.note) {
+      console.log(`   ↳ ${result.note}`)
+    }
   }
 
   const failures = results.filter((result) => !result.ok)
 
   if (failures.length > 0) {
+    printSummary(results)
     printFailures(failures)
     process.exit(1)
   }
 
+  printSummary(results)
   console.log('\n✅ Registry reachable. npm install and lockfile commands should succeed.')
 }
 

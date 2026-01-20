@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hardened Sentry source map handling for production builds
 - Added Vitest coverage thresholds to enforce minimum unit coverage
 - Logged missing Upstash Redis keys before falling back to in-memory rate limiting
+- Enhanced npm registry diagnostics output with per-check context and summaries
 
 ### Dependencies
 - Aligned `@next/mdx` to the Next.js 14.x line
