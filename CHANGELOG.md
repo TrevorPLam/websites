@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - Expanded middleware security header docs and environment helper documentation
 - Noted npm registry access blockers for dependency monitoring task T-070
+- Documented Lighthouse baseline capture blockers due to registry access limits
 - Clarified sanitize utility usage guidance
 - Documented accessibility standards, Lighthouse baselines, and Sentry performance instrumentation
 - Documented Vitest coverage threshold expectations in the testing strategy

@@ -18,6 +18,7 @@ This is not a task list; tasks belong in `TODO.md`.
     - Next.js 15.x lock-in: `@cloudflare/next-on-pages` has peer dependency conflicts with Next.js 16.
     - Edge Runtime limitations: `fs` usage required explicitly marking some routes as `force-static`.
 - Testing posture: Added E2E coverage for contact submission success, rate limiting, and search empty state; configured Vitest coverage thresholds.
+- Testing posture (open): Lighthouse mobile baselines remain blocked locally because npm registry access returns 403 in this environment.
 - Legal: Placeholder privacy and terms pages now exist for launch readiness.
 - Analytics: GA4 script injection and contact form conversion tracking are wired (env-gated).
 

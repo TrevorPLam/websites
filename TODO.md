@@ -210,7 +210,7 @@ Priority: P2
 Type: QUALITY
 Owner: AGENT
 Status: BLOCKED
-Blockers: Lighthouse CLI not installed (install globally or set `LIGHTHOUSE_BIN`).
+Blockers: Lighthouse CLI not installed; npm registry access is blocked (403) in this environment, so `npm install -g lighthouse` fails.
 Context:
 - Diamond Standard requires strong Core Web Vitals
 - Need baseline measurements before setting strict budgets
@@ -230,7 +230,7 @@ Priority: P2
 Type: DEPENDENCY
 Owner: AGENT
 Status: BLOCKED
-Blockers: Await upstream fixes in `@cloudflare/next-on-pages` or Cloudflare runtime updates; npm registry access in this environment returns 403 even with proxy settings unset (see T-070.3, 2026-01-20).
+Blockers: Await upstream fixes in `@cloudflare/next-on-pages` or Cloudflare runtime updates; npm registry access in this environment returns 403 (confirmed via `npm view` and `scripts/npm-registry-check.mjs`, 2026-01-20).
 Context:
 - npm audit reports High/Moderate issues in `path-to-regexp`, `esbuild`, `undici`.
 - These are pulled in by `@cloudflare/next-on-pages`.

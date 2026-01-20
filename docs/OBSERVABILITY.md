@@ -54,7 +54,7 @@ This writes JSON reports under `reports/lighthouse/` (ignored by git) and a `mob
 | Pricing (`/pricing`) | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** |
 | Contact (`/contact`) | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** | **UNKNOWN** |
 
-**Note:** Lighthouse CLI is required to capture baselines. If it is unavailable in the environment, run `npm run audit:lighthouse` locally and replace the **UNKNOWN** values above.
+**Note:** Lighthouse CLI is required to capture baselines. If it is unavailable in the environment, run `npm run audit:lighthouse` locally and replace the **UNKNOWN** values above. In this environment, npm registry access currently returns 403 (see `scripts/npm-registry-check.mjs`), so Lighthouse cannot be installed here.
 
 ### Regression budgets
 
