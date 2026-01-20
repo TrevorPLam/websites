@@ -28,9 +28,8 @@ jobs:
 
       - name: Security audit
         run: npm audit --audit-level=moderate
-        continue-on-error: true
-        # Note: Audit may report vulnerabilities in transitive deps (e.g., @cloudflare/next-on-pages)
-        # These are tracked in T-070 and should be addressed when upstream fixes are available
+        # Security: Block deployments with vulnerabilities (Issue #016)
+        # Removed continue-on-error to enforce security gates
 
       - name: Check for TODO comments
         run: node scripts/check-todo-comments.mjs

@@ -70,8 +70,96 @@ import { headers } from 'next/headers'
 import { z } from 'zod'
 import { logError, logWarn, logInfo } from './logger'
 import { escapeHtml, sanitizeEmail, sanitizeName } from './sanitize'
-import { validatedEnv } from './env'
+import { validatedEnv, isProduction } from './env'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
+
+/**
+ * Validate request origin to prevent CSRF attacks (Issue #010).
+ * 
+ * Checks that the request comes from our own domain.
+ * 
+ * @param requestHeaders - Request headers
+ * @returns true if origin is valid, false otherwise
+ */
+function validateOrigin(requestHeaders: Headers): boolean {
+  const origin = requestHeaders.get('origin')
+  const referer = requestHeaders.get('referer')
+  const host = requestHeaders.get('host')
+  
+  // If no origin/referer (direct API call), reject
+  if (!origin && !referer) {
+    logWarn('CSRF: No origin or referer header')
+    return false
+  }
+  
+  // Check origin matches host
+  if (origin) {
+    try {
+      const originUrl = new URL(origin)
+      const expectedHost = host || validatedEnv.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '')
+      if (originUrl.host !== expectedHost) {
+        logWarn('CSRF: Origin mismatch', { origin, expectedHost })
+        return false
+      }
+    } catch {
+      logWarn('CSRF: Invalid origin URL', { origin })
+      return false
+    }
+  }
+  
+  // Check referer matches host
+  if (referer) {
+    try {
+      const refererUrl = new URL(referer)
+      const expectedHost = host || validatedEnv.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '')
+      if (refererUrl.host !== expectedHost) {
+        logWarn('CSRF: Referer mismatch', { referer, expectedHost })
+        return false
+      }
+    } catch {
+      logWarn('CSRF: Invalid referer URL', { referer })
+      return false
+    }
+  }
+  
+  return true
+}
+
+/**
+ * Validate IP address from headers to prevent spoofing (Issue #011).
+ * 
+ * In production, only trust headers from known proxies (Cloudflare/Vercel).
+ * 
+ * @param requestHeaders - Request headers
+ * @returns Validated client IP or 'unknown'
+ */
+function getValidatedClientIp(requestHeaders: Headers): string {
+  // In production, prioritize trusted proxy headers
+  if (isProduction()) {
+    // Cloudflare sets CF-Connecting-IP (most trustworthy)
+    const cfIp = requestHeaders.get('cf-connecting-ip')
+    if (cfIp) {
+      return cfIp.trim()
+    }
+    
+    // Vercel sets x-vercel-forwarded-for
+    const vercelIp = requestHeaders.get('x-vercel-forwarded-for')
+    if (vercelIp) {
+      return vercelIp.split(',')[0]?.trim() || 'unknown'
+    }
+  }
+  
+  // Development: Accept standard proxy headers
+  const forwardedFor =
+    requestHeaders.get('x-forwarded-for') ||
+    requestHeaders.get('x-real-ip')
+  
+  if (!forwardedFor) {
+    return 'unknown'
+  }
+  
+  return forwardedFor.split(',')[0]?.trim() || 'unknown'
+}
 
 /**
  * Rate limiting configuration.
@@ -248,31 +336,16 @@ async function upsertHubSpotContact(properties: Record<string, string>) {
 }
 
 /**
- * Get client IP address from request headers.
+ * Get validated client IP address from request headers (Issue #011 fixed).
  * 
- * Checks multiple headers in order of preference:
- * 1. x-forwarded-for (standard proxy header)
- * 2. x-vercel-forwarded-for (Vercel-specific)
- * 3. x-real-ip (nginx)
- * 4. cf-connecting-ip (Cloudflare)
- * 
- * If multiple IPs are present (comma-separated), returns the first one.
+ * In production, only trusts headers from known proxies (Cloudflare/Vercel).
+ * Prevents IP spoofing attacks that bypass rate limiting.
  * 
  * @returns Client IP address or 'unknown' if not available
  */
 async function getClientIp(): Promise<string> {
   const requestHeaders = await headers()
-  const forwardedFor =
-    requestHeaders.get('x-forwarded-for') ||
-    requestHeaders.get('x-vercel-forwarded-for') ||
-    requestHeaders.get('x-real-ip') ||
-    requestHeaders.get('cf-connecting-ip')
-
-  if (!forwardedFor) {
-    return 'unknown'
-  }
-
-  return forwardedFor.split(',')[0]?.trim() || 'unknown'
+  return getValidatedClientIp(requestHeaders)
 }
 
 /**
@@ -469,6 +542,16 @@ async function checkRateLimit(email: string, clientIp: string): Promise<boolean>
  */
 export async function submitContactForm(data: ContactFormData) {
   try {
+    // CSRF Protection: Validate request origin (Issue #010 fixed)
+    const requestHeaders = await headers()
+    if (!validateOrigin(requestHeaders)) {
+      logError('CSRF: Invalid origin detected')
+      return {
+        success: false,
+        message: 'Invalid request. Please refresh the page and try again.',
+      }
+    }
+    
     if (data.website) {
       logWarn('Honeypot field triggered for contact form submission')
       return {

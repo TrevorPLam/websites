@@ -211,6 +211,22 @@ if (!env.success) {
 }
 
 /**
+ * Production safety check: Enforce Upstash Redis in production (Issue #005).
+ * 
+ * In-memory rate limiter is NOT production-safe (single-instance only).
+ * Rate limiting can be bypassed in multi-instance deployments.
+ * 
+ * This check prevents production deployment without distributed rate limiting.
+ */
+if (env.data.NODE_ENV === 'production') {
+  if (!env.data.UPSTASH_REDIS_REST_URL || !env.data.UPSTASH_REDIS_REST_TOKEN) {
+    console.error('❌ Production Error: Upstash Redis required for distributed rate limiting')
+    console.error('Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN in production')
+    throw new Error('Upstash Redis required in production for rate limiting')
+  }
+}
+
+/**
  * Validated environment variables with type safety.
  * 
  * **Type Safety:**
