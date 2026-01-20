@@ -84,7 +84,7 @@ import { logError, logWarn, logInfo } from './logger'
 import { escapeHtml, sanitizeEmail, sanitizeName } from './sanitize'
 import { validatedEnv, isProduction } from './env'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
-import { runWithRequestId } from './request-context'
+import { runWithRequestId } from './request-context.server'
 
 const CORRELATION_ID_HEADER = 'x-correlation-id'
 
