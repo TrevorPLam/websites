@@ -27,7 +27,7 @@
  * - Dual limiting: per-email AND per-IP (both must pass)
  * - 3 requests/hour per identifier
  * - IP hashed with SHA-256 before storage (privacy)
- * - Falls back to in-memory Map when Upstash not configured
+ * - Falls back to in-memory Map when Upstash not configured (logged with missing keys)
  *
  * **AI ITERATION HINTS**:
  * 1. Schema changes: Update contact-form-schema.ts first, then this file
@@ -473,14 +473,26 @@ async function getRateLimiter() {
   }
 
   // Check if Upstash credentials are configured
-  if (validatedEnv.UPSTASH_REDIS_REST_URL && validatedEnv.UPSTASH_REDIS_REST_TOKEN) {
+  const redisUrl = validatedEnv.UPSTASH_REDIS_REST_URL
+  const redisToken = validatedEnv.UPSTASH_REDIS_REST_TOKEN
+  const missingUpstashKeys: string[] = []
+
+  if (!redisUrl) {
+    missingUpstashKeys.push('UPSTASH_REDIS_REST_URL')
+  }
+
+  if (!redisToken) {
+    missingUpstashKeys.push('UPSTASH_REDIS_REST_TOKEN')
+  }
+
+  if (missingUpstashKeys.length === 0) {
     try {
       const { Ratelimit } = await import('@upstash/ratelimit')
       const { Redis } = await import('@upstash/redis')
 
       const redis = new Redis({
-        url: validatedEnv.UPSTASH_REDIS_REST_URL,
-        token: validatedEnv.UPSTASH_REDIS_REST_TOKEN,
+        url: redisUrl,
+        token: redisToken,
       })
 
       rateLimiter = new Ratelimit({
@@ -497,7 +509,8 @@ async function getRateLimiter() {
     }
   } else {
     logWarn(
-      'Upstash Redis not configured, using in-memory rate limiting (not suitable for production)'
+      'Upstash Redis not configured, using in-memory rate limiting (not suitable for production)',
+      { missingKeys: missingUpstashKeys }
     )
   }
 

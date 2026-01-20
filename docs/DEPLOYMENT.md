@@ -60,6 +60,10 @@ These are required for the v1 contact pipeline (Supabase storage + HubSpot CRM s
 - HubSpot sync is best-effort: failures do **not** block a user-facing success response.
 - HubSpot failures are recorded in Supabase with `hubspot_sync_status = "needs_sync"` and a timestamp.
 
+### Rate limiting behavior (dev vs production)
+- **Development/test:** If Upstash Redis vars are missing, the app falls back to in-memory rate limiting and logs a warning that includes the missing keys.
+- **Production:** Upstash Redis is mandatory. The app fails fast at startup if either `UPSTASH_REDIS_REST_URL` or `UPSTASH_REDIS_REST_TOKEN` is missing.
+
 ## Pre-deploy checklist
 - [ ] Confirm `npm run build` completes locally.
 - [ ] Set `NEXT_PUBLIC_SITE_URL` to your production domain in Cloudflare Pages.

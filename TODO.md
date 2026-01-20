@@ -200,25 +200,6 @@ References:
 Dependencies: T-055, T-080
 Effort: M
 
-### T-097: Wire distributed rate limiting with Upstash
-Priority: P1
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Ensure rate limiting works in multi-instance production
-Acceptance Criteria:
-- [ ] T-097.1: Ensure limiter uses Upstash when credentials exist
-- [ ] T-097.2: Ensure fallback behavior is logged/documented for missing credentials
-- [ ] T-097.3: Update docs to explain production vs dev limiter behavior
-References:
-- /lib/actions.ts
-- /lib/env.ts
-- /docs/DEPLOYMENT.md
-Dependencies: T-096
-Effort: S
-
 ### T-098: Install analytics provider and track conversions
 Priority: P1
 Type: QUALITY
