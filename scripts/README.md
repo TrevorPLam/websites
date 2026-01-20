@@ -13,6 +13,7 @@ These scripts are **optional helpers**. They exist to reduce manual work, but th
 - `scripts/check.sh` — best-effort local verification (lint/test/build if available)
 - `scripts/security-scan.sh` — lightweight checks (no paid tools required)
 - `scripts/ai-audit.sh` — validates required governance files exist and basic invariants hold
+- `scripts/check-bundle-size.mjs` — verifies Next.js bundle chunks stay within the performance budget
 - `scripts/a11y-audit.mjs` — runs axe-core audits against core pages (requires running dev/server)
 - `scripts/lighthouse-audit.mjs` — captures mobile Lighthouse baselines (requires running dev/server + Lighthouse CLI)
 - `scripts/sync-todo.sh` — generates `TODO.generated.md` from `specs/project-tasks.md (non-binding notes)` (non-binding)

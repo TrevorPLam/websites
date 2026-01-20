@@ -32,6 +32,11 @@ for consistent tracing across logs and Sentry events.
 
 ## Tracing (optional)
 - Add distributed tracing when there are multiple services or external dependencies.
+- Contact form submissions emit server spans for the action and key external calls.
+  - `contact_form.submit` (server action)
+  - `supabase.insert` / `supabase.update`
+  - `hubspot.search` / `hubspot.upsert`
+- Span attributes are limited to hashed identifiers and non-PII flags.
 
 ## Error handling
 - Fail fast on configuration errors.
@@ -76,7 +81,17 @@ This writes JSON reports under `reports/lighthouse/` (ignored by git) and a `mob
 
 Budgets are configured in `.github/lighthouse/budget.json` and treated as **regression guards**, not hard, arbitrary goals. Update budgets only after capturing a new baseline and agreeing to the trade-offs.
 
+## Bundle size regression guard
+
+Run the bundle size budget check after a build to catch oversized chunks before deployment:
+
+```bash
+npm run build
+npm run check:bundle-size
+```
+
 ## Sentry instrumentation
 
-- Contact form submissions emit a dedicated performance span (`contact_form.submit`) to track client-side latency.
+- Contact form submissions emit a dedicated performance span (`contact_form.submit`) on both the client (`op="ui.action"`) and the server action (`op="action"`).
+- External calls in the submission flow (Supabase + HubSpot) are wrapped in spans for latency visibility.
 - Use Sentry traces for user-facing actions; avoid attaching PII to span attributes.

@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Article and Service structured data on blog posts and service pages for richer SEO signals
 - Added GA4 analytics script injection and conversion tracking for contact form submissions
 - Added request correlation IDs to middleware responses and server-side logs
+- Added server-side Sentry spans for contact form submissions and external sync calls
+- Added `npm run check:bundle-size` to enforce bundle size regression checks
 
 ### Security
 - Added hashed IP + email rate limiting for contact form submissions
@@ -39,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documented rate limiting behavior differences between development and production environments
 - Documented GA4 analytics configuration, conversion events, and CSP allowlists
 - Documented correlation ID propagation and JSON log fields for observability
+- Documented server tracing spans and bundle size regression checks in observability guides
 
 ### Changed
 - Removed deprecated `api` and `sentry` keys from `next.config.mjs`

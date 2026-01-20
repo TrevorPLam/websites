@@ -282,49 +282,6 @@ Effort: XS
 
 _Completed (moved to TODOCOMPLETED.md on 2026-01-20): T-108, T-109._
 
-### T-110: Add Sentry tracing spans for server actions + external calls
-Priority: P1
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Sentry is already integrated; tracing adds performance visibility
-- Highlights slow external calls (Supabase/HubSpot) and bottlenecks
-- Supports SLA monitoring for contact submissions
-Acceptance Criteria:
-- [ ] T-110.1: Add Sentry spans to contact form submission flow in `lib/actions.ts`
-- [ ] T-110.2: Capture span attributes without PII (hashes only)
-- [ ] T-110.3: Document tracing coverage in `/docs/OBSERVABILITY.md`
-References:
-- /lib/actions.ts
-- /sentry.server.config.ts
-- /docs/OBSERVABILITY.md
-Dependencies: T-108
-Effort: S
-
-### T-111: Add bundle size regression guard
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Prevents silent performance regressions as the bundle grows
-- Protects Core Web Vitals and Lighthouse scores
-- Supports Diamond Standard performance goals
-Acceptance Criteria:
-- [ ] T-111.1: Wire `scripts/check-bundle-size.mjs` into `package.json` (new script)
-- [ ] T-111.2: Document bundle size budget expectations in `/docs/OBSERVABILITY.md`
-- [ ] T-111.3: Add guidance to `scripts/README.md` for running the bundle size check
-References:
-- /scripts/check-bundle-size.mjs
-- /package.json
-- /scripts/README.md
-- /docs/OBSERVABILITY.md
-Dependencies: None
-Effort: S
-
 ### T-112: Harden CSP with nonce-based script handling
 Priority: P1
 Type: SECURITY
