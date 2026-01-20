@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a contact form honeypot field to block bot submissions
 - Added repeatable accessibility and Lighthouse audit scripts for local QA
 - Added Playwright coverage for contact submission success, rate limiting, and search empty states
+- Added privacy policy and terms of service pages plus sitemap entries for legal routes
+- Added Playwright coverage to verify legal pages render and footer links resolve
 - Added unit tests for Hero, ValueProps, ServicesOverview, and SocialProof sections
 - Added Article and Service structured data on blog posts and service pages for richer SEO signals
 

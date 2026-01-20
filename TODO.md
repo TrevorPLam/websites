@@ -1,7 +1,7 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-12
+Last Updated: 2026-01-20
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
@@ -199,25 +199,6 @@ References:
 - /lib/env.ts
 Dependencies: T-055, T-080
 Effort: M
-
-### T-089: Implement privacy + terms pages and footer links
-Priority: P1
-Type: FEATURE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Legal pages must exist before launch
-- Footer links should not 404
-Acceptance Criteria:
-- [ ] T-089.1: Create /app/privacy/page.tsx and /app/terms/page.tsx using provided copy
-- [ ] T-089.2: Ensure /components/Footer.tsx links resolve without 404s
-- [ ] T-089.3: Add basic SEO metadata to privacy/terms pages
-References:
-- /app/
-- /components/Footer.tsx
-Dependencies: T-072
-Effort: S
 
 ### T-097: Wire distributed rate limiting with Upstash
 Priority: P1

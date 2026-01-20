@@ -1,7 +1,7 @@
 # TODOCOMPLETED.md — Completed Tasks Archive
 
 Document Type: Workflow
-Last Updated: 2026-01-12
+Last Updated: 2026-01-20
 Source: Completed tasks moved from `TODO.md`
 
 This file stores completed work in the same schema as `TODO.md`.
@@ -9,6 +9,25 @@ Move tasks here when Acceptance Criteria are met.
 
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
+
+### T-089: Implement privacy + terms pages and footer links
+Priority: P1
+Type: FEATURE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-20
+Context:
+- Legal pages must exist before launch
+- Footer links should not 404
+Acceptance Criteria:
+- [x] T-089.1: Create /app/privacy/page.tsx and /app/terms/page.tsx using provided copy
+- [x] T-089.2: Ensure /components/Footer.tsx links resolve without 404s
+- [x] T-089.3: Add basic SEO metadata to privacy/terms pages
+References:
+- /app/
+- /components/Footer.tsx
+Dependencies: T-072
+Effort: S
 
 ### T-082: Remove email pipeline and add tests for new lead flow
 Priority: P1

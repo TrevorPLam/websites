@@ -4,7 +4,7 @@ Document Type: Operations
 Canonical Status: Canonical
 Owner: Trevor
 Audience: Humans + agents
-Last Updated: 2026-01-08
+Last Updated: 2026-01-20
 
 ## Purpose
 A lightweight place to record the current state of the project, major decisions, and open questions.
@@ -18,6 +18,7 @@ This is not a task list; tasks belong in `TODO.md`.
     - Next.js 15.x lock-in: `@cloudflare/next-on-pages` has peer dependency conflicts with Next.js 16.
     - Edge Runtime limitations: `fs` usage required explicitly marking some routes as `force-static`.
 - Testing posture: Added E2E coverage for contact submission success, rate limiting, and search empty state; configured Vitest coverage thresholds.
+- Legal: Placeholder privacy and terms pages now exist for launch readiness.
 
 ## Decisions (append-only)
 Use this format:
