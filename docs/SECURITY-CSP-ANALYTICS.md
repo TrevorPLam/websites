@@ -2,11 +2,12 @@
 
 **Created:** 2026-01-09  
 **Related Task:** T-100 (Security cleanup after launch integrations)  
-**Status:** Documentation for future T-098 (Analytics integration)
+**Status:** GA4 integrated; CSP updated to allow GA4 domains
 
 ## Overview
 
-When analytics is integrated (T-098), the Content Security Policy (CSP) in `middleware.ts` will need to be updated to allow analytics provider scripts and connections.
+GA4 is integrated (T-098 completed). The Content Security Policy (CSP) in `middleware.ts` now allowlists
+Google Analytics script and connect domains.
 
 ## Current CSP Restrictions
 
@@ -18,10 +19,9 @@ The current CSP blocks external connections:
 
 ### Google Analytics 4 (GA4)
 
-If using GA4, add to CSP:
+GA4 CSP allowlist now includes:
 
 ```typescript
-// In middleware.ts, update CSP:
 "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
 "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com",
 ```
@@ -45,9 +45,9 @@ If using Plausible, add to CSP:
 
 ## Implementation Steps
 
-1. **Choose analytics provider** (T-064)
-2. **Install analytics** (T-098)
-3. **Update CSP in middleware.ts** with appropriate domains
+1. ✅ **Choose analytics provider** (T-064 complete)
+2. ✅ **Install analytics** (T-098 complete)
+3. ✅ **Update CSP in middleware.ts** with GA4 domains
 4. **Test CSP** - Check browser console for violations
 5. **Verify analytics tracking** works correctly
 
@@ -71,4 +71,4 @@ After updating CSP:
 
 - Current CSP: `middleware.ts` lines 160-173
 - Analytics implementation: `lib/analytics.ts`
-- Task tracking: T-098 (Install analytics provider)
+- Task tracking: T-098 (completed)

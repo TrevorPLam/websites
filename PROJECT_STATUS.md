@@ -19,6 +19,7 @@ This is not a task list; tasks belong in `TODO.md`.
     - Edge Runtime limitations: `fs` usage required explicitly marking some routes as `force-static`.
 - Testing posture: Added E2E coverage for contact submission success, rate limiting, and search empty state; configured Vitest coverage thresholds.
 - Legal: Placeholder privacy and terms pages now exist for launch readiness.
+- Analytics: GA4 script injection and contact form conversion tracking are wired (env-gated).
 
 ## Decisions (append-only)
 Use this format:

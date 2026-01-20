@@ -200,26 +200,6 @@ References:
 Dependencies: T-055, T-080
 Effort: M
 
-### T-098: Install analytics provider and track conversions
-Priority: P1
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Launch should have visibility into traffic and conversions
-Acceptance Criteria:
-- [ ] T-098.1: Install provider script and ensure it loads without console errors
-- [ ] T-098.2: Track contact form submissions as conversion events
-- [ ] T-098.3: Update CSP to allow provider (if needed)
-- [ ] T-098.4: Document the implementation in /docs/OBSERVABILITY.md
-References:
-- /lib/analytics.ts
-- /lib/env.ts
-- /docs/OBSERVABILITY.md
-Dependencies: T-064
-Effort: S
-
 ---
 
 ## 🟡 PHASE 2: Diamond Standard Quality (P2)

@@ -10,6 +10,26 @@ Move tasks here when Acceptance Criteria are met.
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
 
+### T-098: Install analytics provider and track conversions
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-20
+Context:
+- Launch should have visibility into traffic and conversions
+Acceptance Criteria:
+- [x] T-098.1: Install provider script and ensure it loads without console errors
+- [x] T-098.2: Track contact form submissions as conversion events
+- [x] T-098.3: Update CSP to allow provider (if needed)
+- [x] T-098.4: Document the implementation in /docs/OBSERVABILITY.md
+References:
+- /lib/analytics.ts
+- /lib/env.ts
+- /docs/OBSERVABILITY.md
+Dependencies: T-064
+Effort: S
+
 ### T-097: Wire distributed rate limiting with Upstash
 Priority: P1
 Type: QUALITY

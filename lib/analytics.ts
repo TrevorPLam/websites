@@ -10,10 +10,10 @@
  * **FILE PURPOSE**: Provider-agnostic analytics tracking. Wraps multiple
  * analytics providers (GA4, Plausible) with unified API.
  *
- * **CURRENT STATE**: T-064 pending - analytics provider not selected yet.
- * - NEXT_PUBLIC_ANALYTICS_ID not set → events log to console
- * - GA4 gtag present → sends to Google Analytics
- * - Plausible window.plausible present → sends to Plausible
+ * **CURRENT STATE**: GA4 selected (T-064 complete); Plausible optional.
+ * - NEXT_PUBLIC_ANALYTICS_ID set → GA4 gtag is loaded in app/layout.tsx
+ * - Missing NEXT_PUBLIC_ANALYTICS_ID → events log to console
+ * - Plausible window.plausible present → sends to Plausible (optional)
  *
  * **USAGE**:
  * ```typescript
@@ -34,7 +34,7 @@
  * - Dev mode always logs to console (via logInfo)
  *
  * **EVENT NAMING CONVENTION**:
- * - action: verb_noun (e.g., form_submit, cta_click, page_view)
+ * - action: verb_noun (e.g., contact_submit, cta_click, page_view)
  * - category: conversion | engagement | navigation | error
  * - label: optional context (e.g., button location, form name)
  *
@@ -43,7 +43,7 @@
  * - trackCTAClick(page, location) - CTA button tracking
  * - trackPageView() - manual page view (auto-handled by providers usually)
  *
- * **DEPENDS ON**: T-064 for provider selection
+ * **DEPENDS ON**: GA4 script in app/layout.tsx
  *
  * ═══════════════════════════════════════════════════════════════════════════════
  *
@@ -58,8 +58,8 @@
  * - Extensible for others
  *
  * **Configuration:**
- * - GA4: Set NEXT_PUBLIC_ANALYTICS_ID in env
- * - Plausible: Include script in layout
+ * - GA4: Set NEXT_PUBLIC_ANALYTICS_ID in env (script injected in layout)
+ * - Plausible: Include script in layout (optional)
  * - No config needed for dev logging
  *
  * **Usage:**
@@ -166,14 +166,14 @@ export function trackPageView(url: string) {
 }
 
 /**
- * Track form submission
+ * Track form submission (conversion on success)
  */
 export function trackFormSubmission(formName: string, success = true) {
   trackEvent({
-    action: 'form_submission',
-    category: 'form',
+    action: `${formName}_submit`,
+    category: success ? 'conversion' : 'error',
     label: formName,
-    value: success ? undefined : 0,
+    value: success ? 1 : 0,
   })
 }
 

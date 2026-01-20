@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Playwright coverage to verify legal pages render and footer links resolve
 - Added unit tests for Hero, ValueProps, ServicesOverview, and SocialProof sections
 - Added Article and Service structured data on blog posts and service pages for richer SEO signals
+- Added GA4 analytics script injection and conversion tracking for contact form submissions
 
 ### Security
 - Added hashed IP + email rate limiting for contact form submissions
@@ -31,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documented Vitest coverage threshold expectations in the testing strategy
 - Consolidated Cloudflare Pages deployment guidance, added mobile smoke test checklist, and archived legacy roadmaps
 - Documented rate limiting behavior differences between development and production environments
+- Documented GA4 analytics configuration, conversion events, and CSP allowlists
 
 ### Changed
 - Removed deprecated `api` and `sentry` keys from `next.config.mjs`

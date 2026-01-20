@@ -1,6 +1,6 @@
 # OBSERVABILITY.md
 
-Last Updated: 2026-01-02
+Last Updated: 2026-01-20
 
 Applies to repos that run services (API, worker, cron, etc.). For libraries/CLI, keep logging conventions only.
 
@@ -21,6 +21,19 @@ Applies to repos that run services (API, worker, cron, etc.). For libraries/CLI,
 - Fail fast on configuration errors.
 - Use consistent error codes/messages.
 - Add alerting later; start with good logs now.
+
+## Analytics (GA4)
+
+GA4 is the selected analytics provider (see T-064). Tracking is enabled when `NEXT_PUBLIC_ANALYTICS_ID`
+is set in the environment and the GA4 script is injected in `app/layout.tsx`.
+
+**Tracked conversions/events:**
+- `contact_submit` (conversion) — emitted by `trackFormSubmission('contact', true)` on successful contact form submission.
+- `contact_submit` (error) — emitted by `trackFormSubmission('contact', false)` when the submit fails.
+
+**Implementation notes:**
+- Conversion tracking is wired in `components/ContactForm.tsx` via `lib/analytics.ts`.
+- GA4 network calls require CSP allowlisting for `googletagmanager.com` + `google-analytics.com` in `middleware.ts`.
 
 ## Performance baselines (Lighthouse)
 

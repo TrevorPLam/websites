@@ -28,5 +28,9 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',
+    env: {
+      ...process.env,
+      NEXT_PUBLIC_ANALYTICS_ID: 'G-TEST-LOCAL',
+    },
   },
 })

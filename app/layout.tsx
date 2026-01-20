@@ -42,6 +42,7 @@
  *
  * **AI ITERATION HINTS**:
  * - Adding global script? Add to <head> section
+ * - GA4 script is conditionally injected when NEXT_PUBLIC_ANALYTICS_ID is set
  * - Changing fonts? Update font imports and CSS variables
  * - Changing nav links? Edit Navigation.tsx navLinks array
  * - Adding global provider? Wrap in Providers component
@@ -107,6 +108,7 @@
  */
 
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { IBM_Plex_Sans, Inter } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
@@ -114,7 +116,7 @@ import Footer from '@/components/Footer'
 import SkipToContent from '@/components/SkipToContent'
 import Providers from '@/app/providers'
 import InstallPrompt from '@/components/InstallPrompt'
-import { getPublicBaseUrl } from '@/lib/env.public'
+import { getPublicBaseUrl, validatedPublicEnv } from '@/lib/env.public'
 import { getSearchIndex } from '@/lib/search'
 
 // Font configuration with CSS variables
@@ -127,6 +129,7 @@ const plexSans = IBM_Plex_Sans({
 })
 
 const siteUrl = getPublicBaseUrl()
+const analyticsId = validatedPublicEnv.NEXT_PUBLIC_ANALYTICS_ID
 const ogImageUrl = new URL('/api/og?title=Your%20Dedicated%20Marketer', siteUrl).toString()
 
 /**
@@ -213,6 +216,20 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+
+        {analyticsId ? (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`} strategy="afterInteractive" />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${analyticsId}');
+              `}
+            </Script>
+          </>
+        ) : null}
 
         <script
           type="application/ld+json"

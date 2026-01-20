@@ -31,11 +31,12 @@
  * - Production removes 'unsafe-eval' for better security
  * - Future: nonce-based CSP (requires SSR changes)
  *
- * **AI ITERATION HINTS**:
- * - Adding external script? Add domain to script-src
- * - Adding external image? Add domain to img-src
- * - Adding external API? Add domain to connect-src
- * - Test CSP changes in browser console for violations
+   * **AI ITERATION HINTS**:
+   * - GA4 is enabled; keep Google Analytics domains in script-src/connect-src
+   * - Adding external script? Add domain to script-src
+   * - Adding external image? Add domain to img-src
+   * - Adding external API? Add domain to connect-src
+   * - Test CSP changes in browser console for violations
  *
  * **ENV DIFFERENCES**:
  * | Header | Dev | Prod |
@@ -162,19 +163,13 @@ export function middleware(request: NextRequest) {
     [
       "default-src 'self'",
       process.env.NODE_ENV === 'development'
-        ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'" // Next.js runtime + dev tooling in development
-        : "script-src 'self' 'unsafe-inline'", // Avoid unsafe-eval in production
-      // NOTE: When analytics is integrated (T-098), add:
-      // - GA4: 'https://www.googletagmanager.com'
-      // - Plausible: 'https://plausible.io'
+        ? "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com" // Next.js runtime + dev tooling in development
+        : "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com", // Avoid unsafe-eval in production
       "style-src 'self' 'unsafe-inline'", // Tailwind injects styles at runtime
       "img-src 'self' data: https:", // Allow same-origin, data URIs, and HTTPS images
       // TODO: Tighten to specific domains when external image sources are identified
       "font-src 'self' data:",
-      "connect-src 'self'", // Block external data exfiltration by default
-      // NOTE: When analytics is integrated (T-098), add:
-      // - GA4: 'https://www.google-analytics.com' 'https://www.googletagmanager.com'
-      // - Plausible: 'https://plausible.io'
+      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com", // Allow GA4 data collection
       "frame-ancestors 'none'", // Disallow clickjacking via iframes
     ].join('; ')
   )

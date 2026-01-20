@@ -44,6 +44,7 @@
  * - lib/contact-form-schema.ts — Zod validation schema
  * - components/ui/Input, Select, Textarea, Button — form primitives
  * - lib/sentry-client.ts — Sentry context on successful submit
+ * - lib/analytics.ts — conversion tracking for submissions
  *
  * **VALIDATION MODES**:
  * - mode: 'onBlur' — validates when field loses focus
@@ -51,7 +52,6 @@
  * - delayError: 500 — debounces error display for smoother UX
  *
  * **POTENTIAL ISSUES**:
- * - [ ] No analytics tracking on form submission (T-064)
  * - [ ] Success message disappears on page navigation
  *
  * ═══════════════════════════════════════════════════════════════════════════════
@@ -102,6 +102,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { submitContactForm } from '@/lib/actions'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
+import { trackFormSubmission } from '@/lib/analytics'
 import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
 import Textarea from '@/components/ui/Textarea'
@@ -143,6 +144,7 @@ export default function ContactForm() {
       )
 
       if (result.success) {
+        trackFormSubmission('contact', true)
         await setSentryUser({ email: data.email, name: data.name })
         await setSentryContext('contact_form', {
           marketingSpend: data.marketingSpend,
@@ -154,12 +156,14 @@ export default function ContactForm() {
         })
         reset()
       } else {
+        trackFormSubmission('contact', false)
         setSubmitStatus({
           type: 'error',
           message: result.message,
         })
       }
     } catch {
+      trackFormSubmission('contact', false)
       setSubmitStatus({
         type: 'error',
         message: 'Something went wrong. Please try again.',
