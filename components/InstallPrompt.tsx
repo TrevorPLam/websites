@@ -14,6 +14,9 @@ export default function InstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false)
 
   useEffect(() => {
+    // SSR Safety: Check if window is available (Issue #026 fixed)
+    if (typeof window === 'undefined') return
+    
     // Check if user has already dismissed the prompt
     const dismissed = localStorage.getItem('pwa-install-dismissed')
     const installed = localStorage.getItem('pwa-installed')
@@ -29,9 +32,12 @@ export default function InstallPrompt() {
       setDeferredPrompt(e as BeforeInstallPromptEvent)
 
       // Show the install prompt after a delay (to not be too intrusive)
-      setTimeout(() => {
+      const timerId = setTimeout(() => {
         setShowPrompt(true)
       }, 3000)
+      
+      // Memory Leak Fix: Clean up timeout (Issue #025 fixed)
+      return () => clearTimeout(timerId)
     }
 
     window.addEventListener('beforeinstallprompt', handler)
@@ -49,6 +55,9 @@ export default function InstallPrompt() {
 
   const handleInstall = async () => {
     if (!deferredPrompt) return
+    
+    // SSR Safety check
+    if (typeof window === 'undefined') return
 
     // Show the install prompt
     await deferredPrompt.prompt()
@@ -68,6 +77,9 @@ export default function InstallPrompt() {
   }
 
   const handleDismiss = () => {
+    // SSR Safety check
+    if (typeof window === 'undefined') return
+    
     localStorage.setItem('pwa-install-dismissed', 'true')
     setShowPrompt(false)
   }

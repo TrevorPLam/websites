@@ -46,10 +46,10 @@ export default function ServicesOverview() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {services.map((service, index) => {
+          {services.map((service) => {
             const Icon = service.icon
             return (
-              <Card key={index} variant="service">
+              <Card key={service.title} variant="service">
                 <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center mb-4">
                   <Icon className="w-6 h-6 text-teal" />
                 </div>
