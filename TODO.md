@@ -559,25 +559,6 @@ References:
 Dependencies: None
 Effort: XS
 
-### T-129: Support relative URLs in sanitizeUrl
-Priority: P2
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit BUG-013 notes sanitizeUrl rejects relative URLs.
-- Internal paths should be supported safely.
-Acceptance Criteria:
-- [ ] T-129.1: Allow safe relative URLs in sanitizeUrl.
-- [ ] T-129.2: Add tests for relative and invalid URL cases.
-References:
-- /lib/sanitize.ts
-- /__tests__/lib/sanitize.test.ts
-- /WRONG.md
-Dependencies: None
-Effort: XS
-
 ### T-130: Fix blog structured data image references
 Priority: P2
 Type: BUG
@@ -634,26 +615,7 @@ References:
 Dependencies: T-118
 Effort: S
 
-### T-133: Replace magic numbers in sanitize utilities
-Priority: P2
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit flags magic numbers in sanitize utilities.
-- Named constants improve clarity and auditability.
-Acceptance Criteria:
-- [ ] T-133.1: Replace magic numbers in sanitize helpers with named constants.
-- [ ] T-133.2: Ensure tests still cover length limits and truncation behavior.
-References:
-- /lib/sanitize.ts
-- /__tests__/lib/sanitize.test.ts
-- /WRONG.md
-Dependencies: None
-Effort: XS
-
-_Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-112._
+_Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-112, T-129, T-133._
 _Completed (moved to TODOCOMPLETED.md on 2026-01-20): T-108, T-109._
 
 

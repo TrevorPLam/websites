@@ -1231,3 +1231,41 @@ References:
 - /docs/OBSERVABILITY.md
 Dependencies: None
 Effort: S
+
+### T-129: Support relative URLs in sanitizeUrl
+Priority: P2
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit BUG-013 notes sanitizeUrl rejects relative URLs.
+- Internal paths should be supported safely.
+Acceptance Criteria:
+- [x] T-129.1: Allow safe relative URLs in sanitizeUrl.
+- [x] T-129.2: Add tests for relative and invalid URL cases.
+References:
+- /lib/sanitize.ts
+- /__tests__/lib/sanitize.test.ts
+- /WRONG.md
+Dependencies: None
+Effort: XS
+
+### T-133: Replace magic numbers in sanitize utilities
+Priority: P2
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit flags magic numbers in sanitize utilities.
+- Named constants improve clarity and auditability.
+Acceptance Criteria:
+- [x] T-133.1: Replace magic numbers in sanitize helpers with named constants.
+- [x] T-133.2: Ensure tests still cover length limits and truncation behavior.
+References:
+- /lib/sanitize.ts
+- /__tests__/lib/sanitize.test.ts
+- /WRONG.md
+Dependencies: None
+Effort: XS

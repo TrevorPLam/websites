@@ -122,6 +122,11 @@ export function escapeHtml(text: string): string {
   return text.replace(/[&<>"'/]/g, (char) => htmlEscapeMap[char] || char)
 }
 
+const EMAIL_SUBJECT_MAX_LENGTH = 200
+const EMAIL_ADDRESS_MAX_LENGTH = 254
+const NAME_MAX_LENGTH = 100
+const RELATIVE_URL_PATTERN = /^(\/(?!\/)|\.{1,2}\/|[?#])/
+
 /**
  * Sanitize text for use in email subject lines to prevent header injection attacks.
  * 
@@ -162,7 +167,7 @@ export function sanitizeEmailSubject(subject: string): string {
     .replace(/[\r\n\t]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, 200) // Limit length
+    .slice(0, EMAIL_SUBJECT_MAX_LENGTH) // Named constant avoids magic numbers.
 }
 
 /**
@@ -232,7 +237,7 @@ export function textToHtmlParagraphs(text: string): string {
  * @returns Normalized email address
  */
 export function sanitizeEmail(email: string): string {
-  return email.trim().toLowerCase().slice(0, 254) // Max email length per RFC
+  return email.trim().toLowerCase().slice(0, EMAIL_ADDRESS_MAX_LENGTH) // Max email length per RFC
 }
 
 /**
@@ -263,7 +268,7 @@ export function sanitizeEmail(email: string): string {
  * @returns Sanitized name (safe for display)
  */
 export function sanitizeName(name: string): string {
-  return escapeHtml(name.trim().slice(0, 100))
+  return escapeHtml(name.trim().slice(0, NAME_MAX_LENGTH))
 }
 
 /**
@@ -289,6 +294,16 @@ export function sanitizeUrl(url: string): string {
   const trimmed = url.trim()
   if (!trimmed) {
     return ''
+  }
+
+  if (/\s/.test(trimmed)) {
+    // Reject whitespace to avoid ambiguous parsing and header-style injections.
+    return ''
+  }
+
+  if (RELATIVE_URL_PATTERN.test(trimmed)) {
+    // Relative URLs are safe for internal navigation; reject protocol-relative via pattern.
+    return trimmed
   }
 
   try {

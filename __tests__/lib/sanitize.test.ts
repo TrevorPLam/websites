@@ -151,9 +151,31 @@ describe('sanitize utilities', () => {
       expect(sanitizeUrl(input)).toBe('https://example.com/')
     })
 
+    it('should allow relative URLs', () => {
+      // Relative paths are valid for internal navigation and should remain intact.
+      expect(sanitizeUrl('/blog/post')).toBe('/blog/post')
+      expect(sanitizeUrl('./pricing')).toBe('./pricing')
+    })
+
+    it('should allow query or hash-only references', () => {
+      // Query/hash-only values are relative to the current page and safe to keep.
+      expect(sanitizeUrl('?ref=cta')).toBe('?ref=cta')
+      expect(sanitizeUrl('#contact')).toBe('#contact')
+    })
+
+    it('should reject protocol-relative URLs', () => {
+      // Protocol-relative links could escape the site context; block them explicitly.
+      expect(sanitizeUrl('//example.com/unsafe')).toBe('')
+    })
+
     it('should reject javascript URLs', () => {
       const input = 'javascript:alert(1)'
       expect(sanitizeUrl(input)).toBe('')
+    })
+
+    it('should return empty for empty input', () => {
+      // Empty input should fail closed to avoid treating it as a valid link.
+      expect(sanitizeUrl('')).toBe('')
     })
 
     it('should reject invalid URLs', () => {

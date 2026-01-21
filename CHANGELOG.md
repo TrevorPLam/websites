@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restored in-memory rate limiting logic and JSDoc formatting in `lib/actions.ts`
 - Added contact form error boundary fallback and accessibility improvements for decorative icons
 - Replaced ErrorBoundary reload recovery with retry-limited retry and safe navigation escape hatch
+- Allowed safe relative URLs in `sanitizeUrl` while blocking protocol-relative links and replaced sanitize length magic numbers with named constants
 
 ### Documentation
 - Expanded middleware security header docs and environment helper documentation
