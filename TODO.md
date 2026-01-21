@@ -541,24 +541,6 @@ References:
 Dependencies: None
 Effort: S
 
-### T-128: Guard analytics gtag usage with type checks
-Priority: P2
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit BUG-012 flags unsafe access of `window.gtag`.
-- Analytics should fail safely without runtime errors.
-Acceptance Criteria:
-- [ ] T-128.1: Add safe type guards before calling gtag.
-- [ ] T-128.2: Add tests covering missing gtag scenarios.
-References:
-- /lib/analytics.ts
-- /WRONG.md
-Dependencies: None
-Effort: XS
-
 ### T-130: Fix blog structured data image references
 Priority: P2
 Type: BUG
@@ -615,7 +597,7 @@ References:
 Dependencies: T-118
 Effort: S
 
-_Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-112, T-129, T-133._
+_Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-112, T-128, T-129, T-133._
 _Completed (moved to TODOCOMPLETED.md on 2026-01-20): T-108, T-109._
 
 
@@ -716,42 +698,6 @@ References:
 - /components/CTASection.tsx
 - /WRONG.md
 Dependencies: None
-Effort: XS
-
-### T-139: Remove unused analytics tracking helpers
-Priority: P3
-Type: CHORE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit DEAD-002 lists analytics helpers that are never called.
-- Removing dead helpers reduces surface area.
-Acceptance Criteria:
-- [ ] T-139.1: Remove `trackButtonClick`, `trackPageView`, `trackScrollDepth`, `trackTimeOnPage`, `trackOutboundLink`, and `trackDownload`.
-- [ ] T-139.2: Confirm no remaining references in tests or docs.
-References:
-- /lib/analytics.ts
-- /WRONG.md
-Dependencies: None
-Effort: XS
-
-### T-140: Remove unused parameters in analytics helpers
-Priority: P3
-Type: CHORE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit DEAD-003 flags unused parameters in analytics helpers.
-- Removing unused params clarifies API intent.
-Acceptance Criteria:
-- [ ] T-140.1: Remove unused `_location` and `_destination` parameters.
-- [ ] T-140.2: Update call sites and tests if any exist.
-References:
-- /lib/analytics.ts
-- /WRONG.md
-Dependencies: T-139
 Effort: XS
 
 ### T-141: Remove unused getBaseUrl export
@@ -864,3 +810,5 @@ References:
 - /WRONG.md
 Dependencies: None
 Effort: XS
+
+_Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-139, T-140._

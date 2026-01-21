@@ -1,12 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   trackEvent,
-  trackPageView,
   trackFormSubmission,
   trackCTAClick,
-  trackButtonClick,
-  trackOutboundLink,
-  trackDownload,
 } from '@/lib/analytics'
 import { setAnalyticsConsent } from '@/lib/analytics-consent'
 
@@ -54,6 +50,7 @@ describe('Analytics', () => {
 
   describe('trackEvent', () => {
     it('test_calls_gtag_with_correct_parameters', () => {
+      // Happy path: valid gtag should receive the event payload.
       trackEvent({
         action: 'click',
         category: 'button',
@@ -69,6 +66,7 @@ describe('Analytics', () => {
     })
 
     it('test_calls_plausible_with_correct_parameters', () => {
+      // Happy path: plausible event should match unified payload structure.
       trackEvent({
         action: 'click',
         category: 'button',
@@ -85,7 +83,23 @@ describe('Analytics', () => {
       })
     })
 
+    it('test_handles_empty_label', () => {
+      // Empty input: allow empty labels without throwing or mutating payload.
+      trackEvent({
+        action: 'click',
+        category: 'button',
+        label: '',
+      })
+
+      expect(gtagMock).toHaveBeenCalledWith('event', 'click', {
+        event_category: 'button',
+        event_label: '',
+        value: undefined,
+      })
+    })
+
     it('test_skips_tracking_in_development_mode', () => {
+      // Edge case: dev mode should avoid external tracking and only log.
       process.env.NODE_ENV = 'development'
       const consoleSpy = vi.spyOn(console, 'info')
 
@@ -102,6 +116,7 @@ describe('Analytics', () => {
     })
 
     it('test_skips_tracking_when_consent_denied', () => {
+      // Error path: missing consent should short-circuit provider calls.
       setAnalyticsConsent('denied')
 
       trackEvent({
@@ -112,36 +127,29 @@ describe('Analytics', () => {
       expect(gtagMock).not.toHaveBeenCalled()
       expect(plausibleMock).not.toHaveBeenCalled()
     })
-  })
 
-  describe('trackPageView', () => {
-    it('test_calls_gtag_config_with_page_path', () => {
-      trackPageView('/about')
+    it('test_handles_non_function_gtag', () => {
+      // Error path: misconfigured gtag should not throw or block plausible.
+      Object.defineProperty(window, 'gtag', {
+        value: 'not-a-function',
+        writable: true,
+        configurable: true,
+      })
 
-      expect(gtagMock).toHaveBeenCalledWith(
-        'config',
-        process.env.NEXT_PUBLIC_ANALYTICS_ID,
-        {
-          page_path: '/about',
-        }
-      )
-    })
+      expect(() => {
+        trackEvent({
+          action: 'click',
+          category: 'button',
+        })
+      }).not.toThrow()
 
-    it('test_skips_pageview_tracking_in_development', () => {
-      process.env.NODE_ENV = 'development'
-      const consoleSpy = vi.spyOn(console, 'info')
-
-      trackPageView('/about')
-
-      expect(gtagMock).not.toHaveBeenCalled()
-      expect(consoleSpy).toHaveBeenCalled()
-
-      consoleSpy.mockRestore()
+      expect(plausibleMock).toHaveBeenCalled()
     })
   })
 
   describe('trackFormSubmission', () => {
     it('test_tracks_form_submission_conversion', () => {
+      // Happy path: conversion should map to conversion category + value.
       trackFormSubmission('contact')
 
       expect(gtagMock).toHaveBeenCalledWith('event', 'contact_submit', {
@@ -154,7 +162,8 @@ describe('Analytics', () => {
 
   describe('trackCTAClick', () => {
     it('test_tracks_cta_click_event', () => {
-      trackCTAClick('Get Started', '/contact')
+      // Happy path: CTA click should emit consistent engagement event.
+      trackCTAClick('Get Started')
 
       expect(gtagMock).toHaveBeenCalledWith('event', 'cta_click', {
         event_category: 'engagement',
@@ -164,44 +173,9 @@ describe('Analytics', () => {
     })
   })
 
-  describe('trackButtonClick', () => {
-    it('test_tracks_button_click_event', () => {
-      trackButtonClick('Submit', '/form')
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'button_click', {
-        event_category: 'engagement',
-        event_label: 'Submit',
-        value: undefined,
-      })
-    })
-  })
-
-  describe('trackOutboundLink', () => {
-    it('test_tracks_outbound_link_click', () => {
-      trackOutboundLink('https://example.com')
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'outbound_link', {
-        event_category: 'navigation',
-        event_label: 'https://example.com',
-        value: undefined,
-      })
-    })
-  })
-
-  describe('trackDownload', () => {
-    it('test_tracks_file_download', () => {
-      trackDownload('guide.pdf')
-
-      expect(gtagMock).toHaveBeenCalledWith('event', 'download', {
-        event_category: 'engagement',
-        event_label: 'guide.pdf',
-        value: undefined,
-      })
-    })
-  })
-
   describe('Error handling', () => {
     it('test_handles_missing_gtag', () => {
+      // Error path: missing gtag should be safe when provider script fails to load.
       // @ts-ignore
       delete window.gtag
 
