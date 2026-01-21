@@ -4,7 +4,7 @@ Document Type: Operations
 Canonical Status: Canonical
 Owner: Trevor
 Audience: Humans + agents
-Last Updated: 2026-01-20
+Last Updated: 2026-01-21
 
 ## Purpose
 A lightweight place to record the current state of the project, major decisions, and open questions.
@@ -21,6 +21,7 @@ This is not a task list; tasks belong in `TODO.md`.
 - Testing posture (open): Lighthouse mobile baselines remain blocked locally because npm registry access returns 403 in this environment.
 - Legal: Placeholder privacy and terms pages now exist for launch readiness.
 - Analytics: GA4 script injection and contact form conversion tracking are wired (env + consent gated).
+- Audit intake: WRONG.md audit issues have been translated into actionable TODO tasks with priority mapping (critical → P0, major → P1, medium → P2, minor/dead-code → P3).
 
 ## Decisions (append-only)
 Use this format:

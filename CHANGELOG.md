@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documented correlation ID propagation and JSON log fields for observability
 - Documented server tracing spans and bundle size regression checks in observability guides
 - Documented CSP nonce flow for analytics scripts and structured data
+- Added audit-derived tasks from WRONG.md with priority assessment notes in TODO.md
 
 ### Changed
 - Removed deprecated `api` and `sentry` keys from `next.config.mjs`
