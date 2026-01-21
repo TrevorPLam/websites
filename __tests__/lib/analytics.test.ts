@@ -190,7 +190,7 @@ describe('Analytics', () => {
 
   describe('trackDownload', () => {
     it('test_tracks_file_download', () => {
-      trackDownload('guide.pdf', 'pdf')
+      trackDownload('guide.pdf')
 
       expect(gtagMock).toHaveBeenCalledWith('event', 'download', {
         event_category: 'engagement',
