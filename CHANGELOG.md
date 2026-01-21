@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced ErrorBoundary reload recovery with retry-limited retry and safe navigation escape hatch
 - Allowed safe relative URLs in `sanitizeUrl` while blocking protocol-relative links and replaced sanitize length magic numbers with named constants
 - Guarded GA4 tracking against non-function `window.gtag` values to prevent runtime errors
+- Added a CSP nonce fallback in the root layout to avoid crashes when the nonce header is missing
 
 ### Documentation
 - Expanded middleware security header docs and environment helper documentation
@@ -49,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documented correlation ID propagation and JSON log fields for observability
 - Documented server tracing spans and bundle size regression checks in observability guides
 - Documented CSP nonce flow for analytics scripts and structured data
+- Documented CSP nonce fallback behavior for missing nonce headers
 - Added audit-derived tasks from WRONG.md with priority assessment notes in TODO.md
 - Noted `vi` import requirements in the test checklist
 

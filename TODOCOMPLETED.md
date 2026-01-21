@@ -10,6 +10,27 @@ Move tasks here when Acceptance Criteria are met.
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
 
+### T-114: Add CSP nonce fallback in layout
+Priority: P0
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit BUG-002 notes the app crashes if the CSP nonce header is missing.
+- Middleware failures should not hard-crash the app.
+Acceptance Criteria:
+- [x] T-114.1: Provide a fallback nonce when the header is missing, with a logged warning.
+- [x] T-114.2: Add coverage to ensure missing nonce does not crash the app.
+- [x] T-114.3: Document the fallback behavior in deployment or security docs.
+References:
+- /app/layout.tsx
+- /middleware.ts
+- /docs/SECURITY-CSP-ANALYTICS.md
+- /__tests__/app/layout.test.tsx
+Dependencies: None
+Effort: S
+
 ### T-141: Remove unused getBaseUrl export
 Priority: P3
 Type: CHORE
