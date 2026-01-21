@@ -201,6 +201,7 @@ npm run test:coverage
 - [ ] Error states tested
 - [ ] Accessibility verified (for components)
 - [ ] Mocks cleaned up after test
+- [ ] When using `vi.*`, include `vi` in the Vitest import to avoid runtime reference errors
 
 ### Security Tests
 For security-critical code, test:
