@@ -39,7 +39,6 @@ components/
 | `ServiceDetailLayout.tsx` | Template for service pages | Server |
 | `BlogPostContent.tsx` | Blog post renderer | Server |
 | `Breadcrumbs.tsx` | Navigation breadcrumbs | Client |
-| `CTASection.tsx` | Call-to-action blocks | Server |
 | `FinalCTA.tsx` | Bottom-of-page CTA | Server |
 | `SocialProof.tsx` | Testimonials section | Server |
 | `ValueProps.tsx` | Value propositions grid | Server |

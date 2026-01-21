@@ -167,6 +167,25 @@ References:
 Dependencies: None
 Effort: XS
 
+### T-138: Remove unused CTASection component
+Priority: P3
+Type: CHORE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit DEAD-001 marks CTASection as unused.
+- Removing unused components reduces maintenance surface area.
+Acceptance Criteria:
+- [x] T-138.1: Confirm CTASection is unused in app/components/tests.
+- [x] T-138.2: Remove CTASection and update any references if found.
+- [x] T-138.3: Ensure tests and builds still pass.
+References:
+- /components/CTASection.tsx
+- /WRONG.md
+Dependencies: None
+Effort: XS
+
 ### T-113: Add analytics consent gating (privacy compliance)
 Priority: P2
 Type: FEATURE
