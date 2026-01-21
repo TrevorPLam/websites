@@ -60,8 +60,11 @@ function ConsentPrompt({
       className="fixed bottom-4 left-4 right-4 z-50 rounded-xl border border-slate-200 bg-white p-4 shadow-lg md:left-auto md:right-6 md:max-w-md"
       role="dialog"
       aria-live="polite"
+      aria-labelledby="analytics-consent-heading"
     >
-      <h2 className="text-sm font-semibold text-charcoal">Analytics consent</h2>
+      <h2 id="analytics-consent-heading" className="text-sm font-semibold text-charcoal">
+        Analytics consent
+      </h2>
       <p className="mt-2 text-xs text-slate-600">
         We use analytics cookies to understand site usage and improve the experience. You can accept or decline.
       </p>
