@@ -342,6 +342,9 @@ function buildLeadSpanAttributes(leadId: string, emailHash: string): SpanAttribu
 }
 
 const HUBSPOT_API_BASE_URL = 'https://api.hubapi.com'
+const HUBSPOT_MAX_RETRIES = 3
+const HUBSPOT_RETRY_BASE_DELAY_MS = 250
+const HUBSPOT_RETRY_MAX_DELAY_MS = 2000
 
 type SupabaseLeadRow = {
   id: string
@@ -401,6 +404,17 @@ function getHubSpotHeaders() {
   }
 }
 
+function getHubSpotHeadersWithIdempotency(idempotencyKey: string | undefined) {
+  if (!idempotencyKey) {
+    return getHubSpotHeaders()
+  }
+
+  return {
+    ...getHubSpotHeaders(),
+    'Idempotency-Key': idempotencyKey,
+  }
+}
+
 function buildHubSpotSearchPayload(email: string) {
   return {
     filterGroups: [
@@ -442,6 +456,10 @@ async function searchHubSpotContact(email: string, emailHash: string): Promise<s
   return searchData.results[0]?.id
 }
 
+function buildHubSpotIdempotencyKey(leadId: string, emailHash: string) {
+  return hashSpanValue(`${leadId}:${emailHash}`)
+}
+
 function getHubSpotUpsertTarget(existingId?: string): HubSpotUpsertTarget {
   if (existingId) {
     return {
@@ -454,6 +472,22 @@ function getHubSpotUpsertTarget(existingId?: string): HubSpotUpsertTarget {
     url: `${HUBSPOT_API_BASE_URL}/crm/v3/objects/contacts`,
     method: 'POST',
   }
+}
+
+function getRetryDelayMs(attempt: number) {
+  return Math.min(HUBSPOT_RETRY_BASE_DELAY_MS * 2 ** (attempt - 1), HUBSPOT_RETRY_MAX_DELAY_MS)
+}
+
+function normalizeError(error: unknown) {
+  if (error instanceof Error) {
+    return error
+  }
+
+  return new Error('Unknown HubSpot sync error')
+}
+
+function waitForRetry(delayMs: number) {
+  return new Promise((resolve) => setTimeout(resolve, delayMs))
 }
 
 async function insertLead(payload: Record<string, unknown>): Promise<SupabaseLeadRow> {
@@ -555,6 +589,8 @@ async function insertLeadWithSpan(
         is_suspicious: isSuspicious,
         suspicion_reason: isSuspicious ? 'rate_limit' : null,
         hubspot_sync_status: 'pending',
+        hubspot_retry_count: 0,
+        hubspot_idempotency_key: null,
       }),
   )
 
@@ -600,30 +636,66 @@ async function updateLeadWithSpan(leadId: string, emailHash: string, updates: Re
 async function syncHubSpotLead(leadId: string, sanitized: SanitizedContactData) {
   const hubspotProperties = buildHubSpotProperties(sanitized)
   const syncAttemptedAt = new Date().toISOString()
+  const idempotencyKey = buildHubSpotIdempotencyKey(leadId, sanitized.emailHash)
+  const retryResult = await retryHubSpotUpsert(hubspotProperties, idempotencyKey, sanitized.emailHash)
 
-  try {
-    const contact = await upsertHubSpotContact(hubspotProperties)
-    await updateLeadWithSpan(leadId, sanitized.emailHash, {
-      hubspot_contact_id: contact.id,
-      hubspot_sync_status: 'synced',
-      hubspot_last_sync_attempt: syncAttemptedAt,
-    })
-    logInfo('HubSpot contact synced', { leadId, emailHash: sanitized.emailHash })
-  } catch (syncError) {
-    logError('HubSpot sync failed', syncError)
+  if (retryResult.contact) {
     try {
       await updateLeadWithSpan(leadId, sanitized.emailHash, {
-        hubspot_sync_status: 'needs_sync',
+        hubspot_contact_id: retryResult.contact.id,
+        hubspot_sync_status: 'synced',
         hubspot_last_sync_attempt: syncAttemptedAt,
+        hubspot_retry_count: retryResult.attempts,
+        hubspot_idempotency_key: idempotencyKey,
       })
+      logInfo('HubSpot contact synced', { leadId, emailHash: sanitized.emailHash })
     } catch (updateError) {
       logError('Failed to update HubSpot sync status', updateError)
     }
+    return
+  }
+
+  logError('HubSpot sync failed', normalizeError(retryResult.error))
+  try {
+    await updateLeadWithSpan(leadId, sanitized.emailHash, {
+      hubspot_sync_status: 'needs_sync',
+      hubspot_last_sync_attempt: syncAttemptedAt,
+      hubspot_retry_count: retryResult.attempts,
+      hubspot_idempotency_key: idempotencyKey,
+    })
+  } catch (updateError) {
+    logError('Failed to update HubSpot sync status', updateError)
   }
 }
 
-async function upsertHubSpotContact(properties: Record<string, string>) {
-  const emailHash = hashEmail(properties.email)
+async function retryHubSpotUpsert(
+  properties: Record<string, string>,
+  idempotencyKey: string,
+  emailHash: string,
+) {
+  let lastError: Error | undefined
+
+  for (let attempt = 1; attempt <= HUBSPOT_MAX_RETRIES; attempt++) {
+    try {
+      const contact = await upsertHubSpotContact(properties, idempotencyKey, emailHash)
+      return { contact, attempts: attempt }
+    } catch (error) {
+      lastError = normalizeError(error)
+      if (attempt < HUBSPOT_MAX_RETRIES) {
+        logWarn('HubSpot sync retry scheduled', { attempt, emailHash })
+        await waitForRetry(getRetryDelayMs(attempt))
+      }
+    }
+  }
+
+  return { attempts: HUBSPOT_MAX_RETRIES, error: lastError }
+}
+
+async function upsertHubSpotContact(
+  properties: Record<string, string>,
+  idempotencyKey: string,
+  emailHash: string,
+) {
   const existingId = await searchHubSpotContact(properties.email, emailHash)
   const { url, method } = getHubSpotUpsertTarget(existingId)
 
@@ -639,7 +711,7 @@ async function upsertHubSpotContact(properties: Record<string, string>) {
     () =>
       fetch(url, {
         method,
-        headers: getHubSpotHeaders(),
+        headers: getHubSpotHeadersWithIdempotency(idempotencyKey),
         body: JSON.stringify({ properties }),
       }),
   )

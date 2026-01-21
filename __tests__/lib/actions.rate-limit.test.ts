@@ -16,6 +16,15 @@ vi.mock('next/headers', () => ({
       if (key === 'x-forwarded-for') {
         return currentIp
       }
+      if (key === 'origin') {
+        return 'https://example.com'
+      }
+      if (key === 'referer') {
+        return 'https://example.com/contact'
+      }
+      if (key === 'host') {
+        return 'example.com'
+      }
       return null
     },
   }),

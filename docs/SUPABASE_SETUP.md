@@ -1,7 +1,7 @@
 # Supabase Setup Guide
 
 **Task**: T-054
-**Date**: 2026-01-11
+**Date**: 2026-01-21
 **Status**: ✅ Complete
 
 ## Project Details
@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS leads (
   hubspot_contact_id TEXT,
   hubspot_sync_status TEXT DEFAULT 'pending',
   hubspot_last_sync_attempt TIMESTAMPTZ,
+  hubspot_retry_count INTEGER DEFAULT 0,
+  hubspot_idempotency_key TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -66,6 +68,8 @@ FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 | `hubspot_contact_id` | TEXT | HubSpot CRM contact ID after sync |
 | `hubspot_sync_status` | TEXT | Status: pending, synced, failed, needs_sync |
 | `hubspot_last_sync_attempt` | TIMESTAMPTZ | Last HubSpot sync attempt timestamp |
+| `hubspot_retry_count` | INTEGER | Number of HubSpot sync attempts for the lead |
+| `hubspot_idempotency_key` | TEXT | Idempotency key reused across HubSpot retry attempts |
 | `created_at` | TIMESTAMPTZ | Record creation timestamp |
 | `updated_at` | TIMESTAMPTZ | Record update timestamp (auto-updated) |
 

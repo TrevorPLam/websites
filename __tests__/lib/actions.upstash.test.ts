@@ -35,7 +35,9 @@ vi.mock('@/lib/env', () => ({
     HUBSPOT_PRIVATE_APP_TOKEN: 'hubspot-token',
     UPSTASH_REDIS_REST_URL: 'https://upstash.example',
     UPSTASH_REDIS_REST_TOKEN: 'token',
+    NEXT_PUBLIC_SITE_URL: 'https://example.com',
   },
+  isProduction: () => false,
 }))
 
 vi.mock('@/lib/logger', () => ({
@@ -46,7 +48,21 @@ vi.mock('@/lib/logger', () => ({
 
 vi.mock('next/headers', () => ({
   headers: () => ({
-    get: (key: string) => (key === 'x-forwarded-for' ? currentIp : null),
+    get: (key: string) => {
+      if (key === 'x-forwarded-for') {
+        return currentIp
+      }
+      if (key === 'origin') {
+        return 'https://example.com'
+      }
+      if (key === 'referer') {
+        return 'https://example.com/contact'
+      }
+      if (key === 'host') {
+        return 'example.com'
+      }
+      return null
+    },
   }),
 }))
 
@@ -68,7 +84,7 @@ describe('contact form Upstash rate limiting', () => {
     let leadCounter = 0
     fetchMock.mockImplementation(async (input: RequestInfo) => {
       const url = typeof input === 'string' ? input : input.toString()
-      const supabaseRestUrl = 'https://supabase.example/rest/v1/leads'
+      const supabaseRestUrl = `${process.env.SUPABASE_URL}/rest/v1/leads`
 
       if (url === supabaseRestUrl) {
         leadCounter += 1

@@ -1,7 +1,7 @@
 # TODO.md — Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-20
+Last Updated: 2026-01-21
 Task Truth Source: **TODO.md**
 
 This file is the single source of truth for actionable work. If another document disagrees, the task record in this file wins (unless the Constitution overrides).
@@ -303,25 +303,3 @@ References:
 - /docs/SECURITY-CSP-ANALYTICS.md
 Dependencies: None
 Effort: L
-
-### T-114: Add retry policy + idempotency for HubSpot sync
-Priority: P1
-Type: FEATURE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- HubSpot sync failures should be retried automatically
-- Idempotency prevents duplicate contacts on retries
-- Reduces manual intervention for lead sync issues
-Acceptance Criteria:
-- [ ] T-114.1: Implement retry with backoff for HubSpot sync in `lib/actions.ts`
-- [ ] T-114.2: Add idempotency key logic to avoid duplicate upserts
-- [ ] T-114.3: Store retry attempts and final status in Supabase
-- [ ] T-114.4: Add tests covering retry behavior and idempotency
-References:
-- /lib/actions.ts
-- /__tests__/lib
-- /docs/DEPLOYMENT.md
-Dependencies: T-081
-Effort: M

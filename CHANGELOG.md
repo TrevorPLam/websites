@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `npm run check:npm-registry` to diagnose registry connectivity and proxy issues before running dependency commands
 - Added registry reachability checks for `@cloudflare/next-on-pages` metadata to support dependency monitoring
 - Added a contact form honeypot field to block bot submissions
+- Added HubSpot sync retries with idempotency key tracking and retry count persistence
 - Added repeatable accessibility and Lighthouse audit scripts for local QA
 - Added Playwright validation coverage for the contact form phone requirement
 - Added Playwright coverage for contact submission success, rate limiting, and search empty states

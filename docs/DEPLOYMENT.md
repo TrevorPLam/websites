@@ -1,6 +1,6 @@
 # Deployment (Cloudflare Pages)
 
-Last Updated: 2026-01-08
+Last Updated: 2026-01-21
 
 ## Purpose
 This is the single source of truth for deploying the Your Dedicated Marketer site to Cloudflare Pages.
@@ -58,7 +58,8 @@ These are required for the v1 contact pipeline (Supabase storage + HubSpot CRM s
 - Contact submissions are always written to Supabase first (required).
 - Rate-limited submissions are still stored, flagged with `is_suspicious` and `suspicion_reason = "rate_limit"`.
 - HubSpot sync is best-effort: failures do **not** block a user-facing success response.
-- HubSpot failures are recorded in Supabase with `hubspot_sync_status = "needs_sync"` and a timestamp.
+- HubSpot failures are recorded in Supabase with `hubspot_sync_status = "needs_sync"`, retry counts, and a timestamp.
+- HubSpot sync retries reuse a deterministic idempotency key stored in `hubspot_idempotency_key`.
 
 ### Rate limiting behavior (dev vs production)
 - **Development/test:** If Upstash Redis vars are missing, the app falls back to in-memory rate limiting and logs a warning that includes the missing keys.

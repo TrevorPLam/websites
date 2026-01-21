@@ -1,7 +1,7 @@
 # TODOCOMPLETED.md — Completed Tasks Archive
 
 Document Type: Workflow
-Last Updated: 2026-01-20
+Last Updated: 2026-01-21
 Source: Completed tasks moved from `TODO.md`
 
 This file stores completed work in the same schema as `TODO.md`.
@@ -9,6 +9,28 @@ Move tasks here when Acceptance Criteria are met.
 
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
+
+### T-114: Add retry policy + idempotency for HubSpot sync
+Priority: P1
+Type: FEATURE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- HubSpot sync failures should be retried automatically
+- Idempotency prevents duplicate contacts on retries
+- Reduces manual intervention for lead sync issues
+Acceptance Criteria:
+- [x] T-114.1: Implement retry with backoff for HubSpot sync in `lib/actions.ts`
+- [x] T-114.2: Add idempotency key logic to avoid duplicate upserts
+- [x] T-114.3: Store retry attempts and final status in Supabase
+- [x] T-114.4: Add tests covering retry behavior and idempotency
+References:
+- /lib/actions.ts
+- /__tests__/lib
+- /docs/DEPLOYMENT.md
+Dependencies: T-081
+Effort: M
 
 ### T-113: Add analytics consent gating (privacy compliance)
 Priority: P2
