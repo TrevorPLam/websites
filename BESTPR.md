@@ -1,7 +1,7 @@
 # BESTPR.md — Best Practices Reference
 
 **Document Type:** Technical Standards
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Last Updated:** 2026-01-21
 **Status:** Active
 **Authority:** Required reading for all code changes
@@ -545,7 +545,380 @@ npm run audit:a11y    # Automated axe-core checks
 
 ---
 
-## 15. Key Files Reference
+## 15. AI METACODE Documentation
+
+### What is AI METACODE?
+All major files in this repo include **AI METACODE** comment blocks—comprehensive JSDoc sections designed to help AI agents understand critical patterns without reading the entire file.
+
+### When to Add AI METACODE
+Add to **any new file** that is:
+- Security-critical (handles user input, secrets, PII)
+- Complex (>100 lines or non-obvious behavior)
+- Frequently modified (rate limiting, validation, integrations)
+
+### Standard Structure
+```typescript
+/**
+ * Brief file description
+ *
+ * @module path/to/file
+ *
+ * ═══════════════════════════════════════════════════════════════════
+ * 🤖 AI METACODE — Quick Reference for AI Agents
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * **FILE PURPOSE**: What this file does and why it exists
+ *
+ * **ARCHITECTURE PATTERN**: Design pattern used (Server Action, Hook, etc.)
+ * - How it's called
+ * - What it returns
+ * - Key behaviors
+ *
+ * **CURRENT STATE**: Brief implementation status
+ *
+ * **KEY DEPENDENCIES**: List imports that agents should know about
+ * - `./dependency.ts` — What it provides
+ *
+ * **AI ITERATION HINTS**: How to safely modify this file
+ * 1. What to update first
+ * 2. What to test
+ * 3. What to avoid
+ *
+ * **SECURITY CHECKLIST** (for security-critical files):
+ * - [ ] Security requirement 1
+ * - [ ] Security requirement 2
+ *
+ * **RESOLVED ISSUES** (optional): Completed fixes
+ * - [x] ~~Issue description~~ (FIXED: Issue #XXX)
+ *
+ * **POTENTIAL ISSUES** (optional): Known tech debt
+ * - [ ] Issue that needs addressing
+ *
+ * ═══════════════════════════════════════════════════════════════════
+ */
+```
+
+### Examples in Codebase
+- `lib/actions.ts` — Server action with rate limiting
+- `lib/env.ts` — Environment validation
+- `middleware.ts` — Security headers and CSP
+- `components/ContactForm.tsx` — Form validation modes
+- `components/InstallPrompt.tsx` — PWA installation
+
+---
+
+## 16. Rate Limiting Implementation
+
+### Exact Limits
+```typescript
+// Per identifier (email OR IP): 3 requests per 1 hour
+const RATE_LIMIT_MAX_REQUESTS = 3
+const RATE_LIMIT_WINDOW = '1 h'
+
+// Dual-layer: BOTH email AND IP must pass
+// If email is rate-limited: 429 error
+// If IP is rate-limited: 429 error
+```
+
+### Hashing Requirements
+```typescript
+// ALWAYS hash identifiers before storage (privacy)
+import { createHash } from 'crypto'
+
+const hashedEmail = createHash('sha256')
+  .update(email.toLowerCase().trim())
+  .digest('hex')
+
+const hashedIp = createHash('sha256')
+  .update(clientIp)
+  .digest('hex')
+
+// NEVER log raw emails or IPs
+```
+
+### Redis vs In-Memory
+```typescript
+// Production (Upstash Redis):
+// - Distributed rate limiting (multi-instance safe)
+// - Sliding window algorithm
+// - Analytics enabled
+
+// Development/Fallback (In-Memory Map):
+// - Single-instance only
+// - Not suitable for production
+// - Automatically used when UPSTASH_REDIS_REST_URL missing
+```
+
+### Environment Enforcement
+```typescript
+// lib/env.ts enforces Redis in production
+if (env.data.NODE_ENV === 'production') {
+  if (!env.data.UPSTASH_REDIS_REST_URL) {
+    throw new Error('Upstash Redis required in production')
+  }
+}
+```
+
+---
+
+## 17. Form Validation Patterns
+
+### react-hook-form Modes
+```typescript
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const form = useForm({
+  resolver: zodResolver(contactFormSchema),
+  
+  // Validate on blur for better UX (not on every keystroke)
+  mode: 'onBlur',
+  
+  // After first error, re-validate while typing
+  reValidateMode: 'onChange',
+  
+  // Debounce error display by 500ms (smoother UX)
+  delayError: 500,
+  
+  defaultValues: {
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  }
+})
+```
+
+### Honeypot Pattern
+```typescript
+// Hidden field catches bots
+<input
+  type="text"
+  name="website"
+  tabIndex={-1}
+  autoComplete="off"
+  aria-hidden="true"
+  className="absolute left-[-9999px]"
+/>
+
+// Server-side check
+if (formData.get('website')) {
+  return { success: false, message: 'Form submission error' }
+}
+```
+
+---
+
+## 18. Analytics & Consent
+
+### Consent Checking Pattern
+```typescript
+import { hasAnalyticsConsent } from '@/lib/analytics-consent'
+import { trackEvent } from '@/lib/analytics'
+
+// ALWAYS check consent before tracking
+if (hasAnalyticsConsent()) {
+  trackEvent('form_submit', { category: 'engagement' })
+}
+```
+
+### Multi-Provider Support
+```typescript
+// lib/analytics.ts supports both GA4 and Plausible
+export function trackEvent(eventName: string, params?: object) {
+  if (!hasAnalyticsConsent()) {
+    // Fallback in dev/test
+    console.log(`[Analytics] ${eventName}`, params)
+    return
+  }
+
+  // GA4 (window.gtag)
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, params)
+  }
+
+  // Plausible (window.plausible)
+  if (typeof window !== 'undefined' && window.plausible) {
+    window.plausible(eventName, { props: params })
+  }
+}
+```
+
+### SSR Safety
+```typescript
+// ALWAYS check window exists before accessing browser APIs
+if (typeof window === 'undefined') return
+
+// Check localStorage
+const consent = localStorage.getItem('analytics-consent')
+```
+
+---
+
+## 19. PWA Installation Pattern
+
+### beforeinstallprompt Event
+```typescript
+'use client' // Required for browser APIs
+
+export default function InstallPrompt() {
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+
+  useEffect(() => {
+    // SSR Safety
+    if (typeof window === 'undefined') return
+
+    // Check localStorage for dismissed/installed state
+    const dismissed = localStorage.getItem('pwa-install-dismissed')
+    const installed = localStorage.getItem('pwa-installed')
+    if (dismissed || installed) return
+
+    // Timer for cleanup
+    let promptTimerId: NodeJS.Timeout | null = null
+
+    const handler = (e: Event) => {
+      e.preventDefault() // Prevent mini-infobar
+      setDeferredPrompt(e as BeforeInstallPromptEvent)
+      
+      // Show after delay (not intrusive)
+      promptTimerId = setTimeout(() => setShowPrompt(true), 3000)
+    }
+
+    window.addEventListener('beforeinstallprompt', handler)
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler)
+      if (promptTimerId) clearTimeout(promptTimerId)
+    }
+  }, [])
+}
+```
+
+### Memory Safety
+- Always store timer IDs for cleanup
+- Clear timers in useEffect return function
+- Remove event listeners on unmount
+
+---
+
+## 20. Edge Runtime & API Routes
+
+### OG Image Generation Pattern
+```typescript
+// app/api/og/route.tsx
+export const runtime = 'edge' // Required for @vercel/og
+
+import { ImageResponse } from 'next/og'
+import { z } from 'zod'
+
+// Input validation
+const schema = z.object({
+  title: z.string().max(200),
+  description: z.string().max(500).optional()
+})
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  
+  // Validate and sanitize
+  const result = schema.safeParse({
+    title: searchParams.get('title'),
+    description: searchParams.get('description')
+  })
+  
+  if (!result.success) {
+    return new Response('Invalid parameters', { status: 400 })
+  }
+  
+  const { title, description } = result.data
+  
+  // HTML escaping before rendering
+  const safeTitle = escapeHtml(title)
+  
+  return new ImageResponse(
+    <div>{safeTitle}</div>,
+    { width: 1200, height: 630 }
+  )
+}
+```
+
+### Edge Runtime Limitations
+- **No Node.js APIs:** Can't use `fs`, `path`, etc.
+- **Use `dynamic = 'force-static'`:** For static generation
+- **Input validation:** ALWAYS use Zod for query params
+
+---
+
+## 21. CSP (Content Security Policy)
+
+### Development vs Production
+```typescript
+// middleware.ts
+const isDev = process.env.NODE_ENV === 'development'
+
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'" + (isDev ? " 'unsafe-eval'" : ""),
+  // 'unsafe-inline': Required for Next.js hydration + Tailwind
+  // 'unsafe-eval': Only in dev for Fast Refresh/HMR
+  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com",
+  "img-src 'self' data: https://www.google-analytics.com",
+  "style-src 'self' 'unsafe-inline'", // Required for Tailwind
+].join('; ')
+```
+
+### Why 'unsafe-inline'?
+- **Next.js:** Inline hydration scripts
+- **Tailwind:** Inline styles for initial render
+- **Future:** Move to nonce-based CSP (requires SSR changes)
+
+### Adding External Services
+1. **Script:** Add domain to `script-src`
+2. **API:** Add domain to `connect-src`
+3. **Image:** Add domain to `img-src`
+4. **Test:** Check browser console for CSP violations
+
+---
+
+## 22. Environment Variables (Production vs Dev)
+
+### Production Enforcement
+```typescript
+// lib/env.ts validates ALL required env vars at startup
+if (env.data.NODE_ENV === 'production') {
+  // Redis required in production
+  if (!env.data.UPSTASH_REDIS_REST_URL || !env.data.UPSTASH_REDIS_REST_TOKEN) {
+    throw new Error('Upstash Redis required in production')
+  }
+  
+  // Sentry required in production
+  if (!env.data.SENTRY_DSN) {
+    console.warn('Sentry DSN not configured')
+  }
+}
+```
+
+### Development Fallbacks
+```typescript
+// Optional services gracefully degrade in dev
+const redis = env.data.UPSTASH_REDIS_REST_URL
+  ? Redis.fromEnv()
+  : null // Falls back to in-memory Map
+
+if (!redis) {
+  console.log('[Dev] Using in-memory rate limiting')
+}
+```
+
+### Fail-Fast Philosophy
+- **Production:** Crash on startup if critical env vars missing
+- **Development:** Warn and use fallbacks
+- **Never:** Silently fail or use invalid defaults
+
+---
+
+## 23. Key Files Reference
 
 | File | Purpose |
 |------|---------|
@@ -561,10 +934,14 @@ npm run audit:a11y    # Automated axe-core checks
 | `tsconfig.json` | TypeScript config |
 | `next.config.mjs` | Next.js config |
 | `tailwind.config.ts` | Tailwind config |
+| `middleware.ts` | Security headers, CSP |
+| `lib/env.ts` | Environment validation |
+| `lib/actions.ts` | Server actions, rate limiting |
 | `.env.example` | Environment variable template |
 
 ---
 
 ## Version History
 
+**1.1.0** (2026-01-21): Added AI METACODE documentation, rate limiting details, form validation patterns, analytics consent, PWA patterns, Edge runtime, CSP details, environment validation patterns
 **1.0.0** (2026-01-21): Initial release
