@@ -76,6 +76,11 @@ After updating CSP:
 3. `components/AnalyticsConsentBanner.tsx` receives the nonce and applies it to GA4 scripts.
 4. `Content-Security-Policy` header includes the matching `nonce-<value>` source.
 
+### Fallback Behavior
+
+- If the `x-csp-nonce` header is missing, `app/layout.tsx` logs a warning and generates a fallback nonce.
+- If nonce generation fails (missing crypto), the layout logs an error and uses a static nonce to avoid a hard crash.
+
 ## References
 
 - Current CSP: `middleware.ts` lines 160-173

@@ -117,8 +117,9 @@ import SkipToContent from '@/components/SkipToContent'
 import AnalyticsConsentBanner from '@/components/AnalyticsConsentBanner'
 import Providers from '@/app/providers'
 import InstallPrompt from '@/components/InstallPrompt'
-import { CSP_NONCE_HEADER } from '@/lib/csp'
+import { createCspNonce, CSP_NONCE_HEADER } from '@/lib/csp'
 import { getPublicBaseUrl, validatedPublicEnv } from '@/lib/env.public'
+import { logError, logWarn } from '@/lib/logger'
 import { getSearchIndex } from '@/lib/search'
 
 // Font configuration with CSS variables
@@ -133,6 +134,30 @@ const plexSans = IBM_Plex_Sans({
 const siteUrl = getPublicBaseUrl()
 const analyticsId = validatedPublicEnv.NEXT_PUBLIC_ANALYTICS_ID
 const ogImageUrl = new URL('/api/og?title=Your%20Dedicated%20Marketer', siteUrl).toString()
+const NONCE_ERROR_FALLBACK = 'fallback-nonce'
+
+function resolveCspNonce(requestHeaders: Headers): string {
+  const headerNonce = requestHeaders.get(CSP_NONCE_HEADER)
+
+  if (headerNonce) {
+    return headerNonce
+  }
+
+  // We prefer keeping the app online over hard-failing when middleware misses the header.
+  logWarn('CSP nonce missing from request headers; using fallback nonce.', {
+    header: CSP_NONCE_HEADER,
+  })
+
+  try {
+    return createCspNonce()
+  } catch (error) {
+    // If crypto is unavailable, still return a nonce so the layout can render.
+    logError('Failed to create CSP nonce fallback; using static nonce.', error, {
+      header: CSP_NONCE_HEADER,
+    })
+    return NONCE_ERROR_FALLBACK
+  }
+}
 
 /**
  * Global metadata applied to all pages.
@@ -206,11 +231,7 @@ export default function RootLayout({
 }) {
   const searchItems = getSearchIndex()
   const requestHeaders = headers()
-  const cspNonce = requestHeaders.get(CSP_NONCE_HEADER)
-
-  if (!cspNonce) {
-    throw new Error('CSP nonce missing from request headers.')
-  }
+  const cspNonce = resolveCspNonce(requestHeaders)
 
   return (
     <html lang="en" className={`${inter.variable} ${plexSans.variable}`}>

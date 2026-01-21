@@ -159,26 +159,6 @@ References:
 Dependencies: None
 Effort: M
 
-### T-114: Add CSP nonce fallback in layout
-Priority: P0
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit BUG-002 notes the app crashes if the CSP nonce header is missing.
-- Middleware failures should not hard-crash the app.
-Acceptance Criteria:
-- [ ] T-114.1: Provide a fallback nonce when the header is missing, with a logged warning.
-- [ ] T-114.2: Add coverage to ensure missing nonce does not crash the app.
-- [ ] T-114.3: Document the fallback behavior in deployment or security docs.
-References:
-- /app/layout.tsx
-- /middleware.ts
-- /WRONG.md
-Dependencies: None
-Effort: S
-
 ## 🟠 PHASE 1: Lead Capture Pipeline (Supabase + HubSpot) (P1)
 > Replace email delivery with DB + CRM while preserving spam controls.
 
