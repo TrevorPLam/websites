@@ -277,24 +277,6 @@ if (env.data.NODE_ENV === 'production') {
 export const validatedEnv = env.data
 
 /**
- * Get the base site URL for absolute links and metadata.
- * 
- * **Behavior:**
- * - Uses validated NEXT_PUBLIC_SITE_URL
- * - Defaults to http://localhost:3000 in development
- * 
- * @example
- * ```typescript
- * const baseUrl = getBaseUrl()
- * // Development: http://localhost:3000
- * // Production: https://yourdedicatedmarketer.com
- * ```
- * 
- * @returns Base site URL as a string
- */
-export const getBaseUrl = () => validatedEnv.NEXT_PUBLIC_SITE_URL
-
-/**
  * Get current Node environment.
  * 
  * @returns 'development' | 'production' | 'test'

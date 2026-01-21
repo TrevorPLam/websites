@@ -8,7 +8,6 @@ import type { SearchItem } from '@/lib/search'
 
 interface SearchPageProps {
   items: SearchItem[]
-  initialQuery?: string
 }
 
 export default function SearchPage({ items }: SearchPageProps) {

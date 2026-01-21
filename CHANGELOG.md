@@ -64,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Removed unused analytics tracking helpers (`trackButtonClick`, `trackPageView`, `trackScrollDepth`, `trackTimeOnPage`, `trackOutboundLink`, `trackDownload`)
+- Removed unused `getBaseUrl` helper, extra Skeleton exports, and the unused SearchPage prop
 
 ### Dependencies
 - Aligned `@next/mdx` to the Next.js 14.x line

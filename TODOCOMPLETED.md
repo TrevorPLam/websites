@@ -10,6 +10,60 @@ Move tasks here when Acceptance Criteria are met.
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
 
+### T-141: Remove unused getBaseUrl export
+Priority: P3
+Type: CHORE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit DEAD-004 flags `getBaseUrl` as unused.
+- Remove dead exports to avoid confusion with getPublicBaseUrl.
+Acceptance Criteria:
+- [x] T-141.1: Confirm no imports of getBaseUrl outside env.ts.
+- [x] T-141.2: Remove getBaseUrl and update any docs if needed.
+References:
+- /lib/env.ts
+- /WRONG.md
+Dependencies: None
+Effort: XS
+
+### T-142: Remove unused Skeleton utility exports
+Priority: P3
+Type: CHORE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit DEAD-005 notes CardSkeleton/BlogPostSkeleton/ListSkeleton/TextSkeleton are unused.
+- Removing unused exports reduces bundle and maintenance.
+Acceptance Criteria:
+- [x] T-142.1: Confirm no imports of the unused Skeleton helpers.
+- [x] T-142.2: Remove the unused exports and update tests if needed.
+References:
+- /components/ui/Skeleton.tsx
+- /WRONG.md
+Dependencies: None
+Effort: XS
+
+### T-143: Remove unused SearchPage prop
+Priority: P3
+Type: CHORE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit DEAD-006 flags unused `initialQuery` prop on SearchPage.
+- Reducing unused props simplifies the component API.
+Acceptance Criteria:
+- [x] T-143.1: Remove the unused prop from the interface.
+- [x] T-143.2: Confirm no call sites use the prop.
+References:
+- /components/SearchPage.tsx
+- /WRONG.md
+Dependencies: None
+Effort: XS
+
 ### T-112: Harden CSP with nonce-based script handling
 Priority: P1
 Type: SECURITY

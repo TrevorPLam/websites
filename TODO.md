@@ -700,60 +700,6 @@ References:
 Dependencies: None
 Effort: XS
 
-### T-141: Remove unused getBaseUrl export
-Priority: P3
-Type: CHORE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit DEAD-004 flags `getBaseUrl` as unused.
-- Remove dead exports to avoid confusion with getPublicBaseUrl.
-Acceptance Criteria:
-- [ ] T-141.1: Confirm no imports of getBaseUrl outside env.ts.
-- [ ] T-141.2: Remove getBaseUrl and update any docs if needed.
-References:
-- /lib/env.ts
-- /WRONG.md
-Dependencies: None
-Effort: XS
-
-### T-142: Remove unused Skeleton utility exports
-Priority: P3
-Type: CHORE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit DEAD-005 notes CardSkeleton/BlogPostSkeleton/ListSkeleton/TextSkeleton are unused.
-- Removing unused exports reduces bundle and maintenance.
-Acceptance Criteria:
-- [ ] T-142.1: Confirm no imports of the unused Skeleton helpers.
-- [ ] T-142.2: Remove the unused exports and update tests if needed.
-References:
-- /components/ui/Skeleton.tsx
-- /WRONG.md
-Dependencies: None
-Effort: XS
-
-### T-143: Remove unused SearchPage prop
-Priority: P3
-Type: CHORE
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit DEAD-006 flags unused `initialQuery` prop on SearchPage.
-- Reducing unused props simplifies the component API.
-Acceptance Criteria:
-- [ ] T-143.1: Remove the unused prop from the interface.
-- [ ] T-143.2: Confirm no call sites use the prop.
-References:
-- /components/SearchPage.tsx
-- /WRONG.md
-Dependencies: None
-Effort: XS
-
 ### T-144: Decide fate of unused blog utility helpers
 Priority: P3
 Type: QUALITY
@@ -811,4 +757,4 @@ References:
 Dependencies: None
 Effort: XS
 
-_Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-139, T-140._
+_Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-139, T-140, T-141, T-142, T-143._

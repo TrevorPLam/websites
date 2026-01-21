@@ -15,7 +15,7 @@ export default async function SearchRoute() {
 
   return (
     <Suspense>
-      <SearchPage items={items} initialQuery="" />
+      <SearchPage items={items} />
     </Suspense>
   )
 }
