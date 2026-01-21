@@ -159,25 +159,6 @@ References:
 Dependencies: None
 Effort: M
 
-### T-113: Fix ErrorBoundary infinite reload loop
-Priority: P0
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit BUG-001 flags an infinite refresh loop when errors persist.
-- Users can be trapped in the ErrorBoundary with no recovery path.
-Acceptance Criteria:
-- [ ] T-113.1: Replace `window.location.reload()` with a safe navigation or retry-limited recovery flow.
-- [ ] T-113.2: Add a regression test that prevents the infinite loop scenario.
-- [ ] T-113.3: Update any relevant docs or comments describing the recovery behavior.
-References:
-- /components/ErrorBoundary.tsx
-- /WRONG.md
-Dependencies: None
-Effort: S
-
 ### T-114: Add CSP nonce fallback in layout
 Priority: P0
 Type: BUG
@@ -197,25 +178,6 @@ References:
 - /WRONG.md
 Dependencies: None
 Effort: S
-
-### T-115: Locate and fix missing `vi` import in tests
-Priority: P0
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- WRONG.md mentions a critical test failure caused by a missing Vitest `vi` import.
-- The exact file is not specified and must be located safely.
-Acceptance Criteria:
-- [ ] T-115.1: Identify the test file(s) using `vi` without importing it.
-- [ ] T-115.2: Add the correct import and ensure the test passes.
-- [ ] T-115.3: Add or update lint/test guidance to prevent recurrence.
-References:
-- /__tests__
-- /WRONG.md
-Dependencies: None
-Effort: XS
 
 ## 🟠 PHASE 1: Lead Capture Pipeline (Supabase + HubSpot) (P1)
 > Replace email delivery with DB + CRM while preserving spam controls.

@@ -6,21 +6,62 @@ import { logError } from '@/lib/logger'
 interface Props {
   children: ReactNode
   fallback?: ReactNode
+  onNavigateHome?: () => void
 }
 
 interface State {
   hasError: boolean
   error?: Error
+  recoveryAttempts: number
+}
+
+const RECOVERY_STORAGE_KEY = 'error-boundary-recovery-attempts'
+const MAX_RECOVERY_ATTEMPTS = 1
+
+const readRecoveryAttempts = (): number => {
+  if (typeof window === 'undefined') {
+    return 0
+  }
+
+  try {
+    const rawAttempts = window.sessionStorage.getItem(RECOVERY_STORAGE_KEY)
+    const parsedAttempts = Number(rawAttempts)
+
+    // Treat missing/invalid values as zero to avoid crashing the fallback UI.
+    return Number.isFinite(parsedAttempts) && parsedAttempts >= 0 ? parsedAttempts : 0
+  } catch {
+    // Storage can be unavailable (private mode / blocked access), so fail safely.
+    return 0
+  }
+}
+
+const writeRecoveryAttempts = (attempts: number): void => {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  try {
+    window.sessionStorage.setItem(RECOVERY_STORAGE_KEY, String(attempts))
+  } catch {
+    // If storage fails, we still allow the user to retry without persisting state.
+  }
+}
+
+export const navigateHome = (): void => {
+  // Use a direct location change so users can escape an error loop safely.
+  if (typeof window !== 'undefined') {
+    window.location.assign('/')
+  }
 }
 
 /**
  * Error Boundary component to catch and handle React errors
- * Prevents the entire app from crashing
+ * Prevents the entire app from crashing with a retry-limited recovery flow
  */
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = { hasError: false }
+    this.state = { hasError: false, recoveryAttempts: readRecoveryAttempts() }
   }
 
   static getDerivedStateFromError(error: Error): State {
@@ -34,12 +75,32 @@ export class ErrorBoundary extends Component<Props, State> {
     })
   }
 
+  handleRetry = () => {
+    // Limit retries to avoid infinite loops when the underlying error persists.
+    if (this.state.recoveryAttempts >= MAX_RECOVERY_ATTEMPTS) {
+      return
+    }
+
+    const nextAttempts = this.state.recoveryAttempts + 1
+    writeRecoveryAttempts(nextAttempts)
+
+    this.setState({ hasError: false, error: undefined, recoveryAttempts: nextAttempts })
+  }
+
+  handleGoHome = () => {
+    // Safe navigation gives users an escape hatch without triggering reload loops.
+    const navigate = this.props.onNavigateHome ?? navigateHome
+    navigate()
+  }
+
   render() {
     if (this.state.hasError) {
       // Custom fallback UI
       if (this.props.fallback) {
         return this.props.fallback
       }
+
+      const recoveryDisabled = this.state.recoveryAttempts >= MAX_RECOVERY_ATTEMPTS
 
       // Default fallback UI
       return (
@@ -64,15 +125,28 @@ export class ErrorBoundary extends Component<Props, State> {
             <p className="text-gray-600 mb-6">
               We're sorry, but something unexpected happened. Please try refreshing the page.
             </p>
-            <button
-              onClick={() => {
-                this.setState({ hasError: false, error: undefined })
-                window.location.reload()
-              }}
-              className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              Refresh Page
-            </button>
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={this.handleRetry}
+                disabled={recoveryDisabled}
+                className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:bg-blue-300"
+              >
+                Try again
+              </button>
+              <button
+                type="button"
+                onClick={this.handleGoHome}
+                className="w-full px-6 py-3 bg-white text-blue-700 font-semibold rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                Go to homepage
+              </button>
+            </div>
+            {recoveryDisabled ? (
+              <p className="mt-4 text-sm text-gray-500">
+                Recovery attempts are exhausted. Please contact support if this keeps happening.
+              </p>
+            ) : null}
           </div>
         </div>
       )

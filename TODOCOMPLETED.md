@@ -32,6 +32,25 @@ References:
 Dependencies: None
 Effort: L
 
+### T-113: Fix ErrorBoundary infinite reload loop
+Priority: P0
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit BUG-001 flags an infinite refresh loop when errors persist.
+- Users can be trapped in the ErrorBoundary with no recovery path.
+Acceptance Criteria:
+- [x] T-113.1: Replace `window.location.reload()` with a safe navigation or retry-limited recovery flow.
+- [x] T-113.2: Add a regression test that prevents the infinite loop scenario.
+- [x] T-113.3: Update any relevant docs or comments describing the recovery behavior.
+References:
+- /components/ErrorBoundary.tsx
+- /WRONG.md
+Dependencies: None
+Effort: S
+
 ### T-114: Add retry policy + idempotency for HubSpot sync
 Priority: P1
 Type: FEATURE
@@ -53,6 +72,25 @@ References:
 - /docs/DEPLOYMENT.md
 Dependencies: T-081
 Effort: M
+
+### T-115: Locate and fix missing `vi` import in tests
+Priority: P0
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- WRONG.md mentions a critical test failure caused by a missing Vitest `vi` import.
+- The exact file is not specified and must be located safely.
+Acceptance Criteria:
+- [x] T-115.1: Identify the test file(s) using `vi` without importing it.
+- [x] T-115.2: Add the correct import and ensure the test passes.
+- [x] T-115.3: Add or update lint/test guidance to prevent recurrence.
+References:
+- /__tests__
+- /WRONG.md
+Dependencies: None
+Effort: XS
 
 ### T-113: Add analytics consent gating (privacy compliance)
 Priority: P2
