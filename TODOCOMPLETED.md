@@ -199,6 +199,63 @@ References:
 Dependencies: T-064
 Effort: S
 
+### T-128: Guard analytics gtag usage with type checks
+Priority: P2
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit BUG-012 flags unsafe access of `window.gtag`.
+- Analytics should fail safely without runtime errors.
+Acceptance Criteria:
+- [x] T-128.1: Add safe type guards before calling gtag.
+- [x] T-128.2: Add tests covering missing gtag scenarios.
+References:
+- /lib/analytics.ts
+- /__tests__/lib/analytics.test.ts
+- /WRONG.md
+Dependencies: None
+Effort: XS
+
+### T-139: Remove unused analytics tracking helpers
+Priority: P3
+Type: CHORE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit DEAD-002 lists analytics helpers that are never called.
+- Removing dead helpers reduces surface area.
+Acceptance Criteria:
+- [x] T-139.1: Remove `trackButtonClick`, `trackPageView`, `trackScrollDepth`, `trackTimeOnPage`, `trackOutboundLink`, and `trackDownload`.
+- [x] T-139.2: Confirm no remaining references in tests or docs.
+References:
+- /lib/analytics.ts
+- /__tests__/lib/analytics.test.ts
+- /WRONG.md
+Dependencies: None
+Effort: XS
+
+### T-140: Remove unused parameters in analytics helpers
+Priority: P3
+Type: CHORE
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-21
+Context:
+- Audit DEAD-003 flags unused parameters in analytics helpers.
+- Removing unused params clarifies API intent.
+Acceptance Criteria:
+- [x] T-140.1: Remove unused `_location` and `_destination` parameters.
+- [x] T-140.2: Update call sites and tests if any exist.
+References:
+- /lib/analytics.ts
+- /__tests__/lib/analytics.test.ts
+- /WRONG.md
+Dependencies: T-139
+Effort: XS
+
 ### T-097: Wire distributed rate limiting with Upstash
 Priority: P1
 Type: QUALITY

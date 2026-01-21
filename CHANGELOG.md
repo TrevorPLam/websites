@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added contact form error boundary fallback and accessibility improvements for decorative icons
 - Replaced ErrorBoundary reload recovery with retry-limited retry and safe navigation escape hatch
 - Allowed safe relative URLs in `sanitizeUrl` while blocking protocol-relative links and replaced sanitize length magic numbers with named constants
+- Guarded GA4 tracking against non-function `window.gtag` values to prevent runtime errors
 
 ### Documentation
 - Expanded middleware security header docs and environment helper documentation
@@ -60,6 +61,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Logged missing Upstash Redis keys before falling back to in-memory rate limiting
 - Enhanced npm registry diagnostics output with per-check context and summaries
 - Emitted structured JSON logs in production while keeping readable logs in dev/test
+
+### Removed
+- Removed unused analytics tracking helpers (`trackButtonClick`, `trackPageView`, `trackScrollDepth`, `trackTimeOnPage`, `trackOutboundLink`, `trackDownload`)
 
 ### Dependencies
 - Aligned `@next/mdx` to the Next.js 14.x line

@@ -24,7 +24,7 @@
  *
  * // Helper functions
  * trackFormSubmission('contact', true)  // form name, success boolean
- * trackCTAClick('homepage', 'hero')     // page, location
+ * trackCTAClick('homepage')             // CTA text or location label
  * ```
  *
  * **AI ITERATION HINTS**:
@@ -40,8 +40,7 @@
  *
  * **HELPER FUNCTIONS AVAILABLE**:
  * - trackFormSubmission(formName, success) - contact form tracking
- * - trackCTAClick(page, location) - CTA button tracking
- * - trackPageView() - manual page view (auto-handled by providers usually)
+ * - trackCTAClick(ctaText) - CTA button tracking
  *
  * **DEPENDS ON**: GA4 script in app/layout.tsx
  *
@@ -93,6 +92,10 @@ function isTest(): boolean {
   return process.env.NODE_ENV === 'test'
 }
 
+function isGtagFunction(value: unknown): value is (...args: unknown[]) => void {
+  return typeof value === 'function'
+}
+
 /**
  * Analytics event structure following GA4 conventions.
  * 
@@ -124,8 +127,9 @@ export function trackEvent({ action, category, label, value }: AnalyticsEvent) {
 
   // Google Analytics 4
   if (typeof window !== 'undefined') {
-    const w = window as Window & { gtag?: (...args: unknown[]) => void }
-    if (w.gtag) {
+    const w = window as Window & { gtag?: unknown }
+    // Guard against misconfigured gtag to prevent runtime errors when scripts fail to load.
+    if (isGtagFunction(w.gtag)) {
       w.gtag('event', action, {
         event_category: category,
         event_label: label,
@@ -148,33 +152,6 @@ export function trackEvent({ action, category, label, value }: AnalyticsEvent) {
 }
 
 /**
- * Track page view
- */
-export function trackPageView(url: string) {
-  if (!hasAnalyticsConsent()) {
-    return
-  }
-
-  if (isDevelopment() || isTest()) {
-    logInfo('Analytics page view', { url })
-    return
-  }
-
-  // Google Analytics 4
-  if (typeof window !== 'undefined') {
-    const w = window as Window & { gtag?: (...args: unknown[]) => void }
-    if (w.gtag) {
-      w.gtag('config', process.env.NEXT_PUBLIC_ANALYTICS_ID, {
-        page_path: url,
-      })
-    }
-  }
-
-  // Plausible Analytics (automatic)
-  // No need to manually track page views with Plausible
-}
-
-/**
  * Track form submission (conversion on success)
  */
 export function trackFormSubmission(formName: string, success = true) {
@@ -187,67 +164,12 @@ export function trackFormSubmission(formName: string, success = true) {
 }
 
 /**
- * Track button click
- */
-export function trackButtonClick(buttonName: string, _location: string) {
-  trackEvent({
-    action: 'button_click',
-    category: 'engagement',
-    label: buttonName,
-  })
-}
-
-/**
  * Track CTA click
  */
-export function trackCTAClick(ctaText: string, _destination: string) {
+export function trackCTAClick(ctaText: string) {
   trackEvent({
     action: 'cta_click',
     category: 'engagement',
     label: ctaText,
-  })
-}
-
-/**
- * Track outbound link
- */
-export function trackOutboundLink(url: string) {
-  trackEvent({
-    action: 'outbound_link',
-    category: 'navigation',
-    label: url,
-  })
-}
-
-/**
- * Track file download
- */
-export function trackDownload(fileName: string) {
-  trackEvent({
-    action: 'download',
-    category: 'engagement',
-    label: fileName,
-  })
-}
-
-/**
- * Track scroll depth
- */
-export function trackScrollDepth(depth: 25 | 50 | 75 | 100) {
-  trackEvent({
-    action: 'scroll_depth',
-    category: 'engagement',
-    value: depth,
-  })
-}
-
-/**
- * Track time on page
- */
-export function trackTimeOnPage(seconds: number) {
-  trackEvent({
-    action: 'time_on_page',
-    category: 'engagement',
-    value: seconds,
   })
 }
