@@ -8,7 +8,7 @@
 
 ## Purpose
 
-Token-optimized, repo-specific guide for shipping quality code consistently. This document distills patterns from the codebase to help agents write complimentary code on first attempt.
+Token-optimized, repo-specific guide for shipping quality code consistently. This document distills patterns from the codebase to help agents write complementary code on first attempt.
 
 ---
 
