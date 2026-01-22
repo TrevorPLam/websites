@@ -78,250 +78,22 @@
 
 'use server'
 import { createHash } from 'crypto'
-import { isIP } from 'net'
 import { headers } from 'next/headers'
 import { z } from 'zod'
 import { logError, logWarn, logInfo } from './logger'
 import { escapeHtml, sanitizeEmail, sanitizeName } from './sanitize'
-import { validatedEnv, isProduction } from './env'
+import { validatedEnv } from './env'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
 import { runWithRequestId } from './request-context.server'
 import { withServerSpan, type SpanAttributes } from './sentry-server'
+import { checkRateLimit } from './rate-limit'
+import { getValidatedClientIp, validateOrigin } from './request-validation'
 
 const CORRELATION_ID_HEADER = 'x-correlation-id'
-
-/**
- * Extract expected host from headers or fallback to configured site URL.
- * 
- * Helper function to centralize host extraction logic.
- * 
- * @param host - Host header value
- * @returns Expected hostname without protocol
- * 
- * @example
- * ```typescript
- * getExpectedHost('example.com') // => 'example.com'
- * getExpectedHost(null) // => 'yourdedicatedmarketer.com' (from env)
- * ```
- */
-function getExpectedHost(host: string | null): string {
-  return host || validatedEnv.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '')
-}
-
-/**
- * Validate a single header URL against expected host.
- * 
- * Extracted helper to reduce duplication in validateOrigin().
- * 
- * @param headerValue - URL from origin or referer header
- * @param expectedHost - Expected hostname
- * @param headerName - Name of header for logging (origin/referer)
- * @returns true if valid, false otherwise
- * 
- * @throws Never throws - catches and logs URL parsing errors
- */
-function validateHeaderUrl(
-  headerValue: string,
-  expectedHost: string,
-  headerName: 'origin' | 'referer'
-): boolean {
-  try {
-    const url = new URL(headerValue)
-    if (url.host !== expectedHost) {
-      logWarn(`CSRF: ${headerName} mismatch`, { [headerName]: headerValue, expectedHost })
-      return false
-    }
-    return true
-  } catch {
-    logWarn(`CSRF: Invalid ${headerName} URL`, { [headerName]: headerValue })
-    return false
-  }
-}
-
-/**
- * Validate request origin to prevent CSRF attacks (Issue #010 - Fixed).
- * 
- * **Security:** Checks that the request comes from our own domain.
- * Requires at least one of origin/referer to be present.
- * If both are present, BOTH must match (defense in depth).
- * 
- * **Why This Matters:**
- * - Prevents cross-site form submissions
- * - Blocks automated attacks from external domains
- * - Complements rate limiting (different attack vector)
- * 
- * @param requestHeaders - Request headers from Next.js headers()
- * @returns true if origin is valid, false if potentially malicious
- * 
- * @example
- * ```typescript
- * // Valid request from same domain
- * validateOrigin(headers) // => true
- * 
- * // Attack from external site
- * validateOrigin(headers) // => false, logs warning
- * ```
- */
-function validateOrigin(requestHeaders: Headers): boolean {
-  const origin = requestHeaders.get('origin')
-  const referer = requestHeaders.get('referer')
-  const host = requestHeaders.get('host')
-  
-  // If no origin/referer (direct API call), reject
-  if (!origin && !referer) {
-    logWarn('CSRF: No origin or referer header')
-    return false
-  }
-  
-  const expectedHost = getExpectedHost(host)
-  
-  // Check origin if present
-  if (origin && !validateHeaderUrl(origin, expectedHost, 'origin')) {
-    return false
-  }
-  
-  // Check referer if present (defense in depth)
-  if (referer && !validateHeaderUrl(referer, expectedHost, 'referer')) {
-    return false
-  }
-  
-  return true
-}
 
 function getCorrelationIdFromHeaders(requestHeaders: Headers): string | undefined {
   return requestHeaders.get(CORRELATION_ID_HEADER) ?? undefined
 }
-
-/**
- * Trusted proxy header configuration.
- * 
- * Maps environment to trusted headers in priority order.
- * Production only trusts headers from known CDN/hosting providers.
- */
-const TRUSTED_IP_HEADERS = {
-  production: [
-    'cf-connecting-ip',        // Cloudflare (most trustworthy)
-    'x-vercel-forwarded-for',  // Vercel Edge Network
-  ],
-  development: [
-    'x-forwarded-for',  // Standard proxy header
-    'x-real-ip',        // Nginx/other proxies
-  ],
-} as const
-
-/**
- * Extract IP address from comma-separated header value.
- * 
- * Many proxies append IPs in chain: "client, proxy1, proxy2"
- * We want the leftmost (original client) IP.
- * 
- * @param headerValue - Raw header value
- * @returns First IP in chain, trimmed, or null when unavailable/invalid
- * 
- * @example
- * ```typescript
- * extractFirstIp('192.168.1.1, 10.0.0.1') // => '192.168.1.1'
- * extractFirstIp('  192.168.1.1  ') // => '192.168.1.1'
- * extractFirstIp('   ') // => null
- * ```
- */
-function extractFirstIp(headerValue: string): string | null {
-  const trimmedHeader = headerValue.trim()
-  if (!trimmedHeader) {
-    return null
-  }
-
-  const firstIp = trimmedHeader.split(',')[0]?.trim()
-  if (!firstIp) {
-    return null
-  }
-
-  if (!isValidIpAddress(firstIp)) {
-    // WHY: Avoid treating malformed proxy headers as valid client IPs.
-    return null
-  }
-
-  return firstIp
-}
-
-function isValidIpAddress(value: string): boolean {
-  return isIP(value) !== 0
-}
-
-/**
- * Validate IP address from headers to prevent spoofing (Issue #011 - Enhanced).
- * 
- * **Security:** In production, only trusts headers from known proxies (Cloudflare/Vercel).
- * In development, accepts standard proxy headers but still validates.
- * 
- * **Why This Matters:**
- * - Prevents attackers from spoofing IP addresses
- * - Ensures rate limiting works correctly
- * - Different trust model per environment
- * 
- * **Trust Model:**
- * - Production: Only CDN-set headers (cf-connecting-ip, x-vercel-forwarded-for)
- * - Development: Standard proxy headers (x-forwarded-for, x-real-ip)
- * 
- * @param requestHeaders - Request headers from Next.js headers()
- * @returns Validated client IP or 'unknown' if cannot determine
- * 
- * @example
- * ```typescript
- * // Production with Cloudflare
- * getValidatedClientIp(headers) // => '203.0.113.1' (from CF-Connecting-IP)
- * 
- * // Development with nginx proxy
- * getValidatedClientIp(headers) // => '192.168.1.1' (from X-Forwarded-For)
- * 
- * // No trusted headers present or all candidates invalid
- * getValidatedClientIp(headers) // => 'unknown'
- * ```
- */
-function getValidatedClientIp(requestHeaders: Headers): string {
-  const environment = isProduction() ? 'production' : 'development'
-  const trustedHeaders = TRUSTED_IP_HEADERS[environment]
-  
-  // Check headers in priority order
-  for (const headerName of trustedHeaders) {
-    const headerValue = requestHeaders.get(headerName)
-    if (headerValue) {
-      const candidateIp = extractFirstIp(headerValue)
-      if (candidateIp) {
-        return candidateIp
-      }
-    }
-  }
-  
-  // No trusted headers found
-  return 'unknown'
-}
-
-/**
- * Rate limiting configuration.
- * - 3 requests per hour per email address
- * - 3 requests per hour per IP address
- */
-const RATE_LIMIT_MAX_REQUESTS = 3
-const RATE_LIMIT_WINDOW = '1 h' // 1 hour
-
-/**
- * Rate limiter interface for distributed (Upstash) rate limiting.
- */
-type RateLimiter = {
-  limit: (identifier: string) => Promise<{ success: boolean }>
-}
-
-/**
- * Rate limiter instance (null = not initialized, false = fallback to in-memory).
- */
-let rateLimiter: RateLimiter | null | false = null
-
-/**
- * In-memory rate limit tracking (fallback when Upstash is not configured).
- * Maps identifier to request count and reset timestamp.
- */
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 
 /**
  * Salts for hashing to prevent rainbow table attacks.
@@ -769,7 +541,11 @@ async function handleContactFormSubmission(data: ContactFormData, requestHeaders
   const clientIp = await getClientIp()
   const sanitized = buildSanitizedContactData(validatedData, clientIp)
 
-  const rateLimitPassed = await checkRateLimit(sanitized.safeEmail, clientIp)
+  const rateLimitPassed = await checkRateLimit({
+    email: sanitized.safeEmail,
+    clientIp,
+    hashIp,
+  })
   const isSuspicious = !rateLimitPassed
 
   const lead = await insertLeadWithSpan(sanitized, isSuspicious)
@@ -798,152 +574,6 @@ async function getClientIp(): Promise<string> {
   return getValidatedClientIp(requestHeaders)
 }
 
-/**
- * Initialize rate limiter with Upstash Redis (distributed) or fallback to in-memory.
- * 
- * **Distributed (Production):**
- * - Uses Upstash Redis for multi-instance rate limiting
- * - Sliding window algorithm (3 requests per hour)
- * - Analytics enabled for monitoring
- * 
- * **In-Memory (Development/Fallback):**
- * - Uses Map for single-instance rate limiting
- * - Not suitable for production (does not sync across instances)
- * - Used when UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN not set
- * 
- * @returns RateLimiter instance or null for in-memory fallback
- */
-async function getRateLimiter() {
-  if (rateLimiter !== null) {
-    return rateLimiter
-  }
-
-  // Check if Upstash credentials are configured
-  const redisUrl = validatedEnv.UPSTASH_REDIS_REST_URL
-  const redisToken = validatedEnv.UPSTASH_REDIS_REST_TOKEN
-  const missingUpstashKeys: string[] = []
-
-  if (!redisUrl) {
-    missingUpstashKeys.push('UPSTASH_REDIS_REST_URL')
-  }
-
-  if (!redisToken) {
-    missingUpstashKeys.push('UPSTASH_REDIS_REST_TOKEN')
-  }
-
-  if (missingUpstashKeys.length === 0) {
-    try {
-      const { Ratelimit } = await import('@upstash/ratelimit')
-      const { Redis } = await import('@upstash/redis')
-
-      const redis = new Redis({
-        url: redisUrl,
-        token: redisToken,
-      })
-
-      rateLimiter = new Ratelimit({
-        redis,
-        limiter: Ratelimit.slidingWindow(RATE_LIMIT_MAX_REQUESTS, RATE_LIMIT_WINDOW),
-        analytics: true,
-        prefix: 'contact_form',
-      })
-
-      logInfo('Initialized distributed rate limiting with Upstash Redis')
-      return rateLimiter
-    } catch (error) {
-      logError('Failed to initialize Upstash rate limiter, falling back to in-memory', error)
-    }
-  } else {
-    logWarn(
-      'Upstash Redis not configured, using in-memory rate limiting (not suitable for production)',
-      { missingKeys: missingUpstashKeys }
-    )
-  }
-
-  // Return null to indicate fallback to in-memory
-  rateLimiter = false // Sentinel value to prevent re-initialization attempts
-  return null
-}
-
-/**
- * Check rate limit using in-memory storage (fallback when Upstash unavailable).
- * 
- * **Algorithm:**
- * - Fixed window: 1 hour sliding
- * - Automatically cleans up expired entries
- * - Stores count and reset timestamp per identifier
- * 
- * **Limitations:**
- * - NOT suitable for production (single-instance only)
- * - Does not sync across multiple server instances
- * - Memory usage grows with unique identifiers (auto-cleaned on expiry)
- * 
- * @param identifier - Unique identifier (email:xxx or ip:hash)
- * @returns true if request allowed, false if rate limit exceeded
- */
-function checkRateLimitInMemory(identifier: string): boolean {
-  const now = Date.now()
-  const limit = rateLimitMap.get(identifier)
-
-  // Clean up expired entries
-  if (limit && now > limit.resetAt) {
-    rateLimitMap.delete(identifier)
-  }
-
-  const existing = rateLimitMap.get(identifier)
-  if (!existing) {
-    rateLimitMap.set(identifier, { count: 1, resetAt: now + 60 * 60 * 1000 }) // 1 hour
-    return true
-  }
-
-  if (existing.count >= RATE_LIMIT_MAX_REQUESTS) {
-    return false
-  }
-
-  existing.count++
-  return true
-}
-
-/**
- * Check rate limits for both email and IP address.
- * 
- * **Dual Rate Limiting:**
- * - Enforces limits per email address (prevents single user spam)
- * - Enforces limits per IP address (prevents distributed attacks)
- * - BOTH limits must pass for request to be allowed
- * 
- * **Implementation:**
- * - Uses Upstash Redis if configured (production)
- * - Falls back to in-memory if not configured (development)
- * 
- * @param email - User's email address (not hashed for email-based limiting)
- * @param clientIp - Client IP address (hashed before storage)
- * @returns true if both limits pass, false if either limit exceeded
- */
-async function checkRateLimit(email: string, clientIp: string): Promise<boolean> {
-  const limiter = await getRateLimiter()
-  const emailIdentifier = `email:${email}`
-  const ipIdentifier = `ip:${hashIp(clientIp)}`
-
-  if (limiter) {
-    // Use Upstash distributed rate limiting
-    const emailLimit = await limiter.limit(emailIdentifier)
-    if (!emailLimit.success) {
-      return false
-    }
-
-    const ipLimit = await limiter.limit(ipIdentifier)
-    return ipLimit.success
-  } else {
-    // Fall back to in-memory rate limiting
-    const emailAllowed = checkRateLimitInMemory(emailIdentifier)
-    if (!emailAllowed) {
-      return false
-    }
-
-    return checkRateLimitInMemory(ipIdentifier)
-  }
-}
 
 /**
  * Submit contact form with validation, rate limiting, sanitization, and lead capture.

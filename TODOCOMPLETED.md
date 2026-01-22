@@ -1561,3 +1561,43 @@ References:
 - /WRONG.md
 Dependencies: None
 Effort: M
+
+### T-118: Extract rate limiting module from lib/actions.ts
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-22
+Context:
+- Audit notes the `lib/actions.ts` god object and rate limiter initialization complexity.
+- Rate limiting should be isolated and testable.
+Acceptance Criteria:
+- [x] T-118.1: Move rate limiter initialization and helpers into a dedicated module.
+- [x] T-118.2: Update server actions to consume the new module.
+- [x] T-118.3: Add unit tests for rate limiter behavior.
+References:
+- /lib/actions.ts
+- /lib (new module)
+- /WRONG.md
+Dependencies: None
+Effort: M
+
+### T-119: Extract validation + security helpers from lib/actions.ts
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-22
+Context:
+- Audit highlights deep nesting and mixed concerns for IP/CSRF validation.
+- Validation logic should be reusable and easier to audit.
+Acceptance Criteria:
+- [x] T-119.1: Extract CSRF validation, IP parsing, and header validation into a dedicated module.
+- [x] T-119.2: Update actions to call the new validation helpers.
+- [x] T-119.3: Add tests for invalid/edge-case header and IP inputs.
+References:
+- /lib/actions.ts
+- /lib (new module)
+- /WRONG.md
+Dependencies: None
+Effort: M

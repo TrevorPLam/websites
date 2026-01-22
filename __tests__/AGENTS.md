@@ -30,6 +30,8 @@ __tests__/
     ├── blog.test.ts
     ├── env.test.ts
     ├── logger.test.ts
+    ├── rate-limit.test.ts
+    ├── request-validation.test.ts
     └── sanitize.test.ts
 
 tests/
