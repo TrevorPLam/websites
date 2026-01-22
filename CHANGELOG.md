@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added server-side Sentry spans for contact form submissions and external sync calls
 - Added `npm run check:bundle-size` to enforce bundle size regression checks
 - Added analytics consent gating with banner-based preference storage for GA4 loading
+- Added dedicated rate limiting and request validation helper modules with unit coverage
+
+### Changed
+- Refactored contact form submission logic to use shared rate limiting and request validation helpers
 
 ### Security
 - Added hashed IP + email rate limiting for contact form submissions

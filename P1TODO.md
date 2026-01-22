@@ -139,15 +139,16 @@ Effort: S
 Priority: P1
 Type: QUALITY
 Owner: AGENT
-Status: READY
+Status: DONE
 Blockers: None
+Completed: 2026-01-22
 Context:
 - Audit notes the `lib/actions.ts` god object and rate limiter initialization complexity.
 - Rate limiting should be isolated and testable.
 Acceptance Criteria:
-- [ ] T-118.1: Move rate limiter initialization and helpers into a dedicated module.
-- [ ] T-118.2: Update server actions to consume the new module.
-- [ ] T-118.3: Add unit tests for rate limiter behavior.
+- [x] T-118.1: Move rate limiter initialization and helpers into a dedicated module.
+- [x] T-118.2: Update server actions to consume the new module.
+- [x] T-118.3: Add unit tests for rate limiter behavior.
 References:
 - /lib/actions.ts
 - /lib (new module)
@@ -159,15 +160,16 @@ Effort: M
 Priority: P1
 Type: QUALITY
 Owner: AGENT
-Status: READY
+Status: DONE
 Blockers: None
+Completed: 2026-01-22
 Context:
 - Audit highlights deep nesting and mixed concerns for IP/CSRF validation.
 - Validation logic should be reusable and easier to audit.
 Acceptance Criteria:
-- [ ] T-119.1: Extract CSRF validation, IP parsing, and header validation into a dedicated module.
-- [ ] T-119.2: Update actions to call the new validation helpers.
-- [ ] T-119.3: Add tests for invalid/edge-case header and IP inputs.
+- [x] T-119.1: Extract CSRF validation, IP parsing, and header validation into a dedicated module.
+- [x] T-119.2: Update actions to call the new validation helpers.
+- [x] T-119.3: Add tests for invalid/edge-case header and IP inputs.
 References:
 - /lib/actions.ts
 - /lib (new module)
