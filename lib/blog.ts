@@ -44,7 +44,7 @@
  *
  * **POTENTIAL IMPROVEMENTS**:
  * - [ ] Add caching layer for dev mode (re-reads on every request)
- * - [ ] Add frontmatter validation with Zod
+ * - [ ] Expand frontmatter validation with Zod
  * - [ ] Add prev/next post navigation helpers
  *
  * ═══════════════════════════════════════════════════════════════════════════════
@@ -93,6 +93,70 @@ import readingTime from 'reading-time'
 
 /** Absolute path to blog content directory */
 const postsDirectory = path.join(process.cwd(), 'content/blog')
+const datePattern = /^\d{4}-\d{2}-\d{2}$/
+
+const isNonEmptyString = (value: unknown): value is string =>
+  typeof value === 'string' && value.trim().length > 0
+
+const normalizeBlogDate = (value: unknown): { value: string; date: Date } | null => {
+  if (value instanceof Date) {
+    const isoDate = value.toISOString().slice(0, 10)
+    return { value: isoDate, date: value }
+  }
+
+  if (!isNonEmptyString(value) || !datePattern.test(value)) {
+    return null
+  }
+
+  const parsed = new Date(value)
+  if (Number.isNaN(parsed.getTime())) {
+    return null
+  }
+
+  // WHY: Validate that the parsed date matches the frontmatter string to avoid rollover dates.
+  if (parsed.toISOString().slice(0, 10) !== value) {
+    return null
+  }
+
+  return { value, date: parsed }
+}
+
+const buildPost = (
+  slug: string,
+  data: Record<string, unknown>,
+  content: string
+): BlogPost | null => {
+  const hasRequiredFields =
+    Object.hasOwn(data, 'title') &&
+    Object.hasOwn(data, 'description') &&
+    Object.hasOwn(data, 'date')
+
+  if (!hasRequiredFields) {
+    // WHY: Require explicit frontmatter fields to avoid silently accepting malformed posts.
+    return null
+  }
+
+  const title = isNonEmptyString(data.title) ? data.title : null
+  const description = isNonEmptyString(data.description) ? data.description : null
+  const normalizedDate = normalizeBlogDate(data.date)
+
+  if (!title || !description || !normalizedDate) {
+    // WHY: Skip invalid frontmatter to keep blog rendering stable.
+    return null
+  }
+
+  return {
+    slug,
+    title,
+    description,
+    date: normalizedDate.value,
+    author: isNonEmptyString(data.author) ? data.author : 'Your Dedicated Marketer Team',
+    category: isNonEmptyString(data.category) ? data.category : 'Marketing',
+    readingTime: readingTime(content).text,
+    content,
+    featured: typeof data.featured === 'boolean' ? data.featured : false,
+  }
+}
 
 /**
  * Blog post data structure.
@@ -153,21 +217,12 @@ export function getAllPosts(): BlogPost[] {
       const fileContents = fs.readFileSync(fullPath, 'utf8')
       const { data, content } = matter(fileContents)
 
-      return {
-        slug,
-        title: data.title,
-        description: data.description,
-        date: data.date,
-        author: data.author || 'Your Dedicated Marketer Team',
-        category: data.category || 'Marketing',
-        readingTime: readingTime(content).text,
-        content,
-        featured: data.featured || false,
-      } as BlogPost
+      return buildPost(slug, data, content)
     })
+    .filter((post): post is BlogPost => post !== null)
 
   // Sort posts by date
-  return allPosts.sort((a, b) => (a.date > b.date ? -1 : 1))
+  return allPosts.sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
 }
 
 /**
@@ -188,17 +243,7 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents)
 
-    return {
-      slug,
-      title: data.title,
-      description: data.description,
-      date: data.date,
-      author: data.author || 'Your Dedicated Marketer Team',
-      category: data.category || 'Marketing',
-      readingTime: readingTime(content).text,
-      content,
-      featured: data.featured || false,
-    }
+    return buildPost(slug, data, content) ?? undefined
   } catch {
     return undefined
   }

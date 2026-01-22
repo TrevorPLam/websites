@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allowed safe relative URLs in `sanitizeUrl` while blocking protocol-relative links and replaced sanitize length magic numbers with named constants
 - Guarded GA4 tracking against non-function `window.gtag` values to prevent runtime errors
 - Added a CSP nonce fallback in the root layout to avoid crashes when the nonce header is missing
+- Validated blog frontmatter and dates to prevent invalid entries from crashing sorting or rendering
 
 ### Documentation
 - Expanded middleware security header docs and environment helper documentation
@@ -158,4 +159,3 @@ Per DEPENDENCY_HEALTH.md:
 - Note dependency removals and what replaced them
 - Record major version upgrades with impact summary
 - Link to related P0TODO.md, P1TODO.md, P2TODO.md, P3TODO.md or DECISIONS.md entries
-

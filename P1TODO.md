@@ -115,27 +115,6 @@ References:
 Dependencies: T-055, T-080
 Effort: M
 
-### T-116: Fix blog date sorting + frontmatter validation
-Priority: P1
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit BUG-003/004/005 show incorrect sorting and crashes when blog dates/frontmatter are invalid.
-- Blog rendering should remain stable even with malformed content.
-Acceptance Criteria:
-- [ ] T-116.1: Sort posts using validated date parsing (no string comparison).
-- [ ] T-116.2: Validate required frontmatter fields and handle invalid posts safely.
-- [ ] T-116.3: Guard blog date formatting in page rendering with safe fallback behavior.
-- [ ] T-116.4: Add tests for valid, missing, and invalid date/frontmatter cases.
-References:
-- /lib/blog.ts
-- /app/blog/[slug]/page.tsx
-- /WRONG.md
-Dependencies: None
-Effort: M
-
 ### T-117: Harden HubSpot + Supabase response validation
 Priority: P1
 Type: BUG

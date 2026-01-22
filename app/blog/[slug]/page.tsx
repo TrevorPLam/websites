@@ -11,6 +11,23 @@ const BlogPostContent = dynamic(() => import('@/components/BlogPostContent'), {
   ssr: true,
 })
 
+const getPostDateValues = (dateValue: string) => {
+  const parsed = new Date(dateValue)
+  const hasValidDate = !Number.isNaN(parsed.getTime())
+
+  return {
+    hasValidDate,
+    isoDate: hasValidDate ? parsed.toISOString() : null,
+    formattedDate: hasValidDate
+      ? parsed.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        })
+      : 'Unknown date',
+  }
+}
+
 interface Props {
   params: Promise<{ slug: string }>
 }
@@ -47,6 +64,8 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   const baseUrl = getPublicBaseUrl().replace(/\/$/, '')
+  // WHY: Guard against malformed frontmatter dates so rendering remains stable.
+  const dateValues = getPostDateValues(post.date)
 
   // Structured data for article
   const articleStructuredData = {
@@ -55,8 +74,9 @@ export default async function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.description,
     image: `${baseUrl}/blog/${post.slug}.jpg`,
-    datePublished: post.date,
-    dateModified: post.date,
+    ...(dateValues.hasValidDate && dateValues.isoDate
+      ? { datePublished: dateValues.isoDate, dateModified: dateValues.isoDate }
+      : {}),
     author: {
       '@type': 'Person',
       name: post.author,
@@ -125,11 +145,7 @@ export default async function BlogPostPage({ params }: Props) {
               <div className="flex items-center gap-2 text-gray-600">
                 <Calendar className="w-5 h-5" />
                 <span>
-                  {new Date(post.date).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
+                  {dateValues.formattedDate}
                 </span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">

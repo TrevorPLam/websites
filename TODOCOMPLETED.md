@@ -1481,3 +1481,25 @@ References:
 - /WRONG.md
 Dependencies: None
 Effort: S
+
+### T-116: Fix blog date sorting + frontmatter validation
+Priority: P1
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-22
+Context:
+- Audit BUG-003/004/005 show incorrect sorting and crashes when blog dates/frontmatter are invalid.
+- Blog rendering should remain stable even with malformed content.
+Acceptance Criteria:
+- [x] T-116.1: Sort posts using validated date parsing (no string comparison).
+- [x] T-116.2: Validate required frontmatter fields and handle invalid posts safely.
+- [x] T-116.3: Guard blog date formatting in page rendering with safe fallback behavior.
+- [x] T-116.4: Add tests for valid, missing, and invalid date/frontmatter cases.
+References:
+- /lib/blog.ts
+- /app/blog/[slug]/page.tsx
+- /__tests__/lib/blog.test.ts
+- /WRONG.md
+Dependencies: None
+Effort: M
