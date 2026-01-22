@@ -1,7 +1,7 @@
 # TODOCOMPLETED.md — Completed Tasks Archive
 
 Document Type: Workflow
-Last Updated: 2026-01-21
+Last Updated: 2026-01-22
 Source: Completed tasks moved from `P0TODO.md, P1TODO.md, P2TODO.md, P3TODO.md`
 
 This file stores completed work in the same schema as `P0TODO.md, P1TODO.md, P2TODO.md, P3TODO.md`.
@@ -9,6 +9,26 @@ Move tasks here when Acceptance Criteria are met.
 
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
+
+### T-127: Stabilize SearchDialog focus and tag rendering
+Priority: P2
+Type: BUG
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-22
+Context:
+- Audit BUG-009 and BUG-015 call out focus race conditions and unsafe tag joins.
+- Search UX should be stable under keyboard navigation and missing tags.
+Acceptance Criteria:
+- [x] T-127.1: Remove brittle timing assumptions in focus management.
+- [x] T-127.2: Guard tag join logic when tags are undefined.
+- [x] T-127.3: Add unit tests for keyboard focus and tag edge cases.
+References:
+- /components/SearchDialog.tsx
+- /__tests__/components/SearchDialog.test.tsx
+- /WRONG.md
+Dependencies: None
+Effort: S
 
 ### T-114: Add CSP nonce fallback in layout
 Priority: P0

@@ -26,7 +26,10 @@ export default function SearchDialog({ items, variant = 'desktop' }: SearchDialo
     }
 
     return items.filter((item) => {
-      const haystack = [item.title, item.description, item.tags?.join(' ') ?? '']
+      const tagText = Array.isArray(item.tags)
+        ? item.tags.filter((tag) => typeof tag === 'string' && tag.trim().length > 0).join(' ')
+        : ''
+      const haystack = [item.title, item.description, tagText]
         .join(' ')
         .toLowerCase()
       return haystack.includes(normalized)
@@ -53,7 +56,8 @@ export default function SearchDialog({ items, variant = 'desktop' }: SearchDialo
 
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 0)
+      // WHY: focus immediately after the dialog renders to keep keyboard search deterministic.
+      inputRef.current?.focus()
     } else {
       setQuery('')
     }

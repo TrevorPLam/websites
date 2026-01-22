@@ -1,7 +1,7 @@
 # P2TODO.md - Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-21
+Last Updated: 2026-01-22
 Task Truth Source: **P2TODO.md**
 Other Priority Files: `P0TODO.md`, `P1TODO.md`, `P3TODO.md`
 
@@ -147,25 +147,6 @@ References:
 - /components/Navigation.tsx
 Dependencies: None
 Effort: XS
-
-### T-127: Stabilize SearchDialog focus and tag rendering
-Priority: P2
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit BUG-009 and BUG-015 call out focus race conditions and unsafe tag joins.
-- Search UX should be stable under keyboard navigation and missing tags.
-Acceptance Criteria:
-- [ ] T-127.1: Remove brittle timing assumptions in focus management.
-- [ ] T-127.2: Guard tag join logic when tags are undefined.
-- [ ] T-127.3: Add unit tests for keyboard focus and tag edge cases.
-References:
-- /components/SearchDialog.tsx
-- /WRONG.md
-Dependencies: None
-Effort: S
 
 ### T-130: Fix blog structured data image references
 Priority: P2
