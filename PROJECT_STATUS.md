@@ -26,6 +26,13 @@ This is not a task list; tasks belong in `P0TODO.md, P1TODO.md, P2TODO.md, P3TOD
 ## Decisions (append-only)
 Use this format:
 
+- Date: 2026-01-22
+  - Decision: Documentation governance structure verified and archive organized
+  - Why: Ensure all open tasks from docs are integrated into P0-P3TODO.md and documentation is properly archived per governance standards
+  - Alternatives considered: (N/A - this was an audit/verification task)
+  - Trade-offs: None
+  - Follow-up (task IDs in P0TODO.md, P1TODO.md, P2TODO.md, P3TODO.md): T-145 (P3, inline TODO audit)
+
 - Date: 2026-01-07
   - Decision: Downgrade to Next.js 15.5.2 and ESLint 9.
   - Why: `@cloudflare/next-on-pages` adapter did not strictly support Next.js 16, causing peer dependency install failures and runtime build issues.

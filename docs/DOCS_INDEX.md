@@ -28,6 +28,7 @@ Last Updated: 2026-01-08
 - `docs/ops/CODE_AUDIT_SUMMARY.md`
 
 ## Archive
+- `docs/ARCHIVE/README.md` (Archive index and policy)
 - `docs/ARCHIVE/ops/DEPLOYMENT.md` (Historical deployment notes)
 
 ## Standards & health
