@@ -177,7 +177,7 @@ describe('ContactForm', () => {
     await user.type(emailInput, 'john@example.com')
     await user.type(phoneInput, '555-123-4567')
     await user.type(messageInput, 'Test message with enough characters')
-
+    
     await user.click(screen.getByRole('button', { name: /send message/i }))
 
     await waitFor(() => {
@@ -186,5 +186,44 @@ describe('ContactForm', () => {
       expect(phoneInput.value).toBe('')
       expect(messageInput.value).toBe('')
     })
+  })
+
+  it('validates honeypot field - rejects submission when filled', async () => {
+    const user = userEvent.setup()
+    const mockSubmit = vi.mocked(submitContactForm)
+    render(<ContactForm />)
+
+    // Fill out form with valid data
+    await user.type(screen.getByLabelText(/name/i), 'John Smith')
+    await user.type(screen.getByLabelText(/email/i), 'bot@spam.com')
+    await user.type(screen.getByLabelText(/phone/i), '555-123-4567')
+    await user.type(screen.getByRole('textbox', { name: /message/i }), 'This is a bot message')
+
+    // Fill the honeypot field (bots do this, humans should not)
+    const websiteInput = screen.getByLabelText(/website/i)
+    await user.type(websiteInput, 'http://spam.com')
+
+    // Try to submit
+    await user.click(screen.getByRole('button', { name: /send message/i }))
+
+    // The form should not submit when honeypot is filled
+    // submitContactForm should NOT be called because form validation should fail
+    await waitFor(() => {
+      expect(mockSubmit).not.toHaveBeenCalled()
+    })
+    
+    // The error may be shown or may be handled silently (depends on form implementation)
+    // The key is that submission was blocked
+  })
+
+  it('honeypot field is hidden from legitimate users', () => {
+    render(<ContactForm />)
+
+    // The honeypot field should exist but be visually hidden
+    const websiteInput = screen.getByLabelText(/website/i)
+    const websiteContainer = websiteInput.closest('div')
+
+    // Check that it's hidden (sr-only class or similar)
+    expect(websiteContainer).toHaveClass('sr-only')
   })
 })

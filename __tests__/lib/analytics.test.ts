@@ -110,7 +110,15 @@ describe('Analytics', () => {
 
       expect(gtagMock).not.toHaveBeenCalled()
       expect(plausibleMock).not.toHaveBeenCalled()
-      expect(consoleSpy).toHaveBeenCalled()
+      // Verify console logging with correct event data
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[INFO]',
+        'Analytics event',
+        expect.objectContaining({
+          action: 'click',
+          category: 'button',
+        })
+      )
 
       consoleSpy.mockRestore()
     })
@@ -143,7 +151,14 @@ describe('Analytics', () => {
         })
       }).not.toThrow()
 
-      expect(plausibleMock).toHaveBeenCalled()
+      // Verify plausible is still called with correct arguments even when gtag fails
+      expect(plausibleMock).toHaveBeenCalledWith('click', {
+        props: {
+          category: 'button',
+          label: undefined,
+          value: undefined,
+        },
+      })
     })
   })
 

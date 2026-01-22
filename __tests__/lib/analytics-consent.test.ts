@@ -40,12 +40,25 @@ describe('Analytics consent helpers', () => {
   })
 
   it('test_logs_error_when_local_storage_read_fails', () => {
-    const getItemSpy = vi.spyOn(window.localStorage, 'getItem').mockImplementation(() => {
-      throw new Error('Blocked')
+    // Create a spy that throws an error when getItem is called
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('Storage blocked by browser')
     })
 
-    expect(getAnalyticsConsent()).toBe('unknown')
-    expect(logErrorMock).toHaveBeenCalled()
+    // This should trigger the error handling path in readStoredConsent()
+    const result = getAnalyticsConsent()
+    
+    // Should return unknown when error occurs
+    expect(result).toBe('unknown')
+    
+    // Should have logged the error with correct message and context
+    expect(logErrorMock).toHaveBeenCalledWith(
+      'Failed to read analytics consent from localStorage',
+      expect.any(Error),
+      expect.objectContaining({
+        key: 'ydm_analytics_consent',
+      })
+    )
 
     getItemSpy.mockRestore()
   })
