@@ -3,8 +3,9 @@ import os from 'os'
 import path from 'path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-const buildPost = (frontmatter: string, body = 'Post body') =>
+const buildPostFixture = (frontmatter: string, body = 'Post body') =>
   `---\n${frontmatter}\n---\n${body}`
+const buildPost = buildPostFixture
 
 const writeBlogFixture = (files: Record<string, string>) => {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'blog-test-'))
