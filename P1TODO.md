@@ -1,7 +1,7 @@
 # P1TODO.md - Repository Task List
 
 Document Type: Workflow
-Last Updated: 2026-01-21
+Last Updated: 2026-01-22
 Task Truth Source: **P1TODO.md**
 Other Priority Files: `P0TODO.md`, `P2TODO.md`, `P3TODO.md`
 
@@ -253,26 +253,6 @@ Acceptance Criteria:
 - [ ] T-123.3: Add/update unit tests for the refactored component and hook.
 References:
 - /components/ContactForm.tsx
-- /WRONG.md
-Dependencies: None
-Effort: M
-
-### T-124: Refactor logger sanitization and record building
-Priority: P1
-Type: QUALITY
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit calls out sanitizeValue complexity, sensitive key checks, and buildLogRecord complexity.
-- Logging must remain safe while reducing complexity.
-Acceptance Criteria:
-- [ ] T-124.1: Split sanitizeValue into smaller helpers covering object/array cases.
-- [ ] T-124.2: Harden sensitive key detection with clearer rule set and tests.
-- [ ] T-124.3: Simplify buildLogRecord and update related tests.
-References:
-- /lib/logger.ts
-- /__tests__/lib/logger.test.ts
 - /WRONG.md
 Dependencies: None
 Effort: M

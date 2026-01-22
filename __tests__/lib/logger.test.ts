@@ -257,6 +257,27 @@ describe('Logger', () => {
       })
     })
 
+    it('should redact common secret naming variants', () => {
+      // We intentionally redact substrings to avoid leaking secrets with custom field names.
+      const result = sanitizeLogContext({
+        clientSecret: 'client-secret',
+        refreshToken: 'refresh-token',
+        accessToken: 'access-token',
+        sessionId: 'session-id',
+        'api-key': 'api-key',
+        normal: 'value',
+      })
+
+      expect(result).toEqual({
+        clientSecret: '[REDACTED]',
+        refreshToken: '[REDACTED]',
+        accessToken: '[REDACTED]',
+        sessionId: '[REDACTED]',
+        'api-key': '[REDACTED]',
+        normal: 'value',
+      })
+    })
+
     it('should redact nested sensitive fields', () => {
       const result = sanitizeLogContext({
         user: {
@@ -278,6 +299,28 @@ describe('Logger', () => {
           },
         },
         items: [{ password: '[REDACTED]' }],
+      })
+    })
+
+    it('should keep empty context unchanged', () => {
+      // Empty objects should stay empty to avoid introducing noise in logs.
+      const result = sanitizeLogContext({})
+
+      expect(result).toEqual({})
+    })
+
+    it('should preserve Error objects while sanitizing', () => {
+      // Preserve Error metadata for debugging while still sanitizing sibling fields.
+      const error = new Error('Boom')
+
+      const result = sanitizeLogContext({
+        error,
+        token: 'should-redact',
+      })
+
+      expect(result).toEqual({
+        error,
+        token: '[REDACTED]',
       })
     })
   })

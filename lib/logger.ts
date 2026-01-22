@@ -79,13 +79,35 @@ interface LogRecord {
 
 const SENSITIVE_KEYS = new Set([
   'password',
+  'passcode',
   'token',
   'authorization',
   'cookie',
   'api_key',
   'apikey',
   'secret',
+  'client_secret',
+  'refresh_token',
+  'access_token',
+  'session_id',
+  'sessionid',
 ])
+
+const SENSITIVE_KEY_SUBSTRINGS = [
+  'password',
+  'passcode',
+  'token',
+  'secret',
+  'authorization',
+  'cookie',
+  'apikey',
+  'api_key',
+  'client_secret',
+  'refresh_token',
+  'access_token',
+  'session_id',
+  'sessionid',
+]
 
 function normalizeKey(key: string): string {
   return key.toLowerCase().replace(/[^a-z0-9]/g, '_')
@@ -93,7 +115,12 @@ function normalizeKey(key: string): string {
 
 function isSensitiveKey(key: string): boolean {
   const normalized = normalizeKey(key)
-  return SENSITIVE_KEYS.has(normalized)
+  if (SENSITIVE_KEYS.has(normalized)) {
+    return true
+  }
+
+  // Prefer over-redaction to avoid leaking secrets with variable naming.
+  return SENSITIVE_KEY_SUBSTRINGS.some((fragment) => normalized.includes(fragment))
 }
 
 function buildLogContext(context?: LogContext): LogContext | undefined {
@@ -113,21 +140,13 @@ function buildLogRecord(
   context?: LogContext,
   error?: unknown
 ): LogRecord {
-  const record: LogRecord = {
+  return {
     timestamp: new Date().toISOString(),
     level,
     message,
+    ...(context ? { context } : {}),
+    ...(error !== undefined ? { error } : {}),
   }
-
-  if (context) {
-    record.context = context
-  }
-
-  if (error !== undefined) {
-    record.error = error
-  }
-
-  return record
 }
 
 function logJson(level: LogLevel, message: string, context?: LogContext, error?: unknown) {
@@ -147,23 +166,39 @@ function logJson(level: LogLevel, message: string, context?: LogContext, error?:
   console.error(payload)
 }
 
+function shouldPreserveObject(value: object): boolean {
+  // Preserve structured objects so stacks and timestamps remain useful in logs.
+  return value instanceof Error || value instanceof Date || value instanceof RegExp
+}
+
+function sanitizeArray(values: unknown[]): unknown[] {
+  // Recursively sanitize arrays to keep nested structures safe.
+  return values.map((item) => sanitizeValue(item))
+}
+
+function sanitizeObject(value: Record<string, unknown>): Record<string, unknown> {
+  // Treat every key as potentially sensitive to avoid leaking secrets.
+  // Use a null-prototype object to avoid prototype pollution from keys like "__proto__".
+  return Object.entries(value).reduce<Record<string, unknown>>(
+    (acc, [key, entryValue]) => {
+      acc[key] = isSensitiveKey(key) ? '[REDACTED]' : sanitizeValue(entryValue)
+      return acc
+    },
+    Object.create(null) as Record<string, unknown>,
+  )
+}
+
 function sanitizeValue(value: unknown): unknown {
   if (Array.isArray(value)) {
-    return value.map((item) => sanitizeValue(item))
+    return sanitizeArray(value)
   }
 
   if (value && typeof value === 'object') {
-    if (value instanceof Error || value instanceof Date || value instanceof RegExp) {
+    if (shouldPreserveObject(value)) {
       return value
     }
 
-    return Object.entries(value as Record<string, unknown>).reduce<Record<string, unknown>>(
-      (acc, [key, entryValue]) => {
-        acc[key] = isSensitiveKey(key) ? '[REDACTED]' : sanitizeValue(entryValue)
-        return acc
-      },
-      {},
-    )
+    return sanitizeObject(value as Record<string, unknown>)
   }
 
   return value

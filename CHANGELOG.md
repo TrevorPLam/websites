@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Refactored contact form submission logic to use shared rate limiting and request validation helpers
+- Refactored logger sanitization helpers and sensitive key detection rules for clearer redaction behavior
 
 ### Security
 - Added hashed IP + email rate limiting for contact form submissions

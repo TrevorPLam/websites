@@ -10,6 +10,26 @@ Move tasks here when Acceptance Criteria are met.
 ## Completed tasks
 <!-- Append completed tasks below. Preserve the original record for auditability. -->
 
+### T-124: Refactor logger sanitization and record building
+Priority: P1
+Type: QUALITY
+Owner: AGENT
+Status: DONE
+Completed: 2026-01-22
+Context:
+- Audit calls out sanitizeValue complexity, sensitive key checks, and buildLogRecord complexity.
+- Logging must remain safe while reducing complexity.
+Acceptance Criteria:
+- [x] T-124.1: Split sanitizeValue into smaller helpers covering object/array cases.
+- [x] T-124.2: Harden sensitive key detection with clearer rule set and tests.
+- [x] T-124.3: Simplify buildLogRecord and update related tests.
+References:
+- /lib/logger.ts
+- /__tests__/lib/logger.test.ts
+- /WRONG.md
+Dependencies: None
+Effort: M
+
 ### T-130: Fix blog structured data image references
 Priority: P2
 Type: BUG
