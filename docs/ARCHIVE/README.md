@@ -1,7 +1,7 @@
 # docs/ARCHIVE — Documentation Archive
 
 **Last Updated:** 2026-01-22  
-**Purpose:** Store deprecated, superseded, or historical documentation files  
+**Purpose:** Store deprecated, superseded, or historical documentation files
 
 ## Archive Organization
 

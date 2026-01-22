@@ -150,9 +150,9 @@ T-134 (P3, READY): Normalize naming conventions → WRONG.md QUALITY issues
 ### Inline Code TODOs Analysis
 
 **Search Results:**
-- Total inline TODOs/FIXMEs in source code: **~0-2**
-- Only example placeholders found (e.g., "G-XXXX" in analytics examples)
-- No actionable inline code TODOs discovered
+- Total inline TODOs/FIXMEs in source code: **2** (confirmed via grep search)
+- Both are example placeholders: "G-XXXX" in analytics documentation and "G-XXXXXXXXXX" in env.ts
+- No actionable inline code TODOs discovered in initial scan
 
 **Action Taken:**
 - ✅ Created T-145 in P3TODO.md: "Audit and document inline code TODOs"
@@ -254,8 +254,8 @@ ls -la CODEAUDIT.md SECURITYAUDIT.md DEPENDENCYAUDIT.md RELEASEAUDIT.md DOCSAUDI
 # Verify archive structure
 ls -la docs/ARCHIVE/README.md
 
-# Search for inline TODOs
-grep -r "TODO\|FIXME\|HACK\|XXX" --include="*.ts" --include="*.tsx" -n | wc -l
+# Search for inline TODOs (comprehensive)
+grep -r "TODO\|FIXME\|HACK\|XXX" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" -n | wc -l
 ```
 
 ---

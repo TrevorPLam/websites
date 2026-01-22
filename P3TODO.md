@@ -176,14 +176,15 @@ Owner: AGENT
 Status: READY
 Blockers: None
 Context:
-- Problem statement requires checking inline code TODOs (not integrating them into TODO docs, but creating a task to check them)
-- Initial scan shows minimal inline TODOs (only example placeholders like "G-XXXX")
+- Problem statement requires auditing inline code TODOs to determine if they represent actionable tasks
+- Initial scan shows only 2 inline TODOs (both are example placeholders like "G-XXXX")
 - Need comprehensive audit to identify any actionable inline TODOs vs documentation placeholders
+- Note: This task is about auditing, not automatically integrating - integration decisions come after audit
 Acceptance Criteria:
-- [ ] T-145.1: Run comprehensive search for inline TODO/FIXME/HACK/XXX comments in all source files
+- [ ] T-145.1: Run comprehensive search for inline TODO/FIXME/HACK/XXX comments in all source files (.ts, .tsx, .js, .jsx, etc.)
 - [ ] T-145.2: Categorize findings as: actionable tasks, documentation placeholders, or historical notes
-- [ ] T-145.3: Document findings in /docs/INLINE_TODO_AUDIT.md with counts and examples
-- [ ] T-145.4: Create tasks in P0-P3TODO.md for any actionable inline TODOs found
+- [ ] T-145.3: Document findings in /docs/INLINE_TODO_AUDIT.md with exact counts and examples
+- [ ] T-145.4: Create tasks in P0-P3TODO.md only for actionable inline TODOs requiring work (if any found)
 References:
 - All .ts, .tsx, .js, .jsx files in codebase
 - /docs/INLINE_TODO_AUDIT.md (to be created)
