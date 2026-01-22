@@ -1,11 +1,14 @@
+import { createHash } from 'crypto'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { submitContactForm } from '@/lib/actions'
 import { logError, logWarn } from '@/lib/logger'
 
-let currentIp = '203.0.113.1'
+let currentForwardedFor = '203.0.113.1'
+let currentRealIp = '203.0.113.99'
 let insertPayloads: Array<Record<string, unknown>> = []
 let updatePayloads: Array<Record<string, unknown>> = []
 let hubspotShouldFail = false
+let ipCounter = 1
 const fetchMock = vi.hoisted(() => vi.fn())
 
 vi.stubGlobal('fetch', fetchMock)
@@ -14,7 +17,10 @@ vi.mock('next/headers', () => ({
   headers: () => ({
     get: (key: string) => {
       if (key === 'x-forwarded-for') {
-        return currentIp
+        return currentForwardedFor
+      }
+      if (key === 'x-real-ip') {
+        return currentRealIp
       }
       if (key === 'origin') {
         return 'https://example.com'
@@ -44,10 +50,15 @@ const buildPayload = (email: string) => ({
   message: 'This is a sufficiently long message for validation.',
 })
 
+const hashIp = (value: string) =>
+  createHash('sha256').update(`contact_form_ip:${value}`).digest('hex')
+
 describe('contact form rate limiting', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    currentIp = '203.0.113.1'
+    currentForwardedFor = `203.0.113.${ipCounter}`
+    currentRealIp = `203.0.113.${ipCounter + 100}`
+    ipCounter += 1
     insertPayloads = []
     updatePayloads = []
     hubspotShouldFail = false
@@ -109,7 +120,7 @@ describe('contact form rate limiting', () => {
     const second = await submitContactForm(buildPayload(email))
     const third = await submitContactForm(buildPayload(email))
 
-    currentIp = '203.0.113.2'
+    currentForwardedFor = '203.0.113.2'
     const fourth = await submitContactForm(buildPayload(email))
 
     expect(first.success).toBe(true)
@@ -125,7 +136,7 @@ describe('contact form rate limiting', () => {
     await submitContactForm(buildPayload(email))
     await submitContactForm(buildPayload(email))
 
-    currentIp = '198.51.100.5'
+    currentForwardedFor = '198.51.100.5'
     const next = await submitContactForm(buildPayload('fresh@example.com'))
 
     expect(next.success).toBe(true)
@@ -170,5 +181,41 @@ describe('contact form rate limiting', () => {
     expect(lastUpdate).toMatchObject({
       hubspot_sync_status: 'needs_sync',
     })
+  })
+
+  it('uses x-real-ip when x-forwarded-for is blank', async () => {
+    currentForwardedFor = '   '
+    currentRealIp = '203.0.113.55'
+    const email = 'blank-forwarded@example.com'
+
+    await submitContactForm(buildPayload(email))
+    await submitContactForm(buildPayload(email))
+    await submitContactForm(buildPayload(email))
+    await submitContactForm(buildPayload(email))
+
+    expect(logWarn).toHaveBeenCalledWith(
+      'Rate limit exceeded for contact form',
+      expect.objectContaining({
+        ip: hashIp(currentRealIp),
+      }),
+    )
+  })
+
+  it('uses x-real-ip when x-forwarded-for is invalid', async () => {
+    currentForwardedFor = 'not-an-ip'
+    currentRealIp = '203.0.113.56'
+    const email = 'invalid-forwarded@example.com'
+
+    await submitContactForm(buildPayload(email))
+    await submitContactForm(buildPayload(email))
+    await submitContactForm(buildPayload(email))
+    await submitContactForm(buildPayload(email))
+
+    expect(logWarn).toHaveBeenCalledWith(
+      'Rate limit exceeded for contact form',
+      expect.objectContaining({
+        ip: hashIp(currentRealIp),
+      }),
+    )
   })
 })

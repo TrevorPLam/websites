@@ -78,6 +78,7 @@
 
 'use server'
 import { createHash } from 'crypto'
+import { isIP } from 'net'
 import { headers } from 'next/headers'
 import { z } from 'zod'
 import { logError, logWarn, logInfo } from './logger'
@@ -215,16 +216,36 @@ const TRUSTED_IP_HEADERS = {
  * We want the leftmost (original client) IP.
  * 
  * @param headerValue - Raw header value
- * @returns First IP in chain, trimmed
+ * @returns First IP in chain, trimmed, or null when unavailable/invalid
  * 
  * @example
  * ```typescript
  * extractFirstIp('192.168.1.1, 10.0.0.1') // => '192.168.1.1'
  * extractFirstIp('  192.168.1.1  ') // => '192.168.1.1'
+ * extractFirstIp('   ') // => null
  * ```
  */
-function extractFirstIp(headerValue: string): string {
-  return headerValue.split(',')[0]?.trim() || 'unknown'
+function extractFirstIp(headerValue: string): string | null {
+  const trimmedHeader = headerValue.trim()
+  if (!trimmedHeader) {
+    return null
+  }
+
+  const firstIp = trimmedHeader.split(',')[0]?.trim()
+  if (!firstIp) {
+    return null
+  }
+
+  if (!isValidIpAddress(firstIp)) {
+    // WHY: Avoid treating malformed proxy headers as valid client IPs.
+    return null
+  }
+
+  return firstIp
+}
+
+function isValidIpAddress(value: string): boolean {
+  return isIP(value) !== 0
 }
 
 /**
@@ -253,7 +274,7 @@ function extractFirstIp(headerValue: string): string {
  * // Development with nginx proxy
  * getValidatedClientIp(headers) // => '192.168.1.1' (from X-Forwarded-For)
  * 
- * // No trusted headers present
+ * // No trusted headers present or all candidates invalid
  * getValidatedClientIp(headers) // => 'unknown'
  * ```
  */
@@ -265,7 +286,10 @@ function getValidatedClientIp(requestHeaders: Headers): string {
   for (const headerName of trustedHeaders) {
     const headerValue = requestHeaders.get(headerName)
     if (headerValue) {
-      return extractFirstIp(headerValue)
+      const candidateIp = extractFirstIp(headerValue)
+      if (candidateIp) {
+        return candidateIp
+      }
     }
   }
   
@@ -315,8 +339,13 @@ const SPAN_HASH_SALT = 'contact_form_span'
  * @param value - The value to hash (email or IP address)
  * @returns Hex-encoded SHA-256 hash
  */
-function hashIdentifier(value: string, salt = IP_HASH_SALT): string {
+function hashIdentifier(value: string, salt: string): string {
   return createHash('sha256').update(`${salt}:${value}`).digest('hex')
+}
+
+function hashIp(value: string): string {
+  // WHY: Explicit helper prevents accidental salt mix-ups for IP hashing.
+  return hashIdentifier(value, IP_HASH_SALT)
 }
 
 function hashEmail(value: string): string {
@@ -555,7 +584,7 @@ function buildSanitizedContactData(
   validatedData: ContactFormData,
   clientIp: string,
 ): SanitizedContactData {
-  const hashedIp = hashIdentifier(clientIp)
+  const hashedIp = hashIp(clientIp)
   const safeEmail = sanitizeEmail(validatedData.email)
   const safeName = sanitizeName(validatedData.name)
   const safePhone = validatedData.phone ? escapeHtml(validatedData.phone) : ''
@@ -894,7 +923,7 @@ function checkRateLimitInMemory(identifier: string): boolean {
 async function checkRateLimit(email: string, clientIp: string): Promise<boolean> {
   const limiter = await getRateLimiter()
   const emailIdentifier = `email:${email}`
-  const ipIdentifier = `ip:${hashIdentifier(clientIp)}`
+  const ipIdentifier = `ip:${hashIp(clientIp)}`
 
   if (limiter) {
     // Use Upstash distributed rate limiting

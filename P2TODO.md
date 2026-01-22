@@ -148,25 +148,6 @@ References:
 Dependencies: None
 Effort: XS
 
-### T-131: Correct IP hashing + empty IP handling
-Priority: P2
-Type: BUG
-Owner: AGENT
-Status: READY
-Blockers: None
-Context:
-- Audit BUG-017/018 identify wrong salt variable usage and empty IP handling.
-- IP hashing should be deterministic and safe.
-Acceptance Criteria:
-- [ ] T-131.1: Fix salt variable usage in IP hashing.
-- [ ] T-131.2: Handle empty IP strings without returning misleading `unknown`.
-- [ ] T-131.3: Add tests for empty/invalid IP inputs.
-References:
-- /lib/actions.ts
-- /WRONG.md
-Dependencies: None
-Effort: S
-
 ### T-132: Introduce typed identifiers for email/IP rate limits
 Priority: P2
 Type: QUALITY
@@ -186,6 +167,6 @@ References:
 Dependencies: T-118
 Effort: S
 
-_Completed (moved to TODOCOMPLETED.md on 2026-01-22): T-130._
+_Completed (moved to TODOCOMPLETED.md on 2026-01-22): T-130, T-131._
 _Completed (moved to TODOCOMPLETED.md on 2026-01-21): T-112, T-128, T-129, T-133._
 _Completed (moved to TODOCOMPLETED.md on 2026-01-20): T-108, T-109._
