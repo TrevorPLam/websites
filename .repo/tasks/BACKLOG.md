@@ -47,26 +47,6 @@
 
 ## P0 — Critical
 
-### [TASK-012] Run Security Audit and Fix Vulnerabilities
-- **Priority:** P0
-- **Status:** Pending
-- **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - Security audit needed to identify and fix dependency vulnerabilities. Critical for production safety.
-
-#### Acceptance Criteria
-- [ ] Run `npm audit` to identify vulnerabilities
-- [ ] Fix all critical and high severity vulnerabilities
-- [ ] Document any acceptable risks for medium/low severity
-- [ ] Update dependencies where safe
-- [ ] Add npm audit to CI pipeline
-
-#### Notes
-- Reference: CODEBASE_ANALYSIS.md section 19.7 (Dependency Health Check)
-- Current status: Unknown vulnerabilities (needs verification)
-- Set up Dependabot for automated updates
-
----
-
 ### [TASK-013] Remove @ts-ignore Comments and Fix Type Safety Issues
 - **Priority:** P0
 - **Status:** Pending

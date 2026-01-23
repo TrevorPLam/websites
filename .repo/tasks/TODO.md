@@ -66,20 +66,20 @@
 
 ---
 
-### [TASK-001] Refine AGENTS.md to Be Concise & Effective
+### [TASK-012] Run Security Audit and Fix Vulnerabilities
 - **Priority:** P0
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Current AGENTS.md is 22 lines. Best practice is 50-100 lines that are highly specific and example-driven, NOT verbose documentation.
+- **Context:** Per CODEBASE_ANALYSIS.md - Security audit needed to identify and fix dependency vulnerabilities. Critical for production safety.
 
 #### Acceptance Criteria
-- [ ] Include all six core areas: Commands, Testing, Project Structure, Code Style, Git Workflow, Boundaries
-- [ ] Add specific tech stack with versions (Django 4.2 + Python 3.11 + React 18 + TypeScript)
-- [ ] Include 1-2 code examples (showing patterns, not explaining them)
-- [ ] Document clear boundaries (what agents must NEVER do)
-- [ ] Keep total length under 100 lines
+- [ ] Run `npm audit` to identify vulnerabilities
+- [ ] Fix all critical and high severity vulnerabilities
+- [ ] Document any acceptable risks for medium/low severity
+- [ ] Update dependencies where safe
+- [ ] Add npm audit to CI pipeline
 
 #### Notes
-- "One real code snippet beats three paragraphs" — GitHub research
-- Tools: Cursor, Codex mobile, Claude mobile, GitHub Copilot mobile
-- Reference: https://agents.md (official spec)
+- Reference: CODEBASE_ANALYSIS.md section 19.7 (Dependency Health Check)
+- Current status: Unknown vulnerabilities (needs verification)
+- Set up Dependabot for automated updates
