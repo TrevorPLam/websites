@@ -108,8 +108,9 @@ export async function POST(request: Request) {
 ## Documentation Expectations
 - Follow the documentation structure:
   - `README.md` — Project overview and setup
-  - `DIAMOND.md` — Security checklist
+  - `SECURITY.md` — Security policy and vulnerability reporting (when created)
   - `.repo/policy/` — Governance policies
+  - `.repo/archive/assessments/DIAMOND.md` — Historical security checklist (archived)
 - When adding new features, update relevant documentation
 - Keep code comments clear and helpful
 

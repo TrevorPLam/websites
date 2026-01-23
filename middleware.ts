@@ -169,7 +169,6 @@ export function parseContentLength(headerValue: string | null): number | null {
   if (!Number.isFinite(parsed) || parsed < 0) {
     // Invalid header: treat as oversized to avoid bypassing size checks.
     return MAX_BODY_SIZE_BYTES + 1
-    return null
   }
 
   return parsed
