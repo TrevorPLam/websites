@@ -1,6 +1,14 @@
 import '@testing-library/jest-dom'
 import { vi, afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
+import * as fc from 'fast-check'
+
+// Make fast-check available globally for property-based testing
+declare global {
+  // eslint-disable-next-line no-var
+  var fc: typeof fc
+}
+global.fc = fc
 
 // Only set test defaults when the environment variables are not already set to avoid clobbering caller-provided values.
 process.env.SUPABASE_URL = process.env.SUPABASE_URL ?? 'https://example.supabase.co'

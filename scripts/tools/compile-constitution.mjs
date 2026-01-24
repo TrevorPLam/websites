@@ -286,10 +286,10 @@ function generateServerInstructions(constitution) {
 function generateAgentsHeader(targetName, pathType = "global") {
   const timestamp = new Date().toISOString().split("T")[0];
   const agentsJsonPath = pathType === "global" 
-    ? "AGENTS.json" 
+    ? "agents.json" 
     : pathType === "docs"
-    ? "../../AGENTS.json"
-    : "../../AGENTS.json";
+    ? "../../agents.json"
+    : "../../agents.json";
   
   return `<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
 <!-- Source: .repo/policy/constitution.json -->
@@ -318,7 +318,7 @@ function generateGlobalAgents(constitution) {
   const sections = [];
 
   sections.push("## Agent Entry Point\n");
-  sections.push("See `AGENTS.json` for complete agent workflow, command routing, and decision trees.\n");
+  sections.push("See `agents.json` for complete agent workflow, command routing, and decision trees.\n");
 
   sections.push("\n## Key Workflow (from Constitution)\n");
   if (constitution.workflow?.three_pass) {
@@ -342,7 +342,7 @@ function generateDocsAgents(constitution) {
   const sections = [];
 
   sections.push("## Documentation Agent Entry Point\n");
-  sections.push("See `../../AGENTS.json` for complete agent workflow.\n");
+  sections.push("See `../../agents.json` for complete agent workflow.\n");
 
   sections.push("\n## Documentation-Specific Context\n");
   const principle19 = constitution.principles.list.find((p) => p.id === 19);
@@ -357,7 +357,7 @@ function generateClientAgents(constitution) {
   const sections = [];
 
   sections.push("## Client/Frontend Agent Entry Point\n");
-  sections.push("See `../../AGENTS.json` for complete agent workflow.\n");
+  sections.push("See `../../agents.json` for complete agent workflow.\n");
 
   sections.push("\n## Client-Specific Context\n");
   if (constitution.best_practices?.tech_stack?.mobile) {
@@ -374,7 +374,7 @@ function generateServerAgents(constitution) {
   const sections = [];
 
   sections.push("## Server/Backend Agent Entry Point\n");
-  sections.push("See `../../AGENTS.json` for complete agent workflow.\n");
+  sections.push("See `../../agents.json` for complete agent workflow.\n");
 
   sections.push("\n## Server-Specific Context\n");
   if (constitution.best_practices?.tech_stack?.backend) {
