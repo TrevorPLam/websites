@@ -86,3 +86,32 @@ export const TEST = {
   /** Default local development URL */
   DEFAULT_DEV_URL: 'http://localhost:3000',
 } as const
+
+/**
+ * Organization/Business information constants
+ */
+export const ORGANIZATION = {
+  /** Primary contact email address */
+  CONTACT_EMAIL: 'contact@yourdedicatedmarketer.com',
+  
+  /** Social media profile URLs */
+  SOCIAL_MEDIA: {
+    FACEBOOK: 'https://www.facebook.com/yourdedicatedmarketer',
+    TWITTER: 'https://www.twitter.com/yourdedicatedmarketer',
+    LINKEDIN: 'https://www.linkedin.com/company/yourdedicatedmarketer',
+    INSTAGRAM: 'https://www.instagram.com/yourdedicatedmarketer',
+  },
+  
+  /** Aggregate rating information */
+  RATING: {
+    /** Average rating value (out of 5) */
+    VALUE: '4.9',
+    /** Total number of reviews */
+    COUNT: '127',
+  },
+  
+  /** Address information */
+  ADDRESS: {
+    COUNTRY: 'US',
+  },
+} as const

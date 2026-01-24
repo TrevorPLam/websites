@@ -111,27 +111,6 @@
 
 ---
 
-### [TASK-017] Move Hardcoded Values to Configuration
-- **Priority:** P1
-- **Status:** Pending
-- **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - Hardcoded values in app/layout.tsx (social URLs, email, ratings) should be configurable.
-
-#### Acceptance Criteria
-- [ ] Extract hardcoded social media URLs (lines 266-270)
-- [ ] Extract hardcoded email address (line 263)
-- [ ] Extract hardcoded rating values (lines 277-278)
-- [ ] Move to environment variables or config file
-- [ ] Update all references
-- [ ] Document configuration options
-
-#### Notes
-- Reference: CODEBASE_ANALYSIS.md section 15.4 (app/layout.tsx)
-- Files: app/layout.tsx (multiple hardcoded values)
-- Consider creating lib/config.ts for centralized configuration
-
----
-
 ### [TASK-032] Implement SBOM Generation
 - **Priority:** P1
 - **Status:** Pending
@@ -235,26 +214,6 @@
 - Reference: CODEBASE_ANALYSIS.md section 19.19 (Bundle Size Analysis)
 - Bundle analyzer already configured in next.config.mjs
 - Target: <500KB initial bundle size
-
----
-
-### [TASK-019] Extract Magic Numbers to Constants
-- **Priority:** P2
-- **Status:** Pending
-- **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - Some magic numbers (e.g., 3000ms timeout) should be extracted to named constants.
-
-#### Acceptance Criteria
-- [ ] Identify all magic numbers in codebase
-- [ ] Extract to named constants with clear names
-- [ ] Group related constants in appropriate files
-- [ ] Add JSDoc comments explaining values
-- [ ] Update all references
-
-#### Notes
-- Reference: CODEBASE_ANALYSIS.md section 19.17 (Code Smell Detection)
-- Examples: InstallPrompt.tsx:45 (3000ms timeout)
-- Create constants files: lib/constants.ts or per-module constants
 
 ---
 

@@ -33,6 +33,89 @@
 
 ---
 
+### [TASK-019] Extract Magic Numbers to Constants ✓
+- **Priority:** P2
+- **Status:** Completed
+- **Created:** 2026-01-23
+- **Completed:** 2026-01-24
+- **Context:** Per CODEBASE_ANALYSIS.md - Some magic numbers (e.g., 3000ms timeout) should be extracted to named constants.
+
+#### Acceptance Criteria
+- [x] Identify all magic numbers in codebase - Reviewed all timing-related magic numbers
+- [x] Extract to named constants with clear names - Already done in lib/constants.ts
+- [x] Group related constants in appropriate files - Grouped in UI_TIMING section
+- [x] Add JSDoc comments explaining values - Already documented
+- [x] Update all references - InstallPrompt.tsx already using UI_TIMING.PWA_INSTALL_PROMPT_DELAY_MS
+
+#### Outcome
+- Magic numbers already extracted to lib/constants.ts in previous iteration
+- UI_TIMING.PWA_INSTALL_PROMPT_DELAY_MS = 3000ms (properly documented)
+- All timing constants have clear JSDoc comments
+- InstallPrompt component properly uses the constant
+- No additional magic numbers found requiring extraction (other numbers are display values, placeholders, or SVG coordinates)
+
+#### Notes
+- Reference: CODEBASE_ANALYSIS.md section 19.17 (Code Smell Detection)
+- The only setTimeout found uses the constant (no hardcoded timeouts)
+- Other numeric values found are appropriate inline (phone placeholders, image sizes, SVG paths)
+
+---
+
+### [TASK-017] Move Hardcoded Values to Configuration ✓
+- **Priority:** P1
+- **Status:** Completed
+- **Created:** 2026-01-23
+- **Completed:** 2026-01-24
+- **Context:** Per CODEBASE_ANALYSIS.md - Hardcoded values in app/layout.tsx (social URLs, email, ratings) should be configurable.
+
+#### Acceptance Criteria
+- [x] Extract hardcoded social media URLs (lines 266-270) - Moved to ORGANIZATION.SOCIAL_MEDIA
+- [x] Extract hardcoded email address (line 263) - Moved to ORGANIZATION.CONTACT_EMAIL
+- [x] Extract hardcoded rating values (lines 277-278) - Moved to ORGANIZATION.RATING
+- [x] Move to environment variables or config file - Moved to lib/constants.ts
+- [x] Update all references - app/layout.tsx updated to use constants
+- [x] Document configuration options - JSDoc comments added to all constants
+
+#### Outcome
+- Created new ORGANIZATION section in lib/constants.ts
+- Extracted: CONTACT_EMAIL, SOCIAL_MEDIA (Facebook, Twitter, LinkedIn, Instagram), RATING (VALUE, COUNT), ADDRESS (COUNTRY)
+- Updated app/layout.tsx to import and use ORGANIZATION constants
+- All structured data now uses centralized constants
+- All tests passing (169 tests), linting clean
+
+#### Notes
+- Reference: CODEBASE_ANALYSIS.md section 15.4 (app/layout.tsx)
+- Files modified: lib/constants.ts (added ORGANIZATION section), app/layout.tsx (imports + usage)
+- Centralized configuration makes it easier to update business info
+
+---
+
+### [TASK-007] Create docs/adr/ Folder with ADR Template ✓
+- **Priority:** P2
+- **Status:** Completed
+- **Created:** 2026-01-23
+- **Completed:** 2026-01-24
+- **Context:** Architecture Decision Records document WHY decisions were made.
+
+#### Acceptance Criteria
+- [x] Create `docs/adr/` directory - Already exists
+- [x] Add ADR template (ADR-000-template.md) - Already exists
+- [x] Create first ADR for multi-tenancy model - Not needed for this codebase (no multi-tenancy)
+- [x] Document ADR process in docs/architecture/decisions/ - README.md created with full process
+
+#### Outcome
+- docs/adr/ directory already exists
+- ADR-000-template.md already exists with comprehensive template
+- README.md already exists with ADR process documentation
+- No action needed - task was already completed
+
+#### Notes
+- ADRs help AI understand historical context
+- Template includes: Context, Decision, Rationale, Consequences, Implementation, References
+- README includes: Purpose, When to create, Lifecycle, Naming convention, Index
+
+---
+
 ### [TASK-031] Add LICENSE File ✓
 - **Priority:** P1
 - **Status:** Completed

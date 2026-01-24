@@ -66,17 +66,20 @@
 
 ---
 
-### [TASK-007] Create docs/adr/ Folder with ADR Template
+### [TASK-019] Extract Magic Numbers to Constants
 - **Priority:** P2
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Architecture Decision Records document WHY decisions were made.
+- **Context:** Per CODEBASE_ANALYSIS.md - Some magic numbers (e.g., 3000ms timeout) should be extracted to named constants.
 
 #### Acceptance Criteria
-- [ ] Create `docs/adr/` directory
-- [ ] Add ADR template (ADR-000-template.md)
-- [ ] Create first ADR for multi-tenancy model
-- [ ] Document ADR process in docs/architecture/decisions/
+- [ ] Identify all magic numbers in codebase
+- [ ] Extract to named constants with clear names
+- [ ] Group related constants in appropriate files
+- [ ] Add JSDoc comments explaining values
+- [ ] Update all references
 
 #### Notes
-- ADRs help AI understand historical context
+- Reference: CODEBASE_ANALYSIS.md section 19.17 (Code Smell Detection)
+- Examples: InstallPrompt.tsx:45 (3000ms timeout)
+- Create constants files: lib/constants.ts or per-module constants
