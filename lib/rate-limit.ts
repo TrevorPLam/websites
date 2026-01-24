@@ -35,13 +35,14 @@
 
 import { logError, logInfo, logWarn } from './logger'
 import { validatedEnv } from './env'
+import { RATE_LIMIT } from './constants'
 
 /**
  * Rate limiting configuration.
  * - 3 requests per hour per email address
  * - 3 requests per hour per IP address
  */
-const RATE_LIMIT_MAX_REQUESTS = 3
+const RATE_LIMIT_MAX_REQUESTS = RATE_LIMIT.MAX_REQUESTS
 const RATE_LIMIT_WINDOW = '1 h' // 1 hour
 
 /**
@@ -135,7 +136,7 @@ function checkRateLimitInMemory(identifier: string): boolean {
 
   const existing = rateLimitMap.get(identifier)
   if (!existing) {
-    rateLimitMap.set(identifier, { count: 1, resetAt: now + 60 * 60 * 1000 })
+    rateLimitMap.set(identifier, { count: 1, resetAt: now + RATE_LIMIT.WINDOW_MS })
     return true
   }
 

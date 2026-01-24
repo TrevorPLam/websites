@@ -122,9 +122,11 @@ export function escapeHtml(text: string): string {
   return text.replace(/[&<>"'/]/g, (char) => htmlEscapeMap[char] || char)
 }
 
-const EMAIL_SUBJECT_MAX_LENGTH = 200
-const EMAIL_ADDRESS_MAX_LENGTH = 254
-const NAME_MAX_LENGTH = 100
+import { FORM_VALIDATION } from './constants'
+
+const EMAIL_SUBJECT_MAX_LENGTH = FORM_VALIDATION.EMAIL_SUBJECT_MAX_LENGTH
+const EMAIL_ADDRESS_MAX_LENGTH = FORM_VALIDATION.EMAIL_MAX_LENGTH
+const NAME_MAX_LENGTH = FORM_VALIDATION.NAME_MAX_LENGTH
 const RELATIVE_URL_PATTERN = /^(\/(?!\/)|\.{1,2}\/|[?#])/
 
 /**

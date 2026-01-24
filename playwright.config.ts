@@ -1,15 +1,16 @@
 import { defineConfig, devices } from '@playwright/test'
+import { TEST } from './lib/constants'
 
 export default defineConfig({
   testDir: './tests/e2e',
-  timeout: 60 * 1000,
+  timeout: TEST.PLAYWRIGHT_TIMEOUT_MS,
   expect: {
-    timeout: 10 * 1000,
+    timeout: TEST.PLAYWRIGHT_EXPECT_TIMEOUT_MS,
   },
   fullyParallel: true,
   reporter: 'html',
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || TEST.DEFAULT_DEV_URL,
     trace: 'on-first-retry',
   },
   projects: [
@@ -24,7 +25,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:3000',
+    url: TEST.DEFAULT_DEV_URL,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
     stderr: 'pipe',

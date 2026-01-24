@@ -49,7 +49,7 @@
  * **VALIDATION MODES**:
  * - mode: 'onBlur' — validates when field loses focus
  * - reValidateMode: 'onChange' — re-validates while typing after first error
- * - delayError: 500 — debounces error display for smoother UX
+ * - delayError: UI_TIMING.FORM_ERROR_DEBOUNCE_MS — debounces error display for smoother UX
  *
  * **POTENTIAL ISSUES**:
  * - [ ] Success message disappears on page navigation
@@ -103,6 +103,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { submitContactForm } from '@/lib/actions'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
 import { trackFormSubmission } from '@/lib/analytics'
+import { UI_TIMING } from '@/lib/constants'
 import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
 import Textarea from '@/components/ui/Textarea'
@@ -130,7 +131,7 @@ export default function ContactForm() {
     resolver: zodResolver(contactFormSchema),
     mode: 'onBlur', // Validate on blur for better UX
     reValidateMode: 'onChange', // Re-validate on change after first validation
-    delayError: 500, // Debounce error display by 500ms
+    delayError: UI_TIMING.FORM_ERROR_DEBOUNCE_MS, // Debounce error display
   })
 
   const onSubmit = async (data: ContactFormData) => {

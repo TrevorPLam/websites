@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { X, Download } from 'lucide-react'
 import Button from './ui/Button'
+import { UI_TIMING } from '@/lib/constants'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
@@ -44,7 +45,7 @@ export default function InstallPrompt() {
       // Memory-safe: Timer will be cleaned up on unmount
       promptTimerId = setTimeout(() => {
         setShowPrompt(true)
-      }, 3000)
+      }, UI_TIMING.PWA_INSTALL_PROMPT_DELAY_MS)
     }
 
     window.addEventListener('beforeinstallprompt', handler)
