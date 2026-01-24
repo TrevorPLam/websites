@@ -66,21 +66,17 @@
 
 ---
 
-### [TASK-014] Split lib/actions.ts into Smaller Modules
-- **Priority:** P1
+### [TASK-007] Create docs/adr/ Folder with ADR Template
+- **Priority:** P2
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - lib/actions.ts is 535 lines and needs refactoring for maintainability.
+- **Context:** Architecture Decision Records document WHY decisions were made.
 
 #### Acceptance Criteria
-- [ ] Split into: lib/actions/submit.ts (main handler)
-- [ ] Split into: lib/actions/sanitize.ts (sanitization logic)
-- [ ] Split into: lib/actions/hubspot.ts (HubSpot sync)
-- [ ] Split into: lib/actions/supabase.ts (Supabase operations)
-- [ ] Update all imports and tests
-- [ ] Verify no functionality regression
+- [ ] Create `docs/adr/` directory
+- [ ] Add ADR template (ADR-000-template.md)
+- [ ] Create first ADR for multi-tenancy model
+- [ ] Document ADR process in docs/architecture/decisions/
 
 #### Notes
-- Reference: CODEBASE_ANALYSIS.md section 10.3 and 15.2
-- Current: 535 lines (target: <200 lines per file)
-- Maintain existing security patterns and error handling
+- ADRs help AI understand historical context
