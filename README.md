@@ -927,9 +927,9 @@ graph LR
 
 ## 📄 License
 
-**Proprietary** - All rights reserved
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-This software is proprietary and confidential. Unauthorized copying, modification, distribution, or use of this software, via any medium, is strictly prohibited.
+Copyright (c) 2026 Your Dedicated Marketer
 
 ---
 
