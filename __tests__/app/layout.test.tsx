@@ -74,15 +74,15 @@ describe('RootLayout CSP nonce fallback', () => {
     vi.clearAllMocks()
   })
 
-  it('uses the header nonce when available (happy path)', () => {
+  it('uses the header nonce when available (happy path)', async () => {
     // Use the header nonce to prove we respect the middleware-provided value.
     nonceHeaderValue = 'header-nonce'
     vi.mocked(createCspNonce).mockReturnValue('unused-nonce')
 
     const markup = renderToStaticMarkup(
-      <RootLayout>
-        <div>child</div>
-      </RootLayout>
+      await RootLayout({
+        children: <div>child</div>,
+      })
     )
 
     expect(markup).toContain('nonce="header-nonce"')
@@ -91,15 +91,15 @@ describe('RootLayout CSP nonce fallback', () => {
     expect(logError).not.toHaveBeenCalled()
   })
 
-  it('creates a fallback nonce when the header is missing (empty header)', () => {
+  it('creates a fallback nonce when the header is missing (empty header)', async () => {
     // Missing header should log a warning and create a new nonce.
     nonceHeaderValue = null
     vi.mocked(createCspNonce).mockReturnValue('generated-fallback')
 
     const markup = renderToStaticMarkup(
-      <RootLayout>
-        <div>child</div>
-      </RootLayout>
+      await RootLayout({
+        children: <div>child</div>,
+      })
     )
 
     expect(markup).toContain('nonce="generated-fallback"')
@@ -108,7 +108,7 @@ describe('RootLayout CSP nonce fallback', () => {
     expect(logError).not.toHaveBeenCalled()
   })
 
-  it('uses a static fallback nonce if nonce creation fails (error path)', () => {
+  it('uses a static fallback nonce if nonce creation fails (error path)', async () => {
     // If crypto fails, we still render to avoid hard crashes.
     nonceHeaderValue = null
     vi.mocked(createCspNonce).mockImplementation(() => {
@@ -116,9 +116,9 @@ describe('RootLayout CSP nonce fallback', () => {
     })
 
     const markup = renderToStaticMarkup(
-      <RootLayout>
-        <div>child</div>
-      </RootLayout>
+      await RootLayout({
+        children: <div>child</div>,
+      })
     )
 
     expect(markup).toContain('nonce="fallback-nonce"')

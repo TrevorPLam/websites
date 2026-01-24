@@ -105,10 +105,10 @@ export default function ServicesPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {coreServices.map((service, index) => {
+            {coreServices.map((service) => {
               const Icon = service.icon
               return (
-                <Card key={index} variant="service">
+                <Card key={service.title} variant="service">
                   <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center mb-4">
                     <Icon className="w-6 h-6 text-teal" />
                   </div>
@@ -116,8 +116,8 @@ export default function ServicesPage() {
                   <p className="text-slate mb-4 leading-relaxed">{service.description}</p>
 
                   <ul className="space-y-2 mb-6">
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center text-slate">
+                    {service.features.map((feature) => (
+                      <li key={`${service.title}-${feature}`} className="flex items-center text-slate">
                         <span className="w-1.5 h-1.5 bg-teal rounded-full mr-2"></span>
                         {feature}
                       </li>
@@ -150,10 +150,10 @@ export default function ServicesPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {supportServices.map((service, index) => {
+            {supportServices.map((service) => {
               const Icon = service.icon
               return (
-                <Card key={index} variant="default">
+                <Card key={service.title} variant="default">
                   <div className="w-10 h-10 bg-teal/10 rounded-lg flex items-center justify-center mb-3">
                     <Icon className="w-5 h-5 text-teal" />
                   </div>

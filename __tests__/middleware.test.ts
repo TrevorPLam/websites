@@ -13,9 +13,9 @@ describe('parseContentLength', () => {
     expect(parseContentLength(null)).toBeNull()
   })
 
-  it('returns null for non-numeric values (error handling)', () => {
-    // Error path: invalid input should be ignored, not crash or block.
-    expect(parseContentLength('not-a-number')).toBeNull()
+  it('treats non-numeric values as oversized to avoid bypasses (error handling)', () => {
+    // Error path: invalid input should be treated as oversized for safety.
+    expect(parseContentLength('not-a-number')).toBe(1024 * 1024 + 1)
   })
 })
 

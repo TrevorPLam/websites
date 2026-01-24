@@ -57,7 +57,7 @@ Sentry.init({
   ],
 
   // Configure beforeSend to filter or modify events
-  beforeSend(event: ErrorEvent, hint: EventHint) {
+  beforeSend(event: ErrorEvent, _hint: EventHint) {
     // Don't send events in development unless explicitly enabled
     if (process.env.NODE_ENV === 'development' && !process.env.NEXT_PUBLIC_SENTRY_DEBUG) {
       return null

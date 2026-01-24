@@ -147,7 +147,7 @@ describe('contact form lead pipeline', () => {
 
   it('retries HubSpot upserts with a stable idempotency key', async () => {
     let upsertAttempt = 0
-    fetchMock.mockImplementation(async (input: RequestInfo, init?: RequestInit) => {
+    fetchMock.mockImplementation(async (input: RequestInfo, _init?: RequestInit) => {
       const url = typeof input === 'string' ? input : input.toString()
       const supabaseRestUrl = `${supabaseUrl}/rest/v1/leads`
 

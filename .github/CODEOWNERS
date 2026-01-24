@@ -1,0 +1,33 @@
+# CODEOWNERS for your-dedicated-marketer
+# Reference owner derived from repository URL in README.md.
+
+# Default owner for the entire repository
+* @TrevorPLam
+
+# Application routes and pages
+/app/ @TrevorPLam
+
+# Reusable UI components
+/components/ @TrevorPLam
+
+# Shared libraries and utilities
+/lib/ @TrevorPLam
+
+# Middleware and edge logic
+/middleware.ts @TrevorPLam
+
+# Tests and mocks
+/__tests__/ @TrevorPLam
+/__mocks__/ @TrevorPLam
+/tests/ @TrevorPLam
+
+# Documentation and governance artifacts
+/docs/ @TrevorPLam
+/.repo/ @TrevorPLam
+
+# Automation scripts
+/scripts/ @TrevorPLam
+
+# GitHub configuration and CI
+/.github/ @TrevorPLam
+/.github/workflows/ @TrevorPLam

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { vi, expect, afterEach } from 'vitest'
+import { vi, afterEach } from 'vitest'
 import { cleanup } from '@testing-library/react'
 
 // Only set test defaults when the environment variables are not already set to avoid clobbering caller-provided values.

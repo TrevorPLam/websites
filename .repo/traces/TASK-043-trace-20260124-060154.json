@@ -1,0 +1,42 @@
+{
+  "intent": "Stabilize manifest commands and verification gates",
+  "task_id": "TASK-043",
+  "timestamp": "2026-01-24T06:02:48Z",
+  "files": [
+    ".github/CODEOWNERS",
+    "CONTRIBUTING.md",
+    "Makefile",
+    "eslint.config.mjs",
+    "tsconfig.eslint.json",
+    ".repo/tasks/TODO.md",
+    ".repo/tasks/BACKLOG.md",
+    ".repo/tasks/ARCHIVE.md",
+    "README.md",
+    "app/layout.tsx",
+    "components/ErrorBoundary.tsx",
+    "app/pricing/page.tsx",
+    "app/services/page.tsx",
+    "__tests__/app/layout.test.tsx",
+    "__tests__/components/HomePage.test.tsx",
+    "__tests__/middleware.test.ts",
+    "__tests__/lib/actions.submit.test.ts",
+    "vitest.setup.tsx",
+    "sentry.client.config.ts",
+    "sentry.edge.config.ts",
+    "sentry.server.config.ts"
+  ],
+  "commands": [
+    "npm ci --legacy-peer-deps",
+    "make lint",
+    "make test",
+    "make verify"
+  ],
+  "evidence": [
+    "make verify completed with lint, typecheck, and tests passing locally.",
+    "Task tracking updated: TASK-012 marked Blocked (HITL-0001), TASK-003/029/030/043 archived, TASK-014 promoted to TODO."
+  ],
+  "hitl": [
+    "HITL-0001"
+  ],
+  "unknowns": []
+}

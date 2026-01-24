@@ -13,7 +13,7 @@ else
 Q :=
 endif
 
-.PHONY: setup lint test typecheck dev build verify check-governance
+.PHONY: setup lint test test-e2e typecheck dev build verify check-governance
 
 setup:
 	$(Q)echo "=== INSTALLING DEPENDENCIES ==="
@@ -30,7 +30,7 @@ test:
 	$(Q)npm run test
 	$(Q)echo "=== TESTS COMPLETE ==="
 
-test:e2e:
+test-e2e:
 	$(Q)echo "=== RUNNING E2E TESTS ==="
 	$(Q)npm run test:e2e
 	$(Q)echo "=== E2E TESTS COMPLETE ==="

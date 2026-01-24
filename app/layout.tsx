@@ -224,13 +224,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const searchItems = getSearchIndex()
-  const requestHeaders = headers()
+  const requestHeaders = await headers()
   const cspNonce = resolveCspNonce(requestHeaders)
 
   return (

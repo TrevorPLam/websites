@@ -66,20 +66,21 @@
 
 ---
 
-### [TASK-012] Run Security Audit and Fix Vulnerabilities
-- **Priority:** P0
+### [TASK-014] Split lib/actions.ts into Smaller Modules
+- **Priority:** P1
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - Security audit needed to identify and fix dependency vulnerabilities. Critical for production safety.
+- **Context:** Per CODEBASE_ANALYSIS.md - lib/actions.ts is 535 lines and needs refactoring for maintainability.
 
 #### Acceptance Criteria
-- [ ] Run `npm audit` to identify vulnerabilities
-- [ ] Fix all critical and high severity vulnerabilities
-- [ ] Document any acceptable risks for medium/low severity
-- [ ] Update dependencies where safe
-- [ ] Add npm audit to CI pipeline
+- [ ] Split into: lib/actions/submit.ts (main handler)
+- [ ] Split into: lib/actions/sanitize.ts (sanitization logic)
+- [ ] Split into: lib/actions/hubspot.ts (HubSpot sync)
+- [ ] Split into: lib/actions/supabase.ts (Supabase operations)
+- [ ] Update all imports and tests
+- [ ] Verify no functionality regression
 
 #### Notes
-- Reference: CODEBASE_ANALYSIS.md section 19.7 (Dependency Health Check)
-- Current status: Unknown vulnerabilities (needs verification)
-- Set up Dependabot for automated updates
+- Reference: CODEBASE_ANALYSIS.md section 10.3 and 15.2
+- Current: 535 lines (target: <200 lines per file)
+- Maintain existing security patterns and error handling

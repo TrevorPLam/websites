@@ -829,6 +829,7 @@ graph LR
 
 - 🏛️ **[.repo/GOVERNANCE.md](.repo/GOVERNANCE.md)** - Governance framework
 - 📋 **[.repo/policy/BESTPR.md](.repo/policy/BESTPR.md)** - Best practices
+- 👥 **[.github/CODEOWNERS](.github/CODEOWNERS)** - Code ownership and reviewer routing
 - 🔍 **[.repo/policy/SECURITY_BASELINE.md](.repo/policy/SECURITY_BASELINE.md)** - Security rules
 
 ---

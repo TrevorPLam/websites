@@ -47,45 +47,27 @@
 
 ## P0 — Critical
 
-### [TASK-003] Fix Duplicate Content in CI Workflow
+### [TASK-012] Run Security Audit and Fix Vulnerabilities
 - **Priority:** P0
-- **Status:** Pending
+- **Status:** Blocked
 - **Created:** 2026-01-23
-- **Context:** `.github/workflows/ci.yml` has two conflicting workflow definitions causing confusion.
+- **Context:** Per CODEBASE_ANALYSIS.md - Security audit needed to identify and fix dependency vulnerabilities. Critical for production safety.
 
 #### Acceptance Criteria
-- [ ] Remove duplicate workflow definition
-- [ ] Ensure single coherent CI pipeline
-- [ ] Verify all jobs run correctly
-- [ ] Test on a branch before merging
+- [ ] Run `npm audit` to identify vulnerabilities
+- [ ] Fix all critical and high severity vulnerabilities
+- [ ] Document any acceptable risks for medium/low severity
+- [ ] Update dependencies where safe
+- [ ] Add npm audit to CI pipeline
 
 #### Notes
-- File currently has 403 lines with overlapping `name: CI` and `name: CI/CD Pipeline`
+- Blocked pending HITL-0001 completion per `.repo/policy/HITL.md` dependency-vulnerability rule.
+- Filepath: `.repo/hitl/HITL-0001.md`
+- Current status: Human action required before remediation work can proceed.
 
 ---
 
 ## P1 — High
-
-### [TASK-014] Split lib/actions.ts into Smaller Modules
-- **Priority:** P1
-- **Status:** Pending
-- **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - lib/actions.ts is 535 lines and needs refactoring for maintainability.
-
-#### Acceptance Criteria
-- [ ] Split into: lib/actions/submit.ts (main handler)
-- [ ] Split into: lib/actions/sanitize.ts (sanitization logic)
-- [ ] Split into: lib/actions/hubspot.ts (HubSpot sync)
-- [ ] Split into: lib/actions/supabase.ts (Supabase operations)
-- [ ] Update all imports and tests
-- [ ] Verify no functionality regression
-
-#### Notes
-- Reference: CODEBASE_ANALYSIS.md section 10.3 and 15.2
-- Current: 535 lines (target: <200 lines per file)
-- Maintain existing security patterns and error handling
-
----
 
 ### [TASK-015] Increase Test Coverage to 60%
 - **Priority:** P1
@@ -147,48 +129,6 @@
 - Reference: CODEBASE_ANALYSIS.md section 15.4 (app/layout.tsx)
 - Files: app/layout.tsx (multiple hardcoded values)
 - Consider creating lib/config.ts for centralized configuration
-
----
-
-### [TASK-029] Create CODEOWNERS File
-- **Priority:** P1
-- **Status:** Pending
-- **Created:** 2026-01-23
-- **Context:** Per DIAMOND.md - CODEOWNERS file is missing. Needed for automated reviewer assignment and access control.
-
-#### Acceptance Criteria
-- [ ] Create `.github/CODEOWNERS` file
-- [ ] Define code ownership for all major directories
-- [ ] Set up automated reviewer assignment
-- [ ] Document CODEOWNERS usage in CONTRIBUTING.md
-- [ ] Test reviewer assignment on a test PR
-
-#### Notes
-- Reference: DIAMOND.md section 2.1 (Access Control), 15.1 (Code Review)
-- Missing: `.github/CODEOWNERS` file
-- Required for: Automated reviewer assignment, access control
-
----
-
-### [TASK-030] Create CONTRIBUTING.md File
-- **Priority:** P1
-- **Status:** Pending
-- **Created:** 2026-01-23
-- **Context:** Per DIAMOND.md - CONTRIBUTING.md is missing. Needed for code review process and contribution guidelines.
-
-#### Acceptance Criteria
-- [ ] Create CONTRIBUTING.md in repository root
-- [ ] Document code review process and standards
-- [ ] Include development workflow
-- [ ] Document testing requirements
-- [ ] Include PR guidelines
-- [ ] Reference CODEOWNERS file
-- [ ] Link from README.md
-
-#### Notes
-- Reference: DIAMOND.md section 2.2 (Governance), 15.1 (Code Review)
-- Missing: CONTRIBUTING.md file
-- Required for: Code review process, contribution guidelines
 
 ---
 

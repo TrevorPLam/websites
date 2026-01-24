@@ -185,9 +185,9 @@ export default function PricingPage() {
       <Section className="bg-white">
         <Container>
           <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {tiers.map((tier, index) => (
+            {tiers.map((tier) => (
               <Card
-                key={index}
+                key={tier.name}
                 variant="default"
                 className={tier.popular ? 'ring-2 ring-teal relative' : ''}
               >
@@ -209,8 +209,8 @@ export default function PricingPage() {
                 </div>
 
                 <ul className="space-y-3 mb-8">
-                  {tier.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
+                  {tier.features.map((feature) => (
+                    <li key={feature.name} className="flex items-start gap-2">
                       {feature.included ? (
                         <Check className="w-5 h-5 text-teal flex-shrink-0 mt-0.5" />
                       ) : (
@@ -249,8 +249,8 @@ export default function PricingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {addOns.map((addon, index) => (
-              <Card key={index} variant="default">
+            {addOns.map((addon) => (
+              <Card key={addon.name} variant="default">
                 <h3 className="text-xl font-semibold text-charcoal mb-2">{addon.name}</h3>
                 <p className="text-teal font-semibold mb-2">{addon.price}</p>
                 <p className="text-slate text-sm">{addon.description}</p>
