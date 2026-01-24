@@ -1,0 +1,21 @@
+{
+  "intent": "Add .env.example and onboarding docs",
+  "task_id": "TASK-002",
+  "timestamp": "2026-01-24T01:11:53Z",
+  "files": [
+    ".env.example",
+    "README.md",
+    "docs/getting-started/onboarding.md",
+    ".repo/tasks/TODO.md",
+    ".repo/tasks/ARCHIVE.md",
+    ".repo/tasks/BACKLOG.md"
+  ],
+  "commands": [
+    "make lint"
+  ],
+  "evidence": [
+    "make lint failed: Makefile:33: *** target pattern contains no '%'. Stop."
+  ],
+  "hitl": [],
+  "unknowns": []
+}

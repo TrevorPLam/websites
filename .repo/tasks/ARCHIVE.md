@@ -33,6 +33,23 @@
 
 ---
 
+### [TASK-002] Create .env.example File ✓
+- **Priority:** P0
+- **Status:** Completed
+- **Created:** 2026-01-23
+- **Completed:** 2026-01-24
+- **Context:** Code references `.env.example` but file doesn't exist. Blocks new environment setup.
+
+#### Acceptance Criteria
+- [x] Document all required environment variables from `env_validator.py`
+- [x] Include comments explaining each variable
+- [x] Add placeholder values (never real secrets)
+- [x] Reference in README.md and docs/getting-started/onboarding.md
+
+#### Outcome
+- Added `.env.example` with documented placeholders based on `lib/env.ts`.
+- Updated README.md and added docs/getting-started/onboarding.md with setup steps.
+
 ### [TASK-006] Expand docs/ARCHITECTURE.md ✓
 - **Priority:** P1
 - **Status:** Completed
@@ -105,8 +122,8 @@
 ## Statistics
 | Metric | Count |
 |--------|-------|
-| Total Completed | 5 |
-| P0 Completed | 2 |
+| Total Completed | 6 |
+| P0 Completed | 3 |
 | P1 Completed | 3 |
 | P2 Completed | 0 |
 | P3 Completed | 0 |

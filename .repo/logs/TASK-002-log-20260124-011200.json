@@ -1,0 +1,29 @@
+{
+  "intent": "Document environment setup",
+  "plan": [
+    "Create .env.example from the existing env.example template.",
+    "Update README setup instructions to reference .env.example and required vars.",
+    "Add onboarding documentation for environment configuration.",
+    "Update task tracking files to archive TASK-002 and promote TASK-012."
+  ],
+  "actions": [
+    "Created .env.example by copying env.example.",
+    "Updated README environment setup instructions.",
+    "Added docs/getting-started/onboarding.md with required variables.",
+    "Archived TASK-002 and promoted TASK-012 in task files."
+  ],
+  "evidence": [
+    "make lint (failed: Makefile target pattern contains no '%')"
+  ],
+  "decisions": [
+    "Treat .env.example and onboarding updates as setup documentation backed by existing env validation in lib/env.ts."
+  ],
+  "risks": [
+    "None beyond documentation/configuration changes; no runtime behavior changed."
+  ],
+  "follow_ups": [
+    "Investigate Makefile lint target error before next verification run."
+  ],
+  "reasoning_summary": "Completed the environment example file and onboarding docs to match the validated variables in lib/env.ts, and aligned README instructions for setup.",
+  "notes": "No secrets. No private data. No raw chain-of-thought."
+}
