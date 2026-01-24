@@ -11,14 +11,39 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, "../..");
 
-const BASE_REF = process.argv.find((arg) => arg.startsWith("--base-ref="))?.split("=")[1] || "main";
-const THRESHOLD_PERCENT = parseInt(process.argv.find((arg) => arg.startsWith("--threshold="))?.split("=")[1] || "10");
+/** Default git base ref for comparison. */
+const DEFAULT_BASE_REF = "main";
+/** Default regression threshold percentage. */
+const DEFAULT_THRESHOLD_PERCENT = 10;
+/** Timeout for performance test run (milliseconds). */
+const PERFORMANCE_TEST_TIMEOUT_MS = 30_000;
+/** Timeout for bundle build run (milliseconds). */
+const BUNDLE_BUILD_TIMEOUT_MS = 120_000;
+/** Maximum number of changed files to scan for bottlenecks. */
+const MAX_CHANGED_FILES_TO_SCAN = 20;
+/** Threshold for flagging excessive useEffect usage. */
+const USE_EFFECT_WARNING_THRESHOLD = 5;
+/** Threshold for flagging excessive array mapping operations. */
+const MAP_OPERATION_WARNING_THRESHOLD = 10;
+/** Milliseconds per second for conversions. */
+const MILLISECONDS_PER_SECOND = 1000;
+
+const BASE_REF =
+  process.argv.find((arg) => arg.startsWith("--base-ref="))?.split("=")[1] || DEFAULT_BASE_REF;
+const THRESHOLD_PERCENT = parseInt(
+  process.argv.find((arg) => arg.startsWith("--threshold="))?.split("=")[1] ||
+    DEFAULT_THRESHOLD_PERCENT.toString(),
+);
 
 function runPerformanceBenchmark() {
   try {
     // Run a simple performance test
     const start = Date.now();
-    execSync("npm test -- --testPathPattern=performance --silent 2>&1", { encoding: "utf8", cwd: REPO_ROOT, timeout: 30000 });
+    execSync("npm test -- --testPathPattern=performance --silent 2>&1", {
+      encoding: "utf8",
+      cwd: REPO_ROOT,
+      timeout: PERFORMANCE_TEST_TIMEOUT_MS,
+    });
     const duration = Date.now() - start;
     return duration;
   } catch (e) {
@@ -29,14 +54,18 @@ function runPerformanceBenchmark() {
 
 function analyzeBundlePerformance() {
   try {
-    const buildOutput = execSync("npm run expo:static:build 2>&1", { encoding: "utf8", cwd: REPO_ROOT, timeout: 120000 });
+    const buildOutput = execSync("npm run expo:static:build 2>&1", {
+      encoding: "utf8",
+      cwd: REPO_ROOT,
+      timeout: BUNDLE_BUILD_TIMEOUT_MS,
+    });
     
     // Extract build time
     const timeMatch = buildOutput.match(/build.*?(\d+\.?\d*)\s*(s|ms)/i);
     if (timeMatch) {
       const time = parseFloat(timeMatch[1]);
       const unit = timeMatch[2].toLowerCase();
-      return unit === "s" ? time * 1000 : time; // Convert to ms
+      return unit === "s" ? time * MILLISECONDS_PER_SECOND : time; // Convert to ms
     }
   } catch (e) {
     // Build might fail
@@ -47,7 +76,7 @@ function analyzeBundlePerformance() {
 function detectPerformanceBottlenecks(changedFiles) {
   const bottlenecks = [];
 
-  for (const file of changedFiles.slice(0, 20)) {
+  for (const file of changedFiles.slice(0, MAX_CHANGED_FILES_TO_SCAN)) {
     // Limit for performance
     const filePath = path.join(REPO_ROOT, file);
     if (!fs.existsSync(filePath) || !file.match(/\.(ts|tsx|js|jsx)$/)) continue;
@@ -56,7 +85,10 @@ function detectPerformanceBottlenecks(changedFiles) {
       const content = fs.readFileSync(filePath, "utf8");
 
       // Detect potential performance issues
-      if (content.includes("useEffect") && content.match(/useEffect/g)?.length > 5) {
+      if (
+        content.includes("useEffect") &&
+        content.match(/useEffect/g)?.length > USE_EFFECT_WARNING_THRESHOLD
+      ) {
         bottlenecks.push({
           file,
           issue: "too_many_useEffects",
@@ -64,7 +96,10 @@ function detectPerformanceBottlenecks(changedFiles) {
         });
       }
 
-      if (content.includes(".map(") && content.match(/\.map\(/g)?.length > 10) {
+      if (
+        content.includes(".map(") &&
+        content.match(/\.map\(/g)?.length > MAP_OPERATION_WARNING_THRESHOLD
+      ) {
         bottlenecks.push({
           file,
           issue: "excessive_array_operations",

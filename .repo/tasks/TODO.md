@@ -66,20 +66,20 @@
 
 ---
 
-### [TASK-019] Extract Magic Numbers to Constants
-- **Priority:** P2
+### [TASK-012] Run Security Audit and Fix Vulnerabilities
+- **Priority:** P0
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - Some magic numbers (e.g., 3000ms timeout) should be extracted to named constants.
+- **Context:** Per CODEBASE_ANALYSIS.md - Security audit needed to identify and fix dependency vulnerabilities. Critical for production safety.
 
 #### Acceptance Criteria
-- [ ] Identify all magic numbers in codebase
-- [ ] Extract to named constants with clear names
-- [ ] Group related constants in appropriate files
-- [ ] Add JSDoc comments explaining values
-- [ ] Update all references
+- [ ] Run `npm audit` to identify vulnerabilities
+- [ ] Fix all critical and high severity vulnerabilities
+- [ ] Document any acceptable risks for medium/low severity
+- [ ] Update dependencies where safe
+- [ ] Add npm audit to CI pipeline
 
 #### Notes
-- Reference: CODEBASE_ANALYSIS.md section 19.17 (Code Smell Detection)
-- Examples: InstallPrompt.tsx:45 (3000ms timeout)
-- Create constants files: lib/constants.ts or per-module constants
+- Blocked pending HITL-0001 completion per `.repo/policy/HITL.md` dependency-vulnerability rule.
+- Filepath: `.repo/hitl/HITL-0001.md`
+- Current status: Human action required before remediation work can proceed.

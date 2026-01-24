@@ -25,9 +25,13 @@ const INDEX_DIRECTORIES = [
   "scripts",
 ];
 
+/** Debounce delay to avoid excessive updates (milliseconds). */
+const DEBOUNCE_MS = 1000;
+/** Maximum directory recursion depth for watchers. */
+const MAX_WATCH_DEPTH = 5;
+
 // Debounce timer to avoid excessive updates
 let updateTimer = null;
-const DEBOUNCE_MS = 1000; // Wait 1 second after last change before updating
 
 function updateIndexes() {
   console.log(`\n🔄 Updating INDEX.json files...`);
@@ -74,7 +78,7 @@ function scheduleUpdate(changedPath) {
 }
 
 function watchDirectory(dirPath, depth = 0) {
-  if (depth > 5) return; // Limit recursion depth
+  if (depth > MAX_WATCH_DEPTH) return; // Limit recursion depth
 
   try {
     watch(

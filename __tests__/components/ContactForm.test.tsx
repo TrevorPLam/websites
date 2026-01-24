@@ -4,6 +4,9 @@ import userEvent from '@testing-library/user-event'
 import ContactForm from '@/components/ContactForm'
 import { submitContactForm } from '@/lib/actions'
 
+/** Delay to simulate async submission resolution (milliseconds). */
+const SUBMISSION_RESOLVE_DELAY_MS = 100
+
 // Mock the submitContactForm action while keeping the real schema
 vi.mock('@/lib/actions', async () => {
   const actual = await vi.importActual<typeof import('@/lib/actions')>('@/lib/actions')
@@ -137,7 +140,10 @@ describe('ContactForm', () => {
     const user = userEvent.setup()
     const mockSubmit = vi.mocked(submitContactForm)
     mockSubmit.mockImplementation(
-      () => new Promise((resolve) => setTimeout(() => resolve({ success: true, message: 'Success' }), 100))
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ success: true, message: 'Success' }), SUBMISSION_RESOLVE_DELAY_MS),
+        )
     )
 
     render(<ContactForm />)

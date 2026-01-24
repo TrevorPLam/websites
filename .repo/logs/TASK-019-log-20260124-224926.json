@@ -1,0 +1,29 @@
+{
+  "intent": "Extract magic numbers",
+  "plan": [
+    "Identify remaining magic numbers in test and script utilities tied to TASK-019.",
+    "Replace numeric literals with named constants and add JSDoc comments.",
+    "Run lint checks for verification and document evidence.",
+    "Update task tracking and logs with filepaths and evidence."
+  ],
+  "actions": [
+    "Added named constants for performance regression thresholds and timeouts in scripts/intelligent/auto-detect-performance-regressions.mjs.",
+    "Added constants for watcher debounce and recursion depth in scripts/watch-indexes.mjs.",
+    "Extracted async submission delay to a named constant in __tests__/components/ContactForm.test.tsx.",
+    "Recorded verification evidence and updated task tracking files."
+  ],
+  "evidence": [
+    "npm run lint (failed: ESLint could not find @eslint/js dependency)."
+  ],
+  "decisions": [
+    "Kept constants scoped to their respective modules to keep related configuration close to usage while avoiding cross-module coupling."
+  ],
+  "risks": [
+    "Minimal risk: constant extraction only; no behavior change expected."
+  ],
+  "follow_ups": [
+    "Restore linting by ensuring @eslint/js dependency is available in the environment."
+  ],
+  "reasoning_summary": "Extracted numeric literals into named constants with documentation to make timings and thresholds clearer without changing behavior, then documented verification evidence and task metadata.",
+  "notes": "No secrets. No private data. No raw chain-of-thought."
+}

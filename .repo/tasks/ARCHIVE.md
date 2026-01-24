@@ -41,23 +41,17 @@
 - **Context:** Per CODEBASE_ANALYSIS.md - Some magic numbers (e.g., 3000ms timeout) should be extracted to named constants.
 
 #### Acceptance Criteria
-- [x] Identify all magic numbers in codebase - Reviewed all timing-related magic numbers
-- [x] Extract to named constants with clear names - Already done in lib/constants.ts
-- [x] Group related constants in appropriate files - Grouped in UI_TIMING section
-- [x] Add JSDoc comments explaining values - Already documented
-- [x] Update all references - InstallPrompt.tsx already using UI_TIMING.PWA_INSTALL_PROMPT_DELAY_MS
+- [x] Identify all magic numbers in codebase - Reviewed remaining timing/threshold literals in scripts and tests
+- [x] Extract to named constants with clear names - Added constants in scripts and tests
+- [x] Group related constants in appropriate files - Scoped constants to their modules
+- [x] Add JSDoc comments explaining values - Added JSDoc for new constants
+- [x] Update all references - Replaced literals with constants
 
 #### Outcome
-- Magic numbers already extracted to lib/constants.ts in previous iteration
-- UI_TIMING.PWA_INSTALL_PROMPT_DELAY_MS = 3000ms (properly documented)
-- All timing constants have clear JSDoc comments
-- InstallPrompt component properly uses the constant
-- No additional magic numbers found requiring extraction (other numbers are display values, placeholders, or SVG coordinates)
-
-#### Notes
-- Reference: CODEBASE_ANALYSIS.md section 19.17 (Code Smell Detection)
-- The only setTimeout found uses the constant (no hardcoded timeouts)
-- Other numeric values found are appropriate inline (phone placeholders, image sizes, SVG paths)
+- Added constants for performance regression timeouts/thresholds and unit conversion in scripts/intelligent/auto-detect-performance-regressions.mjs
+- Added constants for debounce delay and max watch depth in scripts/watch-indexes.mjs
+- Added submission delay constant in __tests__/components/ContactForm.test.tsx
+- Lint run failed due to missing @eslint/js dependency in the environment
 
 ---
 
