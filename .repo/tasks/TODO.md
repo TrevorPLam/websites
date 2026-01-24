@@ -66,21 +66,17 @@
 
 ---
 
-### [TASK-032] Implement SBOM Generation
-- **Priority:** P1
+### [TASK-008] Enable OpenAPI Drift Detection in CI
+- **Priority:** P2
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Per DIAMOND.md Priority Gaps - SBOM generation is missing. Critical for supply chain security and compliance.
+- **Context:** OpenAPI check job is disabled (`if: false`) in CI workflow.
 
 #### Acceptance Criteria
-- [ ] Add SBOM generation to CI pipeline
-- [ ] Choose format (SPDX or CycloneDX)
-- [ ] Generate SBOM on each build
-- [ ] Store SBOM artifact with releases
-- [ ] Document SBOM process in SECURITY.md
-- [ ] Include transitive dependencies
+- [ ] Fix blocking issues preventing OpenAPI generation
+- [ ] Enable the `openapi-check` job
+- [ ] Ensure schema drift fails CI
+- [ ] Document OpenAPI workflow in CONTRIBUTING.md
 
 #### Notes
-- Reference: DIAMOND.md section 12.1, 12.2 (Dependency Security)
-- Missing: SBOM generation (mentioned in Priority Gaps)
-- Required for: Supply chain security, compliance, dependency transparency
+- Committed OpenAPI artifact is single source of truth for API

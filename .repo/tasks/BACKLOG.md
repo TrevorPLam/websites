@@ -73,23 +73,6 @@
 
 ## P2 — Medium
 
-### [TASK-008] Enable OpenAPI Drift Detection in CI
-- **Priority:** P2
-- **Status:** Pending
-- **Created:** 2026-01-23
-- **Context:** OpenAPI check job is disabled (`if: false`) in CI workflow.
-
-#### Acceptance Criteria
-- [ ] Fix blocking issues preventing OpenAPI generation
-- [ ] Enable the `openapi-check` job
-- [ ] Ensure schema drift fails CI
-- [ ] Document OpenAPI workflow in CONTRIBUTING.md
-
-#### Notes
-- Committed OpenAPI artifact is single source of truth for API
-
----
-
 ### [TASK-009] Add Worker Runtime for Job Queue
 - **Priority:** P2
 - **Status:** Pending

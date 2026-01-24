@@ -33,6 +33,53 @@
 
 ---
 
+### [TASK-032] Implement SBOM Generation ✓
+- **Priority:** P1
+- **Status:** Completed
+- **Created:** 2026-01-23
+- **Completed:** 2026-01-24
+- **Context:** Per DIAMOND.md Priority Gaps - SBOM generation is missing. Critical for supply chain security and compliance.
+
+#### Acceptance Criteria
+- [x] Add SBOM generation to CI pipeline
+- [x] Choose format (SPDX or CycloneDX)
+- [x] Generate SBOM on each build
+- [x] Store SBOM artifact with releases
+- [x] Document SBOM process in SECURITY.md
+- [x] Include transitive dependencies
+
+#### Outcome
+- Created GitHub Actions workflow: `.github/workflows/sbom.yml`
+- Chose CycloneDX format (JSON + XML output)
+- Generates 816 components including all transitive dependencies
+- SBOM generated on: push, PR, release, manual trigger
+- Artifacts stored with 90-day retention
+- SBOMs automatically attached to GitHub releases
+- Latest SBOM stored in `.sbom/sbom-latest.json`
+- Comprehensive documentation added to SECURITY.md
+
+**SBOM Details:**
+- Format: CycloneDX 1.6
+- Components: 816 (production + dev + transitive)
+- Validation: Automated completeness checks
+- Access: Releases, CI artifacts, `.sbom/` directory
+- Features: Vulnerability scanning support, license auditing, compliance
+
+**Workflow Features:**
+- Validates SBOM component count (min 10)
+- Validates metadata presence
+- Stores historical SBOMs with timestamps
+- Automatic release attachment
+- Manual trigger support
+
+#### Notes
+- Reference: DIAMOND.md section 12.1, 12.2 (Dependency Security)
+- Files: `.github/workflows/sbom.yml`, `SECURITY.md`, `.gitignore`
+- Tested locally: successfully generated 816-component SBOM
+- Enables supply chain security, compliance, third-party assessments
+
+---
+
 ### [TASK-016] Add Performance Monitoring ✓
 - **Priority:** P1
 - **Status:** Completed

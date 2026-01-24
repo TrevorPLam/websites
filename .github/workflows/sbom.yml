@@ -33,7 +33,10 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: |
+          # Note: --legacy-peer-deps is used due to peer dependency conflicts in @cloudflare/next-on-pages
+          # This is acceptable for SBOM generation as it doesn't affect the dependency tree structure
+          npm ci --legacy-peer-deps
 
       - name: Generate CycloneDX SBOM
         run: |
@@ -102,7 +105,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Commit and push
-          git add .sbom/
-          git commit -m "chore: update SBOM [skip ci]" || echo "No changes to commit"
-          git push || echo "Failed to push SBOM - may need token permissions"
+          # Commit and push (with better error handling)
+          if git add .sbom/ && git diff-index --quiet HEAD --; then
+            echo "No SBOM changes to commit"
+          else
+            if git commit -m "chore: update SBOM [skip ci]"; then
+              if ! git push; then
+                echo "ERROR: Failed to push SBOM to repository"
+                echo "This may indicate insufficient GITHUB_TOKEN permissions (requires 'contents: write')"
+                echo "SBOM is still available as workflow artifact"
+                exit 1
+              fi
+            fi
+          fi
