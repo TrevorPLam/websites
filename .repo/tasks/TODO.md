@@ -66,20 +66,22 @@
 
 ---
 
-### [TASK-012] Run Security Audit and Fix Vulnerabilities
-- **Priority:** P0
+### [TASK-015] Increase Test Coverage to 60%
+- **Priority:** P1
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - Security audit needed to identify and fix dependency vulnerabilities. Critical for production safety.
+- **Context:** Per CODEBASE_ANALYSIS.md - Current coverage is 50%, target is 70%+. First milestone: 60%.
 
 #### Acceptance Criteria
-- [ ] Run `npm audit` to identify vulnerabilities
-- [ ] Fix all critical and high severity vulnerabilities
-- [ ] Document any acceptable risks for medium/low severity
-- [ ] Update dependencies where safe
-- [ ] Add npm audit to CI pipeline
+- [ ] Add tests for missing components in components/ui/
+- [ ] Add tests for utility functions without coverage
+- [ ] Add integration tests for contact form submission flow
+- [ ] Add error scenario tests
+- [ ] Update vitest.config.ts threshold to 60%
+- [ ] Verify coverage report shows 60%+
 
 #### Notes
-- Blocked pending HITL-0001 completion per `.repo/policy/HITL.md` dependency-vulnerability rule.
-- Filepath: `.repo/hitl/HITL-0001.md`
-- Current status: Human action required before remediation work can proceed.
+- Reference: CODEBASE_ANALYSIS.md section 5.1 and 19.8
+- Current: 50% (branches: 40%, functions: 45%, lines: 50%, statements: 50%)
+- Target: 60% (short-term), 70%+ (medium-term)
+- Test files: 35 total (18 unit + 12 component + 5 E2E)
