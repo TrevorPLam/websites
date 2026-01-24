@@ -4,6 +4,8 @@
  * @module lib/actions/submit
  */
 
+'use server'
+
 import { headers } from 'next/headers'
 import { z } from 'zod'
 import { contactFormSchema, type ContactFormData } from '@/lib/contact-form-schema'
