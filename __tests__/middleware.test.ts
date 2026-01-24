@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { NextRequest } from 'next/server'
 
-import { isPayloadTooLarge, parseContentLength } from '@/middleware'
+import { isPayloadTooLarge, parseContentLength, middleware } from '@/middleware'
 
 describe('parseContentLength', () => {
   it('returns a numeric value for valid headers (happy path)', () => {
@@ -28,5 +29,16 @@ describe('isPayloadTooLarge', () => {
   it('treats missing content length as safe (edge case)', () => {
     // Edge case: unknown size should not be blocked by the size guard.
     expect(isPayloadTooLarge(null)).toBe(false)
+  })
+})
+
+describe('middleware', () => {
+  it('adds Server-Timing header for performance monitoring', () => {
+    const request = new NextRequest(new URL('https://example.com/'))
+    const response = middleware(request)
+    
+    const serverTiming = response.headers.get('Server-Timing')
+    expect(serverTiming).toBeTruthy()
+    expect(serverTiming).toMatch(/middleware;dur=\d+(\.\d+)?/)
   })
 })

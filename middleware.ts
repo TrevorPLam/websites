@@ -242,6 +242,7 @@ function buildPayloadTooLargeResponse(correlationId: string) {
  * @returns Response with security headers applied
  */
 export function middleware(request: NextRequest) {
+  const startTime = performance.now()
   const correlationId = getCorrelationId(request)
   const cspNonce = createCspNonce()
   const requestHeaders = buildRequestHeaders(request, correlationId, cspNonce)
@@ -299,6 +300,10 @@ export function middleware(request: NextRequest) {
     isDevelopment: process.env.NODE_ENV === 'development',
     isProduction: process.env.NODE_ENV === 'production',
   })
+
+  // Add performance timing header for monitoring
+  const duration = performance.now() - startTime
+  response.headers.set('Server-Timing', `middleware;dur=${duration.toFixed(2)}`)
 
   return response
 }
