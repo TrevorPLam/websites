@@ -121,6 +121,7 @@ import { createCspNonce, CSP_NONCE_HEADER } from '@/lib/csp'
 import { getPublicBaseUrl, validatedPublicEnv } from '@/lib/env.public'
 import { logError, logWarn } from '@/lib/logger'
 import { getSearchIndex } from '@/lib/search'
+import { ORGANIZATION } from '@/lib/constants'
 
 // Font configuration with CSS variables
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -260,22 +261,22 @@ export default async function RootLayout({
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'Customer Service',
-                email: 'contact@yourdedicatedmarketer.com',
+                email: ORGANIZATION.CONTACT_EMAIL,
               },
               sameAs: [
-                'https://www.facebook.com/yourdedicatedmarketer',
-                'https://www.twitter.com/yourdedicatedmarketer',
-                'https://www.linkedin.com/company/yourdedicatedmarketer',
-                'https://www.instagram.com/yourdedicatedmarketer',
+                ORGANIZATION.SOCIAL_MEDIA.FACEBOOK,
+                ORGANIZATION.SOCIAL_MEDIA.TWITTER,
+                ORGANIZATION.SOCIAL_MEDIA.LINKEDIN,
+                ORGANIZATION.SOCIAL_MEDIA.INSTAGRAM,
               ],
               address: {
                 '@type': 'PostalAddress',
-                addressCountry: 'US',
+                addressCountry: ORGANIZATION.ADDRESS.COUNTRY,
               },
               aggregateRating: {
                 '@type': 'AggregateRating',
-                ratingValue: '4.9',
-                reviewCount: '127',
+                ratingValue: ORGANIZATION.RATING.VALUE,
+                reviewCount: ORGANIZATION.RATING.COUNT,
               },
             }),
           }}

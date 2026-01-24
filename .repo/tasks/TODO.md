@@ -66,21 +66,20 @@
 
 ---
 
-### [TASK-014] Split lib/actions.ts into Smaller Modules
-- **Priority:** P1
+### [TASK-019] Extract Magic Numbers to Constants
+- **Priority:** P2
 - **Status:** In Progress
 - **Created:** 2026-01-23
-- **Context:** Per CODEBASE_ANALYSIS.md - lib/actions.ts is 535 lines and needs refactoring for maintainability.
+- **Context:** Per CODEBASE_ANALYSIS.md - Some magic numbers (e.g., 3000ms timeout) should be extracted to named constants.
 
 #### Acceptance Criteria
-- [ ] Split into: lib/actions/submit.ts (main handler)
-- [ ] Split into: lib/actions/sanitize.ts (sanitization logic)
-- [ ] Split into: lib/actions/hubspot.ts (HubSpot sync)
-- [ ] Split into: lib/actions/supabase.ts (Supabase operations)
-- [ ] Update all imports and tests
-- [ ] Verify no functionality regression
+- [ ] Identify all magic numbers in codebase
+- [ ] Extract to named constants with clear names
+- [ ] Group related constants in appropriate files
+- [ ] Add JSDoc comments explaining values
+- [ ] Update all references
 
 #### Notes
-- Reference: CODEBASE_ANALYSIS.md section 10.3 and 15.2
-- Current: 535 lines (target: <200 lines per file)
-- Maintain existing security patterns and error handling
+- Reference: CODEBASE_ANALYSIS.md section 19.17 (Code Smell Detection)
+- Examples: InstallPrompt.tsx:45 (3000ms timeout)
+- Create constants files: lib/constants.ts or per-module constants
