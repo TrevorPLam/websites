@@ -4,6 +4,20 @@
 
 This file tracks improvements and changes to the governance framework.
 
+## 2026-01-24 - OpenAPI Drift Detection
+
+### Added
+
+- **OpenAPI generation script** to produce the committed API contract and keep CI drift checks deterministic.
+- **OpenAPI drift check job** in CI to fail when the committed schema is out of sync.
+- **End-to-end test coverage** for the `/api/og` endpoint to validate real API behavior.
+
+### Updated
+
+- **Contributing guide** with OpenAPI update workflow and required commands.
+
+---
+
 ## 2026-01-23 - World-Class Documentation Structure
 
 ### Added

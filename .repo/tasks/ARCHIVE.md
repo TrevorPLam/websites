@@ -33,6 +33,31 @@
 
 ---
 
+### [TASK-008] Enable OpenAPI Drift Detection in CI ✓
+- **Priority:** P2
+- **Status:** Completed
+- **Created:** 2026-01-23
+- **Completed:** 2026-01-25
+- **Context:** OpenAPI check job is disabled (`if: false`) in CI workflow.
+
+#### Acceptance Criteria
+- [x] Fix blocking issues preventing OpenAPI generation
+- [x] Enable the `openapi-check` job
+- [x] Ensure schema drift fails CI
+- [x] Document OpenAPI workflow in CONTRIBUTING.md
+
+#### Outcome
+- Added deterministic OpenAPI generation script and committed schema output.
+- Enabled OpenAPI drift detection in CI with a dedicated job.
+- Documented the OpenAPI update workflow in CONTRIBUTING.md and updated the governance changelog.
+- Added end-to-end coverage for the `/api/og` endpoint.
+- Tests could not run because `npm ci --legacy-peer-deps` hung in this environment; commands failed due to missing dependencies.
+
+#### Notes
+- Files: scripts/generate-openapi.mjs, docs/apis/openapi/openapi.yaml, .github/workflows/ci.yml, package.json, tests/e2e/og-image.spec.ts, CONTRIBUTING.md, .repo/CHANGELOG.md
+
+---
+
 ### [TASK-032] Implement SBOM Generation ✓
 - **Priority:** P1
 - **Status:** Completed
@@ -448,10 +473,10 @@
 ## Statistics
 | Metric | Count |
 |--------|-------|
-| Total Completed | 6 |
-| P0 Completed | 3 |
-| P1 Completed | 3 |
-| P2 Completed | 0 |
+| Total Completed | 21 |
+| P0 Completed | 6 |
+| P1 Completed | 12 |
+| P2 Completed | 3 |
 | P3 Completed | 0 |
 
 *Update statistics when archiving tasks.*
