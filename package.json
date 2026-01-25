@@ -39,6 +39,8 @@
     "check:todo-format": "node scripts/check-todo-format.mjs",
     "check:coverage-ratchet": "node scripts/check-coverage-ratchet.mjs",
     "check:bundle-budget": "node scripts/check-bundle-budget.mjs",
+    "openapi:generate": "node scripts/generate-openapi.mjs",
+    "openapi:check": "npm run openapi:generate && git diff --exit-code docs/apis/openapi/openapi.yaml",
     "index:generate": "node scripts/generate-index-json.mjs",
     "index:watch": "node scripts/watch-indexes.mjs",
     "pr:extract": "node scripts/extract-pr-template-data.mjs",

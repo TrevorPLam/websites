@@ -52,7 +52,26 @@ make verify
 
 > Do not guess alternative commands. Use the manifest-approved workflow.
 
-## 6) Governance Logs (Non-doc Changes)
+## 6) OpenAPI Contract Workflow
+
+The committed OpenAPI contract is the single source of truth for public API behavior.
+
+When you change or add API routes:
+
+1. Update the OpenAPI contract by running:
+
+   ```bash
+   npm run openapi:generate
+   ```
+
+2. Review and commit the updated file:
+
+   - `docs/apis/openapi/openapi.yaml`
+
+CI runs `npm run openapi:check` to regenerate the contract and fail if the committed
+schema drifts.
+
+## 7) Governance Logs (Non-doc Changes)
 
 For any change that is not doc-only, generate both logs:
 
@@ -68,7 +87,7 @@ Then update the generated files under:
 
 Include filepaths, commands run, evidence, and any risks or follow-ups.
 
-## 7) Pull Request Requirements
+## 8) Pull Request Requirements
 
 PRs must follow the repository template and governance policies:
 
@@ -85,6 +104,6 @@ Every PR should clearly state:
 - What verification was run
 - Risks and rollback plan
 
-## 8) CODEOWNERS
+## 9) CODEOWNERS
 
 Code ownership and reviewer routing are defined in [`.github/CODEOWNERS`](.github/CODEOWNERS).
