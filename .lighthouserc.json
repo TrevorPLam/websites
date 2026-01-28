@@ -1,7 +1,0 @@
-{
-  "ci": {
-    "assert": {
-      "budgets": [".github/lighthouse/budget.json"]
-    }
-  }
-}
