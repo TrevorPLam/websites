@@ -1,0 +1,32 @@
+# INDEX.toon
+
+meta{root, generated_at}:
+packages, 2026-01-29T08:08:01Z
+
+entries[26]{path, type}:
+config, dir
+config/package.json, file
+config/typescript-config, dir
+config/typescript-config/base.json, file
+config/typescript-config/node.json, file
+config/typescript-config/package.json, file
+config/typescript-config/react.json, file
+ui, dir
+ui/.ai-context.md, file
+ui/package.json, file
+ui/src, dir
+ui/src/components, dir
+ui/src/components/Accordion.tsx, file
+ui/src/components/Button.tsx, file
+ui/src/components/Card.tsx, file
+ui/src/components/Container.tsx, file
+ui/src/components/Input.tsx, file
+ui/src/components/Section.tsx, file
+ui/src/components/Select.tsx, file
+ui/src/components/Skeleton.tsx, file
+ui/src/components/Textarea.tsx, file
+ui/src/components/index.ts, file
+utils, dir
+utils/package.json, file
+utils/src, dir
+utils/src/index.ts, file
