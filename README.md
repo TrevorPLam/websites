@@ -2,31 +2,42 @@
 
 Marketing website monorepo built with Next.js.
 
-## Structure
-
-- `apps/web-app/` - Main Next.js application
-- `packages/ui/` - Shared design system components
-- `packages/utils/` - Shared utilities
-- `.ai/` - AI-specific configuration and context
-
-## Getting Started
+## Installation
 
 ```bash
 # Install dependencies
 pnpm install
+```
 
+## Usage
+
+```bash
 # Run development server
 pnpm dev
 
 # Build all packages
 pnpm build
+
+# Run linter
+pnpm lint
+
+# Type check
+pnpm type-check
 ```
 
-## Architecture
+## Project Structure
 
-This repository follows a monorepo structure:
-- **Apps**: Applications that consume packages
-- **Packages**: Shared code used across apps
-- **Infrastructure**: Deployment and infrastructure configs
-- **Tools**: Development tools and scripts
-- **Docs**: Documentation
+- `apps/web/` - Main Next.js application
+- `packages/ui/` - Shared design system components
+- `packages/utils/` - Shared utilities
+- `infrastructure/` - Deployment and infrastructure configs
+- `docs/` - Documentation
+- `.ai/` - AI-specific configuration and context
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+
+## License
+
+Proprietary - See [LICENSE](LICENSE) for details.
