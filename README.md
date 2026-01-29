@@ -32,7 +32,6 @@ pnpm type-check
 - `packages/utils/` - Shared utilities
 - `infrastructure/` - Deployment and infrastructure configs
 - `docs/` - Documentation
-- `.ai/` - AI-specific configuration and context
 
 ## Contributing
 
