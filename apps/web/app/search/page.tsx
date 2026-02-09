@@ -1,21 +1,21 @@
-import { Suspense } from 'react'
-import type { Metadata } from 'next'
-import SearchPage from '@/components/SearchPage'
-import { getSearchIndex } from '@/lib/search'
+import { Suspense } from 'react';
+import type { Metadata } from 'next';
+import SearchPage from '@/features/search/components/SearchPage';
+import { getSearchIndex } from '@/lib/search';
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: 'Search | Hair Salon Template',
   description: 'Search blog posts, services, and hair care resources across the site.',
-}
+};
 
 export default async function SearchRoute() {
-  const items = getSearchIndex()
+  const items = getSearchIndex();
 
   return (
     <Suspense>
       <SearchPage items={items} />
     </Suspense>
-  )
+  );
 }

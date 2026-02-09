@@ -7,7 +7,7 @@ Professional hair salon website template monorepo built with modern web technolo
 ### Prerequisites
 
 - **Node.js** `>=20.0.0`
-- **pnpm** `9.15.4` (enforced)
+- **pnpm** `10.29.2` (enforced)
 
 ### Installation
 
@@ -70,10 +70,10 @@ pnpm format:check
 - **Frontend Framework:** Next.js 15.1.6
 - **UI Library:** React 19.0.0
 - **Styling:** Tailwind CSS 3.4.17
-- **Type Safety:** TypeScript 5.9.3
+- **Type Safety:** TypeScript 5.7.2
 - **Linting:** ESLint 9 (flat config)
 - **Code Formatting:** Prettier 3.2.5
-- **Package Manager:** pnpm 9.15.4
+- **Package Manager:** pnpm 10.29.2
 - **Monorepo Tool:** Turbo 2.2.3
 - **Container:** Docker & Docker Compose
 
@@ -81,20 +81,21 @@ pnpm format:check
 
 - **[CONFIG.md](CONFIG.md)** - Detailed configuration documentation
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines and setup
+- **[docs/TEMPLATE_SETUP.md](docs/TEMPLATE_SETUP.md)** - Template setup and integration guide
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history
 - **[Security.md](SECURITY.md)** - Security policy
 
 ## Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start development server |
-| `pnpm build` | Build all packages and apps |
-| `pnpm start` | Start production server |
-| `pnpm lint` | Run ESLint across workspace |
-| `pnpm type-check` | Run TypeScript type checking |
-| `pnpm test` | Run tests |
-| `pnpm format` | Format code with Prettier |
+| Command             | Description                      |
+| ------------------- | -------------------------------- |
+| `pnpm dev`          | Start development server         |
+| `pnpm build`        | Build all packages and apps      |
+| `pnpm start`        | Start production server          |
+| `pnpm lint`         | Run ESLint across workspace      |
+| `pnpm type-check`   | Run TypeScript type checking     |
+| `pnpm test`         | Run tests                        |
+| `pnpm format`       | Format code with Prettier        |
 | `pnpm format:check` | Check formatting without changes |
 
 ## Docker
@@ -110,6 +111,7 @@ Application will be available at `http://localhost:3000`
 ## Contributing
 
 Before contributing, please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
+
 - Setting up development environment
 - Code standards and style
 - Making and submitting changes
@@ -122,6 +124,7 @@ MIT License - See [LICENSE](LICENSE) for details.
 ## Support
 
 For issues, questions, or suggestions:
+
 1. Check [CONFIG.md](CONFIG.md) for configuration troubleshooting
 2. Review [CONTRIBUTING.md](CONTRIBUTING.md) for setup help
 3. Open a GitHub issue with details

@@ -9,40 +9,44 @@ hair salon template. Configuration and infrastructure are complete; this list fo
 
 ---
 
+## Current Blockers (Build/Lint/Dev)
+
+- [ ] Fix module alias paths and missing re-exports (e.g., `@/lib/blog`, `@/components/ContactForm`, `@/lib/analytics-consent`)
+- [ ] Install missing dependencies referenced by the app (blog + forms + MDX)
+- [ ] Resolve ESLint config package resolution (`@repo/eslint-config`)
+- [ ] Add Tailwind color tokens for `bg-off-white` and related utilities in Tailwind config
+- [ ] Align SearchDialog styles with teal palette (replace purple accents)
+- [ ] Add missing CHANGELOG or remove README reference
+
+---
+
 ## Critical Path (Blocking Build)
 
 ### 1. Blog System
 
-- [ ] Create `features/blog/lib/blog.ts` - Blog post management and metadata
-- [ ] Create `features/blog/lib/blog-images.ts` - Image handling for blog posts
-- [ ] Create `features/blog/components/BlogPostContent.tsx` - MDX content renderer with syntax highlighting
+- [ ] Fix `@/lib/blog` and related blog module imports
 - [ ] Add missing dependencies: `next-mdx-remote`, `gray-matter`, `reading-time`, `remark-gfm`, `rehype-slug`, `rehype-pretty-code`
+- [ ] Verify blog components export names match imports
 - [ ] Create sample blog posts in `blogs/` directory (MDX format)
 
 ### 2. Contact Form System
 
-- [ ] Create `features/contact/components/ContactForm.tsx` - Form UI component
-- [ ] Create `features/contact/lib/contact-form-schema.ts` - Zod validation schema
-- [ ] Create `features/contact/lib/constants.ts` - Form field definitions
-- [ ] Add missing dependencies: `react-hook-form`, `@hookform/resolvers`
+- [ ] Add missing dependencies: `react-hook-form`, `@hookform/resolvers/zod`
+- [ ] Align contact form imports with shared schema location
 - [ ] Set up backend form submission (HubSpot or Supabase integration)
 
 ### 3. Analytics & Consent
 
-- [ ] Create `lib/analytics-consent.ts` - Cookie consent management
-- [ ] Implement consent banner state persistence
-- [ ] Connect to existing `features/analytics/` setup
+- [ ] Fix analytics consent import path (`AnalyticsConsentBanner` -> analytics consent module)
+- [ ] Validate consent persistence wiring
 
 ### 4. Search System
 
-- [ ] Create `features/search/components/SearchDialog.tsx` - Search modal/dialog UI
-- [ ] Create `features/search/components/SearchPage.tsx` - Full search results page
-- [ ] Fix `SearchItem` type to include: `id`, `href`, `type`, `tags`
-- [ ] Ensure search indexing includes blog posts and services
+- [ ] Ensure SearchDialog and SearchPage imports match actual component paths
+- [ ] Verify search indexing includes blog posts and service pages
 
 ### 5. Services Feature
 
-- [ ] Create `features/services/components/ServicesOverview.tsx` - Services listing component
 - [ ] Create `features/services/components/ServiceDetailLayout.tsx` - Service detail page layout
 - [ ] Populate services data (coloring, haircuts, treatments, special-occasions)
 
@@ -61,7 +65,6 @@ hair salon template. Configuration and infrastructure are complete; this list fo
 ### Type Definitions
 
 - [ ] Add `options` property to `SelectProps` interface (used in book page)
-- [ ] Define `SearchItem` interface with required properties
 - [ ] Add proper types for blog post metadata
 - [ ] Fix undefined navigation element reference issue in `Navigation.tsx`
 

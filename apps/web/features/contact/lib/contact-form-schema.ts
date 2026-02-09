@@ -19,7 +19,7 @@
  * - name: 2-50 characters, required
  * - email: Valid email format, max 254 characters
  * - company: Optional, max 100 characters
- * - phone: Optional, trimmed, max 20 characters
+ * - phone: Required, trimmed, max 50 characters
  * - servicesInterested: Optional, max 50 characters
  * - preferredAppointment: Optional, max 50 characters
  * - website: Honeypot, must be empty (max 0)
@@ -61,7 +61,7 @@
  *
  * **Validation Rules:**
  * - Required fields: name, email, message
- * - Optional fields: company, phone, servicesInterested, preferredAppointment, hearAboutUs
+ * - Optional fields: company, servicesInterested, preferredAppointment, hearAboutUs
  * - Honeypot field: website (must be empty)
  *
  * **Usage:**
@@ -80,7 +80,7 @@
  */
 
 import { z } from 'zod';
-import { FORM_VALIDATION } from './constants';
+import { FORM_VALIDATION } from '@/lib/constants';
 
 // Contact form schema with enhanced validation
 export const contactFormSchema = z.object({
@@ -90,14 +90,21 @@ export const contactFormSchema = z.object({
     .max(FORM_VALIDATION.NAME_MAX_LENGTH),
   email: z.string().email('Invalid email address').max(FORM_VALIDATION.EMAIL_MAX_LENGTH),
   company: z.string().max(FORM_VALIDATION.COMPANY_MAX_LENGTH).optional(),
-  phone: z
+  phone: z.string().trim().min(1, 'Phone number is required').max(FORM_VALIDATION.PHONE_MAX_LENGTH),
+  servicesInterested: z
     .string()
-    .trim() // Remove whitespace for consistent validation
-    .min(1, 'Phone number is required')
-    .max(FORM_VALIDATION.PHONE_MAX_LENGTH)
+    .max(
+      FORM_VALIDATION.SERVICES_INTERESTED_MAX_LENGTH,
+      "Please select services you're interested in"
+    )
     .optional(),
-  servicesInterested: z.string().max(50, "Please select services you're interested in").optional(),
-  preferredAppointment: z.string().max(50, 'Please select preferred appointment time').optional(),
+  preferredAppointment: z
+    .string()
+    .max(
+      FORM_VALIDATION.PREFERRED_APPOINTMENT_MAX_LENGTH,
+      'Please select preferred appointment time'
+    )
+    .optional(),
   // Honeypot field - must be empty to pass validation (bot protection)
   website: z.string().max(0, 'Honeypot must be empty').optional(),
   message: z
