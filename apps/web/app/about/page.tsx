@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Scissors, Heart, Sparkles, User, Clock, Star } from 'lucide-react'
-import { Container, Section } from '@repo/ui'
+import { ArrowRight, Scissors, Heart, Sparkles } from 'lucide-react'
+import { Container } from '@repo/ui'
 
 export const metadata: Metadata = {
   title: 'About Us | Hair Salon Template',
@@ -40,7 +40,7 @@ export default function AboutPage() {
                 We started as a small team of two stylists and have grown into a family of creative professionals who share a love for the craft. We constantly educate ourselves on the latest trends and techniques to ensure we can bring your vision to life.
               </p>
               <p>
-                Whether you're looking for a subtle refresh or a complete transformation, we listen, we care, and we deliver.
+                Whether you&apos;re looking for a subtle refresh or a complete transformation, we listen, we care, and we deliver.
               </p>
             </div>
           </div>

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllPosts, getAllCategories } from '@/lib/blog'
 import { Calendar, Clock, ArrowRight } from 'lucide-react'
-import { Container, Section } from '@repo/ui'
+import { Container } from '@repo/ui'
 
 export const metadata: Metadata = {
   title: 'Blog | Hair Salon Template',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Container, Section, Card, Button, Input, Select, Textarea } from '@repo/ui'
-import { Calendar, Clock, Scissors, CheckCircle } from 'lucide-react'
+import { Calendar, Clock, Scissors } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Book an Appointment | Hair Salon Template',
@@ -16,7 +16,7 @@ export default function BookPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Book Your Visit</h1>
             <p className="text-xl text-white/80">
-              Select your service and preferred time. We'll confirm your appointment shortly.
+              Select your service and preferred time. We&apos;ll confirm your appointment shortly.
             </p>
           </div>
         </Container>
@@ -154,7 +154,7 @@ export default function BookPage() {
               <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm text-center">
                 <h3 className="font-bold text-charcoal mb-2">Prefer to call?</h3>
                 <p className="text-2xl font-bold text-teal mb-1">(555) 123-4567</p>
-                <p className="text-sm text-slate-500">We're available during business hours.</p>
+                <p className="text-sm text-slate-500">We&apos;re available during business hours.</p>
               </div>
             </div>
           </div>

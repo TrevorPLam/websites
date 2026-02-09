@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Container, Section } from '@repo/ui'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Hair Salon Template',
@@ -37,7 +36,7 @@ export default function PrivacyPolicyPage() {
           <div className="prose prose-lg max-w-4xl text-slate-700">
             <h2>Overview</h2>
             <p>
-              Hair Salon Template ("we," "our," or "us") is committed to protecting your privacy.
+              Hair Salon Template (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy.
               This Privacy Policy explains how we collect, use, disclose, and safeguard your
               information when you visit our website or book an appointment.
             </p>

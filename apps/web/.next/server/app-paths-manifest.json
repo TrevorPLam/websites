@@ -1,1 +1,22 @@
-{}
+{
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/blog/page": "app/blog/page.js",
+  "/about/page": "app/about/page.js",
+  "/blog/[slug]/page": "app/blog/[slug]/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/gallery/page": "app/gallery/page.js",
+  "/search/page": "app/search/page.js",
+  "/book/page": "app/book/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/services/coloring/page": "app/services/coloring/page.js",
+  "/services/haircuts/page": "app/services/haircuts/page.js",
+  "/pricing/page": "app/pricing/page.js",
+  "/services/treatments/page": "app/services/treatments/page.js",
+  "/team/page": "app/team/page.js",
+  "/services/page": "app/services/page.js",
+  "/terms/page": "app/terms/page.js",
+  "/services/special-occasions/page": "app/services/special-occasions/page.js"
+}

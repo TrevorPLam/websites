@@ -36,12 +36,12 @@ export default function ContactPage() {
             <div>
               <h2 className="text-3xl font-bold text-charcoal mb-6">Send Us a Message</h2>
               <p className="text-slate mb-8">
-                Have a question about our services? Fill out the form below and we'll get back to you shortly.
+                Have a question about our services? Fill out the form below and we&apos;ll get back to you shortly.
               </p>
               <ErrorBoundary
                 fallback={(
                   <div className="rounded-lg border border-error/20 bg-error/5 p-4 text-error">
-                    We're having trouble loading the form. Please email us at{' '}
+                    We&apos;re having trouble loading the form. Please email us at{' '}
                     <a
                       href={`mailto:${CONTACT_EMAIL}`}
                       className="underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-error"

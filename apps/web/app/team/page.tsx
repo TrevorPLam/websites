@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Container, Section, Card } from '@repo/ui'
-import { Instagram, Twitter, Linkedin } from 'lucide-react'
+import { Instagram, Twitter } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Our Team | Hair Salon Template',
@@ -101,7 +101,7 @@ export default function TeamPage() {
           <div className="max-w-4xl mx-auto bg-white rounded-2xl p-10 shadow-sm border border-slate-200 text-center">
             <h2 className="text-3xl font-bold text-charcoal mb-4">Join Our Team</h2>
             <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-              We are always looking for talented, passionate individuals to grow with us. If you love hair and people, we'd love to meet you.
+              We are always looking for talented, passionate individuals to grow with us. If you love hair and people, we&apos;d love to meet you.
             </p>
             <button className="px-8 py-3 bg-charcoal text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors">
               View Careers

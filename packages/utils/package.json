@@ -13,10 +13,10 @@
   },
   "dependencies": {
     "clsx": "2.1.1",
-    "tailwind-merge": "2.7.0"
+    "tailwind-merge": "2.6.1"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
+    "typescript": "5.7.2",
     "eslint": "9.18.0",
     "@typescript-eslint/eslint-plugin": "8.19.1",
     "@typescript-eslint/parser": "8.19.1"

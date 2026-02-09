@@ -45,7 +45,7 @@ function SocialProof() {
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {testimonials.map((testimonial) => (
             <Card key={testimonial.author} variant="testimonial">
-              <p className="text-slate mb-6 italic leading-relaxed">"{testimonial.quote}"</p>
+              <p className="text-slate mb-6 italic leading-relaxed">&quot;{testimonial.quote}&quot;</p>
               <div>
                 <p className="font-semibold text-charcoal">{testimonial.author}</p>
                 <p className="text-slate text-sm">{testimonial.title}</p>

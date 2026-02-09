@@ -12,7 +12,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/utils": "workspace:*"
+    "@repo/utils": "workspace:*",
+    "lucide-react": "0.344.0"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -22,7 +23,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "@types/react": "19.0.2",
-    "typescript": "5.9.3",
+    "typescript": "5.7.2",
     "eslint": "9.18.0",
     "@typescript-eslint/eslint-plugin": "8.19.1",
     "@typescript-eslint/parser": "8.19.1"

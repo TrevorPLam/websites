@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Check, X } from 'lucide-react'
 import { Container, Section, Card, Button, Accordion } from '@repo/ui'
 
 export const metadata: Metadata = {
