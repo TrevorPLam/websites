@@ -100,8 +100,10 @@ import { cn } from '@/lib/utils'
 const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/pricing', label: 'Pricing' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/team', label: 'Team' },
   { href: '/about', label: 'About' },
+  { href: '/blog', label: 'Blog' },
 ]
 
 /**
@@ -212,9 +214,9 @@ export default function Navigation({ searchItems }: NavigationProps) {
               </Link>
             ))}
             <SearchDialog items={searchItems} />
-            <Link href="/contact">
+            <Link href="/book">
               <Button variant="primary" size="small">
-                Get Started
+                Book Now
               </Button>
             </Link>
           </div>
@@ -282,9 +284,9 @@ export default function Navigation({ searchItems }: NavigationProps) {
                 {link.label}
               </Link>
             ))}
-            <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href="/book" onClick={() => setIsMobileMenuOpen(false)}>
               <Button variant="primary" size="medium" className="w-full">
-                Get Started
+                Book Now
               </Button>
             </Link>
           </div>

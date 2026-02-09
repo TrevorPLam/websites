@@ -1,11 +1,6 @@
 import type { Metadata } from 'next'
+import { Container, Section } from '@repo/ui'
 
-/**
- * Privacy Policy page
- *
- * Meta-note: This page mirrors the placeholder copy in /docs/PRIVACY_POLICY_TEMPLATE.md
- * so legal review can map each section back to the template.
- */
 export const metadata: Metadata = {
   title: 'Privacy Policy | Hair Salon Template',
   description:
@@ -26,7 +21,7 @@ export default function PrivacyPolicyPage() {
             </p>
             <div className="mt-6 text-sm text-white/70">
               <p>
-                <span className="font-semibold text-white">Effective Date:</span> [TO BE UPDATED]
+                <span className="font-semibold text-white">Effective Date:</span> January 1, 2026
               </p>
               <p>
                 <span className="font-semibold text-white">Last Updated:</span> January 11, 2026
@@ -36,20 +31,15 @@ export default function PrivacyPolicyPage() {
         </div>
       </section>
 
-      {/* Policy content mapped to template sections for traceability. */}
+      {/* Policy content */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="prose prose-lg max-w-4xl">
-            <p>
-              <strong>⚠️ Placeholder:</strong> This is a template. Customize before launch with your
-              specific practices and legal requirements.
-            </p>
-
+          <div className="prose prose-lg max-w-4xl text-slate-700">
             <h2>Overview</h2>
             <p>
               Hair Salon Template ("we," "our," or "us") is committed to protecting your privacy.
               This Privacy Policy explains how we collect, use, disclose, and safeguard your
-              information when you visit our website.
+              information when you visit our website or book an appointment.
             </p>
 
             <h2>Information We Collect</h2>
@@ -58,7 +48,8 @@ export default function PrivacyPolicyPage() {
               <li>Full name</li>
               <li>Email address</li>
               <li>Phone number</li>
-              <li>Message content (optional)</li>
+              <li>Appointment preferences and history</li>
+              <li>Hair history and preferences (for consultations)</li>
             </ul>
 
             <h3>Automatically Collected Information</h3>
@@ -66,34 +57,33 @@ export default function PrivacyPolicyPage() {
               <li>Browser type and version</li>
               <li>IP address</li>
               <li>Pages visited and time spent</li>
-              <li>Referring website</li>
               <li>Device information</li>
             </ul>
 
             <h2>How We Use Your Information</h2>
             <ul>
+              <li>Schedule and manage your appointments</li>
+              <li>Send appointment reminders and confirmations</li>
               <li>Respond to your inquiries and requests</li>
               <li>Provide customer service</li>
-              <li>Send marketing communications (with consent)</li>
+              <li>Send salon updates and promotions (with consent)</li>
               <li>Improve our website and services</li>
-              <li>Comply with legal obligations</li>
-              <li>Analyze website usage and trends</li>
             </ul>
 
             <h2>Information Storage and Sharing</h2>
             <h3>Storage</h3>
-            <p>Your information is stored securely in our database (Supabase) and CRM system (HubSpot).</p>
+            <p>Your information is stored securely in our appointment scheduling system and customer database.</p>
 
             <h3>Third-Party Services</h3>
             <ul>
               <li>
-                <strong>HubSpot:</strong> CRM and marketing automation
+                <strong>Scheduling Software:</strong> For booking and calendar management.
               </li>
               <li>
-                <strong>Analytics providers:</strong> [TO BE SPECIFIED based on T-064]
+                <strong>Payment Processors:</strong> For secure transaction processing.
               </li>
               <li>
-                <strong>Hosting provider:</strong> Cloudflare
+                <strong>Analytics providers:</strong> To help us understand website usage.
               </li>
             </ul>
             <p>We do not sell your personal information to third parties.</p>
@@ -101,7 +91,7 @@ export default function PrivacyPolicyPage() {
             <h2>Data Retention</h2>
             <p>
               We retain your information for as long as necessary to fulfill the purposes outlined in
-              this policy, comply with legal obligations, resolve disputes, and enforce our agreements.
+              this policy, comply with legal obligations, and provide you with ongoing service.
             </p>
 
             <h2>Your Rights</h2>
@@ -111,9 +101,8 @@ export default function PrivacyPolicyPage() {
               <li>Correct inaccurate information</li>
               <li>Request deletion of your information</li>
               <li>Opt-out of marketing communications</li>
-              <li>Object to processing of your information</li>
             </ul>
-            <p>To exercise these rights, contact us at: [CONTACT EMAIL TO BE ADDED]</p>
+            <p>To exercise these rights, please contact us.</p>
 
             <h2>Security</h2>
             <p>
@@ -121,19 +110,10 @@ export default function PrivacyPolicyPage() {
               of transmission over the internet is 100% secure.
             </p>
 
-            <h2>Cookies and Tracking</h2>
-            <p>[TO BE CUSTOMIZED based on analytics provider selection in T-064]</p>
-            <ul>
-              <li>Remember your preferences</li>
-              <li>Analyze website traffic</li>
-              <li>Improve user experience</li>
-            </ul>
-            <p>You can control cookies through your browser settings.</p>
-
             <h2>Children&apos;s Privacy</h2>
             <p>
-              Our services are not directed to individuals under 18. We do not knowingly collect
-              information from children.
+              Our services are available to children with parental consent. We do not knowingly collect
+              personal information from children under 13 without verified parental consent.
             </p>
 
             <h2>Changes to This Policy</h2>
@@ -143,20 +123,7 @@ export default function PrivacyPolicyPage() {
             </p>
 
             <h2>Contact Us</h2>
-            <p>For questions about this Privacy Policy, contact:</p>
-            <p>
-              <strong>Hair Salon Template</strong>
-              <br />
-              Email: [TO BE ADDED]
-              <br />
-              Address: [TO BE ADDED]
-            </p>
-
-            <p>
-              <strong>⚠️ Legal notice:</strong> This is a placeholder template. Before launch, consult
-              with a legal professional to ensure compliance with GDPR, CCPA, CAN-SPAM Act, and other
-              applicable privacy laws.
-            </p>
+            <p>For questions about this Privacy Policy, please contact us at the salon directly.</p>
           </div>
         </div>
       </section>
