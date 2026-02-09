@@ -18,10 +18,10 @@
         "./*"
       ],
       "@repo/ui": [
-        "../../packages/ui"
+        "../../packages/ui/src"
       ],
       "@repo/utils": [
-        "../../packages/utils"
+        "../../packages/utils/src"
       ]
     },
     "allowJs": true,

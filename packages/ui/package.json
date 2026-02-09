@@ -13,13 +13,13 @@
   },
   "dependencies": {
     "@repo/utils": "workspace:*",
-    "react": "^18.0.0"
+    "react": "19.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.0",
-    "typescript": "^5.0.0",
-    "eslint": "^8.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0"
+    "@types/react": "19.0.2",
+    "typescript": "5.9.3",
+    "eslint": "9.18.0",
+    "@typescript-eslint/eslint-plugin": "8.19.1",
+    "@typescript-eslint/parser": "8.19.1"
   }
 }
