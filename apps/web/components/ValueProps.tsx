@@ -1,59 +1,58 @@
 import React, { memo } from 'react'
-import { Target, DollarSign, Settings } from 'lucide-react'
+import { Scissors, Heart, Sparkles } from 'lucide-react'
 import { Container, Section, Card } from '@repo/ui'
 
 const valueProps = [
   {
-    icon: Target,
-    title: 'Marketing shouldn’t feel like a guessing game.',
+    icon: Scissors,
+    title: 'Expert Stylists',
     description: (
       <>
-        <p>Most founders don’t actually need more marketing. They need someone to own it.</p>
-        <p>Someone who:</p>
+        <p>Our team consists of highly trained professionals who are passionate about hair.</p>
+        <p>We provide:</p>
         <ul className="list-disc list-inside pl-4 space-y-1">
-          <li>Understands the business context</li>
-          <li>Knows what matters right now (and what doesn’t)</li>
-          <li>Makes decisions, not just suggestions</li>
-          <li>Stays accountable over time</li>
+          <li>Precision cutting techniques</li>
+          <li>Master colorists</li>
+          <li>Continuous education on latest trends</li>
+          <li>Personalized consultations</li>
         </ul>
-        <p>That’s the role I fill.</p>
+        <p>We listen to your needs to deliver the look you want.</p>
       </>
     ),
   },
   {
-    icon: DollarSign,
-    title: 'What ‘part of your team’ actually means',
+    icon: Sparkles,
+    title: 'Premium Products',
     description: (
       <>
         <p>
-          I’m embedded in your team, learning the business and taking ownership — not handing you a list of tasks.
+          We believe that great hair starts with great health. That’s why we use only the best products.
         </p>
-        <p>When we work together:</p>
+        <p>Our selection includes:</p>
         <ul className="list-disc list-inside pl-4 space-y-1">
-          <li>I learn your business like an internal hire would</li>
-          <li>I help decide priorities, not just execute orders</li>
-          <li>I work within your existing tools, people, and constraints</li>
-          <li>You get marketing leadership without hiring full-time</li>
+          <li>Sulfate-free shampoos and conditioners</li>
+          <li>Organic and eco-friendly options</li>
+          <li>Professional-grade styling tools</li>
+          <li>Treatments for all hair types</li>
         </ul>
-        <p>You stay focused on running the business.</p>
-        <p>I take responsibility for the marketing.</p>
+        <p>Your hair deserves the best care possible.</p>
       </>
     ),
   },
   {
-    icon: Settings,
-    title: 'Who this works best for',
+    icon: Heart,
+    title: 'Relaxing Atmosphere',
     description: (
       <>
-        <p>This is a good fit if:</p>
+        <p>Your salon visit should be a break from your busy day.</p>
         <ul className="list-disc list-inside pl-4 space-y-1">
-          <li>You’re a founder or part of a lean team</li>
-          <li>You want senior-level marketing ownership, not hand-holding</li>
-          <li>You don’t want to manage freelancers or a revolving bench of contractors</li>
-          <li>You want clarity, momentum, and follow-through</li>
+          <li>Comfortable, modern seating</li>
+          <li>Complimentary beverages</li>
+          <li>Relaxing music and ambiance</li>
+          <li>Friendly and welcoming staff</li>
         </ul>
-        <p>If you’re looking for a hands-off partner or a one-time project, this probably isn’t it.</p>
-        <p>If you want a dedicated marketer embedded into your team, it is.</p>
+        <p>Sit back, relax, and let us pamper you.</p>
+        <p>Leave feeling refreshed and confident.</p>
       </>
     ),
   },

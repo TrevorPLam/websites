@@ -3,29 +3,29 @@ import { Container, Section, Card } from '@repo/ui'
 
 const testimonials = [
   {
-    quote: "Working with Your Dedicated Marketer transformed our online presence. We saw a 150% increase in qualified leads within the first 3 months.",
+    quote: "I've never walked out of a salon feeling this confident. The stylists really listen to what you want.",
     author: 'Sarah Johnson',
-    company: 'Tech Solutions Inc.',
-    title: 'CEO',
+    company: 'Local Resident',
+    title: 'Client since 2023',
   },
   {
-    quote: "Finally, a marketing partner that actually understands founder and team realities. No fluff, just results-driven strategies that work.",
+    quote: "The atmosphere is so relaxing and the color services are top-notch. I wouldn't trust anyone else with my hair.",
     author: 'Michael Chen',
-    company: 'Local Services Co.',
-    title: 'Founder',
+    company: 'Regular Customer',
+    title: 'Client since 2021',
   },
   {
-    quote: "The transparency and communication are outstanding. I always know exactly what's being done and why. Our ROI has been exceptional.",
+    quote: "Fantastic experience from start to finish. The team is professional, friendly, and incredibly talented.",
     author: 'Emily Rodriguez',
-    company: 'E-commerce Store',
-    title: 'Owner',
+    company: 'Wedding Client',
+    title: 'Client since 2024',
   },
 ]
 
 const metrics = [
-  { value: '127%', label: 'Average Growth' },
-  { value: '50+', label: 'Clients Served' },
-  { value: '95%', label: 'Client Retention' },
+  { value: '5k+', label: 'Happy Clients' },
+  { value: '10+', label: 'Years Experience' },
+  { value: '4.9', label: 'Average Rating' },
 ]
 
 function SocialProof() {
@@ -34,10 +34,10 @@ function SocialProof() {
       <Container>
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-            Trusted by founders and teams I work with
+            Loved by our clients
           </h2>
           <p className="text-lg text-slate max-w-2xl mx-auto">
-            Here’s what people say about having me embedded in their marketing
+            See why we are the top-rated salon in the area.
           </p>
         </div>
 
@@ -45,10 +45,10 @@ function SocialProof() {
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {testimonials.map((testimonial) => (
             <Card key={testimonial.author} variant="testimonial">
-              <p className="text-slate mb-6 italic leading-relaxed">{testimonial.quote}</p>
+              <p className="text-slate mb-6 italic leading-relaxed">"{testimonial.quote}"</p>
               <div>
                 <p className="font-semibold text-charcoal">{testimonial.author}</p>
-                <p className="text-slate text-sm">{testimonial.company}, {testimonial.title}</p>
+                <p className="text-slate text-sm">{testimonial.title}</p>
               </div>
             </Card>
           ))}

@@ -1,68 +1,68 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Search, FileText, Share2, Mail, TrendingUp, Database, Users, BarChart } from 'lucide-react'
+import { Scissors, Palette, Sparkles, Calendar, User, Clock, Heart, Star } from 'lucide-react'
 import { Container, Section, Card, Button } from '@repo/ui'
 
 export const metadata: Metadata = {
-  title: 'Marketing Services | Your Dedicated Marketer',
-  description: 'Comprehensive marketing solutions for small businesses. SEO, content marketing, social media, email campaigns, and more.',
+  title: 'Salon Services | Hair Salon Template',
+  description: 'Explore our full range of hair salon services including cuts, color, treatments, and bridal styling.',
 }
 
 const coreServices = [
   {
-    icon: Search,
-    title: 'SEO Services',
-    description: 'Technical SEO audits, on-page optimization, keyword research, and local SEO to get found by customers actively searching.',
-    href: '/services/seo',
-    features: ['Technical SEO', 'On-page optimization', 'Local SEO', 'Keyword research'],
+    icon: Scissors,
+    title: 'Haircuts & Styling',
+    description: 'Precision cuts and styling for women, men, and children to suit your lifestyle.',
+    href: '/services/haircuts',
+    features: ['Precision Cutting', 'Blowouts', 'Men\'s Grooming', 'Children\'s Cuts'],
   },
   {
-    icon: FileText,
-    title: 'Content Marketing',
-    description: 'Strategic content planning, blog creation, editorial workflows, and content distribution to attract and engage your audience.',
-    href: '/services/content',
-    features: ['Blog posts', 'Content calendar', 'SEO optimization', 'Distribution strategy'],
+    icon: Palette,
+    title: 'Coloring Services',
+    description: 'Full color, highlights, balayage, and corrections by master colorists.',
+    href: '/services/coloring',
+    features: ['Full Color', 'Highlights & Lowlights', 'Balayage', 'Color Correction'],
   },
   {
-    icon: Share2,
-    title: 'Social Media Management',
-    description: 'Platform strategy, content creation, post scheduling, community management, and engagement monitoring across all platforms.',
-    href: '/services/social',
-    features: ['Platform strategy', 'Content creation', 'Community management', 'Analytics'],
+    icon: Sparkles,
+    title: 'Treatments',
+    description: 'Deep conditioning, keratin, and scalp treatments for healthy, shiny hair.',
+    href: '/services/treatments',
+    features: ['Deep Conditioning', 'Keratin Smoothing', 'Scalp Detox', 'Glossing'],
   },
   {
-    icon: Mail,
-    title: 'Email Marketing',
-    description: 'Campaign strategy, email copywriting, list segmentation, automation setup, and performance tracking for higher conversions.',
-    href: '/services/email',
-    features: ['Campaign strategy', 'Automation', 'List segmentation', 'Analytics'],
+    icon: Calendar,
+    title: 'Special Occasions',
+    description: 'Bridal hair, updos, and styling for weddings, proms, and special events.',
+    href: '/services/special-occasions',
+    features: ['Bridal Hair', 'Updos', 'Event Styling', 'On-site Services'],
   },
 ]
 
-const supportServices = [
+const additionalServices = [
   {
-    icon: TrendingUp,
-    title: 'Marketing Strategy',
-    description: 'Quarterly planning, channel recommendations, budget allocation, and competitive analysis.',
-    href: '/services/strategy',
+    icon: User,
+    title: 'Consultations',
+    description: 'Complimentary 15-minute consultations to discuss your hair goals.',
+    href: '/contact',
   },
   {
-    icon: Database,
-    title: 'CRM Setup & Management',
-    description: 'Platform selection, workflow automation, contact organization, and reporting dashboards.',
-    href: '/services/crm',
+    icon: Clock,
+    title: 'Express Services',
+    description: 'Quick trims and touch-ups for when you are short on time.',
+    href: '/contact',
   },
   {
-    icon: Users,
-    title: 'Funnel Build-Out',
-    description: 'Landing page optimization, lead magnets, conversion tracking, and A/B testing.',
-    href: '/services/funnel',
+    icon: Heart,
+    title: 'Gift Cards',
+    description: 'Give the gift of great hair. Available for any service or amount.',
+    href: '/contact',
   },
   {
-    icon: BarChart,
-    title: 'Marketing Reporting',
-    description: 'Analytics dashboards, performance reports, KPI tracking, and ROI measurement.',
-    href: '/services/reporting',
+    icon: Star,
+    title: 'Memberships',
+    description: 'Join our VIP program for discounts on products and services.',
+    href: '/contact',
   },
 ]
 
@@ -74,15 +74,15 @@ export default function ServicesPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Marketing Services That Drive Growth
+              Services Tailored to You
             </h1>
             <p className="text-xl text-white/80 mb-8">
-              Comprehensive marketing solutions designed to help small businesses scale effectively.
-              No fluff, just strategies that deliver measurable results.
+              Experience professional hair care in a relaxing environment. 
+              Our expert stylists are dedicated to making you look and feel your best.
             </p>
             <Link href="/contact">
               <Button variant="primary" size="large">
-                Schedule Free Consultation
+                Book an Appointment
               </Button>
             </Link>
           </div>
@@ -94,10 +94,10 @@ export default function ServicesPage() {
         <Container>
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-              Core Marketing Services
+              Our Menu
             </h2>
             <p className="text-lg text-slate max-w-2xl mx-auto">
-              Essential services to build your marketing foundation and drive consistent growth
+              We offer a comprehensive range of services to meet all your hair care needs.
             </p>
           </div>
 
@@ -134,20 +134,20 @@ export default function ServicesPage() {
         </Container>
       </Section>
 
-      {/* Support Services */}
+      {/* Additional Services */}
       <Section className="bg-off-white">
         <Container>
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-              Support Services
+              More Ways to Experience
             </h2>
             <p className="text-lg text-slate max-w-2xl mx-auto">
-              Additional services to enhance your marketing efforts and maximize ROI
+              Enhance your visit with these additional offerings.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {supportServices.map((service) => {
+            {additionalServices.map((service) => {
               const Icon = service.icon
               return (
                 <Card key={service.title} variant="default">
@@ -156,12 +156,6 @@ export default function ServicesPage() {
                   </div>
                   <h3 className="text-lg font-semibold text-charcoal mb-2">{service.title}</h3>
                   <p className="text-sm text-slate mb-3 leading-relaxed">{service.description}</p>
-                  <Link
-                    href={service.href}
-                    className="text-teal text-sm font-semibold hover:text-teal-dark transition-colors"
-                  >
-                    Learn More →
-                  </Link>
                 </Card>
               )
             })}
@@ -174,15 +168,15 @@ export default function ServicesPage() {
         <Container>
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-              Not Sure Which Services You Need?
+              Ready for a Transformation?
             </h2>
             <p className="text-lg text-slate mb-8">
-              Schedule a free consultation and we'll create a custom marketing plan tailored to your business goals and budget.
+              Schedule your appointment today and let our experts take care of the rest.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
                 <Button variant="primary" size="large">
-                  Schedule Consultation
+                  Book Now
                 </Button>
               </Link>
               <Link href="/pricing">

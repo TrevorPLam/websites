@@ -92,14 +92,14 @@ export const TEST = {
  */
 export const ORGANIZATION = {
   /** Primary contact email address */
-  CONTACT_EMAIL: 'contact@yourdedicatedmarketer.com',
+  CONTACT_EMAIL: 'contact@hairsalontemplate.com',
   
   /** Social media profile URLs */
   SOCIAL_MEDIA: {
-    FACEBOOK: 'https://www.facebook.com/yourdedicatedmarketer',
-    TWITTER: 'https://www.twitter.com/yourdedicatedmarketer',
-    LINKEDIN: 'https://www.linkedin.com/company/yourdedicatedmarketer',
-    INSTAGRAM: 'https://www.instagram.com/yourdedicatedmarketer',
+    FACEBOOK: 'https://www.facebook.com/hairsalontemplate',
+    TWITTER: 'https://www.twitter.com/hairsalontemplate',
+    LINKEDIN: 'https://www.linkedin.com/company/hairsalontemplate',
+    INSTAGRAM: 'https://www.instagram.com/hairsalontemplate',
   },
   
   /** Aggregate rating information */

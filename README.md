@@ -1,6 +1,6 @@
-# Your Dedicated Marketer
+# Hair Salon Template
 
-Marketing website monorepo built with Next.js.
+Hair salon website template monorepo built with Next.js.
 
 ## Installation
 
@@ -27,7 +27,7 @@ pnpm type-check
 
 ## Project Structure
 
-- `apps/web/` - Main Next.js application
+- `apps/web/` - Main Next.js application for hair salon website
 - `packages/ui/` - Shared design system components
 - `packages/utils/` - Shared utilities
 - `infrastructure/` - Deployment and infrastructure configs
@@ -39,4 +39,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to th
 
 ## License
 
-Proprietary - See [LICENSE](LICENSE) for details.
+MIT License - See [LICENSE](LICENSE) for details.

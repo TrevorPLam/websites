@@ -1,32 +1,32 @@
 import React from 'react'
 import Link from 'next/link'
-import { Search, FileText, Share2, Mail } from 'lucide-react'
+import { Scissors, Palette, Sparkles, Calendar } from 'lucide-react'
 import { Container, Section, Card } from '@repo/ui'
 
 const services = [
   {
-    icon: Search,
-    title: 'SEO Services',
-    description: 'Get found by customers actively searching for your services',
-    href: '/services/seo',
+    icon: Scissors,
+    title: 'Haircuts & Styling',
+    description: 'Precision cuts and styling for women, men, and children to suit your lifestyle.',
+    href: '/services/haircuts',
   },
   {
-    icon: FileText,
-    title: 'Content Marketing',
-    description: 'Attract and engage your audience with strategic content',
-    href: '/services/content',
+    icon: Palette,
+    title: 'Coloring Services',
+    description: 'Full color, highlights, balayage, and corrections by master colorists.',
+    href: '/services/coloring',
   },
   {
-    icon: Share2,
-    title: 'Social Media',
-    description: 'Build community and brand awareness across platforms',
-    href: '/services/social',
+    icon: Sparkles,
+    title: 'Treatments',
+    description: 'Deep conditioning, keratin, and scalp treatments for healthy, shiny hair.',
+    href: '/services/treatments',
   },
   {
-    icon: Mail,
-    title: 'Email Marketing',
-    description: 'Nurture leads and drive conversions with targeted campaigns',
-    href: '/services/email',
+    icon: Calendar,
+    title: 'Special Occasions',
+    description: 'Bridal hair, updos, and styling for weddings, proms, and special events.',
+    href: '/services/special-occasions',
   },
 ]
 
@@ -36,10 +36,10 @@ export default function ServicesOverview() {
       <Container>
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
-            Marketing leadership I run with your team
+            Our Services
           </h2>
           <p className="text-lg text-slate max-w-2xl mx-auto">
-            I focus on the channels that matter most right now so founders and teams get momentum without extra management.
+            From classic cuts to modern makeovers, we offer a full range of hair services tailored to you.
           </p>
         </div>
 

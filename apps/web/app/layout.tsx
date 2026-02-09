@@ -31,7 +31,7 @@
  * ```
  *
  * **METADATA**:
- * - Default title with template: "%s | Your Dedicated Marketer"
+ * - Default title with template: "%s | Hair Salon Template"
  * - Child pages override with their own metadata export
  * - OG image generated via /api/og route
  * - Structured data: Organization + WebSite schemas in <head>
@@ -163,22 +163,22 @@ function resolveCspNonce(requestHeaders: Headers): string {
 /**
  * Global metadata applied to all pages.
  * Child pages can override with their own metadata export.
- * 
- * Title template: "%s | Your Dedicated Marketer"
+ *
+ * Title template: "%s | Hair Salon Template"
  * - Child page title replaces %s
- * - Example: "SEO Services | Your Dedicated Marketer"
+ * - Example: "Services | Hair Salon Template"
  */
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Your Dedicated Marketer | Digital Marketing Services That Drive Results',
-    template: '%s | Your Dedicated Marketer',
+    default: 'Hair Salon Template | Professional Hair Salon Website',
+    template: '%s | Hair Salon Template',
   },
-  description: 'Expert digital marketing services for businesses that want to grow. We specialize in SEO, content marketing, social media, and email marketing that delivers real ROI.',
-  keywords: ['digital marketing', 'SEO services', 'content marketing', 'social media marketing', 'email marketing', 'marketing agency'],
-  authors: [{ name: 'Your Dedicated Marketer' }],
-  creator: 'Your Dedicated Marketer',
-  publisher: 'Your Dedicated Marketer',
+  description: 'Professional hair salon website template with modern design, booking system, and service showcase. Perfect for hair stylists and salon owners.',
+  keywords: ['hair salon', 'hair stylist', 'beauty salon', 'haircut', 'hair styling', 'salon website', 'booking system'],
+  authors: [{ name: 'Hair Salon Template' }],
+  creator: 'Hair Salon Template',
+  publisher: 'Hair Salon Template',
   formatDetection: {
     email: false,
     address: false,
@@ -202,24 +202,24 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: siteUrl,
-    siteName: 'Your Dedicated Marketer',
-    title: 'Your Dedicated Marketer | Digital Marketing Services That Drive Results',
+    siteName: 'Hair Salon Template',
+    title: 'Hair Salon Template | Professional Hair Salon Website',
     description:
-      'Expert digital marketing services for businesses that want to grow. We specialize in SEO, content marketing, social media, and email marketing that delivers real ROI.',
+      'Professional hair salon website template with modern design, booking system, and service showcase. Perfect for hair stylists and salon owners.',
     images: [
       {
         url: ogImageUrl,
         width: 1200,
         height: 630,
-        alt: 'Your Dedicated Marketer brand preview image',
+        alt: 'Hair Salon Template brand preview image',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Your Dedicated Marketer | Digital Marketing Services That Drive Results',
+    title: 'Hair Salon Template | Professional Hair Salon Website',
     description:
-      'Expert digital marketing services for businesses that want to grow. SEO, content, social media, and email marketing that delivers ROI.',
+      'Professional hair salon website template with modern design and booking system. Perfect for hair stylists and salon owners.',
     images: [ogImageUrl],
     creator: '@yourdedicatedmarketer',
   },
@@ -254,8 +254,8 @@ export default async function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Organization',
-              name: 'Your Dedicated Marketer',
-              description: 'Expert digital marketing services for businesses that want to grow.',
+              name: 'Hair Salon Template',
+              description: 'Professional hair salon website template with modern design and booking system.',
               url: siteUrl,
               logo: new URL('/logo.png', siteUrl).toString(),
               contactPoint: {
@@ -288,7 +288,7 @@ export default async function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
-              name: 'Your Dedicated Marketer',
+              name: 'Hair Salon Template',
               url: siteUrl,
               potentialAction: {
                 '@type': 'SearchAction',

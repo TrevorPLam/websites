@@ -194,7 +194,7 @@ export default function Navigation({ searchItems }: NavigationProps) {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold text-white hover:text-white/90 transition-colors">
-            YD Marketer
+            Salon Template
           </Link>
 
           {/* Desktop Navigation */}

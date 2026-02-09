@@ -6,22 +6,21 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   const services = [
-    { href: '/services/seo', label: 'SEO Services' },
-    { href: '/services/content', label: 'Content Marketing' },
-    { href: '/services/social', label: 'Social Media' },
-    { href: '/services/email', label: 'Email Marketing' },
+    { href: '/services/haircuts', label: 'Haircuts & Styling' },
+    { href: '/services/coloring', label: 'Coloring Services' },
+    { href: '/services/treatments', label: 'Treatments' },
+    { href: '/services/special-occasions', label: 'Special Occasions' },
   ]
 
   const company = [
-    { href: '/about', label: 'About' },
-    { href: '/blog', label: 'Blog' },
+    { href: '/about', label: 'About Us' },
+    { href: '/services', label: 'Services' },
     { href: '/contact', label: 'Contact' },
   ]
 
   const legal = [
     { href: '/privacy', label: 'Privacy Policy' },
     { href: '/terms', label: 'Terms of Service' },
-    { href: '/contact', label: 'Contact' },
   ]
 
   const socialLinks = [
@@ -37,9 +36,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Column */}
           <div>
-            <h3 className="text-2xl font-bold text-white mb-4">YD Marketer</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">Salon Template</h3>
             <p className="text-white/70 mb-6">
-              Growth-focused marketing for small businesses. Strategic services that drive real results.
+              Professional hair care services in a relaxing environment. We are dedicated to making you look and feel your best.
             </p>
             <div className="flex gap-4">
               {socialLinks.map(social => {
@@ -113,7 +112,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-white/10 text-center">
           <p className="text-white/60">
-            © {currentYear} YD Firms LLC. All rights reserved.
+            © {currentYear} Salon Template. All rights reserved.
           </p>
         </div>
       </div>

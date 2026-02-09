@@ -1,8 +1,8 @@
 {
-  "name": "your-dedicated-marketer",
+  "name": "hair-salon-template",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing website monorepo",
+  "description": "Hair salon website template monorepo",
   "workspaces": [
     "apps/*",
     "packages/*"

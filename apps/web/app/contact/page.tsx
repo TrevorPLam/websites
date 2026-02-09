@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { Mail, Phone, Clock } from 'lucide-react'
+import { Mail, Phone, Clock, MapPin } from 'lucide-react'
 import { Container, Section, Card } from '@repo/ui'
 import ContactForm from '@/components/ContactForm'
 import ErrorBoundary from '@/components/ErrorBoundary'
 
-const CONTACT_EMAIL = 'contact@yourdedicatedmarketer.com'
+const CONTACT_EMAIL = 'contact@hairsalontemplate.com'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Your Dedicated Marketer',
-  description: 'Get in touch to discuss your marketing goals. Schedule a free consultation or send us a message.',
+  title: 'Contact Us | Hair Salon Template',
+  description: 'Book your appointment or get in touch with our salon team.',
 }
 
 export default function ContactPage() {
@@ -19,10 +19,10 @@ export default function ContactPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Let's Grow Your Business Together
+              Get In Touch
             </h1>
             <p className="text-xl text-white/80">
-              Schedule a free 30-minute consultation to discuss your marketing goals and how we can help you achieve them.
+              Ready for a fresh look? Schedule your appointment or send us a message.
             </p>
           </div>
         </Container>
@@ -36,7 +36,7 @@ export default function ContactPage() {
             <div>
               <h2 className="text-3xl font-bold text-charcoal mb-6">Send Us a Message</h2>
               <p className="text-slate mb-8">
-                Fill out the form below and we'll get back to you within 24 hours (usually much faster!).
+                Have a question about our services? Fill out the form below and we'll get back to you shortly.
               </p>
               <ErrorBoundary
                 fallback={(
@@ -58,9 +58,39 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div>
-              <h2 className="text-3xl font-bold text-charcoal mb-6">Get In Touch</h2>
+              <h2 className="text-3xl font-bold text-charcoal mb-6">Salon Info</h2>
 
               <div className="space-y-6 mb-8">
+                <Card variant="default">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-teal" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-charcoal mb-1">Visit Us</h3>
+                      <p className="text-slate">123 Salon Street</p>
+                      <p className="text-slate">Style City, ST 12345</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card variant="default">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-6 h-6 text-teal" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-charcoal mb-1">Call Us</h3>
+                      <a
+                        href="tel:+15551234567"
+                        className="text-teal hover:text-teal-dark transition-colors"
+                      >
+                        (555) 123-4567
+                      </a>
+                    </div>
+                  </div>
+                </Card>
+
                 <Card variant="default">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -81,56 +111,21 @@ export default function ContactPage() {
                 <Card variant="default">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-6 h-6 text-teal" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-charcoal mb-1">Phone</h3>
-                      <a
-                        href="tel:+15551234567"
-                        className="text-teal hover:text-teal-dark transition-colors"
-                      >
-                        (555) 123-4567
-                      </a>
-                    </div>
-                  </div>
-                </Card>
-
-                <Card variant="default">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Clock className="w-6 h-6 text-teal" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-charcoal mb-1">Office Hours</h3>
-                      <p className="text-slate">Monday - Friday</p>
-                      <p className="text-slate">9:00 AM - 5:00 PM EST</p>
+                      <h3 className="font-semibold text-charcoal mb-1">Hours</h3>
+                      <div className="grid grid-cols-2 gap-x-8 text-slate">
+                        <span>Tue - Fri:</span>
+                        <span>10am - 7pm</span>
+                        <span>Saturday:</span>
+                        <span>9am - 5pm</span>
+                        <span>Sun - Mon:</span>
+                        <span>Closed</span>
+                      </div>
                     </div>
                   </div>
                 </Card>
-              </div>
-
-              <div className="bg-gradient-to-br from-teal/10 to-teal/5 rounded-xl p-6">
-                <h3 className="font-semibold text-charcoal mb-2">What Happens Next?</h3>
-                <ol className="space-y-3 text-slate">
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-teal rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                      1
-                    </span>
-                    <span>We'll review your information and respond within 24 hours</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-teal rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                      2
-                    </span>
-                    <span>Schedule a free 30-minute consultation to discuss your goals</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-teal rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                      3
-                    </span>
-                    <span>Receive a custom marketing plan tailored to your business</span>
-                  </li>
-                </ol>
               </div>
             </div>
           </div>
@@ -142,25 +137,18 @@ export default function ContactPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-charcoal mb-4">
-              Prefer to Talk First?
+              Need to Reschedule?
             </h2>
             <p className="text-lg text-slate mb-8">
-              No problem! Send us an email or give us a call during business hours. We're here to answer any questions about our services, pricing, or process.
+              Please give us a call at least 24 hours in advance to avoid cancellation fees.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href={`mailto:${CONTACT_EMAIL}`}
+                href="tel:+15551234567"
                 className="inline-flex items-center justify-center bg-teal hover:bg-teal-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
-                <Mail className="w-5 h-5 mr-2" aria-hidden="true" />
-                Email Us
-              </a>
-              <a
-                href="tel:+15551234567"
-                className="inline-flex items-center justify-center bg-transparent hover:bg-off-white text-charcoal font-semibold py-3 px-6 rounded-lg border-2 border-charcoal transition-colors"
-              >
                 <Phone className="w-5 h-5 mr-2" aria-hidden="true" />
-                Call Us
+                Call Now
               </a>
             </div>
           </div>
