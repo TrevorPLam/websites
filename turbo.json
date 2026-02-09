@@ -1,3 +1,73 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * Turborepo Pipeline Configuration
+ * ═══════════════════════════════════════════════════════════════════════════════
+ *
+ * Purpose:
+ * - Define build orchestration for monorepo workspaces (appsand packages)
+ * - Configure task dependencies, caching, and outputs for optimal builds
+ * - Enable parallel execution where safe, sequential where required
+ *
+ * Responsibilities:
+ * - Owns: Task dependency graph (which tasks must run before others)
+ * - Owns: Cache configuration (what outputs to cache, what inputs to watch)
+ * - Owns: Persistent task configuration (dev servers, watch modes)
+ * - Does NOT own: Individual task commands (those live in package.json scripts)
+ *
+ * Key Flows:
+ * - `turbo build`: Topological build (dependencies first, then dependents)
+ * - `turbo dev`: Parallel dev servers (no caching, persistent processes)
+ * - `turbo test`: Run tests after building dependencies
+ *
+ * Inputs/Outputs:
+ * - Inputs: Task name + optional filters (e.g., `turbo build --filter=web`)
+ * - Outputs: Cached build artifacts (.next/, dist/, coverage/)
+ * - Side effects: Writes .turbo/ cache directory
+ *
+ * Dependencies:
+ * - External: turbo (CLI tool)
+ * - Internal: Reads package.json scripts from all workspaces
+ *
+ * State & Invariants:
+ * - Assumes: All workspaces have consistent script names (build, dev, lint, test)
+ * - Assumes: Build outputs are deterministic (same inputs → same outputs)
+ * - Invariant: dependsOn array must not create cycles
+ *
+ * Error Handling:
+ * - Task failures halt dependent tasks (fail-fast)
+ * - Cache misses trigger full rebuild (no partial state)
+ * - Invalid task names fail at CLI invocation
+ *
+ * Performance Notes:
+ * - Hot paths: `turbo dev` (watches source files, no caching)
+ * - Cache hits: <1s for unchanged tasks vs. 30s+ for full builds
+ * - Parallelism: Maxes out CPU cores for independent tasks
+ *
+ * Security Notes:
+ * - No authn/authz (local build tool)
+ * - Cache is local-only by default (no remote cache configured)
+ * - Outputs may contain secrets if logged during build (review carefully)
+ *
+ * Testing Notes:
+ * - Test this file: Run `turbo build --dry-run=json` and verify task order
+ * - Mock: Not applicable (declarative config)
+ * - Coverage: Verify all package.json scripts referenced
+ *
+ * Change Risks:
+ * - Adding task dependencies may slow builds (more sequential steps)
+ * - Removing outputs may break cache (force rebuilds)
+ * - Changing "cache": false to true on dev may stall processes
+ *
+ * Owner Boundaries:
+ * - Task definitions: package.json in each workspace
+ * - Build scripts: packages/*/package.json
+ * - CI pipeline: .github/workflows/ci.yml
+ *
+ * AI Navigation Tags:
+ * #build #monorepo #orchestration #caching #ci #performance
+ *
+ * ═══════════════════════════════════════════════════════════════════════════════
+ */
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "stream",

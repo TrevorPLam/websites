@@ -1,3 +1,67 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * Base TypeScript Configuration for Monorepo
+ * ═══════════════════════════════════════════════════════════════════════════════
+ *
+ * Purpose:
+ * - Establish shared TypeScript compiler settings across all workspaces
+ * - Enforce strict type checking to catch bugs at compile time
+ * - Configure modern ES features and module resolution
+ *
+ * Responsibilities:
+ * - Owns: Baseline compiler options (target, lib, strict flags)
+ * - Owns: Universal excludes (node_modules, build outputs)
+ * - Does NOT own: Workspace-specific paths or extends (use workspace tsconfig.json)
+ *
+ * Key Flows:
+ * - Inherited by all workspace tsconfig.json files via "extends"
+ * - Compiler reads this first, then applies workspace overrides
+ *
+ * Inputs/Outputs:
+ * - Input: TypeScript source files (.ts, .tsx)
+ * - Output: Type checking (no emit, handled by Next.js/tsup)
+ * - Side effects: None (readonly config)
+ *
+ * Dependencies:
+ * - External: TypeScript compiler (tsc)
+ * - Internal: Extended by apps/web/tsconfig.json, packages/*/tsconfig.json
+ *
+ * State & Invariants:
+ * - Invariant: "strict": true must remain enabled (type safety requirement)
+ * - Invariant: "noUncheckedIndexedAccess": true prevents undefined access bugs
+ * - Assumption: All workspaces use ES2022+ features
+ *
+ * Error Handling:
+ * - Invalid JSON: tsc fails with parse error
+ * - Unknown options: tsc warns but continues
+ * - Type errors: Fails compile (intended behavior)
+ *
+ * Performance Notes:
+ * - "skipLibCheck": true speeds up type checking (skips .d.ts files)
+ * - "isolatedModules": true enables faster transpilation (Babel, SWC)
+ *
+ * Security Notes:
+ * - No security implications (build-time config)
+ * - Type safety helps prevent runtime bugs
+ *
+ * Testing Notes:
+ * - Test: Run `tsc --noEmit` in workspace to verify config
+ * - Mock: Not applicable (declarative config)
+ *
+ * Change Risks:
+ * - Disabling "strict" may introduce type bugs
+ * - Changing "target" below ES2022 may break modern syntax
+ * - Removing "noUncheckedIndexedAccess" may allow undefined access
+ *
+ * Owner Boundaries:
+ * - Workspace-specific config: apps/web/tsconfig.json, packages/*/tsconfig.json
+ * - Package-specific extends: packages/config/typescript-config/*.json
+ *
+ * AI Navigation Tags:
+ * #typescript #config #strict #type-safety #monorepo
+ *
+ * ═══════════════════════════════════════════════════════════════════════════════
+ */
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
