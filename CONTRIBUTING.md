@@ -7,7 +7,7 @@ Thank you for your interest in contributing to the Hair Salon Template! This doc
 ### Prerequisites
 
 - **Node.js** `>=20.0.0` (enforced via engines field)
-- **pnpm** `9.15.4` exactly (enforced via packageManager field)
+- **pnpm** `10.29.2` exactly (enforced via packageManager field)
 
 ### Initial Setup
 

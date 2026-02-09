@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { X, Download } from 'lucide-react'
-import Button from './ui/Button'
+import { Button } from '@repo/ui'
 import { UI_TIMING } from '@/lib/constants'
 
 interface BeforeInstallPromptEvent extends Event {
