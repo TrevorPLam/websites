@@ -76,7 +76,7 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
 
 ### 0.1 Package Configuration & Dependencies
 
-- [ ] **Fix @repo/eslint-config package resolution**
+- [x] **Fix @repo/eslint-config package resolution**
 
   - [ ] Verify package.json exports in packages/config/eslint-config/
     - File: packages/config/eslint-config/package.json
@@ -89,7 +89,7 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
   - DoD: `pnpm lint` runs without "Cannot find package '@repo/eslint-config'" errors
   - Deps: none
 
-- [ ] **Install missing MDX dependencies**
+- [x] **Install missing MDX dependencies**
 
   - [ ] Add `next-mdx-remote`, `gray-matter`, `reading-time`, `remark-gfm`, `rehype-slug`, `rehype-pretty-code` to apps/web/package.json
     - File: apps/web/package.json (dependencies)
@@ -102,7 +102,7 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
   - DoD: MDX files parse without import errors
   - Deps: none
 
-- [ ] **Install missing form dependencies**
+- [x] **Install missing form dependencies**
 
   - [ ] Add `react-hook-form`, `@hookform/resolvers/zod` to apps/web/package.json
     - File: apps/web/package.json (dependencies)
@@ -115,7 +115,7 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
   - DoD: Contact form imports resolve without errors
   - Deps: none
 
-- [ ] **Install missing rate limiting dependencies**
+- [x] **Install missing rate limiting dependencies**
   - [ ] Add `@upstash/ratelimit`, `@upstash/redis` to apps/web/package.json
     - File: apps/web/package.json (dependencies)
     - Snip:
