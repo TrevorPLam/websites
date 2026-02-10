@@ -139,6 +139,16 @@ pnpm format:check
 - **[docs/INTEGRATION_GUARDRAILS.md](docs/INTEGRATION_GUARDRAILS.md)** - Consent, performance, and tracking guardrails
 - **[SECURITY.md](SECURITY.md)** - Security policy
 
+### Task Management
+
+This repository uses a structured workflow to maintain quality:
+
+- **[docs/TASK_WORKFLOW.md](docs/TASK_WORKFLOW.md)** - Complete workflow documentation
+- **[docs/DEFINITION_OF_DONE.md](docs/DEFINITION_OF_DONE.md)** - Quality checklist
+- **[TODO.md](TODO.md)** - Active tasks
+- **[BACKLOG.md](BACKLOG.md)** - Task queue
+- **[ARCHIVE.md](ARCHIVE.md)** - Completed tasks with notes
+
 ## Available Scripts
 
 | Command             | Description                      |

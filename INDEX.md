@@ -2,6 +2,18 @@
 
 Status: INCOMPLETE. Will be updated as files are audited.
 
+## Task Management
+
+This repository uses a structured task workflow to maintain quality and documentation:
+
+- **[TODO.md](TODO.md)** - Active tasks currently in progress
+- **[BACKLOG.md](BACKLOG.md)** - Queued tasks awaiting promotion
+- **[ARCHIVE.md](ARCHIVE.md)** - Completed tasks with session notes
+- **[docs/TASK_WORKFLOW.md](docs/TASK_WORKFLOW.md)** - Complete workflow documentation
+- **[docs/DEFINITION_OF_DONE.md](docs/DEFINITION_OF_DONE.md)** - Quality checklist
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor workflow guidelines.
+
 ## Repo Map
 
 - TODO(verify): Populate folder map from docs/FILE_INVENTORY.md.
@@ -42,8 +54,10 @@ Status: INCOMPLETE. Will be updated as files are audited.
   - [.prettierignore](.prettierignore): Prettier ignore patterns for generated and vendor files.
   - [.prettierrc](.prettierrc): Prettier formatting rules. See [docs/file-meta/.prettierrc.md](docs/file-meta/.prettierrc.md) for metaheader.
   - [ANALYSIS.md](ANALYSIS.md): Legacy analysis; currently UNVERIFIED and pending re-audit.
+  - [ARCHIVE.md](ARCHIVE.md): Completed tasks with comprehensive session notes. See [docs/TASK_WORKFLOW.md](docs/TASK_WORKFLOW.md) for archival process.
+  - [BACKLOG.md](BACKLOG.md): Queued tasks awaiting promotion to active TODO. See [docs/TASK_WORKFLOW.md](docs/TASK_WORKFLOW.md) for promotion rules.
   - [CONFIG.md](CONFIG.md): Configuration overview with partial verification notes.
-  - [CONTRIBUTING.md](CONTRIBUTING.md): Contribution guide with partial verification notes.
+  - [CONTRIBUTING.md](CONTRIBUTING.md): Contribution guide with task workflow integration.
   - [docker-compose.yml](docker-compose.yml): Local Docker Compose definition. See [docs/file-meta/docker-compose.yml.md](docs/file-meta/docker-compose.yml.md) for metaheader.
   - [jest.config.js](jest.config.js): Jest root configuration for monorepo tests.
   - [jest.helpers.ts](jest.helpers.ts): Shared Jest helper utilities for tests.
@@ -52,7 +66,7 @@ Status: INCOMPLETE. Will be updated as files are audited.
   - [README.md](README.md): Root overview with partial verification notes.
   - [SECURITY.md](SECURITY.md): Security policy (placeholder contact noted).
   - [tasks.md](tasks.md): Audit task tracker checklist.
-  - [TODO.md](TODO.md): Implementation backlog (UNVERIFIED).
+  - [TODO.md](TODO.md): Active implementation tasks. See [docs/TASK_WORKFLOW.md](docs/TASK_WORKFLOW.md) for task lifecycle.
   - [tsconfig.base.json](tsconfig.base.json): Shared TypeScript compiler options. See [docs/file-meta/tsconfig.base.json.md](docs/file-meta/tsconfig.base.json.md) for metaheader.
   - [tsconfig.json](tsconfig.json): Root TypeScript config. See [docs/file-meta/tsconfig.json.md](docs/file-meta/tsconfig.json.md) for metaheader.
 - apps/web/app

@@ -132,6 +132,55 @@ pnpm format:check
 - [ ] Changes are documented (comments, README updates if needed)
 - [ ] No breaking changes without discussion
 
+## Task Management Workflow
+
+This repository uses a structured task management workflow to maintain quality and documentation.
+
+### Overview
+
+- **TODO.md** - Active tasks currently in progress
+- **BACKLOG.md** - Queued tasks awaiting promotion
+- **ARCHIVE.md** - Completed tasks with session notes
+
+### For Contributors
+
+When working on tasks from TODO.md, follow the complete workflow:
+
+1. **Execute** - Implement the task as specified
+2. **Verify** - Run tests, linting, type checking, builds
+3. **Document** - Update code comments and documentation
+4. **Reflect** - Add follow-up tasks to BACKLOG.md
+
+### Definition of Done
+
+Every task must meet all criteria in [docs/DEFINITION_OF_DONE.md](docs/DEFINITION_OF_DONE.md):
+
+- ✅ Implementation complete and meets acceptance criteria
+- ✅ All tests pass, no linting or type errors
+- ✅ Documentation updated (meta headers, inline comments, /docs/)
+- ✅ Follow-up tasks added to backlog
+- ✅ Task archived with comprehensive session notes
+
+### Documentation Standards
+
+All code files should include meta headers documenting:
+
+- File purpose and role
+- Key exports and dependencies
+- Runtime environment and side effects
+- Data flow and invariants
+- Known issues and opportunities
+
+See [docs/TASK_WORKFLOW.md](docs/TASK_WORKFLOW.md) for complete documentation standards.
+
+### Resources
+
+- **[docs/TASK_WORKFLOW.md](docs/TASK_WORKFLOW.md)** - Complete workflow process
+- **[docs/DEFINITION_OF_DONE.md](docs/DEFINITION_OF_DONE.md)** - Quality checklist
+- **[TODO.md](TODO.md)** - Active tasks
+- **[BACKLOG.md](BACKLOG.md)** - Task queue
+- **[ARCHIVE.md](ARCHIVE.md)** - Completed tasks
+
 ## Monorepo Guidelines
 
 ### Adding Dependencies
