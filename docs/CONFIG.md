@@ -82,8 +82,8 @@ This is a **multi-template, multi-client monorepo** with the following structure
 
 ### Templates
 
-- **templates/hair-salon** - Hair salon template for creating client projects (Next.js 15 + React 19, port 3100)
-- Additional templates can be added (e.g., nail-salon, tanning-salon)
+- **templates/hair-salon** - Service business template (hair salon example) for creating client projects (Next.js 15 + React 19, port 3100)
+- Additional templates can be added for any industry (e.g., restaurant, law-firm, dental, real-estate, fitness, retail)
 
 ### Clients
 

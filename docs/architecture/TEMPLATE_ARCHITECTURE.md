@@ -1,4 +1,4 @@
-# Template-Based Multi-Client Architecture
+# Multi-Industry Template-Based Architecture
 
 **Status:** Active  
 **Version:** 2.0  
@@ -6,12 +6,13 @@
 
 ## Overview
 
-The repository has been restructured to support multiple business templates and client projects in a single monorepo. This architecture enables:
+The repository has been restructured to support marketing website templates across all industries and enable multi-client project management in a single monorepo. This architecture enables:
 
-- **Multiple business templates** (hair salon, nail salon, tanning salon, spa)
+- **Multiple industry templates** (service businesses, hospitality, professional services, retail, etc.)
 - **Multiple client projects** deployed independently
 - **Shared components** and utilities across templates
 - **Scalable development** workflow
+- **Cross-industry patterns** and best practices
 
 ## High-Level Architecture
 
@@ -19,8 +20,9 @@ The repository has been restructured to support multiple business templates and 
 graph TB
     subgraph "Templates Layer"
         T1[Hair Salon Template]
-        T2[Nail Salon Template]
-        T3[Tanning Salon Template]
+        T2[Restaurant Template]
+        T3[Law Firm Template]
+        T4[More Industries...]
         TS[Shared Template Components]
     end
 
@@ -60,16 +62,16 @@ graph TB
 ## Directory Structure
 
 ```
-hair-salon/
-├── templates/              # Business templates
-│   ├── hair-salon/        # Hair salon template
+marketing-website-templates/
+├── templates/              # Industry-specific templates
+│   ├── hair-salon/        # Service business template (hair salon)
 │   │   ├── app/           # Next.js app directory
 │   │   ├── components/    # Template components
 │   │   ├── features/      # Business features
 │   │   ├── lib/           # Utilities
 │   │   └── package.json   # Template dependencies
-│   ├── nail-salon/        # Nail salon template (future)
-│   ├── tanning-salon/     # Tanning salon template (future)
+│   ├── restaurant/        # Hospitality template (future)
+│   ├── law-firm/          # Professional services template (future)
 │   └── shared/            # Shared template code
 │       ├── components/    # Shared UI components
 │       ├── features/      # Shared features
@@ -114,14 +116,14 @@ Common features for templates:
 - CRM connectors
 - Search functionality
 
-### Layer 3: Business Templates
+### Layer 3: Industry Templates
 
-Complete website templates:
+Complete marketing website templates:
 
-- Hair salon template
-- Nail salon template
-- Tanning salon template
-- Spa template (future)
+- Service business templates (hair salon, dental, fitness, etc.)
+- Hospitality templates (restaurant, hotel, etc.)
+- Professional services templates (law firm, consulting, etc.)
+- Retail templates (e-commerce, local shop, etc.)
 
 ### Layer 4: Client Projects
 
@@ -247,44 +249,51 @@ graph TB
 
     subgraph "Templates"
         T1[Hair Salon]
-        T2[Nail Salon]
-        T3[Tanning Salon]
+        T2[Restaurant]
+        T3[Law Firm]
+        T4[More...]
     end
 
     A --> T1
     A --> T2
     A --> T3
+    A --> T4
 
     B --> T1
     B --> T2
     B --> T3
+    B --> T4
 
     C --> T1
     C --> T2
     C --> T3
+    C --> T4
 ```
 
 ### What Goes in Shared?
 
 **✅ Include in Shared:**
 
-- Booking form components (generic)
+- Booking/reservation form components (generic)
 - Contact form components
 - Analytics integration
 - CRM connectors (HubSpot, Salesforce)
 - Authentication helpers
 - Security utilities (CSP, rate limiting)
-- Common UI patterns (navigation, footer)
+- Common UI patterns (navigation, footer, hero sections)
 - Search functionality
-- Blog infrastructure
+- Blog/content infrastructure
+- E-commerce foundations
+- Review/testimonial systems
 
 **❌ Keep in Templates:**
 
-- Business-specific branding
+- Industry-specific branding
 - Template-specific page layouts
-- Service offerings structure
-- Business-specific routes
-- Unique business logic
+- Service/product offerings structure
+- Industry-specific routes
+- Unique industry business logic
+- Industry-specific content types
 
 **❌ Keep in Clients:**
 

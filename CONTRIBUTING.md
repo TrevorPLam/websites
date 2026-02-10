@@ -46,7 +46,7 @@
  */
 -->
 
-# Contributing to Hair Salon Template
+# Contributing to Multi-Industry Marketing Website Template System
 
 ## Audit Status (VERIFIED)
 
@@ -55,7 +55,7 @@
 - ✅ **Verified**: All commands tested in [docs/TESTING_STATUS.md](docs/TESTING_STATUS.md)
 - ✅ **Verified**: Quality gates passing (lint, type-check, build, test)
 
-Thank you for your interest in contributing to the Hair Salon Template! This document provides guidelines for contributing to this project with verified workflows and tooling.
+Thank you for your interest in contributing to the Multi-Industry Marketing Website Template System! This document provides guidelines for contributing to this project with verified workflows and tooling.
 
 ## Setup
 
@@ -97,7 +97,7 @@ pnpm format:check
 
 ## Project Structure
 
-- **templates/** - Reusable business templates (hair-salon, etc.)
+- **templates/** - Industry-specific marketing website templates (hair-salon, restaurant, law-firm, etc.)
 - **clients/** - Client project implementations
 - **packages/ui/** - Shared React UI components
 - **packages/utils/** - Shared utilities

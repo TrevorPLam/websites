@@ -46,24 +46,29 @@
  */
 -->
 
-# Hair Salon Template
+# Multi-Industry Marketing Website Template System
 
-## Audit Status (VERIFIED)
+## Audit Status (NEEDS ATTENTION)
 
-- ✅ **Verified**: All commands tested in [docs/TESTING_STATUS.md](docs/TESTING_STATUS.md)
+- ❌ **BROKEN**: Build system failing - ESLint dependencies missing in packages/ui and packages/utils
+- ⚠️ **Outdated**: TESTING_STATUS.md claims all gates passing but lint currently fails
 - ✅ **Verified**: Node.js >=24.0.0 requirement in [package.json](package.json)
 - ✅ **Verified**: pnpm 10.29.2 enforced in [package.json](package.json)
 - ✅ **Verified**: Next.js 15.2.9 and React 19.0.0 configuration verified
-- ✅ **Verified**: All quality gates passing (lint, type-check, build, test)
-- ✅ **Verified**: Security monitoring active and vulnerabilities remediated
+- ⚠️ **Partial**: Security monitoring active but dependency updates needed (Turbo v2.2.3 → v2.8.4)
 
 ## Overview
 
-Professional salon/spa website template system built with modern web technologies. This monorepo supports **multiple business templates** (hair salon, nail salon, tanning salon, spa) and enables you to **manage multiple client projects** from a single repository.
+Professional multi-industry marketing website template system built with modern web technologies. This monorepo provides **ready-to-use templates** for businesses across all industries (service businesses, retail, professional services, hospitality, and more) and enables you to **create and manage unlimited client projects** from a single, well-structured repository.
+
+**Initial Templates:** Hair salon, nail salon, tanning salon (beauty/wellness industry starting point)  
+**Expandable To:** Restaurants, law firms, dental practices, real estate, fitness centers, consulting firms, retail stores, and any business needing a marketing website.
+
+**Current Status:** Phase 1 (Core MVP) - 4/5 features complete | Marketing-First Enhancements in planning
 
 ### Key Features
 
-- 🎨 **Multiple Business Templates** - Ready-to-use templates for different beauty businesses
+- 🎨 **Multiple Industry Templates** - Ready-to-use templates for businesses across all industries
 - 🚀 **Multi-Client Support** - Manage unlimited client projects in one repository
 - 🔧 **Highly Customizable** - Easy branding, content, and feature customization
 - 📦 **Shared Components** - Reusable code across templates and clients
@@ -71,6 +76,8 @@ Professional salon/spa website template system built with modern web technologie
 - 🔒 **Production-Ready** - Security, performance, and SEO optimized
 - 📱 **Responsive** - Mobile-first design approach
 - ♿ **Accessible** - WCAG compliance built-in
+- 🎯 **Marketing-First** - Conversion optimization, social proof, trust indicators (planned)
+- 🔐 **Privacy-First** - Consent-gated analytics, GDPR/CCPA compliant
 
 ## Quick Start
 
@@ -162,10 +169,11 @@ pnpm format:check
 ## Project Structure
 
 ```text
-├── templates/               # Business templates
-│   ├── hair-salon/         # Hair salon template (Next.js 15 app)
-│   ├── nail-salon/         # Nail salon template (coming soon)
-│   ├── tanning-salon/      # Tanning salon template (coming soon)
+├── templates/               # Industry-specific templates
+│   ├── hair-salon/         # Service business template (hair salon example)
+│   ├── nail-salon/         # Service business template (nail salon example)
+│   ├── restaurant/         # Hospitality template (coming soon)
+│   ├── law-firm/           # Professional services template (coming soon)
 │   └── shared/             # Shared template components & features
 │
 ├── clients/                # Client implementations
@@ -197,17 +205,19 @@ See [Template Architecture](docs/architecture/TEMPLATE_ARCHITECTURE.md) for deta
 
 ## Technology Stack
 
-- **Frontend Framework:** Next.js 15.2.9 ([templates/hair-salon/package.json](templates/hair-salon/package.json))
+- **Frontend Framework:** Next.js 15.2.9 (Maintenance LTS) ([templates/hair-salon/package.json](templates/hair-salon/package.json))
 - **UI Library:** React 19.0.0 ([templates/hair-salon/package.json](templates/hair-salon/package.json))
 - **Styling:** Tailwind CSS 3.4.17 ([templates/hair-salon/package.json](templates/hair-salon/package.json))
-- **Type Safety:** TypeScript 5.7.2 ([package.json](package.json))
+- **Type Safety:** TypeScript 5.7.2 (strict mode) ([package.json](package.json))
 - **Linting:** ESLint 9 with flat config ([packages/config/eslint-config/](packages/config/eslint-config/))
 - **Code Formatting:** Prettier 3.2.5 ([package.json](package.json))
-- **Package Manager:** pnpm 10.29.2 ([package.json](package.json))
+- **Package Manager:** pnpm 10.29.2 (strictly enforced) ([package.json](package.json))
 - **Monorepo Tool:** Turbo 2.2.3 ([package.json](package.json))
+- **Runtime:** Node.js >=24.0.0 (recommended) ([package.json](package.json))
+- **Database:** Supabase (PostgreSQL) with RLS
 - **Error Tracking:** Sentry 8.0.0 ([templates/hair-salon/package.json](templates/hair-salon/package.json))
 - **Container:** Docker & Docker Compose ([docker-compose.yml](docker-compose.yml))
-- **Security:** Automated dependency scanning, SBOM generation, secret scanning
+- **Security:** Automated dependency scanning, SBOM generation, secret scanning, vulnerability remediation
 
 ## Documentation
 
@@ -231,6 +241,13 @@ See [Template Architecture](docs/architecture/TEMPLATE_ARCHITECTURE.md) for deta
 - **[Security Monitoring](docs/SECURITY_MONITORING_STATUS.md)** - Security monitoring status
 - **[Version Policy](docs/VERSION_POLICY.md)** - Evergreen maintenance policy
 - **[SECURITY.md](SECURITY.md)** - Security policy and vulnerability reporting
+- **[Analytics & Consent Flow](docs/ANALYTICS_CONSENT_FLOW.md)** - Privacy implementation details
+
+### Roadmap & Planning
+
+- **[TODO.md](TODO.md)** - Implementation backlog and phased tasks
+- **[ARCHIVE.md](ARCHIVE.md)** - Completed tasks archive
+- **[Marketing-First Enhancements Spec](.kiro/specs/marketing-first-enhancements/)** - Conversion optimization features (in planning)
 
 ## Available Scripts
 

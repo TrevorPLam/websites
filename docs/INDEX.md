@@ -1,10 +1,10 @@
-# Repository Index - Template-Based Multi-Client Architecture
+# Repository Index - Multi-Industry Template Architecture
 
 **Version:** 2.0  
 **Date:** 2026-02-10  
 **Status:** Active
 
-This index provides an overview of the restructured repository that supports multiple business templates and client projects.
+This index provides an overview of the restructured repository that supports marketing website templates across all industries and enables multi-client project management.
 
 ## Quick Navigation
 
@@ -18,9 +18,9 @@ This index provides an overview of the restructured repository that supports mul
 
 ## Templates
 
-Business-specific website templates that serve as starting points for client projects.
+Industry-specific marketing website templates that serve as starting points for client projects.
 
-### Hair Salon Template
+### Hair Salon Template (Service Business Example)
 
 **Location:** `templates/hair-salon/`  
 **Status:** ✅ Active - Migrated  
@@ -39,17 +39,19 @@ Business-specific website templates that serve as starting points for client pro
 
 **Documentation:** [docs/templates/hair-salon.md](docs/templates/hair-salon.md)
 
-### Nail Salon Template
+### Additional Service Business Templates
 
-**Location:** `templates/nail-salon/`  
-**Status:** 🔄 Planned  
-**Description:** Template optimized for nail salons
+**Nail Salon** - `templates/nail-salon/` - 🔄 Planned  
+**Tanning Salon** - `templates/tanning-salon/` - 🔄 Planned
 
-### Tanning Salon Template
+### Planned Industry Templates
 
-**Location:** `templates/tanning-salon/`  
-**Status:** 🔄 Planned  
-**Description:** Template optimized for tanning salons
+**Restaurant/Hospitality** - `templates/restaurant/` - 🔄 Planned  
+**Law Firm/Professional Services** - `templates/law-firm/` - 🔄 Planned  
+**Dental Practice** - `templates/dental/` - 🔄 Planned  
+**Real Estate Agency** - `templates/real-estate/` - 🔄 Planned  
+**Fitness Center** - `templates/fitness/` - 🔄 Planned  
+**Retail Store** - `templates/retail/` - 🔄 Planned
 
 ### Shared Template Components
 
@@ -164,6 +166,17 @@ Comprehensive documentation for templates, clients, and architecture.
 - [README.md](../README.md) - Project overview
 - [CONFIG.md](CONFIG.md) - Configuration docs
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - Contribution guidelines
+- [TODO.md](../TODO.md) - Implementation backlog
+- [ARCHIVE.md](../ARCHIVE.md) - Completed tasks
+
+### Specifications
+
+**Location:** `.kiro/specs/`
+
+- **[marketing-first-enhancements](../.kiro/specs/marketing-first-enhancements/)** - Conversion optimization features
+  - Status: Requirements & Design Complete | Tasks Pending
+  - 20 major requirements for social proof, portfolio, trust indicators, conversion optimization
+  - Integration platform with consent gating and default-off integrations
 
 ---
 

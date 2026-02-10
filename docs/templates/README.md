@@ -1,12 +1,12 @@
 # Template Documentation
 
-This directory contains detailed documentation for each template and shared template components.
+This directory contains detailed documentation for each industry-specific template and shared template components.
 
 ## Available Template Guides
 
 ### [Hair Salon Template](./hair-salon.md)
 
-Complete documentation for the hair salon template including:
+Complete documentation for the hair salon template (service business example) including:
 
 - Feature overview
 - Setup and configuration
@@ -14,13 +14,18 @@ Complete documentation for the hair salon template including:
 - Content management
 - Deployment instructions
 
-### [Nail Salon Template](./nail-salon.md) _(Coming Soon)_
+### Service Business Templates _(Coming Soon)_
 
-Documentation for nail salon template
+- **[Nail Salon Template](./nail-salon.md)** - Similar to hair salon, optimized for nail services
+- **[Tanning Salon Template](./tanning-salon.md)** - Service booking focused
 
-### [Tanning Salon Template](./tanning-salon.md) _(Coming Soon)_
+### Other Industry Templates _(Planned)_
 
-Documentation for tanning salon template
+- **Restaurant/Hospitality** - Menu, reservations, online ordering
+- **Law Firm/Professional Services** - Practice areas, case studies, consultations
+- **Dental Practice** - Services, insurance, patient portal
+- **Real Estate** - Property listings, agent profiles, market data
+- **Fitness Center** - Class schedules, membership, trainer profiles
 
 ### [Shared Components Guide](./shared-components.md)
 
@@ -51,29 +56,42 @@ Track version in template's `package.json` and document changes in `CHANGELOG.md
 
 ### Template Best Practices
 
-1. **Generic by default** - Avoid hardcoded business data
-2. **Configurable** - Use environment variables and config files
-3. **Well-documented** - Clear README and inline comments
-4. **Tested** - Include tests for critical features
-5. **Performant** - Optimize for speed and Core Web Vitals
-6. **Accessible** - Follow WCAG guidelines
-7. **Secure** - Implement security best practices
-8. **SEO-friendly** - Proper metadata and structured data
+1. **Industry-agnostic architecture** - Build reusable patterns that work across industries
+2. **Generic by default** - Avoid hardcoded business data
+3. **Configurable** - Use environment variables and config files
+4. **Well-documented** - Clear README and inline comments
+5. **Tested** - Include tests for critical features
+6. **Performant** - Optimize for speed and Core Web Vitals
+7. **Accessible** - Follow WCAG guidelines
+8. **Secure** - Implement security best practices
+9. **SEO-friendly** - Proper metadata and structured data
+10. **Conversion-focused** - Marketing-first design and features
 
 ## Template Feature Matrix
 
-| Feature         | Hair Salon | Nail Salon | Tanning | Spa |
-| --------------- | ---------- | ---------- | ------- | --- |
-| Booking System  | ✅         | 🔄         | 🔄      | 🔄  |
-| Service Pages   | ✅         | 🔄         | 🔄      | 🔄  |
-| Team Profiles   | ✅         | 🔄         | 🔄      | 🔄  |
-| Blog/Content    | ✅         | 🔄         | 🔄      | 🔄  |
-| Gallery         | ✅         | 🔄         | 🔄      | 🔄  |
-| Contact Forms   | ✅         | 🔄         | 🔄      | 🔄  |
-| Pricing Display | ✅         | 🔄         | 🔄      | 🔄  |
-| Online Store    | ❌         | 🔄         | 🔄      | 🔄  |
-| Membership      | ❌         | ❌         | 🔄      | 🔄  |
-| Gift Cards      | 🔄         | 🔄         | 🔄      | 🔄  |
+**Service Industry Templates**
+
+| Feature           | Hair Salon | Nail | Restaurant | Dental | Fitness |
+| ----------------- | ---------- | ---- | ---------- | ------ | ------- |
+| Booking/Reserv.   | ✅         | 🔄   | 🔄         | 🔄     | 🔄      |
+| Service/Menu      | ✅         | 🔄   | 🔄         | 🔄     | 🔄      |
+| Team Profiles     | ✅         | 🔄   | 🔄         | 🔄     | 🔄      |
+| Blog/Content      | ✅         | 🔄   | 🔄         | 🔄     | 🔄      |
+| Gallery/Portfolio | ✅         | 🔄   | 🔄         | 🔄     | 🔄      |
+| Contact Forms     | ✅         | 🔄   | 🔄         | 🔄     | 🔄      |
+| Pricing Display   | ✅         | 🔄   | 🔄         | 🔄     | 🔄      |
+| Online Store      | ❌         | 🔄   | 🔄         | ❌     | 🔄      |
+| Membership        | ❌         | ❌   | 🔄         | 🔄     | 🔄      |
+
+**Professional Services Templates**
+
+| Feature         | Law Firm | Real Estate | Consulting |
+| --------------- | -------- | ----------- | ---------- |
+| Practice Areas  | 🔄       | 🔄          | 🔄         |
+| Case Studies    | 🔄       | 🔄          | 🔄         |
+| Team Profiles   | 🔄       | 🔄          | 🔄         |
+| Contact/Consult | 🔄       | 🔄          | 🔄         |
+| Resource Center | 🔄       | 🔄          | 🔄         |
 
 Legend: ✅ Available | 🔄 Planned | ❌ Not Planned
 
