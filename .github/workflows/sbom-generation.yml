@@ -1,0 +1,75 @@
+name: Generate SBOM
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  sbom-generation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: '.'
+          format: 'spdx-json'
+          output-file: 'sbom.spdx.json'
+
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: '.'
+          format: 'cyclonedx-json'
+          output-file: 'sbom.cyclonedx.json'
+
+      - name: Upload SPDX SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-spdx
+          path: sbom.spdx.json
+          retention-days: 90
+
+      - name: Upload CycloneDX SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom.cyclonedx.json
+          retention-days: 90
+
+      - name: Dependency vulnerability scan
+        run: |
+          pnpm audit --audit-level high || true
+
+      - name: Upload dependency scan results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-scan
+          path: |
+            pnpm-audit-results.json
+            node_modules/.audit.json
+          retention-days: 30

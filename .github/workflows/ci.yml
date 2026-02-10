@@ -47,4 +47,25 @@ jobs:
 
       - name: Test
         run: pnpm test
-        continue-on-error: true
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: '.'
+          format: 'spdx-json'
+          output-file: 'sbom.spdx.json'
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-spdx
+          path: sbom.spdx.json
+          retention-days: 90
+
+      - name: Dependency vulnerability scan
+        run: |
+          pnpm audit --audit-level high
+          if [ $? -ne 0 ]; then
+            echo "❌ High or critical vulnerabilities found"
+            exit 1
+          fi

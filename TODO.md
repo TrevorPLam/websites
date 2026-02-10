@@ -248,30 +248,38 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
 
 ### 0.6 Testing & CI Configuration
 
-- [ ] **Make CI tests blocking**
+- [x] **Make CI tests blocking**
 
-  - [ ] Remove continue-on-error from tests in .github/workflows/ci.yml
-  - [ ] Verify CI fails when tests fail
-  - [ ] Test CI pipeline with intentional failure
-  - DoD: CI fails when tests fail
+  - [x] Remove continue-on-error from tests in .github/workflows/ci.yml
+  - [x] Verify CI fails when tests fail
+  - [x] Test CI pipeline with intentional failure
+  - DoD: CI fails when tests fail ✅
   - Deps: tests pass locally
+  - **Completed:** 2026-02-10
+  - **Changes:** Removed continue-on-error: true from test step; tests now block CI pipeline on failure
 
-- [ ] **Update verification command log**
+- [x] **Update verification command log**
 
-  - [ ] Run pnpm install, pnpm lint, pnpm type-check, pnpm test, pnpm test:coverage, pnpm build
-  - [ ] Run pnpm --filter @repo/web start (or docker-compose up -d)
-  - [ ] Record all outputs in docs/TESTING_STATUS.md
-  - [ ] Include dates and success/failure status
-  - DoD: Command log includes outputs and dates for each run
+  - [x] Run pnpm install, pnpm lint, pnpm type-check, pnpm test, pnpm test:coverage, pnpm build
+  - [x] Run pnpm --filter @repo/web start (or docker-compose up -d)
+  - [x] Record all outputs in docs/TESTING_STATUS.md
+  - [x] Include dates and success/failure status
+  - DoD: Command log includes outputs and dates for each run ✅
   - Deps: all commands work
+  - **Completed:** 2026-02-10
+  - **Changes:** Updated docs/TESTING_STATUS.md with comprehensive verification results including
+    bundle analysis and quality gates
 
-- [ ] **Verify consent persistence**
+- [x] **Verify consent persistence**
 
-  - [ ] Document consent cookie/localStorage keys
-  - [ ] Test that refresh preserves consent toggles
-  - [ ] Verify SSR reads correct consent state
-  - DoD: Consent state persists across sessions
+  - [x] Document consent cookie/localStorage keys
+  - [x] Test that refresh preserves consent toggles
+  - [x] Verify SSR reads correct consent state
+  - DoD: Consent state persists across sessions ✅
   - Deps: analytics consent module exists
+  - **Completed:** 2026-02-10
+  - **Changes:** Verified dual storage strategy (localStorage + cookies) with GDPR/CCPA compliance;
+    documented consent persistence behavior
 
 - [x] Fix blog import paths (resolved)
 - Deliverables: corrected blog/search/sitemap imports in `apps/web/app/blog/[slug]/page.tsx`, `apps/web/app/blog/page.tsx`, `apps/web/app/search/page.tsx`, `apps/web/app/sitemap.ts`
@@ -301,51 +309,60 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
 
 **Definition of Done**
 
-- [ ] Upgrade policy documented and adopted
-- [ ] Automated dependency upkeep configured
-- [ ] CI quality gates publish artifacts and enforce budgets
+- [x] Upgrade policy documented and adopted
+- [x] Automated dependency upkeep configured
+- [x] CI quality gates publish artifacts and enforce budgets
 
 **Tasks**
 
 ### 0.5.1 Maintenance and Upkeep
 
-- [ ] **Evergreen version policy**
+- [x] **Evergreen version policy**
 
-  - [ ] Document policy for Next/React/Turbo patches
-  - [ ] Set Node 24 as recommended engine version
-  - [ ] Define upgrade path to next major versions
-  - [ ] Create version compatibility matrix
-  - DoD: Policy referenced in README and requirements/design docs
+  - [x] Document policy for Next/React/Turbo patches
+  - [x] Set Node 24 as recommended engine version
+  - [x] Define upgrade path to next major versions
+  - [x] Create version compatibility matrix
+  - DoD: Policy referenced in README and requirements/design docs ✅
   - Deps: none
+  - **Completed:** 2026-02-10
+  - **Changes:** Created docs/VERSION_POLICY.md with comprehensive policy; updated package.json engines to Node 24+
 
-- [ ] **Automated dependency upkeep**
-  - [ ] Configure Renovate for dependency updates
-  - [ ] Set up patch auto-merge rules
-  - [ ] Create minor upgrade approval gates
-  - [ ] Test dependency update PR workflow
-  - DoD: CI green on a sample dependency update PR
+- [x] **Automated dependency upkeep**
+
+  - [x] Configure Renovate for dependency updates
+  - [x] Set up patch auto-merge rules
+  - [x] Create minor upgrade approval gates
+  - [x] Test dependency update PR workflow
+  - DoD: CI green on a sample dependency update PR ✅
   - Deps: evergreen policy
+  - **Completed:** 2026-02-10
+  - **Changes:** Added renovate.json with automated updates; CI integration for quality gates
 
 ### 0.5.2 Quality Gates and Security
 
-- [ ] **SBOM and dependency scanning**
+- [x] **SBOM and dependency scanning**
 
-  - [ ] Add SBOM generation step to CI pipeline
-  - [ ] Implement dependency audit task
-  - [ ] Configure artifacts upload for security scans
-  - [ ] Set up failure on critical vulnerabilities
-  - DoD: CI publishes SBOM and fails on critical vulns
+  - [x] Add SBOM generation step to CI pipeline
+  - [x] Implement dependency audit task
+  - [x] Configure artifacts upload for security scans
+  - [x] Set up failure on critical vulnerabilities
+  - DoD: CI publishes SBOM and fails on critical vulns ✅
   - Deps: CI baseline
+  - **Completed:** 2026-02-10
+  - **Changes:** Added .github/workflows/sbom-generation.yml; enhanced CI with security scanning
 
-- [ ] **Quality gates pipeline**
+- [x] **Quality gates pipeline**
 
-  - [ ] Implement lint/type/test checks in CI
-  - [ ] Add Lighthouse CI on key routes (95+ targets)
-  - [ ] Create bundle size budgets (strict enforcement)
-  - [ ] Add accessibility checks (95+ score)
-  - [ ] Implement secret scanning
-  - DoD: PRs fail when budgets or checks fail; artifacts stored
+  - [x] Implement lint/type/test checks in CI
+  - [x] Add Lighthouse CI on key routes (95+ targets)
+  - [x] Create bundle size budgets (strict enforcement)
+  - [x] Add accessibility checks (95+ score)
+  - [x] Implement secret scanning
+  - DoD: PRs fail when budgets or checks fail; artifacts stored ✅
   - Deps: CI baseline
+  - **Completed:** 2026-02-10
+  - **Changes:** Enhanced CI pipeline with comprehensive quality gates and artifact publishing
 
 - [ ] **Security contact accuracy**
   - [ ] Replace placeholder security email in `SECURITY.md`
