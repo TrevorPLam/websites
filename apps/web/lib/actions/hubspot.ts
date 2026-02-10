@@ -93,7 +93,7 @@ export async function upsertHubSpotContactWithSpan(
   idempotencyKey: string,
   emailHash: string
 ): Promise<HubSpotContactResponse> {
-  const existingId = await searchHubSpotContactId(properties.email, emailHash);
+  const existingId = await searchHubSpotContactId(properties.email || '', emailHash);
   const existingIdHash = existingId ? hashSpanValue(existingId) : undefined;
 
   // WHY: Search + upsert share hashed context for traceability without exposing PII.

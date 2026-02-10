@@ -48,15 +48,27 @@ export interface SupabaseLeadRow {
 }
 
 export function buildSupabaseHeaders(): Record<string, string> {
+  const supabaseKey = validatedEnv.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseKey) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for Supabase operations');
+  }
+
   return {
-    apikey: validatedEnv.SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${validatedEnv.SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: supabaseKey,
+    Authorization: `Bearer ${supabaseKey}`,
     'Content-Type': 'application/json',
   };
 }
 
 function getSupabaseLeadsUrl(): string {
-  return `${validatedEnv.SUPABASE_URL}${SUPABASE_LEADS_PATH}`;
+  const supabaseUrl = validatedEnv.SUPABASE_URL;
+
+  if (!supabaseUrl) {
+    throw new Error('SUPABASE_URL is required for Supabase operations');
+  }
+
+  return `${supabaseUrl}${SUPABASE_LEADS_PATH}`;
 }
 
 function createSupabaseInsertError(status: number, errorText: string): Error {

@@ -42,7 +42,7 @@ describe('lib/env - Environment Validation', () => {
 
   // Clean up after each test
   afterEach(() => {
-    process.env.NODE_ENV = originalEnv.NODE_ENV;
+    Object.assign(process.env, { NODE_ENV: originalEnv.NODE_ENV });
   });
 
   // ─────────────────────────────────────────────────────────────────
@@ -66,16 +66,26 @@ describe('lib/env - Environment Validation', () => {
       expect(validatedEnv.SUPABASE_URL).toMatch(/^https?:\/\//);
     });
 
-    test('SUPABASE_SERVICE_ROLE_KEY is set', () => {
-      expect(validatedEnv.SUPABASE_SERVICE_ROLE_KEY).toBeDefined();
-      expect(typeof validatedEnv.SUPABASE_SERVICE_ROLE_KEY).toBe('string');
-      expect(validatedEnv.SUPABASE_SERVICE_ROLE_KEY.length).toBeGreaterThan(0);
+    test('SUPABASE_SERVICE_ROLE_KEY behavior', () => {
+      if (process.env.NODE_ENV === 'production') {
+        expect(validatedEnv.SUPABASE_SERVICE_ROLE_KEY).toBeDefined();
+        expect(typeof validatedEnv.SUPABASE_SERVICE_ROLE_KEY).toBe('string');
+        expect(validatedEnv.SUPABASE_SERVICE_ROLE_KEY?.length).toBeGreaterThan(0);
+      } else {
+        // In development, these should be undefined
+        expect(validatedEnv.SUPABASE_SERVICE_ROLE_KEY).toBeUndefined();
+      }
     });
 
-    test('HUBSPOT_PRIVATE_APP_TOKEN is set', () => {
-      expect(validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN).toBeDefined();
-      expect(typeof validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN).toBe('string');
-      expect(validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN.length).toBeGreaterThan(0);
+    test('HUBSPOT_PRIVATE_APP_TOKEN behavior', () => {
+      if (process.env.NODE_ENV === 'production') {
+        expect(validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN).toBeDefined();
+        expect(typeof validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN).toBe('string');
+        expect(validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN?.length).toBeGreaterThan(0);
+      } else {
+        // In development, these should be undefined
+        expect(validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN).toBeUndefined();
+      }
     });
 
     test('NODE_ENV is set', () => {
@@ -94,7 +104,7 @@ describe('lib/env - Environment Validation', () => {
 
   describe('getNodeEnvironment()', () => {
     test('returns current NODE_ENV', () => {
-      process.env.NODE_ENV = 'test';
+      Object.assign(process.env, { NODE_ENV: 'test' });
       const env = getNodeEnvironment();
       expect(env).toBe('test');
     });
@@ -113,17 +123,17 @@ describe('lib/env - Environment Validation', () => {
 
   describe('isProduction()', () => {
     test('returns true when NODE_ENV is production', () => {
-      process.env.NODE_ENV = 'production';
+      Object.assign(process.env, { NODE_ENV: 'production' });
       expect(isProduction()).toBe(true);
     });
 
     test('returns false when NODE_ENV is development', () => {
-      process.env.NODE_ENV = 'development';
+      Object.assign(process.env, { NODE_ENV: 'development' });
       expect(isProduction()).toBe(false);
     });
 
     test('returns false when NODE_ENV is test', () => {
-      process.env.NODE_ENV = 'test';
+      Object.assign(process.env, { NODE_ENV: 'test' });
       expect(isProduction()).toBe(false);
     });
   });
@@ -134,17 +144,17 @@ describe('lib/env - Environment Validation', () => {
 
   describe('isDevelopment()', () => {
     test('returns true when NODE_ENV is development', () => {
-      process.env.NODE_ENV = 'development';
+      Object.assign(process.env, { NODE_ENV: 'development' });
       expect(isDevelopment()).toBe(true);
     });
 
     test('returns false when NODE_ENV is production', () => {
-      process.env.NODE_ENV = 'production';
+      Object.assign(process.env, { NODE_ENV: 'production' });
       expect(isDevelopment()).toBe(false);
     });
 
     test('returns false when NODE_ENV is test', () => {
-      process.env.NODE_ENV = 'test';
+      Object.assign(process.env, { NODE_ENV: 'test' });
       expect(isDevelopment()).toBe(false);
     });
   });
@@ -155,17 +165,17 @@ describe('lib/env - Environment Validation', () => {
 
   describe('isTest()', () => {
     test('returns true when NODE_ENV is test', () => {
-      process.env.NODE_ENV = 'test';
+      Object.assign(process.env, { NODE_ENV: 'test' });
       expect(isTest()).toBe(true);
     });
 
     test('returns false when NODE_ENV is development', () => {
-      process.env.NODE_ENV = 'development';
+      Object.assign(process.env, { NODE_ENV: 'development' });
       expect(isTest()).toBe(false);
     });
 
     test('returns false when NODE_ENV is production', () => {
-      process.env.NODE_ENV = 'production';
+      Object.assign(process.env, { NODE_ENV: 'production' });
       expect(isTest()).toBe(false);
     });
 
@@ -208,20 +218,20 @@ describe('lib/env - Environment Validation', () => {
   describe('Production Safety (Issue #005 - Rate Limiting)', () => {
     test('allows production without Redis in test mode', () => {
       // This test verifies that test environment doesn't enforce Redis
-      process.env.NODE_ENV = 'test';
+      Object.assign(process.env, { NODE_ENV: 'test' });
       expect(isTest()).toBe(true);
       // No error should be thrown
     });
 
     test('development mode allows optional Redis', () => {
-      process.env.NODE_ENV = 'development';
+      Object.assign(process.env, { NODE_ENV: 'development' });
       expect(isDevelopment()).toBe(true);
       // No error should be thrown
     });
 
     test('production mode with proper env vars works', () => {
       // Verify that production with all required vars is valid
-      process.env.NODE_ENV = 'production';
+      Object.assign(process.env, { NODE_ENV: 'production' });
       // If we get here without error, production safety checks passed
       expect(isProduction()).toBe(true);
     });
@@ -245,7 +255,7 @@ describe('lib/env - Environment Validation', () => {
   describe('Edge Cases', () => {
     test('handles NODE_ENV with various cases (normalized)', () => {
       // ZodENUM is case-sensitive, so only lowercase works
-      process.env.NODE_ENV = 'test';
+      Object.assign(process.env, { NODE_ENV: 'test' });
       expect(getNodeEnvironment()).toBe('test');
     });
 
@@ -255,7 +265,7 @@ describe('lib/env - Environment Validation', () => {
     });
 
     test('Upstash vars are optional in non-production', () => {
-      process.env.NODE_ENV = 'development';
+      Object.assign(process.env, { NODE_ENV: 'development' });
       // Should not throw even if Redis not configured
       expect(isDevelopment()).toBe(true);
     });

@@ -29,6 +29,6 @@
  * - last_audited: 2026-02-09
  */
 
-export * from './lib/search';
+export * from '../../lib/search';
 export { default as SearchDialog } from './components/SearchDialog';
 export { default as SearchPage } from './components/SearchPage';

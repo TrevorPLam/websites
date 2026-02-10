@@ -45,7 +45,7 @@
 import type { Metadata } from 'next';
 import { Mail, Phone, Clock, MapPin } from 'lucide-react';
 import { Container, Section, Card } from '@repo/ui';
-import ContactForm from '@/components/ContactForm';
+import { ContactForm } from '@/features/contact';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 const CONTACT_EMAIL = 'contact@hairsalontemplate.com';

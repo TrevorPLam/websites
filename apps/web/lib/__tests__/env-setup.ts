@@ -27,9 +27,11 @@
  * - last_audited: 2026-02-09
  */
 
-process.env.NODE_ENV = 'test';
-process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000';
-process.env.NEXT_PUBLIC_SITE_NAME = 'Test Hair Salon';
-process.env.SUPABASE_URL = 'https://test-project.supabase.co';
-process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-secret-key-123';
+Object.assign(process.env, {
+  NODE_ENV: 'test',
+  NEXT_PUBLIC_SITE_URL: 'http://localhost:3000',
+  NEXT_PUBLIC_SITE_NAME: 'Test Hair Salon',
+  SUPABASE_URL: 'https://test-project.supabase.co',
+  SUPABASE_SERVICE_ROLE_KEY: 'test-secret-key-123',
+});
 process.env.HUBSPOT_PRIVATE_APP_TOKEN = 'pat-test-token-abc';

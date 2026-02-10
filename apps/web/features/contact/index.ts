@@ -27,4 +27,4 @@
  */
 
 export * from './lib/contact-form-schema';
-export { ContactForm } from './components/ContactForm';
+export { default as ContactForm } from './components/ContactForm';

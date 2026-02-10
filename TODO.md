@@ -139,54 +139,64 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
 
 - [x] **Fix component barrel exports**
 
-  - [ ] Audit all `features/*/index.ts` files for missing exports
+  - [x] Audit all `features/*/index.ts` files for missing exports
     - Files: apps/web/features/blog/index.ts, apps/web/features/contact/index.ts, apps/web/features/search/index.ts, apps/web/features/services/index.ts
-  - [ ] Fix BlogPostContent export in features/blog/index.ts
-  - [ ] Fix ContactForm export in features/contact/index.ts
-  - [ ] Fix SearchDialog and SearchPage exports in features/search/index.ts
-  - [ ] Fix ServicesOverview and ServiceDetailLayout exports in features/services/index.ts
-  - DoD: All feature barrel exports match their component files
+  - [x] Fix BlogPostContent export in features/blog/index.ts
+  - [x] Fix ContactForm export in features/contact/index.ts
+  - [x] Fix SearchDialog and SearchPage exports in features/search/index.ts
+  - [x] Fix ServicesOverview and ServiceDetailLayout exports in features/services/index.ts
+  - DoD: All feature barrel exports match their component files ✅
   - Deps: none
+  - **Completed:** 2026-02-10
+  - **Changes:** Fixed default exports for BlogPostContent and ContactForm; corrected search lib import path; verified all component barrel exports
 
 - [x] **Fix missing component imports**
 
-  - [ ] Create or fix ServicesOverview component import in app/page.tsx
-  - [ ] Create or fix SearchDialog component import in components/Navigation.tsx
+  - [x] Create or fix ServicesOverview component import in app/page.tsx
+  - [x] Create or fix SearchDialog component import in components/Navigation.tsx
     - File: apps/web/components/Navigation.tsx
     - Snip:
       ```tsx
-      import SearchDialog from '@/components/SearchDialog';
+      import { SearchDialog } from '@/features/search';
       <SearchDialog items={searchItems} />
       <SearchDialog items={searchItems} variant="mobile" />
       ```
-  - [ ] Verify all @/component imports resolve correctly
-  - DoD: No "Cannot find module '@/components/\*'" errors
+  - [x] Verify all @/component imports resolve correctly
+  - DoD: No "Cannot find module '@/components/\*'" errors ✅
   - Deps: component barrel exports
+  - **Completed:** 2026-02-10
+  - **Changes:** Verified ServicesOverview import in app/page.tsx; verified SearchDialog import in Navigation.tsx; all component imports now resolve correctly
 
-- [ ] **Fix TypeScript configuration issues**
-  - [ ] Update tsconfig.json paths to match current directory structure
-  - [ ] Verify @/lib, @/features, @/components paths are correct
-  - [ ] Test module resolution in development
-  - DoD: TypeScript paths resolve without alias errors
+- [x] **Fix TypeScript configuration issues**
+  - [x] Update tsconfig.json paths to match current directory structure
+  - [x] Verify @/lib, @/features, @/components paths are correct
+  - [x] Test module resolution in development
+  - DoD: TypeScript paths resolve without alias errors ✅
   - Deps: none
+  - **Completed:** 2026-02-10
+  - **Changes:** Verified tsconfig.json paths are correct; confirmed all @/lib, @/features, @/components paths resolve; module resolution working in development
 
 ### 0.3 Type Safety & Code Quality
 
-- [ ] **Fix TypeScript errors**
+- [x] **Fix TypeScript errors**
 
-  - [ ] Fix Button variant type error in Gallery component
-  - [ ] Fix undefined array access in Navigation.tsx (lastElement, firstElement)
-  - [ ] Fix HubSpot action string type error
-  - [ ] Remove unused imports (requestId, env variables)
-  - DoD: `pnpm type-check` passes without new errors
+  - [x] Fix Button variant type error in Gallery component
+  - [x] Fix undefined array access in Navigation.tsx (lastElement, firstElement)
+  - [x] Fix HubSpot action string type error
+  - [x] Remove unused imports (requestId, env variables)
+  - DoD: `pnpm type-check` passes without new errors ✅
   - Deps: module resolution fixes
+  - **Completed:** 2026-02-10
+  - **Changes:** Fixed Select component options prop; fixed HubSpot email null check; resolved all NODE_ENV assignment errors
 
-- [ ] **Fix NODE_ENV assignment errors**
-  - [ ] Replace direct NODE_ENV assignment with process.env.NODE_ENV
-  - [ ] Update test files to use proper environment variable handling
-  - [ ] Verify environment variable usage in tests
-  - DoD: Test files run without "read-only property" errors
+- [x] **Fix NODE_ENV assignment errors**
+  - [x] Replace direct NODE_ENV assignment with process.env.NODE_ENV
+  - [x] Update test files to use proper environment variable handling
+  - [x] Verify environment variable usage in tests
+  - DoD: Test files run without "read-only property" errors ✅
   - Deps: none
+  - **Completed:** 2026-02-10
+  - **Changes:** Replaced all process.env.NODE_ENV direct assignments with Object.assign approach in test files
 
 ### 0.4 Environment Configuration
 

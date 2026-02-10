@@ -110,13 +110,15 @@ export default function BookPage() {
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Service Type
                     </label>
-                    <Select>
-                      <option>Haircut & Style</option>
-                      <option>Color & Highlights</option>
-                      <option>Treatment</option>
-                      <option>Special Occasion</option>
-                      <option>Consultation</option>
-                    </Select>
+                    <Select
+                      options={[
+                        { value: 'haircut-style', label: 'Haircut & Style' },
+                        { value: 'color-highlights', label: 'Color & Highlights' },
+                        { value: 'treatment', label: 'Treatment' },
+                        { value: 'special-occasion', label: 'Special Occasion' },
+                        { value: 'consultation', label: 'Consultation' },
+                      ]}
+                    />
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-6">
@@ -130,11 +132,13 @@ export default function BookPage() {
                       <label className="block text-sm font-medium text-slate-700 mb-2">
                         Preferred Time
                       </label>
-                      <Select>
-                        <option>Morning (9am - 12pm)</option>
-                        <option>Afternoon (12pm - 4pm)</option>
-                        <option>Evening (4pm - 8pm)</option>
-                      </Select>
+                      <Select
+                        options={[
+                          { value: 'morning', label: 'Morning (9am - 12pm)' },
+                          { value: 'afternoon', label: 'Afternoon (12pm - 4pm)' },
+                          { value: 'evening', label: 'Evening (4pm - 8pm)' },
+                        ]}
+                      />
                     </div>
                   </div>
 

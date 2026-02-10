@@ -30,4 +30,4 @@
 
 export * from './lib/blog';
 export * from './lib/blog-images';
-export { BlogPostContent } from './components/BlogPostContent';
+export { default as BlogPostContent } from './components/BlogPostContent';

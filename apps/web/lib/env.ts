@@ -61,78 +61,84 @@ import { z } from 'zod';
  * - Emails validated with `.email()` (must be valid email format)
  * - Enums validated with `.enum()` (must match allowed values)
  */
-const envSchema = z.object({
-  /**
-   * Public site URL (no trailing slash).
-   * Used for absolute URLs in sitemap, OG tags, canonical URLs.
-   *
-   * @default 'http://localhost:3000' (development)
-   * @example 'https://hairsalon.example.com' (production)
-   */
-  NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
+const createEnvSchema = (nodeEnv: string) =>
+  z.object({
+    /**
+     * Public site URL (no trailing slash).
+     * Used for absolute URLs in sitemap, OG tags, canonical URLs.
+     *
+     * @default 'http://localhost:3000' (development)
+     * @example 'https://hairsalon.example.com' (production)
+     */
+    NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
 
-  /**
-   * Public site name for branding.
-   * Used in page titles, OG tags, meta descriptions.
-   *
-   * @default 'Hair Salon Template'
-   */
-  NEXT_PUBLIC_SITE_NAME: z.string().default('Hair Salon Template'),
+    /**
+     * Public site name for branding.
+     * Used in page titles, OG tags, meta descriptions.
+     *
+     * @default 'Hair Salon Template'
+     */
+    NEXT_PUBLIC_SITE_NAME: z.string().default('Hair Salon Template'),
 
-  /**
-   * Analytics tracking ID (optional).
-   * Used by lib/analytics.ts for event tracking.
-   *
-   * @optional
-   * @example 'G-XXXXXXXXXX' (Google Analytics)
-   * @example 'vercel-analytics' (Vercel Analytics)
-   */
-  NEXT_PUBLIC_ANALYTICS_ID: z.string().optional(),
+    /**
+     * Analytics tracking ID (optional).
+     * Used by lib/analytics.ts for event tracking.
+     *
+     * @optional
+     * @example 'G-XXXXXXXXXX' (Google Analytics)
+     * @example 'vercel-analytics' (Vercel Analytics)
+     */
+    NEXT_PUBLIC_ANALYTICS_ID: z.string().optional(),
 
-  /**
-   * Node environment (development, production, test).
-   *
-   * @default 'development'
-   */
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    /**
+     * Node environment (development, production, test).
+     *
+     * @default 'development'
+     */
+    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
-  /**
-   * Upstash Redis REST URL for distributed rate limiting (optional).
-   * If not set, falls back to in-memory rate limiting (single instance only).
-   *
-   * @optional
-   * @see {@link https://upstash.com/docs/redis/overall/getstarted Upstash Redis}
-   */
-  UPSTASH_REDIS_REST_URL: z.string().optional(),
+    /**
+     * Upstash Redis REST URL for distributed rate limiting (optional).
+     * If not set, falls back to in-memory rate limiting (single instance only).
+     *
+     * @optional
+     * @see {@link https://upstash.com/docs/redis/overall/getstarted Upstash Redis}
+     */
+    UPSTASH_REDIS_REST_URL: z.string().optional(),
 
-  /**
-   * Upstash Redis REST token for distributed rate limiting (optional).
-   * Must be set together with UPSTASH_REDIS_REST_URL.
-   *
-   * @optional
-   */
-  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+    /**
+     * Upstash Redis REST token for distributed rate limiting (optional).
+     * Must be set together with UPSTASH_REDIS_REST_URL.
+     *
+     * @optional
+     */
+    UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
-  /**
-   * Supabase project URL (required).
-   * Used for server-side lead storage.
-   *
-   * @example 'https://xyzcompany.supabase.co'
-   */
-  SUPABASE_URL: z.string().trim().url(),
+    /**
+     * Supabase project URL (required in production, optional in development).
+     * Used for server-side lead storage.
+     *
+     * @example 'https://xyzcompany.supabase.co'
+     */
+    SUPABASE_URL:
+      nodeEnv === 'production' ? z.string().trim().url() : z.string().trim().url().optional(),
 
-  /**
-   * Supabase service role key (required, server-only).
-   * Grants elevated access; never expose to the client.
-   */
-  SUPABASE_SERVICE_ROLE_KEY: z.string().trim().min(1),
+    /**
+     * Supabase service role key (required in production, optional in development, server-only).
+     * Grants elevated access; never expose to client.
+     */
+    SUPABASE_SERVICE_ROLE_KEY:
+      nodeEnv === 'production' ? z.string().trim().min(1) : z.string().trim().min(1).optional(),
 
-  /**
-   * HubSpot private app token (required, server-only).
-   * Used for CRM sync.
-   */
-  HUBSPOT_PRIVATE_APP_TOKEN: z.string().trim().min(1),
-});
+    /**
+     * HubSpot private app token (required in production, optional in development, server-only).
+     * Used for CRM sync.
+     */
+    HUBSPOT_PRIVATE_APP_TOKEN:
+      nodeEnv === 'production' ? z.string().trim().min(1) : z.string().trim().min(1).optional(),
+  });
+
+const envSchema = createEnvSchema(process.env.NODE_ENV || 'development');
 
 /**
  * Validate environment variables at module load time.
@@ -174,6 +180,27 @@ if (!env.success) {
 }
 
 /**
+ * Validated environment variables with type safety.
+ *
+ * **Type Safety:**
+ * - TypeScript knows which variables are required vs optional
+ * - Autocomplete available for all variables
+ * - Compile-time checking for typos
+ *
+ * **Usage:**
+ * ```typescript
+ * import { validatedEnv } from './env'
+ *
+ * // Required variables (always string)
+ * const siteUrl = validatedEnv.NEXT_PUBLIC_SITE_URL
+ *
+ * // Optional variables (string | undefined)
+ * const hubspotToken = validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN
+ * ```
+ */
+export const validatedEnv = env.data;
+
+/**
  * Production safety check: Enforce Upstash Redis in production (Issue #005 - ENFORCED).
  *
  * **Why This Check Exists:**
@@ -200,8 +227,8 @@ if (!env.success) {
  *
  * @throws {Error} If Redis not configured in production environment
  */
-if (env.data.NODE_ENV === 'production') {
-  if (!env.data.UPSTASH_REDIS_REST_URL || !env.data.UPSTASH_REDIS_REST_TOKEN) {
+if (validatedEnv.NODE_ENV === 'production') {
+  if (!validatedEnv.UPSTASH_REDIS_REST_URL || !validatedEnv.UPSTASH_REDIS_REST_TOKEN) {
     console.error('❌ Production Error: Upstash Redis required for distributed rate limiting');
     console.error('Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN in production');
     console.error('\nWhy this is required:');
@@ -217,14 +244,6 @@ if (env.data.NODE_ENV === 'production') {
 }
 
 /**
- * Validated environment variables with type safety.
- *
- * **Type Safety:**
- * - TypeScript knows which variables are required vs optional
- * - Autocomplete available for all variables
- * - Compile-time checking for typos
- *
- * **Usage:**
  * ```typescript
  * import { validatedEnv } from './env'
  *
@@ -235,8 +254,6 @@ if (env.data.NODE_ENV === 'production') {
  * const hubspotToken = validatedEnv.HUBSPOT_PRIVATE_APP_TOKEN
  * ```
  */
-export const validatedEnv = env.data;
-
 /**
  * Get current Node environment.
  *
