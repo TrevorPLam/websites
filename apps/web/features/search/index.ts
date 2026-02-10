@@ -30,5 +30,5 @@
  */
 
 export * from './lib/search';
-export { SearchDialog } from './components/SearchDialog';
-export { SearchPage } from './components/SearchPage';
+export { default as SearchDialog } from './components/SearchDialog';
+export { default as SearchPage } from './components/SearchPage';

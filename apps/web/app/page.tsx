@@ -50,7 +50,7 @@
 import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
 import ValueProps from '@/components/ValueProps';
-import ServicesOverview from '@/components/ServicesOverview';
+import { ServicesOverview } from '@/features/services';
 
 // Below-fold components loaded dynamically for better initial load
 const SocialProof = dynamic(() => import('@/components/SocialProof'), {

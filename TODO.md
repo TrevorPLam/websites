@@ -129,7 +129,7 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
 
 ### 0.2 Module Resolution & Import Fixes
 
-- [ ] **Fix component barrel exports**
+- [x] **Fix component barrel exports**
 
   - [ ] Audit all `features/*/index.ts` files for missing exports
     - Files: apps/web/features/blog/index.ts, apps/web/features/contact/index.ts, apps/web/features/search/index.ts, apps/web/features/services/index.ts
@@ -140,7 +140,7 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
   - DoD: All feature barrel exports match their component files
   - Deps: none
 
-- [ ] **Fix missing component imports**
+- [x] **Fix missing component imports**
 
   - [ ] Create or fix ServicesOverview component import in app/page.tsx
   - [ ] Create or fix SearchDialog component import in components/Navigation.tsx

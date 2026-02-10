@@ -26,5 +26,5 @@
  * - last_audited: 2026-02-09
  */
 
-export { ServicesOverview } from './components/ServicesOverview';
-export { ServiceDetailLayout } from './components/ServiceDetailLayout';
+export { default as ServicesOverview } from './components/ServicesOverview';
+export { default as ServiceDetailLayout } from './components/ServiceDetailLayout';
