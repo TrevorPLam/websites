@@ -29,7 +29,7 @@
  * - last_audited: 2026-02-09
  */
 
-export function runWithRequestId<T>(requestId: string | undefined, fn: () => T): T {
+export function runWithRequestId<T>(_requestId: string | undefined, fn: () => T): T {
   return fn();
 }
 

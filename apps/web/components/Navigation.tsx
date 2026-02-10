@@ -223,7 +223,11 @@ export default function Navigation({ searchItems }: NavigationProps) {
 
             const firstElement = focusableElements[0];
             const lastElement = focusableElements[focusableElements.length - 1];
-            const activeElement = document.activeElement;
+            const activeElement = document.activeElement as HTMLElement | null;
+
+            if (!firstElement || !lastElement) {
+              return;
+            }
 
             if (event.shiftKey && activeElement === firstElement) {
               event.preventDefault();

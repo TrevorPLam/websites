@@ -123,7 +123,7 @@ export default function GalleryPage() {
           </div>
 
           <div className="text-center mt-12">
-            <Button variant="outline" size="large" className="inline-flex items-center gap-2">
+            <Button variant="secondary" size="large" className="inline-flex items-center gap-2">
               <Instagram className="w-5 h-5" />
               Follow us on Instagram for more
             </Button>
