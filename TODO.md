@@ -508,11 +508,11 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
 
 - [ ] Home -> service -> book click flow works and is tracked
 - [x] Contact form submits successfully with confirmation
-- [x] Blog index loads and individual posts render correctly (no content yet)
+- [x] Blog index loads and individual posts render correctly with content
 - [x] Search functionality works across content
 - [x] All core pages are accessible and functional
 
-**Current Status:** 4/5 core features implemented, missing blog content only
+**Current Status:** 4/5 core features implemented, booking flow remaining
 
 **Tasks**
 
@@ -581,25 +581,28 @@ Work is phased to avoid thrash: **do not start a lower phase until the previous 
   - **Status:** Types defined, Zod validation pending
   - **Evidence:** BlogPost interface exists, validation in buildPost
 
-- [ ] **Blog: content creation and directory setup**
+- [x] **Blog: content creation and directory setup**
 
-  - [ ] Create `apps/web/content/blog/` directory structure
-  - [ ] Add sample blog posts with proper frontmatter
-  - [ ] Include posts with code blocks for testing
-  - [ ] Add posts across different categories
-  - [ ] Test blog rendering with actual content
+  - [x] Create `apps/web/content/blog/` directory structure
+  - [x] Add sample blog posts with proper frontmatter
+  - [x] Include posts with code blocks for testing
+  - [x] Add posts across different categories
+  - [x] Test blog rendering with actual content
   - Refs:
     - [apps/web/features/blog/lib/blog.ts](apps/web/features/blog/lib/blog.ts)
     - [apps/web/app/blog/page.tsx](apps/web/app/blog/page.tsx)
   - Snip:
     ```ts
     const posts = getAllPosts();
-    // Should return actual posts, not empty array
+    // Returns 5 posts: summer-hair-care-tips, latest-hairstyle-trends-2024, hair-color-maintenance-guide, wedding-hairstyle-inspiration, mens-grooming-evolution
     ```
-  - DoD: `/blog` renders 3+ sample posts with working navigation
+  - DoD: `/blog` renders 3+ sample posts with working navigation ✅
   - Deps: blog system implemented
-  - **Status:** Critical missing piece - blog exists but no content
-  - **Evidence:** content/blog/ directory does not exist
+  - **Completed:** 2026-02-10
+  - **Changes:** Created content/blog/ directory with 5 sample posts; all posts render correctly
+    categories include Hair Care, Styling, Trends; MDX code blocks functional
+  - **Evidence:** Blog index shows 5 posts; individual post pages generate successfully
+    build output shows all blog routes statically generated
 
 - [ ] **Blog: performance optimization**
   - [ ] Implement memoization for `getAllPosts()` and related helpers
