@@ -58,6 +58,7 @@ const portfolioItems = [
 export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-white">
+      {/* [TRACE:BLOCK=app.gallery.hero] */}
       {/* Hero */}
       <section className="bg-secondary text-white py-16">
         <Container>
@@ -70,6 +71,8 @@ export default function GalleryPage() {
         </Container>
       </section>
 
+      {/* [TRACE:BLOCK=app.gallery.filterAndGrid] */}
+      {/* [FEAT:FILTERING] [FEAT:RESPONSIVE] */}
       {/* Gallery Filter & Grid */}
       <Section className="py-12">
         <Container>
@@ -111,15 +114,17 @@ export default function GalleryPage() {
               </div>
             ))}
           </div>
-
-          <div className="text-center mt-12">
-            <Button variant="secondary" size="large" className="inline-flex items-center gap-2">
-              <Instagram className="w-5 h-5" />
-              Follow us on Instagram for more
-            </Button>
-          </div>
         </Container>
       </Section>
+
+      {/* [TRACE:BLOCK=app.gallery.socialCTA] */}
+      {/* [FEAT:SOCIAL] */}
+      <div className="text-center mt-12">
+        <Button variant="secondary" size="large" className="inline-flex items-center gap-2">
+          <Instagram className="w-5 h-5" />
+          Follow us on Instagram for more
+        </Button>
+      </div>
     </div>
   );
 }
