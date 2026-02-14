@@ -1,11 +1,14 @@
 /**
  * Supabase lead management utilities.
  *
+ * **Task 3.1.1** (2026-02-14): API aligned with template consumers.
+ * - insertSupabaseLead: Prefer: return=representation, parse data[0]
+ * - updateSupabaseLead: env validation, same PATCH semantics
+ * - Throws on missing SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY
+ *
  * **2026 Best Practices Applied:**
  * - Provides backward compatibility with existing code
  * - Uses new client pattern for consistency
- * - Includes comprehensive JSDoc documentation
- * - Maintains existing function signatures
  * - Implements proper error handling
  *
  * @deprecated Use client.ts directly for new implementations
@@ -20,7 +23,6 @@ const SUPABASE_LEADS_PATH = '/rest/v1/leads';
  * @deprecated Use supabaseClient from client.ts
  */
 export function buildSupabaseHeaders(): Record<string, string> {
-  const url = process.env.SUPABASE_URL || '';
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
   return {
@@ -53,27 +55,35 @@ export function createSupabaseUpdateError(status: number): Error {
 }
 
 /**
- * Inserts a lead into Supabase with tracing.
- * Maintains backward compatibility with existing code.
+ * Inserts a lead into Supabase.
+ * Uses Supabase REST API with Prefer: return=representation for array response.
+ * API-compatible with template consumers (lib/actions/supabase.ts).
  *
  * @param payload - Lead data to insert
  * @returns Created lead record
- * @throws {Error} When insertion fails
- *
- * @deprecated Use insertLead from client.ts with client parameter
+ * @throws {Error} When SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY missing or insertion fails
  */
 export async function insertSupabaseLead(
   payload: Record<string, unknown>
 ): Promise<SupabaseLeadRow> {
-  const url = `${process.env.SUPABASE_URL || ''}${SUPABASE_LEADS_PATH}`;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  if (!supabaseUrl) {
+    throw new Error('SUPABASE_URL is required for Supabase operations');
+  }
+  if (!serviceRoleKey) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for Supabase operations');
+  }
+
+  const url = `${supabaseUrl}${SUPABASE_LEADS_PATH}`;
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       apikey: serviceRoleKey,
       Authorization: `Bearer ${serviceRoleKey}`,
       'Content-Type': 'application/json',
+      Prefer: 'return=representation',
     },
     body: JSON.stringify([payload]),
   });
@@ -84,7 +94,13 @@ export async function insertSupabaseLead(
     throw createSupabaseInsertError(response.status, errorText);
   }
 
-  const lead = (await response.json()) as SupabaseLeadRow;
+  const data = (await response.json()) as SupabaseLeadRow[];
+  const lead = Array.isArray(data) ? data[0] : undefined;
+  if (!lead || typeof lead.id !== 'string' || lead.id.trim() === '') {
+    logError('Supabase insert returned invalid lead ID');
+    throw new Error('Supabase insert returned invalid lead ID');
+  }
+
   logInfo('Supabase lead inserted successfully', {
     leadId: lead.id,
     email: payload.email,
@@ -93,23 +109,26 @@ export async function insertSupabaseLead(
 }
 
 /**
- * Updates a lead in Supabase with tracing.
- * Maintains backward compatibility with existing code.
+ * Updates a lead in Supabase.
+ * API-compatible with template consumers (lib/actions/supabase.ts).
  *
  * @param leadId - ID of lead to update
  * @param updates - Lead data to update
  * @returns Promise that resolves when update is complete
- * @throws {Error} When update fails
- *
- * @deprecated Use updateLead from client.ts with client parameter
+ * @throws {Error} When env missing or update fails
  */
 export async function updateSupabaseLead(
   leadId: string,
   updates: Record<string, unknown>
 ): Promise<void> {
-  const url = `${process.env.SUPABASE_URL || ''}/rest/v1/leads?id=eq.${leadId}`;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required for Supabase operations');
+  }
+
+  const url = `${supabaseUrl}/rest/v1/leads?id=eq.${leadId}`;
   const response = await fetch(url, {
     method: 'PATCH',
     headers: {

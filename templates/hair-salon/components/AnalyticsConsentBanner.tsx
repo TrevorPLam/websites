@@ -29,7 +29,7 @@ import {
   getAnalyticsConsent,
   setAnalyticsConsent,
   type AnalyticsConsentState,
-} from '@/features/analytics/lib/analytics-consent';
+} from '@repo/integrations-analytics';
 
 interface AnalyticsConsentBannerProps {
   analyticsId?: string;

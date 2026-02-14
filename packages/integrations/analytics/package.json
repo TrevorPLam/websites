@@ -1,0 +1,24 @@
+{
+  "name": "@repo/integrations-analytics",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Analytics tracking with consent-gated GA4 and Plausible support",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./consent": "./consent.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/infra": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.2"
+  }
+}

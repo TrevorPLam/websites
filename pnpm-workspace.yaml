@@ -2,8 +2,10 @@ packages:
   - 'packages/*'
   - 'packages/config/*'
   - 'packages/integrations/*'
+  - 'packages/features/*'
   - 'templates/*'
   - 'clients/*'
+  - 'apps/*'
 
 # [Task 0.5.1] Centralized version catalog for monorepo-wide consistency
 catalog:

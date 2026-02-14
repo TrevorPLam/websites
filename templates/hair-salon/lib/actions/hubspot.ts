@@ -5,7 +5,7 @@ import {
   searchHubSpotContact,
   upsertHubSpotContact,
   type HubSpotContactResponse,
-} from '@/features/hubspot/lib/hubspot-client';
+} from '@repo/integrations-hubspot';
 import { HUBSPOT } from '../constants';
 import type { SanitizedContactData } from './types';
 import { hashSpanValue, splitName, normalizeError } from './helpers';

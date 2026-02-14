@@ -4,8 +4,6 @@
 # Removed volume mount overriding built files (2.6.2)
 # Added env_file directive (2.6.3)
 # Added restart policy and resource limits (2.6.4)
-# Added plumber service (2.6.6)
-
 services:
   hair-salon:
     build:
@@ -13,26 +11,6 @@ services:
       dockerfile: templates/hair-salon/Dockerfile
     ports:
       - '3100:3100'
-    environment:
-      - NODE_ENV=production
-    env_file:
-      - .env.production.local
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '1.0'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  plumber:
-    build:
-      context: .
-      dockerfile: templates/plumber/Dockerfile
-    ports:
-      - '3101:3101'
     environment:
       - NODE_ENV=production
     env_file:

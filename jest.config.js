@@ -94,4 +94,6 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/templates/hair-salon/$1',
   },
   testPathIgnorePatterns: ['/node_modules/', '.next', 'dist'],
+  // Exclude Next.js standalone output from module resolution (avoids duplicate @repo/* collisions)
+  modulePathIgnorePatterns: ['<rootDir>/.next', '<rootDir>/.*/\\.next'],
 };

@@ -1,4 +1,5 @@
 // File: lib/actions/supabase.ts  [TRACE:FILE=lib.actions.supabase]
+// Source: @repo/integrations-supabase (Task 3.1.1)
 // Purpose: Supabase integration actions providing lead storage, CRM synchronization,
 //          and data persistence with comprehensive error handling and monitoring.
 //          Implements database operations, HubSpot sync, and retry mechanisms.
@@ -26,7 +27,7 @@ import {
   insertSupabaseLead,
   updateSupabaseLead,
   type SupabaseLeadRow,
-} from '@/features/supabase/lib/supabase-leads';
+} from '@repo/integrations-supabase';
 import type { SanitizedContactData } from './types';
 import { buildLeadSpanAttributes, buildHubSpotIdempotencyKey, normalizeError } from './helpers';
 import { retryHubSpotUpsert, buildHubSpotProperties } from './hubspot';

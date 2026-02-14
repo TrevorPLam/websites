@@ -28,6 +28,8 @@ import { headers } from 'next/headers';
 import { BookingFormData, validateBookingSecurity, SERVICE_LABELS } from './booking-schema';
 import { getBookingProviders, BookingProviderResponse } from './booking-providers';
 import { checkRateLimit } from '@repo/infra';
+import { getValidatedClientIp } from '@repo/infra/security/request-validation';
+import { validatedEnv } from '@/lib/env';
 
 /**
  * Booking submission result interface
@@ -103,9 +105,14 @@ function detectSuspiciousActivity(data: BookingFormData, _ip: string): boolean {
  */
 export async function submitBookingRequest(formData: FormData): Promise<BookingSubmissionResult> {
   try {
-    // Get client IP for rate limiting and security
+    // [Task 1.1.1] Use getValidatedClientIp instead of raw x-forwarded-for/x-real-ip.
+    // WHY: Raw headers can be spoofed by attackers to bypass rate limiting; getValidatedClientIp
+    // validates IP format, trusts only environment-appropriate proxy headers (Cloudflare/Vercel in prod),
+    // and returns 'unknown' for invalid/malformed values. Aligns with contact form and ai/security-standards.md.
     const headersList = await headers();
-    const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+    const clientIp = getValidatedClientIp(headersList, {
+      environment: validatedEnv.NODE_ENV,
+    });
 
     // Extract and validate form data
     const rawFormData = {
@@ -127,7 +134,7 @@ export async function submitBookingRequest(formData: FormData): Promise<BookingS
     // Rate limiting check (2026 security pattern)
     const rateLimitResult = await checkRateLimit({
       email: validatedData.email,
-      clientIp: ip,
+      clientIp,
       hashIp: (value: string) => btoa(value).substring(0, 16),
     });
 
@@ -139,9 +146,9 @@ export async function submitBookingRequest(formData: FormData): Promise<BookingS
     }
 
     // AI-powered fraud detection (2026 security pattern)
-    if (detectSuspiciousActivity(validatedData, ip)) {
+    if (detectSuspiciousActivity(validatedData, clientIp)) {
       console.warn('Suspicious booking activity detected:', {
-        ip,
+        ip: clientIp,
         email: validatedData.email,
         timestamp: new Date().toISOString(),
         patterns: 'AI detection triggered',
@@ -174,7 +181,7 @@ export async function submitBookingRequest(formData: FormData): Promise<BookingS
       confirmationNumber,
       service: SERVICE_LABELS[validatedData.serviceType],
       email: validatedData.email,
-      ip,
+      ip: clientIp,
       providerResults: providerResults.map((r) => ({ success: r.success, provider: 'external' })),
       timestamp: new Date().toISOString(),
     });

@@ -192,6 +192,9 @@ importers:
       '@repo/infra':
         specifier: workspace:*
         version: link:../../packages/infra
+      '@repo/integrations-supabase':
+        specifier: workspace:*
+        version: link:../../packages/integrations/supabase
       '@repo/shared':
         specifier: workspace:*
         version: link:../shared
@@ -224,115 +227,6 @@ importers:
         version: 0.344.0(react@19.0.0)
       next:
         specifier: 'catalog:'
-        version: 15.5.12(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      next-mdx-remote:
-        specifier: 5.0.0
-        version: 5.0.0(@types/react@19.0.2)(react@19.0.0)
-      react:
-        specifier: 19.0.0
-        version: 19.0.0
-      react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
-      react-hook-form:
-        specifier: 7.55.0
-        version: 7.55.0(react@19.0.0)
-      reading-time:
-        specifier: 1.5.0
-        version: 1.5.0
-      rehype-pretty-code:
-        specifier: 0.14.1
-        version: 0.14.1(shiki@3.22.0)
-      rehype-slug:
-        specifier: 6.0.0
-        version: 6.0.0
-      remark-gfm:
-        specifier: 4.0.0
-        version: 4.0.0
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      tailwind-merge:
-        specifier: 2.6.1
-        version: 2.6.1
-      zod:
-        specifier: 3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@eslint/eslintrc':
-        specifier: 3.2.0
-        version: 3.2.0
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/config/eslint-config
-      '@types/node':
-        specifier: 20.17.9
-        version: 20.17.9
-      '@types/react':
-        specifier: 19.0.2
-        version: 19.0.2
-      '@types/react-dom':
-        specifier: 19.0.2
-        version: 19.0.2(@types/react@19.0.2)
-      autoprefixer:
-        specifier: 10.4.20
-        version: 10.4.20(postcss@8.4.49)
-      eslint:
-        specifier: 9.18.0
-        version: 9.18.0(jiti@1.21.7)
-      eslint-config-next:
-        specifier: 15.5.12
-        version: 15.5.12(eslint@9.18.0(jiti@1.21.7))(typescript@5.7.2)
-      postcss:
-        specifier: 8.4.49
-        version: 8.4.49
-      tailwindcss:
-        specifier: 3.4.17
-        version: 3.4.17
-      typescript:
-        specifier: 5.7.2
-        version: 5.7.2
-
-  templates/plumber:
-    dependencies:
-      '@hookform/resolvers':
-        specifier: 3.9.1
-        version: 3.9.1(react-hook-form@7.55.0(react@19.0.0))
-      '@repo/infra':
-        specifier: workspace:*
-        version: link:../../packages/infra
-      '@repo/shared':
-        specifier: workspace:*
-        version: link:../shared
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
-      '@sentry/nextjs':
-        specifier: 10.38.0
-        version: 10.38.0(@opentelemetry/context-async-hooks@2.5.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.5.1(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.5.1(@opentelemetry/api@1.9.0))(next@15.5.12(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(webpack@5.105.0)
-      '@upstash/ratelimit':
-        specifier: 2.0.5
-        version: 2.0.5(@upstash/redis@1.34.3)
-      '@upstash/redis':
-        specifier: 1.34.3
-        version: 1.34.3
-      clsx:
-        specifier: 2.1.1
-        version: 2.1.1
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
-      gray-matter:
-        specifier: 4.0.3
-        version: 4.0.3
-      lucide-react:
-        specifier: 0.344.0
-        version: 0.344.0(react@19.0.0)
-      next:
-        specifier: 15.5.12
         version: 15.5.12(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next-mdx-remote:
         specifier: 5.0.0

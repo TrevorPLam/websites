@@ -31,7 +31,7 @@ import {
   contactFormSchema,
   type ContactFormData,
 } from '@/features/contact/lib/contact-form-schema';
-import { trackFormSubmission } from '@/features/analytics/lib/analytics';
+import { trackFormSubmission } from '@repo/integrations-analytics';
 import { UI_TIMING } from '@/lib/constants';
 import { Input, Select, Textarea, Button } from '@repo/ui';
 import { Loader2 } from 'lucide-react';

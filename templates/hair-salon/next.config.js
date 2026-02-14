@@ -6,7 +6,7 @@ const nextConfig = {
   // [Task 1.5.4] Suppress X-Powered-By header to avoid tech stack disclosure
   poweredByHeader: false,
   // Include all workspace packages that need transpilation
-  transpilePackages: ['@repo/ui', '@repo/utils', '@repo/infra', '@repo/shared'],
+  transpilePackages: ['@repo/ui', '@repo/utils', '@repo/infra', '@repo/integrations-analytics', '@repo/integrations-hubspot', '@repo/integrations-supabase', '@repo/shared'],
   eslint: {
     ignoreDuringBuilds: false,
   },
