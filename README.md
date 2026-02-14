@@ -93,7 +93,7 @@ ls templates/
 **Step 2: Copy template to clients directory**
 
 ```bash
-# Copy website template for new client
+# Copy websites template for new client
 cp -r templates/websites clients/my-client-name
 ```
 

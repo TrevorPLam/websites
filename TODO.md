@@ -1,11 +1,341 @@
-# Marketing Platform Monorepo — Implementation Plan
+# Websites Platform — Implementation Plan
 
 > **Philosophy**: Share infrastructure, not design. Every client site is unique and distinct.
 > **Architecture**: Packages = the platform. Client apps = unique compositions on that platform.
 > **Last updated**: 2026-02-14
-> **Reference**: [Codebase Analysis Report](./docs/CODEBASE_ANALYSIS_REPORT.md)
+> **Reference**: [Codebase Analysis Report](./docs/CODEBASE_ANALYSIS_REPORT.md) > **Archive**: [ARCHIVE.md](./ARCHIVE.md) - Completed tasks and milestones
 >
 > **Format**: Each task is markable `- [ ]`. Declares **Type**, **Risk**, **Paths**, **Governance**, **Depends on**, **Tests**, **Verify**, and where applicable: **Code**, **Script**, **Steps**, **Affects**, or **Boundary**.
+
+---
+
+## Agent Execution Protocol
+
+**Read this section before executing ANY task.**
+
+### Pre-Task Checklist
+
+1. **Read `ai/AGENT_SYSTEM.md`** — constitutional rules that override all other guidance
+2. **Read the task's `Governance` field** — open and read each linked `ai/` document before writing code
+3. **Read the current source files** listed in `Paths` — confirm they exist and match expected state
+4. **Check `Depends on`** — verify prerequisite tasks are complete (check git log or file state)
+5. **Check `Requires`** — verify pre-conditions are met (packages installed, files exist, env set)
+
+### During-Task Rules
+
+- **Type = EDIT**: Modify only the specific code region described. Do NOT reformat, reorganize, or change surrounding code.
+- **Type = CREATE**: Create the file with exact content specified. Ensure parent directories exist.
+- **Type = DELETE**: Remove only the specified file/code. Update any imports referencing it.
+- **Type = RUN**: Execute the command and capture output. Only proceed if exit code is 0.
+- **Type = MULTI_FILE**: Execute steps in the numbered order. Verify after each step if indicated.
+- **Type = MOVE**: Copy to new location first, update all imports, verify builds, then delete original.
+
+### Post-Task Checklist
+
+1. Run every command in `Verify` — all must exit 0
+2. If `Tests` specifies creating/updating tests, write them and ensure they pass
+3. If `Affects` lists files, spot-check they still compile/function
+4. Check `ai/checklists/pre-pr-checklist.md` items relevant to the change type
+
+### Task Field Reference
+
+| Field          | Required      | Description                                                                                  |
+| -------------- | ------------- | -------------------------------------------------------------------------------------------- |
+| **Type**       | Yes           | `EDIT`, `CREATE`, `DELETE`, `RUN`, `MULTI_FILE`, `MOVE`                                      |
+| **Risk**       | Yes           | `low` (single-line/config), `medium` (multi-file/behavioral), `high` (architecture/breaking) |
+| **Paths**      | Yes           | Explicit file paths — no wildcards for <3 files                                              |
+| **Governance** | Yes           | Applicable `ai/` documents to read before executing                                          |
+| **Depends on** | If any        | Task IDs that must be complete first                                                         |
+| **Requires**   | If any        | Pre-conditions: packages, files, env, tools                                                  |
+| **Tests**      | Yes           | `none`, `verify-existing`, `create <path> covering [scenarios]`, or `update <path>`          |
+| **Verify**     | Yes           | Commands to run. Multi-level: syntax (`pnpm type-check`) + behavior (specific checks)        |
+| **Steps**      | If complex    | Numbered sub-operations for multi-step tasks                                                 |
+| **Affects**    | If any        | Other files/tests/packages that may break                                                    |
+| **Code**       | If helpful    | Before/After code blocks showing exact changes                                               |
+| **Script**     | If applicable | Shell commands to execute                                                                    |
+| **Boundary**   | If needed     | What NOT to change                                                                           |
+
+---
+
+## Sprint Governance Map
+
+Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Agents MUST read the sprint-level governance docs in addition to per-task `Governance` refs.
+
+| Sprint | Mandatory Governance Documents                                                                                              |
+| ------ | --------------------------------------------------------------------------------------------------------------------------- |
+| **0**  | `ai/AGENT_SYSTEM.md`, `ai/checklists/pre-pr-checklist.md` ✅ **COMPLETED**                                                  |
+| **1**  | `ai/security/security-standards.md`, `ai/checklists/security-checklist.md`, `ai/references/nextjs-god-tier.md` §5           |
+| **2**  | `ai/testing/testing-doctrine.md`, `ai/testing/test-patterns.md`, `ai/checklists/performance-checklist.md`                   |
+| **3**  | `ai/patterns/integration-adapter-pattern.md`, `ai/AGENT_SYSTEM.md` §A1                                                      |
+| **4**  | `ai/decisions/001-architecture-decisions.md`                                                                                |
+| **5**  | `ai/references/nextjs-god-tier.md` (full document), `ai/checklists/pre-pr-checklist.md`                                     |
+| **6**  | `ai/design/design-system.md`, `ai/design/design-tokens.md`, `ai/checklists/accessibility-checklist.md`                      |
+| **7**  | `ai/patterns/integration-adapter-pattern.md`, `ai/testing/testing-doctrine.md`                                              |
+| **8**  | `ai/checklists/performance-checklist.md`, `ai/checklists/accessibility-checklist.md`, `ai/performance/lighthouse-budget.md` |
+| **9**  | `ai/AGENT_SYSTEM.md` §A (all rules), `ai/testing/test-patterns.md`                                                          |
+| **10** | `ai/security/security-standards.md` §Logging, `ai/references/nextjs-god-tier.md` §6                                         |
+| **11** | `ai/AGENT_SYSTEM.md` §E (documentation)                                                                                     |
+
+---
+
+## Sprint 1 — Security Hardening & Missing Infrastructure
+
+**Goal**: Fix all critical security gaps. Add missing infra components.
+**Estimated effort**: 1–3 days
+**Depends on**: Sprint 0 ✅ **COMPLETED**
+**Sprint governance**: `ai/security/security-standards.md`, `ai/checklists/security-checklist.md`, `ai/references/nextjs-god-tier.md` §5
+
+### 1.1 Fix Booking Flow Security
+
+- [ ] **1.1.1** Use `getValidatedClientIp` instead of raw `x-forwarded-for`
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §Input Validation, `ai/references/nextjs-god-tier.md` §5.3
+  - **Replace**:
+    ```ts
+    // REMOVE:
+    const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+    // ADD:
+    import { getValidatedClientIp } from '@repo/infra/security/request-validation';
+    const clientIp = await getValidatedClientIp(headersList, {
+      environment: validatedEnv.NODE_ENV,
+    });
+    ```
+  - **Tests**: create `templates/websites/features/booking/lib/__tests__/booking-actions.test.ts` covering: valid IP extraction, spoofed header rejection, fallback to 'unknown'
+  - **Affects**: Rate limiting behavior (uses IP as identifier)
+  - **Verify**: `pnpm type-check` passes; IP is validated and sanitized; no raw header access
+  - **Boundary**: Only modify the IP extraction lines. Do not change rate limit logic or booking business logic.
+
+- [ ] **1.1.2** Replace `btoa` hashing with SHA-256
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §Input Sanitization
+  - **Replace**:
+    ```ts
+    // REMOVE:
+    hashIp: (value: string) => btoa(value).substring(0, 16),
+    // ADD — remove the hashIp option entirely; the default checkRateLimit uses salted SHA-256 from @repo/infra
+    ```
+  - **Tests**: update `templates/websites/features/booking/lib/__tests__/booking-actions.test.ts` — verify hashed IP is not base64-decodable
+  - **Verify**: Rate limiting uses cryptographic hashing; `btoa` no longer appears in booking-actions.ts
+
+- [ ] **1.1.3** Add CSRF / origin validation to booking
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §CSRF Policy, `ai/references/nextjs-god-tier.md` §5.4
+  - **Add before booking logic**:
+    ```ts
+    import { getBlockedSubmissionResponse } from '@/lib/actions/helpers';
+    const blocked = getBlockedSubmissionResponse(headersList, formData);
+    if (blocked) return blocked;
+    ```
+  - **Tests**: create test covering: cross-origin request rejected, same-origin request allowed, honeypot field triggers block
+  - **Verify**: Booking submission rejects cross-origin requests
+
+- [ ] **1.1.4** Replace `console.*` with structured logger
+
+  - **Type**: EDIT
+  - **Risk**: low
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/AGENT_SYSTEM.md` §A4, `ai/security/security-standards.md` §Logging
+  - **Steps**:
+    1. Add import: `import { logger } from '@repo/infra';`
+    2. Replace all `console.log(...)` with `logger.info(...)` — use structured context objects
+    3. Replace all `console.error(...)` with `logger.error(...)` — ensure no PII in log messages
+  - **Tests**: verify-existing
+  - **Verify**: `grep -r "console\." templates/*/features/booking/lib/booking-actions.ts` returns 0 results
+
+- [ ] **1.1.5** Sanitize booking form fields before storage
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/websites/features/booking/lib/booking-schema.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-schema.ts`
+  - **Governance**: `ai/security/security-standards.md` §Input Sanitization, §XSS Prevention
+  - **Action**: Call `escapeHtml()` / `sanitizeInput()` on user inputs before storing; call `sanitizeNotes()` on notes field
+  - **Tests**: create test covering: HTML tags stripped from name/email/phone, script injection in notes blocked, clean input passes through unchanged
+  - **Verify**: No raw HTML stored in booking data
+
+- [ ] **1.1.7** Add auth/authorization for `getBookingDetails` (IDOR fix)
+
+  - **Type**: EDIT
+  - **Risk**: high
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §Authentication, `ai/references/nextjs-god-tier.md` §9.2 (forbidden/unauthorized)
+  - **Issue**: Any caller with a booking ID can retrieve details — no ownership check (L274–288)
+  - **Tests**: create test covering: owner can access, non-owner gets 403, missing booking gets 404
+  - **Verify**: Only the booking owner (or admin) can access details
+
+- [ ] **1.1.8** Add CSRF to `confirmBooking` and `cancelBooking`
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §CSRF Policy
+  - **Action**: Apply same `getBlockedSubmissionResponse` pattern as submitBookingRequest (L174–270)
+  - **Tests**: update booking tests — verify CSRF rejection on confirm/cancel
+  - **Verify**: State-changing booking endpoints reject cross-origin requests
+
+- [ ] **1.1.9** Configure `allowedOrigins` for edge CSRF in middleware
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/middleware.ts`, `templates/plumber/middleware.ts`
+  - **Governance**: `ai/security/security-standards.md` §CSRF Policy, `ai/patterns/middleware-pattern.md`, `ai/references/nextjs-god-tier.md` §5.2, §5.4
+  - **Action**: Pass `allowedOrigins` array to `createMiddleware()` options
+  - **Tests**: create `templates/websites/lib/__tests__/middleware.test.ts` covering: allowed origin passes, unknown origin rejected, missing origin header handled
+  - **Verify**: Middleware rejects unknown origins
+
+### 1.2 Activate Distributed Rate Limiting
+
+- [ ] **1.2.1** Pass Upstash env to `checkRateLimit` call chain
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/lib/actions/submit.ts`, `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/lib/actions/submit.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §Rate Limiting, `ai/references/nextjs-god-tier.md` §5.3
+  - **Issue**: `checkRateLimit` never receives env, so Upstash Redis is never used (D8)
+  - **Tests**: create integration test with mocked Upstash — verify Redis path is taken when env vars present
+  - **Affects**: `packages/infra/security/rate-limit.ts` (must accept env param)
+  - **Verify**: When `UPSTASH_REDIS_REST_URL` is set, rate limiting uses Redis (not in-memory)
+
+- [ ] **1.2.2** Add rate limiting to `confirmBooking`
+
+  - **Type**: EDIT
+  - **Risk**: low
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §Rate Limiting, `ai/AGENT_SYSTEM.md` §C3
+  - **Issue**: `confirmBooking` has no rate limiting — can be called unlimited times
+  - **Tests**: update booking tests — verify rapid confirm calls return rate limit error
+  - **Verify**: Rapid confirm calls are throttled
+
+- [ ] **1.2.3** Add rate limiting to `cancelBooking`
+
+  - **Type**: EDIT
+  - **Risk**: low
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §Rate Limiting, `ai/AGENT_SYSTEM.md` §C3
+  - **Issue**: `cancelBooking` has no rate limiting — can be called unlimited times
+  - **Tests**: update booking tests — verify rapid cancel calls return rate limit error
+  - **Verify**: Rapid cancel calls are throttled
+
+- [ ] **1.2.4** Add rate limiting to `getBookingDetails`
+
+  - **Type**: EDIT
+  - **Risk**: low
+  - **Paths**: `templates/websites/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Governance**: `ai/security/security-standards.md` §Rate Limiting, `ai/AGENT_SYSTEM.md` §C3
+  - **Issue**: `getBookingDetails` has no rate limiting — enumeration possible
+  - **Tests**: update booking tests — verify rapid detail queries return rate limit error
+  - **Verify**: Rapid detail queries are throttled
+
+### 1.3 Create Sentry Configuration Files
+
+- [ ] **1.3.4** Wrap `next.config.js` with `withSentryConfig`
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Path**: `templates/websites/next.config.js`
+  - **Governance**: `ai/references/nextjs-god-tier.md` §5.1 (Sentry + Next.js integration)
+  - **Requires**: 0.2.1 (Sentry v10+ installed), 1.3.1, 1.3.2
+  - **Tests**: none
+  - **Verify**: Source maps uploaded to Sentry in production builds; `pnpm build` succeeds
+
+### 1.5 Security Micro-Hardening
+
+- [ ] **1.5.1** Sanitize API error text before throwing — strip internal details
+
+  - **Type**: EDIT
+  - **Risk**: medium
+  - **Paths**: `templates/websites/features/hubspot/lib/hubspot-client.ts`, `templates/websites/features/supabase/lib/supabase-leads.ts`, `templates/plumber/features/hubspot/lib/hubspot-client.ts`, `templates/plumber/features/supabase/lib/supabase-leads.ts`
+  - **Governance**: `ai/security/security-standards.md` §Error Message Exposure Rules
+  - **Issue**: Raw API error text propagated in thrown errors may contain internal server details (L108, L36)
+  - **Fix**: Wrap error text in a generic message; log original error server-side only
+  - **Tests**: create tests covering: thrown error contains generic message, original error logged via logger
+  - **Verify**: Error messages surfaced to callers contain no internal API details
+
+- [ ] **1.5.2** Guard `response.json()` with specific `SyntaxError` catch
+
+  - **Type**: EDIT
+  - **Risk**: low
+  - **Paths**: `templates/websites/features/hubspot/lib/hubspot-client.ts`, `templates/websites/features/supabase/lib/supabase-leads.ts`, `templates/plumber/features/hubspot/lib/hubspot-client.ts`, `templates/plumber/features/supabase/lib/supabase-leads.ts`
+  - **Governance**: `ai/security/security-standards.md` §Error Message Exposure Rules
+  - **Issue**: `response.json()` can throw `SyntaxError` on malformed JSON — no specific handling
+  - **Fix**:
+    ```ts
+    let data;
+    try {
+      data = await response.json();
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        logger.error('Malformed JSON response from API', { status: response.status });
+        throw new Error('External service returned invalid response');
+      }
+      throw err;
+    }
+    ```
+  - **Tests**: create test — mock fetch to return non-JSON body, verify SyntaxError caught and generic error thrown
+  - **Verify**: Malformed JSON response returns a clear error, not an unhandled exception
+
+---
+
+## Phase 1 — Core Site MVP
+
+**Current Status**: 🔄 **80% COMPLETE** - 4/5 core features implemented
+
+### Definition of Done
+
+- [x] **Blog System**: MDX parsing, category filtering, metadata validation ✅ **IMPLEMENTED**
+- [x] **Contact Form**: Schema, validation, submission, spam protection ✅ **IMPLEMENTED**
+- [x] **Search Functionality**: Full-text search across pages and content ✅ **IMPLEMENTED**
+- [x] **Booking System**: Appointment scheduling, confirmation, management ✅ **IMPLEMENTED**
+- [ ] **Blog Content**: Sample posts and content directory ⚠️ **MISSING**
+
+### Missing Task
+
+- [ ] **Blog: Content Creation and Directory Setup**
+
+  - **Type**: CREATE
+  - **Risk**: low
+  - **Paths**: `templates/websites/content/blog/`
+  - **Governance**: `ai/AGENT_SYSTEM.md` §A2 (content validation)
+  - **Issue**: Blog system implemented but no content directory or sample posts
+  - **Action**: Create `content/blog/` directory with sample MDX posts covering different categories
+  - **Tests**: verify blog pages render with actual content
+  - **Verify**: Blog displays sample posts correctly; category filtering works
+
+---
+
+## Future Sprints (Planned)
+
+### Sprint 2 — Testing & Performance
+
+### Sprint 3 — Integration Patterns
+
+### Sprint 4 — Architecture Decisions
+
+### Sprint 5 — Production Optimization
+
+### Sprint 6 — Design System
+
+### Sprint 7 — Advanced Testing
+
+### Sprint 8 — Performance & Accessibility
+
+### Sprint 9 — Final Polish
+
+### Sprint 10 — Observability
+
+### Sprint 11 — Documentation
+
+---
+
+_For completed Sprint 0 tasks and historical achievements, see [ARCHIVE.md](./ARCHIVE.md)_
 
 ---
 
@@ -213,7 +543,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: none
   - **Verify**: `docker build` context is significantly smaller
 
-- [x] **0.4.3** Pin pnpm version in Dockerfile, add non-root user, add HEALTHCHECK *(completed 2026-02-14: pinned pnpm@10.29.2 via corepack, added nodejs/nextjs non-root user, added HEALTHCHECK using /api/health endpoint)*
+- [x] **0.4.3** Pin pnpm version in Dockerfile, add non-root user, add HEALTHCHECK _(completed 2026-02-14: pinned pnpm@10.29.2 via corepack, added nodejs/nextjs non-root user, added HEALTHCHECK using /api/health endpoint)_
 
   - **Type**: EDIT
   - **Risk**: medium
@@ -463,7 +793,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
 
 ### 1.3 Create Sentry Configuration Files
 
-- [x] **1.3.1** Create `sentry.client.config.ts` for hair-salon *(completed 2026-02-14: created with PII sanitization via sanitizeSentryEvent beforeSend, env-aware tracesSampleRate, replay config)*
+- [x] **1.3.1** Create `sentry.client.config.ts` for hair-salon _(completed 2026-02-14: created with PII sanitization via sanitizeSentryEvent beforeSend, env-aware tracesSampleRate, replay config)_
 
   - **Type**: CREATE
   - **Risk**: low
@@ -489,7 +819,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: verify-existing — `pnpm build` must pass; manually verify Sentry initializes in dev
   - **Verify**: Sentry initializes in dev; events have PII stripped
 
-- [x] **1.3.2** Create `sentry.server.config.ts` for hair-salon *(completed 2026-02-14: created with sanitizeSentryEvent beforeSend, env-aware tracesSampleRate)*
+- [x] **1.3.2** Create `sentry.server.config.ts` for hair-salon _(completed 2026-02-14: created with sanitizeSentryEvent beforeSend, env-aware tracesSampleRate)_
 
   - **Type**: CREATE
   - **Risk**: low
@@ -513,7 +843,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: none
   - **Verify**: Server-side errors captured with PII redacted
 
-- [x] **1.3.3** Fix Sentry DSN variable mismatch *(completed 2026-02-14: renamed SENTRY_DSN to NEXT_PUBLIC_SENTRY_DSN in env schema, validate.ts, and all JSDoc references — client-side access requires NEXT_PUBLIC_ prefix)*
+- [x] **1.3.3** Fix Sentry DSN variable mismatch _(completed 2026-02-14: renamed SENTRY*DSN to NEXT_PUBLIC_SENTRY_DSN in env schema, validate.ts, and all JSDoc references — client-side access requires NEXT_PUBLIC* prefix)_
 
   - **Type**: EDIT
   - **Risk**: low
@@ -538,7 +868,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: none
   - **Verify**: Source maps uploaded to Sentry in production builds; `pnpm build` succeeds
 
-- [x] **1.3.5** Copy Sentry config to plumber template *(completed 2026-02-14: created sentry.client.config.ts and sentry.server.config.ts for plumber with identical patterns)*
+- [x] **1.3.5** Copy Sentry config to plumber template _(completed 2026-02-14: created sentry.client.config.ts and sentry.server.config.ts for plumber with identical patterns)_
 
   - **Type**: CREATE
   - **Risk**: low
@@ -721,7 +1051,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: create test covering: script tags stripped, event handlers stripped, normal text preserved, unicode preserved
   - **Verify**: Notes field rejects script injection vectors
 
-- [x] **1.5.6** Add MDX content rendering safety layer *(completed 2026-02-14: added SECURITY NOTE to BlogPostContent.tsx in both templates documenting rehype-sanitize requirement if content source becomes user-editable)*
+- [x] **1.5.6** Add MDX content rendering safety layer _(completed 2026-02-14: added SECURITY NOTE to BlogPostContent.tsx in both templates documenting rehype-sanitize requirement if content source becomes user-editable)_
 
   - **Type**: EDIT
   - **Risk**: low
@@ -839,7 +1169,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
 
 ### 2.2 Fix Linting Infrastructure
 
-- [x] **2.2.1** Add ESLint config to `packages/ui` *(completed 2026-02-14: created eslint.config.mjs extending @repo/eslint-config/library.js, added @repo/eslint-config devDependency)*
+- [x] **2.2.1** Add ESLint config to `packages/ui` _(completed 2026-02-14: created eslint.config.mjs extending @repo/eslint-config/library.js, added @repo/eslint-config devDependency)_
 
   - **Type**: CREATE
   - **Risk**: low
@@ -849,7 +1179,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: none
   - **Verify**: `pnpm --filter=@repo/ui lint` runs and passes (or shows real issues)
 
-- [x] **2.2.2** Add ESLint config to `packages/utils` *(completed 2026-02-14: created eslint.config.mjs extending @repo/eslint-config/library.js, added @repo/eslint-config devDependency)*
+- [x] **2.2.2** Add ESLint config to `packages/utils` _(completed 2026-02-14: created eslint.config.mjs extending @repo/eslint-config/library.js, added @repo/eslint-config devDependency)_
 
   - **Type**: CREATE
   - **Risk**: low
@@ -879,7 +1209,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: verify-existing — all tests must still pass
   - **Verify**: `pnpm test` runs tests for both templates correctly
 
-- [x] **2.3.2** Remove unused `jest.helpers.ts` *(completed 2026-02-14: deleted root jest.helpers.ts — functions were unused, root jest.config.js uses jest.setup.js instead)*
+- [x] **2.3.2** Remove unused `jest.helpers.ts` _(completed 2026-02-14: deleted root jest.helpers.ts — functions were unused, root jest.config.js uses jest.setup.js instead)_
 
   - **Type**: DELETE
   - **Risk**: low
@@ -922,7 +1252,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: verify-existing
   - **Verify**: `pnpm test` invokes Turbo which runs per-package test configs
 
-- [x] **2.3.6** Remove duplicate `sanitize.test.ts` from hair-salon template *(completed 2026-02-14: deleted templates/hair-salon/lib/__tests__/sanitize.test.ts and templates/plumber/lib/__tests__/sanitize.test.ts — canonical tests exist at packages/infra/__tests__/sanitize.test.ts)*
+- [x] **2.3.6** Remove duplicate `sanitize.test.ts` from hair-salon template _(completed 2026-02-14: deleted templates/hair-salon/lib/**tests**/sanitize.test.ts and templates/plumber/lib/**tests**/sanitize.test.ts — canonical tests exist at packages/infra/**tests**/sanitize.test.ts)_
 
   - **Type**: DELETE
   - **Risk**: low
@@ -1028,7 +1358,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
   - **Tests**: verify-existing
   - **Verify**: `turbo run test` discovers and runs tests per-package
 
-- [x] **2.5.6** Add ESLint config to `@repo/infra` *(completed 2026-02-14: created eslint.config.mjs extending @repo/eslint-config/library.js with console allow for logging internals)*
+- [x] **2.5.6** Add ESLint config to `@repo/infra` _(completed 2026-02-14: created eslint.config.mjs extending @repo/eslint-config/library.js with console allow for logging internals)_
 
   - **Type**: CREATE
   - **Risk**: low
@@ -2350,7 +2680,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
 
 - [x] **9.3.1** Remove all commented-out analytics code from BookingForm ✅ **COMPLETED 2026-02-14** — **Type**: EDIT | **Risk**: low | **Paths**: `templates/hair-salon/features/booking/components/BookingForm.tsx`, `templates/plumber/features/booking/components/BookingForm.tsx` | **Governance**: none | **Issue**: 5 blocks of commented `trackBookingEvent` calls (L24, L70–76, L95–102, L107–111, L119–123) | **Tests**: verify-existing | **Verify**: No commented code in BookingForm
 
-- [x] **9.3.2** Remove commented Zod schema in booking-providers.ts — **Type**: EDIT | **Risk**: low | **Paths**: `templates/hair-salon/features/booking/lib/booking-providers.ts`, `templates/plumber/features/booking/lib/booking-providers.ts` | **Governance**: none | **Issue**: Dead reference code (L4–13) | **Tests**: verify-existing | **Verify**: No commented schemas *(completed 2026-02-14: removed dead providerConfigSchema JSDoc comment from both templates)*
+- [x] **9.3.2** Remove commented Zod schema in booking-providers.ts — **Type**: EDIT | **Risk**: low | **Paths**: `templates/hair-salon/features/booking/lib/booking-providers.ts`, `templates/plumber/features/booking/lib/booking-providers.ts` | **Governance**: none | **Issue**: Dead reference code (L4–13) | **Tests**: verify-existing | **Verify**: No commented schemas _(completed 2026-02-14: removed dead providerConfigSchema JSDoc comment from both templates)_
 
 - [ ] **9.3.3** Replace `legacyRateLimit.checkRateLimit` with modern `limitByIp`/`limitByEmail` — **Type**: EDIT | **Risk**: medium | **Path**: `packages/infra/security/rate-limit.ts` | **Governance**: none | **Issue**: Legacy wrapper still used (L513) | **Tests**: verify-existing + update rate limit tests | **Verify**: No `legacyRateLimit` references remain
 
@@ -2434,7 +2764,7 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
 
 - [ ] **9.9.1** Convert test files from `require()` to `import` — **Type**: EDIT | **Risk**: low | **Governance**: `ai/testing/test-patterns.md` | **Paths**: All 8 test files using `require()` | **Tests**: verify-existing | **Verify**: Tests still pass; no CJS in TS test files
 
-- [x] **9.9.2** Convert `module.exports` to `export` in env-setup files — **Type**: EDIT | **Risk**: low | **Paths**: `templates/hair-salon/env-setup.ts`, `templates/plumber/env-setup.ts` | **Governance**: `ai/testing/test-patterns.md` | **Tests**: verify-existing | **Verify**: Tests still pass *(completed 2026-02-14: CANNOT convert — these files are Jest setupFiles loaded in CJS mode. module.exports is required. Added clarifying comment instead.)*
+- [x] **9.9.2** Convert `module.exports` to `export` in env-setup files — **Type**: EDIT | **Risk**: low | **Paths**: `templates/hair-salon/env-setup.ts`, `templates/plumber/env-setup.ts` | **Governance**: `ai/testing/test-patterns.md` | **Tests**: verify-existing | **Verify**: Tests still pass _(completed 2026-02-14: CANNOT convert — these files are Jest setupFiles loaded in CJS mode. module.exports is required. Added clarifying comment instead.)_
 
 - [ ] **9.9.3** Reduce file system test brittleness — **Type**: EDIT | **Risk**: medium | **Paths**: `templates/hair-salon/lib/__tests__/search.test.ts`, `templates/hair-salon/features/blog/__tests__/blog.test.ts`, `templates/plumber/lib/__tests__/search.test.ts`, `templates/plumber/features/blog/__tests__/blog.test.ts` | **Governance**: `ai/testing/test-patterns.md` §Mocking Policy | **Fix**: Use virtual file system mock or fixture directory | **Tests**: verify-existing | **Verify**: Tests pass regardless of working directory
 
@@ -2586,21 +2916,21 @@ Each sprint has mandatory `ai/` documents that apply to ALL tasks within it. Age
 
 ## Progress Tracking
 
-| Sprint  | Description                        | Tasks |    Status     |
-| :-----: | ---------------------------------- | :---: | :-----------: |
-|    0    | Unblock CI & Critical Fixes        |  13   | 6 done        |
-|    1    | Security Hardening & Missing Infra |  30   | 14 done       |
-|    2    | Package Quality & Boundaries       |  30   | 20 done       |
-|    3    | Complete Existing Extractions      |   9   | Not started   |
-|    4    | Architecture Evolution             |   8   | Not started   |
-|    5    | Major Dependency Upgrades          |  17   | Not started   |
-|    6    | UI Component Library               |  30+  | Not started   |
-|    7    | Feature Packages                   |  10   | Not started   |
-|    8    | Production Readiness               |  30   | 1 done        |
-|    9    | Code Quality Sweep                 |  45   | 13 done       |
-|   10    | Observability & Tracing            |  14   | Not started   |
-|   11    | JSDoc & Documentation              |   8   | Not started   |
-| Backlog | Future Enhancements                |  29   |  As needed    |
+| Sprint  | Description                        | Tasks |   Status    |
+| :-----: | ---------------------------------- | :---: | :---------: |
+|    0    | Unblock CI & Critical Fixes        |  13   |   6 done    |
+|    1    | Security Hardening & Missing Infra |  30   |   14 done   |
+|    2    | Package Quality & Boundaries       |  30   |   20 done   |
+|    3    | Complete Existing Extractions      |   9   | Not started |
+|    4    | Architecture Evolution             |   8   | Not started |
+|    5    | Major Dependency Upgrades          |  17   | Not started |
+|    6    | UI Component Library               |  30+  | Not started |
+|    7    | Feature Packages                   |  10   | Not started |
+|    8    | Production Readiness               |  30   |   1 done    |
+|    9    | Code Quality Sweep                 |  45   |   13 done   |
+|   10    | Observability & Tracing            |  14   | Not started |
+|   11    | JSDoc & Documentation              |   8   | Not started |
+| Backlog | Future Enhancements                |  29   |  As needed  |
 
 ---
 
