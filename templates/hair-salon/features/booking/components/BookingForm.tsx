@@ -1,4 +1,25 @@
-
+// File: features/booking/components/BookingForm.tsx  [TRACE:FILE=features.booking.components.BookingForm]
+// Purpose: Booking form component providing comprehensive appointment scheduling with real-time validation,
+//          service selection, and submission handling. Implements form state management, error handling,
+//          and user feedback for seamless booking experience.
+//
+// Exports / Entry: BookingForm component (default export)
+// Used by: Booking page (/book), service pages, and any appointment scheduling features
+//
+// Invariants:
+// - Form must validate all inputs against booking schema before submission
+// - Service types and time slots must match available business offerings
+// - Form state must be preserved during submission to prevent data loss
+// - Error messages must be user-friendly and actionable
+// - Submission must be idempotent to prevent duplicate bookings
+//
+// Status: @public
+// Features:
+// - [FEAT:BOOKING] Comprehensive appointment scheduling form
+// - [FEAT:VALIDATION] Real-time form validation with Zod schema
+// - [FEAT:UX] User-friendly error handling and feedback
+// - [FEAT:ACCESSIBILITY] Accessible form controls and ARIA labels
+// - [FEAT:PERFORMANCE] Optimized form state management
 
 'use client';
 
@@ -23,6 +44,9 @@ import { submitBookingRequest, BookingSubmissionResult } from '../lib/booking-ac
 // TODO: Implement analytics tracking
 // import { trackBookingEvent } from '@/features/analytics/lib/analytics';
 
+// [TRACE:INTERFACE=features.booking.BookingFormProps]
+// [FEAT:BOOKING] [FEAT:UX]
+// NOTE: Form props interface - supports flexible form customization and callback handling.
 interface BookingFormProps {
   className?: string;
   prefilledService?: string;
@@ -30,6 +54,9 @@ interface BookingFormProps {
   onError?: (error: string) => void;
 }
 
+// [TRACE:FUNC=features.booking.BookingForm]
+// [FEAT:BOOKING] [FEAT:VALIDATION] [FEAT:UX] [FEAT:ACCESSIBILITY]
+// NOTE: Main booking form component - orchestrates form state, validation, and submission with user feedback.
 export default function BookingForm({
   className,
   prefilledService,

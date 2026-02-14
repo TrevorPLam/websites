@@ -1,3 +1,27 @@
+// File: lib/actions/submit.ts  [TRACE:FILE=lib.actions.submit]
+// Purpose: Contact form submission handler with comprehensive security, validation, and lead
+//          management. Implements rate limiting, input sanitization, fraud detection, and
+//          integration with Supabase and HubSpot for customer relationship management.
+//
+// Exports / Entry: submitContactForm function
+// Used by: ContactForm component, API endpoints, and any contact submission features
+//
+// Invariants:
+// - All submissions must be validated against security schemas
+// - Rate limiting must be enforced per email and IP address
+// - PII must be sanitized and hashed before storage
+// - Lead insertion to Supabase is required (must not fail silently)
+// - HubSpot sync is best-effort (failures must be logged but not block)
+// - IP addresses must be validated against trusted proxy headers
+//
+// Status: @internal
+// Features:
+// - [FEAT:CONTACT] Contact form submission and validation
+// - [FEAT:SECURITY] Rate limiting, sanitization, and fraud detection
+// - [FEAT:INTEGRATION] Supabase lead storage and HubSpot CRM sync
+// - [FEAT:MONITORING] Error logging and correlation tracking
+// - [FEAT:PERFORMANCE] Distributed rate limiting with Redis fallback
+
 'use server';
 
 import { headers } from 'next/headers';
@@ -26,11 +50,17 @@ import { insertLeadWithSpan, syncHubSpotLead } from './supabase';
  *
  * @returns Client IP address or 'unknown' if not available
  */
+// [TRACE:FUNC=lib.actions.getClientIp]
+// [FEAT:SECURITY] [FEAT:MONITORING]
+// NOTE: IP validation - prevents spoofing attacks and ensures accurate rate limiting.
 async function getClientIp(): Promise<string> {
   const requestHeaders = await headers();
   return getValidatedClientIp(requestHeaders, { environment: process.env.NODE_ENV as any });
 }
 
+// [TRACE:FUNC=lib.actions.handleContactFormSubmission]
+// [FEAT:CONTACT] [FEAT:SECURITY] [FEAT:INTEGRATION]
+// NOTE: Core submission handler - orchestrates validation, rate limiting, sanitization, and lead capture.
 async function handleContactFormSubmission(data: ContactFormData, requestHeaders: Headers) {
   const blockedResponse = getBlockedSubmissionResponse(requestHeaders, data);
   if (blockedResponse) {
@@ -119,6 +149,9 @@ async function handleContactFormSubmission(data: ContactFormData, requestHeaders
  * }
  * ```
  */
+// [TRACE:FUNC=lib.actions.submitContactForm]
+// [FEAT:CONTACT] [FEAT:SECURITY] [FEAT:INTEGRATION] [FEAT:MONITORING]
+// NOTE: Public API endpoint - handles complete submission flow with comprehensive error handling.
 export async function submitContactForm(data: ContactFormData) {
   const requestHeaders = await headers();
   const correlationId = getCorrelationIdFromHeaders(requestHeaders);

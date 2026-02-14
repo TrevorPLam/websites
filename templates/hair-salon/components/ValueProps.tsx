@@ -1,9 +1,32 @@
-
+// File: components/ValueProps.tsx  [TRACE:FILE=components.valueProps]
+// Purpose: Value propositions component showcasing key business differentiators with icons
+//          and detailed descriptions. Presents expert stylists, premium products,
+//          and relaxing atmosphere to build customer trust and conversion.
+//
+// Exports / Entry: ValueProps component (default export)
+// Used by: Homepage (app/page.tsx) as part of above-fold content
+//
+// Invariants:
+// - Must render exactly three value propositions for consistent layout
+// - Icons must be meaningful and relevant to each proposition
+// - Content must be concise yet compelling for conversion
+// - Component must be responsive across all device sizes
+// - Descriptions support rich content (lists, formatting)
+//
+// Status: @public
+// Features:
+// - [FEAT:MARKETING] Value proposition showcase
+// - [FEAT:UX] Icon-enhanced content presentation
+// - [FEAT:RESPONSIVE] Mobile-friendly layout
+// - [FEAT:CONVERSION] Trust-building content for conversion
 
 import React, { memo } from 'react';
 import { Scissors, Heart, Sparkles } from 'lucide-react';
 import { Container, Section, Card } from '@repo/ui';
 
+// [TRACE:CONST=components.valueProps.content]
+// [FEAT:MARKETING] [FEAT:UX]
+// NOTE: Value propositions - defines key business differentiators with compelling descriptions and relevant icons.
 const valueProps = [
   {
     icon: Scissors,
@@ -74,7 +97,9 @@ function ValueProps() {
                   <Icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">{prop.title}</h3>
-                <div className="text-muted-foreground leading-relaxed space-y-4">{prop.description}</div>
+                <div className="text-muted-foreground leading-relaxed space-y-4">
+                  {prop.description}
+                </div>
               </Card>
             );
           })}

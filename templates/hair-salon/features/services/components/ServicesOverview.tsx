@@ -1,10 +1,33 @@
-
+// File: features/services/components/ServicesOverview.tsx  [TRACE:FILE=features.services.overview]
+// Purpose: Services overview component displaying the main service categories with icons,
+//          descriptions, and navigation links. Provides a grid layout for service discovery
+//          and acts as the primary services entry point from the homepage.
+//
+// Exports / Entry: ServicesOverview component (default export)
+// Used by: Homepage (app/page.tsx) and potentially other service-related pages
+//
+// Invariants:
+// - Must display exactly 4 main service categories in responsive grid
+// - Each service must have icon, title, description, and navigation link
+// - Grid must be responsive (1 column mobile, 2 columns tablet, 4 columns desktop)
+// - All service links must be valid routes within the services section
+// - Icons must be consistent with service themes
+//
+// Status: @public
+// Features:
+// - [FEAT:SERVICES] Service category display and navigation
+// - [FEAT:UX] Responsive grid layout with hover effects
+// - [FEAT:NAVIGATION] Service discovery and routing
+// - [FEAT:DESIGN] Consistent iconography and visual hierarchy
 
 import React from 'react';
 import Link from 'next/link';
 import { Scissors, Palette, Sparkles, Calendar } from 'lucide-react';
 import { Container, Section, Card } from '@repo/ui';
 
+// [TRACE:BLOCK=features.services.data]
+// [FEAT:SERVICES] [FEAT:NAVIGATION]
+// NOTE: Core service categories - maintain consistency with actual available service routes.
 const services = [
   {
     icon: Scissors,
@@ -32,6 +55,9 @@ const services = [
   },
 ];
 
+// [TRACE:FUNC=features.services.ServicesOverview]
+// [FEAT:SERVICES] [FEAT:UX] [FEAT:NAVIGATION] [FEAT:DESIGN]
+// NOTE: Service discovery component - balances visual appeal with navigation clarity.
 export default function ServicesOverview() {
   return (
     <Section className="bg-muted">

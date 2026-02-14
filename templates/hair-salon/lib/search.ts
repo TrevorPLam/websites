@@ -1,4 +1,24 @@
-
+// File: lib/search.ts  [TRACE:FILE=lib.search]
+// Purpose: Search functionality providing site-wide search index generation and search
+//          capabilities for pages and blog content. Caches search results for performance
+//          and integrates with navigation components.
+//
+// Exports / Entry: SearchItem type, getSearchIndex function
+// Used by: Navigation component, SearchDialog, and any search-related features
+//
+// Invariants:
+// - Must include all static pages in search index for comprehensive coverage
+// - Blog posts must be dynamically fetched and included in search results
+// - Search index must be cached to avoid repeated file system operations
+// - All search items must have valid hrefs for navigation
+// - Tags must be consistent across similar content types
+//
+// Status: @public
+// Features:
+// - [FEAT:SEARCH] Site-wide search functionality
+// - [FEAT:PERFORMANCE] Cached search index generation
+// - [FEAT:BLOG] Dynamic blog post integration
+// - [FEAT:NAVIGATION] Search result navigation
 
 import { cache } from 'react';
 import { getAllPosts } from '@/features/blog/lib/blog';
@@ -12,6 +32,9 @@ export type SearchItem = {
   tags?: string[];
 };
 
+// [TRACE:BLOCK=lib.search.staticPages]
+// [FEAT:SEARCH] [FEAT:NAVIGATION]
+// NOTE: Core page index - maintain consistency with actual available routes and page content.
 const staticPages: SearchItem[] = [
   {
     id: 'page-home',
@@ -95,12 +118,13 @@ const staticPages: SearchItem[] = [
   },
 ];
 
+// [TRACE:FUNC=lib.buildSearchIndex]
+// [FEAT:SEARCH] [FEAT:PERFORMANCE] [FEAT:BLOG]
+// NOTE: Cached index builder - combines static pages with dynamic blog content for comprehensive search.
 const buildSearchIndex = cache((): SearchItem[] => {
   const posts = getAllPosts();
   const blogItems: SearchItem[] = posts.map((post) => {
-    const tags = ['blog', post.category, post.author].filter(
-      (tag): tag is string => Boolean(tag)
-    );
+    const tags = ['blog', post.category, post.author].filter((tag): tag is string => Boolean(tag));
 
     return {
       id: `blog-${post.slug}`,
@@ -115,6 +139,9 @@ const buildSearchIndex = cache((): SearchItem[] => {
   return [...staticPages, ...blogItems];
 });
 
+// [TRACE:FUNC=lib.getSearchIndex]
+// [FEAT:SEARCH] [FEAT:PERFORMANCE]
+// NOTE: Public search API - provides cached search index for navigation and search components.
 export async function getSearchIndex(): Promise<SearchItem[]> {
   return buildSearchIndex();
 }

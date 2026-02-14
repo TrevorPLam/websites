@@ -1,4 +1,25 @@
-
+// File: features/booking/lib/booking-actions.ts  [TRACE:FILE=features.booking.bookingActions]
+// Purpose: Booking action handlers providing appointment submission, validation, and provider
+//          integration. Implements booking storage, confirmation generation, fraud detection,
+//          and external system synchronization for appointment management.
+//
+// Exports / Entry: submitBookingRequest function, BookingSubmissionResult interface
+// Used by: BookingForm component, booking API endpoints, and appointment management features
+//
+// Invariants:
+// - All bookings must be validated against security schema before processing
+// - Rate limiting must be enforced per email and IP address
+// - Confirmation numbers must be unique and traceable
+// - Provider integration must be best-effort (failures logged but not blocking)
+// - Suspicious activity must be detected and flagged for review
+//
+// Status: @internal
+// Features:
+// - [FEAT:BOOKING] Appointment submission and management
+// - [FEAT:SECURITY] Fraud detection and rate limiting
+// - [FEAT:INTEGRATION] External booking provider synchronization
+// - [FEAT:VALIDATION] Security validation and pattern detection
+// - [FEAT:MONITORING] Booking activity logging and tracking
 
 'use server';
 
@@ -11,6 +32,9 @@ import { checkRateLimit } from '@repo/infra';
 /**
  * Booking submission result interface
  */
+// [TRACE:INTERFACE=features.booking.BookingSubmissionResult]
+// [FEAT:BOOKING] [FEAT:INTEGRATION]
+// NOTE: Result interface - provides comprehensive booking outcome with provider details and confirmation data.
 export interface BookingSubmissionResult {
   success: boolean;
   bookingId?: string;
@@ -24,6 +48,9 @@ export interface BookingSubmissionResult {
  * Internal booking storage (in production, this would be a database)
  * For demo purposes, we'll store bookings in memory
  */
+// [TRACE:CONST=features.booking.internalBookings]
+// [FEAT:BOOKING] [FEAT:DEMO]
+// NOTE: Demo storage - in-memory booking storage for demonstration purposes only.
 const internalBookings = new Map<
   string,
   {
@@ -38,6 +65,9 @@ const internalBookings = new Map<
 /**
  * Generate unique confirmation number
  */
+// [TRACE:FUNC=features.booking.generateConfirmationNumber]
+// [FEAT:BOOKING] [FEAT:SECURITY]
+// NOTE: Confirmation generator - creates unique, traceable booking identifiers using timestamp and random data.
 function generateConfirmationNumber(): string {
   const timestamp = Date.now().toString(36);
   const random = Math.random().toString(36).substring(2, 8);
@@ -47,6 +77,9 @@ function generateConfirmationNumber(): string {
 /**
  * Detect suspicious booking patterns (AI-powered fraud detection)
  */
+// [TRACE:FUNC=features.booking.detectSuspiciousActivity]
+// [FEAT:SECURITY] [FEAT:FRAUD_DETECTION]
+// NOTE: Fraud detection - analyzes booking patterns for suspicious activity using configurable rules.
 function detectSuspiciousActivity(data: BookingFormData, _ip: string): boolean {
   const suspiciousPatterns = [
     // Check for obviously fake names

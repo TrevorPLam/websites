@@ -1,4 +1,24 @@
-
+// File: components/AnalyticsConsentBanner.tsx  [TRACE:FILE=components.analyticsConsentBanner]
+// Purpose: GDPR/CCPA compliant analytics consent banner managing user consent for Google Analytics.
+//          Handles consent state persistence, conditional script loading, and user preference
+//          management with privacy-by-design approach.
+//
+// Exports / Entry: AnalyticsConsentBanner component (default export)
+// Used by: Root layout (app/layout.tsx) - renders on all pages
+//
+// Invariants:
+// - Must not load analytics scripts until explicit user consent is granted
+// - Consent state must persist across sessions using localStorage and cookies
+// - Banner must only show when consent state is 'unknown'
+// - Scripts must include CSP nonce for security compliance
+// - Component must be client-side rendered for consent state management
+//
+// Status: @public
+// Features:
+// - [FEAT:ANALYTICS] Google Analytics integration with consent gating
+// - [FEAT:PRIVACY] GDPR/CCPA compliant consent management
+// - [FEAT:SECURITY] CSP-compliant script loading with nonces
+// - [FEAT:UX] Non-intrusive consent banner design
 
 'use client';
 
@@ -16,14 +36,23 @@ interface AnalyticsConsentBannerProps {
   nonce?: string;
 }
 
+// [TRACE:FUNC=components.shouldRenderBanner]
+// [FEAT:PRIVACY] [FEAT:UX]
+// NOTE: Banner visibility logic - only shows when consent is unknown and component is ready.
 function shouldRenderBanner(consent: AnalyticsConsentState, isReady: boolean): boolean {
   return isReady && consent === 'unknown';
 }
 
+// [TRACE:FUNC=components.shouldLoadAnalytics]
+// [FEAT:ANALYTICS] [FEAT:PRIVACY]
+// NOTE: Analytics loading logic - ensures scripts only load with explicit consent and valid ID.
 function shouldLoadAnalytics(consent: AnalyticsConsentState, analyticsId?: string): boolean {
   return consent === 'granted' && Boolean(analyticsId);
 }
 
+// [TRACE:FUNC=components.AnalyticsScriptLoader]
+// [FEAT:ANALYTICS] [FEAT:SECURITY]
+// NOTE: Conditional script loader - only injects GA4 scripts when consent is granted and nonce is available.
 function AnalyticsScriptLoader({
   analyticsId,
   enabled,

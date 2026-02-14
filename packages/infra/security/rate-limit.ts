@@ -1,9 +1,30 @@
-/**
- * Rate limiting utilities
- * Implements 2026 best practices with sliding window, distributed limiting, and privacy-first approach
- */
+// File: packages/infra/security/rate-limit.ts  [TRACE:FILE=packages.infra.security.rateLimit]
+// Purpose: Rate limiting utilities implementing 2026 security best practices with sliding
+//          window algorithms, distributed limiting, and privacy-first approach. Provides
+//          configurable presets for different use cases and analytics integration.
+//
+// Exports / Entry: Rate limiting functions, presets, and configuration constants
+// Used by: Middleware, API routes, and form submission handlers
+//
+// Invariants:
+// - Must use sliding window algorithm for accurate rate limiting
+// - Must not store IP addresses or PII for privacy compliance
+// - Must provide analytics integration for monitoring and alerting
+// - Must support distributed scenarios across multiple server instances
+// - All presets must follow principle of least privilege
+//
+// Status: @internal
+// Features:
+// - [FEAT:SECURITY] Sliding window rate limiting algorithm
+// - [FEAT:PRIVACY] Privacy-first approach without IP storage
+// - [FEAT:MONITORING] Analytics integration for rate limit events
+// - [FEAT:CONFIGURATION] Flexible presets for different use cases
+// - [FEAT:DISTRIBUTED] Support for multi-server deployments
 
 // Rate limiting configuration constants (exported for consumers that need defaults)
+// [TRACE:CONST=packages.infra.security.rateLimit.DEFAULT_RATE_LIMIT]
+// [FEAT:CONFIGURATION]
+// NOTE: Default rate limit configuration - conservative limits for general use.
 export const DEFAULT_RATE_LIMIT = {
   MAX_REQUESTS: 3,
   WINDOW_MS: 60 * 60 * 1000, // 1 hour
@@ -13,6 +34,9 @@ export const DEFAULT_RATE_LIMIT = {
  * Rate limit preset configurations for different use cases
  * Implements 2026 best practices for context-aware limiting
  */
+// [TRACE:CONST=packages.infra.security.rateLimit.RATE_LIMIT_PRESETS]
+// [FEAT:CONFIGURATION] [FEAT:SECURITY]
+// NOTE: Context-aware rate limit presets - optimized for specific application scenarios.
 export const RATE_LIMIT_PRESETS = {
   // Contact forms - strict to prevent spam
   contact: {

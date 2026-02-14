@@ -1,3 +1,26 @@
+// File: lib/actions/helpers.ts  [TRACE:FILE=lib.actions.helpers]
+// Purpose: Security and utility helpers for form submission handling, providing hashing,
+//          correlation tracking, and data sanitization. Implements privacy-preserving
+//          identifier hashing and request context management for secure form processing.
+//
+// Exports / Entry: Hash functions, correlation helpers, and data sanitization utilities
+// Used by: Contact form submission, booking actions, and any form processing features
+//
+// Invariants:
+// - All identifiers must be hashed with unique salts before storage
+// - IP addresses must NEVER be stored or logged in plain text
+// - Correlation IDs must be preserved across request lifecycle
+// - Data sanitization must prevent XSS and injection attacks
+// - Hash salts must be unique per identifier type
+//
+// Status: @internal
+// Features:
+// - [FEAT:SECURITY] Privacy-preserving identifier hashing
+// - [FEAT:MONITORING] Request correlation and tracking
+// - [FEAT:SANITIZATION] XSS prevention and data cleaning
+// - [FEAT:PRIVACY] GDPR-compliant data handling
+// - [FEAT:VALIDATION] Request origin validation
+
 import { createHash } from 'crypto';
 import type { ContactFormData } from '@/features/contact/lib/contact-form-schema';
 import { escapeHtml, sanitizeEmail, sanitizeName, logError, logWarn } from '@repo/infra';
@@ -9,12 +32,18 @@ import type { SpanAttributes } from '@repo/infra';
 /**
  * Salts for hashing to prevent rainbow table attacks.
  */
+// [TRACE:CONST=lib.actions.hashSalts]
+// [FEAT:SECURITY] [FEAT:PRIVACY]
+// NOTE: Unique salts - prevents rainbow table attacks and ensures hash uniqueness per identifier type.
 const IP_HASH_SALT = 'contact_form_ip';
 const EMAIL_HASH_SALT = 'contact_form_email';
 const SPAN_HASH_SALT = 'contact_form_span';
 
 export const CORRELATION_ID_HEADER = 'x-correlation-id';
 
+// [TRACE:FUNC=lib.actions.getCorrelationIdFromHeaders]
+// [FEAT:MONITORING] [FEAT:VALIDATION]
+// NOTE: Correlation extraction - retrieves request correlation ID for distributed tracing and debugging.
 export function getCorrelationIdFromHeaders(requestHeaders: Headers): string | undefined {
   return requestHeaders.get(CORRELATION_ID_HEADER) ?? undefined;
 }
@@ -28,23 +57,38 @@ export function getCorrelationIdFromHeaders(requestHeaders: Headers): string | u
  * @param value - The value to hash (email or IP address)
  * @returns Hex-encoded SHA-256 hash
  */
+// [TRACE:FUNC=lib.actions.hashIdentifier]
+// [FEAT:SECURITY] [FEAT:PRIVACY]
+// NOTE: Core hashing function - implements salted SHA-256 hashing for privacy-preserving identifier storage.
 export function hashIdentifier(value: string, salt: string): string {
   return createHash('sha256').update(`${salt}:${value}`).digest('hex');
 }
 
+// [TRACE:FUNC=lib.actions.hashIp]
+// [FEAT:SECURITY] [FEAT:PRIVACY]
+// NOTE: IP hashing wrapper - prevents accidental salt mix-ups for IP address hashing.
 export function hashIp(value: string): string {
   // WHY: Explicit helper prevents accidental salt mix-ups for IP hashing.
   return hashIdentifier(value, IP_HASH_SALT);
 }
 
+// [TRACE:FUNC=lib.actions.hashEmail]
+// [FEAT:SECURITY] [FEAT:PRIVACY]
+// NOTE: Email hashing wrapper - provides consistent email hashing across the application.
 export function hashEmail(value: string): string {
   return hashIdentifier(value, EMAIL_HASH_SALT);
 }
 
+// [TRACE:FUNC=lib.actions.hashSpanValue]
+// [FEAT:MONITORING] [FEAT:PRIVACY]
+// NOTE: Span hashing wrapper - enables privacy-preserving correlation tracking in monitoring systems.
 export function hashSpanValue(value: string): string {
   return hashIdentifier(value, SPAN_HASH_SALT);
 }
 
+// [TRACE:FUNC=lib.actions.buildContactSpanAttributes]
+// [FEAT:MONITORING] [FEAT:PRIVACY]
+// NOTE: Span attributes builder - creates privacy-preserving monitoring attributes with hashed identifiers.
 export function buildContactSpanAttributes(emailHash: string, ipHash: string): SpanAttributes {
   return {
     email_hash: emailHash,

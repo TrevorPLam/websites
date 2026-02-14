@@ -1,3 +1,24 @@
+// File: lib/env.ts  [TRACE:FILE=lib.env]
+// Purpose: Environment variable validation using composable schemas from @repo/infra.
+//          Provides type-safe access to all environment variables with conditional validation
+//          based on Node environment and feature flags.
+//
+// Exports / Entry: validatedEnv, environment helper functions
+// Used by: All application files requiring environment variable access
+//
+// Invariants:
+// - Must validate all required environment variables before application startup
+// - Optional variables must be handled gracefully in development/test modes
+// - Type safety must be maintained for all environment variable access
+// - Feature flags must accurately reflect available integrations
+//
+// Status: @internal
+// Features:
+// - [FEAT:CONFIG] Environment variable validation and type safety
+// - [FEAT:SECURITY] Secure handling of sensitive configuration
+// - [FEAT:DEVELOPMENT] Development-friendly optional variable handling
+// - [FEAT:INTEGRATION] Feature flag management for external services
+
 import 'server-only';
 
 /**
@@ -54,6 +75,9 @@ import { validateEnv, getFeatureFlags, getEnvContext, type CompleteEnv } from '@
  * }
  * ```
  */
+// [TRACE:FUNC=lib.validatedEnv]
+// [FEAT:CONFIG] [FEAT:SECURITY] [FEAT:INTEGRATION]
+// NOTE: Core environment access - provides type-safe access to all validated environment variables.
 export const validatedEnv = validateEnv() as CompleteEnv;
 
 /**
@@ -61,6 +85,9 @@ export const validatedEnv = validateEnv() as CompleteEnv;
  *
  * @returns 'development' | 'production' | 'test'
  */
+// [TRACE:FUNC=lib.getNodeEnvironment]
+// [FEAT:CONFIG]
+// NOTE: Environment detection - provides safe access to current Node environment.
 export const getNodeEnvironment = () => validatedEnv.NODE_ENV;
 
 /**
@@ -73,6 +100,9 @@ export const getNodeEnvironment = () => validatedEnv.NODE_ENV;
  *
  * @returns true if NODE_ENV === 'production'
  */
+// [TRACE:FUNC=lib.isProduction]
+// [FEAT:CONFIG] [FEAT:SECURITY]
+// NOTE: Production detection - critical for enabling production-only features and security headers.
 export const isProduction = () => getNodeEnvironment() === 'production';
 
 /**

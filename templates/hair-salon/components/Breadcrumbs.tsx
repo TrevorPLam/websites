@@ -1,4 +1,25 @@
-
+// File: components/Breadcrumbs.tsx  [TRACE:FILE=components.breadcrumbs]
+// Purpose: Breadcrumb navigation component providing hierarchical navigation context
+//          and structured data for SEO. Generates breadcrumb trail from current
+//          pathname with proper accessibility and schema.org markup.
+//
+// Exports / Entry: Breadcrumbs component (default export)
+// Used by: Layout component and pages requiring navigation context
+//
+// Invariants:
+// - Must generate correct hrefs for all breadcrumb levels
+// - Must handle root path (/) gracefully without showing breadcrumbs
+// - Must include structured data for SEO and search engines
+// - Must be fully accessible with proper ARIA labels
+// - Current page must be marked as aria-current="page"
+//
+// Status: @public
+// Features:
+// - [FEAT:NAVIGATION] Hierarchical breadcrumb navigation
+// - [FEAT:SEO] Structured data for search engines
+// - [FEAT:ACCESSIBILITY] Screen reader and keyboard navigation support
+// - [FEAT:RESPONSIVE] Mobile-friendly breadcrumb display
+// - [FEAT:LOCALIZATION] Title case conversion for readable labels
 
 'use client';
 
@@ -9,6 +30,9 @@ import { Home } from 'lucide-react';
 
 import { getPublicBaseUrl } from '@/lib/env.public';
 
+// [TRACE:FUNC=components.breadcrumbs.titleize]
+// [FEAT:LOCALIZATION]
+// NOTE: Converts URL segments to readable title case format for breadcrumb labels.
 function titleize(segment: string) {
   return segment
     .split('-')
@@ -16,9 +40,15 @@ function titleize(segment: string) {
     .join(' ');
 }
 
+// [TRACE:FUNC=components.breadcrumbs.Breadcrumbs]
+// [FEAT:NAVIGATION] [FEAT:SEO] [FEAT:ACCESSIBILITY]
+// NOTE: Main breadcrumbs component - generates navigation trail with structured data and accessibility.
 export default function Breadcrumbs() {
   const pathname = usePathname();
 
+  // [TRACE:BLOCK=components.breadcrumbs.crumbsGeneration]
+  // [FEAT:NAVIGATION]
+  // NOTE: Generates breadcrumb items from current pathname with proper href calculation.
   const crumbs = useMemo(() => {
     if (!pathname || pathname === '/') return [];
 
@@ -31,6 +61,9 @@ export default function Breadcrumbs() {
 
   if (!crumbs.length) return null;
 
+  // [TRACE:BLOCK=components.breadcrumbs.structuredData]
+  // [FEAT:SEO]
+  // NOTE: Creates structured data for search engines following schema.org BreadcrumbList format.
   const baseUrl = getPublicBaseUrl().replace(/\/$/, '');
   const structuredData = {
     '@context': 'https://schema.org',

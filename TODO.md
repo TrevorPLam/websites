@@ -1,878 +1,783 @@
-# Marketing Monorepo — Executable Task List for AI Agents
+# Marketing Platform Monorepo — Implementation Plan
 
-> **Principle**: Share infrastructure, not design. Each phase builds on the previous. Do not skip ahead.  
-> **Last updated**: 2026-02-13
+> **Philosophy**: Share infrastructure, not design. Every client site is unique and distinct.  
+> **Architecture**: Packages = the platform. Client apps = unique compositions on that platform.  
+> **Last updated**: 2026-02-14  
+> **Reference**: [Codebase Analysis Report](./docs/CODEBASE_ANALYSIS_REPORT.md)
 >
-> **Format**: Each task is markable `- [ ]`. Main tasks contain subtasks. Every task declares: **Paths**, **Depends on**, **Verify** (tests to create or commands to run).
+> **Format**: Each task is markable `- [ ]`. Declares **Paths**, **Depends on**, **Verify**, and where applicable: **Code**, **Script**, or **Command**.
 
 ---
 
-## Phase 1 — Extract & Share Infrastructure
+## Sprint 0 — Unblock CI & Fix Critical Issues
 
-**Depends on**: none | **Verify phase**: `pnpm build` (both templates), `pnpm test` (both templates)
+**Goal**: Get CI green. Fix security vulnerabilities. Fix Docker. Everything else depends on this.  
+**Estimated effort**: <1 day  
+**Depends on**: nothing  
+**Can be largely scripted — run sequentially.**
 
-### 1.1 Create `packages/infra/` — Security & Middleware
+### 0.1 Fix TypeScript Errors Blocking CI
 
-**Depends on**: none (blocking) | **Paths**: `packages/infra/**`, `templates/hair-salon/lib/**`, `templates/hair-salon/middleware.ts`
+- [ ] **0.1.1** Fix `TS2451` and `TS7006` in hair-salon test files
 
-- [x] **1.1.1** Create `packages/infra` package
+  - **Paths**: `templates/hair-salon/features/blog/__tests__/blog.test.ts`, `templates/hair-salon/lib/__tests__/search.test.ts`
+  - **Issue**: Block-scoped variable redeclaration (`path`, `templateRoot`) and implicit `any` on callback params
+  - **Fix**: Rename conflicting variables; add explicit types to all callback parameters
+  - **Verify**: `pnpm run type-check` exits 0
+
+  ```ts
+  // Before (blog.test.ts)
+  const path = require('path');  // conflicts with @types/node global
+  posts.forEach((post) => { ... });  // implicit any
+
+  // After
+  const testPath = require('path');
+  posts.forEach((post: { slug: string; title: string }) => { ... });
+  ```
+
+- [ ] **0.1.2** Verify plumber has same test issues and fix if present
+
+  - **Paths**: `templates/plumber/features/blog/__tests__/blog.test.ts`, `templates/plumber/lib/__tests__/search.test.ts`
+  - **Verify**: `pnpm run type-check` passes for both templates
+
+### 0.2 Upgrade Sentry to Fix High-Severity Vulnerability
+
+- [ ] **0.2.1** Upgrade `@sentry/nextjs` from 8.0.0 to latest stable (10.38.0+)
+
+  - **Paths**: `templates/hair-salon/package.json`, `templates/plumber/package.json`, `packages/infra/package.json`
+  - **Depends on**: none
+  - **Script**:
+    ```bash
+    pnpm --filter=@templates/hair-salon add @sentry/nextjs@latest
+    pnpm --filter=@templates/plumber add @sentry/nextjs@latest
+    pnpm --filter=@repo/infra add -D @sentry/nextjs@latest
+    ```
+  - **Then run**: `npx @sentry/migr8@latest` to auto-fix deprecated API usage
+  - **Migration notes**: 8→9 removes some APIs (`BaseClient` → `Client`); 9→10 upgrades OpenTelemetry to v2
+  - **Verify**: `pnpm audit --audit-level high` no longer fails on rollup or @sentry/browser
+
+- [ ] **0.2.2** Update `@repo/infra` peer dependency range
 
   - **Path**: `packages/infra/package.json`
-  - **Verify**: Add to `pnpm-workspace.yaml` if needed; run `pnpm install`
-  - [x] **1.1.1a** Create `package.json` with name `@repo/infra`
-  - [x] **1.1.1b** Add `packages/infra` to workspace in `pnpm-workspace.yaml`
+  - **Change**: `"@sentry/nextjs": ">=8.0.0"` → `"@sentry/nextjs": ">=10.0.0"`
+  - **Verify**: `pnpm install` succeeds
 
-- [x] **1.1.2** Extract and migrate CSP module
+### 0.3 Upgrade Next.js to Patch 4 Moderate CVEs
 
-  - **Path**: `packages/infra/security/csp.ts`
-  - **Source**: `templates/hair-salon/lib/csp.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Create `packages/infra/__tests__/csp.test.ts` — test `createCspNonce()` returns non-empty base64; test `buildContentSecurityPolicy()` includes `strict-dynamic` in prod
-  - [x] **1.1.2a** Copy CSP logic to `packages/infra/security/csp.ts`
-  - [x] **1.1.2b** Add nonce-based CSP with `strict-dynamic`; remove `unsafe-inline`/`unsafe-eval` in production
-  - [x] **1.1.2c** Add CSP violation reporting (`report-uri` or `report-to`)
+- [ ] **0.3.1** Upgrade `next` to 15.5.12 (latest stable v15 patch)
 
-- [x] **1.1.3** Extract security headers
+  - **Paths**: `templates/hair-salon/package.json`, `templates/plumber/package.json`
+  - **Script**:
+    ```bash
+    pnpm --filter=@templates/hair-salon add next@15.5.12 eslint-config-next@15.5.12
+    pnpm --filter=@templates/plumber add next@15.5.12 eslint-config-next@15.5.12
+    ```
+  - **Also update**: `packages/infra/package.json` peer dep to `"next": "^15.5.0"`
+  - **Verify**: `pnpm audit` shows 0 high, 0 moderate for `next`; `pnpm build` passes both templates
 
-  - **Path**: `packages/infra/security/security-headers.ts`
-  - **Source**: `templates/hair-salon/lib/security-headers.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Unit test — `getSecurityHeaders('production')` returns `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`
-  - [x] **1.1.3a** Extract to `packages/infra/security/security-headers.ts`
-  - [x] **1.1.3b** Add `Permissions-Policy` (camera, microphone, geolocation)
+### 0.4 Fix Docker Build
 
-- [x] **1.1.4** Extract sanitize module
+- [ ] **0.4.1** Add `output: 'standalone'` to `next.config.js` (both templates)
 
-  - **Path**: `packages/infra/security/sanitize.ts`
-  - **Source**: `templates/hair-salon/lib/sanitize.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Move `templates/hair-salon/lib/__tests__/sanitize.test.ts` → `packages/infra/__tests__/sanitize.test.ts`; tests pass
-  - [x] **1.1.4a** Move `templates/hair-salon/lib/__tests__/sanitize.test.ts` → `packages/infra/__tests__/sanitize.test.ts`
-  - [x] **1.1.4b** Tests pass
+  - **Paths**: `templates/hair-salon/next.config.js`, `templates/plumber/next.config.js`
+  - **Code**:
+    ```js
+    const nextConfig = {
+      output: 'standalone',  // ← ADD THIS
+      transpilePackages: ['@repo/ui', '@repo/utils', '@repo/infra', '@repo/shared'],
+      // ... rest unchanged
+    };
+    ```
+  - **Also fix**: Add `@repo/infra` and `@repo/shared` to `transpilePackages` (currently missing)
+  - **Verify**: `pnpm build` produces `.next/standalone/` directory
 
-- [x] **1.1.5** Extract and enhance rate-limit module
+- [ ] **0.4.2** Create `.dockerignore`
+
+  - **Path**: `.dockerignore`
+  - **Content**:
+    ```
+    node_modules
+    .next
+    .git
+    .github
+    docs
+    *.md
+    .turbo
+    ```
+  - **Verify**: `docker build` context is significantly smaller
+
+- [ ] **0.4.3** Pin pnpm version in Dockerfile, add non-root user, add HEALTHCHECK
+
+  - **Path**: `templates/hair-salon/Dockerfile`
+  - **Verify**: `docker build -f templates/hair-salon/Dockerfile .` succeeds
+
+### 0.5 Version Alignment via pnpm Catalogs
+
+- [ ] **0.5.1** Add catalog to `pnpm-workspace.yaml`
+
+  - **Path**: `pnpm-workspace.yaml`
+  - **Code**:
+    ```yaml
+    packages:
+      - 'packages/*'
+      - 'packages/config/*'
+      - 'templates/*'
+      - 'clients/*'
+
+    catalog:
+      next: "15.5.12"
+      react: "19.2.4"
+      react-dom: "19.2.4"
+      typescript: "5.9.3"
+      "@sentry/nextjs": "^10.0.0"
+      "@types/node": "^24.0.0"
+      "@types/react": "^19.2.0"
+      "@types/react-dom": "^19.2.0"
+      zod: "^3.23.0"
+      eslint: "^9.18.0"
+    ```
+  - **Then**: Update all `package.json` files to use `"catalog:"` for these deps
+  - **Verify**: `pnpm install` succeeds; `pnpm outdated` shows consistent versions
+
+- [ ] **0.5.2** Upgrade `@types/node` to match `engines.node >= 24`
+
+  - **All package.json files**: Change `@types/node` to `catalog:` (resolves to `^24.0.0`)
+  - **Verify**: `pnpm run type-check` passes
+
+### 0.6 Verify CI is Green
+
+- [ ] **0.6.1** Run full CI pipeline locally
+
+  - **Command**: `pnpm lint; pnpm type-check; pnpm build; pnpm test; pnpm audit --audit-level high`
+  - **Verify**: All exit 0
+
+---
+
+## Sprint 1 — Security Hardening & Missing Infrastructure
+
+**Goal**: Fix all critical security gaps. Add missing infra components.  
+**Estimated effort**: 1–3 days  
+**Depends on**: Sprint 0
+
+### 1.1 Fix Booking Flow Security
+
+- [ ] **1.1.1** Use `getValidatedClientIp` instead of raw `x-forwarded-for`
+
+  - **Paths**: `templates/hair-salon/features/booking/lib/booking-actions.ts`, `templates/plumber/features/booking/lib/booking-actions.ts`
+  - **Replace**:
+    ```ts
+    // REMOVE:
+    const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown';
+    // ADD:
+    import { getValidatedClientIp } from '@repo/infra/security/request-validation';
+    const clientIp = await getValidatedClientIp(headersList, { environment: validatedEnv.NODE_ENV });
+    ```
+  - **Verify**: IP is validated and sanitized; no raw header access
+
+- [ ] **1.1.2** Replace `btoa` hashing with SHA-256
+
+  - **Same files as 1.1.1**
+  - **Replace**:
+    ```ts
+    // REMOVE:
+    hashIp: (value: string) => btoa(value).substring(0, 16),
+    // ADD (use same hashIp from contact form helpers, or don't pass — use default):
+    // The default checkRateLimit uses salted SHA-256 from @repo/infra
+    ```
+  - **Verify**: Rate limiting uses cryptographic hashing
+
+- [ ] **1.1.3** Add CSRF / origin validation to booking
+
+  - **Same files as 1.1.1**
+  - **Add before booking logic**:
+    ```ts
+    import { getBlockedSubmissionResponse } from '@/lib/actions/helpers';
+    const blocked = getBlockedSubmissionResponse(headersList, formData);
+    if (blocked) return blocked;
+    ```
+  - **Verify**: Booking submission rejects cross-origin requests
+
+- [ ] **1.1.4** Replace `console.*` with structured logger
+
+  - **Same files as 1.1.1**
+  - **Replace all** `console.log`, `console.error` with `import { logger } from '@repo/infra'`
+  - **Verify**: No `console.` calls remain in booking-actions.ts; PII not logged
+
+- [ ] **1.1.5** Sanitize booking form fields before storage
+
+  - **Paths**: `templates/*/features/booking/lib/booking-actions.ts`, `templates/*/features/booking/lib/booking-schema.ts`
+  - **Action**: Call `escapeHtml()` / `sanitizeInput()` on user inputs before storing; call `sanitizeNotes()` on notes field
+  - **Verify**: No raw HTML stored in booking data
+
+- [ ] **1.1.6** Make booking IDs non-guessable
+
+  - **Paths**: `templates/*/features/booking/lib/booking-actions.ts`
+  - **Issue**: Currently `booking_${Date.now()}_${random}` — sequential and predictable
+  - **Fix**: Use `crypto.randomUUID()` or similar cryptographic ID
+  - **Verify**: Booking IDs are opaque UUIDs
+
+- [ ] **1.1.7** Add auth/authorization for `getBookingDetails` (IDOR fix)
+
+  - **Paths**: `templates/*/features/booking/lib/booking-actions.ts` L274–288
+  - **Issue**: Any caller with a booking ID can retrieve details — no ownership check
+  - **Verify**: Only the booking owner (or admin) can access details
+
+- [ ] **1.1.8** Add CSRF to `confirmBooking` and `cancelBooking`
+
+  - **Paths**: `templates/*/features/booking/lib/booking-actions.ts` L174–270
+  - **Action**: Apply same `getBlockedSubmissionResponse` pattern as submitBookingRequest
+  - **Verify**: State-changing booking endpoints reject cross-origin requests
+
+- [ ] **1.1.9** Configure `allowedOrigins` for edge CSRF in middleware
+
+  - **Paths**: `templates/*/middleware.ts`
+  - **Action**: Pass `allowedOrigins` array to `createMiddleware()` options
+  - **Verify**: Middleware rejects unknown origins
+
+### 1.2 Activate Distributed Rate Limiting
+
+- [ ] **1.2.1** Pass Upstash env to `checkRateLimit` call chain
+
+  - **Paths**: `templates/*/lib/actions/submit.ts`, `templates/*/features/booking/lib/booking-actions.ts`
+  - **Issue**: `checkRateLimit` never receives env, so Upstash Redis is never used (D8)
+  - **Verify**: When `UPSTASH_REDIS_REST_URL` is set, rate limiting uses Redis (not in-memory)
+
+### 1.3 Create Sentry Configuration Files
+
+- [ ] **1.3.1** Create `sentry.client.config.ts` for hair-salon
+
+  - **Path**: `templates/hair-salon/sentry.client.config.ts`
+  - **Code**:
+    ```ts
+    import * as Sentry from '@sentry/nextjs';
+    import { sanitizeSentryEvent } from '@repo/infra/sentry/sanitize';
+
+    Sentry.init({
+      dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+      environment: process.env.NODE_ENV,
+      tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+      replaysSessionSampleRate: 0,
+      replaysOnErrorSampleRate: 1.0,
+      beforeSend: sanitizeSentryEvent,
+    });
+    ```
+  - **Verify**: Sentry initializes in dev; events have PII stripped
+
+- [ ] **1.3.2** Create `sentry.server.config.ts` for hair-salon
+
+  - **Path**: `templates/hair-salon/sentry.server.config.ts`
+  - **Code**: Similar to client but without replays; add `beforeSend: sanitizeSentryEvent`
+  - **Verify**: Server-side errors captured with PII redacted
+
+- [ ] **1.3.3** Fix Sentry DSN variable mismatch
+
+  - **Path**: `packages/infra/env/schemas/sentry.ts`
+  - **Issue**: Schema uses `SENTRY_DSN` but runtime checks `NEXT_PUBLIC_SENTRY_DSN`
+  - **Verify**: Variable names are consistent across schema and runtime usage
+
+- [ ] **1.3.4** Wrap `next.config.js` with `withSentryConfig`
+
+  - **Path**: `templates/hair-salon/next.config.js`
+  - **Verify**: Source maps uploaded to Sentry in production builds
+
+- [ ] **1.3.5** Copy Sentry config to plumber template
+
+  - **Verify**: Both templates have working Sentry with PII sanitization
+
+### 1.4 Add Error Recovery Pages
+
+- [ ] **1.4.1** Create `app/error.tsx` (route-level error boundary)
+
+  - **Paths**: `templates/hair-salon/app/error.tsx`, `templates/plumber/app/error.tsx`
+  - **Verify**: Rendering errors show recovery UI; Sentry captures the error
+
+- [ ] **1.4.2** Create `app/global-error.tsx` (root layout error boundary)
+
+  - **Paths**: `templates/hair-salon/app/global-error.tsx`, `templates/plumber/app/global-error.tsx`
+  - **Verify**: Root-level errors show minimal recovery page
+
+### 1.5 Add Health Check Endpoint
+
+- [ ] **1.5.1** Create `/api/health` route
+
+  - **Path**: `templates/hair-salon/app/api/health/route.ts`
+  - **Code**:
+    ```ts
+    import { NextResponse } from 'next/server';
+    export async function GET() {
+      return NextResponse.json({ status: 'ok', timestamp: new Date().toISOString() });
+    }
+    ```
+  - **Copy to**: `templates/plumber/app/api/health/route.ts`
+  - **Verify**: `curl localhost:3100/api/health` returns `{"status":"ok"}`
+
+### 1.6 Create `.env.example`
+
+- [ ] **1.6.1** Document all required and optional environment variables
+
+  - **Path**: `.env.example`
+  - **Source**: Aggregate from `packages/infra/env/schemas/*.ts`
+  - **Verify**: New developer can copy `.env.example` → `.env.local` and start developing
+
+---
+
+## Sprint 2 — Package Quality & Boundaries
+
+**Goal**: Fix all package boundary issues. Make the platform solid.  
+**Estimated effort**: 3–5 days  
+**Depends on**: Sprint 0
+
+### 2.1 Fix Package Boundaries
+
+- [ ] **2.1.1** Add `packages/integrations/*` to pnpm workspace
+
+  - **Path**: `pnpm-workspace.yaml`
+  - **Add**: `'packages/integrations/*'` to packages array
+  - **Verify**: `pnpm install`; `@repo/integrations-supabase` is recognized
+
+- [ ] **2.1.2** Declare `@repo/infra` subpath exports in `package.json`
+
+  - **Path**: `packages/infra/package.json`
+  - **Add all subpath exports that code currently imports**:
+    ```json
+    "exports": {
+      ".": "./index.ts",
+      "./client": "./index.client.ts",
+      "./context/request-context": "./context/request-context.ts",
+      "./context/request-context.server": "./context/request-context.server.ts",
+      "./security/request-validation": "./security/request-validation.ts",
+      "./sentry/sanitize": "./sentry/sanitize.ts",
+      "./sentry/client": "./sentry/client.ts",
+      "./sentry/server": "./sentry/server.ts"
+    }
+    ```
+  - **Verify**: All template imports of `@repo/infra/*` resolve correctly
+
+### 2.2 Fix Linting Infrastructure
+
+- [ ] **2.2.1** Add ESLint config to `packages/ui`
+
+  - **Path**: `packages/ui/eslint.config.mjs`
+  - **Also add**: `"@repo/eslint-config": "workspace:*"` to devDependencies
+  - **Verify**: `pnpm --filter=@repo/ui lint` runs and passes (or shows real issues)
+
+- [ ] **2.2.2** Add ESLint config to `packages/utils`
+
+  - **Path**: `packages/utils/eslint.config.mjs`
+  - **Same pattern as 2.2.1**
+  - **Verify**: `pnpm --filter=@repo/utils lint` runs and passes
+
+### 2.3 Fix Testing Infrastructure
+
+- [ ] **2.3.1** Fix root Jest config for multi-template support
+
+  - **Path**: `jest.config.js`
+  - **Issue**: `moduleNameMapper` hardcoded to `templates/hair-salon/$1`; plumber tests broken (D24)
+  - **Options**:
+    - A) Per-package Jest configs (preferred): Each template gets its own `jest.config.js` with correct `@/*` mapping; root runs via Turbo `turbo run test`
+    - B) Fix root config to detect which template a test belongs to
+  - **Verify**: `pnpm test` runs tests for both templates correctly
+
+- [ ] **2.3.2** Remove unused `jest.helpers.ts`
+
+  - **Path**: `jest.helpers.ts`
+  - **Issue**: 146-line file that is never imported
+  - **Verify**: `pnpm test` still passes after removal
+
+### 2.4 Performance Quick Wins
+
+- [ ] **2.4.1** Add `unstable_cache` for blog data
+
+  - **Paths**: `templates/hair-salon/features/blog/lib/blog.ts`, `templates/plumber/features/blog/lib/blog.ts`
+  - **Replace**: `cache(readAllPosts)` → `unstable_cache(readAllPosts, ['blog-all-posts'], { revalidate: 3600 })`
+  - **Verify**: Blog data cached across requests (not re-read from filesystem each time)
+
+- [ ] **2.4.2** Add fetch timeouts to external API calls
+
+  - **Paths**: `templates/*/features/hubspot/lib/hubspot-client.ts`, `templates/*/features/supabase/lib/supabase-leads.ts`, `templates/*/features/booking/lib/booking-providers.ts`
+  - **Add**: `signal: AbortSignal.timeout(10_000)` to all `fetch()` calls
+  - **Verify**: External API calls fail gracefully after 10 seconds instead of hanging
+
+- [ ] **2.4.3** Add periodic cleanup to `InMemoryRateLimiter`
 
   - **Path**: `packages/infra/security/rate-limit.ts`
-  - **Source**: `templates/hair-salon/lib/rate-limit.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Unit tests — sliding window, IP/user/email limiting, per-route presets
-  - [x] **1.1.5a** Extract to `packages/infra/security/rate-limit.ts`
-  - [x] **1.1.5b** Implement sliding window via `Ratelimit.slidingWindow()`
-  - [x] **1.1.5c** Export `limitByIp(prefix)` for Server Actions (IP from `headers()`)
-  - [x] **1.1.5d** Export `limitByUserId(prefix, userId)` for authenticated
-  - [x] **1.1.5e** Add per-route presets (stricter for contact/booking)
+  - **Issue**: `limits` Map grows without bound (D20)
+  - **Verify**: Old entries are cleaned up periodically
 
-- [x] **1.1.6** Extract request-validation
+### 2.5 DX Improvements
 
-  - **Path**: `packages/infra/security/request-validation.ts`
-  - **Source**: `templates/hair-salon/lib/request-validation.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Import from `@repo/infra` in one template; type-check passes
-  - [x] **1.1.6a** Extract to `packages/infra/security/request-validation.ts` with 2026 security best practices
-  - [x] **1.1.6b** Enhanced with OWASP 2026 CSRF protection, IP validation, and comprehensive logging
-  - [x] **1.1.6c** Created comprehensive test suite with Jest compatibility
-  - [x] **1.1.6d** Updated both templates to use `@repo/infra/security/request-validation`
-  - [x] **1.1.6e** Added TypeScript path mappings for proper module resolution
+- [ ] **2.5.1** Create `.env.example` (if not done in 1.6)
 
-- [x] **1.1.7** Create middleware factory
+- [ ] **2.5.2** Enable Turbo remote caching
 
-  - **Path**: `packages/infra/middleware/create-middleware.ts`
-  - **Source**: `templates/hair-salon/middleware.ts`
-  - **Depends on**: 1.1.2, 1.1.3
-  - **Verify**: Template `middleware.ts` calls `createMiddleware(options)`; run `pnpm dev` for hair-salon; CSP and security headers present in response
-  - [x] **1.1.7a** Create `createMiddleware(options)` factory
-  - [x] **1.1.7b** **CRITICAL**: Strip `x-middleware-subrequest` header in factory (CVE mitigation)
-  - [x] **1.1.7c** Add `allowedOrigins` option for CSRF
-
-- [x] **1.1.8** Extract logger
-
-  - **Path**: `packages/infra/logger/index.ts`
-  - **Source**: `templates/hair-salon/lib/logger.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Production mode logs JSON format (Vercel Log Drain compatible)
-  - [x] **1.1.8a** Extracted to `packages/infra/logger`; client-safe logger in `logger/client.ts` for client components
-  - [x] **1.1.8b** Unit test for JSON format in production mode
-
-- [x] **1.1.9** Extract request-context
-
-  - **Path**: `packages/infra/context/request-context.ts`, `packages/infra/context/request-context.server.ts`
-  - **Source**: `templates/hair-salon/lib/request-context.ts`, `lib/request-context.server.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Import in one template; request ID available in logs
-  - [x] **1.1.9a** Stub (request-context.ts) and server (request-context.server.ts) extracted
-
-- [x] **1.1.10** Extract Sentry modules
-
-  - **Path**: `packages/infra/sentry/client.ts`, `server.ts`, `sanitize.ts`
-  - **Source**: `templates/hair-salon/lib/sentry-client.ts`, `sentry-server.ts`, `sentry-sanitize.ts`
-  - **Depends on**: 1.1.1
-  - **Verify**: Sentry initialization works in hair-salon dev
-  - [x] **1.1.10a** Client in `sentry/client.ts` (client barrel only), server and sanitize in main barrel
-
-- [x] **1.1.11** Create barrel exports
-
-  - **Path**: `packages/infra/index.ts`, `packages/infra/index.client.ts`
-  - **Depends on**: 1.1.2–1.1.10
-  - **Verify**: `import { createCspNonce } from '@repo/infra'` works; client barrel excludes server-only code
-  - [x] **1.1.11a** Export map includes `./context/request-context` and `./context/request-context.server`
-
-- [x] **1.1.12** Migrate hair-salon to `@repo/infra`
-
-  - **Paths**: `templates/hair-salon/**/*.ts`, `templates/hair-salon/middleware.ts`
-  - **Depends on**: 1.1.11
-  - **Verify**: `pnpm build` (hair-salon), `pnpm test`, no imports from `@/lib/` for extracted modules
-  - [x] **1.1.12a** All extracted modules now imported from `@repo/infra` or `@repo/infra/client`
-
-- [x] **1.1.13** Migrate plumber to `@repo/infra`
-
-  - **Paths**: `templates/plumber/**/*.ts`, `templates/plumber/middleware.ts`
-  - **Depends on**: 1.1.12
-  - **Verify**: `pnpm build` (plumber), `pnpm test`
-  - [x] **1.1.13a** Plumber uses `createMiddleware` and all infra imports; build and test pass
-
-- [x] **1.1.14** Delete duplicated lib files from templates
-  - **Paths**: `templates/hair-salon/lib/`, `templates/plumber/lib/`
-  - **Depends on**: 1.1.13
-  - **Verify**: No duplicate csp, security-headers, sanitize, rate-limit, request-validation, logger, request-context, sentry-\*; `pnpm build` and `pnpm test` pass for both
-  - [x] **1.1.14a** Removed duplicate files; template sanitize tests updated to use `@repo/infra`
+  - **Commands**: `npx turbo login` → `npx turbo link`
+  - **CI**: Add `TURBO_TOKEN` and `TURBO_TEAM` to GitHub Actions secrets
+  - **Path**: `.github/workflows/ci.yml` — ensure `turbo` commands use remote cache
+  - **Verify**: Second CI run shows cache hits
 
 ---
 
-### 1.2 Create `packages/infra/env/` — Env Validation
+## Sprint 3 — Complete Existing Extractions
 
-**Depends on**: 1.1.1 | **Paths**: `packages/infra/env/**`, `templates/*/lib/env.ts`
+**Goal**: Finish the in-progress package extractions from the original roadmap.  
+**Estimated effort**: 1–2 weeks  
+**Depends on**: Sprint 0 (CI green)
 
-- [x] **1.2.1** Create base env schema
+### 3.1 Wire Templates to `@repo/integrations-supabase`
 
-  - **Path**: `packages/infra/env/schemas/base.ts`
-  - **Verify**: Zod schema with `NODE_ENV`, `SITE_URL`, `SITE_NAME`, `ANALYTICS_ID`; use `z.coerce`/`.transform()` where needed
+**Previously**: TODO 1.3.4 (incomplete)
 
-- [x] **1.2.2** Create rate-limit env schema
+- [ ] **3.1.1** Update templates to import from `@repo/integrations-supabase`
 
-  - **Path**: `packages/infra/env/schemas/rate-limit.ts`
-  - **Verify**: `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` (optional)
-
-- [x] **1.2.3** Create supabase, hubspot, booking, sentry env schemas
-
-  - **Paths**: `packages/infra/env/schemas/supabase.ts`, `hubspot.ts`, `booking.ts`, `sentry.ts`
-  - **Verify**: Each schema validates; compose via `.merge()`
-
-- [x] **1.2.4** Create public env schema
-
-  - **Path**: `packages/infra/env/schemas/public.ts`
-  - **Verify**: `NEXT_PUBLIC_*` vars only; safe for client
-
-- [x] **1.2.5** Create validate and compose helpers
-
-  - **Path**: `packages/infra/env/validate.ts`, `packages/infra/env/types.ts`
-  - **Verify**: `z.infer<typeof schema>` for types; fail early with descriptive Zod errors
-
-- [x] **1.2.6** Update templates to use composable env
-  - **Paths**: `templates/hair-salon/lib/env.ts`, `templates/plumber/lib/env.ts`
-  - **Depends on**: 1.2.1–1.2.5
-  - **Verify**: `pnpm dev` and `pnpm build` for both; env validation runs at startup
-
----
-
-### 1.3 Create `packages/integrations/supabase/`
-
-**Depends on**: 1.1.1 | **Paths**: `packages/integrations/supabase/**`, `templates/hair-salon/features/supabase/**`
-
-- [x] **1.3.1** Create package
-
-  - **Path**: `packages/integrations/supabase/package.json`
-  - **Verify**: `pnpm install`; package builds
-
-- [x] **1.3.2** Move supabase-leads and client
-
-  - **Paths**: `packages/integrations/supabase/leads.ts`, `client.ts`
-  - **Source**: `templates/hair-salon/features/supabase/lib/`
-  - **Verify**: Import from `@repo/integrations-supabase` in submit action; lead insert works (or mocked)
-
-- [x] **1.3.3** Export types
-
-  - **Path**: `packages/integrations/supabase/types.ts`
-  - **Verify**: `SupabaseLeadRow` etc. exported
-
-- [ ] **1.3.4** Update templates and delete duplicated feature
   - **Paths**: `templates/*/lib/actions/submit.ts`, `templates/*/features/supabase/`
-  - **Verify**: `pnpm build` both; no `features/supabase` dir in templates
+  - **Depends on**: 2.1.1 (package in workspace)
+  - **Verify**: `pnpm build` both; Supabase lead insert works
 
----
+- [ ] **3.1.2** Delete duplicated `features/supabase/` from templates
 
-### 1.4 Create `packages/integrations/hubspot/`
+  - **Verify**: No `features/supabase` dir in templates; builds pass
 
-**Depends on**: 1.1.1 | **Paths**: `packages/integrations/hubspot/**`, `templates/hair-salon/features/hubspot/**`, `templates/hair-salon/lib/actions/hubspot.ts`
+### 3.2 Extract HubSpot Integration
 
-- [ ] **1.4.1** Create package
+**Previously**: TODO 1.4
+
+- [ ] **3.2.1** Create `packages/integrations/hubspot/`
 
   - **Path**: `packages/integrations/hubspot/package.json`
+  - **Source**: `templates/hair-salon/features/hubspot/`, `templates/hair-salon/lib/actions/hubspot.ts`
   - **Verify**: `pnpm install`; package builds
 
-- [ ] **1.4.2** Move hubspot-client and sync logic
+- [ ] **3.2.2** Move client, sync logic, types
 
-  - **Paths**: `packages/integrations/hubspot/client.ts`, `sync.ts`
-  - **Source**: `templates/hair-salon/features/hubspot/`, `lib/actions/hubspot.ts`
-  - **Verify**: Retry/upsert logic preserved
+  - **Paths**: `packages/integrations/hubspot/client.ts`, `sync.ts`, `types.ts`
+  - **Verify**: Retry/upsert logic preserved; templates import from package
 
-- [ ] **1.4.3** Export types and update templates
-  - **Path**: `packages/integrations/hubspot/types.ts`
-  - **Verify**: `pnpm build` both; delete `features/hubspot` from templates
+- [ ] **3.2.3** Update templates and delete duplicated feature
 
----
+  - **Verify**: `pnpm build` both; no `features/hubspot` in templates
 
-### 1.5 Create `packages/integrations/booking-providers/`
+### 3.3 Extract Booking Providers
 
-**Depends on**: 1.1.1 | **Paths**: `packages/integrations/booking-providers/**`, `templates/hair-salon/features/booking/lib/booking-providers.ts`
+**Previously**: TODO 1.5
 
-- [ ] **1.5.1** Create package and move providers
+- [ ] **3.3.1** Create `packages/integrations/booking-providers/`
 
-  - **Paths**: `packages/integrations/booking-providers/package.json`, `providers.ts`, `factory.ts`
   - **Source**: `templates/hair-salon/features/booking/lib/booking-providers.ts`
-  - **Verify**: `MindbodyProvider`, `VagaroProvider`, `SquareProvider`, `BookingProviders` factory
+  - **Refactor**: Use registry/plugin pattern instead of closed factory (fixes D23)
+  - **Code**:
+    ```ts
+    // Registry pattern (open for extension)
+    const providerRegistry = new Map<string, BookingProvider>();
+    export function registerProvider(name: string, provider: BookingProvider) {
+      providerRegistry.set(name, provider);
+    }
+    export function getProvider(name: string): BookingProvider | undefined {
+      return providerRegistry.get(name);
+    }
+    ```
+  - **Verify**: Providers are extensible without modifying source
 
-- [ ] **1.5.2** Add Cal.com adapter
+### 3.4 Extract Analytics
 
-  - **Path**: `packages/integrations/booking-providers/cal-com.ts`
-  - **Verify**: Cal.com provider implements same interface
+**Previously**: TODO 1.6
 
-- [ ] **1.5.3** Update hair-salon and delete duplicated code
-  - **Paths**: `templates/hair-salon/features/booking/`
-  - **Verify**: `pnpm build` hair-salon; booking flow works or mocked
+- [ ] **3.4.1** Create `packages/integrations/analytics/`
 
----
-
-### 1.6 Create `packages/integrations/analytics/`
-
-**Depends on**: 1.1.1 | **Paths**: `packages/integrations/analytics/**`, `templates/hair-salon/features/analytics/**`
-
-- [ ] **1.6.1** Create package and move analytics logic
-
-  - **Paths**: `packages/integrations/analytics/package.json`, `tracking.ts`, `consent.ts`, `vercel.ts`
   - **Source**: `templates/hair-salon/features/analytics/`
-  - **Verify**: Consent management (GDPR/CCPA); Vercel Web Analytics + Speed Insights helpers
-
-- [ ] **1.6.2** Update templates and delete duplicated feature
-  - **Paths**: `templates/*/`
-  - **Verify**: `pnpm build` both; no `features/analytics` in templates
+  - **Include**: Tracking, consent management (GDPR), Vercel analytics helpers
+  - **Verify**: `pnpm build`; analytics consent works
 
 ---
 
-### 1.7 Extract Shared Feature Packages
+## Sprint 4 — Architecture Evolution (Platform Model)
 
-**Depends on**: 1.3, 1.4, 1.5, 1.6
+**Goal**: Restructure repo from template-centric to platform-centric.  
+**Estimated effort**: 1 week  
+**Depends on**: Sprint 3
 
-#### 1.7.1 `packages/features/contact/`
+### 4.1 Restructure Directories
 
-- [ ] **1.7.1.1** Create package
+- [ ] **4.1.1** Create `apps/` directory for client sites
 
-  - **Path**: `packages/features/contact/package.json`
-  - **Verify**: `pnpm install`
+  - **Command**: `mkdir apps`
+  - **Update**: `pnpm-workspace.yaml` — add `'apps/*'`
 
-- [ ] **1.7.1.2** Move schema and ContactForm
+- [ ] **4.1.2** Move templates to `reference/` (or keep as `templates/` but clearly marked as reference)
 
-  - **Paths**: `packages/features/contact/schema.ts`, `ContactForm.tsx`
-  - **Source**: `templates/hair-salon/features/contact/`, `lib/actions/submit.ts` + helpers
-  - **Verify**: Schema validates; form renders
+  - **Decision**: Either rename `templates/` → `reference/` or add a `README.md` to `templates/` explaining they are reference implementations, not starting points for clients
+  - **Update**: `pnpm-workspace.yaml`, `turbo.json`, `.github/workflows/ci.yml`
+  - **Verify**: `pnpm build` passes; CI still works
 
-- [ ] **1.7.1.3** Move server actions (compose integrations + rate-limit)
+- [ ] **4.1.3** Deprecate `templates/plumber`
 
-  - **Path**: `packages/features/contact/actions.ts`
-  - **Verify**: Rate limit applied; Supabase + HubSpot used
+  - **Issue**: Incomplete fork with hair-salon content (73% identical). Maintaining two near-identical templates pushes toward sameness.
+  - **Action**: Add deprecation notice to `templates/plumber/README.md`; optionally move to `archive/plumber`
+  - **Verify**: Team agrees on deprecation plan
 
-- [ ] **1.7.1.4** Update both templates
-  - **Paths**: `templates/hair-salon/**`, `templates/plumber/**`
-  - **Verify**: `pnpm build` both; contact form submits
+### 4.2 Create Client Site Scaffold
 
-#### 1.7.2 `packages/features/booking/`
+- [ ] **4.2.1** Document the "new client site" process
 
-- [ ] **1.7.2.1** Create package; move schema, BookingForm, actions
+  - **Path**: `docs/NEW_CLIENT_SITE.md`
+  - **Content**: Step-by-step for starting a new client app that composes packages
+  - **Sections**: Init Next.js app → add workspace deps → configure `site.config.ts` → build unique pages
+  - **Verify**: A developer can follow the doc to create a new client site
 
-  - **Paths**: `packages/features/booking/package.json`, `schema.ts`, `BookingForm.tsx`, `actions.ts`
-  - **Source**: `templates/hair-salon/features/booking/`
-  - **Verify**: Composes `@repo/integrations-booking-providers`
+- [ ] **4.2.2** Create a minimal client site scaffold (optional)
 
-- [ ] **1.7.2.2** Update hair-salon
-  - **Paths**: `templates/hair-salon/**`
-  - **Verify**: `pnpm build`; booking flow works
+  - **Path**: `apps/_scaffold/` (or a script)
+  - **Contains**: Bare `package.json` with platform deps, `next.config.js`, `site.config.ts` skeleton, `middleware.ts` using `createMiddleware`, `app/layout.tsx`, `app/page.tsx`
+  - **Note**: This is NOT a template to copy — it's the minimal wiring to get platform packages working
+  - **Verify**: `pnpm build` succeeds for scaffold app
 
-#### 1.7.3 `packages/features/blog/`
+### 4.3 CI/CD for Multi-App
 
-- [ ] **1.7.3.1** Create package; move MDX utilities, BlogPostCard
+- [ ] **4.3.1** Update CI to handle `apps/*` alongside `templates/*`
 
-  - **Paths**: `packages/features/blog/package.json`, `mdx.ts`, `BlogPostCard.tsx`
-  - **Source**: `templates/hair-salon/features/blog/`
-  - **Verify**: Move `features/blog/__tests__/blog.test.ts` → `packages/features/blog/__tests__/blog.test.ts`; tests pass
+  - **Path**: `.github/workflows/ci.yml`
+  - **Add**: Turbo filter for affected builds: `turbo run build --filter=...[HEAD^1]`
+  - **Verify**: CI only builds changed apps/packages
 
-- [ ] **1.7.3.2** Update both templates; keep content in `templates/*/content/blog/`
-  - **Verify**: `pnpm build` both; blog pages render
+- [ ] **4.3.2** Parallelize CI jobs
 
-#### 1.7.4 `packages/features/search/`
-
-- [ ] **1.7.4.1** Create package; move index builder, SearchOverlay, SearchResults
-  - **Paths**: `packages/features/search/package.json`, `index.ts`, `SearchOverlay.tsx`, `SearchResults.tsx`
-  - **Source**: `templates/hair-salon/features/search/`, `lib/search.ts`
-  - **Verify**: Move search tests if any; `pnpm build` both
-
-#### 1.7.5 `packages/features/gallery/` (NEW)
-
-- [ ] **1.7.5.1** Create package
-
-  - **Path**: `packages/features/gallery/package.json`
-  - **Verify**: `pnpm install`
-
-- [ ] **1.7.5.2** Implement layout components
-  - **Paths**: `packages/features/gallery/MasonryGrid.tsx`, `UniformGrid.tsx`, `Lightbox.tsx`, `GalleryCarousel.tsx`, `FilterBar.tsx`, `BeforeAfterSlider.tsx`, `GalleryItem.tsx`
-  - **Verify**: Unit test for at least one component (e.g. Lightbox opens/closes)
-
-#### 1.7.6 `packages/features/team/` (NEW)
-
-- [ ] **1.7.6.1** Create package; implement TeamGrid, TeamCarousel, PersonProfile, Avatar
-  - **Paths**: `packages/features/team/package.json`, `TeamGrid.tsx`, `TeamCarousel.tsx`, `PersonProfile.tsx`, `Avatar.tsx`
-  - **Verify**: Component renders with sample data
-
-#### 1.7.7 `packages/features/reviews/` (NEW)
-
-- [ ] **1.7.7.1** Create package; implement ReviewCard, ReviewCarousel, StarRating, AggregateRating, JSON-LD
-  - **Paths**: `packages/features/reviews/package.json`, `ReviewCard.tsx`, `ReviewCarousel.tsx`, `StarRating.tsx`, `AggregateRating.tsx`, `schema.ts`, `aggregate.ts`
-  - **Verify**: `AggregateRating` JSON-LD validates in Rich Results Test
+  - **Path**: `.github/workflows/ci.yml`
+  - **Change**: Run lint, type-check, test as parallel jobs (not sequential steps)
+  - **Verify**: CI completes faster
 
 ---
 
-### 1.8 Clean Up Templates Post-Extraction
+## Sprint 5 — Major Dependency Upgrades
 
-**Depends on**: 1.1–1.7 complete
+**Goal**: Modernize the dependency stack.  
+**Estimated effort**: 1–2 weeks (can be done incrementally)  
+**Depends on**: Sprint 0 (CI green), Sprint 2 (package boundaries fixed)
 
-- [ ] **1.8.1** Remove extracted features and lib from templates
+### 5.1 Upgrade TypeScript (Low Risk)
 
-  - **Paths**: `templates/hair-salon/features/`, `templates/hair-salon/lib/`, `templates/plumber/features/`, `templates/plumber/lib/`
-  - **Verify**: Only `app/`, `components/`, `content/`, `site.config.ts`, `middleware.ts`, `globals.css`, configs remain
+- [ ] **5.1.1** Upgrade to TypeScript 5.9.3
 
-- [ ] **1.8.2** Full verification
-  - **Verify**: `pnpm build` (both), `pnpm test` (both), `pnpm type-check` (both)
+  - **Command**: Update catalog in `pnpm-workspace.yaml`; `pnpm install`
+  - **New features**: `import defer` support, better hovers, perf improvements
+  - **Verify**: `pnpm type-check` passes
 
----
+### 5.2 Upgrade Turbo (Low Risk)
 
-### 1.9 Address Codebase Analysis Issues
+- [ ] **5.2.1** Upgrade to Turbo 2.8.8
 
-**Depends on**: none (parallel to 1.2–1.8) | **Reference**: [CODEBASE_ANALYSIS.md](./CODEBASE_ANALYSIS.md) §9
+  - **Command**: `pnpm add -D -w turbo@latest`
+  - **Verify**: `pnpm build` passes; remote caching works
 
-- [ ] **1.9.1** Plumber content — /about
+### 5.3 Upgrade React (Low Risk)
 
-  - **Path**: `templates/plumber/app/about/page.tsx`
-  - **Verify**: Content is plumber-specific (company story, values, stats); no "haircut" references
+- [ ] **5.3.1** Upgrade React and React DOM to 19.2.4
 
-- [ ] **1.9.2** Plumber content — /services/\*
+  - **Command**: Update catalog; `pnpm install`
+  - **Verify**: `pnpm build` passes; no runtime regressions
 
-  - **Paths**: `templates/plumber/app/services/page.tsx`, `templates/plumber/app/services/[slug]/page.tsx`
-  - **Verify**: Services: residential-repair, commercial-service, emergency-response, maintenance-plan
+### 5.4 Upgrade Tailwind CSS to v4 (High Risk — Plan Carefully)
 
-- [ ] **1.9.3** Plumber content — /pricing, /team, /gallery, /book
+- [ ] **5.4.1** Run automated migration tool
 
-  - **Paths**: `templates/plumber/app/pricing/page.tsx`, `team/page.tsx`, `gallery/page.tsx`, `book/page.tsx`
-  - **Verify**: Plumber pricing, staff, work photos, quote/booking copy
+  - **Command**: `npx @tailwindcss/upgrade` (in each template directory)
+  - **Key changes**:
+    - `tailwind.config.js` → CSS-based `@theme` directives
+    - `@tailwind base/components/utilities` → CSS imports
+    - PostCSS config changes
+    - Some utility class renames
+  - **Verify**: All pages render correctly; no missing styles
 
-- [ ] **1.9.4** Plumber content — Blog and SEO
+- [ ] **5.4.2** Update `packages/ui` for Tailwind v4
 
-  - **Paths**: `templates/plumber/content/blog/`, `templates/plumber/app/layout.tsx`
-  - **Verify**: Plumber topics or redirect; layout keywords for plumber
+  - **Verify**: All UI components render correctly with new Tailwind
 
-- [ ] **1.9.5** Public assets — hair-salon
+- [ ] **5.4.3** Update `tailwind-merge` to v3
 
-  - **Path**: `templates/hair-salon/public/`
-  - **Verify**: Add or document: `manifest.json`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `logo.png`, `images/hero-salon.svg`
+  - **Required for**: Tailwind v4 class format compatibility
+  - **Verify**: `cn()` utility works correctly
 
-- [ ] **1.9.6** Public assets — plumber
+### 5.5 Upgrade Zod to v4 (Medium Risk)
 
-  - **Path**: `templates/plumber/public/`
-  - **Verify**: Plumber equivalents
+- [ ] **5.5.1** Run codemod and upgrade
 
-- [ ] **1.9.7** Port conflict
+  - **Command**: `npx zod-v3-to-v4` then `pnpm add zod@^4.0.0` via catalog
+  - **Key changes**: `message` param → `error` param; `errorMap` → `error`
+  - **Impact**: All env schemas in `packages/infra/env/schemas/`, all form schemas
+  - **Verify**: `pnpm type-check` and `pnpm build` pass; env validation still works
 
-  - **Path**: `templates/plumber/package.json`
-  - **Verify**: `"dev": "next dev -p 3101"`; both templates run simultaneously without conflict
+### 5.6 Upgrade ESLint to v10 (Medium Risk)
 
-- [ ] **1.9.8** Jest moduleNameMapper for plumber
+- [ ] **5.6.1** Upgrade ESLint and plugins
 
-  - **Path**: `jest.config.js` or `templates/plumber/jest.config.js`
-  - **Verify**: Plumber tests resolve `@/*` to `templates/plumber/*`
-
-- [ ] **1.9.9** Docker — add plumber or document
-
-  - **Path**: `docker-compose.yml`
-  - **Verify**: Plumber service on 3101 or README documents single-template Docker
-
-- [ ] **1.9.10** @repo/ui unit tests
-
-  - **Paths**: `packages/ui/src/Button/__tests__/Button.test.tsx`, etc.
-  - **Verify**: Unit tests for Button, Card, Container, Section, Input, Select, Textarea, Accordion; `pnpm test` passes
-
-- [ ] **1.9.11** Documentation alignment
-  - **Path**: `docs/`
-  - **Verify**: Docs reflect current state; mark "planned" vs "done" where aspirational
+  - **Command**: Update catalog to `eslint: "^10.0.0"`; upgrade `@typescript-eslint/*` to compatible versions
+  - **Key change**: `.eslintrc.*` completely removed (repo already uses flat config)
+  - **Verify**: `pnpm lint` passes; ESLint 10's per-file config lookup works correctly in monorepo
 
 ---
 
-## Phase 2 — Expand UI Primitives & Compositions
+## Sprint 6 — UI Component Library Enhancement
 
-**Depends on**: Phase 1 (or at least 1.1) | **Paths**: `packages/ui/**`
+**Goal**: Build out the design system primitives that enable unique client sites.  
+**Estimated effort**: 2–4 weeks  
+**Depends on**: Sprint 0 (CI green)  
+**Note**: This can run in parallel with Sprints 1–4.
 
-### 2.1 Audit Current Primitives
+### 6.1 Audit & Foundation
 
-- [ ] **2.1.1** Review 8 existing components
+- [ ] **6.1.1** Audit current 8 UI components (Button, Card, Container, Section, Input, Select, Textarea, Accordion)
+- [ ] **6.1.2** Evaluate Radix UI or shadcn/ui as headless a11y layer
+- [ ] **6.1.3** Add per-component exports for tree-shaking (`package.json` exports field)
+- [ ] **6.1.4** Add ESLint config and unit tests to `packages/ui` (blocked by 2.2.1)
 
-  - **Paths**: `packages/ui/src/`
-  - **Verify**: Document in `packages/ui/README.md` — Button, Card, Container, Section, Input, Select, Textarea, Accordion
+### 6.2 Content Primitives
 
-- [ ] **2.1.2** Document gaps vs catalog
+- [ ] **6.2.1** Badge — `packages/ui/src/Badge/Badge.tsx`
+- [ ] **6.2.2** Avatar + AvatarGroup — `packages/ui/src/Avatar/`
+- [ ] **6.2.3** Divider — `packages/ui/src/Divider/Divider.tsx`
+- [ ] **6.2.4** Image (Next.js wrapper) — `packages/ui/src/Image/Image.tsx`
+- [ ] **6.2.5** VisuallyHidden — `packages/ui/src/VisuallyHidden/VisuallyHidden.tsx`
 
-  - **Path**: `packages/ui/README.md`
-  - **Verify**: List missing primitives needed for catalog patterns
+### 6.3 Layout Primitives
 
-- [ ] **2.1.3** Evaluate Radix UI adoption
-  - **Verify**: Decision doc — use Radix as headless a11y layer under styled components?
+- [ ] **6.3.1** Stack / VStack — `packages/ui/src/Stack/Stack.tsx`
+- [ ] **6.3.2** Inline / HStack — `packages/ui/src/Inline/Inline.tsx`
+- [ ] **6.3.3** Grid — `packages/ui/src/Grid/Grid.tsx`
+- [ ] **6.3.4** AspectRatio — `packages/ui/src/AspectRatio/AspectRatio.tsx`
 
----
+### 6.4 Input Primitives
 
-### 2.2 Add Content Primitives
+- [ ] **6.4.1** Checkbox — `packages/ui/src/Checkbox/Checkbox.tsx`
+- [ ] **6.4.2** Radio + RadioGroup — `packages/ui/src/Radio/`
+- [ ] **6.4.3** Switch — `packages/ui/src/Switch/Switch.tsx`
+- [ ] **6.4.4** DatePicker — `packages/ui/src/DatePicker/DatePicker.tsx`
+- [ ] **6.4.5** FileUpload — `packages/ui/src/FileUpload/FileUpload.tsx`
 
-**Depends on**: 2.1 | **Paths**: `packages/ui/src/`
+### 6.5 Feedback Components
 
-- [ ] **2.2.1** Badge — **Path**: `packages/ui/src/Badge/Badge.tsx` — **Verify**: Unit test; 24×24px min touch if interactive
-- [ ] **2.2.2** Avatar — **Path**: `packages/ui/src/Avatar/Avatar.tsx` — **Verify**: Image + fallback initials; sizes
-- [ ] **2.2.3** AvatarGroup — **Path**: `packages/ui/src/AvatarGroup/AvatarGroup.tsx` — **Verify**: Overlapping stack
-- [ ] **2.2.4** Divider/Separator — **Path**: `packages/ui/src/Divider/Divider.tsx` — **Verify**: Horizontal/vertical
-- [ ] **2.2.5** Image (Next.js wrapper) — **Path**: `packages/ui/src/Image/Image.tsx` — **Verify**: Loading states, aspect ratio, AVIF
-- [ ] **2.2.6** Icon (Lucide wrapper) — **Path**: `packages/ui/src/Icon/Icon.tsx` — **Verify**: Consistent sizing
-- [ ] **2.2.7** VisuallyHidden — **Path**: `packages/ui/src/VisuallyHidden/VisuallyHidden.tsx` — **Verify**: Screen reader announces; visually hidden
+- [ ] **6.5.1** Toast (wrap Sonner) — `packages/ui/src/Toast/`
+- [ ] **6.5.2** Alert — `packages/ui/src/Alert/Alert.tsx`
+- [ ] **6.5.3** Dialog/Modal — `packages/ui/src/Dialog/`
+- [ ] **6.5.4** Drawer — `packages/ui/src/Drawer/Drawer.tsx`
+- [ ] **6.5.5** Tooltip + Popover — `packages/ui/src/Tooltip/`, `Popover/`
+- [ ] **6.5.6** Skeleton + Spinner — `packages/ui/src/Skeleton/`, `Spinner/`
 
----
+### 6.6 Compositions
 
-### 2.3 Add Layout Primitives
+- [ ] **6.6.1** FormField (label + input + helper + error) — `packages/ui/src/FormField/`
+- [ ] **6.6.2** NavigationMenu — `packages/ui/src/NavigationMenu/`
+- [ ] **6.6.3** MobileMenu — `packages/ui/src/MobileMenu/`
+- [ ] **6.6.4** Breadcrumb (with JSON-LD) — `packages/ui/src/Breadcrumb/`
+- [ ] **6.6.5** Tabs, Pagination, Table — `packages/ui/src/Tabs/`, etc.
 
-- [ ] **2.3.1** Stack — **Path**: `packages/ui/src/Stack/Stack.tsx` — **Verify**: Gap, align, justify props
-- [ ] **2.3.2** Inline/HStack — **Path**: `packages/ui/src/Inline/Inline.tsx` — **Verify**: Horizontal spacing
-- [ ] **2.3.3** Grid — **Path**: `packages/ui/src/Grid/Grid.tsx` — **Verify**: Responsive columns
-- [ ] **2.3.4** Spacer — **Path**: `packages/ui/src/Spacer/Spacer.tsx` — **Verify**: Flexible space
-- [ ] **2.3.5** AspectRatio — **Path**: `packages/ui/src/AspectRatio/AspectRatio.tsx` — **Verify**: Consistent ratio containers
+### 6.7 Hooks
 
----
+- [ ] **6.7.1** useMediaQuery, useScrollPosition, useDebounce, useClickOutside, useReducedMotion
+- [ ] **6.7.2** useFocusTrap, useIntersectionObserver
 
-### 2.4 Add Input Primitives
+### 6.8 Accessibility (WCAG 2.2 AA)
 
-- [ ] **2.4.1** Checkbox — **Path**: `packages/ui/src/Checkbox/Checkbox.tsx` — **Verify**: Label, error, indeterminate; 24×24px touch
-- [ ] **2.4.2** Radio + RadioGroup — **Path**: `packages/ui/src/Radio/` — **Verify**: Label, description; 24×24px
-- [ ] **2.4.3** Switch — **Path**: `packages/ui/src/Switch/Switch.tsx` — **Verify**: Toggle; 24×24px
-- [ ] **2.4.4** DatePicker, TimePicker — **Paths**: `packages/ui/src/DatePicker/`, `TimePicker/` — **Verify**: 24×24px
-- [ ] **2.4.5** FileUpload — **Path**: `packages/ui/src/FileUpload/FileUpload.tsx` — **Verify**: Drag-and-drop, preview
-- [ ] **2.4.6** Slider — **Path**: `packages/ui/src/Slider/Slider.tsx` — **Verify**: Single + range; 24×24px
-
----
-
-### 2.5 Add Feedback Components
-
-- [ ] **2.5.1** Toast — **Path**: `packages/ui/src/Toast/` — **Verify**: Wrap Sonner or custom; unit test
-- [ ] **2.5.2** Alert — **Path**: `packages/ui/src/Alert/Alert.tsx` — **Verify**: info, warning, error, success
-- [ ] **2.5.3** Modal/Dialog — **Path**: `packages/ui/src/Dialog/` — **Verify**: Radix base; focus trap
-- [ ] **2.5.4** Drawer — **Path**: `packages/ui/src/Drawer/Drawer.tsx` — **Verify**: Slide-in panel
-- [ ] **2.5.5** Tooltip, Popover — **Paths**: `packages/ui/src/Tooltip/`, `Popover/` — **Verify**: Accessible
-- [ ] **2.5.6** Skeleton, Spinner, ProgressBar — **Paths**: `packages/ui/src/Skeleton/`, `Spinner/`, `ProgressBar/` — **Verify**: Loading states
-
----
-
-### 2.6 Add Compositions
-
-- [ ] **2.6.1** FormField — **Path**: `packages/ui/src/FormField/FormField.tsx` — **Verify**: Label + input + helper + error
-- [ ] **2.6.2** FormGroup — **Path**: `packages/ui/src/FormGroup/FormGroup.tsx` — **Verify**: Group related fields
-- [ ] **2.6.3** NavigationMenu — **Path**: `packages/ui/src/NavigationMenu/` — **Verify**: Radix base; mega menu support
-- [ ] **2.6.4** MobileMenu — **Path**: `packages/ui/src/MobileMenu/MobileMenu.tsx` — **Verify**: Hamburger + drawer; variants
-- [ ] **2.6.5** Breadcrumb — **Path**: `packages/ui/src/Breadcrumb/Breadcrumb.tsx` — **Verify**: JSON-LD BreadcrumbList output
-- [ ] **2.6.6** Tabs, Pagination, Table, DescriptionList — **Paths**: `packages/ui/src/Tabs/`, etc. — **Verify**: Unit tests
-- [ ] **2.6.7** PhoneInput, Map — **Paths**: `packages/ui/src/PhoneInput/`, `Map/` — **Verify**: Formatted input; map embed
+- [ ] **6.8.1** SkipToContent — `packages/ui/src/SkipToContent/`
+- [ ] **6.8.2** FocusTrap — `packages/ui/src/FocusTrap/`
+- [ ] **6.8.3** LiveRegion — `packages/ui/src/LiveRegion/`
+- [ ] **6.8.4** Audit all components — visible focus, 24×24px touch targets, aria attributes
 
 ---
 
-### 2.7 Add Accessibility Helpers (WCAG 2.2 AA)
+## Sprint 7 — Feature Packages
 
-- [ ] **2.7.1** SkipToContent — **Path**: `packages/ui/src/SkipToContent/SkipToContent.tsx` — **Verify**: Focuses `<main>` on activate
-- [ ] **2.7.2** ScreenReaderOnly — **Path**: `packages/ui/src/ScreenReaderOnly/ScreenReaderOnly.tsx` — **Verify**: Visually hidden, announced
-- [ ] **2.7.3** FocusTrap — **Path**: `packages/ui/src/FocusTrap/FocusTrap.tsx` — **Verify**: Modals/drawers trap focus
-- [ ] **2.7.4** LiveRegion — **Path**: `packages/ui/src/LiveRegion/LiveRegion.tsx` — **Verify**: aria-live announcements
-- [ ] **2.7.5** FocusNotObscured — **Path**: `packages/ui/src/FocusNotObscured/FocusNotObscured.tsx` — **Verify**: WCAG 2.4.11
-- [ ] **2.7.6** Audit all components — **Verify**: Visible focus (no `outline: none`); 24×24px touch targets; drag alternatives where needed
+**Goal**: Extract reusable feature logic (not UI, not layout — just logic).  
+**Estimated effort**: 2–3 weeks  
+**Depends on**: Sprint 3
 
----
+### 7.1 `packages/features/contact/`
 
-### 2.8 Add Utility Components
+- [ ] **7.1.1** Create package with schema, server action, integrations composition
+- [ ] **7.1.2** Keep form UI in client apps (each client designs their own contact form)
+- [ ] **7.1.3** Update reference template to use feature package
+- [ ] **Verify**: `pnpm build`; contact form submission works
 
-- [ ] **2.8.1** ThemeToggle — **Path**: `packages/ui/src/ThemeToggle/ThemeToggle.tsx` — **Verify**: localStorage + prefers-color-scheme
-- [ ] **2.8.2** CookieConsent — **Path**: `packages/ui/src/CookieConsent/CookieConsent.tsx` — **Verify**: Accept/Reject/Preferences
-- [ ] **2.8.3** BackToTop — **Path**: `packages/ui/src/BackToTop/BackToTop.tsx` — **Verify**: Scroll to top
-- [ ] **2.8.4** ShareButtons — **Path**: `packages/ui/src/ShareButtons/ShareButtons.tsx` — **Verify**: Web Share API + fallback
-- [ ] **2.8.5** SEOHead — **Path**: `packages/ui/src/SEOHead/SEOHead.tsx` — **Verify**: Title, description, canonical, OG, Twitter, JSON-LD
+### 7.2 `packages/features/booking/`
 
----
+- [ ] **7.2.1** Create package with schema, server action, provider integration
+- [ ] **7.2.2** **Replace in-memory Map with Supabase persistence** (fixes D5)
+- [ ] **7.2.3** Update reference template
+- [ ] **Verify**: Bookings persist across restarts
 
-### 2.9 Add Hooks
+### 7.3 `packages/features/blog/`
 
-- [ ] **2.9.1** useMediaQuery — **Path**: `packages/ui/src/hooks/useMediaQuery.ts` — **Verify**: Unit test
-- [ ] **2.9.2** useScrollPosition — **Path**: `packages/ui/src/hooks/useScrollPosition.ts` — **Verify**: Unit test
-- [ ] **2.9.3** useDebounce — **Path**: `packages/ui/src/hooks/useDebounce.ts` — **Verify**: Unit test
-- [ ] **2.9.4** useClickOutside — **Path**: `packages/ui/src/hooks/useClickOutside.ts` — **Verify**: Unit test
-- [ ] **2.9.5** useKeyboard — **Path**: `packages/ui/src/hooks/useKeyboard.ts` — **Verify**: Unit test
-- [ ] **2.9.6** useIntersectionObserver — **Path**: `packages/ui/src/hooks/useIntersectionObserver.ts` — **Verify**: Unit test
-- [ ] **2.9.7** useReducedMotion — **Path**: `packages/ui/src/hooks/useReducedMotion.ts` — **Verify**: Respects prefers-reduced-motion
-- [ ] **2.9.8** useFocusTrap — **Path**: `packages/ui/src/hooks/useFocusTrap.ts` — **Verify**: Unit test
+- [ ] **7.3.1** Create package with MDX utilities, reading time, frontmatter parsing
+- [ ] **7.3.2** Keep blog layout/design in client apps
+- [ ] **Verify**: Blog pages render; tests pass
 
----
+### 7.4 `packages/features/search/`
 
-### 2.10 Documentation & Testing
-
-- [ ] **2.10.1** Add Storybook or showcase
-
-  - **Path**: `packages/ui/` (Storybook config)
-  - **Verify**: All components documented
-
-- [ ] **2.10.2** Visual regression (Chromatic/Percy)
-
-  - **Verify**: CI runs on PRs touching `packages/ui/`
-
-- [ ] **2.10.3** Unit tests for all new primitives
-
-  - **Paths**: `packages/ui/src/**/__tests__/`
-  - **Verify**: `pnpm test`; coverage threshold met
-
-- [ ] **2.10.4** eslint-plugin-jsx-a11y — zero warnings
-
-  - **Verify**: `pnpm lint` on packages/ui; no jsx-a11y violations
-
-- [ ] **2.10.5** Per-component exports for tree-shaking
-  - **Path**: `packages/ui/package.json`
-  - **Verify**: `exports` field with per-component entry points; `import { Button } from '@repo/ui/Button'` works
+- [ ] **7.4.1** Create package with index builder, search logic
+- [ ] **7.4.2** Keep search UI in client apps
+- [ ] **Verify**: Search works across blog and pages
 
 ---
 
-### 2.11 UI Package Versioning
+## Sprint 8 — Production Readiness
 
-- [ ] **2.11.1** Semantic versioning + CHANGELOG
+**Goal**: Testing, performance, SEO, documentation.  
+**Estimated effort**: 2–4 weeks  
+**Depends on**: Sprints 1–4
 
-  - **Path**: `packages/ui/CHANGELOG.md`
-  - **Verify**: Document breaking/feature/fix
+### 8.1 Testing
 
-- [ ] **2.11.2** Breaking change policy
+- [ ] **8.1.1** Unit tests for all `packages/infra` exports
+- [ ] **8.1.2** Integration tests for contact and booking server actions (mocked external services)
+- [ ] **8.1.3** E2E with Playwright for critical flows (form submit, mobile nav, keyboard nav)
+- [ ] **8.1.4** axe-core accessibility testing in E2E
 
-  - **Path**: `packages/ui/README.md` or CONTRIBUTING
-  - **Verify**: Defined: prop removal, default change, DOM structure change
+### 8.2 Performance
 
-- [ ] **2.11.3** Visual regression CI
-  - **Verify**: CI check on PRs touching packages/ui
+- [ ] **8.2.1** Move CSP nonce generation from layout to middleware (enables static generation) (D18)
+- [ ] **8.2.2** Dynamic import heavy components below fold (`next/dynamic`)
+- [ ] **8.2.3** Core Web Vitals audit — LCP <2.5s, INP <200ms, CLS <0.1
+- [ ] **8.2.4** Tree-shaking verification for `packages/ui`
 
----
+### 8.3 SEO
 
-## Phase 3 — Industry Presets & Config System
+- [ ] **8.3.1** JSON-LD generators for LocalBusiness, Article, FAQ, BreadcrumbList
+- [ ] **8.3.2** Auto sitemap and robots via Next.js Metadata API
+- [ ] **8.3.3** Dynamic OG image generation
 
-**Depends on**: Phase 1, 2
+### 8.4 Documentation
 
-### 3.1 Extend SiteConfig Type
-
-- [ ] **3.1.1** Add `features` boolean map
-
-  - **Path**: `packages/shared/types/site-config.ts` or `packages/config/types/site-config.ts`
-  - **Verify**: Type includes booking, contact, blog, gallery, team, reviews, search, etc.
-
-- [ ] **3.1.2** Add `industry` union (100+ types)
-
-  - **Path**: same as 3.1.1
-  - **Verify**: hair-salon, plumber, restaurant, medical, legal, etc.
-
-- [ ] **3.1.3** Add `seo.schemaType`, `seo.geoTarget`
-  - **Path**: same
-  - **Verify**: TypeScript compiles
+- [ ] **8.4.1** `docs/NEW_CLIENT_SITE.md` — step-by-step guide
+- [ ] **8.4.2** `CONTRIBUTING.md` — how to add a feature, integration, or UI component
+- [ ] **8.4.3** `docs/ARCHITECTURE.md` — platform architecture overview
+- [ ] **8.4.4** VS Code workspace settings and recommended extensions
 
 ---
 
-### 3.2 Create Industry Presets
-
-- [ ] **3.2.1** Create presets directory
-
-  - **Path**: `packages/config/industry-presets/`
-  - **Verify**: Directory exists
-
-- [ ] **3.2.2** Create hair-salon, plumber presets
-
-  - **Paths**: `packages/config/industry-presets/hair-salon.preset.ts`, `plumber.preset.ts`
-  - **Verify**: Default features, theme, nav, conversion flow, JSON-LD type
-
-- [ ] **3.2.3** Create restaurant, medical, legal, home-services, fitness, real-estate presets
-  - **Paths**: `packages/config/industry-presets/*.preset.ts`
-  - **Verify**: Each preset aligns with catalog industry features
-
----
-
-### 3.3 createSiteConfig() Helper
-
-- [ ] **3.3.1** Implement createSiteConfig(preset, overrides)
-
-  - **Path**: `packages/config/create-site-config.ts`
-  - **Verify**: Deep-merge + Zod validation; returns typed SiteConfig
-
-- [ ] **3.3.2** Unit tests for merge and validation
-  - **Path**: `packages/config/__tests__/create-site-config.test.ts`
-  - **Verify**: Override wins; invalid config throws Zod error
-
----
-
-### 3.4 Migrate Templates to Presets
-
-- [ ] **3.4.1** hair-salon
-
-  - **Path**: `templates/hair-salon/site.config.ts`
-  - **Verify**: `createSiteConfig(hairSalonPreset, { ... })`; build passes
-
-- [ ] **3.4.2** plumber
-  - **Path**: `templates/plumber/site.config.ts`
-  - **Verify**: `createSiteConfig(plumberPreset, { ... })`; build passes
-
----
-
-### 3.5 Theme Generator
-
-- [ ] **3.5.1** OKLCH palette generation
-
-  - **Path**: `packages/config/theme-generator/index.ts`
-  - **Verify**: Input HSL → OKLCH; accessible foreground (4.5:1 contrast)
-
-- [ ] **3.5.2** Design tokens (global → semantic → component)
-  - **Path**: `packages/config/theme-generator/tokens.ts`
-  - **Verify**: generateGlobalsCss(siteConfig) outputs CSS vars
-
----
-
-### 3.6 SEO Config & Schema Generation
-
-- [ ] **3.6.1** Auto sitemap, robots
-
-  - **Path**: `packages/infra/seo/sitemap.ts`, `robots.ts`
-  - **Verify**: Next.js Metadata API; routes from SiteConfig
-
-- [ ] **3.6.2** JSON-LD generators
-
-  - **Path**: `packages/infra/seo/schemas/`
-  - **Verify**: LocalBusiness, FAQPage, Article, AggregateRating, BreadcrumbList, Service, Person; validate in Rich Results Test
-
-- [ ] **3.6.3** Dynamic OG images
-  - **Path**: `packages/infra/seo/opengraph-image.tsx` or template convention
-  - **Verify**: opengraph-image.tsx generates OG image per route
-
----
-
-## Phase 4 — Client Override System & First Client Sites
-
-**Depends on**: Phase 1, 2, 3
-
-### 4.1 Define Client Site Structure
-
-- [ ] **4.1.1** Create CLIENT_SITE_STRUCTURE.md
-  - **Path**: `docs/CLIENT_SITE_STRUCTURE.md`
-  - **Verify**: Canonical `apps/client-<name>/` layout; files to copy vs write; one Vercel project per app
-
----
-
-### 4.2 First Client Site (PoC)
-
-- [ ] **4.2.1** Create apps/client-<name>/
-
-  - **Path**: `apps/client-<name>/` (or `clients/client-<name>/` pre-rename)
-  - **Depends on**: 4.1.1
-  - **Verify**: Uses createSiteConfig(preset, overrides); custom sections; `pnpm build`; Lighthouse 90+ all categories
-
-- [ ] **4.2.2** Document lessons learned
-  - **Path**: `docs/CLIENT_SITE_LESSONS.md`
-  - **Verify**: Captures pain points, gaps
-
----
-
-### 4.3 Second Client Site (Different Industry)
-
-- [ ] **4.3.1** Create second client in different industry
-  - **Verify**: Preset system works; feature toggling; theme distinct; JSON-LD per industry
-
----
-
-### 4.4 Rename & Restructure Root
-
-- [ ] **4.4.1** Rename templates → apps
-  - **Paths**: Move `templates/hair-salon` → `apps/template-hair-salon`, etc.
-  - **Verify**: Update pnpm-workspace.yaml, turbo.json, all imports; `pnpm build` full monorepo
-
----
-
-### 4.5 CI/CD for Multi-App Deploys
-
-- [ ] **4.5.1** Vercel project per app
-
-  - **Verify**: Each app has own Vercel project; Root Directory set
-
-- [ ] **4.5.2** Turborepo filter for affected builds
-
-  - **Verify**: `turbo run build --filter=...[HEAD^1]` builds only changed apps
-
-- [ ] **4.5.3** GitHub Actions deploy changed apps
-  - **Path**: `.github/workflows/deploy.yml`
-  - **Verify**: PR → preview; merge → production for changed apps
-
----
-
-### 4.6 Affected-Only CI Testing
-
-- [ ] **4.6.1** turbo run test --filter=...[HEAD^1]
-
-  - **Verify**: Only changed packages + dependants tested
-
-- [ ] **4.6.2** Enable Turborepo Remote Caching
-  - **Verify**: Vercel or similar; CI cache hits
-
----
-
-## Phase 5 — New Industry Templates
-
-**Depends on**: Phase 1–4
-
-- [ ] **5.1** template-restaurant — **Path**: `apps/template-restaurant/` — **Verify**: createSiteConfig(restaurantPreset); menu, reservations, gallery, reviews; Restaurant JSON-LD; 5+ catalog patterns
-- [ ] **5.2** template-medical — **Path**: `apps/template-medical/` — **Verify**: MedicalBusiness + Physician; consultation, providers, insurance; 5+ catalog patterns
-- [ ] **5.3** template-legal — **Path**: `apps/template-legal/` — **Verify**: LegalService + Attorney; practice areas, case results; 5+ catalog patterns
-- [ ] **5.4** template-home-services — **Path**: `apps/template-home-services/` — **Verify**: HomeAndConstructionBusiness; quote, emergency, before/after; 5+ catalog patterns
-- [ ] **5.5** template-fitness — **Path**: `apps/template-fitness/` — **Verify**: SportsActivityLocation; booking, class schedule; 5+ catalog patterns
-- [ ] **5.6** template-real-estate — **Path**: `apps/template-real-estate/` — **Verify**: RealEstateAgent; listings, agents, virtual tour; 5+ catalog patterns
-
----
-
-## Phase 6 — Polish & Production Readiness
-
-**Depends on**: Phase 1–5
-
-### 6.1 Testing Infrastructure
-
-- [ ] **6.1.1** Unit tests for infra, features, integrations
-
-  - **Paths**: `packages/infra/__tests__/`, `packages/features/*/__tests__/`, `packages/integrations/*/__tests__/`
-  - **Verify**: `pnpm test`; coverage thresholds
-
-- [ ] **6.1.2** Integration tests (lead capture, booking)
-
-  - **Path**: `packages/features/contact/__tests__/integration/`, etc.
-  - **Verify**: E2E or integration test for submit → Supabase/HubSpot (mocked)
-
-- [ ] **6.1.3** E2E with Playwright
-
-  - **Path**: `e2e/` or `apps/template-hair-salon/e2e/`
-  - **Verify**: Form submit, mobile nav, keyboard nav
-
-- [ ] **6.1.4** axe-core + Lighthouse a11y
-  - **Verify**: axe in E2E; Lighthouse accessibility 100
-
----
-
-### 6.2 Developer Experience
-
-- [ ] **6.2.1** CONTRIBUTING.md — new client, feature, preset, integration
-
-  - **Path**: `CONTRIBUTING.md`
-  - **Verify**: Step-by-step instructions
-
-- [ ] **6.2.2** pnpm dev:<app> scripts
-
-  - **Path**: `package.json` (root)
-  - **Verify**: `pnpm dev:hair-salon`, `pnpm dev:plumber` work
-
-- [ ] **6.2.3** VS Code workspace + extensions
-
-  - **Path**: `.vscode/extensions.json`, `settings.json`
-  - **Verify**: ESLint, Tailwind, axe recommended
-
-- [ ] **6.2.4** DevContainer or .agent/workflows
-
-  - **Path**: `.devcontainer/` or `.agent/workflows/`
-  - **Verify**: Reproducible dev env
-
-- [ ] **6.2.5** ADR template
-  - **Path**: `docs/adr/template.md`
-  - **Verify**: Standard format for decisions
-
----
-
-### 6.3 Performance
-
-- [ ] **6.3.1** Tree-shaking verification
-
-  - **Verify**: Import single component; bundle excludes others
-
-- [ ] **6.3.2** next/dynamic for heavy components
-
-  - **Paths**: Templates using gallery, search, booking modal
-  - **Verify**: Lazy load below-fold
-
-- [ ] **6.3.3** Core Web Vitals
-
-  - **Verify**: LCP < 2.5s, INP < 200ms, CLS < 0.1 (Lighthouse)
-
-- [ ] **6.3.4** RUM via Vercel Speed Insights
-  - **Verify**: Real user metrics collected
-
----
-
-### 6.4 Security Audit
-
-- [ ] **6.4.1** CSP strict-dynamic in prod
-
-  - **Verify**: No unsafe-eval, unsafe-inline in production
-
-- [ ] **6.4.2** Rate limiting on Server Actions
-
-  - **Verify**: Contact, booking actions rate-limited
-
-- [ ] **6.4.3** Next.js ≥ 15.2.3, pnpm audit, CSRF allowedOrigins
-  - **Verify**: `pnpm audit` clean; next version check
-
----
-
-### 6.5 SEO & Discoverability Audit
-
-- [ ] **6.5.1** JSON-LD Rich Results Test
-
-  - **Verify**: All schema types pass for each template
-
-- [ ] **6.5.2** Canonical, OG, Twitter, semantic HTML
-  - **Verify**: All pages have canonical; OG/Twitter render; proper heading hierarchy
-
----
-
-### 6.6 Dependency Hygiene
-
-- [ ] **6.6.1** Peer deps in shared packages
-
-  - **Verify**: React, Next.js as peerDependencies where appropriate
-
-- [ ] **6.6.2** pnpm dedupe, depcheck/knip
-
-  - **Verify**: No unused deps; `pnpm dedupe` run
-
-- [ ] **6.6.3** Workspace-aware Renovate
-  - **Path**: `renovate.json`
-  - **Verify**: Grouped updates per workspace
-
----
-
-## Phase 7 — Future Enhancements (Backlog)
+## Backlog — Future Enhancements
 
 **Do not build until demonstrated need.**
 
-- [ ] **7.1** i18n — next-intl, hreflang — **Trigger**: Client needs multi-language
-- [ ] **7.2** CMS — Sanity, Storyblok, Payload — **Trigger**: Client needs content editing
-- [ ] **7.3** AI chatbot — **Trigger**: Client requests
-- [ ] **7.4** A/B testing — **Trigger**: Data-driven optimization
-- [ ] **7.5** CLI (pnpm create:client) — **Trigger**: 10+ client sites
-- [ ] **7.6** Multi-tenant self-serve — **Trigger**: High-volume demand
+- [ ] **B.1** i18n — next-intl, hreflang — **Trigger**: Client needs multi-language
+- [ ] **B.2** CMS integration — Sanity, Storyblok, Payload — **Trigger**: Client needs content editing
+- [ ] **B.3** AI chatbot — **Trigger**: Client requests
+- [ ] **B.4** A/B testing — **Trigger**: Data-driven optimization
+- [ ] **B.5** CLI (`pnpm create:client`) — **Trigger**: 10+ client sites
+- [ ] **B.6** Biome migration (replace ESLint + Prettier) — **Trigger**: DX sprint; 10-100x faster linting
+- [ ] **B.7** Storybook or component showcase — **Trigger**: Team grows beyond 2-3 developers
+
+---
+
+## Progress Tracking
+
+| Sprint | Description | Tasks | Status |
+|:------:|-------------|:-----:|:------:|
+| 0 | Unblock CI & Critical Fixes | 13 | Not started |
+| 1 | Security Hardening & Missing Infra | 14 | Not started |
+| 2 | Package Quality & Boundaries | 12 | Not started |
+| 3 | Complete Existing Extractions | 9 | Not started |
+| 4 | Architecture Evolution | 7 | Not started |
+| 5 | Major Dependency Upgrades | 8 | Not started |
+| 6 | UI Component Library | 30+ | Not started |
+| 7 | Feature Packages | 10 | Not started |
+| 8 | Production Readiness | 12 | Not started |
 
 ---
 
@@ -886,7 +791,9 @@ Each executable task follows this structure:
   - **Source**: `source/path` (for extraction tasks)
   - **Depends on**: Task IDs or "none"
   - **Verify**: Command to run, test to create, or criterion to check
-  - [ ] **Subtask** — Path: `...` — Verify: ...
+  - **Code**: (optional) Code snippet showing the change
+  - **Script**: (optional) Shell command to execute
+  - [ ] **Subtask** — description
 ```
 
 **Verification types**:
@@ -895,3 +802,5 @@ Each executable task follows this structure:
 - Create unit test at `path` testing X
 - Manual check: Y
 - Lighthouse score Z
+
+**Sprint execution order**: 0 → 1 → 2 (parallel with 1) → 3 → 4 → 5 (can overlap 4) → 6 (parallel with 3-5) → 7 → 8

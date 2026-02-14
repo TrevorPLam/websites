@@ -1,3 +1,23 @@
+// File: app/book/page.tsx  [TRACE:FILE=app.bookingPage]
+// Purpose: Booking page providing appointment scheduling interface with booking form,
+//          business hours information, cancellation policy, and contact alternatives.
+//          Integrates with the booking feature for form handling and submission.
+//
+// Exports / Entry: BookPage component, metadata export
+// Used by: Next.js for the /book route
+//
+// Invariants:
+// - Booking form must be the primary focus (2/3 column width on desktop)
+// - Business hours and policy information must be visible for user context
+// - Contact fallback must be provided for users who prefer phone booking
+// - Page must be fully responsive with mobile-first design
+//
+// Status: @public
+// Features:
+// - [FEAT:BOOKING] Appointment scheduling interface
+// - [FEAT:UX] Responsive layout with form and information sidebar
+// - [FEAT:BUSINESS] Hours, policy, and contact information display
+
 import type { Metadata } from 'next';
 import { Container, Section, Card } from '@repo/ui';
 import { Clock, Scissors } from 'lucide-react';
@@ -8,6 +28,9 @@ export const metadata: Metadata = {
   description: 'Schedule your next haircut, color, or style appointment online.',
 };
 
+// [TRACE:FUNC=app.BookPage]
+// [FEAT:BOOKING] [FEAT:UX] [FEAT:BUSINESS]
+// NOTE: Booking interface - balances form functionality with business information for conversion.
 export default function BookPage() {
   return (
     <div className="min-h-screen bg-muted">

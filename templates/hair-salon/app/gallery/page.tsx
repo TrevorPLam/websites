@@ -1,15 +1,46 @@
+// File: app/gallery/page.tsx  [TRACE:FILE=app.gallery.page]
+// Purpose: Gallery page showcasing salon portfolio with category filtering and
+//          placeholder data. Provides visual proof of work quality and style
+//          capabilities to convert visitors into customers.
+//
+// Exports / Entry: GalleryPage component, metadata export
+// Used by: Next.js app router for /gallery route
+//
+// Invariants:
+// - Must display portfolio items in responsive grid layout
+// - Category filtering must work correctly with visual feedback
+// - Placeholder data must be realistic and representative of actual work
+// - All images must have proper alt text for accessibility
+// - Social media CTA must link to actual Instagram account
+//
+// Status: @public
+// Features:
+// - [FEAT:GALLERY] Portfolio showcase with category filtering
+// - [FEAT:FILTERING] Visual category selection and filtering
+// - [FEAT:RESPONSIVE] Mobile-first responsive grid layout
+// - [FEAT:PLACEHOLDER] Realistic placeholder portfolio data
+// - [FEAT:SOCIAL] Social media integration and CTA
+
 import type { Metadata } from 'next';
 import { Container, Section, Button } from '@repo/ui';
 import { Instagram } from 'lucide-react';
 
+// [TRACE:BLOCK=app.gallery.metadata]
+// [FEAT:SEO]
+// NOTE: SEO-optimized metadata for gallery page - targets portfolio and salon work searches.
 export const metadata: Metadata = {
   title: 'Gallery',
   description: 'View our portfolio of haircuts, colors, and styles.',
 };
 
-// Placeholder images logic
+// [TRACE:CONST=app.gallery.categories]
+// [FEAT:FILTERING]
+// NOTE: Gallery categories for filtering - represents main service types offered.
 const categories = ['All', 'Cuts', 'Color', 'Bridal', 'Extensions'];
 
+// [TRACE:CONST=app.gallery.portfolioItems]
+// [FEAT:PLACEHOLDER]
+// NOTE: Placeholder portfolio data - realistic examples of actual salon work for demonstration.
 const portfolioItems = [
   { id: 1, category: 'Color', title: 'Platinum Blonde Transformation', image: 'bg-slate-200' },
   { id: 2, category: 'Cuts', title: 'Textured Bob', image: 'bg-slate-300' },
@@ -18,9 +49,12 @@ const portfolioItems = [
   { id: 5, category: 'Cuts', title: 'Modern Shag', image: 'bg-slate-200' },
   { id: 6, category: 'Extensions', title: 'Volume & Length', image: 'bg-slate-300' },
   { id: 7, category: 'Color', title: 'Vivid Purple', image: 'bg-slate-200' },
-  { id: 8, category: 'Bridal', title: 'Boho Waves', image: 'bg-slate-300' },
+  { id: 8, category: 'Bridal', title: 'Beach Waves', image: 'bg-slate-300' },
 ];
 
+// [TRACE:FUNC=app.gallery.GalleryPage]
+// [FEAT:GALLERY] [FEAT:FILTERING] [FEAT:RESPONSIVE]
+// NOTE: Main gallery page component - displays portfolio with category filtering and social CTA.
 export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-white">

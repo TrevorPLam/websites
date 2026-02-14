@@ -1,10 +1,33 @@
-
+// File: components/Hero.tsx  [TRACE:FILE=components.hero]
+// Purpose: Hero section component providing the main landing page header with compelling
+//          value proposition, call-to-action buttons, and visual branding. Optimized for
+//          conversion and accessibility with responsive design.
+//
+// Exports / Entry: Hero component (default export)
+// Used by: Homepage (app/page.tsx) as the primary above-fold content
+//
+// Invariants:
+// - Must render immediately without dynamic imports for SEO and UX
+// - Primary CTA must lead to booking/contact for conversion optimization
+// - Secondary CTA must provide service information path
+// - Hero image must be responsive and optimized for performance
+// - All text must be accessible with proper contrast ratios
+//
+// Status: @public
+// Features:
+// - [FEAT:MARKETING] Conversion-focused hero section
+// - [FEAT:UX] Responsive layout with mobile-first design
+// - [FEAT:ACCESSIBILITY] Semantic HTML and ARIA-friendly structure
+// - [FEAT:PERFORMANCE] Optimized image loading with priority flag
 
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button, Container } from '@repo/ui';
 
+// [TRACE:FUNC=components.Hero]
+// [FEAT:MARKETING] [FEAT:UX] [FEAT:ACCESSIBILITY] [FEAT:PERFORMANCE]
+// NOTE: Primary conversion component - balances visual appeal with performance and accessibility.
 export default function Hero() {
   return (
     <section className="bg-gradient-to-b from-off-white to-white py-20 md:py-32">

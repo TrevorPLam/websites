@@ -1,11 +1,39 @@
+// File: packages/ui/src/components/Button.tsx  [TRACE:FILE=packages.ui.components.Button]
+// Purpose: Reusable button component providing consistent styling and behavior across the application.
+//          Supports multiple variants, sizes, and accessibility features with proper focus management
+//          and keyboard navigation support.
+//
+// Exports / Entry: Button component, ButtonProps interface
+// Used by: All application components requiring button interactions
+//
+// Invariants:
+// - Must maintain consistent visual hierarchy across all variants
+// - Must be fully accessible with proper ARIA attributes
+// - Must support keyboard navigation and focus management
+// - Must handle disabled state gracefully
+// - Must forward refs properly for DOM manipulation
+//
+// Status: @public
+// Features:
+// - [FEAT:UI] Consistent button styling and behavior
+// - [FEAT:ACCESSIBILITY] Full keyboard and screen reader support
+// - [FEAT:RESPONSIVE] Multiple size variants for different contexts
+// - [FEAT:DESIGN] Multiple visual variants for different use cases
+
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
+// [TRACE:INTERFACE=packages.ui.components.ButtonProps]
+// [FEAT:UI] [FEAT:ACCESSIBILITY]
+// NOTE: Button props interface - extends HTML button attributes with variant and size options.
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'text';
   size?: 'small' | 'medium' | 'large';
 }
 
+// [TRACE:CONST=packages.ui.components.Button.variantStyles]
+// [FEAT:DESIGN]
+// NOTE: Visual variant definitions - maintains consistent design system across all button styles.
 const variantStyles: Record<string, string> = {
   primary: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm',
   secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-sm',
@@ -16,12 +44,18 @@ const variantStyles: Record<string, string> = {
   text: 'bg-transparent text-primary hover:text-primary/80 underline-offset-4 hover:underline',
 };
 
+// [TRACE:CONST=packages.ui.components.Button.sizeStyles]
+// [FEAT:RESPONSIVE]
+// NOTE: Size variant definitions - provides consistent spacing and typography for different contexts.
 const sizeStyles: Record<string, string> = {
   small: 'h-8 px-3 text-sm',
   medium: 'h-10 px-5 text-base',
   large: 'h-12 px-8 text-lg',
 };
 
+// [TRACE:FUNC=packages.ui.components.Button]
+// [FEAT:UI] [FEAT:ACCESSIBILITY] [FEAT:RESPONSIVE]
+// NOTE: Main button component - renders accessible button with variant styling and proper ref forwarding.
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'medium', type = 'button', ...props }, ref) => {
     return (

@@ -1,19 +1,47 @@
+// File: app/about/page.tsx  [TRACE:FILE=app.about.page]
+// Purpose: About page component showcasing salon story, values, statistics, and conversion CTAs.
+//          Provides brand narrative and trust signals to convert visitors into customers through
+//          compelling storytelling and social proof.
+//
+// Exports / Entry: AboutPage component (default export), metadata export
+// Used by: Next.js app router for /about route
+//
+// Invariants:
+// - Must render responsive design across all device sizes
+// - All CTAs must navigate to valid routes within the application
+// - Statistics must be credible and regularly updated
+// - Images and icons must have proper alt text for accessibility
+// - Content must reflect current salon branding and messaging
+//
+// Status: @public
+// Features:
+// - [FEAT:SEO] Optimized metadata for search engines
+// - [FEAT:BRANDING] Consistent salon story and values presentation
+// - [FEAT:CONVERSION] Strategic CTAs for booking and services
+// - [FEAT:RESPONSIVE] Mobile-first responsive design
+// - [FEAT:ACCESSIBILITY] Semantic HTML and ARIA compliance
+
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Scissors, Heart, Sparkles } from 'lucide-react';
 import { Container } from '@repo/ui';
 
-// Page-specific SEO metadata
+// [TRACE:BLOCK=app.about.metadata]
+// [FEAT:SEO]
+// NOTE: SEO-optimized metadata for search engine indexing and social sharing.
 export const metadata: Metadata = {
   title: 'About Us',
   description:
     'Meet our team of expert stylists and learn about our commitment to healthy, beautiful hair.',
 };
 
-// About page component with story, values, stats, and conversion CTAs
+// [TRACE:FUNC=app.about.AboutPage]
+// [FEAT:BRANDING] [FEAT:CONVERSION] [FEAT:RESPONSIVE]
+// NOTE: Main about page component - renders brand story, values, stats, and conversion CTAs.
 export default function AboutPage() {
   return (
     <div className="min-h-screen">
+      {/* [TRACE:BLOCK=app.about.hero] */}
       {/* Hero Section - Main value proposition */}
       <section className="bg-gradient-to-br from-secondary via-slate-800 to-primary/20 text-white py-20">
         <Container>
@@ -27,6 +55,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      {/* [TRACE:BLOCK=app.about.story] */}
       {/* Our Story Section - Founding narrative */}
       <section className="py-20 bg-white">
         <Container>
@@ -54,6 +83,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      {/* [TRACE:BLOCK=app.about.values] */}
       {/* Values Section - Key differentiators */}
       <section className="py-20 bg-muted">
         <Container>
@@ -100,6 +130,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      {/* [TRACE:BLOCK=app.about.stats] */}
       {/* Stats Section - Social proof */}
       <section className="py-20 bg-gradient-to-br from-secondary via-slate-800 to-primary/20 text-white">
         <Container>
@@ -127,6 +158,8 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      {/* [TRACE:BLOCK=app.about.cta] */}
+      {/* [FEAT:CONVERSION] */}
       {/* CTA Section - Final conversion */}
       <section className="py-20 bg-white">
         <Container>

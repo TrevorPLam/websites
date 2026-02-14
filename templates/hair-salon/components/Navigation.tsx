@@ -1,3 +1,26 @@
+// File: components/Navigation.tsx  [TRACE:FILE=components.navigation]
+// Purpose: Main navigation component providing site-wide navigation with mobile responsiveness,
+//          search integration, and accessibility features. Handles active state detection,
+//          mobile menu toggle, and focus management for keyboard navigation.
+//
+// Exports / Entry: Navigation component (default export)
+// Used by: Root layout (app/layout.tsx) - appears on all pages
+//
+// Invariants:
+// - Must be fully client-side rendered for pathname detection and mobile state
+// - Mobile menu must trap focus and restore it on close for accessibility
+// - Active path detection must handle trailing slashes and query parameters
+// - Search integration must be optional (graceful degradation when disabled)
+// - All interactive elements must be keyboard accessible
+//
+// Status: @public
+// Features:
+// - [FEAT:NAVIGATION] Site-wide navigation with active state
+// - [FEAT:SEARCH] Integrated search dialog
+// - [FEAT:ACCESSIBILITY] Focus management and keyboard navigation
+// - [FEAT:UX] Mobile-responsive hamburger menu
+// - [FEAT:PERFORMANCE] Memoized path normalization
+
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -25,6 +48,9 @@ interface NavigationProps {
  * Main navigation component.
  * Renders in root layout - appears on all pages.
  */
+// [TRACE:FUNC=components.Navigation]
+// [FEAT:NAVIGATION] [FEAT:SEARCH] [FEAT:ACCESSIBILITY] [FEAT:UX] [FEAT:PERFORMANCE]
+// NOTE: Critical navigation component - handles all site navigation with accessibility and mobile support.
 export default function Navigation({ searchItems }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -32,6 +58,9 @@ export default function Navigation({ searchItems }: NavigationProps) {
   const lastFocusedElementRef = useRef<HTMLElement | null>(null);
   const mobileToggleButtonRef = useRef<HTMLButtonElement | null>(null);
 
+  // [TRACE:FUNC=components.normalizePath]
+  // [FEAT:NAVIGATION]
+  // NOTE: Critical for active state detection - handles trailing slashes and query parameters consistently.
   const normalizePath = (path: string) => {
     const [cleanPath] = path.split(/[?#]/);
     if (!cleanPath || cleanPath === '/') {

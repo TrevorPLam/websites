@@ -1,3 +1,25 @@
+// File: app/layout.tsx  [TRACE:FILE=app.rootLayout]
+// Purpose: Root layout component providing global HTML structure, metadata, CSP security,
+//          and core UI providers for the hair salon website. Handles font loading,
+//          SEO optimization, and analytics consent management.
+//
+// Exports / Entry: RootLayout component, metadata export
+// Used by: Next.js as the root layout for all pages in the application
+//
+// Invariants:
+// - Must resolve CSP nonce before any script execution for security
+// - Fonts must be loaded with display: swap to prevent layout shift
+// - Analytics consent banner must render after all other content for GDPR compliance
+// - Search index must be available for Navigation component
+//
+// Status: @internal
+// Features:
+// - [FEAT:SEO] Global metadata and OpenGraph optimization
+// - [FEAT:SECURITY] Content Security Policy with nonce generation
+// - [FEAT:ANALYTICS] Consent management and GDPR compliance
+// - [FEAT:SEARCH] Search index integration for navigation
+// - [FEAT:ACCESSIBILITY] Skip links and semantic HTML structure
+
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { IBM_Plex_Sans, Inter } from 'next/font/google';
@@ -30,6 +52,10 @@ const ogImageUrl = new URL(
 ).toString();
 const NONCE_ERROR_FALLBACK = 'fallback-nonce';
 
+// [TRACE:FUNC=app.resolveCspNonce]
+// [FEAT:SECURITY]
+// NOTE: Critical security function - provides fallback nonce generation when middleware
+//       fails to set the CSP header. Prefers keeping the app online over hard failures.
 function resolveCspNonce(requestHeaders: Headers): string {
   const headerNonce = requestHeaders.get(CSP_NONCE_HEADER);
 
@@ -124,6 +150,10 @@ export const metadata: Metadata = {
   },
 };
 
+// [TRACE:FUNC=app.RootLayout]
+// [FEAT:SEO] [FEAT:SECURITY] [FEAT:ANALYTICS] [FEAT:SEARCH] [FEAT:ACCESSIBILITY]
+// NOTE: Main layout component - orchestrates all global providers and structure.
+//       Critical for app initialization and security context.
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const searchItems = await getSearchIndex();
   const requestHeaders = await headers();

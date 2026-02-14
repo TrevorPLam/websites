@@ -1,4 +1,25 @@
-
+// File: features/contact/components/ContactForm.tsx  [TRACE:FILE=features.contact.components.ContactForm]
+// Purpose: Contact form component providing customer inquiry submission with real-time validation,
+//          error handling, and analytics tracking. Implements form state management, submission
+//          feedback, and Sentry error monitoring for reliable communication.
+//
+// Exports / Entry: ContactForm component (default export)
+// Used by: Contact page (/contact), footer contact sections, and any inquiry features
+//
+// Invariants:
+// - Form must validate all inputs against contact schema before submission
+// - Submission state must be preserved to prevent duplicate submissions
+// - Error messages must be user-friendly and actionable
+// - Analytics events must be tracked for form interactions
+// - Sentry context must be set for error monitoring
+//
+// Status: @public
+// Features:
+// - [FEAT:CONTACT] Customer inquiry form with validation
+// - [FEAT:VALIDATION] Real-time form validation with Zod schema
+// - [FEAT:ANALYTICS] Form interaction tracking
+// - [FEAT:MONITORING] Sentry error tracking and context
+// - [FEAT:UX] User-friendly error handling and feedback
 
 'use client';
 
@@ -20,6 +41,9 @@ import { setSentryContext, setSentryUser, withSentrySpan } from '@repo/infra/cli
  * Contact form with full validation and server submission.
  * Manages its own submission state and error handling.
  */
+// [TRACE:FUNC=features.contact.ContactForm]
+// [FEAT:CONTACT] [FEAT:VALIDATION] [FEAT:ANALYTICS] [FEAT:MONITORING]
+// NOTE: Main contact form component - orchestrates validation, submission, analytics, and error monitoring.
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
@@ -45,6 +69,9 @@ export default function ContactForm() {
     setSubmitStatus({ type: null, message: '' });
 
     try {
+      // [TRACE:BLOCK=features.contact.formSubmission]
+      // [FEAT:CONTACT] [FEAT:ANALYTICS] [FEAT:MONITORING]
+      // NOTE: Form submission flow - tracks analytics, sets Sentry context, and handles server submission.
       const result = await withSentrySpan(
         { name: 'contact_form.submit', op: 'ui.action', attributes: { route: '/contact' } },
         () => submitContactForm(data)

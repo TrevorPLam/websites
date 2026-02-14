@@ -1,3 +1,25 @@
+// File: app/api/og/route.tsx  [TRACE:FILE=app.api.og.route]
+// Purpose: OpenGraph image generation API route creating dynamic social sharing images.
+//          Generates branded OG images with customizable title and description for social media
+//          previews and SEO optimization using Next.js ImageResponse.
+//
+// Exports / Entry: GET function for /api/og route
+// Used by: Social media platforms, search engines, and link preview services
+//
+// Invariants:
+// - Must validate all query parameters to prevent XSS attacks
+// - Must escape HTML content before rendering in images
+// - Must run at edge runtime for optimal performance
+// - Must return consistent 1200x630 image dimensions
+// - Must handle missing parameters gracefully with defaults
+//
+// Status: @public
+// Features:
+// - [FEAT:SEO] Dynamic OpenGraph image generation
+// - [FEAT:SECURITY] Input validation and HTML escaping
+// - [FEAT:PERFORMANCE] Edge runtime optimization
+// - [FEAT:BRANDING] Consistent visual identity across social shares
+
 import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
@@ -7,13 +29,23 @@ import siteConfig from '@/site.config';
 
 export const runtime = 'edge';
 
+// [TRACE:BLOCK=app.api.og.schema]
+// [FEAT:SECURITY]
+// NOTE: Zod schema for validating OG image query parameters - prevents XSS and ensures data integrity.
 const ogQuerySchema = z.object({
   title: z.string().max(200).optional(),
   description: z.string().max(500).optional(),
 });
 
+// [TRACE:FUNC=app.api.og.GET]
+// [FEAT:SEO] [FEAT:SECURITY] [FEAT:PERFORMANCE]
+// NOTE: Main OG image generation handler - validates input, escapes content, and renders branded social images.
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
+
+  // [TRACE:BLOCK=app.api.og.validation]
+  // [FEAT:SECURITY]
+  // NOTE: Input validation using Zod schema - prevents XSS attacks and ensures parameter constraints.
   const parseResult = ogQuerySchema.safeParse({
     title: searchParams.get('title') ?? undefined,
     description: searchParams.get('description') ?? undefined,
@@ -23,9 +55,15 @@ export async function GET(request: NextRequest) {
     return new Response('Invalid query parameters', { status: 400 });
   }
 
+  // [TRACE:BLOCK=app.api.og.contentPreparation]
+  // [FEAT:SECURITY]
+  // NOTE: HTML escaping and content preparation - sanitizes user input before rendering in image.
   const title = escapeHtml(parseResult.data.title ?? siteConfig.name);
   const description = escapeHtml(parseResult.data.description ?? siteConfig.seo.defaultDescription);
 
+  // [TRACE:BLOCK=app.api.og.imageGeneration]
+  // [FEAT:BRANDING] [FEAT:SEO]
+  // NOTE: ImageResponse generation - creates branded OG image with salon colors, logo, and content.
   return new ImageResponse(
     (
       <div

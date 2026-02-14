@@ -1,3 +1,26 @@
+// File: site.config.ts  [TRACE:FILE=site.config]
+// Purpose: Central site configuration providing branding, navigation, SEO, and business
+//          information for the hair salon website. Defines site structure, theme colors,
+//          contact details, and conversion flow settings.
+//
+// Exports / Entry: siteConfig object (default export)
+// Used by: Layout components, SEO metadata, navigation, and site-wide configuration
+//
+// Invariants:
+// - All URLs must be absolute or properly relative to domain root
+// - Navigation links must match actual page routes
+// - Theme colors must follow CSS custom property format
+// - Contact information must be consistent across all displays
+// - Social links must use valid platform identifiers
+//
+// Status: @public
+// Features:
+// - [FEAT:CONFIG] Centralized site configuration management
+// - [FEAT:SEO] Structured data and metadata configuration
+// - [FEAT:THEME] Design system color definitions
+// - [FEAT:NAVIGATION] Site navigation and footer structure
+// - [FEAT:CONVERSION] Booking flow configuration
+
 import type { SiteConfig } from '@repo/shared/types';
 
 const siteConfig: SiteConfig = {

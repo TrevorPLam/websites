@@ -1,4 +1,25 @@
-
+// File: lib/actions/supabase.ts  [TRACE:FILE=lib.actions.supabase]
+// Purpose: Supabase integration actions providing lead storage, CRM synchronization,
+//          and data persistence with comprehensive error handling and monitoring.
+//          Implements database operations, HubSpot sync, and retry mechanisms.
+//
+// Exports / Entry: insertLeadWithSpan, updateLeadWithSpan, syncHubSpotLead functions
+// Used by: Contact form submission, booking actions, and any lead management features
+//
+// Invariants:
+// - All database operations must be wrapped in spans for monitoring
+// - HubSpot sync must be idempotent with retry mechanisms
+// - Lead data must be sanitized before database storage
+// - Suspicious activity must be flagged and logged appropriately
+// - Database failures must not expose sensitive information
+//
+// Status: @internal
+// Features:
+// - [FEAT:INTEGRATION] Supabase database operations
+// - [FEAT:CRM] HubSpot synchronization with retry logic
+// - [FEAT:MONITORING] Comprehensive span tracking and logging
+// - [FEAT:RELIABILITY] Error handling and recovery mechanisms
+// - [FEAT:SECURITY] Sanitized data storage and validation
 
 import { logWarn, logInfo, logError, withServerSpan } from '@repo/infra';
 import {
@@ -10,6 +31,9 @@ import type { SanitizedContactData } from './types';
 import { buildLeadSpanAttributes, buildHubSpotIdempotencyKey, normalizeError } from './helpers';
 import { retryHubSpotUpsert, buildHubSpotProperties } from './hubspot';
 
+// [TRACE:FUNC=lib.actions.insertLeadWithSpan]
+// [FEAT:INTEGRATION] [FEAT:MONITORING] [FEAT:SECURITY]
+// NOTE: Lead insertion - stores sanitized contact data with monitoring and suspicious activity logging.
 export async function insertLeadWithSpan(
   sanitized: SanitizedContactData,
   isSuspicious: boolean

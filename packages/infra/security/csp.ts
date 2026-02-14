@@ -1,13 +1,34 @@
-/**
- * Content Security Policy (CSP) utilities
- * Implements 2026 best practices with nonce-based CSP, strict-dynamic, and violation reporting
- */
+// File: packages/infra/security/csp.ts  [TRACE:FILE=packages.infra.security.csp]
+// Purpose: Content Security Policy utilities implementing 2026 security best practices.
+//          Provides nonce-based CSP generation, policy building, and violation reporting
+//          to prevent XSS attacks and enforce secure content loading policies.
+//
+// Exports / Entry: createCspNonce, buildContentSecurityPolicy, constants, interfaces
+// Used by: Root layout (app/layout.tsx), middleware, and security configuration
+//
+// Invariants:
+// - Nonces must use cryptographically secure random values (128 bits entropy)
+// - CSP policies must follow zero-trust approach for third-party resources
+// - Development mode must allow debugging tools while maintaining security
+// - All CSP directives must be properly escaped and validated
+// - Violation reporting must not leak sensitive information
+//
+// Status: @internal
+// Features:
+// - [FEAT:SECURITY] XSS prevention through Content Security Policy
+// - [FEAT:CRYPTOGRAPHY] Cryptographically secure nonce generation
+// - [FEAT:REPORTING] CSP violation monitoring and logging
+// - [FEAT:ENVIRONMENT] Development vs production security policies
+// - [FEAT:COMPLIANCE] 2026 web security standards compliance
 
 const NONCE_BYTE_LENGTH = 16;
 export const CSP_NONCE_HEADER = 'x-csp-nonce';
 export const CSP_REPORT_TO_HEADER = 'Report-To';
 export const CSP_REPORT_ONLY_HEADER = 'Content-Security-Policy-Report-Only';
 
+// [TRACE:INTERFACE=packages.infra.security.csp.CspOptions]
+// [FEAT:SECURITY] [FEAT:ENVIRONMENT]
+// NOTE: CSP configuration options - controls nonce, environment, and reporting behavior.
 interface CspOptions {
   nonce: string;
   isDevelopment: boolean;
@@ -15,6 +36,9 @@ interface CspOptions {
   enableStrictDynamic?: boolean;
 }
 
+// [TRACE:INTERFACE=packages.infra.security.csp.CspViolationReport]
+// [FEAT:REPORTING]
+// NOTE: CSP violation report structure - standardized format for security incident logging.
 interface CspViolationReport {
   cspReport: {
     documentURI: string;
@@ -30,6 +54,9 @@ interface CspViolationReport {
   };
 }
 
+// [TRACE:FUNC=packages.infra.security.csp.encodeBase64]
+// [FEAT:CRYPTOGRAPHY]
+// NOTE: Base64 encoding utility - handles both Node.js and browser environments for nonce encoding.
 function encodeBase64(bytes: Uint8Array): string {
   // Use Buffer in Node.js environment, fallback to browser API
   if (typeof window === 'undefined' && typeof Buffer !== 'undefined') {
@@ -43,6 +70,9 @@ function encodeBase64(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
+// [TRACE:FUNC=packages.infra.security.csp.getCryptoProvider]
+// [FEAT:CRYPTOGRAPHY]
+// NOTE: Crypto provider validation - ensures secure random number generation is available.
 function getCryptoProvider(): Crypto {
   if (!globalThis.crypto?.getRandomValues) {
     throw new Error('Crypto.getRandomValues is required to create a CSP nonce.');
@@ -50,26 +80,18 @@ function getCryptoProvider(): Crypto {
   return globalThis.crypto;
 }
 
-/**
- * Creates a cryptographically secure CSP nonce
- * Uses 16 bytes (128 bits) of entropy for optimal security/size balance
- */
+// [TRACE:FUNC=packages.infra.security.csp.createCspNonce]
+// [FEAT:CRYPTOGRAPHY] [FEAT:SECURITY]
+// NOTE: Creates cryptographically secure CSP nonce using 128 bits of entropy for optimal security.
 export function createCspNonce(): string {
   const bytes = new Uint8Array(NONCE_BYTE_LENGTH);
   getCryptoProvider().getRandomValues(bytes);
   return encodeBase64(bytes);
 }
 
-/**
- * Builds a Content Security Policy header value with 2026 best practices
- *
- * Features:
- * - Nonce-based script execution
- * - strict-dynamic for modern CSP (when enabled)
- * - Violation reporting endpoint
- * - Environment-specific hardening
- * - Zero-trust approach to third-party resources
- */
+// [TRACE:FUNC=packages.infra.security.csp.buildContentSecurityPolicy]
+// [FEAT:SECURITY] [FEAT:ENVIRONMENT] [FEAT:COMPLIANCE]
+// NOTE: Builds CSP header value with 2026 best practices - nonce-based, strict-dynamic, and reporting.
 export function buildContentSecurityPolicy({
   nonce,
   isDevelopment,

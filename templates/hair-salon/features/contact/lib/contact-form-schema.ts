@@ -1,9 +1,32 @@
-
+// File: features/contact/lib/contact-form-schema.ts  [TRACE:FILE=features.contact.contactFormSchema]
+// Purpose: Contact form validation schema providing comprehensive input validation,
+//          security checks, and bot protection. Implements Zod-based validation
+//          with configurable limits and honeypot field for spam prevention.
+//
+// Exports / Entry: contactFormSchema, ContactFormData type
+// Used by: ContactForm component, contact submission actions, and any contact validation features
+//
+// Invariants:
+// - All input fields must be validated against security patterns
+// - Honeypot field must detect bot submissions and fail validation
+// - Validation limits must prevent abuse while allowing legitimate input
+// - Error messages must be user-friendly and actionable
+// - Schema must support both client and server-side validation
+//
+// Status: @public
+// Features:
+// - [FEAT:VALIDATION] Comprehensive form input validation
+// - [FEAT:SECURITY] Bot protection and honeypot detection
+// - [FEAT:UX] User-friendly validation messages
+// - [FEAT:CONFIGURATION] Configurable validation limits
+// - [FEAT:TYPESAFE] Type-safe form data handling
 
 import { z } from 'zod';
 import { FORM_VALIDATION } from '@/lib/constants';
 
-// Contact form schema with enhanced validation
+// [TRACE:SCHEMA=features.contact.contactFormSchema]
+// [FEAT:VALIDATION] [FEAT:SECURITY] [FEAT:UX] [FEAT:CONFIGURATION]
+// NOTE: Contact form validation - implements comprehensive input validation with bot protection and security checks.
 export const contactFormSchema = z.object({
   name: z
     .string()

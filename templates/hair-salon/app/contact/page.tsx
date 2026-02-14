@@ -1,3 +1,26 @@
+// File: app/contact/page.tsx  [TRACE:FILE=app.contact.page]
+// Purpose: Contact page providing customer communication interface with contact form,
+//          business information, hours, and rescheduling options. Integrates with contact
+//          feature for form handling and error boundary protection.
+//
+// Exports / Entry: ContactPage component, metadata export
+// Used by: Next.js app router for /contact route
+//
+// Invariants:
+// - Contact form must be primary focus with error boundary protection
+// - Business information must be complete and accurate from site config
+// - All contact methods must be accessible and functional
+// - Rescheduling policy must be clearly communicated
+// - Page must be fully responsive with mobile-first design
+//
+// Status: @public
+// Features:
+// - [FEAT:CONTACT] Customer communication interface
+// - [FEAT:BUSINESS] Hours, location, and contact information display
+// - [FEAT:ERROR_HANDLING] Error boundary protection for form loading
+// - [FEAT:ACCESSIBILITY] Accessible contact methods and ARIA labels
+// - [FEAT:RESPONSIVE] Mobile-first responsive design
+
 import React from 'react';
 import type { Metadata } from 'next';
 import { Mail, Phone, Clock, MapPin } from 'lucide-react';
@@ -8,14 +31,21 @@ import siteConfig from '@/site.config';
 
 const { contact } = siteConfig;
 
+// [TRACE:BLOCK=app.contact.metadata]
+// [FEAT:SEO]
+// NOTE: SEO-optimized metadata for contact page - targets appointment booking and customer service searches.
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Book your appointment or get in touch with our salon team.',
 };
 
+// [TRACE:FUNC=app.contact.ContactPage]
+// [FEAT:CONTACT] [FEAT:BUSINESS] [FEAT:ERROR_HANDLING]
+// NOTE: Main contact page component - provides form, business info, and rescheduling options.
 export default function ContactPage() {
   return (
     <>
+      {/* [TRACE:BLOCK=app.contact.hero] */}
       {/* Hero Section */}
       <Section className="bg-gradient-to-b from-secondary to-secondary/95 text-white">
         <Container>
@@ -28,6 +58,8 @@ export default function ContactPage() {
         </Container>
       </Section>
 
+      {/* [TRACE:BLOCK=app.contact.formSection] */}
+      {/* [FEAT:CONTACT] [FEAT:ERROR_HANDLING] */}
       {/* Contact Form Section */}
       <Section className="bg-white">
         <Container>
@@ -57,6 +89,8 @@ export default function ContactPage() {
               </ErrorBoundary>
             </div>
 
+            {/* [TRACE:BLOCK=app.contact.businessInfo] */}
+            {/* [FEAT:BUSINESS] */}
             {/* Contact Information */}
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-6">Salon Info</h2>
@@ -141,6 +175,8 @@ export default function ContactPage() {
         </Container>
       </Section>
 
+      {/* [TRACE:BLOCK=app.contact.reschedule] */}
+      {/* [FEAT:BUSINESS] */}
       {/* FAQ Section */}
       <Section className="bg-muted">
         <Container>

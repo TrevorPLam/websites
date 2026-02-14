@@ -1,3 +1,26 @@
+// File: features/booking/lib/booking-providers.ts  [TRACE:FILE=features.booking.bookingProviders]
+// Purpose: External booking provider integration system supporting multiple appointment
+//          scheduling platforms. Implements provider abstractions, configuration management,
+//          and API integration for flexible booking system architecture.
+//
+// Exports / Entry: BookingProvider types, ProviderConfig interface, provider classes, getBookingProviders function
+// Used by: Booking actions, booking forms, and appointment management features
+//
+// Invariants:
+// - All providers must implement consistent booking interface
+// - Provider configurations must be validated before use
+// - API failures must be logged but not block booking flow
+// - Provider URLs must be properly validated and sanitized
+// - Booking IDs must be traceable across provider systems
+//
+// Status: @internal
+// Features:
+// - [FEAT:BOOKING] Multi-provider appointment scheduling
+// - [FEAT:INTEGRATION] External API integration (Mindbody, Vagaro, Square, Calendly)
+// - [FEAT:CONFIGURATION] Provider management and validation
+// - [FEAT:RELIABILITY] Error handling and fallback mechanisms
+// - [FEAT:MONITORING] Provider performance tracking
+
 import { BookingFormData } from './booking-schema';
 import { validatedEnv } from '@/lib/env';
 
@@ -15,11 +38,17 @@ import { validatedEnv } from '@/lib/env';
 /**
  * External booking provider types
  */
+// [TRACE:TYPE=features.booking.BookingProvider]
+// [FEAT:BOOKING] [FEAT:INTEGRATION]
+// NOTE: Provider types - defines supported external booking platforms for integration flexibility.
 export type BookingProvider = 'mindbody' | 'vagaro' | 'square' | 'calendly';
 
 /**
  * Provider configuration interface
  */
+// [TRACE:INTERFACE=features.booking.ProviderConfig]
+// [FEAT:BOOKING] [FEAT:CONFIGURATION] [FEAT:SECURITY]
+// NOTE: Configuration interface - defines secure provider setup with API credentials and endpoints.
 export interface ProviderConfig {
   enabled: boolean;
   apiKey?: string;
@@ -31,6 +60,9 @@ export interface ProviderConfig {
 /**
  * Booking provider interfaces
  */
+// [TRACE:INTERFACE=features.booking.BookingProviderResponse]
+// [FEAT:BOOKING] [FEAT:INTEGRATION]
+// NOTE: Response interface - standardizes booking outcomes across different provider APIs.
 export interface BookingProviderResponse {
   success: boolean;
   bookingId?: string;
@@ -41,6 +73,9 @@ export interface BookingProviderResponse {
 /**
  * Mindbody API integration
  */
+// [TRACE:CLASS=features.booking.MindbodyProvider]
+// [FEAT:BOOKING] [FEAT:INTEGRATION] [FEAT:RELIABILITY]
+// NOTE: Mindbody integration - implements wellness platform booking with error handling and logging.
 class MindbodyProvider {
   private config: ProviderConfig;
 

@@ -1,3 +1,26 @@
+// File: features/blog/lib/blog.ts  [TRACE:FILE=features.blog.blog]
+// Purpose: Blog content management system providing MDX parsing, frontmatter validation,
+//          and content indexing for hair salon blog. Handles blog post discovery, metadata
+//          extraction, and search integration with caching for performance.
+//
+// Exports / Entry: getAllPosts, getPostBySlug, getPostSlugs, BlogPost type
+// Used by: Blog pages, search functionality, and any blog-related features
+//
+// Invariants:
+// - All blog posts must have valid frontmatter with required fields
+// - Date parsing must be consistent and handle timezone issues
+// - Content directory must exist and be readable
+// - MDX parsing must handle syntax errors gracefully
+// - Search index must include all published posts
+//
+// Status: @public
+// Features:
+// - [FEAT:BLOG] MDX blog post parsing and management
+// - [FEAT:SEARCH] Blog content integration with site search
+// - [FEAT:PERFORMANCE] Cached content parsing and indexing
+// - [FEAT:CONTENT] Frontmatter validation and type safety
+// - [FEAT:SEO] Automatic reading time and metadata extraction
+
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -6,13 +29,25 @@ import { cache } from 'react';
 import { z } from 'zod';
 import siteConfig from '@/site.config';
 
-/** Absolute path to blog content directory */
+// [TRACE:CONST=features.blog.postsDirectory]
+// [FEAT:BLOG] [FEAT:CONTENT]
+// NOTE: Content directory path - resolves to content/blog from project root for MDX files.
 const postsDirectory = path.join(process.cwd(), 'content/blog');
+
+// [TRACE:CONST=features.blog.datePattern]
+// [FEAT:BLOG] [FEAT:CONTENT]
+// NOTE: Date validation regex - ensures YYYY-MM-DD format for consistent frontmatter dates.
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
+// [TRACE:FUNC=features.blog.isNonEmptyString]
+// [FEAT:BLOG] [FEAT:CONTENT]
+// NOTE: String validation - ensures non-empty strings for frontmatter field validation.
 const isNonEmptyString = (value: unknown): value is string =>
   typeof value === 'string' && value.trim().length > 0;
 
+// [TRACE:FUNC=features.blog.normalizeBlogDate]
+// [FEAT:BLOG] [FEAT:CONTENT] [FEAT:SEO]
+// NOTE: Date normalization - validates and normalizes dates while preventing timezone rollovers.
 const normalizeBlogDate = (value: unknown): { value: string; date: Date } | null => {
   if (value instanceof Date) {
     const isoDate = value.toISOString().slice(0, 10);
@@ -36,6 +71,9 @@ const normalizeBlogDate = (value: unknown): { value: string; date: Date } | null
   return { value, date: parsed };
 };
 
+// [TRACE:SCHEMA=features.blog.blogFrontmatterSchema]
+// [FEAT:BLOG] [FEAT:CONTENT] [FEAT:SEO]
+// NOTE: Frontmatter validation schema - enforces required fields and content standards for blog posts.
 const blogFrontmatterSchema = z.object({
   title: z.string().min(2).max(200).trim(),
   description: z.string().min(10).max(300).trim(),
@@ -45,8 +83,14 @@ const blogFrontmatterSchema = z.object({
   featured: z.boolean().optional(),
 });
 
+// [TRACE:FUNC=features.blog.formatFrontmatterErrors]
+// [FEAT:BLOG] [FEAT:CONTENT]
+// NOTE: Error formatting - converts Zod errors to JSON for logging and debugging.
 const formatFrontmatterErrors = (error: z.ZodError) => JSON.stringify(error.flatten().fieldErrors);
 
+// [TRACE:FUNC=features.blog.reportFrontmatterError]
+// [FEAT:BLOG] [FEAT:CONTENT]
+// NOTE: Error reporting - logs frontmatter validation errors with context for debugging.
 const reportFrontmatterError = (slug: string, details: string) => {
   const message = `Invalid frontmatter for blog post "${slug}": ${details}`;
 
