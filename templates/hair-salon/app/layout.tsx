@@ -223,7 +223,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SkipToContent />
         <Navigation searchItems={searchItems} />
         <Providers>
-          <main id="main-content" tabIndex={-1} className="focus-visible:outline-none">
+          <main id="main-content" tabIndex={-1} className="focus-visible:outline-hidden">
             {children}
           </main>
         </Providers>

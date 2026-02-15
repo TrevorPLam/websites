@@ -127,7 +127,7 @@ export default function Navigation({ searchItems }: NavigationProps) {
 
   return (
     <nav
-      className="bg-secondary shadow-sm sticky top-0 z-50"
+      className="bg-secondary shadow-xs sticky top-0 z-50"
       role="navigation"
       aria-label="Primary"
     >

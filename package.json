@@ -16,6 +16,7 @@
     "apps/*"
   ],
   "scripts": {
+    "changeset": "changeset",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
@@ -30,9 +31,12 @@
     "syncpack:fix": "syncpack fix-mismatches",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "validate-exports": "node scripts/validate-exports.js"
+    "validate-exports": "node scripts/validate-exports.js",
+    "version-packages": "pnpm changeset version && pnpm install --no-frozen-lockfile",
+    "release": "pnpm changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.8",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

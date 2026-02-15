@@ -68,3 +68,8 @@ jobs:
       - name: Knip
         continue-on-error: true
         run: pnpm knip
+
+      # [Task 0.16] Docker build verification — ensures standalone output + Dockerfile alignment
+      - name: Docker build (hair-salon)
+        continue-on-error: true
+        run: docker build -f templates/hair-salon/Dockerfile -t hair-salon .

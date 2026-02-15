@@ -133,7 +133,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group bg-white rounded-lg shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 overflow-hidden"
+                  className="group bg-white rounded-lg shadow-xs border border-slate-200 hover:shadow-xl transition-all duration-300 overflow-hidden"
                 >
                   <div className="p-8">
                     {/* Category Badge */}

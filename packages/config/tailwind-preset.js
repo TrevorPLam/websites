@@ -1,10 +1,8 @@
 // File: packages/config/tailwind-preset.js  [TRACE:FILE=packages.config.tailwindPreset]
-// Purpose: Shared Tailwind CSS preset providing semantic utility classes and design system
-//          configuration for all marketing website templates. Maps semantic classes
-//          to CSS custom properties for consistent theming across templates.
-//
-// Exports / Entry: Tailwind preset configuration object
-// Used by: Template tailwind.config.js files for design system setup
+// @deprecated Task 0.4 (2026-02-15): Replaced by tailwind-theme.css for Tailwind v4.
+//            Tailwind v4 removes tailwind.config.js; use @import "@repo/config/tailwind-theme.css" instead.
+// Purpose: [LEGACY] Shared Tailwind CSS preset for v3. Replaced by packages/config/tailwind-theme.css.
+// Exports / Entry: N/A (deprecated)
 //
 // Invariants:
 // - Must provide semantic color mappings (primary, secondary, muted, etc.)

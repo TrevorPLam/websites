@@ -26,7 +26,7 @@ export default function NotFound() {
         <div className="grid md:grid-cols-3 gap-4 mb-12">
           <Link
             href="/"
-            className="flex flex-col items-center p-6 bg-card rounded-lg shadow-sm border border-border hover:shadow-md hover:border-primary/30 transition-all group"
+            className="flex flex-col items-center p-6 bg-card rounded-lg shadow-xs border border-border hover:shadow-md hover:border-primary/30 transition-all group"
           >
             <Home className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="font-semibold text-foreground mb-1">Go Home</h3>
@@ -35,7 +35,7 @@ export default function NotFound() {
 
           <Link
             href="/services"
-            className="flex flex-col items-center p-6 bg-card rounded-lg shadow-sm border border-border hover:shadow-md hover:border-secondary/30 transition-all group"
+            className="flex flex-col items-center p-6 bg-card rounded-lg shadow-xs border border-border hover:shadow-md hover:border-secondary/30 transition-all group"
           >
             <Search className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="font-semibold text-foreground mb-1">Our Services</h3>
@@ -44,7 +44,7 @@ export default function NotFound() {
 
           <Link
             href="/contact"
-            className="flex flex-col items-center p-6 bg-card rounded-lg shadow-sm border border-border hover:shadow-md hover:border-accent/30 transition-all group"
+            className="flex flex-col items-center p-6 bg-card rounded-lg shadow-xs border border-border hover:shadow-md hover:border-accent/30 transition-all group"
           >
             <HelpCircle className="w-8 h-8 text-accent mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="font-semibold text-foreground mb-1">Get Help</h3>

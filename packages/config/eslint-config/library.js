@@ -1,14 +1,26 @@
-import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
 import { boundaryRules } from './boundaries.js';
 
+const recommended = tseslint.configs.recommended;
+const mergedRules = recommended.reduce(
+  (acc, config) => ({
+    ...acc,
+    ...(config.rules ?? {}),
+  }),
+  {}
+);
+
 export default [
-  js.configs.recommended,
   {
+    files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
+      parser: tseslint.parser,
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
+      ...mergedRules,
       'no-console': 'off',
       ...boundaryRules,
     },

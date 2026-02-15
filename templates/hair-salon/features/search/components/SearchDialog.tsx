@@ -124,7 +124,7 @@ export default function SearchDialog({ items = [], variant = 'desktop' }: Search
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search blog posts, services, and pages"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-ring"
                 aria-label="Search"
               />
             </div>

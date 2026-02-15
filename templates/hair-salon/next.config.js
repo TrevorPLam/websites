@@ -1,8 +1,11 @@
-/** @type {import('next').NextConfig} */
+/**
+ * @type {import('next').NextConfig}
+ * [Task 0.16] Standalone output required for Docker deployments.
+ * Bundles prod deps into .next/standalone for minimal container size (~180MB).
+ * Windows: local `next build` may EPERM on symlinks; use `next dev` or build in Docker.
+ * See: docs/adr/0004-dockerfile-standalone-output.md, docs/deployment/docker.md
+ */
 const nextConfig = {
-  // [Task 0.16] Re-enabled standalone output — required for Docker deployments.
-  // Standalone output bundles all dependencies into .next/standalone for minimal container size.
-  // Note: If developing locally on Windows with symlink issues, use `next dev` (which ignores this).
   output: 'standalone',
   // [Task 1.5.4] Suppress X-Powered-By header to avoid tech stack disclosure
   poweredByHeader: false,

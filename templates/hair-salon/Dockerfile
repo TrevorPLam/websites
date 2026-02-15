@@ -1,6 +1,8 @@
 # Hair Salon Template — Production Dockerfile
-# [Task 0.4.3] Pinned pnpm version, added non-root user, added HEALTHCHECK
-# [Task 0.16] Aligned Node version with engines.node >= 22.0.0 (Task 0.28)
+# [Task 0.4.3] Pinned pnpm version, non-root user, HEALTHCHECK
+# [Task 0.16] Standalone output + path-based filter; Node 22 (Task 0.28)
+# Build: docker build -f templates/hair-salon/Dockerfile -t hair-salon .
+# See: docs/deployment/docker.md, docs/adr/0004-dockerfile-standalone-output.md
 
 # Stage 1: Dependencies
 FROM node:22-alpine AS deps

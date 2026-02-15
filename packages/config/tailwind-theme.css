@@ -1,0 +1,38 @@
+/* File: packages/config/tailwind-theme.css  [TRACE:FILE=packages.config.tailwindTheme]
+ * Purpose: Tailwind v4 @theme block replacing tailwind-preset.js. Maps semantic design
+ *          tokens to CSS custom properties. ThemeInjector/site.config.ts override the
+ *          underlying vars (--primary, --background, etc.) at runtime.
+ * Task: 0.4 Tailwind v4 migration
+ * Features: [FEAT:DESIGN] [FEAT:THEMING] [FEAT:CONFIGURATION]
+ */
+
+@theme {
+  /* Semantic colors — reference :root vars (ThemeInjector overrides these) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Border radius scale */
+  --radius: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-md: calc(var(--radius) + 2px);
+  --radius-sm: calc(var(--radius) - 2px);
+
+  /* Font families */
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+}

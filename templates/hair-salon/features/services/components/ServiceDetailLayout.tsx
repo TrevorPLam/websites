@@ -140,7 +140,7 @@ export default function ServiceDetailLayout({
             <div className="grid md:grid-cols-2 gap-4">
               {included.map((item) => (
                 <div key={item} className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="w-4 h-4 text-primary" />
                   </div>
                   <span className="text-muted-foreground">{item}</span>
@@ -179,7 +179,7 @@ export default function ServiceDetailLayout({
             <div className="space-y-4">
               {whoItsFor.map((item) => (
                 <div key={item} className="flex items-start gap-3">
-                  <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="w-4 h-4 text-white" />
                   </div>
                   <span className="text-muted-foreground text-lg">{item}</span>

@@ -6,10 +6,10 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const variantStyles: Record<string, string> = {
-  default: 'bg-card text-card-foreground rounded-xl border border-border shadow-sm',
-  testimonial: 'bg-card text-card-foreground rounded-xl border border-border shadow-sm p-6',
+  default: 'bg-card text-card-foreground rounded-xl border border-border shadow-xs',
+  testimonial: 'bg-card text-card-foreground rounded-xl border border-border shadow-xs p-6',
   service:
-    'bg-card text-card-foreground rounded-xl border border-border shadow-sm p-6 hover:shadow-md transition-shadow',
+    'bg-card text-card-foreground rounded-xl border border-border shadow-xs p-6 hover:shadow-md transition-shadow',
 };
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(

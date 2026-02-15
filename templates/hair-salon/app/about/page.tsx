@@ -92,7 +92,7 @@ export default function AboutPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Value 1: Expertise */}
-            <div className="bg-white p-8 rounded-lg shadow-sm border border-slate-100">
+            <div className="bg-white p-8 rounded-lg shadow-xs border border-slate-100">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Scissors className="w-6 h-6 text-primary" />
               </div>
@@ -104,7 +104,7 @@ export default function AboutPage() {
             </div>
 
             {/* Value 2: Care */}
-            <div className="bg-white p-8 rounded-lg shadow-sm border border-slate-100">
+            <div className="bg-white p-8 rounded-lg shadow-xs border border-slate-100">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Heart className="w-6 h-6 text-primary" />
               </div>
@@ -116,7 +116,7 @@ export default function AboutPage() {
             </div>
 
             {/* Value 3: Atmosphere */}
-            <div className="bg-white p-8 rounded-lg shadow-sm border border-slate-100">
+            <div className="bg-white p-8 rounded-lg shadow-xs border border-slate-100">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Sparkles className="w-6 h-6 text-primary" />
               </div>

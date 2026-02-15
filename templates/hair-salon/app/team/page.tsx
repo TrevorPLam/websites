@@ -108,7 +108,7 @@ export default function TeamPage() {
       {/* Join Us CTA */}
       <section className="py-20 bg-muted">
         <Container>
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl p-10 shadow-sm border border-slate-200 text-center">
+          <div className="max-w-4xl mx-auto bg-white rounded-2xl p-10 shadow-xs border border-slate-200 text-center">
             <h2 className="text-3xl font-bold text-foreground mb-4">Join Our Team</h2>
             <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
               We are always looking for talented, passionate individuals to grow with us. If you

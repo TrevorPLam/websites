@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* [Task 0.4] Tailwind v4 — @import replaces @tailwind directives */
+@import "@repo/config/tailwind-theme.css";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Explicit source for workspace package (auto-detection may miss it) */
+@source "../../../packages/ui/src";
 
 @layer base {
   :root {

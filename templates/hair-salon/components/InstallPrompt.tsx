@@ -111,7 +111,7 @@ export default function InstallPrompt() {
       </button>
 
       <div className="flex items-start gap-4 pr-8">
-        <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
           <Download className="w-6 h-6" />
         </div>
 

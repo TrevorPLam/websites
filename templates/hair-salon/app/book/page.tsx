@@ -92,7 +92,7 @@ export default function BookPage() {
                 </p>
               </Card>
 
-              <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm text-center">
+              <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-xs text-center">
                 <h3 className="font-bold text-foreground mb-2">Prefer to call?</h3>
                 <p className="text-2xl font-bold text-primary mb-1">(555) 123-4567</p>
                 <p className="text-sm text-slate-500">

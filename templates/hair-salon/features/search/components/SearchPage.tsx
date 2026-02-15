@@ -47,7 +47,7 @@ export default function SearchPage({ items }: SearchPageProps) {
 
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm">
+          <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-xs">
             <label htmlFor="site-search" className="sr-only">
               Search
             </label>
@@ -58,7 +58,7 @@ export default function SearchPage({ items }: SearchPageProps) {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search blog posts, services, and pages"
-                className="w-full text-base text-gray-900 focus:outline-none"
+                className="w-full text-base text-gray-900 focus:outline-hidden"
               />
             </div>
 

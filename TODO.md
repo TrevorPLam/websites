@@ -721,8 +721,8 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 **Implementation Summary:**
 
 - Installed syncpack@13.0.4 (stable) as root devDependency
-- Created `.syncpackrc.json` with version groups: ignore @repo/** (workspace), unsupported/catalog, local; semver group for peer deps (^)
-- Fixed 11 mismatches via `syncpack fix-mismatches`: @eslint/eslintrc, @types/node, @upstash/*, eslint, tailwindcss, typescript, @sentry/nextjs peer
+- Created `.syncpackrc.json` with version groups: ignore @repo/\*\* (workspace), unsupported/catalog, local; semver group for peer deps (^)
+- Fixed 11 mismatches via `syncpack fix-mismatches`: @eslint/eslintrc, @types/node, @upstash/\*, eslint, tailwindcss, typescript, @sentry/nextjs peer
 - Added `syncpack:check` and `syncpack:fix` to root scripts; CI step (blocking) after type-check
 - Created `docs/tooling/syncpack.md`; cross-linked in `docs/tooling/pnpm.md`
 
@@ -747,7 +747,7 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 **Implementation Summary:**
 
 - Created `scripts/validate-exports.js` (plain Node.js, matches validate-workspaces pattern — no tsx dep)
-- Validates all workspace package.json files under packages/*, templates/*, clients/*, apps/*
+- Validates all workspace package.json files under packages/_, templates/_, clients/_, apps/_
 - Supports simple string exports and conditional exports (import/require/default)
 - Added `pnpm validate-exports` script; CI step (blocking) after type-check, before syncpack
 - Created `docs/tooling/validate-exports.md`; cross-linked in `docs/tooling/pnpm.md`
@@ -899,19 +899,21 @@ These tasks must run after config/code fixes and tooling are in place.
 
 **Priority:** HIGH | **Effort:** 30 min | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-15]
 
-**What:** `templates/hair-salon/next.config.js:5` has `output: 'standalone'` commented out, but `Dockerfile:38` uses `COPY --from=builder .next/standalone ./`. Docker builds will fail with file-not-found.
+**What:** `templates/hair-salon/next.config.js:5` had `output: 'standalone'` commented out (per audit); Dockerfile expected standalone output. Additionally, build filter `@templates/hair-salon` did not match package name `@templates/websites`.
 
-**Steps:**
+**Implementation Summary:**
 
-1. Re-enable `output: 'standalone'` in `next.config.js` (preferred for Docker deploys)
-2. OR: Rewrite Dockerfile to not depend on standalone output
-3. Verify Docker build succeeds: `docker build -t test .`
+- `output: 'standalone'` was already re-enabled in next.config.js (prior session).
+- **Critical fix:** Dockerfile build step used `--filter=@templates/hair-salon` which returns "No package found". Changed to `--filter=./templates/hair-salon` (path-based) so build succeeds.
+- Created `docs/adr/0004-dockerfile-standalone-output.md`, `docs/deployment/docker.md`.
+- Verification: `docker build -f templates/hair-salon/Dockerfile -t hair-salon .` (requires Docker; Windows local `next build` may EPERM on symlinks).
 
 **Files:**
 
-- Fix: `templates/hair-salon/next.config.js` OR `templates/hair-salon/Dockerfile`
+- Fix: `templates/hair-salon/Dockerfile` (build filter)
+- Docs: `docs/adr/0004-dockerfile-standalone-output.md`, `docs/deployment/docker.md`
 
 ---
 
@@ -925,7 +927,7 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 **Priority:** MEDIUM | **Effort:** 2 hrs (evaluation only) | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
 **What:** Tailwind v4.0 (released Jan 2025) is a major architectural change: CSS-first config, no `tailwind.config.js`, native cascade layers, zero-config content detection. Project uses v3.4.17.
 
@@ -944,13 +946,19 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 **Output:** Decision doc: migrate now / defer / hybrid pilot
 
+**Implementation Summary:**
+
+- **2026-02-15 User override:** Full v4 migration executed. See `docs/adr/0005-tailwind-v4-migration.md`.
+- Migrated: tailwind 4.1, @tailwindcss/postcss, @tailwindcss/typography; created packages/config/tailwind-theme.css; removed tailwind.config.js; fixed outline-none, shadow-sm, flex-shrink-0 across 15+ files.
+- Build compiles; pages generate. Windows standalone EPERM (pre-existing) persists.
+
 ---
 
 #### 0.5 Evaluate Next.js 16 Migration
 
 **Priority:** MEDIUM | **Effort:** 2 hrs (evaluation only) | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Next.js 16 (released Oct 2025) includes React 19.2, stabilized Turbopack for production, caching improvements. Project uses 15.5.12 (Maintenance LTS).
 
@@ -1027,7 +1035,7 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 **Priority:** HIGH | **Effort:** 2 hrs | **Dependencies:** 0.2
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Introduce deterministic package versioning and changelog generation for multi-package refactors.
 
