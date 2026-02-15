@@ -343,7 +343,7 @@ All tasks in Batch A can be executed in parallel. No dependencies between them.
 
 **Priority:** HIGH | **Effort:** 30 min | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Template dependencies use hardcoded versions instead of `catalog:` protocol, causing version drift:
 
@@ -425,9 +425,9 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 
 **Priority:** CRITICAL | **Effort:** 2 hrs | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-15]
 
-**What:** The entire config-driven theming story is broken. `site.config.ts` defines HSL theme values (lines 103-121) but `globals.css` uses hardcoded hex values. No code reads `siteConfig.theme` to generate CSS custom properties. Changing `site.config.ts` theme values has **zero visual effect**.
+**What:** The entire config-driven theming story was broken. `site.config.ts` defines HSL theme values (lines 103-121) but `globals.css` used hardcoded hex values. No code read `siteConfig.theme` to generate CSS custom properties. Changing `site.config.ts` theme values had **zero visual effect**.
 
 **Evidence:**
 
@@ -458,15 +458,22 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 
 **Acceptance Criteria:**
 
-- Changing theme values in `site.config.ts` produces visible CSS changes
-- `globals.css` remains as fallback when no config override exists
-- No hydration mismatch warnings
+- [x] Changing theme values in `site.config.ts` produces visible CSS changes
+- [x] `globals.css` remains as fallback when no config override exists
+- [x] No hydration mismatch warnings (Server Component)
+
+**Implementation Summary:**
+
+- `ThemeInjector` existed; verified and enhanced (type compatibility with @repo/shared ThemeColors)
+- Fixed `logError` calls in error.tsx and global-error.tsx (Task 0.26 follow-up) for build verification
+- See `docs/theming/theme-injector.md` for architecture and usage
 
 **Files:**
 
-- Create: `packages/ui/src/components/ThemeInjector.tsx`
-- Update: `packages/ui/src/index.ts`
-- Update: `templates/hair-salon/app/layout.tsx`
+- `packages/ui/src/components/ThemeInjector.tsx` (enhanced types)
+- `packages/ui/src/index.ts` (exports)
+- `templates/hair-salon/app/layout.tsx` (wired)
+- `docs/theming/theme-injector.md` (created)
 
 ---
 
@@ -571,7 +578,7 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 
 **Priority:** HIGH | **Effort:** 1 hr | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-15]
 
 **What:** Two separate hardcoded lists of site pages exist:
 
@@ -587,11 +594,22 @@ When a route is added or removed, both files must be updated independently.
 3. Refactor `search.ts` to consume from route registry
 4. This becomes the foundation for config-driven routing in the refactor
 
+**Implementation Summary:**
+
+- Created `lib/routes.ts` with `RouteEntry` type, `STATIC_ROUTES` (16 entries), `getSitemapEntries()`, and `getSearchEntries()`
+- `sitemap.ts` now uses `getSitemapEntries(baseUrl)` for static pages; blog posts still generated dynamically
+- `search.ts` now uses `getSearchEntries()` for static pages; blog items merged in `buildSearchIndex()`
+- Search index expanded to include all 16 static pages (previously 10) — adds service detail pages, privacy, terms
+- Added `docs/architecture/route-registry.md` for architecture documentation
+- Added `lib/__tests__/routes.test.ts` — 9 unit tests, all passing
+
 **Files:**
 
-- Create: `templates/hair-salon/lib/routes.ts`
-- Refactor: `templates/hair-salon/app/sitemap.ts`
-- Refactor: `templates/hair-salon/lib/search.ts`
+- Created: `templates/hair-salon/lib/routes.ts`
+- Refactored: `templates/hair-salon/app/sitemap.ts`
+- Refactored: `templates/hair-salon/lib/search.ts`
+- Created: `docs/architecture/route-registry.md`
+- Created: `templates/hair-salon/lib/__tests__/routes.test.ts`
 
 ---
 
@@ -669,23 +687,26 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 
 **Priority:** HIGH | **Effort:** 1 hr | **Dependencies:** 0.2
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-14]
 
 **What:** [knip](https://knip.dev/) finds unused files, exports, and dependencies in monorepos. Would have automatically detected the duplicate `cn()`, broken export paths, stale dependencies.
 
-**Steps:**
+**Implementation Summary:**
 
-1. Install: `pnpm add -Dw knip`
-2. Create `knip.config.ts` with workspace configuration
-3. Run `knip` and review results — configure ignores for false positives
-4. Add to root `package.json` scripts: `"knip": "knip"`
-5. Add to CI workflow (non-blocking initially, then blocking)
+- Installed knip ^5.83.1 as root devDependency
+- Created `knip.config.ts` with workspace config, ignoreDependencies, ignoreExportsUsedInFile, ignoreIssues, ignoreUnresolved
+- Added `pnpm knip` to root scripts; added CI step (non-blocking, continue-on-error)
+- Fixed ESLint imports: `@repo/eslint-config/library.js` → `@repo/eslint-config` (packages/infra, utils, ui)
+- Added unlisted deps: @repo/config (hair-salon), @repo/eslint-config (infra), tailwindcss (packages/config)
+- Created `docs/tooling/knip.md` for usage and interpretation
 
 **Files:**
 
 - Create: `knip.config.ts`
+- Create: `docs/tooling/knip.md`
 - Update: root `package.json` scripts
 - Update: `.github/workflows/ci.yml`
+- Update: `templates/hair-salon/package.json`, `packages/infra/package.json`, `packages/config/package.json`
 
 ---
 
@@ -693,23 +714,25 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 
 **Priority:** HIGH | **Effort:** 1 hr | **Dependencies:** 0.27
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-14]
 
 **What:** [syncpack](https://jamiemason.github.io/syncpack/) ensures consistent dependency versions across workspace packages. Would catch zod version mismatch, React not using catalog, etc.
 
-**Steps:**
+**Implementation Summary:**
 
-1. Install: `pnpm add -Dw syncpack`
-2. Create `.syncpackrc.json` with desired rules
-3. Add to `package.json` scripts: `"syncpack:check": "syncpack list-mismatches"`
-4. Run and fix any remaining mismatches
-5. Add to CI as blocking check
+- Installed syncpack@13.0.4 (stable) as root devDependency
+- Created `.syncpackrc.json` with version groups: ignore @repo/** (workspace), unsupported/catalog, local; semver group for peer deps (^)
+- Fixed 11 mismatches via `syncpack fix-mismatches`: @eslint/eslintrc, @types/node, @upstash/*, eslint, tailwindcss, typescript, @sentry/nextjs peer
+- Added `syncpack:check` and `syncpack:fix` to root scripts; CI step (blocking) after type-check
+- Created `docs/tooling/syncpack.md`; cross-linked in `docs/tooling/pnpm.md`
 
 **Files:**
 
-- Create: `.syncpackrc.json`
+- Created: `.syncpackrc.json`
+- Created: `docs/tooling/syncpack.md`
 - Update: root `package.json` scripts
-- Update: CI workflow
+- Update: `.github/workflows/ci.yml`
+- Update: `packages/config/package.json`, `packages/infra/package.json`, `templates/hair-salon/package.json`, `templates/shared/package.json`, `packages/config/typescript-config/package.json` (version fixes)
 
 ---
 
@@ -717,24 +740,25 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 
 **Priority:** HIGH | **Effort:** 1 hr | **Dependencies:** 0.10
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-14]
 
 **What:** Validate that every entry in every `package.json` `exports` field resolves to an actual file on disk. Prevents BUG-1 (broken infra export) from recurring.
 
-**Steps:**
+**Implementation Summary:**
 
-1. Create `scripts/validate-exports.ts`:
-   - Read all `packages/*/package.json` files
-   - For each exports entry, verify the target file exists on disk
-   - Exit with error code if any broken
-2. Add to `package.json` scripts: `"validate-exports": "tsx scripts/validate-exports.ts"`
-3. Add to CI workflow
+- Created `scripts/validate-exports.js` (plain Node.js, matches validate-workspaces pattern — no tsx dep)
+- Validates all workspace package.json files under packages/*, templates/*, clients/*, apps/*
+- Supports simple string exports and conditional exports (import/require/default)
+- Added `pnpm validate-exports` script; CI step (blocking) after type-check, before syncpack
+- Created `docs/tooling/validate-exports.md`; cross-linked in `docs/tooling/pnpm.md`
+- Verified: detects broken exports (tested with intentional invalid path); all current exports pass
 
 **Files:**
 
-- Create: `scripts/validate-exports.ts`
+- Create: `scripts/validate-exports.js`
+- Create: `docs/tooling/validate-exports.md`
 - Update: root `package.json` scripts
-- Update: CI workflow
+- Update: `.github/workflows/ci.yml`
 
 ---
 
@@ -766,11 +790,11 @@ These tasks must run after config/code fixes and tooling are in place.
 
 #### 0.3 Upgrade Turborepo
 
-**Priority:** HIGH | **Effort:** 1 hr | **Dependencies:** 0.29
+**Priority:** HIGH | **Effort:** 1 hr | **Dependencies:** 0.2
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
-**What:** Turbo 2.2.3 → 2.8.7+ (latest stable). 6-minor-version gap with significant improvements: affected package detection, composable configuration, devtools, task search in TUI, sidecar tasks, performance.
+**What:** Turbo 2.2.3 → 2.8.9 (latest stable). 6-minor-version gap with significant improvements: affected package detection, composable configuration, devtools, task search in TUI, sidecar tasks, performance.
 
 **Steps:**
 
@@ -790,6 +814,15 @@ These tasks must run after config/code fixes and tooling are in place.
 **Files:**
 
 - Fix: root `package.json` — update `turbo` devDependency
+- Create: `docs/tooling/turborepo.md` — configuration and upgrade documentation
+
+**Completion Notes (2026-02-14):**
+
+- Upgraded turbo 2.2.3 → 2.8.9 via `pnpm up turbo@latest -D -w`
+- `turbo.json` already uses `tasks` (not deprecated `pipeline`); no config changes required
+- No Turborepo deprecation warnings observed
+- Full pipeline (lint, type-check, build, test) has pre-existing failures in @repo/utils (ESLint), @repo/ui (missing @typescript-eslint), @repo/integrations (tsconfig paths, CSP types) — see Wave 0 Batch B/C tasks
+- Turborepo 2.8.9 orchestrates correctly; cache hits confirmed; see `docs/tooling/turborepo.md`
 
 ---
 
@@ -797,33 +830,34 @@ These tasks must run after config/code fixes and tooling are in place.
 
 **Priority:** CRITICAL | **Effort:** 2 hrs | **Dependencies:** 0.2
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
 **What:** Prevent cross-package architecture drift by enforcing import and dependency boundaries. Template code should not import internal feature implementation files directly.
 
-**Steps:**
+**Implementation Summary:**
 
-1. Define allowed dependency direction matrix:
-   - `templates` → `features/components/types` (allowed)
-   - `templates` → `template internals of another app` (blocked)
-   - External packages → `@repo/*/src/*` (blocked — deep imports)
-2. Configure ESLint `no-restricted-imports` and/or boundary plugin
-3. Update `packages/*/package.json` exports to expose only supported entrypoints
-4. Create `docs/architecture/module-boundaries.md` documenting the matrix
-5. Add CI step that fails on boundary violations with actionable errors
+- Created `docs/architecture/module-boundaries.md` with dependency direction matrix and supported entrypoints
+- Added `./env` → `./env/index.ts` to @repo/infra exports (was missing; hair-salon imports from `@repo/infra/env`)
+- Created `packages/config/eslint-config/boundaries.js` with `no-restricted-imports` patterns: `@repo/*/src/*`, `**/packages/**`, `**/templates/**`
+- Merged boundary rules into `@repo/eslint-config` (next.js and library.js) — lint step enforces boundaries
+- Added `./boundaries` export to @repo/eslint-config package.json
+- CI lint step already fails on boundary violations; added workflow comment for clarity
+- Created `docs/adr/0002-module-boundaries-eslint.md` for architectural decision record
 
 **Acceptance Criteria:**
 
-- Deep imports like `@repo/features/src/*` blocked from external packages
-- Architectural dependency matrix documented and enforced in lint
-- CI fails on boundary violations
+- [x] Deep imports like `@repo/*/src/*` blocked via ESLint
+- [x] Architectural dependency matrix documented in module-boundaries.md
+- [x] CI fails on boundary violations (via existing `pnpm lint`)
 
 **Files:**
 
-- Create: `docs/architecture/module-boundaries.md`
-- Create or configure: `eslint-rules/no-cross-package-internals.js`
-- Update: root ESLint config
-- Update: `packages/*/package.json` exports
+- Created: `docs/architecture/module-boundaries.md`
+- Created: `packages/config/eslint-config/boundaries.js`
+- Created: `docs/adr/0002-module-boundaries-eslint.md`
+- Update: `packages/infra/package.json` (./env export), `packages/config/eslint-config/package.json` (./boundaries export)
+- Update: `packages/config/eslint-config/next.js`, `library.js` (boundary rules)
+- Update: `.github/workflows/ci.yml` (comment)
 
 ---
 
@@ -831,35 +865,33 @@ These tasks must run after config/code fixes and tooling are in place.
 
 **Priority:** CRITICAL | **Effort:** 3 hrs | **Dependencies:** 0.3
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
 **What:** Ensure every PR runs consistent checks: type safety, tests, build, lint, affected packages. Deliver Wave 0 baseline gate first, then extend after Task 2.21.
 
-**Steps:**
+**Implementation Summary:**
 
-1. Update `.github/workflows/ci.yml` with required checks:
-   - `pnpm turbo lint`
-   - `pnpm turbo type-check`
-   - `pnpm turbo test`
-   - `pnpm turbo build`
-   - Changed-package validation (affected graph only)
-2. Add nightly full-repo run (not just affected)
-3. Split into required blocking jobs vs informative non-blocking
-4. Add explicit branch protection mapping to required check names
-5. Create `docs/ci/required-checks.md`
-6. Update `turbo.json` to include lint/type-check/test/build for all new packages
+- Split CI into `quality-gates` (blocking) and `quality-audit` (informative, parallel)
+- PRs use `--filter="...[origin/main]"` for affected-package optimization; push runs full pipeline
+- Added `nightly.yml` for daily full-repo validation (02:00 UTC + workflow_dispatch)
+- Created `docs/ci/required-checks.md` with branch protection mapping
+- Created `docs/adr/0003-ci-quality-gates.md` for architectural decision record
+- turbo.json already defines lint/type-check/test/build for all packages (no change needed)
 
 **Acceptance Criteria:**
 
-- PR CI runs lint/type-check/test/build with clear pass/fail gates
-- Affected-package path for speed; nightly full run configured
-- Required checks documentation matches branch protection config
+- [x] PR CI runs lint/type-check/test/build with clear pass/fail gates
+- [x] Affected-package path for speed; nightly full run configured
+- [x] Required checks documentation matches branch protection config
+
+**Note:** Pre-existing lint (@repo/utils) and test (env schema) failures remain; CI structure is complete.
 
 **Files:**
 
 - Update: `.github/workflows/ci.yml`
+- Create: `.github/workflows/nightly.yml`
 - Create: `docs/ci/required-checks.md`
-- Update: `turbo.json`
+- Create: `docs/adr/0003-ci-quality-gates.md`
 
 ---
 

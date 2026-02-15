@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import { boundaryRules } from './boundaries.js';
 
 export default [
   js.configs.recommended,
@@ -9,6 +10,7 @@ export default [
     },
     rules: {
       'no-console': 'off',
+      ...boundaryRules,
     },
   },
 ];

@@ -1,222 +1,279 @@
 // File: lib/routes.ts  [TRACE:FILE=lib.routes]
-// Purpose: Single authoritative route registry — consumed by sitemap.ts and search.ts
-//          to prevent route drift between navigation, sitemap, and search index.
+// Purpose: Single authoritative route registry for the hair-salon template. Consolidates
+//          static page definitions used by sitemap, search index, and future config-driven
+//          routing. Eliminates duplicate maintenance across sitemap.ts and search.ts.
 //
-// Exports / Entry: ROUTES, getRoutesByPriority, getSearchableRoutes
-// Used by: app/sitemap.ts, lib/search.ts, components/Navigation (future)
+// Exports / Entry: RouteEntry, getStaticRoutes, getSitemapEntries, getSearchEntries
+// Used by: app/sitemap.ts, lib/search.ts, and future route consumers
 //
 // Invariants:
-// - Every page route MUST be registered here
-// - Adding/removing a route updates sitemap AND search automatically
-// - Priority values follow sitemap protocol: 1.0 (homepage) to 0.1 (low priority)
+// - All static routes must exist as app directory page routes
+// - path must be valid URL path (leading slash, no trailing slash except for '/')
+// - changeFrequency and priority follow sitemap.org conventions
+// - Search metadata (title, description, tags) must be present for searchable pages
 //
 // Status: @public
 // Features:
-// - [FEAT:ROUTING] Centralized route definitions
-// - [FEAT:SEO] Sitemap priority and change frequency
-// - [FEAT:SEARCH] Search index metadata
+// - [FEAT:NAVIGATION] Centralized route definition
+// - [FEAT:SEO] Sitemap generation source
+// - [FEAT:SEARCH] Search index source
+// - [FEAT:CONFIGURATION] Foundation for config-driven routing (Task 3.x)
+//
+// Related: Task 0.25 — Create Unified Route Registry
 
-export interface RouteDefinition {
-  /** URL path relative to site root */
-  path: string;
-  /** Human-readable title */
+import type { MetadataRoute } from 'next';
+
+/** Sitemap change frequency per sitemaps.org. */
+export type ChangeFrequency =
+  | 'always'
+  | 'hourly'
+  | 'daily'
+  | 'weekly'
+  | 'monthly'
+  | 'yearly'
+  | 'never';
+
+/** Search index metadata for a route. */
+export type RouteSearchMeta = {
+  id: string;
   title: string;
-  /** Short description for search results and sitemap */
   description: string;
-  /** Sitemap priority (0.0 to 1.0) */
-  priority: number;
-  /** Sitemap change frequency */
-  changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
-  /** Whether this route should appear in search index */
-  searchable: boolean;
-  /** Optional search keywords for ranking boost */
-  keywords?: string[];
-  /** Optional category for grouping in search results */
-  category?: string;
-}
+  tags?: string[];
+};
 
 /**
- * Canonical route registry for the hair-salon template.
- *
- * Sources merged:
- * - app/sitemap.ts (sitemap priorities & change frequencies)
- * - lib/search.ts  (search descriptions, tags/keywords)
- *
- * When adding a new page, add a single entry here and both sitemap
- * and search index will pick it up automatically once the consumers
- * are refactored (see Task 0.25 TODOs in sitemap.ts / search.ts).
+ * Canonical route definition. Single source of truth for static routes.
+ * Used by sitemap generation and search index; extensible for config-driven routing.
  */
-export const ROUTES: RouteDefinition[] = [
+export type RouteEntry = {
+  /** URL path (e.g. '/' or '/about'). No trailing slash except for '/'. */
+  path: string;
+  /** Sitemap change frequency hint for crawlers. */
+  changeFrequency: ChangeFrequency;
+  /** Sitemap priority 0.0–1.0. Homepage typically 1.0. */
+  priority: number;
+  /** Search index metadata. Omit for noindex or non-searchable pages. */
+  search?: RouteSearchMeta;
+};
+
+/** Static route definitions. Add/remove here; sitemap and search stay in sync. */
+const STATIC_ROUTES: RouteEntry[] = [
   {
     path: '/',
-    title: 'Home',
-    description: 'Overview of our hair salon services, pricing, and booking information.',
-    priority: 1.0,
     changeFrequency: 'weekly',
-    searchable: true,
-    keywords: ['hair salon', 'services', 'styling'],
-    category: 'main',
+    priority: 1.0,
+    search: {
+      id: 'page-home',
+      title: 'Home',
+      description: 'Overview of our hair salon services, pricing, and booking information.',
+      tags: ['hair salon', 'services', 'styling'],
+    },
   },
   {
     path: '/about',
-    title: 'About',
-    description: 'Learn about our stylists, mission, and hair care philosophy.',
-    priority: 0.8,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['team', 'mission'],
-    category: 'main',
+    priority: 0.8,
+    search: {
+      id: 'page-about',
+      title: 'About',
+      description: 'Learn about our stylists, mission, and hair care philosophy.',
+      tags: ['team', 'mission'],
+    },
   },
   {
     path: '/services',
-    title: 'Services',
-    description: 'Explore haircuts, coloring, styling, and hair treatment services.',
-    priority: 0.9,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['hair services', 'treatments', 'styling'],
-    category: 'services',
+    priority: 0.9,
+    search: {
+      id: 'page-services',
+      title: 'Services',
+      description: 'Explore haircuts, coloring, styling, and hair treatment services.',
+      tags: ['hair services', 'treatments', 'styling'],
+    },
   },
   {
     path: '/services/haircuts',
-    title: 'Haircuts',
-    description: 'Professional haircut services for all styles and lengths.',
-    priority: 0.8,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['haircuts', 'hair styling', 'trim'],
-    category: 'services',
+    priority: 0.8,
+    search: {
+      id: 'page-services-haircuts',
+      title: 'Haircuts & Styling',
+      description: 'Precision cuts and styling for women, men, and children.',
+      tags: ['haircuts', 'styling'],
+    },
   },
   {
     path: '/services/coloring',
-    title: 'Coloring',
-    description: 'Hair coloring, highlights, balayage, and color correction services.',
-    priority: 0.8,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['hair color', 'highlights', 'balayage'],
-    category: 'services',
+    priority: 0.8,
+    search: {
+      id: 'page-services-coloring',
+      title: 'Coloring Services',
+      description: 'Full color, highlights, balayage, and color corrections.',
+      tags: ['coloring', 'highlights'],
+    },
   },
   {
     path: '/services/treatments',
-    title: 'Treatments',
-    description: 'Deep conditioning, keratin, and restorative hair treatments.',
-    priority: 0.8,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['hair treatments', 'conditioning', 'keratin'],
-    category: 'services',
+    priority: 0.8,
+    search: {
+      id: 'page-services-treatments',
+      title: 'Treatments',
+      description: 'Deep conditioning, keratin, and scalp treatments.',
+      tags: ['treatments', 'conditioning'],
+    },
   },
   {
     path: '/services/special-occasions',
-    title: 'Special Occasions',
-    description: 'Wedding, prom, and special event hair styling services.',
-    priority: 0.8,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['wedding hair', 'special events', 'updo'],
-    category: 'services',
+    priority: 0.8,
+    search: {
+      id: 'page-services-special-occasions',
+      title: 'Special Occasions',
+      description: 'Bridal hair, updos, and styling for weddings and events.',
+      tags: ['bridal', 'updos', 'special occasions'],
+    },
   },
   {
     path: '/pricing',
-    title: 'Pricing',
-    description: 'Review hair salon service packages, pricing, and membership options.',
-    priority: 0.9,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['pricing', 'packages'],
-    category: 'main',
+    priority: 0.9,
+    search: {
+      id: 'page-pricing',
+      title: 'Pricing',
+      description: 'Review hair salon service packages, pricing, and membership options.',
+      tags: ['pricing', 'packages'],
+    },
   },
   {
     path: '/book',
-    title: 'Book',
-    description: 'Request an appointment and share your preferred time.',
-    priority: 0.9,
     changeFrequency: 'weekly',
-    searchable: true,
-    keywords: ['booking', 'appointment'],
-    category: 'main',
+    priority: 0.9,
+    search: {
+      id: 'page-book',
+      title: 'Book',
+      description: 'Request an appointment and share your preferred time.',
+      tags: ['booking', 'appointment'],
+    },
   },
   {
     path: '/gallery',
-    title: 'Gallery',
-    description: 'Browse before-and-after transformations from our stylists.',
-    priority: 0.8,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['gallery', 'before and after'],
-    category: 'main',
+    priority: 0.8,
+    search: {
+      id: 'page-gallery',
+      title: 'Gallery',
+      description: 'Browse before-and-after transformations from our stylists.',
+      tags: ['gallery', 'before and after'],
+    },
   },
   {
     path: '/team',
-    title: 'Team',
-    description: 'Meet stylists and learn about their specialties.',
-    priority: 0.8,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['team', 'stylists'],
-    category: 'main',
+    priority: 0.8,
+    search: {
+      id: 'page-team',
+      title: 'Team',
+      description: 'Meet stylists and learn about their specialties.',
+      tags: ['team', 'stylists'],
+    },
   },
   {
     path: '/contact',
-    title: 'Contact',
-    description: 'Get in touch to schedule a free consultation.',
-    priority: 0.9,
     changeFrequency: 'monthly',
-    searchable: true,
-    keywords: ['contact', 'consultation'],
-    category: 'main',
-  },
-  {
-    path: '/blog',
-    title: 'Blog',
-    description: 'Hair care tips, trends, and styling advice from our experts.',
-    priority: 0.8,
-    changeFrequency: 'weekly',
-    searchable: true,
-    keywords: ['blog', 'insights'],
-    category: 'content',
-  },
-  {
-    path: '/search',
-    title: 'Search',
-    description: 'Search blog posts, services, and hair care resources across site.',
-    priority: 0.5,
-    changeFrequency: 'weekly',
-    searchable: true,
-    keywords: ['search', 'resources'],
-    category: 'utility',
+    priority: 0.9,
+    search: {
+      id: 'page-contact',
+      title: 'Contact',
+      description: 'Get in touch to schedule a free consultation.',
+      tags: ['contact', 'consultation'],
+    },
   },
   {
     path: '/privacy',
-    title: 'Privacy Policy',
-    description: 'Our privacy policy and data handling practices.',
-    priority: 0.4,
     changeFrequency: 'yearly',
-    searchable: false,
-    category: 'legal',
+    priority: 0.4,
+    search: {
+      id: 'page-privacy',
+      title: 'Privacy Policy',
+      description: 'Privacy policy and data handling practices.',
+      tags: ['legal', 'privacy'],
+    },
   },
   {
     path: '/terms',
-    title: 'Terms of Service',
-    description: 'Terms of service and conditions for using our website.',
-    priority: 0.4,
     changeFrequency: 'yearly',
-    searchable: false,
-    category: 'legal',
+    priority: 0.4,
+    search: {
+      id: 'page-terms',
+      title: 'Terms of Service',
+      description: 'Terms and conditions of service.',
+      tags: ['legal', 'terms'],
+    },
+  },
+  {
+    path: '/blog',
+    changeFrequency: 'weekly',
+    priority: 0.8,
+    search: {
+      id: 'page-blog',
+      title: 'Blog',
+      description: 'Hair care tips, trends, and styling advice from our experts.',
+      tags: ['blog', 'insights'],
+    },
+  },
+  {
+    path: '/search',
+    changeFrequency: 'weekly',
+    priority: 0.5,
+    search: {
+      id: 'page-search',
+      title: 'Search',
+      description: 'Search blog posts, services, and hair care resources across site.',
+      tags: ['search', 'resources'],
+    },
   },
 ];
 
 /**
- * Returns routes sorted by sitemap priority (highest first).
+ * Returns all static route entries. Use this for programmatic route iteration.
  */
-export function getRoutesByPriority(): RouteDefinition[] {
-  return [...ROUTES].sort((a, b) => b.priority - a.priority);
+export function getStaticRoutes(): RouteEntry[] {
+  return STATIC_ROUTES;
 }
 
 /**
- * Returns only routes flagged as searchable.
+ * Converts route registry to sitemap entries. Use in app/sitemap.ts.
  */
-export function getSearchableRoutes(): RouteDefinition[] {
-  return ROUTES.filter((route) => route.searchable);
+export function getSitemapEntries(baseUrl: string): MetadataRoute.Sitemap {
+  const now = new Date();
+  return STATIC_ROUTES.map((route) => ({
+    url: `${baseUrl.replace(/\/$/, '')}${route.path === '/' ? '' : route.path}`,
+    lastModified: now,
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
+}
+
+/**
+ * Converts route registry to search index items (static pages only).
+ * Blog posts are added separately by getSearchIndex.
+ */
+export function getSearchEntries(): Array<{
+  id: string;
+  title: string;
+  description: string;
+  href: string;
+  type: 'Page';
+  tags?: string[];
+}> {
+  return STATIC_ROUTES.filter((r) => r.search).map((route) => ({
+    id: route.search!.id,
+    title: route.search!.title,
+    description: route.search!.description,
+    href: route.path === '/' ? '/' : route.path,
+    type: 'Page' as const,
+    tags: route.search!.tags,
+  }));
 }

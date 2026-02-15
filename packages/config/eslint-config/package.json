@@ -6,7 +6,8 @@
   "description": "Shared ESLint configuration",
   "exports": {
     ".": "./library.js",
-    "./next": "./next.js"
+    "./next": "./next.js",
+    "./boundaries": "./boundaries.js"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

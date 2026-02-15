@@ -18,6 +18,7 @@
 // - [FEAT:THEMING] Config-driven CSS custom property generation
 // - [FEAT:PERFORMANCE] Zero client-side JS — server-rendered <style> tag
 // - [Task 0.14] Bridges the gap between site.config.ts theme and visual output
+// - Completed 2026-02-15: Type compat with @repo/shared, docs in docs/theming/theme-injector.md
 //
 // 2026 Best Practices:
 // - Server Component eliminates client-side bundle cost
@@ -32,6 +33,8 @@ import * as React from 'react';
  * Values should be CSS-valid color strings. The component accepts either:
  * - HSL space-separated values (e.g., '174 85% 33%') — wrapped in hsl() automatically
  * - Full CSS color values (e.g., '#0ea5a4', 'hsl(174, 85%, 33%)') — used as-is
+ *
+ * Compatible with @repo/shared ThemeColors (no index signature to allow strict SiteConfig assignment).
  */
 export interface ThemeColors {
   primary?: string;
@@ -51,7 +54,6 @@ export interface ThemeColors {
   border?: string;
   input?: string;
   ring?: string;
-  [key: string]: string | undefined;
 }
 
 export interface ThemeInjectorProps {

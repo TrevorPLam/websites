@@ -22,6 +22,7 @@
 // - [FEAT:COMPATIBILITY] Flat config compatibility for modern ESLint
 
 import { FlatCompat } from '@eslint/eslintrc';
+import { boundaryRules } from './boundaries.js';
 
 // [TRACE:FUNC=packages.config.eslint.next.compat]
 // [FEAT:COMPATIBILITY]
@@ -49,6 +50,9 @@ export default [
 
       // Allow console logging for specific levels (warn, error, info) but not general logs
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+
+      // [Task 0.11] Monorepo boundary enforcement — block deep imports and cross-package relative paths
+      ...boundaryRules,
     },
   },
 ];

@@ -19,6 +19,7 @@
     "./sentry/sanitize": "./sentry/sanitize.ts",
     "./sentry/client": "./sentry/client.ts",
     "./sentry/server": "./sentry/server.ts",
+    "./env": "./env/index.ts",
     "./env/validate": "./env/validate.ts",
     "./logger": "./logger/index.ts"
   },
@@ -27,12 +28,13 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@sentry/nextjs": ">=10.0.0",
+    "@sentry/nextjs": "^10.0.0",
     "next": "^15.5.0",
-    "@upstash/ratelimit": "^2.0.0",
-    "@upstash/redis": "^1.34.0"
+    "@upstash/ratelimit": "^2.0.5",
+    "@upstash/redis": "^1.34.3"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@sentry/nextjs": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",

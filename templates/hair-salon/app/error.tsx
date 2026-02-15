@@ -20,7 +20,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    logError(error);
+    logError('Error boundary caught error', error);
   }, [error]);
 
   return (

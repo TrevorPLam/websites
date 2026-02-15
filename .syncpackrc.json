@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/syncpack/dist/schema.json",
+  "versionGroups": [
+    {
+      "label": "Workspace packages — use workspace:* (pnpm)",
+      "dependencies": ["@repo/**"],
+      "dependencyTypes": ["dev", "peer", "prod"],
+      "isIgnored": true
+    },
+    {
+      "label": "pnpm catalog protocol — versions from pnpm-workspace.yaml",
+      "specifierTypes": ["unsupported", "workspace-protocol"],
+      "isIgnored": true
+    },
+    {
+      "label": "Local workspace references",
+      "dependencyTypes": ["local"],
+      "isIgnored": true
+    }
+  ],
+  "semverGroups": [
+    {
+      "label": "Use ^ for peer dependencies",
+      "dependencyTypes": ["peer"],
+      "range": "^"
+    }
+  ]
+}

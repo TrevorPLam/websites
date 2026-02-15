@@ -1,5 +1,5 @@
 // [Task 2.5.6] ESLint config for @repo/infra — extends shared library rules
-import config from '@repo/eslint-config/library.js';
+import config from '@repo/eslint-config';
 
 export default [
   ...config,

@@ -24,7 +24,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/.pnpm-store ./.pnpm-store
 COPY . .
 
-RUN pnpm run build --filter=@templates/hair-salon
+# Path-based filter: package name is @templates/websites; --filter=./templates/hair-salon
+# correctly targets the hair-salon template (see CODEBASE_AUDIT.md BUG re: name mismatch)
+RUN pnpm run build --filter=./templates/hair-salon
 
 # Stage 3: Runtime
 FROM node:22-alpine AS runtime

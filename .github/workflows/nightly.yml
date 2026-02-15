@@ -1,0 +1,70 @@
+# Nightly — Full Monorepo Validation
+#
+# [Task 0.13] Runs complete pipeline across ALL packages (no affected filter).
+# Catches drift that PR-level affected runs might miss (e.g. transitive deps,
+# config changes that don't touch package code).
+#
+# Schedule: Daily at 02:00 UTC
+# Trigger: workflow_dispatch for manual runs
+
+name: Nightly
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+jobs:
+  full-pipeline:
+    name: full-pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.29.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (full)
+        run: pnpm turbo run lint
+
+      - name: Type check (full)
+        run: pnpm turbo run type-check
+
+      - name: Validate exports
+        run: pnpm validate-exports
+
+      - name: Syncpack
+        run: pnpm syncpack:check
+
+      - name: Build (full)
+        run: pnpm turbo run build
+
+      - name: Test
+        run: pnpm test
+
+      - name: Knip
+        continue-on-error: true
+        run: pnpm knip

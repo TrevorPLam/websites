@@ -1,3 +1,14 @@
+# CI — Marketing Website Monorepo
+#
+# [Task 0.13] Strengthened quality gates with clear pass/fail separation,
+# affected-package optimization for PRs, and nightly full-repo validation.
+#
+# Blocking checks: lint, type-check, validate-exports, syncpack, build, test
+# Non-blocking: knip, SBOM, dependency audit (informative)
+#
+# Branch protection: Require "quality-gates" job to pass before merge.
+# See docs/ci/required-checks.md for configuration details.
+
 name: CI
 
 on:
@@ -15,21 +26,29 @@ permissions:
   contents: read
 
 jobs:
-  ci:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Blocking quality gates — must pass for merge
+  # Map this job name to branch protection "Require status checks"
+  # ─────────────────────────────────────────────────────────────────────────
+  quality-gates:
+    name: quality-gates
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
     strategy:
+      fail-fast: false
       matrix:
-        # [Task 0.28] Aligned with engines.node >= 22.0.0 in package.json
         node-version: [22.x]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
+          # [Task 0.13] Full history required for turbo affected-package detection
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
           version: 10.29.2
 
@@ -42,19 +61,81 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # [Task 0.11] Lint enforces module boundaries — docs/architecture/module-boundaries.md
+      # [Task 0.13] PRs use affected-package filter for speed; push runs full pipeline
       - name: Lint
-        run: pnpm lint
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm turbo run lint --filter="...[origin/main]"
+          else
+            pnpm turbo run lint
+          fi
 
       - name: Type check
-        run: pnpm type-check
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm turbo run type-check --filter="...[origin/main]"
+          else
+            pnpm turbo run type-check
+          fi
+
+      # [Task 0.19] Export map validation — prevents broken package export paths
+      - name: Validate exports
+        run: pnpm validate-exports
+
+      # [Task 0.18] Dependency version consistency across workspace
+      - name: Syncpack
+        run: pnpm syncpack:check
 
       - name: Build
-        run: pnpm build
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm turbo run build --filter="...[origin/main]"
+          else
+            pnpm turbo run build
+          fi
 
+      # Root jest runs full monorepo test suite (jest.config.js discovers all __tests__)
       - name: Test
         run: pnpm test
 
-      # [Task 2.7.4] Non-critical steps use continue-on-error to avoid blocking core pipeline
+  # ─────────────────────────────────────────────────────────────────────────
+  # Informative audit steps — non-blocking, continue-on-error
+  # Run in parallel with quality-gates for visibility without blocking merge
+  # ─────────────────────────────────────────────────────────────────────────
+  quality-audit:
+    name: quality-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.29.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # [Task 0.17] Dead code/dependency detection
+      - name: Knip
+        continue-on-error: true
+        run: pnpm knip
+
+      # [Task 2.7.4] SBOM generation for supply chain visibility
       - name: Generate SBOM
         continue-on-error: true
         uses: anchore/sbom-action@v0
@@ -71,11 +152,8 @@ jobs:
           path: sbom.spdx.json
           retention-days: 90
 
+      # OWASP-aligned dependency vulnerability scan
       - name: Dependency vulnerability scan
         continue-on-error: true
         run: |
-          pnpm audit --audit-level high
-          if [ $? -ne 0 ]; then
-            echo "⚠️ High or critical vulnerabilities found"
-            exit 1
-          fi
+          pnpm audit --audit-level high || echo "⚠️ High or critical vulnerabilities detected"

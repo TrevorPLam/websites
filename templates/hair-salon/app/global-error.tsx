@@ -20,7 +20,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    logError(error);
+    logError('Global error boundary caught error', error);
   }, [error]);
 
   return (
