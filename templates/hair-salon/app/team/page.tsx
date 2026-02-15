@@ -67,11 +67,21 @@ export default function TeamPage() {
                   </div>
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                    <a href="#" className="text-white hover:text-foreground transition-colors">
+                    <a
+                      href="#"
+                      aria-label={`View ${member.name}'s Instagram profile`}
+                      className="text-white hover:text-foreground transition-colors inline-flex items-center gap-2"
+                    >
                       <Instagram className="w-6 h-6" />
+                      <span className="sr-only">Instagram</span>
                     </a>
-                    <a href="#" className="text-white hover:text-foreground transition-colors">
+                    <a
+                      href="#"
+                      aria-label={`View ${member.name}'s Twitter profile`}
+                      className="text-white hover:text-foreground transition-colors inline-flex items-center gap-2"
+                    >
                       <Twitter className="w-6 h-6" />
+                      <span className="sr-only">Twitter</span>
                     </a>
                   </div>
                 </div>

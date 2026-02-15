@@ -3,7 +3,7 @@
 //          React components driven by CSS custom properties, enabling consistent design
 //          systems across all template applications.
 //
-// Exports / Entry: All UI components (Container, Section, Button, Card, Input, Select, Textarea, Accordion)
+// Exports / Entry: All UI components (Container, Section, Button, Card, Input, Select, Textarea, Accordion, Dialog)
 // Used by: All template applications, any workspace needing UI components
 //
 // Invariants:
@@ -50,6 +50,27 @@ export type { TextareaProps } from './components/Textarea';
 // Disclosure
 export { Accordion } from './components/Accordion';
 export type { AccordionItem, AccordionProps } from './components/Accordion';
+
+// Overlay
+export {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './components/Dialog';
+export type {
+  DialogProps,
+  DialogContentProps,
+  DialogHeaderProps,
+  DialogTitleProps,
+  DialogDescriptionProps,
+  DialogFooterProps,
+} from './components/Dialog';
 
 // Theme
 export { ThemeInjector } from './components/ThemeInjector';

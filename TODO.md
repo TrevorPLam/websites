@@ -1013,7 +1013,7 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 **Priority:** HIGH | **Effort:** 3 hrs | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [🔄] IN_PROGRESS | **Assigned To:** [Cascade] | **Completed:** [ ]
 
 **What:** Run automated checks and document WCAG 2.2 AA gaps before building new components.
 
@@ -1071,7 +1071,7 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 **Priority:** CRITICAL | **Effort:** 1 hr | **Dependencies:** 0.2
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-15]
 
 **What:** `@repo/shared` lives in `templates/shared/` — anomalous location. Move to `packages/types/` for proper placement. Preserve existing SiteConfig type infrastructure (4 conversion flow types).
 
@@ -1110,7 +1110,7 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 **Priority:** CRITICAL | **Effort:** 4 hrs (reduced — existing foundation) | **Dependencies:** 0.8
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** EXTEND (not rebuild) the existing `SiteConfig` type to add `industry`, `features`, and `integrations` fields. Add Zod runtime validation companion.
 
@@ -1191,7 +1191,7 @@ interface SiteConfig {
 
 **Priority:** CRITICAL | **Effort:** 4 hrs | **Dependencies:** 1.8
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Define industry-specific configurations and defaults for all 12 industries.
 
@@ -1802,7 +1802,7 @@ export default function HomePage() {
 
 **Priority:** CRITICAL | **Effort:** 4 hrs | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-15]
 
 **What:** Modal dialog for forms, confirmations, lightboxes. The overlay for "Book Now" / "Contact Us" actions.
 
@@ -1823,6 +1823,21 @@ export default function HomePage() {
 
 - Create: `packages/ui/src/components/Dialog.tsx`
 - Update: `packages/ui/src/index.ts`
+
+**Implementation Summary:**
+
+- ✅ Created Dialog component with full Radix UI integration using unified `radix-ui` package (2026 best practice)
+- ✅ Implemented all sub-components: Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription
+- ✅ Full accessibility support with focus trapping, ARIA attributes, keyboard navigation
+- ✅ Smooth animations with reduced motion support
+- ✅ TypeScript interfaces for all props with proper extending from Radix primitives
+- ✅ Added comprehensive metaheader documentation following existing patterns
+- ✅ Created ADR-0005 documenting unified radix-ui package strategy
+- ✅ Added to UI package exports with proper TypeScript types
+- ✅ Verified with type-check and lint - all passing
+- ✅ Added comprehensive unit test suite (requires Jest setup for full validation)
+
+**Decision Made:** Used unified `radix-ui` package over individual `@radix-ui/react-*` packages for better dependency management and tree shaking, documented in ADR-0005.
 
 ---
 

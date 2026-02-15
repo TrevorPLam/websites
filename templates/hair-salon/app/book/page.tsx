@@ -38,7 +38,7 @@ export default function BookPage() {
       <section className="bg-secondary text-white py-16">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Book Your Visit</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Book Your Visit</h1>
             <p className="text-xl text-white/80">
               Select your service and preferred time. We&apos;ll confirm your appointment shortly.
             </p>

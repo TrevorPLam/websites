@@ -129,6 +129,16 @@ export interface ThemeColors {
   ring: string;
 }
 
+/** Font families used by the theme. */
+export interface ThemeFonts {
+  /** Primary heading font family, e.g., "Inter, sans-serif" */
+  heading: string;
+  /** Body copy font family */
+  body: string;
+  /** Optional accent font for callouts or highlights */
+  accent?: string;
+}
+
 // ---- Top-level SiteConfig ----
 
 export interface SiteConfig {
@@ -191,8 +201,17 @@ export interface SiteConfig {
   contact: ContactInfo;
   /** SEO defaults */
   seo: SeoDefaults;
-  /** Theme colors (HSL strings) */
-  theme: ThemeColors;
+  /** Theme configuration */
+  theme: {
+    /** Theme colors (HSL strings) */
+    colors: ThemeColors;
+    /** Theme font families */
+    fonts?: ThemeFonts;
+    /** Border radius scale for components */
+    borderRadius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+    /** Shadow depth scale for components */
+    shadows?: 'none' | 'small' | 'medium' | 'large';
+  };
   /** Conversion flow config */
   conversionFlow: ConversionFlowConfig;
 }
@@ -255,6 +274,12 @@ const themeColorsSchema = z.object({
   border: z.string(),
   input: z.string(),
   ring: z.string(),
+});
+
+const themeFontsSchema = z.object({
+  heading: z.string().min(1),
+  body: z.string().min(1),
+  accent: z.string().min(1).optional(),
 });
 
 const conversionFlowSchema = z.discriminatedUnion('type', [
@@ -330,6 +355,11 @@ export const siteConfigSchema = z.object({
   footer: footerConfigSchema,
   contact: contactInfoSchema,
   seo: seoDefaultsSchema,
-  theme: themeColorsSchema,
+  theme: z.object({
+    colors: themeColorsSchema,
+    fonts: themeFontsSchema.optional(),
+    borderRadius: z.enum(['none', 'small', 'medium', 'large', 'full']).optional(),
+    shadows: z.enum(['none', 'small', 'medium', 'large']).optional(),
+  }),
   conversionFlow: conversionFlowSchema,
 });

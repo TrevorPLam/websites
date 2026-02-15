@@ -63,7 +63,7 @@ export default function GalleryPage() {
       <section className="bg-secondary text-white py-16">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Work</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">Our Work</h1>
             <p className="text-xl text-white/80">
               Browse our portfolio of real client transformations.
             </p>

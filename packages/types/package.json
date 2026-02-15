@@ -9,6 +9,8 @@
     "./types": "./src/index.ts",
     "./site-config": "./src/site-config.ts",
     "./site-config-schema": "./src/site-config.ts",
+    "./industry": "./src/industry.ts",
+    "./industry-configs": "./src/industry-configs.ts",
     ".": "./src/index.ts"
   },
   "dependencies": {

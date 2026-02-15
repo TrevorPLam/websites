@@ -24,6 +24,8 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@repo/utils": "workspace:*"
+    "@repo/utils": "workspace:*",
+    "radix-ui": "catalog:",
+    "lucide-react": "catalog:"
   }
 }

@@ -164,7 +164,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={`${inter.variable} ${plexSans.variable}`}>
       <head>
         {/* [Task 0.14] Config-driven theme — overrides globals.css fallback values */}
-        <ThemeInjector theme={siteConfig.theme} />
+        <ThemeInjector theme={siteConfig.theme.colors} />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0ea5e9" />
         <meta name="mobile-web-app-capable" content="yes" />

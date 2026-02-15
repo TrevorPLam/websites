@@ -24,7 +24,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
@@ -74,7 +74,8 @@ export default function BookingForm({
     resolver: zodResolver(bookingFormSchema as unknown as Parameters<typeof zodResolver>[0]),
     defaultValues: {
       ...bookingFormDefaults,
-      serviceType: (prefilledService as any) || 'consultation',
+      serviceType:
+        (prefilledService as BookingFormData['serviceType'] | undefined) ?? 'consultation',
     },
     mode: 'onChange',
   });
@@ -89,7 +90,7 @@ export default function BookingForm({
   maxDate.setDate(maxDate.getDate() + 90);
   const maxDateStr = maxDate.toISOString().split('T')[0];
 
-  const onSubmit = async (data: BookingFormData) => {
+  const onSubmit: SubmitHandler<BookingFormData> = async (data) => {
     startTransition(async () => {
       try {
         // Create FormData for server action
@@ -114,7 +115,7 @@ export default function BookingForm({
           toast.error(result.error || 'Failed to submit booking');
           onError?.(result.error || 'Failed to submit booking');
         }
-      } catch (error) {
+      } catch {
         const errorMessage = 'An unexpected error occurred. Please try again.';
         toast.error(errorMessage);
         onError?.(errorMessage);
@@ -189,6 +190,8 @@ export default function BookingForm({
           className="hidden"
           tabIndex={-1}
           autoComplete="off"
+          aria-hidden="true"
+          aria-label="Do not fill"
         />
 
         {/* Customer Information */}
@@ -198,6 +201,7 @@ export default function BookingForm({
             <Input
               {...register('firstName')}
               placeholder="Jane"
+              aria-label="First Name"
               error={errors.firstName?.message}
               disabled={isPending}
             />
@@ -207,6 +211,7 @@ export default function BookingForm({
             <Input
               {...register('lastName')}
               placeholder="Doe"
+              aria-label="Last Name"
               error={errors.lastName?.message}
               disabled={isPending}
             />
@@ -220,6 +225,7 @@ export default function BookingForm({
               {...register('email')}
               type="email"
               placeholder="jane@example.com"
+              aria-label="Email Address"
               error={errors.email?.message}
               disabled={isPending}
             />
@@ -230,6 +236,7 @@ export default function BookingForm({
               {...register('phone')}
               type="tel"
               placeholder="(555) 123-4567"
+              aria-label="Phone Number"
               error={errors.phone?.message}
               disabled={isPending}
             />
@@ -245,6 +252,7 @@ export default function BookingForm({
               value: type,
               label: SERVICE_LABELS[type],
             }))}
+            aria-label="Service Type"
             error={errors.serviceType?.message}
             disabled={isPending}
           />
@@ -258,6 +266,7 @@ export default function BookingForm({
               type="date"
               min={minDate}
               max={maxDateStr}
+              aria-label="Preferred Date"
               error={errors.preferredDate?.message}
               disabled={isPending}
             />
@@ -273,6 +282,7 @@ export default function BookingForm({
                 value: slot,
                 label: TIME_SLOT_LABELS[slot],
               }))}
+              aria-label="Preferred Time"
               error={errors.timeSlot?.message}
               disabled={isPending}
             />
@@ -287,6 +297,7 @@ export default function BookingForm({
             {...register('notes')}
             placeholder="Any specific requests or hair history..."
             rows={3}
+            aria-label="Notes for Stylist"
             error={errors.notes?.message}
             disabled={isPending}
           />
