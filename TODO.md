@@ -1013,7 +1013,7 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 **Priority:** HIGH | **Effort:** 3 hrs | **Dependencies:** None
 
-**Status:** [🔄] IN_PROGRESS | **Assigned To:** [Cascade] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-15]
 
 **What:** Run automated checks and document WCAG 2.2 AA gaps before building new components.
 
@@ -1241,7 +1241,7 @@ interface SiteConfig {
 
 **Priority:** CRITICAL | **Effort:** 1 hr | **Dependencies:** None
 
-**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Create the shared features package directory structure.
 

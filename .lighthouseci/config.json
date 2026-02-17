@@ -1,0 +1,39 @@
+{
+  "ci": {
+    "collect": {
+      "chromePath": "c:/dev/marketing-websites/chrome/win64-145.0.7632.76/chrome-win64/chrome.exe",
+      "chromeFlags": [
+        "--headless=new",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--user-data-dir=./.chrome-profile"
+      ],
+      "startServerCommand": "pnpm --filter @templates/websites start",
+      "startServerReadyPattern": "started server on",
+      "url": [
+        "http://localhost:3100/",
+        "http://localhost:3100/about",
+        "http://localhost:3100/services",
+        "http://localhost:3100/book",
+        "http://localhost:3100/contact",
+        "http://localhost:3100/blog"
+      ],
+      "numberOfRuns": 1,
+      "settings": {
+        "disableStorageReset": true,
+        "formFactor": "desktop",
+        "screenEmulation": {
+          "mobile": false
+        }
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouse"
+    },
+    "assert": {
+      "preset": "lighthouse:recommended"
+    }
+  }
+}

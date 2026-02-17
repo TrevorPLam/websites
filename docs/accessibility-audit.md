@@ -42,6 +42,11 @@ node scripts/a11y-scan.js
 - 2026-02-15 route sweep (desktop): **PASS** on `/services`, `/services/haircuts`, `/services/coloring`,
   `/services/treatments`, `/services/special-occasions`, `/services/bridal`, `/pricing`.
 - `/gallery`: initial fail (contrast on hero h1). Fixed by switching heading to `text-white`; now **PASS**.
+- `/team`: initial fail (empty social links). Fixed with aria-label + sr-only text; now **PASS**.
+- `/book`: initial fails (hero contrast, honeypot name). Fixed (hero text-white, honeypot aria-label/hidden) and **PASS**.
+- `/about`, `/blog`, `/search`, `/privacy`, `/terms`: **PASS**.
+- `/contact`: initial fail (destructive color contrast on required asterisk). Fixed by darkening `destructive` to
+  `hsl(0 72% 38%)` and **PASS**.
 
 ## Checklist (WCAG 2.2 AA)
 
@@ -59,9 +64,8 @@ node scripts/a11y-scan.js
 
 ## Next actions
 
-- Spin up the app locally (`pnpm --filter @templates/websites dev --port 3100`) and run pa11y against the route list.
-- Capture findings per page and log issues in this doc with severity/criterion.
-- Propose code fixes for any critical blockers (especially forms, navigation, modal focus).
+- Keyboard/focus/manual: verify tab order, visible focus, modal/search focus trap, touch target sizes, form error announcements.
+- If clean, mark checklist items and close task 0.7 in TODO.
 
 ## Deliverables for completion
 

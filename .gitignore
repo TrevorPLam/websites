@@ -115,3 +115,6 @@ coverage/
 # Misc
 *.egg-info/
 .DS_Store
+
+# Chrome browser binaries (too large for GitHub)
+chrome/
