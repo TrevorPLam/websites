@@ -136,6 +136,7 @@ pnpm format:check
 - [ ] Changes are documented (comments, README updates if needed)
 - [ ] No breaking changes without discussion
 - [ ] Documentation changes: `pnpm validate-docs` passes
+- [ ] When modifying `@repo/ui` or `packages/ui/src/index.ts`: `pnpm validate-ui-exports` passes
 - [ ] Documentation follows [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md)
 
 ## Monorepo Guidelines

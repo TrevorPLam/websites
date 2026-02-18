@@ -74,7 +74,10 @@ Following industry best practices (2026), we target the following distribution:
 - `@testing-library/react` for component rendering
 - `@testing-library/user-event` for realistic user interactions
 - `@testing-library/jest-dom` for DOM matchers
+- `jest-axe` for accessibility (axe-core) in component tests
 - `jest-environment-jsdom` for browser APIs
+
+**Tested components (pattern for new ones):** Button, Dialog, Input, Label, Slider, Alert, Checkbox. Place tests in `packages/ui/src/components/__tests__/ComponentName.test.tsx`. For components that use Radix primitives requiring ResizeObserver (e.g. Slider), the root `jest.setup.js` provides a minimal ResizeObserver polyfill for jsdom.
 
 **Example Test Pattern:**
 
@@ -512,7 +515,7 @@ When adding a new feature:
 
 1. **Mock Service Worker (MSW):** For API mocking in integration tests
 2. **Visual Regression Testing:** For UI component changes
-3. **Accessibility Testing:** Automated a11y checks (axe-core)
+3. **Accessibility Testing:** jest-axe is in use for UI components (Button, Dialog, Input, Label, Alert, Checkbox); extend to more components.
 4. **Performance Testing:** Component render time benchmarks
 5. **E2E Testing:** Playwright or Cypress for critical flows
 

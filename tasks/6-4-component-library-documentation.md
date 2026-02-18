@@ -44,6 +44,76 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-DOCS — Architecture Decision Records
+```markdown
+# ADR-001: Use App Router for Page Templates
+
+## Context
+We need to decide between Pages Router and App Router for our page templates.
+
+## Decision
+Use App Router with Server Components by default, Client Components only for interactivity.
+
+## Consequences
+- Better performance with RSC
+- Learning curve for team
+- Migration path from existing templates
+```
+
+### R-UI — React 19 component with ref forwarding
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function Component({ ref, className, ...props }: ComponentProps) {
+  return React.createElement(
+    Primitive.Root,
+    { ref, className: cn('component', className), ...props }
+  );
+}
+```
+
+### R-A11Y — Touch targets and reduced motion
+```css
+.component-button {
+  min-width: 24px;
+  min-height: 24px;
+}
+```
+
+### Reduced motion detection
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
+### R-PERF — Core Web Vitals optimization
+```typescript
+// Performance monitoring
+export function reportWebVitals(metric: any) {
+  // Send to analytics service
+  console.log({
+    name: metric.name,
+    value: metric.value,
+    rating: metric.rating,
+  });
+}
+
+// Bundle optimization
+export function optimizeBundle() {
+  // Bundle optimization logic
+}
+
+// Image optimization with next/image
+export function OptimizedImage({ src, alt, priority }: ImageProps) {
+  return React.createElement(Image, {
+    src,
+    alt,
+    priority,
+    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+  });
+}
+```
+
 ### Related Patterns
 - See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
 

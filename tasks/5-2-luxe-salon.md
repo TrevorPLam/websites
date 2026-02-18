@@ -44,6 +44,68 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-INDUSTRY — JSON-LD schema integration
+```typescript
+interface StructuredData {
+  '@context': 'https://schema.org';
+  '@type': 'Organization' | 'Product' | 'Article' | 'LocalBusiness' | 'Service';
+  name: string;
+  description?: string;
+  url?: string;
+  image?: string;
+  address?: Address;
+  contactPoint?: ContactPoint;
+}
+
+export function generateStructuredData(data: StructuredData) {
+  return JSON.stringify(data);
+}
+```
+
+### R-CONFIG-VALIDATION — Zod runtime validation
+```typescript
+import { z } from 'zod';
+
+const siteConfigSchema = z.object({
+  siteName: z.string().min(1),
+  siteUrl: z.string().url(),
+  description: z.string().optional(),
+  logo: z.string().optional(),
+  social: z.object({
+    twitter: z.string().optional(),
+    facebook: z.string().optional(),
+    linkedin: z.string().optional(),
+  }).optional(),
+});
+
+type SiteConfig = z.infer<typeof siteConfigSchema>;
+
+export function validateSiteConfig(config: unknown): SiteConfig {
+  return siteConfigSchema.parse(config);
+}
+```
+
+### R-MIGRATION — Template-to-client migration
+```typescript
+interface MigrationPlan {
+  sourceTemplate: string;
+  targetClient: string;
+  components: ComponentMapping[];
+  routes: RouteMapping[];
+  config: ConfigMapping[];
+}
+
+interface ComponentMapping {
+  source: string;
+  target: string;
+  type: 'server' | 'client' | 'shared';
+}
+
+export function executeMigration(plan: MigrationPlan) {
+  // Migration execution logic
+}
+```
+
 ### Related Patterns
 - See [R-INDUSTRY - Research Findings](RESEARCH-INVENTORY.md#r-industry) for additional examples
 

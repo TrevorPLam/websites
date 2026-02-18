@@ -47,6 +47,15 @@ require('@testing-library/jest-dom');
 const { toHaveNoViolations } = require('jest-axe');
 expect.extend(toHaveNoViolations);
 
+// jsdom does not provide ResizeObserver (required by Radix Slider and similar components)
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}
+
 // Suppress console output in tests (unless test explicitly checks for it)
 const originalError = console.error;
 const originalWarn = console.warn;

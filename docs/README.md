@@ -221,6 +221,11 @@ WCAG compliance guidelines and accessibility best practices.
 
 Comprehensive testing strategy for the platform.
 
+**[QA: 1-xx UI Components](qa/1-xx-ui-components-qa.md)**  
+*Quality assurance for UI component implementation*
+
+QA analysis, verification commands (`pnpm validate-ui-exports`, UI component tests), and follow-ups for the shared UI library.
+
 ---
 
 ## Resources and Reference
@@ -306,6 +311,8 @@ docs/
 ├── performance-baseline.md      # Performance benchmarks
 ├── accessibility-audit.md       # Accessibility standards
 ├── testing-strategy.md          # Testing approach
+├── qa/                          # Quality assurance
+│   └── 1-xx-ui-components-qa.md # UI component QA and validation
 ├── getting-started/             # New user documentation
 │   ├── onboarding.md           # Developer onboarding
 │   └── troubleshooting.md      # Common issues

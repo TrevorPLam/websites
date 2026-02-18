@@ -32,6 +32,7 @@ pnpm test:coverage         # Jest with coverage report
 pnpm format                # Prettier write
 pnpm format:check          # Prettier check (no writes)
 pnpm validate-exports      # Validate package.json export maps
+pnpm validate-ui-exports   # Validate @repo/ui index.ts → component files exist
 pnpm validate-docs         # Validate documentation
 pnpm knip                  # Dead code / unused dependency detection
 pnpm syncpack:check        # Check for cross-workspace version drift
@@ -223,6 +224,11 @@ pnpm --filter @repo/ui test   # Package-level
 ### Module aliases in tests
 
 Jest `moduleNameMapper` resolves `@repo/*` to actual source files. No need to build packages before running tests.
+
+### UI component tests and jsdom
+
+- **Component tests:** `packages/ui/src/components/__tests__/` — Button, Dialog, Input, Label, Slider, Alert, Checkbox (and more as added). Use `@testing-library/react`, `jest-axe` for a11y, `userEvent` for interactions.
+- **ResizeObserver:** Root `jest.setup.js` defines a minimal `ResizeObserver` polyfill for jsdom so Radix-based components (e.g. Slider) run without `ResizeObserver is not defined`.
 
 ---
 

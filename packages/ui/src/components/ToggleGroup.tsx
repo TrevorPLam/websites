@@ -75,14 +75,23 @@ export interface ToggleGroupItemProps
 export const ToggleGroup = React.forwardRef<
   React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
   ToggleGroupProps
->(({ className, variant = 'default', size = 'md', type = 'single', ...props }, ref) => (
-  <ToggleGroupPrimitive.Root
-    ref={ref}
-    type={type}
-    className={cn('flex items-center justify-center gap-1', className)}
-    {...props}
-  />
-));
+>(({ className, variant = 'default', size = 'md', type = 'single', value, defaultValue, onValueChange, valueMultiple, defaultValueMultiple, onValueChangeMultiple, disabled, orientation, loop, children, ...props }, ref) => {
+  const rootProps = type === 'single' 
+    ? { value, defaultValue, onValueChange, disabled, orientation, loop }
+    : { value: valueMultiple, defaultValue: defaultValueMultiple, onValueChange: onValueChangeMultiple, disabled, orientation, loop };
+  
+  return (
+    <ToggleGroupPrimitive.Root
+      ref={ref}
+      type={type}
+      className={cn('flex items-center justify-center gap-1', className)}
+      {...rootProps}
+      {...props}
+    >
+      {children}
+    </ToggleGroupPrimitive.Root>
+  );
+});
 ToggleGroup.displayName = 'ToggleGroup';
 
 export const ToggleGroupItem = React.forwardRef<

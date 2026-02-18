@@ -127,10 +127,13 @@ module.exports = {
         '<rootDir>/packages/ui/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/components/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/components/**/*.test.{ts,tsx}',
+        '<rootDir>/packages/marketing-components/**/__tests__/**/*.test.{ts,tsx}',
+        '<rootDir>/packages/marketing-components/**/*.test.{ts,tsx}',
       ],
       collectCoverageFrom: [
         'packages/ui/src/**/*.{ts,tsx}',
         'packages/features/**/components/**/*.{ts,tsx}',
+        'packages/marketing-components/src/**/*.{ts,tsx}',
         '!**/*.d.ts',
         '!**/index.ts',
         '!**/index.tsx',

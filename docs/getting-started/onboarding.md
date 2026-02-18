@@ -186,6 +186,8 @@ pnpm lint
 pnpm type-check
 pnpm test
 pnpm build
+# When modifying packages/ui or its index.ts:
+pnpm validate-ui-exports
 
 # All commands should pass without errors
 ```
@@ -417,10 +419,10 @@ pnpm test --coverage
 
 #### Test Types
 
-- **Unit tests**: Component and function testing with Vitest
+- **Unit tests**: Component and function testing with Jest (see [Testing Strategy](../testing-strategy.md))
 - **Integration tests**: Cross-package functionality
-- **E2E tests**: Full user workflows with Playwright
-- **Accessibility tests**: Automated a11y checking
+- **E2E tests**: Full user workflows (planned)
+- **Accessibility tests**: jest-axe in UI component tests (Button, Dialog, Input, Label, Alert, Checkbox)
 
 ---
 
@@ -439,12 +441,12 @@ mkdir -p src/components/NewComponent
 touch src/components/NewComponent/NewComponent.tsx
 touch src/components/NewComponent/index.ts
 
-# Add exports
-echo "export * from './NewComponent';" >> src/components/index.ts
+# Add exports to packages/ui/src/index.ts (not a separate components index)
+# Then run: pnpm validate-ui-exports
 
-# Add tests
-mkdir -p src/components/NewComponent/__tests__
-touch src/components/NewComponent/__tests__/NewComponent.test.tsx
+# Add tests (see packages/ui/src/components/__tests__/ for pattern)
+mkdir -p src/components/__tests__
+touch src/components/__tests__/NewComponent.test.tsx
 ```
 
 #### Component Template

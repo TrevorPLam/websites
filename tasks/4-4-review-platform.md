@@ -44,6 +44,73 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-INDUSTRY — JSON-LD schema integration
+```typescript
+interface StructuredData {
+  '@context': 'https://schema.org';
+  '@type': 'Organization' | 'Product' | 'Article' | 'LocalBusiness' | 'Service';
+  name: string;
+  description?: string;
+  url?: string;
+  image?: string;
+  address?: Address;
+  contactPoint?: ContactPoint;
+}
+
+export function generateStructuredData(data: StructuredData) {
+  return JSON.stringify(data);
+}
+```
+
+### R-INTEGRATION — Third-party service adapter
+```typescript
+interface ServiceAdapter {
+  name: string;
+  connect: () => Promise<void>;
+  send: (data: any) => Promise<any>;
+  disconnect: () => void;
+  retryPolicy?: RetryPolicy;
+}
+
+interface RetryPolicy {
+  maxRetries: number;
+  baseDelay: number;
+  maxDelay: number;
+}
+
+export class EmailAdapter implements ServiceAdapter {
+  async send(data: EmailData) {
+    // Email sending implementation with retry logic
+  }
+}
+```
+
+### R-UI — React 19 component with ref forwarding
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function Component({ ref, className, ...props }: ComponentProps) {
+  return React.createElement(
+    Primitive.Root,
+    { ref, className: cn('component', className), ...props }
+  );
+}
+```
+
+### R-A11Y — Touch targets and reduced motion
+```css
+.component-button {
+  min-width: 24px;
+  min-height: 24px;
+}
+```
+
+### Reduced motion detection
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
 ### Related Patterns
 - See [R-INTEGRATION - Research Findings](RESEARCH-INVENTORY.md#r-integration) for additional examples
 

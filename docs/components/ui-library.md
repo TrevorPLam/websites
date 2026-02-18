@@ -688,20 +688,21 @@ Components are optimized for React 19 features:
 
 ## Testing
 
+UI component tests live in `packages/ui/src/components/__tests__/`. Tested components include **Button**, **Dialog**, **Input**, **Label**, **Slider**, **Alert**, and **Checkbox**. The test pattern uses `@testing-library/react`, `jest-axe` for accessibility, and `@testing-library/user-event` for interactions. Run `pnpm test` from the repo root (Jest uses the root config with jsdom for UI tests). After adding or removing component exports in `packages/ui/src/index.ts`, run **`pnpm validate-ui-exports`** to ensure every export resolves to an existing file.
+
 ### Unit Testing
 
 ```typescript
 // Component testing example
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { userEvent } from '@testing-library/user-event';
 import { Button } from '@repo/ui';
 
-test('Button handles click events', () => {
+test('Button handles click events', async () => {
   const handleClick = jest.fn();
+  const user = userEvent.setup();
   render(<Button onClick={handleClick}>Click me</Button>);
-  
-  const button = screen.getByRole('button');
-  fireEvent.click(button);
-  
+  await user.click(screen.getByRole('button'));
   expect(handleClick).toHaveBeenCalledTimes(1);
 });
 ```
@@ -709,14 +710,14 @@ test('Button handles click events', () => {
 ### Accessibility Testing
 
 ```typescript
-// Accessibility testing with axe-core
-import { render, axe } from '@testing-library/react';
+// Accessibility testing with jest-axe
+import { render } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import { Button } from '@repo/ui';
 
-test('Button is accessible', async () => {
+test('Button has no a11y violations', async () => {
   const { container } = render(<Button>Click me</Button>);
-  const results = await axe(container);
-  expect(results).toHaveNoViolations();
+  expect(await axe(container)).toHaveNoViolations();
 });
 ```
 
@@ -780,11 +781,11 @@ pnpm update @repo/ui
 
 ### Adding New Components
 
-1. **Create Component File**: `packages/ui/src/components/NewComponent/NewComponent.tsx`
-2. **Add Tests**: `packages/ui/src/components/NewComponent/__tests__/NewComponent.test.tsx`
-3. **Update Exports**: Add to `packages/ui/src/index.ts`
+1. **Create Component File**: `packages/ui/src/components/NewComponent.tsx` (or `NewComponent/NewComponent.tsx` if multi-file)
+2. **Add Tests**: `packages/ui/src/components/__tests__/NewComponent.test.tsx` — use `@testing-library/react`, `jest-axe` for a11y, and `userEvent` for interactions (see Button, Label, Alert, Checkbox tests as reference).
+3. **Update Exports**: Add to `packages/ui/src/index.ts`, then run **`pnpm validate-ui-exports`** to ensure the barrel file references only existing component files.
 4. **Document**: Add to this documentation
-5. **Storybook**: Add Storybook stories
+5. **Storybook**: Add Storybook stories (when available)
 
 ### Component Template
 

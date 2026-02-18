@@ -60,6 +60,7 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 pnpm install
 pnpm turbo run lint type-check build
 pnpm validate-exports
+pnpm validate-ui-exports   # when modifying packages/ui or its index.ts
 pnpm madge:circular
 pnpm syncpack:check
 pnpm test:coverage

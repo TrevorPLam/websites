@@ -44,6 +44,71 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-DOCS — Architecture Decision Records
+```markdown
+# ADR-001: Use App Router for Page Templates
+
+## Context
+We need to decide between Pages Router and App Router for our page templates.
+
+## Decision
+Use App Router with Server Components by default, Client Components only for interactivity.
+
+## Consequences
+- Better performance with RSC
+- Learning curve for team
+- Migration path from existing templates
+```
+
+### R-CONFIG-VALIDATION — Zod runtime validation
+```typescript
+import { z } from 'zod';
+
+const siteConfigSchema = z.object({
+  siteName: z.string().min(1),
+  siteUrl: z.string().url(),
+  description: z.string().optional(),
+  logo: z.string().optional(),
+  social: z.object({
+    twitter: z.string().optional(),
+    facebook: z.string().optional(),
+    linkedin: z.string().optional(),
+  }).optional(),
+});
+
+type SiteConfig = z.infer<typeof siteConfigSchema>;
+
+export function validateSiteConfig(config: unknown): SiteConfig {
+  return siteConfigSchema.parse(config);
+}
+```
+
+### R-UI — React 19 component with ref forwarding
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function Component({ ref, className, ...props }: ComponentProps) {
+  return React.createElement(
+    Primitive.Root,
+    { ref, className: cn('component', className), ...props }
+  );
+}
+```
+
+### R-A11Y — Touch targets and reduced motion
+```css
+.component-button {
+  min-width: 24px;
+  min-height: 24px;
+}
+```
+
+### Reduced motion detection
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
 ### Related Patterns
 - See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
 
