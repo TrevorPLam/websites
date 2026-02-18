@@ -18,7 +18,6 @@
 // - [FEAT:UX] Consistent layout sections
 // - [FEAT:CONFIGURATION] Props-driven, no template coupling
 
-import React from 'react';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { Container, Section, Card, Button, Accordion } from '@repo/ui';

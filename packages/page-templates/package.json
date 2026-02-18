@@ -19,6 +19,8 @@
     "react-dom": "catalog:"
   },
   "dependencies": {
+    "@repo/features": "workspace:*",
+    "@repo/marketing-components": "workspace:*",
     "@repo/types": "workspace:*"
   },
   "devDependencies": {

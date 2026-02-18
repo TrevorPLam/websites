@@ -18,7 +18,6 @@
 // - [FEAT:NAVIGATION] Service discovery
 // - [FEAT:CONFIGURATION] Props-driven, industry-agnostic
 
-import React from 'react';
 import Link from 'next/link';
 import { Container, Section, Card } from '@repo/ui';
 import type { ServicesOverviewProps } from '../types';
