@@ -150,7 +150,9 @@ export function handleMenuKeys(
 ): boolean {
   const { onClose, onActivate, elements, currentIndex, setIndex } = opts;
   const count = elements.length;
-
+  if (count === 0) {
+    return false;
+  }
   switch (event.key) {
     case Keys.ArrowDown: {
       const next = (currentIndex + 1) % count;
