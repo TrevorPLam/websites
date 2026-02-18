@@ -145,15 +145,18 @@ Tabs.displayName = 'Tabs';
 export const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   TabsListProps
->(({ className, variant: variantProp, size: _size, ...props }, ref) => {
+>(({ className, variant: variantProp, size: sizeProp, ...props }, ref) => {
   const ctx = React.useContext(TabsContext);
   const variant = variantProp ?? ctx.variant;
+  const size = sizeProp ?? ctx.size;
   return (
-    <TabsPrimitive.List
-      ref={ref}
-      className={cn(listVariantStyles[variant], className)}
-      {...props}
-    />
+    <TabsContext.Provider value={{ variant, size }}>
+      <TabsPrimitive.List
+        ref={ref}
+        className={cn(listVariantStyles[variant], className)}
+        {...props}
+      />
+    </TabsContext.Provider>
   );
 });
 TabsList.displayName = 'TabsList';
