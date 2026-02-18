@@ -1,0 +1,24 @@
+# Task: [C.7] Storybook visual regression checks
+# Status: Placeholder — TODO implement
+
+name: Visual Regression
+
+on:
+  pull_request:
+    paths: ['packages/ui/**', 'packages/marketing-components/**']
+
+jobs:
+  visual-regression:
+    name: Storybook visual regression
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10.29.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: echo "TODO: Storybook build and visual regression"

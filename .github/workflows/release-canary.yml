@@ -1,0 +1,25 @@
+# Task: [C.4] Canary pre-release channel
+# Status: Placeholder — configure for canary releases
+
+name: Release Canary
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [canary]
+
+jobs:
+  canary:
+    name: Publish canary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10.29.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: echo "TODO: canary publish"

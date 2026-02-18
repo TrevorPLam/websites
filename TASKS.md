@@ -10,13 +10,13 @@
 
 ### Status Convention
 
-| Symbol | Status |
-|--------|--------|
-| `[ ]` | TODO/Pending |
-| `[🔄]` | IN_PROGRESS |
-| `[x]` | COMPLETED |
-| `[🚫]` | BLOCKED |
-| `[⏸️]` | PAUSED |
+| Symbol | Status       |
+| ------ | ------------ |
+| `[ ]`  | TODO/Pending |
+| `[🔄]` | IN_PROGRESS  |
+| `[x]`  | COMPLETED    |
+| `[🚫]` | BLOCKED      |
+| `[⏸️]` | PAUSED       |
 
 **To update a task:** change its status line and fill in Assigned To / Completed date.
 
@@ -32,239 +32,239 @@
 
 ### Task Index
 
-| ID | Title |
-|----|-------|
-| **UI Primitives (Enhanced)** | |
-| 1.2 | Create Toast Component (Enhanced: 6 variants, 6 positions, actions, custom content) |
-| 1.3 | Create Tabs Component (Enhanced: 5 variants, URL sync, nested, scrollable) |
-| 1.4 | Create Dropdown Menu Component (Enhanced: typeahead, multi-select, checkbox/radio items) |
-| 1.5 | Create Tooltip Component (Enhanced: 12 positions, 4 trigger modes, rich content) |
-| 1.6 | Create Popover Component (Enhanced: collision detection, slots, nested, animations) |
-| **UI Primitives (New 1.7-1.50)** | |
-| 1.7 | Create Badge Component |
-| 1.8 | Create Avatar Component |
-| 1.9 | Create Skeleton Component |
-| 1.10 | Create Separator Component |
-| 1.11 | Create Switch Component |
-| 1.12 | Create Slider Component |
-| 1.13 | Create Progress Component |
-| 1.14 | Create Breadcrumb Component |
-| 1.15 | Create Command Palette Component |
-| 1.16 | Create Context Menu Component |
-| 1.17 | Create Hover Card Component |
-| 1.18 | Create Menubar Component |
-| 1.19 | Create Navigation Menu Component |
-| 1.20 | Create Radio Group Component |
-| 1.21 | Create Checkbox Component |
-| 1.22 | Create Label Component |
-| 1.23 | Create Form Component |
-| 1.24 | Create Alert Component |
-| 1.25 | Create Alert Dialog Component |
-| 1.26 | Create Aspect Ratio Component |
-| 1.27 | Create Collapsible Component |
-| 1.28 | Create Resizable Component |
-| 1.29 | Create Scroll Area Component |
-| 1.30 | Create Select Component (Enhanced) |
-| 1.31 | Create Sheet Component (Sidebar) |
-| 1.32 | Create Table Component |
-| 1.33 | Create Toggle Component |
-| 1.34 | Create Toggle Group Component |
-| 1.35 | Create Calendar Component |
-| 1.36 | Create Date Picker Component |
-| 1.37 | Create Time Picker Component |
-| 1.38 | Create Color Picker Component |
-| 1.39 | Create File Upload Component |
-| 1.40 | Create Rating Component |
-| 1.41 | Create Pagination Component |
-| 1.42 | Create Stepper Component |
-| 1.43 | Create Timeline Component |
-| 1.44 | Create Tree View Component |
-| 1.45 | Create Carousel Component |
-| 1.46 | Create Masonry Component |
-| 1.47 | Create Virtual List Component |
-| 1.48 | Create Infinite Scroll Component |
-| 1.49 | Create Drag and Drop Component |
-| 1.50 | Create Resizable Panel Component |
-| **Marketing Components (Enhanced)** | |
-| 1.7 | Create @repo/marketing-components Package Scaffold |
-| 2.1 | Build HeroVariants Components (Expanded: 20+ variants, composition system) |
-| 2.2 | Build ServiceShowcase Components (Expanded: 20+ layouts, filtering, sorting) |
-| 2.3 | Build TeamDisplay Components (Expanded: 15+ layouts, role filtering, social) |
-| 2.4 | Build Testimonial Components (Expanded: 20+ variants, multi-source integration) |
-| 2.5 | Build Pricing Components (Expanded: 15+ variants, customization, comparison) |
-| 2.6 | Build Gallery Components (Expanded: 20+ variants, filtering, organization) |
-| 2.7 | Build Stats Counter Component (Expanded: 6 variants, animation customization) |
-| 2.8 | Build CTA Section Components (Expanded: 10+ variants, A/B testing) |
-| 2.9 | Build FAQ Section Component (Expanded: 6 variants, search functionality) |
-| 2.10 | Build Contact Form Variants (Expanded: 10+ variants, validation, integration) |
-| **Marketing Components (New Families 2.11-2.35)** | |
-| 2.11 | Build Navigation Components (15+ variants, multi-level, mega menu) |
-| 2.12 | Build Footer Components (10+ variants, newsletter, social-focused) |
-| 2.13 | Build Blog Components (15+ variants, pagination, filtering, related posts) |
-| 2.14 | Build Product Components (15+ variants, e-commerce features) |
-| 2.15 | Build Event Components (10+ variants, calendar, registration) |
-| 2.16 | Build Location Components (10+ variants, maps integration) |
-| 2.17 | Build Menu Components (Restaurant) (10+ variants, dietary info) |
-| 2.18 | Build Portfolio Components (12+ variants, filtering, lightbox) |
-| 2.19 | Build Case Study Components (10+ variants, metrics, downloads) |
-| 2.20 | Build Job Listing Components (10+ variants, search, application) |
-| 2.21 | Build Course Components (Education) (10+ variants, enrollment, progress) |
-| 2.22 | Build Resource Components (8+ variants, download tracking) |
-| 2.23 | Build Comparison Components (6+ variants, feature/price comparison) |
-| 2.24 | Build Filter Components (8+ variants, presets, history) |
-| 2.25 | Build Search Components (8+ variants, autocomplete, suggestions) |
-| 2.26 | Build Social Proof Components (8+ variants, trust badges, counts) |
-| 2.27 | Build Video Components (10+ variants, playlists, analytics) |
-| 2.28 | Build Audio Components (6+ variants, waveforms, transcripts) |
-| 2.29 | Build Interactive Components (8+ variants, quizzes, calculators) |
-| 2.30 | Build Widget Components (8+ variants, weather, clock, countdown) |
-| **Feature Breadth (Enhanced)** | |
-| 2.16 | Create Testimonials Feature (Enhanced: 5+ patterns, multi-source, filtering) |
-| 2.17 | Create Team Feature (Enhanced: 5+ patterns, CMS, API adapters) |
-| 2.18 | Create Gallery Feature (Enhanced: 5+ patterns, CDN, optimization) |
-| 2.19 | Create Pricing Feature (Enhanced: 5+ patterns, calculator, comparison) |
-| **Feature Breadth (New 2.20-2.50)** | |
-| 2.20 | Create Search Feature (5+ patterns, AI-powered, semantic search) |
-| 2.21 | Create Newsletter Feature (5+ patterns, segmentation, automation) |
-| 2.22 | Create Social Media Integration Feature (5+ patterns, feeds, sharing) |
-| 2.23 | Create Analytics Feature (5+ patterns, privacy-first, real-time) |
-| 2.24 | Create A/B Testing Feature (5+ patterns, statistical analysis, ML) |
-| 2.25 | Create Personalization Feature (5+ patterns, behavioral, AI-powered) |
-| 2.26 | Create Chat Feature (5+ patterns, AI chatbot, live chat) |
-| 2.27 | Create Reviews Feature (5+ patterns, aggregation, moderation) |
-| 2.28 | Create Booking Feature (Expanded: 5+ patterns, multi-provider) |
-| 2.29 | Create E-commerce Feature (5+ patterns, headless commerce) |
-| 2.30 | Create Content Management Feature (5+ patterns, CMS abstraction) |
-| 2.31 | Create Form Builder Feature (5+ patterns, visual builder) |
-| 2.32 | Create Payment Feature (5+ patterns, multi-gateway) |
-| 2.33 | Create Notification Feature (5+ patterns, multi-channel) |
-| 2.34 | Create Authentication Feature (5+ patterns, OAuth, SSO) |
-| 2.35 | Create File Upload Feature (5+ patterns, multi-provider storage) |
-| 2.36 | Create Localization Feature (5+ patterns, AI translation, RTL) |
-| 2.37 | Create SEO Feature (5+ patterns, structured data, sitemap) |
-| 2.38 | Create Performance Feature (5+ patterns, optimization, monitoring) |
-| 2.39 | Create Security Feature (5+ patterns, CSP, rate limiting) |
-| 2.40 | Create Monitoring Feature (5+ patterns, error tracking, APM) |
-| 2.41 | Create Backup Feature (5+ patterns, automated, cloud) |
-| 2.42 | Create Migration Feature (5+ patterns, validation, rollback) |
-| 2.43 | Create API Feature (5+ patterns, REST, GraphQL, tRPC) |
-| 2.44 | Create Webhook Feature (5+ patterns, security, retry) |
-| 2.45 | Create Integration Feature (5+ patterns, CRM, email, payment) |
-| 2.46 | Create Automation Feature (5+ patterns, workflow builder, AI) |
-| 2.47 | Create Reporting Feature (5+ patterns, dashboards, visualization) |
-| **Infrastructure Systems (F.1-F.40)** | |
-| F.1 | Component Composition System |
-| F.2 | Variant System Infrastructure |
-| F.3 | Customization Hook System |
-| F.4 | Layout System |
-| F.5 | Theme Extension System |
-| F.6 | Animation System |
-| F.7 | Interaction System |
-| F.8 | Responsive System |
-| F.9 | Grid System |
-| F.10 | Spacing System |
-| F.11 | Typography System |
-| F.12 | Color System |
-| F.13 | Shadow System |
-| F.14 | Border System |
-| F.15 | Icon System |
-| F.16 | Image System |
-| F.17 | Media System |
-| F.18 | State Management System |
-| F.19 | Form System |
-| F.20 | Validation System |
-| F.21 | Error Handling System |
-| F.22 | Loading System |
-| F.23 | Accessibility System |
-| F.24 | Performance System |
-| F.25 | Testing System |
-| F.26 | Documentation System |
-| F.27 | Development System |
-| F.28 | Build System |
-| F.29 | Deployment System |
-| F.30 | Monitoring System |
-| F.31 | Slot System |
-| F.32 | Render Prop System |
-| F.33 | Higher-Order Component System |
-| F.34 | Context System |
-| F.35 | Provider System |
-| F.36 | Style System |
-| F.37 | Theme System |
-| F.38 | Configuration System |
-| F.39 | Plugin System |
-| F.40 | Extension System |
-| **Page Templates** | |
-| 3.1 | Create Page-Templates Registry and Package Scaffold |
-| 3.2 | Build HomePageTemplate |
-| 3.3 | Build ServicesPageTemplate |
-| 3.4 | Build AboutPageTemplate |
-| 3.5 | Build ContactPageTemplate |
-| 3.6 | Build BlogIndexTemplate |
-| 3.7 | Build BlogPostTemplate |
-| 3.8 | Build BookingPageTemplate |
-| **Integrations** | |
-| 4.1 | Email Marketing Integrations |
-| 4.2 | Scheduling Integrations |
-| 4.3 | Chat Support Integrations |
-| 4.4 | Review Platform Integrations |
-| 4.5 | Maps Integration |
-| 4.6 | Industry Schemas Package |
-| **Client Factory** | |
-| 5.1 | Create Starter-Template in clients/ |
-| 5.2 | Luxe-Salon Example Client |
-| 5.3 | Bistro-Central Example Client |
-| 5.4 | Law Firm (Chen-Law) Example |
-| 5.5 | Medical (Sunrise-Dental) Example |
-| 5.6 | Retail (Urban-Outfitters) Example |
-| **Cleanup & Docs** | |
-| 6.1 | Migrate Template Content |
-| 6.2 | Create Migration Guide |
-| 6.2a | Update clients/README |
-| 6.3 | Remove Templates Directory |
-| 6.4 | Create Component Library Documentation |
-| 6.5 | Create Configuration Reference |
-| 6.6 | Create Feature Documentation |
-| 6.7 | Create Architecture Decision Records |
-| 6.8 | Create CLI Tooling |
-| 6.9 | Remove Dead Code and Unused Dependencies |
-| 6.10a | Add validate-client Script |
-| 6.10b | Add health-check Script |
-| 6.10c | Add program:wave0–wave3 Scripts |
-| **Governance** | |
-| C.1 | Enforce Circular Dependency and Layering Checks |
-| C.2 | Harden pnpm Policy and Workspace Determinism |
-| C.3 | Enable Turborepo Remote Cache |
-| C.4 | Multi-Track Release Strategy (Canary + Stable) |
-| C.5 | Three-Layer Design Token Architecture |
-| C.6 | Motion Primitives and Creative Interaction Standards |
-| C.7 | Storybook + Visual Regression Testing |
-| C.8 | Experimentation Platform (A/B + Feature Flags) |
-| C.9 | Personalization Rules Engine |
-| C.10 | CMS Abstraction Layer |
-| C.11 | Localization and RTL Foundation |
-| C.12 | Standardize Conversion Event Taxonomy |
-| C.13 | Continuous Security Program |
-| C.14 | Performance and Reliability SLO Framework |
-| C.15 | Spec-Driven Development Workflow |
-| C.16 | AI-Assisted Delivery Playbooks |
-| C.17 | Industry Compliance Feature Pack Framework |
-| C.18 | Edge Personalization and Experiment Routing |
-| **Advanced Recommendations** | |
-| D.1 | Schema Governance Program |
-| D.2 | Experimentation Statistics and Guardrails |
-| D.3 | Editorial Workflow and Preview Governance |
-| D.4 | Tenant Operations and Capacity Playbook |
-| D.5 | Incident Management and Error Budget Policy |
-| D.6 | Continuous Accessibility Gates |
-| D.7 | Ownership and Escalation Matrix |
-| D.8 | Software Supply Chain Security Program |
-| **Innovation** | |
-| E.1–E.7 | Round 1 — Adjacency-Derived Innovation |
-| F.1–F.12 | Round 2 — Non-Direct-Domain Innovation |
-| **Future AOS** | |
-| 7.1–7.3, 8.1–8.2, 9.1, 10.1 | Phase 7+ |
-| **Strategic Enhancements** | |
-| Part 6 | AEO, Privacy/Sustainability, DevEx, Real-Time, FSD, Digital Twin — see Part 6 roadmap |
+| ID                                                | Title                                                                                    |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| **UI Primitives (Enhanced)**                      |                                                                                          |
+| 1.2                                               | Create Toast Component (Enhanced: 6 variants, 6 positions, actions, custom content)      |
+| 1.3                                               | Create Tabs Component (Enhanced: 5 variants, URL sync, nested, scrollable)               |
+| 1.4                                               | Create Dropdown Menu Component (Enhanced: typeahead, multi-select, checkbox/radio items) |
+| 1.5                                               | Create Tooltip Component (Enhanced: 12 positions, 4 trigger modes, rich content)         |
+| 1.6                                               | Create Popover Component (Enhanced: collision detection, slots, nested, animations)      |
+| **UI Primitives (New 1.7-1.50)**                  |                                                                                          |
+| 1.7                                               | Create Badge Component                                                                   |
+| 1.8                                               | Create Avatar Component                                                                  |
+| 1.9                                               | Create Skeleton Component                                                                |
+| 1.10                                              | Create Separator Component                                                               |
+| 1.11                                              | Create Switch Component                                                                  |
+| 1.12                                              | Create Slider Component                                                                  |
+| 1.13                                              | Create Progress Component                                                                |
+| 1.14                                              | Create Breadcrumb Component                                                              |
+| 1.15                                              | Create Command Palette Component                                                         |
+| 1.16                                              | Create Context Menu Component                                                            |
+| 1.17                                              | Create Hover Card Component                                                              |
+| 1.18                                              | Create Menubar Component                                                                 |
+| 1.19                                              | Create Navigation Menu Component                                                         |
+| 1.20                                              | Create Radio Group Component                                                             |
+| 1.21                                              | Create Checkbox Component                                                                |
+| 1.22                                              | Create Label Component                                                                   |
+| 1.23                                              | Create Form Component                                                                    |
+| 1.24                                              | Create Alert Component                                                                   |
+| 1.25                                              | Create Alert Dialog Component                                                            |
+| 1.26                                              | Create Aspect Ratio Component                                                            |
+| 1.27                                              | Create Collapsible Component                                                             |
+| 1.28                                              | Create Resizable Component                                                               |
+| 1.29                                              | Create Scroll Area Component                                                             |
+| 1.30                                              | Create Select Component (Enhanced)                                                       |
+| 1.31                                              | Create Sheet Component (Sidebar)                                                         |
+| 1.32                                              | Create Table Component                                                                   |
+| 1.33                                              | Create Toggle Component                                                                  |
+| 1.34                                              | Create Toggle Group Component                                                            |
+| 1.35                                              | Create Calendar Component                                                                |
+| 1.36                                              | Create Date Picker Component                                                             |
+| 1.37                                              | Create Time Picker Component                                                             |
+| 1.38                                              | Create Color Picker Component                                                            |
+| 1.39                                              | Create File Upload Component                                                             |
+| 1.40                                              | Create Rating Component                                                                  |
+| 1.41                                              | Create Pagination Component                                                              |
+| 1.42                                              | Create Stepper Component                                                                 |
+| 1.43                                              | Create Timeline Component                                                                |
+| 1.44                                              | Create Tree View Component                                                               |
+| 1.45                                              | Create Carousel Component                                                                |
+| 1.46                                              | Create Masonry Component                                                                 |
+| 1.47                                              | Create Virtual List Component                                                            |
+| 1.48                                              | Create Infinite Scroll Component                                                         |
+| 1.49                                              | Create Drag and Drop Component                                                           |
+| 1.50                                              | Create Resizable Panel Component                                                         |
+| **Marketing Components (Enhanced)**               |                                                                                          |
+| 1.7                                               | Create @repo/marketing-components Package Scaffold                                       |
+| 2.1                                               | Build HeroVariants Components (Expanded: 20+ variants, composition system)               |
+| 2.2                                               | Build ServiceShowcase Components (Expanded: 20+ layouts, filtering, sorting)             |
+| 2.3                                               | Build TeamDisplay Components (Expanded: 15+ layouts, role filtering, social)             |
+| 2.4                                               | Build Testimonial Components (Expanded: 20+ variants, multi-source integration)          |
+| 2.5                                               | Build Pricing Components (Expanded: 15+ variants, customization, comparison)             |
+| 2.6                                               | Build Gallery Components (Expanded: 20+ variants, filtering, organization)               |
+| 2.7                                               | Build Stats Counter Component (Expanded: 6 variants, animation customization)            |
+| 2.8                                               | Build CTA Section Components (Expanded: 10+ variants, A/B testing)                       |
+| 2.9                                               | Build FAQ Section Component (Expanded: 6 variants, search functionality)                 |
+| 2.10                                              | Build Contact Form Variants (Expanded: 10+ variants, validation, integration)            |
+| **Marketing Components (New Families 2.11-2.35)** |                                                                                          |
+| 2.11                                              | Build Navigation Components (15+ variants, multi-level, mega menu)                       |
+| 2.12                                              | Build Footer Components (10+ variants, newsletter, social-focused)                       |
+| 2.13                                              | Build Blog Components (15+ variants, pagination, filtering, related posts)               |
+| 2.14                                              | Build Product Components (15+ variants, e-commerce features)                             |
+| 2.15                                              | Build Event Components (10+ variants, calendar, registration)                            |
+| 2.16                                              | Build Location Components (10+ variants, maps integration)                               |
+| 2.17                                              | Build Menu Components (Restaurant) (10+ variants, dietary info)                          |
+| 2.18                                              | Build Portfolio Components (12+ variants, filtering, lightbox)                           |
+| 2.19                                              | Build Case Study Components (10+ variants, metrics, downloads)                           |
+| 2.20                                              | Build Job Listing Components (10+ variants, search, application)                         |
+| 2.21                                              | Build Course Components (Education) (10+ variants, enrollment, progress)                 |
+| 2.22                                              | Build Resource Components (8+ variants, download tracking)                               |
+| 2.23                                              | Build Comparison Components (6+ variants, feature/price comparison)                      |
+| 2.24                                              | Build Filter Components (8+ variants, presets, history)                                  |
+| 2.25                                              | Build Search Components (8+ variants, autocomplete, suggestions)                         |
+| 2.26                                              | Build Social Proof Components (8+ variants, trust badges, counts)                        |
+| 2.27                                              | Build Video Components (10+ variants, playlists, analytics)                              |
+| 2.28                                              | Build Audio Components (6+ variants, waveforms, transcripts)                             |
+| 2.29                                              | Build Interactive Components (8+ variants, quizzes, calculators)                         |
+| 2.30                                              | Build Widget Components (8+ variants, weather, clock, countdown)                         |
+| **Feature Breadth (Enhanced)**                    |                                                                                          |
+| 2.16                                              | Create Testimonials Feature (Enhanced: 5+ patterns, multi-source, filtering)             |
+| 2.17                                              | Create Team Feature (Enhanced: 5+ patterns, CMS, API adapters)                           |
+| 2.18                                              | Create Gallery Feature (Enhanced: 5+ patterns, CDN, optimization)                        |
+| 2.19                                              | Create Pricing Feature (Enhanced: 5+ patterns, calculator, comparison)                   |
+| **Feature Breadth (New 2.20-2.50)**               |                                                                                          |
+| 2.20                                              | Create Search Feature (5+ patterns, AI-powered, semantic search)                         |
+| 2.21                                              | Create Newsletter Feature (5+ patterns, segmentation, automation)                        |
+| 2.22                                              | Create Social Media Integration Feature (5+ patterns, feeds, sharing)                    |
+| 2.23                                              | Create Analytics Feature (5+ patterns, privacy-first, real-time)                         |
+| 2.24                                              | Create A/B Testing Feature (5+ patterns, statistical analysis, ML)                       |
+| 2.25                                              | Create Personalization Feature (5+ patterns, behavioral, AI-powered)                     |
+| 2.26                                              | Create Chat Feature (5+ patterns, AI chatbot, live chat)                                 |
+| 2.27                                              | Create Reviews Feature (5+ patterns, aggregation, moderation)                            |
+| 2.28                                              | Create Booking Feature (Expanded: 5+ patterns, multi-provider)                           |
+| 2.29                                              | Create E-commerce Feature (5+ patterns, headless commerce)                               |
+| 2.30                                              | Create Content Management Feature (5+ patterns, CMS abstraction)                         |
+| 2.31                                              | Create Form Builder Feature (5+ patterns, visual builder)                                |
+| 2.32                                              | Create Payment Feature (5+ patterns, multi-gateway)                                      |
+| 2.33                                              | Create Notification Feature (5+ patterns, multi-channel)                                 |
+| 2.34                                              | Create Authentication Feature (5+ patterns, OAuth, SSO)                                  |
+| 2.35                                              | Create File Upload Feature (5+ patterns, multi-provider storage)                         |
+| 2.36                                              | Create Localization Feature (5+ patterns, AI translation, RTL)                           |
+| 2.37                                              | Create SEO Feature (5+ patterns, structured data, sitemap)                               |
+| 2.38                                              | Create Performance Feature (5+ patterns, optimization, monitoring)                       |
+| 2.39                                              | Create Security Feature (5+ patterns, CSP, rate limiting)                                |
+| 2.40                                              | Create Monitoring Feature (5+ patterns, error tracking, APM)                             |
+| 2.41                                              | Create Backup Feature (5+ patterns, automated, cloud)                                    |
+| 2.42                                              | Create Migration Feature (5+ patterns, validation, rollback)                             |
+| 2.43                                              | Create API Feature (5+ patterns, REST, GraphQL, tRPC)                                    |
+| 2.44                                              | Create Webhook Feature (5+ patterns, security, retry)                                    |
+| 2.45                                              | Create Integration Feature (5+ patterns, CRM, email, payment)                            |
+| 2.46                                              | Create Automation Feature (5+ patterns, workflow builder, AI)                            |
+| 2.47                                              | Create Reporting Feature (5+ patterns, dashboards, visualization)                        |
+| **Infrastructure Systems (F.1-F.40)**             |                                                                                          |
+| F.1                                               | Component Composition System                                                             |
+| F.2                                               | Variant System Infrastructure                                                            |
+| F.3                                               | Customization Hook System                                                                |
+| F.4                                               | Layout System                                                                            |
+| F.5                                               | Theme Extension System                                                                   |
+| F.6                                               | Animation System                                                                         |
+| F.7                                               | Interaction System                                                                       |
+| F.8                                               | Responsive System                                                                        |
+| F.9                                               | Grid System                                                                              |
+| F.10                                              | Spacing System                                                                           |
+| F.11                                              | Typography System                                                                        |
+| F.12                                              | Color System                                                                             |
+| F.13                                              | Shadow System                                                                            |
+| F.14                                              | Border System                                                                            |
+| F.15                                              | Icon System                                                                              |
+| F.16                                              | Image System                                                                             |
+| F.17                                              | Media System                                                                             |
+| F.18                                              | State Management System                                                                  |
+| F.19                                              | Form System                                                                              |
+| F.20                                              | Validation System                                                                        |
+| F.21                                              | Error Handling System                                                                    |
+| F.22                                              | Loading System                                                                           |
+| F.23                                              | Accessibility System                                                                     |
+| F.24                                              | Performance System                                                                       |
+| F.25                                              | Testing System                                                                           |
+| F.26                                              | Documentation System                                                                     |
+| F.27                                              | Development System                                                                       |
+| F.28                                              | Build System                                                                             |
+| F.29                                              | Deployment System                                                                        |
+| F.30                                              | Monitoring System                                                                        |
+| F.31                                              | Slot System                                                                              |
+| F.32                                              | Render Prop System                                                                       |
+| F.33                                              | Higher-Order Component System                                                            |
+| F.34                                              | Context System                                                                           |
+| F.35                                              | Provider System                                                                          |
+| F.36                                              | Style System                                                                             |
+| F.37                                              | Theme System                                                                             |
+| F.38                                              | Configuration System                                                                     |
+| F.39                                              | Plugin System                                                                            |
+| F.40                                              | Extension System                                                                         |
+| **Page Templates**                                |                                                                                          |
+| 3.1                                               | Create Page-Templates Registry and Package Scaffold                                      |
+| 3.2                                               | Build HomePageTemplate                                                                   |
+| 3.3                                               | Build ServicesPageTemplate                                                               |
+| 3.4                                               | Build AboutPageTemplate                                                                  |
+| 3.5                                               | Build ContactPageTemplate                                                                |
+| 3.6                                               | Build BlogIndexTemplate                                                                  |
+| 3.7                                               | Build BlogPostTemplate                                                                   |
+| 3.8                                               | Build BookingPageTemplate                                                                |
+| **Integrations**                                  |                                                                                          |
+| 4.1                                               | Email Marketing Integrations                                                             |
+| 4.2                                               | Scheduling Integrations                                                                  |
+| 4.3                                               | Chat Support Integrations                                                                |
+| 4.4                                               | Review Platform Integrations                                                             |
+| 4.5                                               | Maps Integration                                                                         |
+| 4.6                                               | Industry Schemas Package                                                                 |
+| **Client Factory**                                |                                                                                          |
+| 5.1                                               | Create Starter-Template in clients/                                                      |
+| 5.2                                               | Luxe-Salon Example Client                                                                |
+| 5.3                                               | Bistro-Central Example Client                                                            |
+| 5.4                                               | Law Firm (Chen-Law) Example                                                              |
+| 5.5                                               | Medical (Sunrise-Dental) Example                                                         |
+| 5.6                                               | Retail (Urban-Outfitters) Example                                                        |
+| **Cleanup & Docs**                                |                                                                                          |
+| 6.1                                               | Migrate Template Content                                                                 |
+| 6.2                                               | Create Migration Guide                                                                   |
+| 6.2a                                              | Update clients/README                                                                    |
+| 6.3                                               | Remove Templates Directory                                                               |
+| 6.4                                               | Create Component Library Documentation                                                   |
+| 6.5                                               | Create Configuration Reference                                                           |
+| 6.6                                               | Create Feature Documentation                                                             |
+| 6.7                                               | Create Architecture Decision Records                                                     |
+| 6.8                                               | Create CLI Tooling                                                                       |
+| 6.9                                               | Remove Dead Code and Unused Dependencies                                                 |
+| 6.10a                                             | Add validate-client Script                                                               |
+| 6.10b                                             | Add health-check Script                                                                  |
+| 6.10c                                             | Add program:wave0–wave3 Scripts                                                          |
+| **Governance**                                    |                                                                                          |
+| C.1                                               | Enforce Circular Dependency and Layering Checks                                          |
+| C.2                                               | Harden pnpm Policy and Workspace Determinism                                             |
+| C.3                                               | Enable Turborepo Remote Cache                                                            |
+| C.4                                               | Multi-Track Release Strategy (Canary + Stable)                                           |
+| C.5                                               | Three-Layer Design Token Architecture                                                    |
+| C.6                                               | Motion Primitives and Creative Interaction Standards                                     |
+| C.7                                               | Storybook + Visual Regression Testing                                                    |
+| C.8                                               | Experimentation Platform (A/B + Feature Flags)                                           |
+| C.9                                               | Personalization Rules Engine                                                             |
+| C.10                                              | CMS Abstraction Layer                                                                    |
+| C.11                                              | Localization and RTL Foundation                                                          |
+| C.12                                              | Standardize Conversion Event Taxonomy                                                    |
+| C.13                                              | Continuous Security Program                                                              |
+| C.14                                              | Performance and Reliability SLO Framework                                                |
+| C.15                                              | Spec-Driven Development Workflow                                                         |
+| C.16                                              | AI-Assisted Delivery Playbooks                                                           |
+| C.17                                              | Industry Compliance Feature Pack Framework                                               |
+| C.18                                              | Edge Personalization and Experiment Routing                                              |
+| **Advanced Recommendations**                      |                                                                                          |
+| D.1                                               | Schema Governance Program                                                                |
+| D.2                                               | Experimentation Statistics and Guardrails                                                |
+| D.3                                               | Editorial Workflow and Preview Governance                                                |
+| D.4                                               | Tenant Operations and Capacity Playbook                                                  |
+| D.5                                               | Incident Management and Error Budget Policy                                              |
+| D.6                                               | Continuous Accessibility Gates                                                           |
+| D.7                                               | Ownership and Escalation Matrix                                                          |
+| D.8                                               | Software Supply Chain Security Program                                                   |
+| **Innovation**                                    |                                                                                          |
+| E.1–E.7                                           | Round 1 — Adjacency-Derived Innovation                                                   |
+| F.1–F.12                                          | Round 2 — Non-Direct-Domain Innovation                                                   |
+| **Future AOS**                                    |                                                                                          |
+| 7.1–7.3, 8.1–8.2, 9.1, 10.1                       | Phase 7+                                                                                 |
+| **Strategic Enhancements**                        |                                                                                          |
+| Part 6                                            | AEO, Privacy/Sustainability, DevEx, Real-Time, FSD, Digital Twin — see Part 6 roadmap    |
 
 ---
 
@@ -1954,6 +1954,7 @@ packages/experience-layer/
 ### 11.1 High-Priority Research Additions Needed
 
 **UI Primitives Deep Dive (§10 - NEW SECTION):**
+
 - Advanced form components (Command Palette, Date/Time Pickers, File Upload, Color Picker)
 - Data display components (Table, Tree View, Timeline, Stepper)
 - Navigation & layout components (Breadcrumb, Pagination, Carousel, Masonry)
@@ -1964,6 +1965,7 @@ packages/experience-layer/
 - Utility components (Aspect Ratio, Separator, Badge, Avatar)
 
 **Marketing Component Patterns (§11 - NEW SECTION):**
+
 - Navigation & structure components (Navigation Systems, Footer Components)
 - Content display components (Blog, Portfolio, Case Study Components)
 - E-commerce components (Product Components, E-commerce Patterns)
@@ -1978,6 +1980,7 @@ packages/experience-layer/
 - Comparison & analysis components (Comparison Components)
 
 **Feature Implementation Patterns (§12 - NEW SECTION):**
+
 - Search & discovery features (Search Feature, Filter Feature)
 - Communication features (Newsletter, Chat, Notification Features)
 - Analytics & optimization features (Analytics, A/B Testing, Personalization Features)
@@ -1991,6 +1994,7 @@ packages/experience-layer/
 - Reporting & analytics features (Reporting Feature)
 
 **Infrastructure Systems Research (§13 - NEW SECTION):**
+
 - Composition systems (Slot, Render Prop, HOC, Context, Provider Systems)
 - Variant & customization systems (Variant System, Customization Hooks, Theme Extension)
 - Layout & responsive systems (Layout, Grid, Responsive, Spacing Systems)
@@ -2010,12 +2014,14 @@ packages/experience-layer/
 ### 11.2 Medium-Priority Research Additions
 
 **Advanced Component Patterns (§14 - NEW SECTION):**
+
 - Animation & motion patterns (Animation System, Interaction System)
 - Advanced composition patterns (Compound Components, Controlled vs Uncontrolled)
 - Performance optimization patterns (Code Splitting, Memoization, Virtualization)
 - Accessibility advanced patterns (ARIA Advanced, Keyboard Navigation, Screen Reader Support)
 
 **Industry-Specific Research Expansion (§15 - EXPAND §6):**
+
 - Fitness & Wellness industry patterns
 - Real Estate industry patterns
 - Construction & Trades industry patterns
@@ -2025,6 +2031,7 @@ packages/experience-layer/
 - Technology & SaaS industry patterns
 
 **Testing & Quality Assurance (§18 - NEW SECTION):**
+
 - Testing strategies (Testing Pyramid, Testing Tools, Testing Patterns)
 - Component testing (Component Testing, Visual Regression)
 - E2E testing (E2E Testing Patterns)
@@ -2032,6 +2039,7 @@ packages/experience-layer/
 - Accessibility testing (Accessibility Testing)
 
 **Security & Privacy Advanced (§17 - EXPAND §4.1):**
+
 - Advanced security patterns (Authentication, Authorization, API Security)
 - Privacy compliance advanced (GDPR, CCPA/CPRA, LGPD)
 - Security monitoring (Security Monitoring, Vulnerability Management)
@@ -2039,6 +2047,7 @@ packages/experience-layer/
 ### 11.3 Lower-Priority Research Additions
 
 **Emerging Technologies Advanced (§16 - EXPAND §9):**
+
 - AI integration advanced (AI-Powered Features, AI Providers, AI Patterns)
 - Edge computing advanced (Edge Platforms, Edge Patterns, Edge Performance)
 - WebAssembly advanced (Wasm Use Cases, Wasm Tools, Wasm Patterns)
@@ -2048,26 +2057,29 @@ packages/experience-layer/
 - Advanced performance techniques (Resource Hints, HTTP/3 & QUIC, Streaming)
 
 **Deployment & DevOps Advanced (§19 - EXPAND §7.2):**
+
 - Deployment strategies (Deployment Patterns, Deployment Platforms)
 - CI/CD advanced (CI/CD Patterns, CI/CD Tools)
 - Monitoring & observability (Observability, Monitoring Tools)
 - Infrastructure as Code (IaC Patterns, Containerization)
 
 **Documentation & Developer Experience Advanced (§20 - EXPAND §7.3):**
+
 - Documentation patterns (Documentation Types, Documentation Tools)
 - Developer experience (DevEx Patterns, DevEx Metrics)
 
 ### 11.4 Research Addition Priority
 
-| Priority | Sections | Estimated Effort | Timeline |
-|----------|----------|------------------|----------|
-| **High** | §10, §11, §12, §13 | 80-100 hours | Phase 1 (Weeks 1-4) |
-| **Medium** | §14, §15, §18, §17 | 40-60 hours | Phase 2 (Weeks 5-8) |
-| **Lower** | §16, §19, §20 | 20-30 hours | Phase 3 (Weeks 9-12) |
+| Priority   | Sections           | Estimated Effort | Timeline             |
+| ---------- | ------------------ | ---------------- | -------------------- |
+| **High**   | §10, §11, §12, §13 | 80-100 hours     | Phase 1 (Weeks 1-4)  |
+| **Medium** | §14, §15, §18, §17 | 40-60 hours      | Phase 2 (Weeks 5-8)  |
+| **Lower**  | §16, §19, §20      | 20-30 hours      | Phase 3 (Weeks 9-12) |
 
 ### 11.5 Research Sources to Add
 
 **Academic & Standards:**
+
 - W3C WCAG 2.2 Guidelines
 - W3C Web Sustainability Guidelines (WSG)
 - OWASP Top 10 2026
@@ -2075,6 +2087,7 @@ packages/experience-layer/
 - ARIA Authoring Practices Guide
 
 **Framework & Library Documentation:**
+
 - React 19 documentation
 - Next.js 16 documentation
 - Radix UI documentation
@@ -2084,6 +2097,7 @@ packages/experience-layer/
 - Framer Motion documentation
 
 **Component Library References:**
+
 - shadcn/ui components
 - Radix UI primitives
 - Base UI components
@@ -2091,6 +2105,7 @@ packages/experience-layer/
 - Chakra UI patterns
 
 **Tool Documentation:**
+
 - Turborepo documentation
 - pnpm documentation
 - Vitest documentation
@@ -2098,6 +2113,7 @@ packages/experience-layer/
 - Storybook documentation
 
 **AI & Emerging Tech:**
+
 - OpenAI API documentation
 - Anthropic API documentation
 - Vector database documentation
@@ -2150,17 +2166,17 @@ _Research Gaps Analysis: See RESEARCH_GAPS.md for detailed breakdown_
 
 ### Package Status (this repo)
 
-| Layer  | Package                      | Status                       | Scope                                                                 |
-| ------ | ---------------------------- | ---------------------------- | --------------------------------------------------------------------- |
-| **--** | Housekeeping (Wave 0)        | Complete                     | Config fixes, tooling, CI, bug fixes done                             |
+| Layer  | Package                      | Status                       | Scope                                                                                       |
+| ------ | ---------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------- |
+| **--** | Housekeeping (Wave 0)        | Complete                     | Config fixes, tooling, CI, bug fixes done                                                   |
 | **L2** | `@repo/ui`                   | 10 of 14                     | Container, Section, Button, Card, Input, Select, Textarea, Accordion, Dialog, ThemeInjector |
-| **L2** | `@repo/marketing-components` | Dir + components; no package | Hero (4), Services (4), Team (3), Testimonials (3), Pricing (2); package.json needed (1.7) |
-| **L2** | `@repo/features`             | 5 of 9                       | booking, contact, blog, services, search                              |
-| **L2** | `@repo/types`                | Complete                     | In packages; SiteConfig, industry types                               |
-| **L3** | `@repo/page-templates`       | Scaffolded only              | 0 of 7 templates; add 3.1 then 3.2–3.8                                |
-| **L3** | `clients/`                   | Not started                  | Add 5.1 (starter) then 5.2–5.6                                        |
-| **L0** | `@repo/infra`                | Complete                     | Security, middleware, logging, 7 env schemas                          |
-| **L0** | `@repo/integrations`         | Partial                      | 3 exist (analytics, hubspot, supabase), more planned                  |
+| **L2** | `@repo/marketing-components` | Dir + components; no package | Hero (4), Services (4), Team (3), Testimonials (3), Pricing (2); package.json needed (1.7)  |
+| **L2** | `@repo/features`             | 5 of 9                       | booking, contact, blog, services, search                                                    |
+| **L2** | `@repo/types`                | Complete                     | In packages; SiteConfig, industry types                                                     |
+| **L3** | `@repo/page-templates`       | Scaffolded only              | 0 of 7 templates; add 3.1 then 3.2–3.8                                                      |
+| **L3** | `clients/`                   | Not started                  | Add 5.1 (starter) then 5.2–5.6                                                              |
+| **L0** | `@repo/infra`                | Complete                     | Security, middleware, logging, 7 env schemas                                                |
+| **L0** | `@repo/integrations`         | Partial                      | 3 exist (analytics, hubspot, supabase), more planned                                        |
 
 ### Vision: Configuration-as-Code Architecture (CaCA)
 
@@ -2217,17 +2233,17 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 ### Batching and Streamlining
 
-| Batch | Tasks                              | Streamline approach |
-| ----- | ---------------------------------- | ------------------- |
+| Batch | Tasks                              | Streamline approach                                                                                  |
+| ----- | ---------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | **A** | 1.2–1.6 (UI primitives)            | Implement 1.3 Tabs first as reference; scaffold Toast, Dropdown, Tooltip, Popover from same template |
-| **B** | 2.1–2.10 (marketing components)    | Shared types first (2.1a, 2.2a); same folder structure per domain |
-| **C** | 3.2–3.8 (page templates)           | After 3.1, build 3.2 HomePageTemplate as reference; copy structure for others |
-| **D** | 5.2–5.6 (example clients)          | Script: copy starter-template → clients/<name>; edit site.config.ts only |
-| **E** | 2.16–2.19 (new features)           | Copy existing feature (e.g. contact/booking), find-replace name |
-| **F** | 4.1–4.5 (integrations)             | Adapter contract first; reuse retry/timeout pattern |
-| **G** | 6.10a–6.10c (scripts)              | Do 6.10b (health) then 6.10a (validate-client); then 6.10c |
-| **H** | 6.4, 6.5, 6.6, 6.7 (documentation) | Storybook setup once; then doc sprint with shared template |
-| **I** | C.1–C.18, D.x (governance)         | Script-heavy: one pass to add check scripts + CI |
+| **B** | 2.1–2.10 (marketing components)    | Shared types first (2.1a, 2.2a); same folder structure per domain                                    |
+| **C** | 3.2–3.8 (page templates)           | After 3.1, build 3.2 HomePageTemplate as reference; copy structure for others                        |
+| **D** | 5.2–5.6 (example clients)          | Script: copy starter-template → clients/<name>; edit site.config.ts only                             |
+| **E** | 2.16–2.19 (new features)           | Copy existing feature (e.g. contact/booking), find-replace name                                      |
+| **F** | 4.1–4.5 (integrations)             | Adapter contract first; reuse retry/timeout pattern                                                  |
+| **G** | 6.10a–6.10c (scripts)              | Do 6.10b (health) then 6.10a (validate-client); then 6.10c                                           |
+| **H** | 6.4, 6.5, 6.6, 6.7 (documentation) | Storybook setup once; then doc sprint with shared template                                           |
+| **I** | C.1–C.18, D.x (governance)         | Script-heavy: one pass to add check scripts + CI                                                     |
 
 **Parent tasks with subtasks:** Mark parent complete only when all subtasks (e.g. 2.1a–2.1e) are done.
 
@@ -2237,13 +2253,13 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **Corrections to Prior Analysis:**
 
-| Claim                               | Actual                                                         |
-| ----------------------------------- | -------------------------------------------------------------- |
-| "7 packages"                        | 5 top-level dirs → ~10 workspace packages                      |
-| Search feature "no components"      | Has SearchDialog (6.3KB) + SearchPage (3.5KB)                  |
-| Services feature "1 component"      | Has ServicesOverview + ServiceDetailLayout (8KB)               |
-| conversionFlow "only booking"       | SiteConfig supports 4 flows: booking, contact, quote, dispatch |
-| INP "replaces FID March 2026"       | INP replaced FID in **March 2024**                             |
+| Claim                          | Actual                                                         |
+| ------------------------------ | -------------------------------------------------------------- |
+| "7 packages"                   | 5 top-level dirs → ~10 workspace packages                      |
+| Search feature "no components" | Has SearchDialog (6.3KB) + SearchPage (3.5KB)                  |
+| Services feature "1 component" | Has ServicesOverview + ServiceDetailLayout (8KB)               |
+| conversionFlow "only booking"  | SiteConfig supports 4 flows: booking, contact, quote, dispatch |
+| INP "replaces FID March 2026"  | INP replaced FID in **March 2024**                             |
 
 **Key Discoveries:**
 
@@ -2272,6 +2288,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** Non-blocking notification system with extensive customization. Sonner integration at L2 (@repo/ui). Current usage: `packages/features/src/booking/components/BookingForm.tsx` line 29.
 
 **Enhanced Requirements:**
+
 - **Variants:** success, error, warning, info, loading, custom (6 total)
 - **Positions:** top-left, top-center, top-right, bottom-left, bottom-center, bottom-right (6 total)
 - **Actions:** Action buttons, close button, dismiss on click, swipe to dismiss
@@ -2285,7 +2302,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** `Toaster(props?)`, `toast.success/error/warning/info/loading/custom`, `toast.promise(promise, {loading, success, error})`, `toast.dismiss(id)`, `toast.dismissAll()`, `useToast()`
 
-**Checklist:** 
+**Checklist:**
+
 - 1.2a: Create Toast base component with variant system (3h)
 - 1.2b: Add position system and queue management (2h)
 - 1.2c: Add actions and custom content support (2h)
@@ -2306,6 +2324,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** Tabbed content with accessible tablist, roving focus, and extensive customization. Layer L2 (@repo/ui).
 
 **Enhanced Requirements:**
+
 - **Variants:** default, underline, pills, enclosed, soft (5 total)
 - **Sizes:** sm, md, lg, xl (4 total)
 - **Orientations:** horizontal, vertical (2 total)
@@ -2320,7 +2339,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`, `TabsIndicator`. Props: `orientation`, `activationMode`, `variant`, `size`, `syncWithUrl`, `scrollable`, `nested`.
 
-**Checklist:** 
+**Checklist:**
+
 - 1.3a: Create base Tabs component with Radix UI (2h)
 - 1.3b: Add variant system and sizes (2h)
 - 1.3c: Add URL sync functionality (2h)
@@ -2341,6 +2361,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** Clickable button revealing action list with advanced features. Full keyboard semantics, nested menus, typeahead, multi-select. Layer L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** default, compact, spacious (3 total)
 - **Typeahead:** Keyboard character matching for quick navigation
 - **Multi-Select:** Checkbox items with multi-selection support
@@ -2356,7 +2377,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuCheckboxItem`, `DropdownMenuRadioItem`, `DropdownMenuSeparator`, `DropdownMenuGroup`, `DropdownMenuSub`, `DropdownMenuSubTrigger`, `DropdownMenuSubContent`, `DropdownMenuLabel`, `DropdownMenuShortcut`, etc. (full Radix set + enhancements)
 
-**Checklist:** 
+**Checklist:**
+
 - 1.4a: Create base DropdownMenu with Radix UI (3h)
 - 1.4b: Add typeahead functionality (2h)
 - 1.4c: Add checkbox and radio item variants (2h)
@@ -2378,6 +2400,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** Small popup on hover/focus with extensive positioning and customization. Layer L2. WCAG 2.2 1.4.13 compliance.
 
 **Enhanced Requirements:**
+
 - **Positions:** top, top-start, top-end, bottom, bottom-start, bottom-end, left, left-start, left-end, right, right-start, right-end (12 total)
 - **Trigger Modes:** hover, focus, click, manual (4 total)
 - **Rich Content:** Icons, formatted text, links (accessible)
@@ -2391,7 +2414,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** `TooltipProvider`, `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipArrow`. Props: `side`, `align`, `sideOffset`, `alignOffset`, `delayDuration`, `disableHoverableContent`, `collisionPadding`.
 
-**Checklist:** 
+**Checklist:**
+
 - 1.5a: Create base Tooltip with Radix UI (2h)
 - 1.5b: Add all 12 position variants (2h)
 - 1.5c: Add multiple trigger modes (2h)
@@ -2412,6 +2436,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** Rich interactive overlay with advanced positioning and composition. Click-outside dismissal, focus management. Layer L2. WCAG 2.2 Dialog pattern.
 
 **Enhanced Requirements:**
+
 - **Modes:** Modal, non-modal (2 total)
 - **Positions:** All 12 positions (same as Tooltip)
 - **Collision Detection:** Auto-adjust when near viewport edges
@@ -2426,7 +2451,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverAnchor`, `PopoverArrow`, `PopoverClose`, `PopoverHeader`, `PopoverBody`, `PopoverFooter`. Props: `side`, `align`, `modal`, `collisionPadding`, `animation`.
 
-**Checklist:** 
+**Checklist:**
+
 - 1.6a: Create base Popover with Radix UI (2h)
 - 1.6b: Add collision detection and positioning (2h)
 - 1.6c: Add slot system for composition (2h)
@@ -3259,6 +3285,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 20+ Hero variants with advanced composition system. Shared HeroProps with extensive customization. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Centered, Split, Video, Carousel, Image Background, Gradient Background, Animated Background, Minimal, Bold, Overlay, Split Image Left, Split Image Right, Split Content Left, Split Content Right, Fullscreen, Contained, With Stats, With Testimonials, With Features, With Form (20+ total)
 - **Composition System:** Slots for header, content, footer, background, overlay, CTA area
 - **Layout Options:** Full-width, contained, edge-to-edge, with sidebar
@@ -3272,7 +3299,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** Discriminated unions `HeroProps`. Base: title, subtitle, primaryCta, secondaryCta, description, background, overlay. Variant-specific: image, video, carouselItems, stats, testimonials, features, form. Composition: `HeroHeader`, `HeroContent`, `HeroFooter`, `HeroBackground`, `HeroOverlay`, `HeroCTA`.
 
-**Checklist:** 
+**Checklist:**
+
 - 2.1a: Create types and composition system (4h)
 - 2.1b: Build core variants (Centered, Split, Video, Carousel) (6h)
 - 2.1c: Build background variants (Image, Gradient, Animated) (4h)
@@ -3294,6 +3322,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 20+ Service layout variants with filtering, sorting, and advanced composition. L2.
 
 **Enhanced Requirements:**
+
 - **Layout Variants:** Grid (2-col, 3-col, 4-col), List (vertical, horizontal), Tabs, Accordion, Masonry, Card Grid, Featured + Grid, Carousel, Sidebar + Content, Comparison Table, Timeline, Stepper, Filterable Grid, Searchable List, Category Tabs, Tagged Grid, Featured Service, Service Showcase, Service Directory, Service Map (20+ total)
 - **Filtering:** By category, tag, price range, rating, featured status
 - **Sorting:** By name, price, rating, date added, popularity
@@ -3305,7 +3334,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** `ServiceShowcase`, `ServiceCard`, `ServiceFilter`, `ServiceSort`. Props: `layout`, `services` (array), `filters`, `sortBy`, `onServiceClick`, `showPrice`, `showRating`, `showTags`.
 
-**Checklist:** 
+**Checklist:**
+
 - 2.2a: Create types and composition system (4h)
 - 2.2b: Build core layouts (Grid, List, Tabs, Accordion) (6h)
 - 2.2c: Build advanced layouts (Masonry, Carousel, Comparison, Timeline) (6h)
@@ -3327,6 +3357,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 15+ Team layout variants with role filtering and social integration. L2.
 
 **Enhanced Requirements:**
+
 - **Layout Variants:** Grid (2-col, 3-col, 4-col), List (vertical, horizontal), Card Grid, Featured + Grid, Carousel, Sidebar + Grid, Masonry, Timeline, Accordion, Filterable Grid, Role-based Grid, Department Tabs, Social-focused, Minimal Cards, Detailed Cards (15+ total)
 - **Role Filtering:** Filter by role, department, team
 - **Social Integration:** Social media links, LinkedIn, Twitter, GitHub integration
@@ -3352,6 +3383,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 20+ Testimonial variants with multi-source integration. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Grid (2-col, 3-col), Carousel, Slider, List, Featured + Grid, Card Grid, Quote Cards, Minimal, Bold, With Images, With Videos, Filterable, Searchable, Star Ratings, Review Cards, Trust Badges, Social Proof, Testimonial Wall, Rotating Quotes, Side-by-Side (20+ total)
 - **Multi-Source Integration:** Google Reviews, Yelp, Trustpilot, custom config, API adapters
 - **Composition:** Testimonial cards with quote, author, role, company, image, rating, date, source badge
@@ -3377,6 +3409,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 15+ Pricing variants with advanced customization and comparison. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Three Column, Four Column, Two Column, Single Featured, Comparison Table, Tabs, Accordion, Toggle (Monthly/Yearly), With Features, Minimal, Bold, Card Grid, Side-by-Side, With Calculator, Customizable (15+ total)
 - **Customization:** Feature lists, CTA buttons, badges (Popular, Best Value), tooltips, icons
 - **Comparison:** Side-by-side comparison, feature comparison table, highlight differences
@@ -3401,6 +3434,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 20+ Gallery variants with advanced filtering and organization. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Grid (2-col, 3-col, 4-col), Masonry, Carousel, Slider, Lightbox, Filterable Grid, Tagged Grid, Category Tabs, Timeline, Before/After, Portfolio Grid, Featured + Grid, With Captions, Minimal, Bold, Sidebar + Grid, Searchable, Infinite Scroll, With Filters, Custom Layout (20+ total)
 - **Filtering:** By category, tag, date, featured status
 - **Organization:** Categories, tags, albums, collections
@@ -3425,6 +3459,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 6 Stats Counter variants with animation customization. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Grid (2-col, 3-col, 4-col), List, Carousel, With Icons (6 total)
 - **Animation:** Count-up animation, duration control, easing functions
 - **Composition:** Stat cards with number, label, icon, description, trend indicator
@@ -3448,6 +3483,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ CTA Section variants with A/B testing support. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Centered, Split, With Image, With Video, With Form, Minimal, Bold, With Stats, With Testimonials, Sidebar (10+ total)
 - **A/B Testing:** Variant selection, conversion tracking, analytics integration
 - **Composition:** CTA sections with headline, description, primary CTA, secondary CTA, image/video, form
@@ -3471,6 +3507,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 6 FAQ Section variants with search functionality. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Accordion, List, Tabs, Searchable, With Categories, Minimal (6 total)
 - **Search:** Full-text search, highlight matches, filter by category
 - **Composition:** FAQ items with question, answer, category, tags
@@ -3494,6 +3531,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Contact Form variants with validation and integration. L2.
 
 **Enhanced Requirements:**
+
 - **Variants:** Standard, Minimal, With Map, With Office Info, Multi-Step, With File Upload, With Calendar, With Chat, Sidebar, Full Page (10+ total)
 - **Validation:** Client-side validation, error messages, success states
 - **Integration:** Email service, CRM integration, webhook support
@@ -3519,6 +3557,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 15+ Navigation variants with multi-level and mega menu support. L2.
 
 **Requirements:**
+
 - **Variants:** Horizontal, Vertical, Sidebar, Sticky, Transparent, With Logo, With Search, Mega Menu, Dropdown, Mobile Drawer, Breadcrumb Nav, Footer Nav, Tab Nav, Accordion Nav, Minimal (15+ total)
 - **Multi-Level:** Nested navigation, submenus, mega menus
 - **Features:** Search integration, mobile responsive, keyboard navigation
@@ -3542,6 +3581,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Footer variants with newsletter and social-focused layouts. L2.
 
 **Requirements:**
+
 - **Variants:** Standard, Minimal, With Newsletter, Social-Focused, Multi-Column, With Map, With Contact, With Links, With Logo, Sticky (10+ total)
 - **Newsletter Integration:** Email signup, validation, integration
 - **Social Integration:** Social media links, icons, follow buttons
@@ -3565,6 +3605,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 15+ Blog variants with pagination, filtering, and related posts. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, Featured + Grid, Card Grid, Masonry, With Sidebar, Minimal, Magazine, Timeline, Category Tabs, Tagged, Searchable, With Author, With Date, Infinite Scroll (15+ total)
 - **Pagination:** Page-based, infinite scroll, load more
 - **Filtering:** By category, tag, author, date
@@ -3589,6 +3630,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 15+ Product variants with e-commerce features. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, Featured Product, Product Card, Product Detail, With Gallery, With Reviews, Comparison, Related Products, Upsell, Cross-sell, Category Grid, Searchable, Filterable, With Wishlist (15+ total)
 - **E-commerce Features:** Add to cart, wishlist, quick view, product comparison, reviews integration
 
@@ -3611,6 +3653,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Event variants with calendar and registration. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, Calendar View, Timeline, Featured Event, Event Card, With Registration, With Map, Upcoming Events, Past Events (10+ total)
 - **Calendar Integration:** Calendar view, date filtering, recurring events
 - **Registration:** Registration form, ticket selection, confirmation
@@ -3634,6 +3677,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Location variants with maps integration. L2.
 
 **Requirements:**
+
 - **Variants:** With Map, List, Grid, Single Location, Multiple Locations, With Directions, With Contact, With Hours, With Reviews, Minimal (10+ total)
 - **Maps Integration:** Google Maps, Mapbox, interactive maps, markers, directions
 
@@ -3656,6 +3700,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Menu variants with dietary information. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, Tabs, Accordion, With Images, With Prices, With Descriptions, Category Tabs, Filterable, With Dietary Info (10+ total)
 - **Dietary Information:** Vegetarian, vegan, gluten-free, allergen labels
 - **Filtering:** By category, dietary restrictions, price range
@@ -3679,6 +3724,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 12+ Portfolio variants with filtering and lightbox. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, Masonry, Carousel, Filterable Grid, Tagged Grid, Category Tabs, With Details, Minimal, Bold, With Case Studies, With Testimonials, With Stats (12+ total)
 - **Filtering:** By category, tag, project type, client
 - **Lightbox:** Image lightbox, project details modal
@@ -3702,6 +3748,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Case Study variants with metrics and downloads. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, Featured, Detail Page, With Metrics, With Testimonials, With Timeline, With Downloads, Minimal, With Images (10+ total)
 - **Metrics:** Key metrics display, charts, statistics
 - **Downloads:** PDF downloads, resource links
@@ -3725,6 +3772,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Job Listing variants with search and application. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, Featured, With Filters, Searchable, Category Tabs, With Application Form, Minimal, Detailed, With Company Info (10+ total)
 - **Search:** Full-text search, filter by location, department, type
 - **Application:** Application form, file upload, integration
@@ -3748,6 +3796,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Course variants with enrollment and progress. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, Featured, With Enrollment, With Progress, Category Tabs, With Reviews, With Curriculum, Minimal, Detailed (10+ total)
 - **Enrollment:** Enrollment form, payment integration, confirmation
 - **Progress:** Progress tracking, completion status, certificates
@@ -3771,6 +3820,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 8+ Resource variants with download tracking. L2.
 
 **Requirements:**
+
 - **Variants:** Grid, List, With Downloads, Category Tabs, Searchable, With Previews, Minimal, Featured (8+ total)
 - **Download Tracking:** Download counts, analytics, file types
 
@@ -3793,6 +3843,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 6+ Comparison variants for features and pricing. L2.
 
 **Requirements:**
+
 - **Variants:** Table, Side-by-Side, Feature Comparison, Price Comparison, With Highlights, Minimal (6+ total)
 - **Features:** Highlight differences, feature checkmarks, tooltips
 
@@ -3815,6 +3866,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 8+ Filter variants with presets and history. L2.
 
 **Requirements:**
+
 - **Variants:** Sidebar, Top Bar, Accordion, Dropdown, With Presets, With History, Minimal, Advanced (8+ total)
 - **Presets:** Saved filter presets, quick filters
 - **History:** Recent filters, filter suggestions
@@ -3838,6 +3890,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 8+ Search variants with autocomplete and suggestions. L2.
 
 **Requirements:**
+
 - **Variants:** Standard, With Autocomplete, With Suggestions, With Filters, Global Search, Mobile Search, Minimal, Advanced (8+ total)
 - **Autocomplete:** Real-time suggestions, recent searches, popular searches
 - **Suggestions:** Search suggestions, related searches, typo correction
@@ -3861,6 +3914,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 8+ Social Proof variants with trust badges and counts. L2.
 
 **Requirements:**
+
 - **Variants:** Trust Badges, Review Counts, Customer Counts, Logo Wall, Testimonial Carousel, Star Ratings, Social Shares, Minimal (8+ total)
 - **Trust Badges:** Security badges, certifications, guarantees
 - **Counts:** Customer counts, review counts, social media followers
@@ -3884,6 +3938,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 10+ Video variants with playlists and analytics. L2.
 
 **Requirements:**
+
 - **Variants:** Single Video, Video Gallery, Playlist, With Controls, Autoplay, Background Video, Embedded, With Captions, With Transcript, Minimal (10+ total)
 - **Playlists:** Video playlists, next/previous navigation
 - **Analytics:** View tracking, engagement metrics, completion rates
@@ -3907,6 +3962,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 6+ Audio variants with waveforms and transcripts. L2.
 
 **Requirements:**
+
 - **Variants:** Single Audio, Playlist, With Waveform, With Transcript, With Controls, Minimal (6+ total)
 - **Waveforms:** Audio waveform visualization, progress indicator
 - **Transcripts:** Audio transcripts, synchronized highlighting
@@ -3930,6 +3986,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 8+ Interactive variants including quizzes and calculators. L2.
 
 **Requirements:**
+
 - **Variants:** Quiz, Calculator, Poll, Survey, Interactive Form, With Results, With Sharing, Minimal (8+ total)
 - **Quizzes:** Question/answer format, scoring, results display
 - **Calculators:** Custom calculators, form-based calculations, results display
@@ -3953,6 +4010,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** 8+ Widget variants including weather, clock, and countdown. L2.
 
 **Requirements:**
+
 - **Variants:** Weather, Clock, Countdown, Stock Ticker, News Feed, Social Feed, Calendar Widget, Minimal (8+ total)
 - **Real-Time Updates:** Live data, auto-refresh, API integration
 
@@ -3977,6 +4035,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** TestimonialsSection with 5+ implementation patterns, multi-source integration, and filtering. Uses 2.4 display variants.
 
 **Enhanced Requirements:**
+
 - **Implementation Patterns:** Config-Based, API-Based, CMS-Based, Hybrid, Calculator-Based (5+ total)
 - **Multi-Source:** Google Reviews, Yelp, Trustpilot, Facebook, custom config, API adapters
 - **Filtering:** By rating, source, date, featured, category
@@ -3986,7 +4045,8 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 **API:** `TestimonialsSection`, `testimonialsSchema`, `createTestimonialsConfig`, `normalizeGoogleReviews`, `normalizeYelp`, `normalizeTrustpilot`, `normalizeFromConfig`, `normalizeFromCMS`, `filterTestimonials`, `TestimonialsConfig`, `TestimonialsAPI`, `TestimonialsCMS`, `TestimonialsHybrid`
 
-**Checklist:** 
+**Checklist:**
+
 - 2.16a: Schema and base adapters (config, Google, Yelp) (6h)
 - 2.16b: Additional adapters (Trustpilot, CMS) (4h)
 - 2.16c: Implementation patterns (Config, API, CMS, Hybrid) (6h)
@@ -4007,6 +4067,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** TeamSection with 5+ implementation patterns, CMS and API adapters. Uses 2.3 display components.
 
 **Enhanced Requirements:**
+
 - **Implementation Patterns:** Config-Based, API-Based, CMS-Based, Hybrid, Directory-Based (5+ total)
 - **CMS Integration:** Sanity, Contentful, Strapi, MDX adapters
 - **API Integration:** REST API, GraphQL, directory services
@@ -4031,6 +4092,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** GallerySection with 5+ implementation patterns, CDN integration, and optimization. Uses 2.6 display components.
 
 **Enhanced Requirements:**
+
 - **Implementation Patterns:** Config-Based, API-Based, CMS-Based, CDN-Based, Hybrid (5+ total)
 - **CDN Integration:** Cloudinary, ImageKit, Cloudflare Images, AWS S3
 - **Optimization:** Image optimization, lazy loading, responsive images, WebP support
@@ -4055,6 +4117,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 **Objective:** PricingSection with 5+ implementation patterns, calculator integration, and comparison. Uses 2.5 display components.
 
 **Enhanced Requirements:**
+
 - **Implementation Patterns:** Config-Based, API-Based, CMS-Based, Calculator-Based, Hybrid (5+ total)
 - **Calculator Integration:** Price calculator, feature calculator, usage-based calculator
 - **Comparison:** Feature comparison, price comparison, plan recommendations
@@ -5493,7 +5556,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 ---
 
-#### 6.8 Create CLI Tooling | 6.9 Remove Dead Code | 6.10a validate-client | 6.10b health-check | 6.10c program:wave*
+#### 6.8 Create CLI Tooling | 6.9 Remove Dead Code | 6.10a validate-client | 6.10b health-check | 6.10c program:wave\*
 
 **Status:** [ ] TODO each | **Batch:** G (6.10) | **Deps:** 6.3 (6.8), 6.1+6.3 (6.9), 5.1 (6.10a)
 
@@ -5539,18 +5602,18 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 ### File Reference Guide
 
-| Area | Files |
-|------|-------|
-| UI Components | `packages/ui/src/components/Button.tsx`, `Input.tsx`, `Accordion.tsx`, `Dialog.tsx` |
-| Configuration | `packages/types/src/site-config.ts`, `templates/hair-salon/site.config.ts`, `pnpm-workspace.yaml` |
-| Features | `packages/features/src/` (booking, contact, blog, services, search) |
-| Env Validation | `packages/infra/env/schemas/` (7 Zod schemas) |
-| Security | `packages/infra/security/csp.ts` |
-| Package Setup | `packages/ui/package.json`, `packages/infra/package.json` |
+| Area           | Files                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| UI Components  | `packages/ui/src/components/Button.tsx`, `Input.tsx`, `Accordion.tsx`, `Dialog.tsx`               |
+| Configuration  | `packages/types/src/site-config.ts`, `templates/hair-salon/site.config.ts`, `pnpm-workspace.yaml` |
+| Features       | `packages/features/src/` (booking, contact, blog, services, search)                               |
+| Env Validation | `packages/infra/env/schemas/` (7 Zod schemas)                                                     |
+| Security       | `packages/infra/security/csp.ts`                                                                  |
+| Package Setup  | `packages/ui/package.json`, `packages/infra/package.json`                                         |
 
 ### Radix UI (Unified Package)
 
-Use `radix-ui` (unified). Import: `import { Dialog, Tabs, Popover } from 'radix-ui'`. Sonner for Toast (separate). No @radix-ui/react-* individual packages.
+Use `radix-ui` (unified). Import: `import { Dialog, Tabs, Popover } from 'radix-ui'`. Sonner for Toast (separate). No @radix-ui/react-\* individual packages.
 
 ### Scripted Execution (Planned)
 
@@ -5605,7 +5668,7 @@ pnpm turbo lint type-check test build
 - A/B Testing Framework
 - Monitoring & Alerting
 - Competitive Analysis
-- *(Full list retained from TODO.md — 80+ items across Documentation, Technical Debt, Developer Experience, Business Features, Infrastructure, Innovation)*
+- _(Full list retained from TODO.md — 80+ items across Documentation, Technical Debt, Developer Experience, Business Features, Infrastructure, Innovation)_
 
 ---
 
@@ -5637,28 +5700,28 @@ Shift from SEO to Answer Engine Optimization (AEO) and Generative Engine Optimiz
 **Current:** `packages/industry-schemas/` generates static JSON-LD.  
 **Target:** Dynamic knowledge graph for AI agents (Google SGE, ChatGPT, Perplexity, voice assistants).
 
-| Step | Implementation | Files |
-|------|----------------|-------|
-| 1 | Add `SpeakableSpecification` for blog, services, FAQ | `packages/industry-schemas/src/schemas/speakable.ts`; extend `generateArticleSchema`, `generateFAQSchema` |
-| 2 | Build AEO Audit Tool | `scripts/aeo-audit.ts`; integrate with `validate-client.ts` (6.10a); output `docs/aeo/` |
-| 3 | Entity Authority Building | `packages/features/seo/entity-graph.ts` — crawl content, build knowledge graph, enrich schema |
-| 4 | AEO-Pro Compliance Pack | C.17 `aeo-pro`: dynamic FAQ from trends, citation building, Knowledge Graph API |
+| Step | Implementation                                       | Files                                                                                                     |
+| ---- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| 1    | Add `SpeakableSpecification` for blog, services, FAQ | `packages/industry-schemas/src/schemas/speakable.ts`; extend `generateArticleSchema`, `generateFAQSchema` |
+| 2    | Build AEO Audit Tool                                 | `scripts/aeo-audit.ts`; integrate with `validate-client.ts` (6.10a); output `docs/aeo/`                   |
+| 3    | Entity Authority Building                            | `packages/features/seo/entity-graph.ts` — crawl content, build knowledge graph, enrich schema             |
+| 4    | AEO-Pro Compliance Pack                              | C.17 `aeo-pro`: dynamic FAQ from trends, citation building, Knowledge Graph API                           |
 
 #### 6.1.2 Autonomous Content Refresher Agent (Extend 7.3)
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Agent workflow in `packages/ai-platform/agent-orchestration/src/agents/content-optimizer.ts`; subscribes to page views, conversions, rankings |
-| 2 | Integrate conversion events (C.12): `content.optimization.suggested`, `content.optimization.applied`, `content.optimization.impact` |
-| 3 | Admin UI in `apps/admin-dashboard` for approve/decline, A/B integration (C.8) |
+| Step | Implementation                                                                                                                                |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Agent workflow in `packages/ai-platform/agent-orchestration/src/agents/content-optimizer.ts`; subscribes to page views, conversions, rankings |
+| 2    | Integrate conversion events (C.12): `content.optimization.suggested`, `content.optimization.applied`, `content.optimization.impact`           |
+| 3    | Admin UI in `apps/admin-dashboard` for approve/decline, A/B integration (C.8)                                                                 |
 
 #### 6.1.3 Consumer-Controlled Intent Marketplaces (Future)
 
-| Step | Implementation |
-|------|----------------|
-| 1 | New package `packages/intake/intent-receiver` — Webhooks/SSE for intent signals |
-| 2 | Extend personalization engine (C.9) with intent-based segments |
-| 3 | Document in `docs/strategy/intent-marketplaces.md` |
+| Step | Implementation                                                                  |
+| ---- | ------------------------------------------------------------------------------- |
+| 1    | New package `packages/intake/intent-receiver` — Webhooks/SSE for intent signals |
+| 2    | Extend personalization engine (C.9) with intent-based segments                  |
+| 3    | Document in `docs/strategy/intent-marketplaces.md`                              |
 
 ---
 
@@ -5668,23 +5731,23 @@ Shift from SEO to Answer Engine Optimization (AEO) and Generative Engine Optimiz
 
 **Target:** Auditable consent logs, real-time enforcement, automated subject rights.
 
-| Step | Implementation | Files |
-|------|----------------|-------|
-| 1 | Consent Service | `packages/infra/consent/`: `service.ts`, `store.ts`, `middleware.ts` |
-| 2 | Integrate with tracking | Wrap analytics, chat, email adapters: `if (consentService.checkConsent('analytics'))` |
-| 3 | SRR Automation | `scripts/srr-handler.ts` — collect/export/delete user data across packages |
-| 4 | Privacy-Pro Pack (C.17) | Regional consent variants (GDPR, CCPA, LGPD), anonymization, audit reports |
+| Step | Implementation          | Files                                                                                 |
+| ---- | ----------------------- | ------------------------------------------------------------------------------------- |
+| 1    | Consent Service         | `packages/infra/consent/`: `service.ts`, `store.ts`, `middleware.ts`                  |
+| 2    | Integrate with tracking | Wrap analytics, chat, email adapters: `if (consentService.checkConsent('analytics'))` |
+| 3    | SRR Automation          | `scripts/srr-handler.ts` — collect/export/delete user data across packages            |
+| 4    | Privacy-Pro Pack (C.17) | Regional consent variants (GDPR, CCPA, LGPD), anonymization, audit reports            |
 
 #### 6.2.2 W3C Web Sustainability Guidelines (WSG)
 
 **Note:** W3C WSG published January 2026. See [w3c.github.io/sustainableweb-wsg](https://w3c.github.io/sustainableweb-wsg/).
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Green Code ESLint rules | `packages/config/eslint-config`: `no-autoplay-video-without-poster`, `prefer-css-animations`, `ensure-image-optimization`; CI gate (C.13) |
-| 2 | Sustainable component variants | `HeroVideo.sustainable.tsx`, Gallery variants — AVIF/WebP, deferred JS, CSS transitions |
-| 3 | Docs | Storybook "Sustainability Note"; `docs/sustainability/` |
-| 4 | CO₂ metrics | Extend C.14 with per-page CO₂ estimates; "Green Score" dashboard |
+| Step | Implementation                 |
+| ---- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Green Code ESLint rules        | `packages/config/eslint-config`: `no-autoplay-video-without-poster`, `prefer-css-animations`, `ensure-image-optimization`; CI gate (C.13) |
+| 2    | Sustainable component variants | `HeroVideo.sustainable.tsx`, Gallery variants — AVIF/WebP, deferred JS, CSS transitions                                                   |
+| 3    | Docs                           | Storybook "Sustainability Note"; `docs/sustainability/`                                                                                   |
+| 4    | CO₂ metrics                    | Extend C.14 with per-page CO₂ estimates; "Green Score" dashboard                                                                          |
 
 ---
 
@@ -5692,28 +5755,28 @@ Shift from SEO to Answer Engine Optimization (AEO) and Generative Engine Optimiz
 
 #### 6.3.1 Instrument CLI Tools (Enhance 6.8, E.4)
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Anonymous telemetry for CLI | `create-client.ts`, `validate-config.ts` → `packages/telemetry`; command, success/fail, duration (no PII) |
-| 2 | CLI Health Dashboard | `apps/internal-dashboard` — success rates, duration, common errors, feature adoption |
-| 3 | Friction Alerts | Slack/email when commands fail frequently or run abnormally long |
+| Step | Implementation              |
+| ---- | --------------------------- | --------------------------------------------------------------------------------------------------------- |
+| 1    | Anonymous telemetry for CLI | `create-client.ts`, `validate-config.ts` → `packages/telemetry`; command, success/fail, duration (no PII) |
+| 2    | CLI Health Dashboard        | `apps/internal-dashboard` — success rates, duration, common errors, feature adoption                      |
+| 3    | Friction Alerts             | Slack/email when commands fail frequently or run abnormally long                                          |
 
 #### 6.3.2 Developer Satisfaction Scorecard — SPACE Framework
 
 **Note:** SPACE (Satisfaction, Performance, Activity, Communication, Efficiency) — Microsoft research 2021; multidimensional productivity.
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Quarterly survey | `scripts/developer-survey.ts` — SPACE questions; store in DB |
-| 2 | eNPS | Promoters 9–10, Passives 7–8, Detractors 0–6; trend in dashboard |
-| 3 | Correlate | eNPS vs time-to-market, bugs, adoption — demonstrate ROI |
+| Step | Implementation   |
+| ---- | ---------------- | ---------------------------------------------------------------- |
+| 1    | Quarterly survey | `scripts/developer-survey.ts` — SPACE questions; store in DB     |
+| 2    | eNPS             | Promoters 9–10, Passives 7–8, Detractors 0–6; trend in dashboard |
+| 3    | Correlate        | eNPS vs time-to-market, bugs, adoption — demonstrate ROI         |
 
 #### 6.3.3 Golden Paths to Business ROI (E.4)
 
-| Metric | Measurement |
-|--------|-------------|
-| Time-to-Market | `create-client` → production launch |
-| Cost of Change | Spec → merged PR (component update) |
+| Metric               | Measurement                           |
+| -------------------- | ------------------------------------- |
+| Time-to-Market       | `create-client` → production launch   |
+| Cost of Change       | Spec → merged PR (component update)   |
 | Maintenance Overhead | Dependency upgrades, security patches |
 
 Use GitHub API + CI logs; present in quarterly reviews.
@@ -5724,20 +5787,20 @@ Use GitHub API + CI logs; present in quarterly reviews.
 
 #### 6.4.1 Real-Time Feedback Loop Architecture
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Micro-signals | Extend C.12: `element.view`, `video.pause`, `form.field.focus` → stream (BullMQ) |
-| 2 | Signal Processor | `packages/realtime/signal-processor` — consume events, update Redis profiles, trigger rules |
-| 3 | Personalization (C.9) | React to signals (e.g. >30s on pricing → chat offer) |
-| 4 | Predictive prefetch (C.18) | Predict next action; prefetch at edge |
+| Step | Implementation             |
+| ---- | -------------------------- | ------------------------------------------------------------------------------------------- |
+| 1    | Micro-signals              | Extend C.12: `element.view`, `video.pause`, `form.field.focus` → stream (BullMQ)            |
+| 2    | Signal Processor           | `packages/realtime/signal-processor` — consume events, update Redis profiles, trigger rules |
+| 3    | Personalization (C.9)      | React to signals (e.g. >30s on pricing → chat offer)                                        |
+| 4    | Predictive prefetch (C.18) | Predict next action; prefetch at edge                                                       |
 
 #### 6.4.2 Signal Quality Scoring
 
-| Metric | Definition |
-|--------|------------|
+| Metric           | Definition                  |
+| ---------------- | --------------------------- |
 | Predictive power | Correlation with conversion |
-| Freshness | Recency |
-| Uniqueness | New information added |
+| Freshness        | Recency                     |
+| Uniqueness       | New information added       |
 
 Add `signalQuality` to user profile; weight personalization rules.
 
@@ -5747,58 +5810,225 @@ Add `signalQuality` to user profile; weight personalization rules.
 
 #### 6.5.1 Everything-as-Code (Extend CaCA)
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Docs in packages | Per-feature `README.md`, `docs/`; `scripts/build-docs-site.ts` (Docusaurus/Next.js) |
-| 2 | Blog as code | MDX in `content/blog/`; TinaCMS or Git-based editor |
-| 3 | Infra in repo | Terraform/Pulumi in `infrastructure/`; PR process |
-| 4 | Unified knowledge graph | AI agents (7.3) access code, docs, content, config, infra |
+| Step | Implementation          |
+| ---- | ----------------------- | ----------------------------------------------------------------------------------- |
+| 1    | Docs in packages        | Per-feature `README.md`, `docs/`; `scripts/build-docs-site.ts` (Docusaurus/Next.js) |
+| 2    | Blog as code            | MDX in `content/blog/`; TinaCMS or Git-based editor                                 |
+| 3    | Infra in repo           | Terraform/Pulumi in `infrastructure/`; PR process                                   |
+| 4    | Unified knowledge graph | AI agents (7.3) access code, docs, content, config, infra                           |
 
 #### 6.5.2 Feature-Sliced Design (FSD)
 
 **Note:** FSD organizes by business domain; [steiger](https://feature-sliced.design/) enforces architecture.
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Refactor features | `booking/{ui,api,model,lib,config}/`; unidirectional flow |
-| 2 | Add steiger to CI | Prevent cross-import violations |
-| 3 | Document | `docs/architecture/feature-sliced-design.md` |
+| Step | Implementation    |
+| ---- | ----------------- | --------------------------------------------------------- |
+| 1    | Refactor features | `booking/{ui,api,model,lib,config}/`; unidirectional flow |
+| 2    | Add steiger to CI | Prevent cross-import violations                           |
+| 3    | Document          | `docs/architecture/feature-sliced-design.md`              |
 
 #### 6.5.3 Digital Twin Learning Layer (Future Phase)
 
-| Step | Implementation |
-|------|----------------|
-| 1 | Data schema | Anonymized aggregates: page views, conversions, component usage; warehouse (BigQuery/Snowflake) |
-| 2 | Insights Engine | `packages/intelligence/insights-engine` — scheduled pattern detection |
-| 3 | Auto suggestions | Create issues/PRs for affected clients |
-| 4 | A/B Testing as a Service | Integrate C.8; deploy winning variants across clients |
+| Step | Implementation           |
+| ---- | ------------------------ | ----------------------------------------------------------------------------------------------- |
+| 1    | Data schema              | Anonymized aggregates: page views, conversions, component usage; warehouse (BigQuery/Snowflake) |
+| 2    | Insights Engine          | `packages/intelligence/insights-engine` — scheduled pattern detection                           |
+| 3    | Auto suggestions         | Create issues/PRs for affected clients                                                          |
+| 4    | A/B Testing as a Service | Integrate C.8; deploy winning variants across clients                                           |
 
 ---
 
 ### 6.6 Strategic Enhancement Roadmap
 
-| Priority | Enhancement | Existing Task | New Work | Effort |
-|----------|-------------|---------------|----------|--------|
-| **Immediate (2 weeks)** | | | | |
-| 1 | AEO Audit Tool | 6.10a | `scripts/aeo-audit.ts`, validate-client integration | 8h |
-| 2 | Green Code Linting | C.13 | Custom ESLint rules | 6h |
-| 3 | Consent Service MVP | C.13 | `packages/infra/consent/`, adapter changes | 16h |
-| 4 | CLI Telemetry | 6.8 | Add telemetry to CLI tools | 8h |
-| **Short-Term (3–6 weeks)** | | | | |
-| 5 | FSD Refactor & Linter | — | Refactor features, add steiger to CI | 20h |
-| 6 | Developer Satisfaction Scorecard | E.4 | Survey script, dashboard | 12h |
-| 7 | Sustainability Component Variants | 2.x | `sustainable` variants | 16h |
-| 8 | Content Refresher Agent MVP | 7.3 | `content-optimizer` agent | 24h |
-| **Medium-Term (7–12 weeks)** | | | | |
-| 9 | Everything-as-Code (Docs, Blog) | 6.6 | Docs in packages, build docs site | 20h |
-| 10 | SRR Automation | C.13 | `scripts/srr-handler.ts` | 12h |
-| 11 | Real-Time Signal Processing | C.9, C.18 | `signal-processor`, edge integration | 24h |
-| 12 | Privacy Pro Compliance Pack | C.17 | Enhanced consent, anonymization | 16h |
-| **Long-Term (Post–Wave 3)** | | | | |
-| 13 | Digital Twin Insights Engine | — | Warehouse, pattern detection | 40h |
-| 14 | Intent Marketplace APIs | C.9 | `intent-receiver` package | 16h |
-| 15 | A/B Testing as a Service | C.8 | Integration with insights engine | 32h |
+| Priority                     | Enhancement                       | Existing Task | New Work                                            | Effort |
+| ---------------------------- | --------------------------------- | ------------- | --------------------------------------------------- | ------ |
+| **Immediate (2 weeks)**      |                                   |               |                                                     |        |
+| 1                            | AEO Audit Tool                    | 6.10a         | `scripts/aeo-audit.ts`, validate-client integration | 8h     |
+| 2                            | Green Code Linting                | C.13          | Custom ESLint rules                                 | 6h     |
+| 3                            | Consent Service MVP               | C.13          | `packages/infra/consent/`, adapter changes          | 16h    |
+| 4                            | CLI Telemetry                     | 6.8           | Add telemetry to CLI tools                          | 8h     |
+| **Short-Term (3–6 weeks)**   |                                   |               |                                                     |        |
+| 5                            | FSD Refactor & Linter             | —             | Refactor features, add steiger to CI                | 20h    |
+| 6                            | Developer Satisfaction Scorecard  | E.4           | Survey script, dashboard                            | 12h    |
+| 7                            | Sustainability Component Variants | 2.x           | `sustainable` variants                              | 16h    |
+| 8                            | Content Refresher Agent MVP       | 7.3           | `content-optimizer` agent                           | 24h    |
+| **Medium-Term (7–12 weeks)** |                                   |               |                                                     |        |
+| 9                            | Everything-as-Code (Docs, Blog)   | 6.6           | Docs in packages, build docs site                   | 20h    |
+| 10                           | SRR Automation                    | C.13          | `scripts/srr-handler.ts`                            | 12h    |
+| 11                           | Real-Time Signal Processing       | C.9, C.18     | `signal-processor`, edge integration                | 24h    |
+| 12                           | Privacy Pro Compliance Pack       | C.17          | Enhanced consent, anonymization                     | 16h    |
+| **Long-Term (Post–Wave 3)**  |                                   |               |                                                     |        |
+| 13                           | Digital Twin Insights Engine      | —             | Warehouse, pattern detection                        | 40h    |
+| 14                           | Intent Marketplace APIs           | C.9           | `intent-receiver` package                           | 16h    |
+| 15                           | A/B Testing as a Service          | C.8           | Integration with insights engine                    | 32h    |
 
 ---
 
-_Consolidated from TODO.md, RESEARCH_ENHANCED.md, docs/task-specs/, and Strategic Enhancement Report — February 18, 2026_
+## 10. UI Primitives Deep Dive (NEW)
+
+> Applies to `packages/ui`, `packages/features`, and template consumers. Use Radix/Base UI primitives copied into @repo/ui (shadcn pattern) with Tailwind tokens.
+
+### 10.1 Advanced Form Components
+
+| Primitive             | 2026 Patterns                                                                                                                                                                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Command Palette**   | `cmdk` + fuzzy search (Fuse.js/TanStack Match Sorter), <kbd>⌘/Ctrl</kbd>+<kbd>K</kbd> binding, keyboard-only navigation, action registry living beside feature adapters, optimistic optimistic updates for AI actions (LogRocket Linear clone ref, Feb 2026). |
+| **Form System**       | React Hook Form 7 + Zod 3 (`@hookform/resolvers/zod`) for field-level validation, `useFormState` for async errors, `useFieldArray` for dynamic blocks, schema-driven form builder for Feature 2.31.                                                           |
+| **Date/Time Pickers** | React Aria DatePicker or `react-day-picker@^9` with timezone normalization (Luxon/Temporal polyfill), locale-aware parsing, keyboard grid navigation, screen-reader hints for range selection.                                                                |
+| **File Upload**       | `react-dropzone` or Uploady for drag/drop, chunked uploads, pause/resume (Tus), progress events, virus scanning hook (Cloudflare R2/S3).                                                                                                                      |
+| **Color Picker**      | `react-colorful` + accessible presets, color-blind safe palettes (WCAG 2.2 contrast), Oklch token export to Tailwind.                                                                                                                                         |
+
+### 10.2 Data Display Components
+
+- **Table**: TanStack Table v8 headless core + TanStack Virtual for 10k+ rows, server-driven pagination/sorting for CMS adapters, row selection synced to Zustand store.
+- **Tree View**: Roving tabindex, aria-expanded states, virtualization for deep hierarchies (docs navigation, schema explorer).
+- **Timeline / Stepper**: Use CSS Scroll Snap + IntersectionObserver to pin progress, INP-friendly transitions (<100 ms).
+
+### 10.3 Navigation & Layout
+
+- **Breadcrumbs**: JSON-LD `BreadcrumbList`, Next.js `generateMetadata` hook integration, aria-label="breadcrumb".
+- **Pagination**: SEO-friendly pattern (Strapi case study) limiting to two clicks from landing page, `rel="prev"/"next"`, canonical URLs.
+- **Carousel/Masonry**: Prefers-reduced-motion support, pointer/keyboard controls, CSS masonry via `grid-template-rows: masonry` fallback to JS layout for Safari.
+
+### 10.4 Interaction & Utility
+
+- **Drag & Drop**: `@dnd-kit` sortable contexts, custom collision detection for multi-column marketing layouts, pointer + keyboard sensors.
+- **Resizable Panels / Virtual Lists / Infinite Scroll**: TanStack Virtual headless virtualization, suspense-friendly loaders, loader rows for chat-like experiences.
+- **Skeleton / Progress / Status**: Component-level performance budgets (skeleton widths mirror final layout), optimistic UI defaults per Part E.6.
+
+### 10.5 Accessibility Guarantees
+
+- Minimum 24×24 px hit targets, focus outlines ≥2px w/ 3:1 contrast, ARIA live regions for alerts/rating updates, `prefers-reduced-motion` fallbacks.
+
+## 11. Marketing Component Patterns (NEW)
+
+> Scope: `packages/marketing-components` (Task 1.7) and downstream template registries. Each family ships registry metadata (variants, industries, metrics) plus analytics hooks.
+
+| Family                                      | Key Research Items                                                                                                                                           |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Navigation Systems**                      | Responsive mega menu (LogRocket 2026): desktop hover panels + mobile drawer (Sheet) with focus trapping, analytics on menu depth, TTL caching of nav config. |
+| **Footers**                                 | Multi-column grid, CTA slot, newsletter embed (ConvertKit/Mailchimp), trust badges, legal links (WCAG link contrast).                                        |
+| **Blog / Portfolio / Case Studies**         | Pagination with canonical URLs, facet filters, MDX + CMS adapters, lightbox using `next/image` blur placeholders, downloadable PDFs tracked via events.      |
+| **Product / E-commerce**                    | Comparison tables, quick-view modals with Suspense streaming, cart badges tied to Zustand store, price localization (Intl.NumberFormat).                     |
+| **Event / Location**                        | Calendar sync (ICS), ticket tiers, Mapbox/Google Maps w/ IntersectionObserver lazy loading + WebP tiles, structured data (`Event`, `Place`).                 |
+| **Menu (Restaurant)**                       | Dietary/allergen chips, filtering, photo galleries, ordering CTAs hooking into Feature 2.28.                                                                 |
+| **Education / Course / Resource**           | Progress meters, curriculum accordions, certificate CTA, download tracking with signed URLs.                                                                 |
+| **Jobs / Careers**                          | Search & filters (location, department), ATS webhook integration (Greenhouse/Lever), algorithmic sorting by freshness.                                       |
+| **Interactive / Widgets**                   | Quiz/calculator frameworks using Zod validation + optimistic updates, poll results w/ SSE fallback, embedding guardrails (TCF v2.3).                         |
+| **Social Proof / Media / Gallery Enhanced** | Logo walls, testimonial sliders, review aggregation (Trustpilot/Yelp quotas), video playlists with transcript sync.                                          |
+| **Search / Filter / Comparison**            | Autocomplete w/ semantic ranking, multi-select filter chips, saved filter presets (URL state), comparison matrices with tooltip clarifications.              |
+
+## 12. Feature Implementation Patterns (NEW)
+
+- **Search (2.20)**: AI semantic search pipeline (Encore + OpenAI embeddings + Qdrant) w/ vector cache per client, hybrid keyword reranking, analytics on zero-result queries.
+- **Newsletter (2.21)**: ConvertKit/Mailchimp adapters using OAuth 2.1 + PKCE, double opt-in flows, CMP gating before script load, segmentation metadata stored in `features/newsletter`.
+- **Chat (2.26)**: Live chat provider abstraction + AI co-pilot; optimistic message queue, typing indicators, ARIA live updates, consent-first SDK loading.
+- **Analytics / A/B / Personalization (2.23-2.25)**: Privacy-first trackers (Plausible, Umami, custom warehouse), server actions to enqueue experiments, edge flag resolution (Vercel Edge Config / Cloudflare KV).
+- **E-commerce / Payment / Reviews (2.28-2.32)**: Headless commerce connectors (Shopify Storefront API, Commerce.js), PCI-scoped webhook relays, review ingestion with moderation queue.
+- **Automation / Webhook / Integration (2.44-2.46)**: Durable workflows (Temporal/Trigger.dev) for CRM sync, signed webhook verification (Stripe-style), retry/backoff policies.
+- **Security / Monitoring / Performance (2.38-2.40)**: SLO dashboards, INP monitors, synthetic checks via Playwright, CSP/report-to endpoints.
+
+Each feature spec includes: adapter interfaces (`packages/features/src/*/adapters`), server action contract, analytics taxonomy, performance budget (component + endpoint), regression tests (Vitest + Playwright).
+
+## 13. Infrastructure Systems Research (NEW)
+
+| System                                            | 2026 Guidance                                                                                                                                                                                   |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Slot / Render Prop / Provider Systems**         | Slot-based composition for page templates (named slots w/ TypeScript generics), render-prop fallbacks for legacy clients, provider tree optimizer (Context memoization + React Compiler hints). |
+| **Variant / Theme / Style**                       | CVA for variants, Design Token pipeline (DTCG v1.0) exporting to Tailwind v4 + CSS vars, multi-brand theming with CSS cascade layers.                                                           |
+| **Layout / Grid / Responsive / Spacing**          | Container queries (`@container`), logical properties for RTL, spacing scales tied to tokens, `packages/config/tailwind-theme.css`.                                                              |
+| **Typography / Color / Shadow / Border**          | Variable fonts (Inter Variable fallback), display-P3 colors, shadow elevation levels, border radius matrices per brand.                                                                         |
+| **Media / Icon / Image**                          | Lucide icon registry, Next.js Image CDN presets, video streaming via Mux/site CDN, audio waveform visualizers.                                                                                  |
+| **State / Form / Validation**                     | Zustand slices per feature; Jotai for fine-grained states (e.g., Command Palette), Zod schemas shared between server actions + client forms.                                                    |
+| **Error / Loading / Accessibility**               | Error boundaries per route group, Suspense skeleton registry, accessibility checklist automation (axe-core CI).                                                                                 |
+| **Performance / Testing / Documentation**         | Performance budgets enforced via `scripts/validate-performance.ts`, Vitest component suites, Playwright smoke tests, Storybook/MDX docs.                                                        |
+| **Development / Build / Deployment / Monitoring** | Turborepo pipelines w/ remote cache, Next.js partial prerendering, Skott for dependency graphs (C.1), Sentry/Datadog instrumentation, IaC via Terraform modules.                                |
+| **Configuration / Plugin / Extension**            | Zod-validated config loader, plugin architecture for feature packs (e.g., industries), feature-flag SDK (LaunchDarkly, Statsig) wrapping edge middleware.                                       |
+
+## 14. Advanced Component Patterns
+
+1. **Animation & Motion**: Framer Motion 11 presets, reduced-motion guards, Activity component gating expensive renders.
+2. **Composition**: Compound components with context selectors, controlled/uncontrolled hybrids for Select/Combobox.
+3. **Performance**: Code-splitting via `next/dynamic`, React Compiler auto-memoization adoption, virtualization checklists.
+4. **Accessibility**: ARIA live regions, roving tabindex utilities, Escape key + inert overlays for sheets/menus.
+
+## 15. Industry-Specific Research Expansion
+
+- **Fitness & Wellness**: Class schedulers (Calendly/Mindbody adapters), progress dashboards, FitnessCenter schema, trainer bios.
+- **Real Estate**: MLS ingestion, mortgage calculators, 3D tour embeds, RealEstateAgent + Offer schemas.
+- **Construction & Trades**: Project timelines, license verification banners, service area maps, integration with Jobber/ServiceTitan.
+- **Education & Training**: Course catalogs, instructor credentials, SCORM/LMS webhooks.
+- **Healthcare & Medical**: HIPAA-safe contact forms (BAA storage), telehealth CTAs, schema for MedicalProcedure, location-based provider filters.
+- **Non-Profit & Organizations**: Donation widgets (Stripe Giving, GiveWP), volunteer CRM sync, impact metrics showcases.
+- **Technology & SaaS**: Product tour components, ROI calculators, API docs teasers, SOC2/compliance trust stamps.
+
+## 16. Emerging Technologies & Advanced Patterns
+
+1. **AI Integration**: Multi-provider LLM orchestration (Vercel AI SDK router) with fallback tiers, Retrieval-Augmented Generation for search/personalization, cost telemetry per tenant.
+2. **Edge Computing**: Vercel Edge Functions / Cloudflare Workers for personalization, edge A/B tests, predictive prefetchers using Network Information API.
+3. **WebAssembly**: Wasm modules for image processing (Squoosh pipeline), crypto, heavy analytics, loaded via dynamic import with feature detection.
+4. **PWA**: Workbox recipes for offline caching, background sync for forms, push notifications gated by CMP.
+5. **Web Components & Micro Frontends**: Module Federation for vendor widgets, custom elements bridging to Next.js via `use client` wrappers.
+6. **Real-Time Tech**: WebSockets (Socket.IO), Server-Sent Events for analytics dashboards, GraphQL subscriptions for booking availability.
+7. **Advanced Performance**: Resource hints (preload/prefetch), HTTP/3 adoption, streaming server components with Suspense boundaries.
+
+## 17. Security & Privacy Advanced
+
+- **Authentication**: OAuth 2.1 + PKCE, OIDC clients, passkey/passwordless options, biometric fallbacks on mobile.
+- **Authorization**: RBAC/ABAC policies via `@repo/infra/authz`, policy-as-code (Cedar/Oso) for tenant isolation.
+- **API Security**: HMAC-signed webhooks, rate limiting via edge middleware, schema validation for inbound payloads.
+- **Privacy Compliance**: GDPR/CCPA/LGPD checklists, CMP integration (TCF v2.3), consent-first third-party embeds, data deletion workflows.
+- **Security Monitoring**: SIEM integrations, dependency scanning (GitHub Advanced Security/OWASP Dependency-Track), threat modeling playbooks.
+
+## 18. Testing & Quality Assurance
+
+| Layer                 | Tooling & Patterns                                                                                          |
+| --------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Unit / Component**  | Vitest + React Testing Library, MSW for network stubs, Storybook interaction tests.                         |
+| **Integration**       | Playwright component tests (experimental) + Next.js app router harness, contract tests for adapters (Pact). |
+| **E2E**               | Playwright/Cypress suites per template, Lighthouse CI for performance budgets, synthetic user journeys.     |
+| **Visual Regression** | Chromatic/Applitools with UI tokens, gating merges for marketing components.                                |
+| **Accessibility**     | axe-core CI, manual screen-reader checklists, focus management tests.                                       |
+| **Performance**       | WebPageTest + Lighthouse, Next.js `next/script` timings, custom INP logger.                                 |
+
+## 19. Deployment & DevOps Advanced
+
+- **Strategies**: Blue/green + canary on Vercel/Netlify, feature flags for progressive delivery, rollback scripts.
+- **CI/CD**: Turborepo pipeline stages (lint → test → build → deploy), remote cache, selective package builds via `turbo run build --filter`.
+- **Observability**: OpenTelemetry tracing, Datadog/Sentry/LogRocket for errors + INP, dashboards per client.
+- **IaC / Containers**: Terraform modules for shared infra, Dockerized preview environments, container security scans, edge config automation.
+
+## 20. Documentation & Developer Experience
+
+- **Docs**: MDX handbooks per package, Docusaurus or Next.js docs site fed by `scripts/build-docs-site.ts`, auto-generated prop tables via TS compiler API.
+- **DevEx**: pnpm workspace scripts (`pnpm new:feature`), scaffolding templates, internal developer portal (Backstage) tracking golden paths + DX Core metrics.
+
+---
+
+## Part 3: Architecture & Execution — Expanded
+
+### 3.1 Package Dependency Graph
+
+- Adopt Skott for graph generation (`scripts/analyze-deps.ts`) covering new UI primitives, marketing families, features, and infra systems.
+- Enforce layered graph: config → utils → ui → features → marketing-components → page-templates → clients; integrations shared at L0.
+
+### 3.2 Implementation Patterns Reference
+
+- Provide code samples for Adapter, Factory, Strategy, Observer, Composition patterns in `docs/architecture/patterns.md` referencing current packages.
+- Tag each feature task with required pattern(s) to speed onboarding.
+
+### 3.3 Testing Strategy
+
+- Testing pyramid per package (unit 60%, integration 30%, e2e 10%), coverage gates in CI, shared fixtures in `packages/test-utils`.
+
+### 3.4 Performance Budgets
+
+- Component budgets (e.g., hero <40 KB JS), feature-level budgets (Search <120 KB), page budgets (<250 KB JS gz). Track via Lighthouse CI + custom `scripts/check-bundlesize.ts`.
+
+### 3.5 Accessibility Standards
+
+- WCAG 2.2 AA checklist template, component-level a11y specs, keyboard navigation requirements, screen-reader smoke tests recorded in Playwright.
+
+---
+
+_Consolidated from TODO.md, RESEARCH_ENHANCED.md, docs/task-specs/, RESEARCH_GAPS.md analysis, and Strategic Enhancement Report — February 18, 2026_

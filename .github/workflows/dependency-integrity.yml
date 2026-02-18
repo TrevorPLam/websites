@@ -1,0 +1,28 @@
+# Task: [D.8] Dependency provenance checks
+# Status: Placeholder — TODO implement
+
+name: Dependency Integrity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 8 * * 1'  # Weekly Monday 8am
+
+jobs:
+  dependency-integrity:
+    name: Dependency provenance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10.29.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: echo "TODO: dependency integrity / provenance checks"

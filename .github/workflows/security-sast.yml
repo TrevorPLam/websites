@@ -1,0 +1,21 @@
+# Task: [C.13] SAST scanning
+# Status: Placeholder — TODO implement
+
+name: Security SAST
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly Monday 6am
+
+jobs:
+  sast:
+    name: SAST scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: SAST placeholder
+        run: echo "TODO: CodeQL or similar SAST"
