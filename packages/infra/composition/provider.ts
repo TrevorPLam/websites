@@ -68,7 +68,7 @@ export function ProviderComposer({
     () => composeProviders(providers),
     // Providers array is unlikely to change; memoize by identity
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [providers.length]
+    [providers]
   );
   return React.createElement(ComposedProviders, null, children);
 }
