@@ -1,6 +1,82 @@
 # 4.2 Scheduling
 
 ## Metadata
+# 4.2 Scheduling
+
+## Metadata
+
+- **Task ID**: 4-2-scheduling
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: None (4.4 feeds 2.16)
+- **Downstream Tasks**: (Tasks that consume this output)
+
+## Context
+
+Adapter contracts. Calendly/Acuity/Cal.com; Intercom/Crisp/Tidio; Google/Yelp/Trustpilot; Google Maps (static + interactive); JSON-LD generators per industry.
+
+## Dependencies
+
+- **Upstream Task**: None (4.4 feeds 2.16) – required – prerequisite
+
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None (4.4 feeds 2.16)
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+### Primary Research Topics
+- **[2026-02-18] R-INTEGRATION**: Scheduling, OAuth, TCF — see [RESEARCH-INVENTORY.md](https://github.com/TrevorPLam/websites/blob/main/tasks/RESEARCH-INVENTORY.md#r-integration) for full research findings.
+
+### Key Findings
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-INTEGRATION](https://github.com/TrevorPLam/websites/blob/main/tasks/RESEARCH-INVENTORY.md#r-integration) — Full research findings
+- [RESEARCH.md](https://github.com/TrevorPLam/websites/blob/main/tasks/RESEARCH.md) — Additional context
+
+## Related Files
+- `packages/integrations/scheduling/contract.ts` – modify – SchedulingAdapter interface
+- `packages/integrations/calendly/src/index.ts` – modify – Calendly implementation
+- `packages/integrations/acuity/src/index.ts` – modify – Acuity implementation
+- `packages/integrations/calcom/src/index.ts` – modify – Cal.com implementation
+- `packages/integrations/scheduling/index.ts` – modify – Central export
+- `packages/integrations/scheduling/__tests__/adapters.test.ts` – create – Unit tests
+
+## Code Snippets / Examples
+
+### R-INTEGRATION — Scheduling Adapter Contract
+```typescript
+export interface SchedulingAdapter {
+  id: string;
+  name: string;
+  getEventTypes(): Promise<SchedulingEvent[]>;
+  getBookingUrl(eventTypeId?: string): string;
+  getEmbedConfig(eventTypeId?: string): EmbedConfig;
+}
+```
+
+### Usage Example
+```typescript
+const adapter = new CalendlyAdapter('username');
+const url = adapter.getBookingUrl();
+```
+
+## Acceptance Criteria
+- [x] Contract first; adapters; export; consent gate where needed.
+- [x] Adapters work
+- [ ] schemas generate valid JSON-LD.
+
+## Definition of Done
+- [x] Code reviewed and approved
+- [x] All tests passing
+- [x] Documentation updated
+- [x] Build passes
 
 - **Task ID**: 4-2-scheduling
 - **Owner**: AGENT
