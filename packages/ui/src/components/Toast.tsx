@@ -5,7 +5,7 @@
 //          a lightweight wrapper that matches the design system's color tokens.
 //
 // Relationship: Wraps `sonner` (catalog peer). Consumed by any package/template that
-//               needs non-blocking notifications. Pairs with Toaster.tsx for rendering.
+//              needs non-blocking notifications. Pairs with Toaster.tsx for rendering.
 // System role: Notification primitive (Layer L2 @repo/ui).
 // Assumptions: Toaster component is mounted once at the app root (layout.tsx).
 //              Tailwind CSS custom properties for colors are available in the host app.
@@ -35,10 +35,16 @@ export type ToastOptions = ExternalToast;
 // [TRACE:TYPE=packages.ui.components.Toast.ToastVariant]
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info' | 'loading' | 'custom';
 
+// [TRACE:TYPE=packages.ui.components.Toast.PromiseOptions]
+// Sonner v2: PromiseData = Omit<ExternalToast, 'description'> & { loading?, success?, error? }.
+// We model this explicitly so callers get accurate types and cannot accidentally
+// pass `description` (which PromiseData omits) via the options bag.
+export type PromiseToastOptions = Omit<ExternalToast, 'description'>;
+
 // [TRACE:CONST=packages.ui.components.toast]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 // NOTE: Typed wrapper around Sonner. Each method maps to a semantic color variant.
-//       toast.promise is included for async operation feedback patterns.
+// toast.promise is included for async operation feedback patterns.
 export const toast = {
   /** Show a success notification (green). */
   success: (message: string, options?: ToastOptions) =>
@@ -67,10 +73,21 @@ export const toast = {
     sonnerToast.custom(jsx, options),
 
   /**
-   * Show a promise-driven notification that transitions between loading → success | error.
+   * Show a promise-driven notification that transitions between loading -> success | error.
    *
-   * @param promise - The async operation to track
+   * Sonner v2 API: `.promise(promise, data)` where `data` is a single object of shape
+   * `PromiseData<T> = Omit<ExternalToast, 'description'> & { loading?, success?, error? }`.
+   *
+   * FIX (was: `sonnerToast.promise(promise, { ...messages, ...options })` which spread
+   * `ExternalToast` — including the disallowed `description` field — directly into `data`,
+   * causing a TypeScript type error and silently passing unknown keys to Sonner's internals).
+   *
+   * Correct form: spread messages and the narrowed `PromiseToastOptions` together so the
+   * merged object satisfies `PromiseData<T>` exactly, with `description` excluded.
+   *
+   * @param promise  - The async operation to track
    * @param messages - Labels for each state: loading, success, error
+   * @param options  - Additional Sonner toast options (description excluded per PromiseData)
    */
   promise: <T,>(
     promise: Promise<T>,
@@ -79,8 +96,12 @@ export const toast = {
       success: string | ((data: T) => string);
       error: string | ((err: unknown) => string);
     },
-    options?: ToastOptions
-  ) => sonnerToast.promise(promise, { ...messages, ...options }),
+    options?: PromiseToastOptions
+  ) =>
+    sonnerToast.promise(promise, {
+      ...messages,
+      ...options,
+    }),
 
   /** Dismiss a specific toast by id, or all toasts when called without arguments. */
   dismiss: (id?: string | number) => sonnerToast.dismiss(id),
