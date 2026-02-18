@@ -1,19 +1,103 @@
 # 2.30 Create Content Management Feature
 
-**Status:** [ ] TODO | **Batch:** E | **Effort:** 24h | **Deps:** 2.11, C.10
+## Metadata
 
-**Related Research:** §5.1 (Spec-driven), §C.10 (CMS abstraction)
+- **Task ID**: 2-30-create-content-management-feature
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 2.11, C.10
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** Content management feature with 5+ implementation patterns and CMS abstraction layer.
+## Context
+
+Content management feature with 5+ implementation patterns and CMS abstraction layer.
 
 **Implementation Patterns:** Config-Based, CMS-Adapter-Based, Headless-CMS-Based, Git-Based, Hybrid (5+ total)
 
-**Files:** `packages/features/src/content-management/` (index, lib/schema, lib/adapters, lib/content-config.ts, lib/cms-adapter.ts, lib/git.ts, components/ContentSection.tsx, components/ContentConfig.tsx, components/ContentCMS.tsx, components/ContentHeadless.tsx, components/ContentGit.tsx, components/ContentHybrid.tsx)
+## Dependencies
 
-**API:** `ContentSection`, `contentSchema`, `createContentConfig`, `fetchContent`, `updateContent`, `publishContent`, `ContentConfig`, `ContentCMS`, `ContentHeadless`, `ContentGit`, `ContentHybrid`
+- **Upstream Task**: 2.11 – required – prerequisite
+- **Upstream Task**: C.10 – required – prerequisite
+- **Package**: @repo/features – modify – target package
 
-**Checklist:** Schema; adapters; CMS abstraction; git integration; implementation patterns; export.
-**Done:** Builds; all patterns work; CMS abstraction functional; git integration works.
-**Anti:** No custom CMS; use existing providers.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 2.11, C.10
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §5.1 (Spec-driven), §C.10 (CMS abstraction)
+
+## Related Files
+
+- `packages/features/src/content-management/index` – create – (see task objective)
+- `packages/features/src/content-management/lib/schema` – create – (see task objective)
+- `packages/features/src/content-management/lib/adapters` – create – (see task objective)
+- `packages/features/src/content-management/lib/content-config.ts` – create – (see task objective)
+- `packages/features/src/content-management/lib/cms-adapter.ts` – create – (see task objective)
+- `packages/features/src/content-management/lib/git.ts` – create – (see task objective)
+- `packages/features/src/content-management/components/ContentSection.tsx` – create – (see task objective)
+- `packages/features/src/content-management/components/ContentConfig.tsx` – create – (see task objective)
+- `packages/features/src/content-management/components/ContentCMS.tsx` – create – (see task objective)
+- `packages/features/src/content-management/components/ContentHeadless.tsx` – create – (see task objective)
+- `packages/features/src/content-management/components/ContentGit.tsx` – create – (see task objective)
+- `packages/features/src/content-management/components/ContentHybrid.tsx` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `ContentSection`, `contentSchema`, `createContentConfig`, `fetchContent`, `updateContent`, `publishContent`, `ContentConfig`, `ContentCMS`, `ContentHeadless`, `ContentGit`, `ContentHybrid`
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Schema; adapters; CMS abstraction; git integration; implementation patterns; export.
+- [ ] Builds
+- [ ] all patterns work
+- [ ] CMS abstraction functional
+- [ ] git integration works.
+
+## Technical Constraints
+
+- No custom CMS
+- use existing providers.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] (Add implementation steps)
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

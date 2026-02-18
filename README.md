@@ -31,7 +31,7 @@
  *
  * @gotchas
  * - Quickstart commands are VERIFIED and tested
- * - Template directory is `hair-salon` but package name is `@templates/websites`
+ * - Starter template: `clients/starter-template` (package `@clients/starter-template`)
  *
  * @issues
  * - None - all claims verified with evidence
@@ -72,7 +72,7 @@ Professional multi-industry marketing website template system built with modern 
 ### Current Status
 
 **Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Timeline:** 12 weeks | **Current State:** Single hair-salon template → **Target:** 12 industries, 20+ components, config-driven
+**Timeline:** 12 weeks | **Current State:** Config-driven clients (starter-template, luxe-salon, etc.) → **Target:** 12 industries, 20+ components
 
 | Layer | Package | Status | Progress |
 |-------|---------|--------|----------|
@@ -82,8 +82,8 @@ Professional multi-industry marketing website template system built with modern 
 | **L2** | `@repo/features` | 🟡 Partial | 5 of 9 features (booking, contact, blog, services, search) |
 | **L2** | `@repo/types` | 🟢 Complete | Moved from templates/shared; extended |
 | **L3** | `@repo/page-templates` | 🔴 Scaffolded Only | 0 of 7 templates implemented |
-| **L3** | `templates/hair-salon` | 🟢 Active | Production-ready template |
-| **L3** | `clients/` | 🔴 Not Started | Directory exists but empty |
+| **L3** | `clients/starter-template` | 🟢 Active | Golden-path template (port 3101) |
+| **L3** | `clients/luxe-salon`, etc. | 🟢 Active | Industry-specific examples |
 
 See [TASKS.md](TASKS.md) for detailed progress tracking and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
 
@@ -123,12 +123,12 @@ pnpm install
 ### Development
 
 ```bash
-# Start the hair salon template development server
-cd templates/hair-salon
+# Start the starter template development server
+cd clients/starter-template
 pnpm dev
 
-# Or use workspace filter (runs on port 3100)
-pnpm --filter @templates/websites dev
+# Or use workspace filter (runs on port 3101)
+pnpm --filter @clients/starter-template dev
 
 # Build all packages and projects
 pnpm build
@@ -145,8 +145,8 @@ pnpm format        # Format with Prettier
 **Step 1: Copy the template**
 
 ```bash
-# Copy hair salon template to clients directory
-cp -r templates/hair-salon clients/my-client-name
+# Copy starter template to create a new client
+cp -r clients/starter-template clients/my-client-name
 ```
 
 **Step 2: Configure the client**
@@ -176,22 +176,16 @@ pnpm --filter @clients/my-client-name dev --port 3001
 ```
 
 For detailed instructions, see:
-- **[Template README](templates/README.md)** - Template usage guide
-- **[Hair Salon Template](templates/hair-salon/README.md)** - Specific template documentation
 - **[Developer Onboarding](docs/getting-started/onboarding.md)** - Complete setup guide
+- **[Build First Client](docs/tutorials/build-first-client.md)** - Step-by-step tutorial
 
 ## 📁 Project Structure
 
 ```
 marketing-websites/
-├── templates/                    # Industry-specific templates
-│   └── hair-salon/               # Hair salon template (package: @templates/websites)
-│       ├── app/                  # Next.js App Router pages
-│       ├── components/           # Template-specific components
-│       ├── lib/                  # Utilities and configurations
-│       └── package.json
-│
-├── clients/                      # Client implementations (currently empty)
+├── clients/                      # Client implementations
+│   ├── starter-template/        # Golden-path template (@clients/starter-template, port 3101)
+│   ├── luxe-salon/              # Example: salon industry
 │   └── [client-name]/            # Your client projects
 │
 ├── packages/                      # Shared packages (Layer 0-2)
@@ -233,7 +227,7 @@ marketing-websites/
 
 - **Layer 0 (Infrastructure):** `@repo/infra` - Security, middleware, logging, environment schemas
 - **Layer 2 (Components):** `@repo/ui`, `@repo/marketing-components`, `@repo/features` - Reusable components and features
-- **Layer 3 (Experience):** `@repo/page-templates`, `templates/`, `clients/` - Composed sites and templates
+- **Layer 3 (Experience):** `@repo/page-templates`, `clients/` - Composed sites
 
 See [Architecture Overview](docs/architecture/README.md) for detailed architecture documentation.
 
@@ -247,7 +241,7 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 | **Package Manager** | pnpm | 10.29.2 | [package.json](package.json) |
 | **Frontend Framework** | Next.js | 16.1.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
 | **UI Library** | React | 19.0.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Styling** | Tailwind CSS | 4.1.0 | [templates/hair-salon/package.json](templates/hair-salon/package.json) |
+| **Styling** | Tailwind CSS | 4.1.0 | [clients/starter-template/package.json](clients/starter-template/package.json) |
 | **Type Safety** | TypeScript | 5.7.2 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
 | **Linting** | ESLint | 9.18.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
 | **Code Formatting** | Prettier | 3.2.5 | [package.json](package.json) |
@@ -332,22 +326,20 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 | `pnpm syncpack:check` | Check for dependency version mismatches |
 | `pnpm syncpack:fix` | Fix dependency version mismatches |
 
-### Template/Client Commands
+### Client Commands
 
 ```bash
-# Work on specific template
-pnpm --filter @templates/websites dev
-pnpm --filter @templates/websites build
+# Work on starter template (golden path)
+pnpm --filter @clients/starter-template dev
+pnpm --filter @clients/starter-template build
 
 # Work on specific client (when created)
 pnpm --filter @clients/my-client dev
 pnpm --filter @clients/my-client build
 
-# Run command in all templates
-pnpm --filter "@templates/*" lint
-
 # Run command in all clients
 pnpm --filter "@clients/*" build
+pnpm --filter "@clients/*" lint
 ```
 
 ## 🐳 Docker

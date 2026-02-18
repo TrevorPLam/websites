@@ -109,17 +109,18 @@ graph LR
 
 **Resources:**
 - [README.md](../../README.md) - Project overview
-- [Templates Documentation](../templates/README.md) - Available templates
+- [Client Directory README](../clients/README.md) - Available clients
 
-#### 2. Understanding Templates (1 hour)
+#### 2. Understanding Clients (1 hour)
 
-- [ ] Learn about template structure
+- [ ] Learn about client structure
 - [ ] Understand configuration files
 - [ ] Review customization options
 - [ ] Explore example client implementations
 
 **Resources:**
-- [Template Architecture](../architecture/TEMPLATE_ARCHITECTURE.md)
+- [Build First Client](../tutorials/build-first-client.md)
+- [Architecture Overview](../architecture/README.md)
 - [Client Setup Guide](../clients/README.md)
 
 #### 3. Configuration Basics (1-2 hours)

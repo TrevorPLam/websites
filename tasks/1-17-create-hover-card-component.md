@@ -2,9 +2,12 @@
 
 ## Metadata
 
+- **Task ID**: 1-17-create-hover-card-component
 - **Owner**: AGENT
 - **Priority / Severity**: P2
+- **Target Release**: TBD
 - **Related Epics / ADRs**: Component Library Epic
+- **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Tasks requiring hover tooltips
 
@@ -83,7 +86,7 @@ export const HoverCardContent = React.forwardRef<...>(...)
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Follow Radix UI implementation for screen readers and keyboard navigation
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; Radix UI provides base implementation for screen readers and keyboard navigation
 - Performance: Minimal runtime overhead; efficient hover detection
 - Timing: Appropriate delays to prevent accidental triggers
 
@@ -103,11 +106,12 @@ export const HoverCardContent = React.forwardRef<...>(...)
 - Keyboard navigation tests
 - Visual regression tests for positioning
 - Hover timing behavior tests
+- Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
 
-- [ ] Add Hover Card to component library docs
-- [ ] Update component index/registry
+- [ ] Update [docs/components/ui-library.md](docs/components/ui-library.md) – add Hover Card component
+- [ ] Update packages/ui exports – ensure HoverCard is in index
 
 ## Design References
 

@@ -1,10 +1,19 @@
 # 2.4 Build Testimonial Components (Expanded)
 
-**Status:** [🚫] BLOCKED | **Batch:** B | **Effort:** 24h | **Deps:** 1.7, 1.45 (Carousel), 1.40 (Rating)
+## Metadata
 
-**Related Research:** §2.1, §4.2, §2.2
+- **Task ID**: 2-4-build-testimonial-components-expanded
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 1.7, 1.45 (Carousel), 1.40 (Rating)
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** 20+ Testimonial variants with multi-source integration. L2.
+## Context
+
+20+ Testimonial variants with multi-source integration. L2.
 
 **Enhanced Requirements:**
 
@@ -14,12 +23,86 @@
 - **Filtering:** By rating, source, date, featured
 - **Animations:** Fade, slide, rotate, typewriter
 
-**Files:** `packages/marketing-components/src/testimonials/types.ts`, `TestimonialGrid.tsx`, `TestimonialCarousel.tsx`, `TestimonialSlider.tsx`, `TestimonialList.tsx`, `TestimonialCard.tsx`, `TestimonialFilterable.tsx`, `testimonials/sources.tsx`, `testimonials/filters.tsx`, `index.ts`
+## Dependencies
 
-**API:** `TestimonialDisplay`, `TestimonialCard`. Props: `variant`, `testimonials` (array), `source`, `filterByRating`, `showRating`, `showImage`, `showSource`.
+- **Upstream Task**: 1.7 – required – prerequisite
+- **Upstream Task**: 1.45 (Carousel) – required – prerequisite
+- **Upstream Task**: 1.40 (Rating) – required – prerequisite
+- **Package**: @repo/marketing-components – modify – target package
 
-**Checklist:** Types; variants; multi-source adapters; filtering; export.
-**Done:** All 20+ variants render; multi-source integration works; filtering functional; animations smooth.
-**Anti:** No live API keys; mock data for external sources.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 1.7, 1.45 (Carousel), 1.40 (Rating)
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §2.1, §4.2, §2.2
+
+## Related Files
+
+- `packages/marketing-components/src/testimonials/types.ts` – modify – (see task objective)
+- `TestimonialGrid.tsx` – modify – (see task objective)
+- `TestimonialCarousel.tsx` – modify – (see task objective)
+- `TestimonialSlider.tsx` – modify – (see task objective)
+- `TestimonialList.tsx` – modify – (see task objective)
+- `TestimonialCard.tsx` – modify – (see task objective)
+- `TestimonialFilterable.tsx` – modify – (see task objective)
+- `testimonials/sources.tsx` – modify – (see task objective)
+- `testimonials/filters.tsx` – modify – (see task objective)
+- `index.ts` – modify – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `TestimonialDisplay`, `TestimonialCard`. Props: `variant`, `testimonials` (array), `source`, `filterByRating`, `showRating`, `showImage`, `showSource`.
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Types; variants; multi-source adapters; filtering; export.
+- [ ] All 20+ variants render
+- [ ] multi-source integration works
+- [ ] filtering functional
+- [ ] animations smooth.
+
+## Technical Constraints
+
+- No live API keys
+- mock data for external sources.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] Types; variants; multi-source adapters; filtering; export.
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

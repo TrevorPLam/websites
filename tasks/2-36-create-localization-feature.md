@@ -1,19 +1,105 @@
 # 2.36 Create Localization Feature
 
-**Status:** [ ] TODO | **Batch:** E | **Effort:** 24h | **Deps:** 2.11, C.11
+## Metadata
 
-**Related Research:** §5.1 (Spec-driven), §C.11 (i18n/RTL), AI translation
+- **Task ID**: 2-36-create-localization-feature
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 2.11, C.11
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** Localization feature with 5+ implementation patterns, AI translation, and RTL support.
+## Context
+
+Localization feature with 5+ implementation patterns, AI translation, and RTL support.
 
 **Implementation Patterns:** Config-Based, i18n-Based, AI-Translation-Based, CMS-Based, Hybrid (5+ total)
 
-**Files:** `packages/features/src/localization/` (index, lib/schema, lib/adapters, lib/locale-config.ts, lib/i18n.ts, lib/translation.ts, lib/rtl.ts, components/LocalizationSection.tsx, components/LocalizationConfig.tsx, components/LocalizationI18n.tsx, components/LocalizationAI.tsx, components/LocalizationCMS.tsx, components/LocalizationHybrid.tsx)
+## Dependencies
 
-**API:** `LocalizationSection`, `localizationSchema`, `createLocaleConfig`, `translate`, `switchLocale`, `rtlSupport`, `LocalizationConfig`, `LocalizationI18n`, `LocalizationAI`, `LocalizationCMS`, `LocalizationHybrid`
+- **Upstream Task**: 2.11 – required – prerequisite
+- **Upstream Task**: C.11 – required – prerequisite
+- **Package**: @repo/features – modify – target package
 
-**Checklist:** Schema; adapters; i18n; AI translation; RTL support; implementation patterns; export.
-**Done:** Builds; all patterns work; i18n functional; AI translation works; RTL works.
-**Anti:** No custom translation models; use existing services.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 2.11, C.11
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §5.1 (Spec-driven), §C.11 (i18n/RTL), AI translation
+
+## Related Files
+
+- `packages/features/src/localization/index` – create – (see task objective)
+- `packages/features/src/localization/lib/schema` – create – (see task objective)
+- `packages/features/src/localization/lib/adapters` – create – (see task objective)
+- `packages/features/src/localization/lib/locale-config.ts` – create – (see task objective)
+- `packages/features/src/localization/lib/i18n.ts` – create – (see task objective)
+- `packages/features/src/localization/lib/translation.ts` – create – (see task objective)
+- `packages/features/src/localization/lib/rtl.ts` – create – (see task objective)
+- `packages/features/src/localization/components/LocalizationSection.tsx` – create – (see task objective)
+- `packages/features/src/localization/components/LocalizationConfig.tsx` – create – (see task objective)
+- `packages/features/src/localization/components/LocalizationI18n.tsx` – create – (see task objective)
+- `packages/features/src/localization/components/LocalizationAI.tsx` – create – (see task objective)
+- `packages/features/src/localization/components/LocalizationCMS.tsx` – create – (see task objective)
+- `packages/features/src/localization/components/LocalizationHybrid.tsx` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `LocalizationSection`, `localizationSchema`, `createLocaleConfig`, `translate`, `switchLocale`, `rtlSupport`, `LocalizationConfig`, `LocalizationI18n`, `LocalizationAI`, `LocalizationCMS`, `LocalizationHybrid`
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Schema; adapters; i18n; AI translation; RTL support; implementation patterns; export.
+- [ ] Builds
+- [ ] all patterns work
+- [ ] i18n functional
+- [ ] AI translation works
+- [ ] RTL works.
+
+## Technical Constraints
+
+- No custom translation models
+- use existing services.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] (Add implementation steps)
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

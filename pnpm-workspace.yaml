@@ -7,7 +7,6 @@ packages:
   - 'packages/content-platform/*'
   - 'packages/marketing-ops/*'
   - 'packages/infrastructure/*'
-  - 'templates/*'
   - 'clients/*'
   - 'apps/*'
   - 'tooling/*'

@@ -30,7 +30,7 @@
 'use server';
 
 import { headers } from 'next/headers';
-import { checkRateLimit, logError, withServerSpan } from '@repo/infra';
+import { checkRateLimit, hashIp, logError, withServerSpan } from '@repo/infra';
 import { runWithRequestId } from '@repo/infra/context/request-context.server';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import type { ContactFormData } from './contact-schema';
@@ -172,7 +172,7 @@ export async function submitContactForm(
           const rateLimitPassed = await checkRateLimit({
             email: typeof data.email === 'string' ? data.email : '',
             clientIp,
-            hashIp: (value: string) => btoa(value).substring(0, 16),
+            hashIp,
           });
 
           if (!rateLimitPassed) {

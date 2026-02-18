@@ -1,17 +1,90 @@
 # 1.44 Create Tree View Component
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 8h | **Deps:** None
+## Metadata
 
-**Related Research:** §2.2 (Radix UI), §3.1 (React 19)
+- **Task ID**: 1-44-create-tree-view-component
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: None
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** Hierarchical tree view with expand/collapse. Layer L2.
+## Context
 
-**Files:** Create `packages/ui/src/components/TreeView.tsx`; update `index.ts`.
+Hierarchical tree view with expand/collapse. Layer L2.
 
-**API:** `Tree`, `TreeItem`, `TreeItemIndicator`, `TreeItemTrigger`, `TreeItemContent`. Props: `data` (array), `defaultExpanded` (array), `onSelect`, `selectable` (boolean), `multiSelect` (boolean).
+## Dependencies
 
-**Checklist:** Import Tree from radix-ui or build custom; add expand/collapse; add selection; export; type-check; build.
-**Done:** Builds; tree renders; expand/collapse works; selection functional; keyboard accessible.
-**Anti:** No virtual scrolling; basic tree only.
+- **Package**: @repo/ui – modify – target package
 
----
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §2.2 (Radix UI), §3.1 (React 19)
+
+## Related Files
+
+- `packages/ui/src/components/TreeView.tsx` – create – (see task objective)
+- `index.ts` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `Tree`, `TreeItem`, `TreeItemIndicator`, `TreeItemTrigger`, `TreeItemContent`. Props: `data` (array), `defaultExpanded` (array), `onSelect`, `selectable` (boolean), `multiSelect` (boolean).
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Import Tree from radix-ui or build custom; add expand/collapse; add selection; export; type-check; build.
+- [ ] Builds
+- [ ] tree renders
+- [ ] expand/collapse works
+- [ ] selection functional
+- [ ] keyboard accessible.
+
+## Technical Constraints
+
+- No virtual scrolling
+- basic tree only.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] Import Tree from radix-ui or build custom; add expand/collapse; add selection; export; type-check; build.
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

@@ -58,7 +58,7 @@
  * - packages/features (Mixed) → jsdom for components, node for actions
  * - packages/utils (Pure utilities) → node
  * - packages/infra (Server code) → node
- * - templates/hair-salon (Mixed) → jsdom for components, node for lib
+ * - packages/utils, packages/infra, packages/features (Mixed) → node for lib, jsdom for components
  */
 
 const sharedConfig = {
@@ -80,12 +80,12 @@ const sharedConfig = {
     '^@repo/ui$': '<rootDir>/packages/ui/src/index.ts',
     '^@repo/utils$': '<rootDir>/packages/utils/src/index.ts',
     '^@repo/infra$': '<rootDir>/packages/infra/index.ts',
+    '^@repo/infra/client$': '<rootDir>/packages/infra/index.client.ts',
     '^@repo/infra/(.*)$': '<rootDir>/packages/infra/$1',
     '^@repo/types$': '<rootDir>/packages/types/src/index.ts',
     '^@repo/types/(.*)$': '<rootDir>/packages/types/src/$1',
     '^@repo/features$': '<rootDir>/packages/features/src/index.ts',
     '^@repo/features/(.*)$': '<rootDir>/packages/features/src/$1',
-    '^@/(.*)$': '<rootDir>/templates/hair-salon/$1',
   },
   testPathIgnorePatterns: ['/node_modules/', '.next', 'dist'],
   modulePathIgnorePatterns: ['<rootDir>/.next', '<rootDir>/.*/\\.next'],
@@ -100,18 +100,16 @@ module.exports = {
       testEnvironment: 'node',
       testMatch: [
         '<rootDir>/packages/utils/**/__tests__/**/*.test.{ts,tsx}',
+        '<rootDir>/packages/types/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/infra/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/lib/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/lib/**/*.test.{ts,tsx}',
-        '<rootDir>/templates/**/lib/**/__tests__/**/*.test.{ts,tsx}',
-        '<rootDir>/templates/**/lib/**/*.test.{ts,tsx}',
-        '<rootDir>/templates/**/__tests__/**/*.test.{ts,tsx}',
       ],
       collectCoverageFrom: [
         'packages/utils/src/**/*.{ts,tsx}',
+        'packages/types/src/**/*.{ts,tsx}',
         'packages/infra/**/*.{ts,tsx}',
         'packages/features/**/lib/**/*.{ts,tsx}',
-        'templates/**/lib/**/*.{ts,tsx}',
         '!**/*.d.ts',
         '!**/index.ts',
         '!**/index.tsx',
@@ -127,15 +125,10 @@ module.exports = {
         '<rootDir>/packages/ui/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/components/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/components/**/*.test.{ts,tsx}',
-        '<rootDir>/templates/**/components/**/__tests__/**/*.test.{ts,tsx}',
-        '<rootDir>/templates/**/components/**/*.test.{ts,tsx}',
-        '<rootDir>/templates/**/features/**/components/**/__tests__/**/*.test.{ts,tsx}',
       ],
       collectCoverageFrom: [
         'packages/ui/src/**/*.{ts,tsx}',
         'packages/features/**/components/**/*.{ts,tsx}',
-        'templates/**/components/**/*.{ts,tsx}',
-        'templates/**/features/**/components/**/*.{ts,tsx}',
         '!**/*.d.ts',
         '!**/index.ts',
         '!**/index.tsx',
@@ -143,14 +136,12 @@ module.exports = {
     },
   ],
   collectCoverageFrom: [
-    // Hair salon template
-    'templates/hair-salon/lib/**/*.{ts,tsx}',
-    'templates/hair-salon/components/**/*.{ts,tsx}',
-    'templates/hair-salon/features/**/*.{ts,tsx}',
     // UI library
     'packages/ui/src/**/*.{ts,tsx}',
     // Utils library
     'packages/utils/src/**/*.{ts,tsx}',
+    // Types
+    'packages/types/src/**/*.{ts,tsx}',
     // Features
     'packages/features/src/**/*.{ts,tsx}',
     // Infra
@@ -161,4 +152,13 @@ module.exports = {
     '!**/index.tsx',
   ],
   coveragePathIgnorePatterns: ['/node_modules/', '.next', 'dist', '__tests__'],
+  coverageThreshold: {
+    // Phase 1 target: 50% (docs/testing-strategy.md). Start at current baseline; raise as tests are added.
+    global: {
+      branches: 20,
+      functions: 10,
+      lines: 14,
+      statements: 14,
+    },
+  },
 };

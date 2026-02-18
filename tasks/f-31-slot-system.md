@@ -1,17 +1,93 @@
 # F.31 Slot System
 
-**Status:** [ ] TODO | **Batch:** Infrastructure | **Effort:** 12h | **Deps:** F.1
+## Metadata
 
-**Related Research:** Slot patterns, composition
+- **Task ID**: f-31-slot-system
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: F.1
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** Slot system for component composition with named slots and slot fallbacks.
+## Context
 
-**Files:** `packages/infrastructure/slots/` (index, slots.ts, named-slots.ts, fallbacks.ts, hooks.ts)
+Slot system for component composition with named slots and slot fallbacks.
 
-**API:** `Slot`, `useSlot`, `NamedSlot`, `SlotFallback`, `SlotProvider`
+## Dependencies
 
-**Checklist:** Slot component; named slots; fallbacks; hooks; export.
-**Done:** Builds; slot system functional; named slots work; fallbacks work.
-**Anti:** No custom slot engine; React children + context only.
+- **Upstream Task**: F.1 – required – prerequisite
+- **Package**: @repo/infrastructure – modify – target package
 
----
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: F.1
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – Slot patterns, composition
+
+## Related Files
+
+- `packages/infrastructure/slots/index` – create – (see task objective)
+- `packages/infrastructure/slots/slots.ts` – create – (see task objective)
+- `packages/infrastructure/slots/named-slots.ts` – create – (see task objective)
+- `packages/infrastructure/slots/fallbacks.ts` – create – (see task objective)
+- `packages/infrastructure/slots/hooks.ts` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `Slot`, `useSlot`, `NamedSlot`, `SlotFallback`, `SlotProvider`
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Slot component; named slots; fallbacks; hooks; export.
+- [ ] Builds
+- [ ] slot system functional
+- [ ] named slots work
+- [ ] fallbacks work.
+
+## Technical Constraints
+
+- No custom slot engine
+- React children + context only.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] Slot component; named slots; fallbacks; hooks; export.
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

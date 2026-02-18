@@ -2,9 +2,12 @@
 
 ## Metadata
 
+- **Task ID**: 1-22-create-label-component
 - **Owner**: AGENT
 - **Priority / Severity**: P2
+- **Target Release**: TBD
 - **Related Epics / ADRs**: Component Library Epic
+- **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Tasks requiring form labels
 
@@ -86,7 +89,7 @@ export const Label = React.forwardRef<
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Follow Radix UI implementation for screen readers and proper label association
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; Radix UI provides base implementation for screen readers and proper label association
 - Performance: Minimal runtime overhead; efficient rendering
 - Semantic: Proper htmlFor association with form controls
 
@@ -107,11 +110,12 @@ export const Label = React.forwardRef<
 - Label association tests
 - Visual regression tests for variants
 - Required indicator functionality tests
+- Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
 
-- [ ] Add Label to component library docs
-- [ ] Update component index/registry
+- [ ] Update [docs/components/ui-library.md](docs/components/ui-library.md) – add Label component
+- [ ] Update packages/ui exports – ensure Label is in index
 
 ## Design References
 

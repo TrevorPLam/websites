@@ -2,9 +2,12 @@
 
 ## Metadata
 
+- **Task ID**: 1-23-create-form-component
 - **Owner**: AGENT
 - **Priority / Severity**: P1
+- **Target Release**: TBD
 - **Related Epics / ADRs**: Component Library Epic
+- **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 1-21-create-checkbox-component.md, 1-22-create-label-component.md, 1-20-create-radio-group-component.md
 - **Downstream Tasks**: Tasks requiring form validation
 
@@ -99,7 +102,7 @@ const form = useForm<z.infer<typeof formSchema>>({
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Follow ARIA patterns for form validation and error announcements
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; follow ARIA patterns for form validation and error announcements
 - Performance: Efficient validation and minimal re-renders
 - Error: Clear, accessible error messages with proper association
 
@@ -120,11 +123,12 @@ const form = useForm<z.infer<typeof formSchema>>({
 - Form validation tests
 - Error message display tests
 - Schema validation integration tests
+- Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
 
-- [ ] Add Form to component library docs
-- [ ] Update component index/registry
+- [ ] Update [docs/components/ui-library.md](docs/components/ui-library.md) – add Form component
+- [ ] Update packages/ui exports – ensure Form is in index
 
 ## Design References
 

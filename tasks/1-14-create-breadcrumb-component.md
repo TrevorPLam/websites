@@ -2,9 +2,12 @@
 
 ## Metadata
 
+- **Task ID**: 1-14-create-breadcrumb-component
 - **Owner**: AGENT
 - **Priority / Severity**: P2
+- **Target Release**: TBD
 - **Related Epics / ADRs**: Component Library Epic
+- **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Tasks requiring navigation trails
 
@@ -85,7 +88,7 @@ export const BreadcrumbPage = React.forwardRef<...>(...)
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Follow Radix UI implementation for screen readers and keyboard navigation
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; Radix UI provides base implementation for screen readers and keyboard navigation
 - Performance: Minimal runtime overhead; efficient rendering of long trails
 - SEO: Include structured data for search engines
 
@@ -106,11 +109,12 @@ export const BreadcrumbPage = React.forwardRef<...>(...)
 - Keyboard navigation tests
 - Visual regression tests for separator variants
 - SEO structured data validation
+- Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
 
-- [ ] Add Breadcrumb to component library docs
-- [ ] Update component index/registry
+- [ ] Update [docs/components/ui-library.md](docs/components/ui-library.md) – add Breadcrumb component
+- [ ] Update packages/ui exports – ensure Breadcrumb is in index
 
 ## Design References
 

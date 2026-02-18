@@ -1,10 +1,19 @@
 # 2.1 Build HeroVariants Components (Expanded)
 
-**Status:** [🚫] BLOCKED | **Batch:** B | **Effort:** 24h | **Deps:** 1.7, 1.45 (Carousel)
+## Metadata
 
-**Related Research:** §2.1 (Atomic design, LCP), §4.2 (Core Web Vitals), §2.2 (Component patterns)
+- **Task ID**: 2-1-build-herovariants-components-expanded
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 1.7, 1.45 (Carousel)
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** 20+ Hero variants with advanced composition system. Shared HeroProps with extensive customization. L2.
+## Context
+
+20+ Hero variants with advanced composition system. Shared HeroProps with extensive customization. L2.
 
 **Enhanced Requirements:**
 
@@ -17,20 +26,93 @@
 - **Animation Options:** Fade in, slide up, zoom, parallax scroll, typewriter effect
 - **Responsive Breakpoints:** Mobile-first, tablet, desktop, large desktop variants
 
-**Files:** `packages/marketing-components/src/hero/types.ts`, `HeroCentered.tsx`, `HeroSplit.tsx`, `HeroVideo.tsx`, `HeroCarousel.tsx`, `HeroImageBackground.tsx`, `HeroGradient.tsx`, `HeroAnimated.tsx`, `HeroMinimal.tsx`, `HeroBold.tsx`, `HeroOverlay.tsx`, `HeroWithStats.tsx`, `HeroWithTestimonials.tsx`, `HeroWithFeatures.tsx`, `HeroWithForm.tsx`, `hero/composition.tsx`, `hero/hooks.ts`, `index.ts`
+## Dependencies
 
-**API:** Discriminated unions `HeroProps`. Base: title, subtitle, primaryCta, secondaryCta, description, background, overlay. Variant-specific: image, video, carouselItems, stats, testimonials, features, form. Composition: `HeroHeader`, `HeroContent`, `HeroFooter`, `HeroBackground`, `HeroOverlay`, `HeroCTA`.
+- **Upstream Task**: 1.7 – required – prerequisite
+- **Upstream Task**: 1.45 (Carousel) – required – prerequisite
+- **Package**: @repo/marketing-components – modify – target package
 
-**Checklist:**
+## Cross-Task Dependencies & Sequencing
 
-- 2.1a: Create types and composition system (4h)
-- 2.1b: Build core variants (Centered, Split, Video, Carousel) (6h)
-- 2.1c: Build background variants (Image, Gradient, Animated) (4h)
-- 2.1d: Build content-enhanced variants (With Stats, With Testimonials, With Features, With Form) (6h)
-- 2.1e: Add animations and responsive breakpoints (4h)
-- next/image; lazy video; barrel; export.
+- **Upstream**: 1.7, 1.45 (Carousel)
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
 
-**Done:** All 20+ variants render; composition system functional; LCP optimized; animations smooth; responsive breakpoints work.
-**Anti:** No CMS adapter; variants defined in code only.
+## Research & Evidence (Date-Stamped)
 
----
+- **Derived from Related Research** – §2.1 (Atomic design, LCP), §4.2 (Core Web Vitals), §2.2 (Component patterns)
+
+## Related Files
+
+- `packages/marketing-components/src/hero/types.ts` – modify – (see task objective)
+- `HeroCentered.tsx` – modify – (see task objective)
+- `HeroSplit.tsx` – modify – (see task objective)
+- `HeroVideo.tsx` – modify – (see task objective)
+- `HeroCarousel.tsx` – modify – (see task objective)
+- `HeroImageBackground.tsx` – modify – (see task objective)
+- `HeroGradient.tsx` – modify – (see task objective)
+- `HeroAnimated.tsx` – modify – (see task objective)
+- `HeroMinimal.tsx` – modify – (see task objective)
+- `HeroBold.tsx` – modify – (see task objective)
+- `HeroOverlay.tsx` – modify – (see task objective)
+- `HeroWithStats.tsx` – modify – (see task objective)
+- `HeroWithTestimonials.tsx` – modify – (see task objective)
+- `HeroWithFeatures.tsx` – modify – (see task objective)
+- `HeroWithForm.tsx` – modify – (see task objective)
+- `hero/composition.tsx` – modify – (see task objective)
+- `hero/hooks.ts` – modify – (see task objective)
+- `index.ts` – modify – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// Discriminated unions `HeroProps`. Base: title, subtitle, primaryCta, secondaryCta, description, background, overlay. Variant-specific: image, video, carouselItems, stats, testimonials, features, form. Composition: `HeroHeader`, `HeroContent`, `HeroFooter`, `HeroBackground`, `HeroOverlay`, `HeroCTA`.
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] All 20+ variants render
+- [ ] composition system functional
+- [ ] LCP optimized
+- [ ] animations smooth
+- [ ] responsive breakpoints work.
+
+## Technical Constraints
+
+- No CMS adapter
+- variants defined in code only.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] (Add implementation steps)
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

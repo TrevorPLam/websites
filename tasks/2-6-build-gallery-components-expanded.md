@@ -1,10 +1,19 @@
 # 2.6 Build Gallery Components (Expanded)
 
-**Status:** [🚫] BLOCKED | **Batch:** B | **Effort:** 24h | **Deps:** 1.7, 1.45 (Carousel), 1.46 (Masonry)
+## Metadata
 
-**Related Research:** §2.1, §4.2, §2.2
+- **Task ID**: 2-6-build-gallery-components-expanded
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 1.7, 1.45 (Carousel), 1.46 (Masonry)
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** 20+ Gallery variants with advanced filtering and organization. L2.
+## Context
+
+20+ Gallery variants with advanced filtering and organization. L2.
 
 **Enhanced Requirements:**
 
@@ -13,12 +22,86 @@
 - **Organization:** Categories, tags, albums, collections
 - **Interactive:** Lightbox, zoom, fullscreen, slideshow, share
 
-**Files:** `packages/marketing-components/src/gallery/types.ts`, `GalleryGrid.tsx`, `GalleryMasonry.tsx`, `GalleryCarousel.tsx`, `GalleryLightbox.tsx`, `GalleryFilterable.tsx`, `GalleryTagged.tsx`, `gallery/filters.tsx`, `gallery/lightbox.tsx`, `index.ts`
+## Dependencies
 
-**API:** `GalleryDisplay`, `GalleryItem`. Props: `variant`, `items` (array), `filterByCategory`, `filterByTag`, `showLightbox`, `showCaptions`, `columns`.
+- **Upstream Task**: 1.7 – required – prerequisite
+- **Upstream Task**: 1.45 (Carousel) – required – prerequisite
+- **Upstream Task**: 1.46 (Masonry) – required – prerequisite
+- **Package**: @repo/marketing-components – modify – target package
 
-**Checklist:** Types; variants; filtering; lightbox; export.
-**Done:** All 20+ variants render; filtering works; lightbox functional; responsive breakpoints work.
-**Anti:** No image optimization; use next/image.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 1.7, 1.45 (Carousel), 1.46 (Masonry)
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §2.1, §4.2, §2.2
+
+## Related Files
+
+- `packages/marketing-components/src/gallery/types.ts` – modify – (see task objective)
+- `GalleryGrid.tsx` – modify – (see task objective)
+- `GalleryMasonry.tsx` – modify – (see task objective)
+- `GalleryCarousel.tsx` – modify – (see task objective)
+- `GalleryLightbox.tsx` – modify – (see task objective)
+- `GalleryFilterable.tsx` – modify – (see task objective)
+- `GalleryTagged.tsx` – modify – (see task objective)
+- `gallery/filters.tsx` – modify – (see task objective)
+- `gallery/lightbox.tsx` – modify – (see task objective)
+- `index.ts` – modify – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `GalleryDisplay`, `GalleryItem`. Props: `variant`, `items` (array), `filterByCategory`, `filterByTag`, `showLightbox`, `showCaptions`, `columns`.
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Types; variants; filtering; lightbox; export.
+- [ ] All 20+ variants render
+- [ ] filtering works
+- [ ] lightbox functional
+- [ ] responsive breakpoints work.
+
+## Technical Constraints
+
+- No image optimization
+- use next/image.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] Types; variants; filtering; lightbox; export.
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

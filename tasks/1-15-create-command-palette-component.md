@@ -2,9 +2,12 @@
 
 ## Metadata
 
+- **Task ID**: 1-15-create-command-palette-component
 - **Owner**: AGENT
 - **Priority / Severity**: P1
+- **Target Release**: TBD
 - **Related Epics / ADRs**: Component Library Epic
+- **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Tasks requiring command interfaces
 
@@ -85,7 +88,7 @@ export const CommandShortcut = React.forwardRef<...>(...)
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Follow ARIA patterns for menu navigation and screen readers
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; follow ARIA patterns for menu navigation and screen readers
 - Performance: Efficient search and filtering; minimal re-renders
 - Keyboard: Full keyboard navigation with proper focus management
 
@@ -106,11 +109,12 @@ export const CommandShortcut = React.forwardRef<...>(...)
 - Keyboard navigation tests
 - Visual regression tests for all states
 - Performance tests for large command lists
+- Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
 
-- [ ] Add Command to component library docs
-- [ ] Update component index/registry
+- [ ] Update [docs/components/ui-library.md](docs/components/ui-library.md) – add Command component
+- [ ] Update packages/ui exports – ensure Command is in index
 
 ## Design References
 

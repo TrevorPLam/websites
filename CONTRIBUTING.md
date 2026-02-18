@@ -97,8 +97,7 @@ pnpm format:check
 
 ## Project Structure
 
-- **templates/** - Industry-specific marketing website templates (hair-salon, restaurant, law-firm, etc.)
-- **clients/** - Client project implementations
+- **clients/** - Client implementations (starter-template, luxe-salon, industry examples)
 - **packages/ui/** - Shared React UI components
 - **packages/utils/** - Shared utilities
 - **packages/config/** - Shared configuration (ESLint, TypeScript, etc.)
@@ -176,7 +175,7 @@ The repository uses modern tooling:
 
 ## Docker Deployment
 
-The repository includes Docker support for production deployments. Each template has its own `Dockerfile` and the root `docker-compose.yml` orchestrates services.
+The repository includes Docker support for production deployments. The starter-template has a `Dockerfile` and the root `docker-compose.yml` orchestrates services.
 
 ### Quick Start
 
@@ -191,7 +190,7 @@ docker compose up --build
 ### Key Files
 
 - **`docker-compose.yml`** — Service definitions, port mappings, resource limits
-- **`templates/hair-salon/Dockerfile`** — Multi-stage build (deps → builder → runtime)
+- **`clients/starter-template/Dockerfile`** — Multi-stage build (deps → builder → runtime)
 - **`.env.production.local.example`** — Template for all required environment variables
 - **`.env.production.local`** — Your actual secrets (git-ignored, never commit this)
 

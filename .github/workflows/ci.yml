@@ -97,7 +97,7 @@ jobs:
 
       # Root jest runs full monorepo test suite (jest.config.js discovers all __tests__)
       - name: Test
-        run: pnpm test
+        run: pnpm test:coverage
 
   # ─────────────────────────────────────────────────────────────────────────
   # Informative audit steps — non-blocking, continue-on-error

@@ -1,19 +1,105 @@
 # 2.25 Create Personalization Feature
 
-**Status:** [ ] TODO | **Batch:** E | **Effort:** 24h | **Deps:** 2.11, C.9
+## Metadata
 
-**Related Research:** §5.1 (Spec-driven), §C.9 (Personalization), behavioral tracking
+- **Task ID**: 2-25-create-personalization-feature
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 2.11, C.9
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** Personalization feature with 5+ implementation patterns, behavioral tracking, and AI-powered recommendations.
+## Context
+
+Personalization feature with 5+ implementation patterns, behavioral tracking, and AI-powered recommendations.
 
 **Implementation Patterns:** Config-Based, Rule-Based, Behavioral-Based, AI-Powered-Based, Hybrid (5+ total)
 
-**Files:** `packages/features/src/personalization/` (index, lib/schema, lib/adapters, lib/personalization-config.ts, lib/rules.ts, lib/behavioral.ts, lib/ai.ts, components/PersonalizationSection.tsx, components/PersonalizationConfig.tsx, components/PersonalizationRule.tsx, components/PersonalizationBehavioral.tsx, components/PersonalizationAI.tsx, components/PersonalizationHybrid.tsx)
+## Dependencies
 
-**API:** `PersonalizationSection`, `personalizationSchema`, `createPersonalizationConfig`, `personalizeContent`, `trackBehavior`, `aiRecommend`, `PersonalizationConfig`, `PersonalizationRule`, `PersonalizationBehavioral`, `PersonalizationAI`, `PersonalizationHybrid`
+- **Upstream Task**: 2.11 – required – prerequisite
+- **Upstream Task**: C.9 – required – prerequisite
+- **Package**: @repo/features – modify – target package
 
-**Checklist:** Schema; adapters; rules engine; behavioral tracking; AI integration; implementation patterns; export.
-**Done:** Builds; all patterns work; rules functional; behavioral tracking works; AI recommendations work.
-**Anti:** No custom AI models; use existing services.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 2.11, C.9
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §5.1 (Spec-driven), §C.9 (Personalization), behavioral tracking
+
+## Related Files
+
+- `packages/features/src/personalization/index` – create – (see task objective)
+- `packages/features/src/personalization/lib/schema` – create – (see task objective)
+- `packages/features/src/personalization/lib/adapters` – create – (see task objective)
+- `packages/features/src/personalization/lib/personalization-config.ts` – create – (see task objective)
+- `packages/features/src/personalization/lib/rules.ts` – create – (see task objective)
+- `packages/features/src/personalization/lib/behavioral.ts` – create – (see task objective)
+- `packages/features/src/personalization/lib/ai.ts` – create – (see task objective)
+- `packages/features/src/personalization/components/PersonalizationSection.tsx` – create – (see task objective)
+- `packages/features/src/personalization/components/PersonalizationConfig.tsx` – create – (see task objective)
+- `packages/features/src/personalization/components/PersonalizationRule.tsx` – create – (see task objective)
+- `packages/features/src/personalization/components/PersonalizationBehavioral.tsx` – create – (see task objective)
+- `packages/features/src/personalization/components/PersonalizationAI.tsx` – create – (see task objective)
+- `packages/features/src/personalization/components/PersonalizationHybrid.tsx` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `PersonalizationSection`, `personalizationSchema`, `createPersonalizationConfig`, `personalizeContent`, `trackBehavior`, `aiRecommend`, `PersonalizationConfig`, `PersonalizationRule`, `PersonalizationBehavioral`, `PersonalizationAI`, `PersonalizationHybrid`
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Schema; adapters; rules engine; behavioral tracking; AI integration; implementation patterns; export.
+- [ ] Builds
+- [ ] all patterns work
+- [ ] rules functional
+- [ ] behavioral tracking works
+- [ ] AI recommendations work.
+
+## Technical Constraints
+
+- No custom AI models
+- use existing services.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] (Add implementation steps)
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

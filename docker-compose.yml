@@ -4,13 +4,14 @@
 # Removed volume mount overriding built files (2.6.2)
 # Added env_file directive (2.6.3)
 # Added restart policy and resource limits (2.6.4)
+# [6.3] Replaced hair-salon with starter-template
 services:
-  hair-salon:
+  starter-template:
     build:
       context: .
-      dockerfile: templates/hair-salon/Dockerfile
+      dockerfile: clients/starter-template/Dockerfile
     ports:
-      - '3100:3100'
+      - '3101:3101'
     environment:
       - NODE_ENV=production
     env_file:

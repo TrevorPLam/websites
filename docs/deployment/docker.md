@@ -1,12 +1,12 @@
-# Docker Deployment — Hair Salon Template
+# Docker Deployment — Starter Template
 
-**Last Updated:** 2026-02-15  
-**Task:** 0.16  
-**Related:** `docs/adr/0004-dockerfile-standalone-output.md`, `templates/hair-salon/Dockerfile`
+**Last Updated:** 2026-02-18  
+**Task:** 0.16, 6.3  
+**Related:** `docs/adr/0004-dockerfile-standalone-output.md`, `clients/starter-template/Dockerfile`
 
 ## Overview
 
-The hair-salon template uses a multi-stage Dockerfile that produces a minimal production image leveraging Next.js standalone output. The image runs the Next.js server without a full `node_modules` tree, reducing size and attack surface.
+The starter-template uses a multi-stage Dockerfile that produces a minimal production image leveraging Next.js standalone output. The image runs the Next.js server without a full `node_modules` tree, reducing size and attack surface.
 
 ## Prerequisites
 
@@ -17,16 +17,16 @@ The hair-salon template uses a multi-stage Dockerfile that produces a minimal pr
 
 ```bash
 # From monorepo root
-docker build -f templates/hair-salon/Dockerfile -t hair-salon .
+docker build -f clients/starter-template/Dockerfile -t starter-template .
 
-# Run (port 3100)
-docker run -p 3100:3100 hair-salon
+# Run (port 3101)
+docker run -p 3101:3101 starter-template
 
 # With environment variables
-docker run -p 3100:3100 \
+docker run -p 3101:3101 \
   -e NEXT_PUBLIC_SITE_URL=https://example.com \
   -e NEXT_PUBLIC_SENTRY_DSN=... \
-  hair-salon
+  starter-template
 ```
 
 ## Environment Variables
@@ -41,11 +41,11 @@ See `.env.production.local.example` (or `.env.example`) for required variables. 
 
 ## Health Check
 
-The image includes a HEALTHCHECK that probes `http://localhost:3100/api/health`. Orchestrators (Kubernetes, Docker Swarm, ECS) use this for readiness and liveness.
+The image includes a HEALTHCHECK that probes `http://localhost:3101/api/health`. Orchestrators (Kubernetes, Docker Swarm, ECS) use this for readiness and liveness.
 
 ```bash
 # Manual health check
-curl -s http://localhost:3100/api/health
+curl -s http://localhost:3101/api/health
 ```
 
 ## Architecture
@@ -56,7 +56,7 @@ curl -s http://localhost:3100/api/health
 | **builder** | Build Next.js with `output: 'standalone'` |
 | **runtime** | Minimal Alpine image with standalone server |
 
-The build uses `pnpm run build --filter=./templates/hair-salon` (path-based filter) because the package name is `@templates/websites`; the name filter would not match.
+The build uses `pnpm run build --filter=@clients/starter-template` (package name matches).
 
 ## Local Development vs. Docker
 
@@ -66,14 +66,14 @@ The build uses `pnpm run build --filter=./templates/hair-salon` (path-based filt
 
 ## Verification Checklist
 
-- [ ] `output: 'standalone'` enabled in `next.config.js`
-- [ ] Dockerfile uses `--filter=./templates/hair-salon` (not `@templates/hair-salon`)
+- [ ] `output: 'standalone'` enabled in `clients/starter-template/next.config.js`
+- [ ] Dockerfile uses `--filter=@clients/starter-template`
 - [ ] `docker build` succeeds
-- [ ] Container serves site at port 3100
+- [ ] Container serves site at port 3101
 - [ ] `/api/health` returns 200
 
 ## References
 
 - ADR 0004: Dockerfile Standalone Output Alignment
 - Next.js [Standalone Output](https://nextjs.org/docs/app/api-reference/next-config-js/output)
-- `templates/hair-salon/Dockerfile` inline comments
+- `clients/starter-template/Dockerfile` inline comments

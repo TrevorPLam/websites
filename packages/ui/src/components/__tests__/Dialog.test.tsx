@@ -30,126 +30,78 @@ import {
   DialogFooter,
 } from '../Dialog';
 
-// Mock Radix UI to avoid dependency on browser APIs during testing
-jest.mock('radix-ui', () => ({
-  Dialog: {
-    Root: ({ children, open, onOpenChange }: any) => (
-      <div data-testid="dialog-root" data-open={open} onClick={() => onOpenChange?.(!open)}>
-        {children}
-      </div>
-    ),
-    Trigger: React.forwardRef(({ children, ...props }: any, ref: any) => (
-      <button ref={ref} data-testid="dialog-trigger" {...props}>
-        {children}
-      </button>
-    )),
-    Portal: ({ children }: any) => <div data-testid="dialog-portal">{children}</div>,
-    Overlay: React.forwardRef(({ ...props }: any, ref: any) => (
-      <div ref={ref} data-testid="dialog-overlay" {...props} />
-    )),
-    Content: React.forwardRef(({ children, showCloseButton, ...props }: any, ref: any) => (
-      <div ref={ref} data-testid="dialog-content" data-show-close-button={showCloseButton} {...props}>
-        {children}
-        {showCloseButton && <button data-testid="dialog-close">Close</button>}
-      </div>
-    )),
-    Title: React.forwardRef(({ children, ...props }: any, ref: any) => (
-      <h2 ref={ref} data-testid="dialog-title" {...props}>
-        {children}
-      </h2>
-    )),
-    Description: React.forwardRef(({ children, ...props }: any, ref: any) => (
-      <p ref={ref} data-testid="dialog-description" {...props}>
-        {children}
-      </p>
-    )),
-  },
-}));
-
 describe('Dialog Components', () => {
   describe('Dialog Root', () => {
-    it('renders without errors', () => {
+    it('renders trigger when closed', () => {
       render(
         <Dialog open={false}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogContent>Content</DialogContent>
         </Dialog>
       );
-      
-      expect(screen.getByTestId('dialog-root')).toBeInTheDocument();
-      expect(screen.getByTestId('dialog-trigger')).toBeInTheDocument();
-      expect(screen.getByTestId('dialog-content')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /open dialog/i })).toBeInTheDocument();
     });
 
-    it('passes open state correctly', () => {
+    it('shows dialog when open', () => {
       render(
         <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogContent>Content</DialogContent>
         </Dialog>
       );
-      
-      const root = screen.getByTestId('dialog-root');
-      expect(root).toHaveAttribute('data-open', 'true');
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByText('Content')).toBeInTheDocument();
     });
 
-    it('handles onOpenChange callback', async () => {
+    it('handles onOpenChange when trigger clicked', async () => {
       const mockOnOpenChange = jest.fn();
       const user = userEvent.setup();
-      
       render(
         <Dialog open={false} onOpenChange={mockOnOpenChange}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogContent>Content</DialogContent>
         </Dialog>
       );
-      
-      await user.click(screen.getByTestId('dialog-root'));
+      await user.click(screen.getByRole('button', { name: /open dialog/i }));
       expect(mockOnOpenChange).toHaveBeenCalledWith(true);
     });
   });
 
   describe('Dialog Content', () => {
-    it('renders with close button by default', () => {
+    it('renders with close button by default when open', () => {
       render(
-        <Dialog>
+        <Dialog open={true}>
           <DialogContent>Content</DialogContent>
         </Dialog>
       );
-      
-      const content = screen.getByTestId('dialog-content');
-      expect(content).toHaveAttribute('data-show-close-button', 'true');
-      expect(screen.getByTestId('dialog-close')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument();
     });
 
     it('hides close button when showCloseButton is false', () => {
       render(
-        <Dialog>
+        <Dialog open={true}>
           <DialogContent showCloseButton={false}>Content</DialogContent>
         </Dialog>
       );
-      
-      const content = screen.getByTestId('dialog-content');
-      expect(content).toHaveAttribute('data-show-close-button', 'false');
-      expect(screen.queryByTestId('dialog-close')).not.toBeInTheDocument();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /close/i })).not.toBeInTheDocument();
     });
 
     it('passes className prop correctly', () => {
       render(
-        <Dialog>
+        <Dialog open={true}>
           <DialogContent className="custom-class">Content</DialogContent>
         </Dialog>
       );
-      
-      const content = screen.getByTestId('dialog-content');
-      expect(content).toHaveClass('custom-class');
+      const dialog = screen.getByRole('dialog');
+      expect(dialog).toHaveClass('custom-class');
     });
   });
 
   describe('Dialog Sub-components', () => {
-    it('renders complete dialog structure', () => {
+    it('renders complete dialog structure when open', () => {
       render(
-        <Dialog>
+        <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -163,12 +115,8 @@ describe('Dialog Components', () => {
           </DialogContent>
         </Dialog>
       );
-      
-      expect(screen.getByTestId('dialog-portal')).toBeInTheDocument();
-      expect(screen.getByTestId('dialog-overlay')).toBeInTheDocument();
-      expect(screen.getByTestId('dialog-title')).toBeInTheDocument();
-      expect(screen.getByTestId('dialog-description')).toBeInTheDocument();
-      expect(screen.getByText('Test Title')).toBeInTheDocument();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Test Title' })).toBeInTheDocument();
       expect(screen.getByText('Test Description')).toBeInTheDocument();
       expect(screen.getByText('Cancel')).toBeInTheDocument();
       expect(screen.getByText('Submit')).toBeInTheDocument();

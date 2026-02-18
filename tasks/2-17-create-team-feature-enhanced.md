@@ -1,10 +1,19 @@
 # 2.17 Create Team Feature (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** E | **Effort:** 20h | **Deps:** 2.11, 2.3
+## Metadata
 
-**Related Research:** §2.1, §3.1 (RSC), §6 (Industry), §3.4 (CMS)
+- **Task ID**: 2-17-create-team-feature-enhanced
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 2.11, 2.3
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** TeamSection with 5+ implementation patterns, CMS and API adapters. Uses 2.3 display components.
+## Context
+
+TeamSection with 5+ implementation patterns, CMS and API adapters. Uses 2.3 display components.
 
 **Enhanced Requirements:**
 
@@ -13,12 +22,90 @@
 - **API Integration:** REST API, GraphQL, directory services
 - **Features:** Schema validation, role filtering, department organization, social integration
 
-**Files:** `packages/features/src/team/` (index, lib/schema, lib/adapters/config.ts, lib/adapters/api.ts, lib/adapters/cms.ts, lib/adapters/directory.ts, lib/team-config.ts, lib/filters.ts, components/TeamSection.tsx, components/TeamConfig.tsx, components/TeamAPI.tsx, components/TeamCMS.tsx, components/TeamHybrid.tsx)
+## Dependencies
 
-**API:** `TeamSection`, `teamSchema`, `createTeamConfig`, `normalizeFromConfig`, `normalizeFromAPI`, `normalizeFromCMS`, `filterByRole`, `filterByDepartment`, `TeamConfig`, `TeamAPI`, `TeamCMS`, `TeamHybrid`
+- **Upstream Task**: 2.11 – required – prerequisite
+- **Upstream Task**: 2.3 – required – prerequisite
+- **Package**: @repo/features – modify – target package
 
-**Checklist:** Schema → adapters → implementation patterns → Section components → export. Copy pattern from testimonials.
-**Done:** Builds; all patterns work; CMS integration functional; API adapters work; filtering works.
-**Anti:** No CMS sync; Server Components for data; formatCurrency server-side.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 2.11, 2.3
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §2.1, §3.1 (RSC), §6 (Industry), §3.4 (CMS)
+
+## Related Files
+
+- `packages/features/src/team/index` – create – (see task objective)
+- `packages/features/src/team/lib/schema` – create – (see task objective)
+- `packages/features/src/team/lib/adapters/config.ts` – create – (see task objective)
+- `packages/features/src/team/lib/adapters/api.ts` – create – (see task objective)
+- `packages/features/src/team/lib/adapters/cms.ts` – create – (see task objective)
+- `packages/features/src/team/lib/adapters/directory.ts` – create – (see task objective)
+- `packages/features/src/team/lib/team-config.ts` – create – (see task objective)
+- `packages/features/src/team/lib/filters.ts` – create – (see task objective)
+- `packages/features/src/team/components/TeamSection.tsx` – create – (see task objective)
+- `packages/features/src/team/components/TeamConfig.tsx` – create – (see task objective)
+- `packages/features/src/team/components/TeamAPI.tsx` – create – (see task objective)
+- `packages/features/src/team/components/TeamCMS.tsx` – create – (see task objective)
+- `packages/features/src/team/components/TeamHybrid.tsx` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `TeamSection`, `teamSchema`, `createTeamConfig`, `normalizeFromConfig`, `normalizeFromAPI`, `normalizeFromCMS`, `filterByRole`, `filterByDepartment`, `TeamConfig`, `TeamAPI`, `TeamCMS`, `TeamHybrid`
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Schema → adapters → implementation patterns → Section components → export. Copy pattern from testimonials.
+- [ ] Builds
+- [ ] all patterns work
+- [ ] CMS integration functional
+- [ ] API adapters work
+- [ ] filtering works.
+
+## Technical Constraints
+
+- No CMS sync
+- Server Components for data
+- formatCurrency server-side.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] (Add implementation steps)
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

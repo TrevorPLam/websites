@@ -1,10 +1,19 @@
 # 1.4 Create Dropdown Menu Component (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 10h | **Deps:** None
+## Metadata
 
-**Related Research:** §2.2 (Radix UI), §3.1 (React 19)
+- **Task ID**: 1-4-create-dropdown-menu-component-enhanced
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: None
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** Clickable button revealing action list with advanced features. Full keyboard semantics, nested menus, typeahead, multi-select. Layer L2.
+## Context
+
+Clickable button revealing action list with advanced features. Full keyboard semantics, nested menus, typeahead, multi-select. Layer L2.
 
 **Enhanced Requirements:**
 
@@ -19,20 +28,79 @@
 - **Animations:** Smooth open/close animations
 - **Accessibility:** Full ARIA support, keyboard navigation, focus management
 
-**Files:** Create `packages/ui/src/components/DropdownMenu.tsx`, `dropdown-menu/types.ts`, `dropdown-menu/hooks.ts`; update `index.ts`.
+## Dependencies
 
-**API:** `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuCheckboxItem`, `DropdownMenuRadioItem`, `DropdownMenuSeparator`, `DropdownMenuGroup`, `DropdownMenuSub`, `DropdownMenuSubTrigger`, `DropdownMenuSubContent`, `DropdownMenuLabel`, `DropdownMenuShortcut`, etc. (full Radix set + enhancements)
+- **Package**: @repo/ui – modify – target package
 
-**Checklist:**
+## Cross-Task Dependencies & Sequencing
 
-- 1.4a: Create base DropdownMenu with Radix UI (3h)
-- 1.4b: Add typeahead functionality (2h)
-- 1.4c: Add checkbox and radio item variants (2h)
-- 1.4d: Add multi-select support and keyboard shortcuts (2h)
-- 1.4e: Add animations and accessibility enhancements (1h)
-- Import from radix-ui; CVA variants; keyboard nav + typeahead; export; a11y tests.
+- **Upstream**: None
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
 
-**Done:** Builds; keyboard nav; nested menus; typeahead works; multi-select functional; checkbox/radio items; keyboard shortcuts display.
-**Anti:** No custom positioning beyond Radix; stop at Radix foundation.
+## Research & Evidence (Date-Stamped)
 
----
+- **Derived from Related Research** – §2.2 (Radix UI), §3.1 (React 19)
+
+## Related Files
+
+- `packages/ui/src/components/DropdownMenu.tsx` – create – (see task objective)
+- `dropdown-menu/types.ts` – create – (see task objective)
+- `dropdown-menu/hooks.ts` – create – (see task objective)
+- `index.ts` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuCheckboxItem`, `DropdownMenuRadioItem`, `DropdownMenuSeparator`, `DropdownMenuGroup`, `DropdownMenuSub`, `DropdownMenuSubTrigger`, `DropdownMenuSubContent`, `DropdownMenuLabel`, `DropdownMenuShortcut`, etc. (full Radix set + enhancements)
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Builds
+- [ ] keyboard nav
+- [ ] nested menus
+- [ ] typeahead works
+- [ ] multi-select functional
+- [ ] checkbox/radio items
+- [ ] keyboard shortcuts display.
+
+## Technical Constraints
+
+- No custom positioning beyond Radix
+- stop at Radix foundation.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] (Add implementation steps)
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

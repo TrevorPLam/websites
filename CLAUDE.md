@@ -11,7 +11,7 @@ This file provides context for AI assistants (Claude Code and others) working in
 **marketing-websites** is a **pnpm monorepo** for building multi-industry marketing websites. It uses a configuration-as-code (CaCA) architecture where a single `site.config.ts` drives all client-site behavior — theming, page composition, feature flags, SEO schema, and integrations.
 
 - **Current phase:** Wave 0 complete → Wave 1 in progress
-- **Active template:** `templates/hair-salon` (package `@templates/websites`)
+- **Starter template:** `clients/starter-template` (package `@clients/starter-template`, port 3101)
 - **Package manager:** pnpm 10.29.2 (strictly enforced via `packageManager` field)
 - **Node.js:** >=22.0.0 (enforced via `engines`)
 
@@ -41,8 +41,8 @@ pnpm syncpack:fix          # Auto-fix version drift
 ### Targeting specific packages
 
 ```bash
-pnpm --filter @templates/websites dev     # Hair salon template dev server (port 3100)
-pnpm --filter @templates/websites build   # Build hair salon template
+pnpm --filter @clients/starter-template dev     # Starter template dev server (port 3101)
+pnpm --filter @clients/starter-template build   # Build starter template
 pnpm --filter @repo/ui lint               # Lint UI package only
 pnpm --filter "@clients/*" build          # Build all clients
 ```
@@ -50,7 +50,7 @@ pnpm --filter "@clients/*" build          # Build all clients
 ### Bundle analysis
 
 ```bash
-ANALYZE=true pnpm --filter @templates/websites build
+ANALYZE=true pnpm --filter @clients/starter-template build
 ```
 
 ---
@@ -59,18 +59,13 @@ ANALYZE=true pnpm --filter @templates/websites build
 
 ```
 marketing-websites/
-├── templates/
-│   └── hair-salon/          # Active template — @templates/websites, port 3100
+├── clients/                 # Client projects
+│   └── starter-template/    # Golden-path template — @clients/starter-template, port 3101
 │       ├── app/             # Next.js App Router (layout.tsx, page.tsx, route dirs)
-│       ├── components/      # Template-local components
-│       ├── features/        # Template-local feature pages (blog, booking, contact…)
-│       ├── lib/             # Template-local utilities
-│       ├── content/         # MDX blog posts / static content
+│       ├── components/      # Client-local components
 │       ├── site.config.ts   # THE central config — drives everything
-│       ├── next.config.js   # Next.js config (standalone output, bundle analyzer)
-│       └── middleware.ts    # Edge middleware (security headers, rate-limiting)
-│
-├── clients/                 # Future client projects (currently empty)
+│       ├── next.config.js   # Next.js config (standalone output)
+│       └── Dockerfile       # Production container
 │
 ├── packages/
 │   ├── infra/               # @repo/infra — L0: security, middleware, logging, env schemas
@@ -108,15 +103,15 @@ marketing-websites/
 |-------|----------|--------|
 | L0 — Infrastructure | `@repo/infra`, `@repo/integrations-*` | Complete |
 | L2 — Components | `@repo/ui`, `@repo/features`, `@repo/types`, `@repo/utils` | Partial |
-| L3 — Experience | `templates/hair-salon`, `clients/*` | 1 template active |
+| L3 — Experience | `clients/*` (e.g. starter-template, luxe-salon) | Multiple clients |
 
 ### Allowed dependency direction
 
-- **templates/** → `@repo/*` packages — OK via public package exports
+- **clients/** → `@repo/*` packages — OK via public package exports
 - **@repo/features** → `@repo/ui`, `@repo/utils`, `@repo/types`, `@repo/infra` — OK
 - **@repo/ui** → `@repo/utils`, `@repo/types` — OK
-- **packages/** → **templates/** — **NEVER**
-- **templates/A** → **templates/B** — **NEVER** (cross-template isolation)
+- **packages/** → **clients/** — **NEVER**
+- **clients/A** → **clients/B** — **NEVER** (cross-client isolation)
 - Deep imports like `@repo/infra/src/internal` — **NEVER** (use public export paths only)
 
 ### Version catalog
@@ -192,7 +187,7 @@ Central versions live in `pnpm-workspace.yaml` under `catalog:`. Always use `cat
   import { Button } from '@repo/ui/src/components/Button';
   ```
 - Internal workspace packages use `workspace:*` in `package.json`
-- Template-local aliases: `@/` maps to `templates/hair-salon/` (configured in jest moduleNameMapper and tsconfig paths)
+- Client-local aliases: each client's `@/` maps to its own root (e.g. `clients/starter-template/`)
 
 ### File headers
 
@@ -208,8 +203,8 @@ Jest uses two projects (defined in root `jest.config.js`):
 
 | Environment | Used for | Test patterns |
 |-------------|----------|---------------|
-| `node` | Server utilities, infra, server actions, lib/ | `packages/utils/**`, `packages/infra/**`, `templates/**/lib/**` |
-| `jsdom` | React components, UI primitives | `packages/ui/**`, `packages/features/**/components/**`, `templates/**/components/**` |
+| `node` | Server utilities, infra, server actions, lib/ | `packages/utils/**`, `packages/infra/**`, `packages/features/**/lib/**` |
+| `jsdom` | React components, UI primitives | `packages/ui/**`, `packages/features/**/components/**` |
 
 ### Running tests
 
@@ -227,7 +222,7 @@ pnpm --filter @repo/ui test   # Package-level
 
 ### Module aliases in tests
 
-Jest `moduleNameMapper` resolves `@repo/*` to actual source files. The `@/` alias maps to `templates/hair-salon/`. No need to build packages before running tests.
+Jest `moduleNameMapper` resolves `@repo/*` to actual source files. No need to build packages before running tests.
 
 ---
 
@@ -235,17 +230,17 @@ Jest `moduleNameMapper` resolves `@repo/*` to actual source files. The `@/` alia
 
 All environment variables are optional for local development — the app runs with sensible defaults.
 
-Copy `.env.example` to `.env.local` in the template directory:
+Copy `.env.example` to `.env.local` in the client directory:
 
 ```bash
-cp .env.example templates/hair-salon/.env.local
+cp .env.example clients/starter-template/.env.local
 ```
 
 Key variables (all optional locally):
 
 | Variable | Description |
 |----------|-------------|
-| `NEXT_PUBLIC_SITE_URL` | Public site URL (default: `http://localhost:3100`) |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL (default: `http://localhost:3101` for starter-template) |
 | `NEXT_PUBLIC_SENTRY_DSN` | Sentry error tracking DSN |
 | `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | Must be set together (pair) |
 | `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (pair; falls back to in-memory) |
@@ -288,8 +283,8 @@ When creating a new client, copy the template and update `site.config.ts` — no
 ## Adding New Templates / Clients
 
 ```bash
-# Copy the hair-salon template as a starting point
-cp -r templates/hair-salon clients/my-client
+# Copy the starter-template as a starting point
+cp -r clients/starter-template clients/my-client
 
 # Update package name in package.json
 # Update site.config.ts with client-specific settings
@@ -349,7 +344,7 @@ Config in `.changeset/config.json` — base branch is `main`.
 ## Docker
 
 ```bash
-docker-compose up -d        # Start hair-salon template on http://localhost:3100
+docker-compose up -d        # Start starter-template on http://localhost:3101
 docker-compose logs -f
 docker-compose down
 ```
@@ -387,6 +382,6 @@ Key docs:
 - **`@repo/ui` does not include React as a direct dependency** — it uses `peerDependencies`. Apps provide React.
 - **`noUncheckedIndexedAccess` is enabled.** Array/object index access returns `T | undefined` — handle it.
 - **Server-only modules in `@repo/infra`.** The package uses `server-only`. Client-safe exports live in `index.client.ts`.
-- **Template dev port is 3100.** The hair-salon template runs on port 3100 (not the Next.js default 3000).
+- **Starter-template dev port is 3101.** Each client uses a unique port (e.g. luxe-salon: 3102).
 - **Paired environment variables.** Supabase, Upstash Redis, and booking providers require both variables in a pair or neither.
 - **TypeScript build errors block CI.** `typescript.ignoreBuildErrors: false` is set in `next.config.js`.

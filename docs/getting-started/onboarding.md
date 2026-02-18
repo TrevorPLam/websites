@@ -198,10 +198,9 @@ pnpm build
 
 ```text
 marketing-websites/
-├── templates/               # Industry-specific website templates
-│   ├── hair-salon/         # Beauty/wellness template
-│   └── [future-templates]  # Additional industries
 ├── clients/                # Client implementations
+│   ├── starter-template/   # Golden-path template (clone for new clients)
+│   ├── luxe-salon/         # Example: salon industry
 │   └── [client-name]/      # Production client sites
 ├── packages/               # Shared libraries
 │   ├── ui/                 # React components
@@ -217,11 +216,10 @@ marketing-websites/
 
 ### Key Concepts
 
-#### Templates vs Clients
+#### Clients and Packages
 
-- **Templates**: Reusable industry-specific website foundations
-- **Clients**: Production deployments based on templates
-- **Packages**: Shared code used across templates and clients
+- **Clients**: Production-ready sites (starter-template is the golden path; clone for new projects)
+- **Packages**: Shared code used across clients
 
 #### Configuration-Driven Development
 
@@ -239,25 +237,25 @@ marketing-websites/
 
 ## Development Workflows
 
-### Working with Templates
+### Working with Clients
 
-#### Start Template Development
+#### Start Client Development
 
 ```bash
-# Navigate to template directory
-cd templates/hair-salon
+# Navigate to client directory (e.g. starter-template)
+cd clients/starter-template
 
-# Start development server
-pnpm dev --port 3100
+# Start development server (port 3101)
+pnpm dev
 
-# Open browser to http://localhost:3100
+# Open browser to http://localhost:3101
 ```
 
-#### Template Development Commands
+#### Client Development Commands
 
 ```bash
 # Development
-pnpm dev --port 3100
+pnpm dev
 
 # Build
 pnpm build
@@ -309,8 +307,8 @@ packages/ui/
 #### Create New Client
 
 ```bash
-# Copy template to clients directory
-cp -r templates/hair-salon clients/my-client
+# Copy starter-template to create new client
+cp -r clients/starter-template clients/my-client
 
 # Navigate to client directory
 cd clients/my-client
@@ -579,9 +577,9 @@ pnpm type-check --noEmit src/file.ts
       "name": "Debug Template",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/templates/hair-salon/node_modules/.bin/next",
+      "program": "${workspaceFolder}/clients/starter-template/node_modules/.bin/next",
       "args": ["dev"],
-      "cwd": "${workspaceFolder}/templates/hair-salon",
+      "cwd": "${workspaceFolder}/clients/starter-template",
       "runtimeArgs": ["--inspect"]
     }
   ]

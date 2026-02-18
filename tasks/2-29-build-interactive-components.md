@@ -1,23 +1,103 @@
 # 2.29 Build Interactive Components
 
-**Status:** [ ] TODO | **Batch:** B | **Effort:** 20h | **Deps:** 1.7, 1.23 (Form), 1.2 (Button)
+## Metadata
 
-**Related Research:** §2.1, §4.2, §2.2
+- **Task ID**: 2-29-build-interactive-components
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 1.7, 1.23 (Form), 1.2 (Button)
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** 8+ Interactive variants including quizzes and calculators. L2.
+## Context
 
-**Requirements:**
+8+ Interactive variants including quizzes and calculators. L2.
+
+**Enhanced Requirements:**
 
 - **Variants:** Quiz, Calculator, Poll, Survey, Interactive Form, With Results, With Sharing, Minimal (8+ total)
 - **Quizzes:** Question/answer format, scoring, results display
 - **Calculators:** Custom calculators, form-based calculations, results display
 
-**Files:** `packages/marketing-components/src/interactive/types.ts`, `Quiz.tsx`, `Calculator.tsx`, `Poll.tsx`, `Survey.tsx`, `interactive/quiz.tsx`, `interactive/calculator.tsx`, `index.ts`
+## Dependencies
 
-**API:** `InteractiveDisplay`, `Quiz`, `Calculator`. Props: `variant`, `questions` (array), `onSubmit`, `showResults`, `shareable`.
+- **Upstream Task**: 1.7 – required – prerequisite
+- **Upstream Task**: 1.23 (Form) – required – prerequisite
+- **Upstream Task**: 1.2 (Button) – required – prerequisite
+- **Package**: @repo/marketing-components – modify – target package
 
-**Checklist:** Types; variants; quiz logic; calculator logic; export.
-**Done:** All 8+ variants render; quizzes work; calculators functional.
-**Anti:** No custom logic; basic implementations only.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 1.7, 1.23 (Form), 1.2 (Button)
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
+
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §2.1, §4.2, §2.2
+
+## Related Files
+
+- `packages/marketing-components/src/interactive/types.ts` – modify – (see task objective)
+- `Quiz.tsx` – modify – (see task objective)
+- `Calculator.tsx` – modify – (see task objective)
+- `Poll.tsx` – modify – (see task objective)
+- `Survey.tsx` – modify – (see task objective)
+- `interactive/quiz.tsx` – modify – (see task objective)
+- `interactive/calculator.tsx` – modify – (see task objective)
+- `index.ts` – modify – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `InteractiveDisplay`, `Quiz`, `Calculator`. Props: `variant`, `questions` (array), `onSubmit`, `showResults`, `shareable`.
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Types; variants; quiz logic; calculator logic; export.
+- [ ] All 8+ variants render
+- [ ] quizzes work
+- [ ] calculators functional.
+
+## Technical Constraints
+
+- No custom logic
+- basic implementations only.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] Types; variants; quiz logic; calculator logic; export.
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

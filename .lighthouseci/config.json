@@ -9,15 +9,15 @@
         "--disable-dev-shm-usage",
         "--user-data-dir=./.chrome-profile"
       ],
-      "startServerCommand": "pnpm --filter @templates/websites start",
+      "startServerCommand": "pnpm --filter @clients/starter-template start",
       "startServerReadyPattern": "started server on",
       "url": [
-        "http://localhost:3100/",
-        "http://localhost:3100/about",
-        "http://localhost:3100/services",
-        "http://localhost:3100/book",
-        "http://localhost:3100/contact",
-        "http://localhost:3100/blog"
+        "http://localhost:3101/",
+        "http://localhost:3101/about",
+        "http://localhost:3101/services",
+        "http://localhost:3101/book",
+        "http://localhost:3101/contact",
+        "http://localhost:3101/blog"
       ],
       "numberOfRuns": 1,
       "settings": {

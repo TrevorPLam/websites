@@ -2,9 +2,12 @@
 
 ## Metadata
 
+- **Task ID**: 1-16-create-context-menu-component
 - **Owner**: AGENT
 - **Priority / Severity**: P2
+- **Target Release**: TBD
 - **Related Epics / ADRs**: Component Library Epic
+- **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Tasks requiring right-click menus
 
@@ -92,7 +95,7 @@ export const ContextMenuShortcut = React.forwardRef<...>(...)
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Follow Radix UI implementation for screen readers and keyboard navigation
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; Radix UI provides base implementation for screen readers and keyboard navigation
 - Performance: Minimal runtime overhead; efficient menu rendering
 - Keyboard: Full keyboard navigation with proper focus management
 
@@ -112,11 +115,12 @@ export const ContextMenuShortcut = React.forwardRef<...>(...)
 - Keyboard navigation tests
 - Visual regression tests for menu states
 - Nested submenu functionality tests
+- Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
 
-- [ ] Add Context Menu to component library docs
-- [ ] Update component index/registry
+- [ ] Update [docs/components/ui-library.md](docs/components/ui-library.md) – add Context Menu component
+- [ ] Update packages/ui exports – ensure ContextMenu is in index
 
 ## Design References
 

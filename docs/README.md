@@ -98,12 +98,7 @@ Complete guide to setting up your development environment and understanding the 
 
 Frequently encountered problems and their solutions.
 
-### For Template Users
-
-**[Template Directory README](../../templates/README.md)**  
-*Using and creating templates*
-
-Guide to using templates and creating new industry-specific templates.
+### For New Projects
 
 **[Client Directory README](../../clients/README.md)**  
 *Client setup and deployment*
@@ -268,10 +263,9 @@ Recognition for those who contribute to documentation.
 
 ## Documentation by Role
 
-### Template Users
+### New Projects
 
 - [Quick Start](../README.md#quick-start)
-- [Template Directory README](../templates/README.md)
 - [Client Directory README](../clients/README.md)
 - [Build Your First Client](tutorials/build-first-client.md)
 - [Troubleshooting](getting-started/troubleshooting.md)

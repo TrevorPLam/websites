@@ -95,16 +95,16 @@ First, let's see what templates are available:
 # Navigate to repository root
 cd marketing-websites
 
-# List available templates
-ls templates/
+# List available clients
+ls clients/
 ```
 
-You should see templates like:
-- `hair-salon/` - Beauty/wellness industry template
-- `websites/` - Multi-industry template
-- (More templates as they're added)
+You should see clients like:
+- `starter-template/` - Golden-path template (clone for new projects)
+- `luxe-salon/` - Example: salon industry
+- (More clients as they're added)
 
-For this tutorial, we'll use the `hair-salon` template, but the process is similar for any template.
+For this tutorial, we'll use the `starter-template` as the base.
 
 ## Step 2: Create Client Project (5 minutes)
 
@@ -114,8 +114,8 @@ Create a new client from the template:
 # Create client directory
 mkdir -p clients/my-first-client
 
-# Copy template to client directory
-cp -r templates/hair-salon/* clients/my-first-client/
+# Copy starter-template to client directory
+cp -r clients/starter-template/* clients/my-first-client/
 
 # Navigate to client directory
 cd clients/my-first-client
@@ -132,8 +132,7 @@ Edit `pnpm-workspace.yaml` in the repository root and add:
 ```yaml
 packages:
   - 'packages/*'
-  - 'templates/*'
-  - 'clients/my-first-client'  # Add this line
+  - 'clients/*'   # Already includes my-first-client
 ```
 
 ## Step 4: Install Dependencies (5 minutes)
@@ -397,7 +396,7 @@ In this tutorial, you learned to:
 - [Client Setup Guide](../clients/README.md)
 - [Configuration Guide](../CONFIG.md)
 - [Deployment Guide](../deployment/)
-- [Template Documentation](../templates/README.md)
+- [Developer Onboarding](../getting-started/onboarding.md)
 
 ---
 

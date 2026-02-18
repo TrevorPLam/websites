@@ -26,12 +26,9 @@ packages/
   ui/                  # Radix-based primitives
   utils/               # Utility helpers
 apps/
-clients/               # Client factory outputs (site.config.ts)
-templates/             # Legacy hair-salon template (deprecated; remove after migration)
+clients/               # Client implementations (starter-template, luxe-salon, etc.)
 tooling/               # Internal CLIs + scripts
 ```
-
-_Keep `templates/` until remaining migrations finish, but treat as legacy._
 
 ### 1.2 Toolchain
 

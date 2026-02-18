@@ -1,10 +1,19 @@
 # 2.19 Create Pricing Feature (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** E | **Effort:** 20h | **Deps:** 2.11, 2.5
+## Metadata
 
-**Related Research:** §2.1, §3.1 (RSC), §6 (Industry), §3.4 (CMS)
+- **Task ID**: 2-19-create-pricing-feature-enhanced
+- **Owner**: AGENT
+- **Priority / Severity**: P2
+- **Target Release**: TBD
+- **Related Epics / ADRs**: (Add if applicable)
+- **Reviewers / Stakeholders**: @agent
+- **Upstream Tasks**: 2.11, 2.5
+- **Downstream Tasks**: (Tasks that consume this output)
 
-**Objective:** PricingSection with 5+ implementation patterns, calculator integration, and comparison. Uses 2.5 display components.
+## Context
+
+PricingSection with 5+ implementation patterns, calculator integration, and comparison. Uses 2.5 display components.
 
 **Enhanced Requirements:**
 
@@ -13,14 +22,91 @@
 - **Comparison:** Feature comparison, price comparison, plan recommendations
 - **Features:** Schema validation, currency formatting, localization, plan recommendations
 
-**Files:** `packages/features/src/pricing/` (index, lib/schema, lib/adapters/config.ts, lib/adapters/api.ts, lib/adapters/cms.ts, lib/pricing-config.ts, lib/calculator.ts, lib/comparison.ts, lib/formatting.ts, components/PricingSection.tsx, components/PricingConfig.tsx, components/PricingAPI.tsx, components/PricingCMS.tsx, components/PricingCalculator.tsx, components/PricingHybrid.tsx)
+## Dependencies
 
-**API:** `PricingSection`, `pricingSchema`, `createPricingConfig`, `normalizeFromConfig`, `normalizeFromAPI`, `normalizeFromCMS`, `calculatePrice`, `comparePlans`, `formatCurrency`, `recommendPlan`, `PricingConfig`, `PricingAPI`, `PricingCMS`, `PricingCalculator`, `PricingHybrid`
+- **Upstream Task**: 2.11 – required – prerequisite
+- **Upstream Task**: 2.5 – required – prerequisite
+- **Package**: @repo/features – modify – target package
 
-**Checklist:** Schema → adapters → implementation patterns → calculator → comparison → Section components → export.
-**Done:** Builds; all patterns work; calculator functional; comparison works; currency formatting works.
-**Anti:** No payment processing; display and calculation only.
+## Cross-Task Dependencies & Sequencing
 
----
+- **Upstream**: 2.11, 2.5
+- **Parallel Work**: (Tasks to coordinate with)
+- **Downstream**: (Work that will consume this output)
 
-### Feature Breadth (New Features 2.20–2.50)
+## Research & Evidence (Date-Stamped)
+
+- **Derived from Related Research** – §2.1, §3.1 (RSC), §6 (Industry), §3.4 (CMS)
+
+## Related Files
+
+- `packages/features/src/pricing/index` – create – (see task objective)
+- `packages/features/src/pricing/lib/schema` – create – (see task objective)
+- `packages/features/src/pricing/lib/adapters/config.ts` – create – (see task objective)
+- `packages/features/src/pricing/lib/adapters/api.ts` – create – (see task objective)
+- `packages/features/src/pricing/lib/adapters/cms.ts` – create – (see task objective)
+- `packages/features/src/pricing/lib/pricing-config.ts` – create – (see task objective)
+- `packages/features/src/pricing/lib/calculator.ts` – create – (see task objective)
+- `packages/features/src/pricing/lib/comparison.ts` – create – (see task objective)
+- `packages/features/src/pricing/lib/formatting.ts` – create – (see task objective)
+- `packages/features/src/pricing/components/PricingSection.tsx` – create – (see task objective)
+- `packages/features/src/pricing/components/PricingConfig.tsx` – create – (see task objective)
+- `packages/features/src/pricing/components/PricingAPI.tsx` – create – (see task objective)
+- `packages/features/src/pricing/components/PricingCMS.tsx` – create – (see task objective)
+- `packages/features/src/pricing/components/PricingCalculator.tsx` – create – (see task objective)
+- `packages/features/src/pricing/components/PricingHybrid.tsx` – create – (see task objective)
+
+## Code Snippets / Examples
+
+```typescript
+// API surface (from task)
+// `PricingSection`, `pricingSchema`, `createPricingConfig`, `normalizeFromConfig`, `normalizeFromAPI`, `normalizeFromCMS`, `calculatePrice`, `comparePlans`, `formatCurrency`, `recommendPlan`, `PricingConfig`, `PricingAPI`, `PricingCMS`, `PricingCalculator`, `PricingHybrid`
+
+// Add usage examples per implementation
+```
+
+## Acceptance Criteria
+
+- [ ] Schema → adapters → implementation patterns → calculator → comparison → Section components → export.
+- [ ] Builds
+- [ ] all patterns work
+- [ ] calculator functional
+- [ ] comparison works
+- [ ] currency formatting works.
+
+## Technical Constraints
+
+- No payment processing
+- display and calculation only.
+
+## Accessibility & Performance Requirements
+
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for UI tasks; (N/A for non-UI)
+- Performance: (Add target metrics: LCP, INP, bundle size per task scope)
+
+## Implementation Plan
+
+- [ ] (Add implementation steps)
+
+## Testing Requirements
+
+- Unit tests for new code
+- Integration tests where applicable
+- Run `pnpm test`, `pnpm type-check`, `pnpm lint` to verify
+
+## Documentation Updates
+
+- [ ] Update relevant docs (add specific paths per task)
+- [ ] Add JSDoc for new exports
+
+## Design References
+
+- (Add links to mockups or design assets if applicable)
+
+## Definition of Done
+
+- [ ] Code reviewed and approved
+- [ ] All tests passing
+- [ ] Documentation updated
+- [ ] Build passes
+

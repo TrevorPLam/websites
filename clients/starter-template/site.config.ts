@@ -67,7 +67,13 @@ const siteConfig: SiteConfig = {
   contact: {
     email: 'hello@example.com',
     phone: '',
-    address: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
+      country: '',
+    },
   },
   conversionFlow: {
     type: 'booking',

@@ -2,9 +2,12 @@
 
 ## Metadata
 
+- **Task ID**: 1-13-create-progress-component
 - **Owner**: AGENT
 - **Priority / Severity**: P2
+- **Target Release**: TBD
 - **Related Epics / ADRs**: Component Library Epic
+- **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Tasks requiring progress indicators
 
@@ -74,7 +77,7 @@ interface ProgressProps {
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Follow Radix UI implementation for screen readers and ARIA attributes
+- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; Radix UI provides base implementation for screen readers and ARIA attributes
 - Performance: CSS-only animations for smooth rendering; minimal runtime overhead
 
 ## Implementation Plan
@@ -92,11 +95,12 @@ interface ProgressProps {
 - Accessibility tests with axe-core
 - Visual regression tests for all variants and states
 - Performance tests for animation smoothness
+- Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
 
-- [ ] Add Progress to component library docs
-- [ ] Update component index/registry
+- [ ] Update [docs/components/ui-library.md](docs/components/ui-library.md) – add Progress component
+- [ ] Update packages/ui exports – ensure Progress is in index
 
 ## Design References
 
