@@ -1,24 +1,19 @@
 // File: features/search/index.ts  [TRACE:FILE=features.search.index]
-// Purpose: Search feature barrel export providing clean imports for search components
-//          and utilities. Centralizes search functionality for site-wide search
-//          capabilities with consistent import patterns.
+// Purpose: Backward-compatible barrel export for search feature.
+//          Re-exports from extracted @repo/features/search while maintaining
+//          template-specific compatibility for existing usage.
 //
-// Exports / Entry: SearchDialog component, SearchPage component
-// Used by: Navigation component, search page (/search), and any search-related features
+// Exports / Entry: SearchDialog, SearchPage, SearchItem type
+// Used by: Navigation component, search page
 //
 // Invariants:
-// - Must export all public search components with consistent naming
-// - Component exports must be default exports for React patterns
-// - No internal utilities should be exported (only public components)
-// - Export structure must remain stable to avoid breaking imports
+// - Must maintain backward compatibility with existing imports
+// - Component exports must match pre-extraction API
 //
-// Status: @public
+// Status: @public (template-specific compatibility layer)
 // Features:
-// - [FEAT:SEARCH] Site-wide search functionality
-// - [FEAT:NAVIGATION] Search dialog integration
-// - [FEAT:ARCHITECTURE] Clean barrel export pattern
-// - [FEAT:MAINTAINABILITY] Centralized export management
+// - [FEAT:SEARCH] Site-wide search
+// - [FEAT:ARCHITECTURE] Backward-compatible re-export pattern
 
-// Component exports
-export { default as SearchDialog } from './components/SearchDialog';
-export { default as SearchPage } from './components/SearchPage';
+export { SearchDialog, SearchPage } from '@repo/features/search';
+export type { SearchItem } from '@repo/features/search';

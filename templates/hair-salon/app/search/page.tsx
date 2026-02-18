@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import SearchPage from '@/features/search/components/SearchPage';
+import { SearchPage } from '@/features/search';
 import { getSearchIndex } from '@/lib/search';
 
 export const dynamic = 'force-static';

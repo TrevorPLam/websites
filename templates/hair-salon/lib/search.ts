@@ -1,64 +1,46 @@
 // File: lib/search.ts  [TRACE:FILE=lib.search]
-// Purpose: Search functionality providing site-wide search index generation and search
-//          capabilities for pages and blog content. Caches search results for performance
-//          and integrates with navigation components. Consumes unified route registry from
-//          lib/routes.ts for static pages.
+// Purpose: Search index adapter wiring template-specific content sources to
+//          @repo/features/search. Provides getSearchIndex() for layout and
+//          search page. Static pages from route registry; blog from blog feature.
 //
 // Exports / Entry: SearchItem type, getSearchIndex function
-// Used by: Navigation component, SearchDialog, and any search-related features
+// Used by: app/layout.tsx, app/search/page.tsx, Navigation
 //
 // Invariants:
-// - Static pages come from lib/routes.ts (single source of truth)
-// - Blog posts must be dynamically fetched and included in search results
-// - Search index must be cached to avoid repeated file system operations
-// - All search items must have valid hrefs for navigation
-// - Tags must be consistent across similar content types
+// - Static pages from lib/routes.ts (single source of truth)
+// - Blog posts from @repo/features/blog via template adapter
+// - Same API as pre-extraction for backward compatibility
 //
 // Status: @public
 // Features:
-// - [FEAT:SEARCH] Site-wide search functionality
-// - [FEAT:PERFORMANCE] Cached search index generation
-// - [FEAT:BLOG] Dynamic blog post integration
-// - [FEAT:NAVIGATION] Search result navigation
-// - [FEAT:CONFIGURATION] Route registry consumer
-//
-// Related: Task 0.25 — Create Unified Route Registry
+// - [FEAT:SEARCH] Site-wide search
+// - [FEAT:ARCHITECTURE] Template-to-feature adapter
 
-import { cache } from 'react';
-import { getAllPosts } from '@/features/blog/lib/blog';
+import { getSearchIndex as getSearchIndexFromFeature } from '@repo/features/search';
+export type { SearchItem } from '@repo/features/search';
 import { getSearchEntries } from '@/lib/routes';
+import { getAllPosts } from '@/features/blog';
 
-export type SearchItem = {
-  id: string;
-  title: string;
-  description: string;
-  href: string;
-  type: 'Page' | 'Blog';
-  tags?: string[];
-};
-
-// [TRACE:FUNC=lib.buildSearchIndex]
-// [FEAT:SEARCH] [FEAT:PERFORMANCE] [FEAT:BLOG]
-// NOTE: Cached index builder. Static pages from route registry; blog posts from content.
-const buildSearchIndex = cache((): SearchItem[] => {
+/**
+ * Build and return search index for the site.
+ * Merges static route pages with blog posts.
+ */
+export async function getSearchIndex(): Promise<SearchItem[]> {
   const staticItems = getSearchEntries() as SearchItem[];
   const posts = getAllPosts();
   const blogItems: SearchItem[] = posts.map((post) => {
-    const tags = ['blog', post.category, post.author].filter((tag): tag is string => Boolean(tag));
+    const tags = ['blog', post.category, post.author].filter(
+      (tag): tag is string => Boolean(tag)
+    );
     return {
       id: `blog-${post.slug}`,
       title: post.title,
       description: post.description,
       href: `/blog/${post.slug}`,
-      type: 'Blog',
+      type: 'Blog' as const,
       tags,
     };
   });
-  return [...staticItems, ...blogItems];
-});
 
-// [TRACE:FUNC=lib.getSearchIndex]
-// [FEAT:SEARCH] [FEAT:PERFORMANCE]
-export async function getSearchIndex(): Promise<SearchItem[]> {
-  return buildSearchIndex();
+  return getSearchIndexFromFeature({ staticItems, blogItems });
 }

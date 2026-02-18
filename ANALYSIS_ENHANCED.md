@@ -6,14 +6,14 @@ This document provides a comprehensive, evidence-based analysis of the marketing
 
 **Current State at a Glance:**
 
-- **5 package directories** in `packages/` (config, infra, integrations, ui, utils) resolving to **~10 workspace packages**
-- **1 template** (hair-salon) in `templates/` directory + **@repo/shared** in `templates/shared/`
-- **8 UI components** in `@repo/ui`
+- **7 package directories** in `packages/` (config, infra, integrations, ui, utils, **types**, **features**) resolving to **~10 workspace packages**
+- **1 template** (hair-salon) in `templates/`; **@repo/types** in `packages/types/` (moved from `templates/shared/`, which was removed)
+- **9 UI components** in `@repo/ui` (including Dialog, ThemeInjector)
 - **5 security modules** in `@repo/infra` + 7 env validation schemas
 - **11 template-specific components** in hair-salon
-- **5 feature modules** (blog, booking, contact, search, services) with **7 total components** (not 3)
-- **13 test files** across infra, env, and template features
-- **pnpm catalog** configured with 10 centralized dependency versions
+- **5 feature modules** in `@repo/features` (blog, booking, contact, search, services); template re-exports from package for all five
+- **Parity tests** in `templates/hair-salon/__tests__/refactor-parity/` (booking, search, services, contact, blog)
+- **pnpm catalog** configured; workspace globs synced (Task 0.2)
 
 ---
 
@@ -94,13 +94,12 @@ packages:
   - 'packages/*'
   - 'packages/config/*'
   - 'packages/integrations/*'
-  - 'packages/features/*' # Referenced but directory does not exist yet
+  - 'packages/features/*' # Exists: booking, contact, blog, services, search
   - 'templates/*'
   - 'clients/*'
-  - 'apps/*' # Referenced but directory does not exist yet
+  - 'apps/*'
 
-# NOTE: root package.json workspaces field is OUT OF SYNC with this file.
-# package.json omits packages/integrations/* and packages/features/* and apps/*
+# NOTE: root package.json workspaces field is synced with this file (Task 0.2).
 
 catalog:
   next: '15.5.12'
@@ -117,9 +116,9 @@ catalog:
 
 **Key Findings:**
 
-1. The pnpm-workspace.yaml references `packages/features/*` and `apps/*` which do not currently exist, indicating planned expansion.
-2. **Config conflict:** `.npmrc` sets `node-linker = hoisted` while `.pnpmrc` sets `node-linker=pnpm`. These conflict — `.pnpmrc` should win for pnpm but this should be reconciled.
-3. **Workspace glob mismatch:** `root package.json` workspaces field does NOT include `packages/integrations/*`, `packages/features/*`, or `apps/*` — but `pnpm-workspace.yaml` does. Since pnpm uses its own workspace file, the package.json field is effectively stale.
+1. **packages/features/** exists with five extracted feature modules: booking, contact, blog, services, search. Template re-exports from @repo/features for all five.
+2. **Config conflict:** Fixed (Task 0.1). `.npmrc` no longer sets node-linker; `.pnpmrc` is authoritative.
+3. **Workspace glob mismatch:** Fixed (Task 0.2). Root `package.json` workspaces match `pnpm-workspace.yaml`.
 
 **turbo.json Pipeline (Actual):**
 

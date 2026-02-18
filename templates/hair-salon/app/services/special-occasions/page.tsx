@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Calendar } from 'lucide-react';
-import ServiceDetailLayout from '@/features/services/components/ServiceDetailLayout';
+import { ServiceDetailLayout } from '@repo/features/services';
+import siteConfig from '@/site.config';
+import { getPublicBaseUrl } from '@/lib/env.public';
 
 export const metadata: Metadata = {
   title: 'Special Occasions',
@@ -13,6 +15,8 @@ export default function SpecialOccasionsPage() {
     <ServiceDetailLayout
       icon={Calendar}
       title="Special Occasions"
+      siteName={siteConfig.name}
+      baseUrl={getPublicBaseUrl()}
       description="Bridal hair, updos, and styling for weddings, proms, and special events. We create stunning looks that stay perfect all day and night."
       serviceSlug="special-occasions"
       included={[

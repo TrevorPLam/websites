@@ -1,29 +1,27 @@
-// File: features/blog/index.ts  [TRACE:FILE=features.blog.index]
-// Purpose: Blog feature barrel export providing clean imports for blog content management,
-//          MDX rendering, and image processing. Centralizes blog functionality
-//          for consistent content management and rendering across the application.
+// File: templates/hair-salon/features/blog/index.ts  [TRACE:FILE=templates.hair-salon.features.blog.index]
+// Purpose: Backward-compatible barrel export for blog feature.
+//          Re-exports from extracted @repo/features/blog while maintaining
+//          template-specific compatibility layer for existing usage.
 //
 // Exports / Entry: Blog utilities, BlogPostContent component, blog image functions
-// Used by: Blog pages, search functionality, and any blog-related features
+// Used by: Blog pages, search functionality
 //
 // Invariants:
-// - Must export all public blog utilities with consistent naming
-// - MDX rendering components must handle both markdown and MDX content
-// - Blog image utilities must optimize for performance and SEO
-// - Export structure must remain stable to avoid breaking blog functionality
-// - No internal parsing details should be exposed unnecessarily
+// - Must maintain backward compatibility with existing template imports
+// - Must re-export BlogPostContent component
+// - Must provide blog API exports compatible with existing usage
 //
-// Status: @public
+// Status: @public (template-specific compatibility layer)
 // Features:
 // - [FEAT:BLOG] MDX content management and rendering
-// - [FEAT:CONTENT] Blog post discovery and indexing
-// - [FEAT:IMAGES] Blog image optimization and processing
-// - [FEAT:SEARCH] Blog content integration with site search
-// - [FEAT:ARCHITECTURE] Clean barrel export pattern
+// - [FEAT:ARCHITECTURE] Backward-compatible re-export pattern
 
-// Library exports
+// Re-export BlogPostContent component
+export { default as BlogPostContent } from '@repo/features/blog';
+
+// Re-export blog API functions (adapter wrappers)
 export * from './lib/blog';
-export * from './lib/blog-images';
+export type { BlogPost } from './lib/blog';
 
-// Component exports
-export { default as BlogPostContent } from './components/BlogPostContent';
+// Re-export image utilities
+export * from '@repo/features/blog';

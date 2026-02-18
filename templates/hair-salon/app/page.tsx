@@ -21,7 +21,8 @@
 import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
 import ValueProps from '@/components/ValueProps';
-import { ServicesOverview } from '@/features/services';
+import { ServicesOverview } from '@repo/features/services';
+import { servicesOverviewItems } from '@/lib/services-config';
 
 // Below-fold components loaded dynamically for better initial load
 const SocialProof = dynamic(() => import('@/components/SocialProof'), {
@@ -42,7 +43,11 @@ export default function HomePage() {
     <>
       <Hero />
       <ValueProps />
-      <ServicesOverview />
+      <ServicesOverview
+        services={servicesOverviewItems}
+        heading="Our Services"
+        subheading="From classic cuts to modern makeovers, we offer a full range of hair services tailored to you."
+      />
       <SocialProof />
       <FinalCTA />
     </>

@@ -10,7 +10,9 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "peerDependencies": {
     "react": "catalog:",
@@ -24,6 +26,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
+    "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "radix-ui": "catalog:",
     "lucide-react": "catalog:"

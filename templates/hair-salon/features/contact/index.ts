@@ -1,26 +1,25 @@
-// File: features/contact/index.ts  [TRACE:FILE=features.contact.index]
-// Purpose: Contact feature barrel export providing clean imports for contact components
-//          and form schemas. Centralizes contact functionality for customer
-//          communication and inquiry handling across the application.
+// File: templates/hair-salon/features/contact/index.ts  [TRACE:FILE=templates.hair-salon.features.contact.index]
+// Purpose: Backward-compatible barrel export for contact feature.
+//          Re-exports from extracted @repo/features/contact while maintaining
+//          template-specific compatibility layer for existing usage.
 //
-// Exports / Entry: ContactForm component, contact form schema
-// Used by: Contact page (/contact), footer contact sections, and inquiry features
+// Exports / Entry: ContactForm component, contact form schema (backward-compatible)
+// Used by: Contact page (/contact), footer contact sections
 //
 // Invariants:
-// - Must export ContactForm as default export for React patterns
-// - Must export all contact form utilities with consistent naming
-// - Export structure must remain stable to avoid breaking contact functionality
-// - Schema exports must include validation rules and type definitions
+// - Must maintain backward compatibility with existing template imports
+// - Must re-export ContactForm component (adapter wrapper)
+// - Must provide schema exports compatible with existing usage
 //
-// Status: @public
+// Status: @public (template-specific compatibility layer)
 // Features:
 // - [FEAT:CONTACT] Customer inquiry and communication forms
-// - [FEAT:FORMS] Contact form validation and submission
-// - [FEAT:INTEGRATION] External CRM and email system connections
-// - [FEAT:ARCHITECTURE] Clean barrel export pattern
+// - [FEAT:ARCHITECTURE] Backward-compatible re-export pattern
 
-// Library exports
-export * from './lib/contact-form-schema';
-
-// Component exports
+// Re-export ContactForm component (adapter wrapper)
 export { default as ContactForm } from './components/ContactForm';
+
+// Re-export schema for backward compatibility
+// Note: Template-specific code should migrate to use @repo/features/contact directly
+export * from './lib/contact-form-schema';
+export type { ContactFormData } from './lib/contact-form-schema';

@@ -1,53 +1,31 @@
+// File: packages/features/src/services/components/ServiceDetailLayout.tsx  [TRACE:FILE=packages.features.services.detail]
+// Purpose: Service detail page layout with hero, included, process, pricing, FAQs.
+//          Renders Schema.org Service and FAQPage JSON-LD from props.
+//
+// Exports / Entry: ServiceDetailLayout (default export)
+// Used by: Service detail pages (/services/[slug])
+//
+// Invariants:
+// - No direct site config or env imports; siteName and baseUrl passed as props
+// - Structured data uses passed siteName and baseUrl for provider/urls
+// - Accordion items must match AccordionItem { question, answer }
+// - CTAs link to configurable contactHref
+//
+// Status: @public
+// Features:
+// - [FEAT:SERVICES] Service detail presentation
+// - [FEAT:SEO] Service + FAQ structured data
+// - [FEAT:UX] Consistent layout sections
+// - [FEAT:CONFIGURATION] Props-driven, no template coupling
+
 import React from 'react';
 import Link from 'next/link';
-import { Check, LucideIcon } from 'lucide-react';
-import { Container, Section, Card, Button, Accordion, AccordionItem } from '@repo/ui';
-import { getPublicBaseUrl } from '@/lib/env.public';
-import siteConfig from '@/site.config';
+import { Check } from 'lucide-react';
+import { Container, Section, Card, Button, Accordion } from '@repo/ui';
+import type { ServiceDetailProps } from '../types';
 
-/**
- * Process step data structure.
- */
-export interface ProcessStep {
-  /** Step title */
-  title: string;
-  /** Step description */
-  description: string;
-}
-
-/**
- * Service detail page props.
- * All fields are required to ensure consistent service pages.
- */
-export interface ServiceDetailProps {
-  /** Lucide icon component for the service */
-  icon: LucideIcon;
-  /** Service title (used in h1 and structured data) */
-  title: string;
-  /** Service description (hero and meta) */
-  description: string;
-  /** List of features/deliverables included */
-  included: string[];
-  /** Numbered process steps */
-  process: ProcessStep[];
-  /** Target audience descriptions */
-  whoItsFor: string[];
-  /** Pricing tier cards */
-  pricing: {
-    tier: string;
-    description: string;
-    href: string;
-  }[];
-  /** FAQ items for accordion */
-  faqs: AccordionItem[];
-  /** Optional service slug for structured data */
-  serviceSlug?: string;
-}
-
-/**
- * Service detail page layout component.
- * Renders all sections with consistent styling.
- */
+// [TRACE:FUNC=packages.features.services.ServiceDetailLayout]
+// [FEAT:SERVICES] [FEAT:SEO] [FEAT:UX]
 export default function ServiceDetailLayout({
   icon: Icon,
   title,
@@ -58,48 +36,47 @@ export default function ServiceDetailLayout({
   pricing,
   faqs,
   serviceSlug,
+  siteName,
+  baseUrl,
+  contactHref = '/contact',
+  ctaLabel = 'Get Started',
+  finalCtaHeading = 'Ready to Get Started?',
+  finalCtaDescription = 'Schedule a free consultation to discuss how this service can help grow your business.',
+  finalCtaButtonLabel = 'Schedule Free Consultation',
 }: ServiceDetailProps) {
-  const baseUrl = getPublicBaseUrl().replace(/\/$/, '');
+  const resolvedBaseUrl = baseUrl.replace(/\/$/, '');
   const resolvedServiceUrl = serviceSlug
-    ? `${baseUrl}/services/${serviceSlug}`
-    : `${baseUrl}/services`;
+    ? `${resolvedBaseUrl}/services/${serviceSlug}`
+    : `${resolvedBaseUrl}/services`;
 
-  // Structured data for Service
   const serviceStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: title,
-    description: description,
+    description,
     provider: {
       '@type': 'Organization',
-      name: siteConfig.name,
-      url: baseUrl,
+      name: siteName,
+      url: resolvedBaseUrl,
     },
     url: resolvedServiceUrl,
     serviceType: title,
-    areaServed: {
-      '@type': 'Country',
-      name: 'United States',
-    },
+    areaServed: { '@type': 'Country', name: 'United States' },
     offers: pricing.map((tier) => ({
       '@type': 'Offer',
       name: `${title} - ${tier.tier}`,
       description: tier.description,
-      url: `${baseUrl}${tier.href}`,
+      url: tier.href.startsWith('http') ? tier.href : `${resolvedBaseUrl}${tier.href}`,
     })),
   };
 
-  // Structured data for FAQs
   const faqStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
     })),
   };
 
@@ -114,34 +91,34 @@ export default function ServiceDetailLayout({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
 
-      {/* Hero Section */}
       <Section className="bg-gradient-to-b from-secondary to-secondary/95 text-white">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="w-16 h-16 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <Icon className="w-8 h-8 text-primary" />
+              <Icon className="w-8 h-8 text-primary" aria-hidden />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">{title}</h1>
             <p className="text-xl text-white/80 mb-8">{description}</p>
-            <Link href="/contact">
+            <Link href={contactHref}>
               <Button variant="primary" size="large">
-                Get Started
+                {ctaLabel}
               </Button>
             </Link>
           </div>
         </Container>
       </Section>
 
-      {/* What's Included */}
       <Section className="bg-white">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-foreground mb-8 text-center">What's Included</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
+              What&apos;s Included
+            </h2>
             <div className="grid md:grid-cols-2 gap-4">
               {included.map((item) => (
                 <div key={item} className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-4 h-4 text-primary" />
+                    <Check className="w-4 h-4 text-primary" aria-hidden />
                   </div>
                   <span className="text-muted-foreground">{item}</span>
                 </div>
@@ -151,7 +128,6 @@ export default function ServiceDetailLayout({
         </Container>
       </Section>
 
-      {/* Process */}
       <Section className="bg-muted">
         <Container>
           <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Our Process</h2>
@@ -159,7 +135,9 @@ export default function ServiceDetailLayout({
             {process.map((step, index) => (
               <Card key={step.title} variant="default">
                 <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-white font-bold text-xl">{index + 1}</span>
+                  <span className="text-white font-bold text-xl" aria-hidden>
+                    {index + 1}
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">{step.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
@@ -169,7 +147,6 @@ export default function ServiceDetailLayout({
         </Container>
       </Section>
 
-      {/* Who It's For */}
       <Section className="bg-white">
         <Container>
           <div className="max-w-3xl mx-auto">
@@ -180,7 +157,7 @@ export default function ServiceDetailLayout({
               {whoItsFor.map((item) => (
                 <div key={item} className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-4 h-4 text-white" />
+                    <Check className="w-4 h-4 text-white" aria-hidden />
                   </div>
                   <span className="text-muted-foreground text-lg">{item}</span>
                 </div>
@@ -190,7 +167,6 @@ export default function ServiceDetailLayout({
         </Container>
       </Section>
 
-      {/* Pricing */}
       <Section className="bg-gradient-to-br from-primary/10 to-primary/5">
         <Container>
           <h2 className="text-3xl font-bold text-foreground mb-8 text-center">Pricing Options</h2>
@@ -210,7 +186,6 @@ export default function ServiceDetailLayout({
         </Container>
       </Section>
 
-      {/* FAQs */}
       <Section className="bg-white">
         <Container>
           <div className="max-w-3xl mx-auto">
@@ -222,19 +197,14 @@ export default function ServiceDetailLayout({
         </Container>
       </Section>
 
-      {/* Final CTA */}
       <Section className="bg-secondary text-white">
         <Container>
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Get Started?
-            </h2>
-            <p className="text-lg text-white/80 mb-8">
-              Schedule a free consultation to discuss how this service can help grow your business.
-            </p>
-            <Link href="/contact">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{finalCtaHeading}</h2>
+            <p className="text-lg text-white/80 mb-8">{finalCtaDescription}</p>
+            <Link href={contactHref}>
               <Button variant="primary" size="large">
-                Schedule Free Consultation
+                {finalCtaButtonLabel}
               </Button>
             </Link>
           </div>

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Scissors } from 'lucide-react';
-import ServiceDetailLayout from '@/features/services/components/ServiceDetailLayout';
+import { ServiceDetailLayout } from '@repo/features/services';
+import siteConfig from '@/site.config';
+import { getPublicBaseUrl } from '@/lib/env.public';
 
 export const metadata: Metadata = {
   title: 'Haircuts & Styling',
@@ -13,6 +15,8 @@ export default function HaircutsPage() {
     <ServiceDetailLayout
       icon={Scissors}
       title="Haircuts & Styling"
+      siteName={siteConfig.name}
+      baseUrl={getPublicBaseUrl()}
       description="Precision cuts and styling for women, men, and children to suit your lifestyle. Our stylists take the time to understand your needs and deliver a look that enhances your natural beauty."
       serviceSlug="haircuts"
       included={[

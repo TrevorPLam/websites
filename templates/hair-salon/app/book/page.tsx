@@ -21,7 +21,8 @@
 import type { Metadata } from 'next';
 import { Container, Section, Card } from '@repo/ui';
 import { Clock, Scissors } from 'lucide-react';
-import { BookingForm } from '@/features/booking';
+import { BookingForm, createBookingConfig } from '@/features/booking';
+import siteConfig from '@/site.config';
 
 export const metadata: Metadata = {
   title: 'Book an Appointment',
@@ -51,7 +52,13 @@ export default function BookPage() {
           <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Booking Form */}
             <div className="lg:col-span-2">
-              <BookingForm />
+              {siteConfig.conversionFlow.type === 'booking' ? (
+                <BookingForm config={createBookingConfig(siteConfig.conversionFlow)} />
+              ) : (
+                <Card className="p-6 text-muted-foreground">
+                  Booking is not configured for this site.
+                </Card>
+              )}
             </div>
 
             {/* Sidebar Info */}

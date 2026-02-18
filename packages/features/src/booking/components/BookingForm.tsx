@@ -1,14 +1,13 @@
-// File: features/booking/components/BookingForm.tsx  [TRACE:FILE=features.booking.components.BookingForm]
+// File: packages/features/src/booking/components/BookingForm.tsx  [TRACE:FILE=packages.features.booking.components.BookingForm]
 // Purpose: Booking form component providing comprehensive appointment scheduling with real-time validation,
-//          service selection, and submission handling. Implements form state management, error handling,
-//          and user feedback for seamless booking experience.
+//          service selection, and submission handling. Now configurable via BookingFeatureConfig.
 //
 // Exports / Entry: BookingForm component (default export)
 // Used by: Booking page (/book), service pages, and any appointment scheduling features
 //
 // Invariants:
 // - Form must validate all inputs against booking schema before submission
-// - Service types and time slots must match available business offerings
+// - Service types and time slots must match provided configuration
 // - Form state must be preserved during submission to prevent data loss
 // - Error messages must be user-friendly and actionable
 // - Submission must be idempotent to prevent duplicate bookings
@@ -20,10 +19,11 @@
 // - [FEAT:UX] User-friendly error handling and feedback
 // - [FEAT:ACCESSIBILITY] Accessible form controls and ARIA labels
 // - [FEAT:PERFORMANCE] Optimized form state management
+// - [FEAT:CONFIGURATION] Configurable service types and time slots
 
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useMemo } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -32,30 +32,34 @@ import { Card, Button, Input, Select, Textarea } from '@repo/ui';
 import { Calendar } from 'lucide-react';
 
 import {
-  bookingFormSchema,
-  BookingFormData,
-  SERVICE_LABELS,
-  TIME_SLOT_LABELS,
-  SERVICE_TYPES,
-  TIME_SLOTS,
-  bookingFormDefaults,
+  createBookingFormSchema,
+  createBookingFormDefaults,
+  type BookingFormData,
 } from '../lib/booking-schema';
-import { submitBookingRequest, BookingSubmissionResult } from '../lib/booking-actions';
+import { submitBookingRequest, type BookingSubmissionResult } from '../lib/booking-actions';
+import type { BookingFeatureConfig } from '../lib/booking-config';
 
-// [TRACE:INTERFACE=features.booking.BookingFormProps]
-// [FEAT:BOOKING] [FEAT:UX]
-// NOTE: Form props interface - supports flexible form customization and callback handling.
-interface BookingFormProps {
+// [TRACE:INTERFACE=packages.features.booking.BookingFormProps]
+// [FEAT:BOOKING] [FEAT:UX] [FEAT:CONFIGURATION]
+// NOTE: Form props interface - supports flexible form customization and callback handling with configuration.
+export interface BookingFormProps {
+  /** Booking feature configuration (service categories, time slots, etc.) */
+  config: BookingFeatureConfig;
+  /** Optional CSS class name */
   className?: string;
+  /** Optional pre-filled service type */
   prefilledService?: string;
+  /** Success callback */
   onSuccess?: (result: BookingSubmissionResult) => void;
+  /** Error callback */
   onError?: (error: string) => void;
 }
 
-// [TRACE:FUNC=features.booking.BookingForm]
-// [FEAT:BOOKING] [FEAT:VALIDATION] [FEAT:UX] [FEAT:ACCESSIBILITY]
+// [TRACE:FUNC=packages.features.booking.BookingForm]
+// [FEAT:BOOKING] [FEAT:VALIDATION] [FEAT:UX] [FEAT:ACCESSIBILITY] [FEAT:CONFIGURATION]
 // NOTE: Main booking form component - orchestrates form state, validation, and submission with user feedback.
 export default function BookingForm({
+  config,
   className,
   prefilledService,
   onSuccess,
@@ -64,18 +68,20 @@ export default function BookingForm({
   const [isPending, startTransition] = useTransition();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  // Create schema and defaults from config
+  const schema = useMemo(() => createBookingFormSchema(config), [config]);
+  const defaults = useMemo(() => createBookingFormDefaults(config), [config]);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty },
     setValue,
   } = useForm<BookingFormData>({
-    // Type assertion: zodResolver expects Zod 3.23+ internal types (~standard, ~validate); we use Zod 3.22
-    resolver: zodResolver(bookingFormSchema as unknown as Parameters<typeof zodResolver>[0]),
+    resolver: zodResolver(schema as unknown as Parameters<typeof zodResolver>[0]),
     defaultValues: {
-      ...bookingFormDefaults,
-      serviceType:
-        (prefilledService as BookingFormData['serviceType'] | undefined) ?? 'consultation',
+      ...defaults,
+      serviceType: prefilledService ?? defaults.serviceType ?? '',
     },
     mode: 'onChange',
   });
@@ -85,12 +91,12 @@ export default function BookingForm({
   tomorrow.setDate(tomorrow.getDate() + 1);
   const minDate = tomorrow.toISOString().split('T')[0];
 
-  // Set maximum date to 90 days from now
+  // Set maximum date based on config
   const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate() + 90);
+  maxDate.setDate(maxDate.getDate() + config.maxAdvanceDays);
   const maxDateStr = maxDate.toISOString().split('T')[0];
 
-  const onSubmit: SubmitHandler<BookingFormData> = async (data) => {
+  const onSubmit: SubmitHandler<BookingFormData> = async (data: BookingFormData) => {
     startTransition(async () => {
       try {
         // Create FormData for server action
@@ -105,7 +111,7 @@ export default function BookingForm({
         formData.append('honeypot', '');
         formData.append('timestamp', new Date().toISOString());
 
-        const result = await submitBookingRequest(formData);
+        const result = await submitBookingRequest(formData, config);
 
         if (result.success) {
           setIsSubmitted(true);
@@ -169,6 +175,18 @@ export default function BookingForm({
       </Card>
     );
   }
+
+  // Create service options from config
+  const serviceOptions = config.services.map((service) => ({
+    value: service.id,
+    label: service.label,
+  }));
+
+  // Create time slot options from config
+  const timeSlotOptions = config.timeSlots.map((slot) => ({
+    value: slot.value,
+    label: slot.label,
+  }));
 
   return (
     <Card variant="default" className={`p-8 ${className}`}>
@@ -248,10 +266,7 @@ export default function BookingForm({
           <label className="block text-sm font-medium text-slate-700 mb-2">Service Type</label>
           <Select
             {...register('serviceType')}
-            options={SERVICE_TYPES.map((type) => ({
-              value: type,
-              label: SERVICE_LABELS[type],
-            }))}
+            options={serviceOptions}
             aria-label="Service Type"
             error={errors.serviceType?.message}
             disabled={isPending}
@@ -271,17 +286,14 @@ export default function BookingForm({
               disabled={isPending}
             />
             <p className="text-xs text-slate-500 mt-1">
-              Bookings available up to 90 days in advance
+              Bookings available up to {config.maxAdvanceDays} days in advance
             </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">Preferred Time</label>
             <Select
               {...register('timeSlot')}
-              options={TIME_SLOTS.map((slot) => ({
-                value: slot,
-                label: TIME_SLOT_LABELS[slot],
-              }))}
+              options={timeSlotOptions}
               aria-label="Preferred Time"
               error={errors.timeSlot?.message}
               disabled={isPending}
@@ -291,13 +303,13 @@ export default function BookingForm({
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-2">
-            Notes for Stylist (Optional)
+            {config.notesLabel ?? 'Notes (Optional)'}
           </label>
           <Textarea
             {...register('notes')}
-            placeholder="Any specific requests or hair history..."
+            placeholder={config.notesPlaceholder ?? 'Any specific requests or notes...'}
             rows={3}
-            aria-label="Notes for Stylist"
+            aria-label={config.notesLabel ?? 'Notes'}
             error={errors.notes?.message}
             disabled={isPending}
           />

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Palette } from 'lucide-react';
-import ServiceDetailLayout from '@/features/services/components/ServiceDetailLayout';
+import { ServiceDetailLayout } from '@repo/features/services';
+import siteConfig from '@/site.config';
+import { getPublicBaseUrl } from '@/lib/env.public';
 
 export const metadata: Metadata = {
   title: 'Coloring Services',
@@ -13,6 +15,8 @@ export default function ColoringPage() {
     <ServiceDetailLayout
       icon={Palette}
       title="Coloring Services"
+      siteName={siteConfig.name}
+      baseUrl={getPublicBaseUrl()}
       description="Full color, highlights, balayage, and corrections by master colorists. Whether you want a subtle change or a bold transformation, we have the expertise to achieve it safely."
       serviceSlug="coloring"
       included={[

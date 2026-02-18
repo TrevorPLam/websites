@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Sparkles } from 'lucide-react';
-import ServiceDetailLayout from '@/features/services/components/ServiceDetailLayout';
+import { ServiceDetailLayout } from '@repo/features/services';
+import siteConfig from '@/site.config';
+import { getPublicBaseUrl } from '@/lib/env.public';
 
 export const metadata: Metadata = {
   title: 'Hair Treatments',
@@ -13,6 +15,8 @@ export default function TreatmentsPage() {
     <ServiceDetailLayout
       icon={Sparkles}
       title="Hair Treatments"
+      siteName={siteConfig.name}
+      baseUrl={getPublicBaseUrl()}
       description="Deep conditioning, keratin, and scalp treatments for healthy, shiny hair. Combat damage, dryness, and frizz with our specialized care menu."
       serviceSlug="treatments"
       included={[

@@ -18,7 +18,7 @@
 // - [FEAT:THEMING] Config-driven CSS custom property generation
 // - [FEAT:PERFORMANCE] Zero client-side JS — server-rendered <style> tag
 // - [Task 0.14] Bridges the gap between site.config.ts theme and visual output
-// - Completed 2026-02-15: Type compat with @repo/shared, docs in docs/theming/theme-injector.md
+// - ThemeColors from @repo/types (single source of truth); docs in docs/theming/theme-injector.md
 //
 // 2026 Best Practices:
 // - Server Component eliminates client-side bundle cost
@@ -27,6 +27,7 @@
 // - Specificity: :root style from ThemeInjector overrides globals.css :root defaults
 
 import * as React from 'react';
+import type { ThemeColors as ThemeColorsFromTypes } from '@repo/types';
 
 /**
  * Theme color map matching the CSS custom property names in globals.css and tailwind-preset.js.
@@ -34,27 +35,9 @@ import * as React from 'react';
  * - HSL space-separated values (e.g., '174 85% 33%') — wrapped in hsl() automatically
  * - Full CSS color values (e.g., '#0ea5a4', 'hsl(174, 85%, 33%)') — used as-is
  *
- * Compatible with @repo/shared ThemeColors (no index signature to allow strict SiteConfig assignment).
+ * Uses @repo/types ThemeColors; partial theme allowed for incremental override.
  */
-export interface ThemeColors {
-  primary?: string;
-  'primary-foreground'?: string;
-  secondary?: string;
-  'secondary-foreground'?: string;
-  accent?: string;
-  'accent-foreground'?: string;
-  background?: string;
-  foreground?: string;
-  muted?: string;
-  'muted-foreground'?: string;
-  card?: string;
-  'card-foreground'?: string;
-  destructive?: string;
-  'destructive-foreground'?: string;
-  border?: string;
-  input?: string;
-  ring?: string;
-}
+export type ThemeColors = Partial<ThemeColorsFromTypes>;
 
 export interface ThemeInjectorProps {
   /** Theme color values from site.config.ts */
