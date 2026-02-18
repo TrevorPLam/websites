@@ -3,6 +3,10 @@
 //          management. Implements rate limiting, input sanitization, fraud detection, and
 //          integration with Supabase and HubSpot for customer relationship management.
 //
+// Relationship: Uses @repo/infra (rate limit, request context, IP validation), helpers, supabase/hubspot actions.
+// System role: submitContactForm validates, rate-limits, inserts lead (Supabase), syncs HubSpot; rate limit failure does not block insert.
+// Assumptions: contactFormSchema from template features/contact; insertLeadWithSpan, syncHubSpotLead from local actions.
+//
 // Exports / Entry: submitContactForm function
 // Used by: ContactForm component, API endpoints, and any contact submission features
 //

@@ -1,19 +1,10 @@
 /**
- * Supabase lead management utilities.
- *
- * **Task 3.1.1** (2026-02-14): API aligned with template consumers.
- * - insertSupabaseLead: Prefer: return=representation, parse data[0]
- * - updateSupabaseLead: env validation, same PATCH semantics
- * - Throws on missing SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY
- *
- * **2026 Best Practices Applied:**
- * - Provides backward compatibility with existing code
- * - Uses new client pattern for consistency
- * - Implements proper error handling
- *
- * @deprecated Use client.ts directly for new implementations
+ * @file packages/integrations/supabase/leads.ts
+ * Purpose: Legacy Supabase lead helpers (insertSupabaseLead, updateSupabaseLead, buildSupabaseHeaders, etc.).
+ * Relationship: Uses @repo/infra/logger. Re-exported from index for backward compat; new code uses client.ts.
+ * System role: REST calls with Prefer: return=representation; parse data[0]; deprecated in favor of client.
+ * Assumptions: @deprecated — use client.ts insertLead/updateLead for new implementations.
  */
-
 import { logError, logInfo } from '@repo/infra/logger';
 import type { SupabaseLeadRow } from './types';
 

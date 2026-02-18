@@ -1,8 +1,10 @@
 /**
- * Security headers utilities
- * Implements 2026 best practices with comprehensive cross-origin protection
+ * @file packages/infra/security/security-headers.ts
+ * Purpose: Security headers utilities (X-Frame-Options, HSTS, COEP, COOP, Permissions-Policy).
+ * Relationship: Used by create-middleware. No @repo deps.
+ * System role: getSecurityHeaders(config) returns key-value map for NextResponse headers.
+ * Assumptions: environment drives HSTS/COEP; customPermissions optional.
  */
-
 export interface SecurityHeadersConfig {
   environment: 'development' | 'production';
   enableHSTS?: boolean;

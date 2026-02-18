@@ -23,9 +23,12 @@
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
-// [TRACE:INTERFACE=packages.ui.components.ButtonProps]
-// [FEAT:UI] [FEAT:ACCESSIBILITY]
-// NOTE: Button props interface - extends HTML button attributes with variant and size options.
+/**
+ * Button props: variant/size plus standard button attributes. Default type is 'button'.
+ *
+ * @param variant - Visual style; maps to theme tokens (primary, secondary, outline, etc.)
+ * @param size - small | medium | large for height and padding
+ */
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'text';
   size?: 'small' | 'medium' | 'large';
@@ -53,9 +56,12 @@ const sizeStyles: Record<string, string> = {
   large: 'h-12 px-8 text-lg',
 };
 
-// [TRACE:FUNC=packages.ui.components.Button]
-// [FEAT:UI] [FEAT:ACCESSIBILITY] [FEAT:RESPONSIVE]
-// NOTE: Main button component - renders accessible button with variant styling and proper ref forwarding.
+/**
+ * Accessible button with variant/size styling. Focus ring and disabled state handled via Tailwind.
+ *
+ * @param props - ButtonProps (variant, size, type, className, and HTML button attributes)
+ * @returns Forwarded ref to the native button element
+ */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'medium', type = 'button', ...props }, ref) => {
     return (

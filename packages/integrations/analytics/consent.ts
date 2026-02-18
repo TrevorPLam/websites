@@ -1,7 +1,10 @@
 /**
- * GDPR/CCPA compliant analytics consent management.
+ * @file packages/integrations/analytics/consent.ts
+ * Purpose: GDPR/CCPA compliant analytics consent (granted/denied/unknown); cookie + localStorage.
+ * Relationship: Used by analytics index for hasAnalyticsConsent. Depends on @repo/infra/client (logError).
+ * System role: getAnalyticsConsent, hasAnalyticsConsent, setAnalyticsConsent; cookie key ydm_analytics_consent.
+ * Assumptions: Browser only; cookie SameSite=Lax, 1y max-age when granted.
  */
-
 import { logError } from '@repo/infra/client';
 
 export type AnalyticsConsentState = 'granted' | 'denied' | 'unknown';

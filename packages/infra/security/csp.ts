@@ -1,7 +1,10 @@
 // File: packages/infra/security/csp.ts  [TRACE:FILE=packages.infra.security.csp]
 // Purpose: Content Security Policy utilities implementing 2026 security best practices.
-//          Provides nonce-based CSP generation, policy building, and violation reporting
-//          to prevent XSS attacks and enforce secure content loading policies.
+//          Provides nonce-based CSP generation, policy building, and violation reporting.
+//
+// Relationship: Used by create-middleware and layout (nonce). No @repo deps.
+// System role: buildContentSecurityPolicy, createCspNonce, CSP_NONCE_HEADER for nonce-based script/style.
+// Assumptions: Nonce passed from middleware to layout; strict-dynamic in production.
 //
 // Exports / Entry: createCspNonce, buildContentSecurityPolicy, constants, interfaces
 // Used by: Root layout (app/layout.tsx), middleware, and security configuration

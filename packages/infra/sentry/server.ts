@@ -1,8 +1,10 @@
 /**
- * Sentry server helpers — server-only.
- * @module @repo/infra/sentry/server
+ * @file packages/infra/sentry/server.ts
+ * Purpose: Sentry server helpers (withServerSpan). Server-only.
+ * Relationship: Used by contact-actions, booking-actions, template actions. Peer: @sentry/nextjs.
+ * System role: withServerSpan(options, callback) wraps async work in a span when DSN set.
+ * Assumptions: NEXT_PUBLIC_SENTRY_DSN and Sentry.startSpan available in Node.
  */
-
 import * as Sentry from '@sentry/nextjs';
 
 export type SpanAttributeValue = string | number | boolean;

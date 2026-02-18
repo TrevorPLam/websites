@@ -3,6 +3,10 @@
 //          security checks, and bot protection. Implements Zod-based validation
 //          with configurable fields and validation rules. Now configurable via ContactFeatureConfig.
 //
+// Relationship: Uses contact-config (ContactFeatureConfig). Used by ContactForm, contact-actions.
+// System role: Schema factory from config.fields; validateContactSecurity parses and logs failures.
+// Assumptions: config.fields define type and validation; honeypot optional but recommended.
+//
 // Exports / Entry: createContactFormSchema factory, ContactFormData type, validateContactSecurity
 // Used by: ContactForm component, contact actions, API endpoints
 //

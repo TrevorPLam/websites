@@ -24,9 +24,10 @@
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
-// [TRACE:INTERFACE=packages.ui.components.InputProps]
-// [FEAT:UI] [FEAT:VALIDATION] [FEAT:ACCESSIBILITY]
-// NOTE: Input props interface - extends HTML input attributes with validation and labeling options.
+/**
+ * Input props: label, error, isValid plus standard input attributes. Used for form fields
+ * with optional label and validation feedback (error message or success border).
+ */
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** Label text displayed above input */
   label?: string;
@@ -36,14 +37,16 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   isValid?: boolean;
 }
 
-// [TRACE:FUNC=packages.ui.components.Input]
-// [FEAT:UI] [FEAT:VALIDATION] [FEAT:ACCESSIBILITY]
-// NOTE: Main input component - renders accessible input with label, validation states, and proper ARIA attributes.
+/**
+ * Renders a labeled input with optional error/success state. Sets aria-invalid and
+ * aria-describedby for the error message; error paragraph has role="alert".
+ *
+ * @param props - InputProps (label, error, isValid, id, and HTML input attributes)
+ * @returns Forwarded ref to the native input element
+ */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, isValid, id, ...props }, ref) => {
-    // [TRACE:BLOCK=packages.ui.components.Input.idGeneration]
-    // [FEAT:ACCESSIBILITY]
-    // NOTE: ID generation for label-input association - creates unique IDs for accessibility.
+    // Stable id for label association and aria-describedby; fallback from label if id not provided
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (

@@ -4,6 +4,10 @@
 //          pluggable submission handlers for CRM integration. Provides template-agnostic
 //          contact form submission with 2026 security best practices.
 //
+// Relationship: Uses contact-schema. Depends on @repo/infra (rate limit, request context, IP validation).
+// System role: Server action submitContactForm; validates, rate-limits, then calls handler(data, metadata).
+// Assumptions: Handler is provided by template (e.g. insert lead + HubSpot sync); runWithRequestId for tracing.
+//
 // Exports / Entry: submitContactForm function, ContactSubmissionResult interface, ContactSubmissionHandler type
 // Used by: ContactForm component, API endpoints, and any contact submission features
 //

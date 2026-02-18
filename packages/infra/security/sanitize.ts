@@ -1,8 +1,10 @@
 /**
- * Input sanitization utilities
- * Implements 2026 best practices with XSS prevention, header injection protection, and Unicode support
+ * @file packages/infra/security/sanitize.ts
+ * Purpose: Input sanitization (sanitizeName, sanitizeEmail, escapeHtml, etc.) — XSS and injection prevention.
+ * Relationship: Used by template lib/actions/helpers and contact flows. No @repo deps.
+ * System role: Exports sanitize* and escapeHtml; config for allowBasicHtml/allowUnicode/strict.
+ * Assumptions: Names/emails validated length and pattern; sanitize for storage/display only.
  */
-
 // Import constants for validation limits
 const FORM_VALIDATION = {
   NAME_MIN_LENGTH: 2,

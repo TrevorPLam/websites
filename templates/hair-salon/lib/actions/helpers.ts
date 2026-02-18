@@ -3,6 +3,10 @@
 //          correlation tracking, and data sanitization. Implements privacy-preserving
 //          identifier hashing and request context management for secure form processing.
 //
+// Relationship: Uses @repo/infra (escapeHtml, sanitize*, log, request-validation), validatedEnv, contact-form-schema.
+// System role: buildSanitizedContactData, getCorrelationIdFromHeaders, validateOrigin, getBlockedSubmissionResponse.
+// Assumptions: Used by submit.ts; IP/email hashed with salts; origin validation via createValidationConfig.
+//
 // Exports / Entry: Hash functions, correlation helpers, and data sanitization utilities
 // Used by: Contact form submission, booking actions, and any form processing features
 //

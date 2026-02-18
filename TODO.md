@@ -6,6 +6,26 @@
 
 ---
 
+## Normalized Task Specifications
+
+Each task has a **normalized spec** in `docs/task-specs/` with the strict 15-section format:
+
+| Spec File | Tasks |
+|-----------|-------|
+| [01-ui-primitives](docs/task-specs/01-ui-primitives.md) | 1.2–1.6 (Toast, Tabs, Dropdown, Tooltip, Popover) |
+| [02-marketing-components](docs/task-specs/02-marketing-components.md) | 1.7, 2.1–2.10 |
+| [03-feature-breadth](docs/task-specs/03-feature-breadth.md) | 2.16–2.19 |
+| [04-page-templates](docs/task-specs/04-page-templates.md) | 3.1–3.8 |
+| [05-integrations](docs/task-specs/05-integrations.md) | 4.1–4.6 |
+| [06-client-factory](docs/task-specs/06-client-factory.md) | 5.1–5.6 |
+| [07-cleanup-scripts](docs/task-specs/07-cleanup-scripts.md) | 6.1–6.10 |
+| [08-governance](docs/task-specs/08-governance.md) | C.1–D.8 |
+| [09-innovation-future](docs/task-specs/09-innovation-future.md) | E, F, Phase 7+ |
+
+**Use these specs for:** objective clarification, dependency check, file paths, API design, data contracts, implementation checklist, done criteria, and anti-overengineering guardrails. See [00-OVERVIEW](docs/task-specs/00-OVERVIEW.md) for conventions.
+
+---
+
 ## AI Agent Usage Instructions
 
 Each task uses the following status convention:

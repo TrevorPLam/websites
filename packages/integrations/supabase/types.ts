@@ -1,24 +1,8 @@
 /**
- * Supabase integration type definitions.
- *
- * **2026 Best Practices Applied:**
- * - Provides comprehensive TypeScript type safety
- * - Includes all Supabase lead fields
- * - Supports optional and required fields
- * - Includes JSDoc documentation for all types
- *
- * @example
- * ```typescript
- * import type { SupabaseLeadRow, SupabaseClientConfig } from '@repo/integrations-supabase/types';
- *
- * const lead: SupabaseLeadRow = {
- *   id: 'uuid-123',
- *   name: 'John Doe',
- *   email: 'john@example.com'
- * };
- * ```
+ * @file packages/integrations/supabase/types.ts
+ * Purpose: Supabase lead and client type definitions (SupabaseLeadRow, SupabaseClientConfig, etc.).
+ * Relationship: Used by client.ts and leads.ts; consumed by template actions.
  */
-
 /**
  * Complete Supabase lead record structure.
  * Represents a lead stored in the Supabase database.

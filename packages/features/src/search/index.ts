@@ -3,6 +3,10 @@
 //          index builder, and utilities. Centralizes search functionality for site-wide
 //          search with configurable content sources.
 //
+// Relationship: Depends on @repo/ui (Dialog, Input). Consumed by template layout (SearchDialog) and /search page.
+// System role: getSearchIndex(config) builds items; filterSearchItems for client filter; components use index.
+// Assumptions: Template passes SearchIndexConfig (staticItems + optional blogItems) from layout/search page.
+//
 // Exports / Entry: SearchDialog, SearchPage, getSearchIndex, filterSearchItems, SearchItem
 // Used by: Navigation, /search page, layout
 //

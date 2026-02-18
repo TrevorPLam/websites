@@ -1,33 +1,17 @@
 /**
+ * @file packages/infra/env/index.ts
  * Environment variable validation and composition utilities.
  *
- * **2026 Best Practices Applied:**
- * - Composable schema validation with Zod
- * - Type-safe environment variable access
- * - Comprehensive error reporting and validation
- * - Support for optional and required variables
- * - Feature flag detection from configuration
- *
- * **Exports:**
- * - Individual schemas for modular validation
- * - Type definitions for TypeScript support
- * - Validation helpers for composable environments
- * - Feature flag utilities for conditional logic
+ * Purpose: Composable Zod schemas and validateEnv/getFeatureFlags for type-safe env and feature flags.
+ * Relationship: Used by template lib/env.ts, booking-providers, features. Depends on env/schemas/*, env/validate.
+ * System role: Barrel of schemas and validateEnv; CompleteEnv from types; getFeatureFlags for integration gates.
+ * Assumptions: validateEnv() called once at app bootstrap; schemas compose (base, rate-limit, supabase, etc.).
  *
  * @example
- * ```typescript
  * import { validateEnv, getFeatureFlags } from '@repo/infra/env';
- * import type { CompleteEnv } from '@repo/infra/env/types';
- *
  * const env = validateEnv();
  * const flags = getFeatureFlags();
- *
- * if (flags.supabaseEnabled) {
- *   console.log('Supabase integration available');
- * }
- * ```
  */
-
 // Export all schemas for individual validation
 export { baseEnvSchema } from './schemas/base';
 export { rateLimitEnvSchema } from './schemas/rate-limit';

@@ -3,6 +3,10 @@
 //          Provides validated environment variables with proper defaults and error handling
 //          for public configuration like site URL and analytics ID.
 //
+// Relationship: Zod schema only (no @repo/infra). Used by layout (getPublicBaseUrl, validatedPublicEnv).
+// System role: publicEnvSchema validates NEXT_PUBLIC_*; throws at load if invalid; getPublicBaseUrl strips trailing slash.
+// Assumptions: Safe for client; defaults for localhost and site name; analytics ID optional.
+//
 // Exports / Entry: validatedPublicEnv, getPublicBaseUrl function
 // Used by: Client components, metadata generation, and any public environment access
 //

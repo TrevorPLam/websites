@@ -2,6 +2,10 @@
 // Purpose: Blog feature configuration interface enabling template-agnostic blog setup
 //          with configurable content sources, routing, and metadata defaults.
 //
+// Relationship: Uses blog-content-source (BlogContentSourceConfig). Used by blog lib, template blog setup.
+// System role: createBlogConfig fills defaults; contentSource drives getPosts/getBySlug.
+// Assumptions: contentSource is configured for template's content location (e.g. app/blog/content).
+//
 // Exports / Entry: BlogFeatureConfig interface, createBlogConfig helper
 // Used by: Blog feature initialization, content source creation
 //

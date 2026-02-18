@@ -1,7 +1,19 @@
-// ---------------------------------------------------------------------------
-// SiteConfig — the single source of truth for every marketing site.
-// Each template defines one of these in its own `site.config.ts`.
-// ---------------------------------------------------------------------------
+/**
+ * @file packages/types/src/site-config.ts
+ * [TRACE:FILE=packages.types.site-config]
+ *
+ * Purpose: Defines SiteConfig interface and Zod schema as the single source of truth for
+ *          every marketing site. Each template implements one of these in site.config.ts.
+ *
+ * Relationship: Exported via packages/types/src/index.ts. Consumed by templates for
+ *               typing site.config and by @repo/features for conversion flow and theme.
+ *
+ * System role: Central type definitions for nav, footer, theme, SEO, conversion flow
+ *              (booking/contact/quote/dispatch), features, and integrations.
+ *
+ * Assumptions: Theme color values are HSL strings without hsl() wrapper; conversionFlow
+ *              is a discriminated union by type; schema validates at build or bootstrap.
+ */
 
 import { z } from 'zod';
 
@@ -217,6 +229,7 @@ export interface SiteConfig {
 }
 
 // ---------------------- Zod Schemas ----------------------
+// Built from smaller schemas for reuse and consistent validation at template bootstrap.
 
 const navLinkSchema = z.object({ href: z.string().min(1), label: z.string().min(1) });
 
@@ -304,6 +317,7 @@ const conversionFlowSchema = z.discriminatedUnion('type', [
   }),
 ]);
 
+/** Full Zod schema for SiteConfig; use to validate template site.config at runtime or build. */
 export const siteConfigSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),

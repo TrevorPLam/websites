@@ -3,6 +3,10 @@
 //          enabling config-driven theming. Injects a <style> tag into <head> that overrides
 //          globals.css defaults with values from the site configuration.
 //
+// Relationship: Depends on @repo/types (ThemeColors). Used by template app/layout.tsx.
+// System role: Bridges site.config.theme.colors to :root CSS variables; server-only.
+// Assumptions: Theme values are HSL strings or full CSS colors; globals.css defines --* fallbacks.
+//
 // Exports / Entry: ThemeInjector component
 // Used by: Root layout (app/layout.tsx) — must render inside <head> or early in <body>
 //
@@ -50,18 +54,18 @@ export interface ThemeInjectorProps {
  * Detects whether a color string is a bare HSL value (space-separated H S% L%)
  * vs. a full CSS color (hex, rgb(), hsl(), named color, etc.)
  *
- * Bare HSL format: "174 85% 33%" or "0 0% 100%"
- * Full CSS color: "#0ea5a4", "hsl(174, 85%, 33%)", "rgb(14, 165, 164)", "red"
+ * @param value - Theme color string from config
+ * @returns true if format is "H S% L%" (e.g. "174 85% 33%")
  */
 function isBareHslValue(value: string): boolean {
-  // Matches: number, space, number%, space, number%
   return /^\d+(\.\d+)?\s+\d+(\.\d+)?%\s+\d+(\.\d+)?%$/.test(value.trim());
 }
 
 /**
- * Converts a theme color value to a valid CSS color string.
- * Bare HSL values (e.g., '174 85% 33%') are wrapped in hsl().
- * Full CSS color values are returned as-is.
+ * Converts a theme color value to a valid CSS color string. Bare HSL wrapped in hsl().
+ *
+ * @param value - Theme color string (bare HSL or full CSS color)
+ * @returns CSS color string for use in custom property
  */
 function toCssColor(value: string): string {
   if (isBareHslValue(value)) {

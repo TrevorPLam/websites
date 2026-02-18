@@ -1,5 +1,9 @@
 // File: packages/infra/logger/index.ts  [TRACE:FILE=packages.infra.logger.index]
 // Purpose: Structured logging system entry point providing server-side logging with
+//
+// Relationship: Used by all infra and features (logError, logWarn, logInfo). request-context.server for requestId.
+// System role: logInfo/logWarn/logError with optional context; sanitizeLogContext for PII; server-focused.
+// Assumptions: Context may contain PII; sanitizeLogContext strips sensitive keys.
 //          environment-aware output formatting, security sanitization, and Sentry
 //          integration for production error tracking and monitoring.
 //

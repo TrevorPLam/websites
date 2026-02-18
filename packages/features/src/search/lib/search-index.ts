@@ -3,6 +3,10 @@
 //          configurable content sources. Caches results for performance and supports
 //          static pages, blog content, and future CMS/API sources.
 //
+// Relationship: Uses search types (SearchItem, SearchIndexConfig). Uses React cache() for request deduplication.
+// System role: buildSearchIndexCached merges staticItems with blogItems (array or promise); getSearchIndex exports.
+// Assumptions: config.staticItems and config.blogItems (if present) produce valid SearchItem[]; no dedupe by id in merge.
+//
 // Exports / Entry: getSearchIndex function
 // Used by: Search page routes, layout (for SearchDialog), content indexing
 //

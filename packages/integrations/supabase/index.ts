@@ -1,27 +1,10 @@
 /**
- * Supabase integration package barrel exports.
- *
- * **2026 Best Practices Applied:**
- * - Provides clean barrel exports for the package
- * - Includes comprehensive JSDoc documentation
- * - Organizes exports by functionality
- * - Follows monorepo package patterns
- *
- * @example
- * ```typescript
- * import {
- *   createSupabaseClient,
- *   insertLead,
- *   updateLead,
- *   supabaseClient
- * } from '@repo/integrations-supabase';
- * import type { SupabaseLeadRow, SupabaseClientConfig } from '@repo/integrations-supabase/types';
- *
- * const client = createSupabaseClient();
- * const lead = await insertLead(client, { name: 'John Doe', email: 'john@example.com' });
- * ```
+ * @file packages/integrations/supabase/index.ts
+ * Purpose: Supabase integration barrel — client, insertLead/updateLead, leads helpers, types.
+ * Relationship: Depends on @repo/infra, @repo/utils. Consumed by template lib/actions/supabase.
+ * System role: createSupabaseClient, insertLead, updateLead, getSupabaseClient; leads module for legacy compat.
+ * Assumptions: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required for client; server-only usage.
  */
-
 // Client exports
 // [Task 0.24] Added getSupabaseClient; supabaseClient kept for backward compat (deprecated)
 export { insertLead, updateLead, getSupabaseClient, supabaseClient } from './client';

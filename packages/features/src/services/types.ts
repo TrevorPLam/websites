@@ -2,6 +2,10 @@
 // Purpose: Shared type definitions for the services feature. Enables cross-industry
 //          configurability and structured data generation for service pages.
 //
+// Relationship: Imports AccordionItem from @repo/ui. Used by ServicesOverview, ServiceDetailLayout, template config.
+// System role: Type-only; ProcessStep, ServicePricingTier align with Schema.org and UI components.
+// Assumptions: Template builds arrays matching ServiceOverviewItem and ServiceDetailProps.
+//
 // Exports / Entry: ServiceOverviewItem, ProcessStep, ServiceDetailProps, ServicePricingTier
 // Used by: ServicesOverview, ServiceDetailLayout, template service pages
 //

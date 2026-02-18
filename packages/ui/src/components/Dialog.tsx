@@ -3,6 +3,10 @@
 //          Provides focus trapping, keyboard navigation, and proper ARIA attributes
 //          following WAI-ARIA dialog modal pattern with Radix UI primitives.
 //
+// Relationship: Used by @repo/features (SearchDialog). Depends on radix-ui, @repo/utils (cn).
+// System role: Overlay/modal primitive; portal renders outside DOM hierarchy.
+// Assumptions: Radix handles focus trap, escape, scroll lock; we style overlay and content.
+//
 // Exports / Entry: Dialog component, DialogProps interface, Dialog sub-components
 // Used by: Modal forms, confirmation dialogs, lightbox galleries, booking flows
 //

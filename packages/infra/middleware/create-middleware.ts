@@ -1,15 +1,12 @@
 /**
+ * @file packages/infra/middleware/create-middleware.ts
  * Next.js middleware factory — CSP, security headers, CVE mitigation, and optional CSRF allowlist.
  *
- * Implements:
- * - Nonce-based CSP and security headers (X-Frame-Options, etc.)
- * - CVE-2025-29927 mitigation: strips x-middleware-subrequest so it cannot be spoofed by clients
- * - Optional allowedOrigins for edge CSRF: when set, requests with an Origin header are allowed
- *   only if the origin is in the list; otherwise returns 403.
- *
- * Templates must export config.matcher themselves; this factory only returns the middleware function.
+ * Purpose: Single factory for app middleware: nonce, CSP, security headers, strip x-middleware-subrequest, optional allowedOrigins.
+ * Relationship: Used by template middleware.ts. Depends on security/csp and security/security-headers.
+ * System role: createMiddleware(options) returns (request) => NextResponse; templates set config.matcher.
+ * Assumptions: Middleware runs before layout; nonce in header so layout can inject into script/style.
  */
-
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import {

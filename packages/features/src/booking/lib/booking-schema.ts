@@ -3,6 +3,10 @@
 //          Implements Zod-based schema validation for customer information, service selection,
 //          and scheduling with 2026 security best practices. Now configurable via BookingFeatureConfig.
 //
+// Relationship: Depends on booking-config (BookingFeatureConfig). Used by BookingForm, booking-actions.
+// System role: Schema factory and validation helpers; date window from config.maxAdvanceDays.
+// Assumptions: config.services and config.timeSlots have at least one item for z.enum().
+//
 // Exports / Entry: createBookingFormSchema factory, BookingFormData type, validateBookingSecurity, sanitizeNotes
 // Used by: BookingForm component, booking actions, API endpoints
 //

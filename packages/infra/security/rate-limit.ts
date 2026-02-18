@@ -1,7 +1,10 @@
 // File: packages/infra/security/rate-limit.ts  [TRACE:FILE=packages.infra.security.rateLimit]
 // Purpose: Rate limiting utilities implementing 2026 security best practices with sliding
-//          window algorithms, distributed limiting, and privacy-first approach. Provides
-//          configurable presets for different use cases and analytics integration.
+//          window algorithms, distributed limiting, and privacy-first approach.
+//
+// Relationship: Used by contact-actions, booking-actions, template submit. Depends on @repo/utils (hashIp).
+// System role: checkRateLimit(email, clientIp, hashIp); in-memory and optional Redis/Upstash.
+// Assumptions: hashIp provided by caller; Redis optional; env for REDIS_URL / Upstash.
 //
 // Exports / Entry: Rate limiting functions, presets, and configuration constants
 // Used by: Middleware, API routes, and form submission handlers

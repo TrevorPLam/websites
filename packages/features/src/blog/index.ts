@@ -3,6 +3,10 @@
 //          content management, and utilities. Centralizes blog functionality for
 //          consistent content management and rendering across the application.
 //
+// Relationship: Depends on @repo/ui, next-mdx-remote, etc. Consumed by template blog pages and search.
+// System role: Feature barrel; content from BlogContentSource (e.g. MDX); BlogPostContent renders MDX.
+// Assumptions: Template provides BlogFeatureConfig with contentSource; blog items feed search index.
+//
 // Exports / Entry: Blog components, content management functions, image utilities, and config
 // Used by: Blog pages, search functionality, and any blog-related features
 //

@@ -1,5 +1,24 @@
+/**
+ * @file packages/types/src/industry-configs.ts
+ * [TRACE:FILE=packages.types.industry-configs]
+ *
+ * Purpose: Map of industry slug to IndustryConfig (schemaType, defaultFeatures,
+ *          requiredFields, defaultIntegrations). Used for schema.org and optional
+ *          config defaults in templates.
+ *
+ * Relationship: Imports Industry and IndustryConfig from industry.ts; exported from
+ *               packages/types. Consumed by templates or tooling that need industry defaults.
+ *
+ * System role: Provides getIndustryConfig(industry) for safe lookup with fallback to
+ *              "general"; industryConfigs is the single source for per-industry data.
+ *
+ * Assumptions: Every value in the Industry union has an entry; getIndustryConfig falls
+ *              back to general for unknown or future industry values.
+ */
+
 import { Industry, IndustryConfig } from './industry';
 
+/** Per-industry config: schemaType, default features, required fields, integration presets. */
 export const industryConfigs: Record<Industry, IndustryConfig> = {
   salon: {
     schemaType: 'HairSalon',
@@ -70,6 +89,13 @@ export const industryConfigs: Record<Industry, IndustryConfig> = {
   },
 };
 
+/**
+ * Returns the IndustryConfig for the given industry. Falls back to "general" if the
+ * industry key is missing (e.g. future industry or typo).
+ *
+ * @param industry - Industry slug from SiteConfig.industry
+ * @returns IndustryConfig for that industry, or general defaults
+ */
 export function getIndustryConfig(industry: Industry): IndustryConfig {
   return industryConfigs[industry] ?? industryConfigs.general;
 }

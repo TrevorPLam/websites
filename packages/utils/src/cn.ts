@@ -21,10 +21,15 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-// [TRACE:FUNC=packages.utils.cn]
-// [FEAT:STYLING] [FEAT:UTILITIES]
-// NOTE: Primary utility function - combines clsx conditional logic with tailwind-merge deduplication.
-//       Essential for preventing conflicting Tailwind classes in dynamic component styling.
+/**
+ * Merges class names with Tailwind-aware deduplication. Uses clsx for conditional
+ * classes (e.g. cn('base', isActive && 'active')) then tailwind-merge so later
+ * classes override conflicting Tailwind utilities (e.g. 'p-2' and 'p-4' → 'p-4').
+ *
+ * @param inputs - ClassValue(s): strings, arrays, or conditional expressions
+ * @returns Single deduplicated className string for use in className prop
+ */
 export function cn(...inputs: ClassValue[]): string {
+  // clsx flattens and resolves conditionals; twMerge dedupes Tailwind classes
   return twMerge(clsx(inputs));
 }

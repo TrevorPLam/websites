@@ -1,3 +1,15 @@
+/**
+ * @file packages/ui/src/components/Accordion.tsx
+ * [TRACE:FILE=packages.ui.components.Accordion]
+ *
+ * Purpose: Client-side accordion: list of question/answer items with expand/collapse. Single
+ *          or multiple panels open; ARIA expanded/controls for accessibility.
+ *
+ * Relationship: Used by @repo/features (ServiceDetailLayout, etc.) and template pricing/FAQ.
+ * System role: Disclosure component; uses theme border/muted colors.
+ * Assumptions: items array is stable; key by index is acceptable (no reorder).
+ */
+
 'use client';
 
 import * as React from 'react';
@@ -14,9 +26,17 @@ export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
   multiple?: boolean;
 }
 
+/**
+ * Renders an accordion: each item is a button (question) and collapsible region (answer).
+ * Toggle state is local; single-open mode clears others when one opens.
+ *
+ * @param props - AccordionProps (items, multiple, className, and div attributes)
+ * @returns No ref; root is a div
+ */
 export function Accordion({ items, multiple = false, className, ...props }: AccordionProps) {
   const [openIndices, setOpenIndices] = React.useState<Set<number>>(new Set());
 
+  /** Toggle item at index: in single mode replace state with only this index; in multiple add/remove. */
   const toggle = (index: number) => {
     setOpenIndices((prev) => {
       const next = new Set(multiple ? prev : []);

@@ -1,9 +1,10 @@
 /**
- * Sentry client helpers — for browser/client bundles only.
- * Dynamic import of @sentry/nextjs to avoid pulling server code into client.
- * @module @repo/infra/sentry/client
+ * @file packages/infra/sentry/client.ts
+ * Purpose: Sentry client helpers (setSentryUser, setSentryContext, withSentrySpan). Client-safe.
+ * Relationship: Used by ContactForm and other client components. Dynamic import of @sentry/nextjs.
+ * System role: Lazy-load Sentry; setUser/setContext/startSpan when DSN and window defined.
+ * Assumptions: Only call from browser; NEXT_PUBLIC_SENTRY_DSN for feature gate.
  */
-
 let sentryPromise: Promise<typeof import('@sentry/nextjs')> | null = null;
 export type SpanAttributeValue = string | number | boolean;
 export type SpanAttributes = Record<string, SpanAttributeValue | undefined>;

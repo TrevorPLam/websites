@@ -3,6 +3,10 @@
 //          with configurable fields, validation rules, and multi-step support. Supports
 //          industry-specific customization while maintaining consistent validation patterns.
 //
+// Relationship: Can derive from @repo/types ContactFlowConfig. Used by contact-schema, ContactForm, contact-actions.
+// System role: createContactConfig builds ContactFeatureConfig from flow config; fields drive schema factory.
+// Assumptions: config.fields non-empty; step boundaries align with field order when multi-step.
+//
 // Exports / Entry: ContactFeatureConfig interface, ContactFieldConfig interface, createContactConfig helper
 // Used by: ContactForm component, contact schema factory, contact actions
 //

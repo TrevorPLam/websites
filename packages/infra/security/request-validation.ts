@@ -1,19 +1,10 @@
 /**
- * Request Validation Utilities
- *
- * Implements 2026 security best practices for:
- * - CSRF protection via Origin/Referer header validation
- * - IP address validation with trusted proxy support
- * - Defense in depth following OWASP guidelines
- *
- * Security considerations:
- * - Uses Origin header first (more reliable than Referer)
- * - Falls back to Referer when Origin is missing
- * - Validates against exact host matches to prevent subdomain attacks
- * - Supports modern deployment architectures (Vercel, Cloudflare, reverse proxies)
- * - Implements proper logging for security monitoring
+ * @file packages/infra/security/request-validation.ts
+ * Purpose: Request validation: CSRF (Origin/Referer), IP extraction with trusted proxy headers.
+ * Relationship: Used by template lib/actions/helpers, contact-actions, booking-actions. No @repo deps.
+ * System role: validateOrigin, getValidatedClientIp; createValidationConfig for allowlist.
+ * Assumptions: TRUSTED_IP_HEADERS per environment; expectedHost for CSRF; allowMissingHeaders for same-origin.
  */
-
 // Logger interface for optional logging dependency
 export interface Logger {
   info?: (message: string, context?: Record<string, unknown>) => void;

@@ -3,6 +3,11 @@
 //          utilities used by @repo/ui and all templates, ensuring consistent behavior
 //          across all applications and components.
 //
+// Relationship: No @repo dependencies. Consumed by @repo/ui (all components using cn),
+//               templates (e.g. Navigation via @/lib/utils or @repo/utils).
+// System role: Foundation layer; styling and pure utilities only.
+// Assumptions: New utilities added here must be framework-agnostic and stable.
+//
 // Exports / Entry: cn utility function for CSS class merging
 // Used by: @repo/ui components, all template applications, any workspace needing utilities
 //

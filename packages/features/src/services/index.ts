@@ -2,6 +2,10 @@
 // Purpose: Services feature barrel export providing clean imports for service components
 //          and types. Centralizes services functionality for homepage and detail pages.
 //
+// Relationship: Depends on @repo/ui (Container, Section, Card, Button, Accordion). Consumed by template pages.
+// System role: Presentational components only; data (items, detail) supplied by template (e.g. services-config).
+// Assumptions: ServiceOverviewItem and ServiceDetailProps match template data shape; no internal data fetching.
+//
 // Exports / Entry: ServicesOverview, ServiceDetailLayout, service types
 // Used by: Homepage, service detail pages (/services/*), marketing sections
 //

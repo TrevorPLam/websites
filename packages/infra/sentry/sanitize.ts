@@ -1,8 +1,10 @@
 /**
- * Sentry event sanitization — redacts PII (email, phone, etc.) before sending.
- * @module @repo/infra/sentry/sanitize
+ * @file packages/infra/sentry/sanitize.ts
+ * Purpose: Sentry event sanitization — redacts PII (email, phone, sensitive keys) before sending.
+ * Relationship: Used by template sentry.server.config and sentry.client.config. Peer: @sentry/nextjs.
+ * System role: sanitizeSentryEvent(event) mutates event; redacts SENSITIVE_KEYS and regex patterns.
+ * Assumptions: Event type from @sentry/nextjs; redaction in-place; keys case-insensitive.
  */
-
 import type { Event } from '@sentry/nextjs';
 
 const EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;

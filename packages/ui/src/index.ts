@@ -3,6 +3,11 @@
 //          React components driven by CSS custom properties, enabling consistent design
 //          systems across all template applications.
 //
+// Relationship: Depends on @repo/types (ThemeInjector), @repo/utils (cn). Consumed by
+//               @repo/features and templates/hair-salon.
+// System role: UI layer; presentational components only; theme via CSS variables.
+// Assumptions: Consumers supply theme in globals.css; components receive standard HTML props.
+//
 // Exports / Entry: All UI components (Container, Section, Button, Card, Input, Select, Textarea, Accordion, Dialog)
 // Used by: All template applications, any workspace needing UI components
 //

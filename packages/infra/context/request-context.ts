@@ -1,7 +1,9 @@
 /**
- * Request context (stub) — safe for client and edge.
- * Use request-context.server.ts in Node server code for real AsyncLocalStorage-backed context.
- * @see request-context.server.ts
+ * @file packages/infra/context/request-context.ts
+ * Purpose: Request context stub safe for client and edge; no AsyncLocalStorage.
+ * Relationship: Default export from context; server code should use request-context.server for real context.
+ * System role: runWithRequestId/getRequestId no-ops here; avoids server-only in client bundles.
+ * Assumptions: Server actions import from request-context.server so getRequestId() works in logs.
  */
 
 /**

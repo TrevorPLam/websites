@@ -3,6 +3,10 @@
 //          schemas, actions, providers, and configuration. Centralizes booking functionality for
 //          appointment scheduling across the application.
 //
+// Relationship: Depends on @repo/types (BookingFlowConfig), @repo/ui, @repo/infra. Consumed by template /book.
+// System role: Feature barrel; config from site conversionFlow; server actions in lib.
+// Assumptions: Template passes BookingFeatureConfig from createBookingConfig(siteConfig.conversionFlow).
+//
 // Exports / Entry: BookingForm component, booking schemas, actions, providers, and config utilities
 // Used by: Booking page (/book), contact forms, and any appointment scheduling features
 //

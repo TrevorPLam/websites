@@ -1,9 +1,10 @@
 /**
- * Request context (server) — Node.js AsyncLocalStorage.
- * Server-only: do not import from client code.
- * @module @repo/infra/context/request-context.server
+ * @file packages/infra/context/request-context.server.ts
+ * Purpose: Request context (server) — AsyncLocalStorage for requestId. Server-only.
+ * Relationship: Used by contact-actions, template submit. Do not import from client.
+ * System role: runWithRequestId(requestId, fn) sets context; getRequestId() reads it in same async chain.
+ * Assumptions: Call runWithRequestId at action entry; logger can then include requestId.
  */
-
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 interface RequestContext {

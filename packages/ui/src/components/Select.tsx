@@ -1,3 +1,15 @@
+/**
+ * @file packages/ui/src/components/Select.tsx
+ * [TRACE:FILE=packages.ui.components.Select]
+ *
+ * Purpose: Native select wrapper with optional label, options array, error state, and
+ *          placeholder. Used in forms (contact, booking) for dropdowns.
+ *
+ * Relationship: Used by @repo/features (ContactForm, BookingForm). Depends on @repo/utils (cn).
+ * System role: Form primitive; aria-invalid and aria-describedby for error message.
+ * Assumptions: options are { value, label }; placeholder renders as disabled empty option.
+ */
+
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
@@ -17,6 +29,13 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   placeholder?: string;
 }
 
+/**
+ * Renders a labeled select with optional placeholder and error message. Id derived from
+ * label if not provided, for accessibility.
+ *
+ * @param props - SelectProps (label, options, error, placeholder, id, and native select props)
+ * @returns Forwarded ref to the native select element
+ */
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, label, options = [], error, placeholder, id, ...props }, ref) => {
     const selectId = id || label?.toLowerCase().replace(/\s+/g, '-');

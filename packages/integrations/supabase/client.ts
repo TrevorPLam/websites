@@ -1,29 +1,10 @@
 /**
- * Supabase client integration.
- *
- * **2026 Best Practices Applied:**
- * - Provides type-safe Supabase client configuration
- * - Includes comprehensive JSDoc documentation
- * - Supports both client and server-side usage
- * - Implements proper error handling and logging
- * - Follows monorepo package patterns
- *
- * **Features:**
- * - Lead management operations
- * - Database connection handling
- * - Type-safe API interactions
- * - Environment-based configuration
- *
- * @example
- * ```typescript
- * import { createSupabaseClient, insertLead } from '@repo/integrations-supabase/client';
- * import type { SupabaseLeadRow } from '@repo/integrations-supabase/types';
- *
- * const client = createSupabaseClient();
- * const lead = await insertLead(client, { name: 'John Doe', email: 'john@example.com' });
- * ```
+ * @file packages/integrations/supabase/client.ts
+ * Purpose: Supabase client and lead operations — createSupabaseClient, insertLead, updateLead, getSupabaseClient.
+ * Relationship: Depends on @repo/infra (logError, logInfo). Uses types.ts for config and row types.
+ * System role: REST API to /rest/v1/leads; config from env or partial config; lazy singleton getSupabaseClient.
+ * Assumptions: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required; server-only.
  */
-
 import { logError, logInfo } from '@repo/infra';
 // [Task 0.24] Import SupabaseClientConfig from types.ts (removed duplicate from this file)
 import type { SupabaseClientConfig, SupabaseLeadRow } from './types';

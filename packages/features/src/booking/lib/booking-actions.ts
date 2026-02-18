@@ -2,6 +2,10 @@
 // Purpose: Booking action handlers providing appointment submission, validation, and provider
 //          integration. Now accepts BookingFeatureConfig for configurable validation.
 //
+// Relationship: Uses booking-schema, booking-config, booking-providers. Depends on @repo/infra (rate limit, IP).
+// System role: Server actions; in-memory demo storage; rate limit and fraud detection then provider sync.
+// Assumptions: internalBookings is process-local; revalidatePath('/book') exists in app.
+//
 // Exports / Entry: submitBookingRequest function, BookingSubmissionResult interface
 // Used by: BookingForm component, booking API endpoints, and appointment management features
 //

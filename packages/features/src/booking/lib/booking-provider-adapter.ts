@@ -2,6 +2,10 @@
 // Purpose: Abstract adapter interface for booking provider integrations, eliminating code duplication
 //          across multiple provider implementations. Implements Strategy pattern for provider abstraction.
 //
+// Relationship: Uses booking-schema (BookingFormData). Implementations live in booking-providers.ts.
+// System role: Strategy pattern; createBooking calls buildRequestBody/parseResponse; fetch in base class.
+// Assumptions: Subclasses implement buildRequestBody, parseResponse; config.enabled and apiKey gate requests.
+//
 // Exports / Entry: BookingProviderAdapter interface, BaseBookingProviderAdapter abstract class
 // Used by: Booking provider implementations (Mindbody, Vagaro, Square, Calendly)
 //

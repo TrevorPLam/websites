@@ -2,6 +2,10 @@
 // Purpose: External booking provider integration system supporting multiple appointment scheduling platforms.
 //          Refactored to use adapter pattern, eliminating ~300 lines of duplicated code across providers.
 //
+// Relationship: Uses booking-schema, booking-provider-adapter. Depends on @repo/infra/env (validateEnv).
+// System role: Factory of Mindbody/Vagaro/Square adapters; getBookingProviders is lazy to avoid build-time env.
+// Assumptions: Env vars like MINDBODY_ENABLED, MINDBODY_API_KEY; Calendly not yet implemented as adapter.
+//
 // Exports / Entry: BookingProvider types, ProviderConfig interface, provider classes, getBookingProviders function
 // Used by: Booking actions, booking forms, and appointment management features
 //

@@ -3,6 +3,10 @@
 //          Provides type-safe access to all environment variables with conditional validation
 //          based on Node environment and feature flags.
 //
+// Relationship: Uses @repo/infra/env (validateEnv, getFeatureFlags, getEnvContext). Used by actions, layout, components.
+// System role: validatedEnv at module load; getFeatureFlags, getEnvContext; throwOnError for required vars.
+// Assumptions: validateEnv() called once; optional vars graceful in dev/test.
+//
 // Exports / Entry: validatedEnv, environment helper functions
 // Used by: All application files requiring environment variable access
 //

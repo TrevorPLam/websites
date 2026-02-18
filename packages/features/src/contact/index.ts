@@ -3,6 +3,10 @@
 //          schemas, actions, and configuration. Centralizes contact functionality for customer
 //          communication and inquiry handling across the application.
 //
+// Relationship: Depends on @repo/ui, @repo/infra. Consumed by template contact page; handler passed by template.
+// System role: Feature barrel; config-driven schema; submitContactForm uses pluggable ContactSubmissionHandler.
+// Assumptions: Template provides createContactConfig and handler (e.g. Supabase + HubSpot in lib/actions/submit).
+//
 // Exports / Entry: ContactForm component, contact schemas, actions, and config utilities
 // Used by: Contact pages, footer contact sections, and any inquiry features
 //

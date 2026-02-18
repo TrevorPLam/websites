@@ -1,7 +1,10 @@
 /**
- * Analytics tracking with consent-gated GA4 and Plausible support.
+ * @file packages/integrations/analytics/index.ts
+ * Purpose: Analytics tracking with consent-gated GA4 and Plausible support.
+ * Relationship: Depends on @repo/infra/client (logInfo). Uses consent.ts for hasAnalyticsConsent.
+ * System role: trackEvent, trackFormSubmission, trackCTAClick; dev/test log only; browser gtag/plausible.
+ * Assumptions: Consent stored in cookie/localStorage; gtag and plausible optional on window.
  */
-
 import { logInfo } from '@repo/infra/client';
 import { hasAnalyticsConsent } from './consent';
 

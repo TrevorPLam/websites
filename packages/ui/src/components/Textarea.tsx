@@ -1,3 +1,15 @@
+/**
+ * @file packages/ui/src/components/Textarea.tsx
+ * [TRACE:FILE=packages.ui.components.Textarea]
+ *
+ * Purpose: Multiline text input with optional label and validation feedback (error/success).
+ *          Mirrors Input behavior for consistency in forms.
+ *
+ * Relationship: Used by @repo/features contact/booking forms. Depends on @repo/utils (cn).
+ * System role: Form primitive; aria-invalid and aria-describedby for error.
+ * Assumptions: Same id/label/error pattern as Input; isValid shows primary border.
+ */
+
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
@@ -10,6 +22,12 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
   isValid?: boolean;
 }
 
+/**
+ * Renders a labeled textarea with error/success styling. Min height 80px; id from label if omitted.
+ *
+ * @param props - TextareaProps (label, error, isValid, id, and native textarea props)
+ * @returns Forwarded ref to the native textarea element
+ */
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, error, isValid, id, ...props }, ref) => {
     const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-');

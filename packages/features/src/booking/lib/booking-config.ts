@@ -2,6 +2,10 @@
 // Purpose: Configuration interface for booking feature, enabling template-agnostic booking forms
 //          that derive service categories and time slots from site configuration.
 //
+// Relationship: Imports BookingFlowConfig from @repo/types. Used by booking-schema, BookingForm, booking-actions.
+// System role: Converts site conversionFlow (booking) into feature config; throws if type !== 'booking'.
+// Assumptions: flowConfig.serviceCategories and timeSlots are non-empty; labels default from id.
+//
 // Exports / Entry: BookingFeatureConfig interface, createBookingConfig helper
 // Used by: BookingForm component, booking schema factory, booking actions
 //
@@ -67,12 +71,12 @@ export interface BookingFeatureConfig {
 }
 
 /**
- * Creates booking feature configuration from BookingFlowConfig
- * Extracts service categories and time slots from site configuration
+ * Creates booking feature configuration from BookingFlowConfig. Throws if flow is not booking type.
+ *
+ * @param flowConfig - Site conversion flow (must be type 'booking')
+ * @returns BookingFeatureConfig with services, timeSlots, maxAdvanceDays
+ * @throws Error if flowConfig.type !== 'booking'
  */
-// [TRACE:FUNC=packages.features.booking.createBookingConfig]
-// [FEAT:BOOKING] [FEAT:CONFIGURATION]
-// NOTE: Config factory - converts site config to feature config with proper typing.
 export function createBookingConfig(
   flowConfig: BookingFlowConfig
 ): BookingFeatureConfig {

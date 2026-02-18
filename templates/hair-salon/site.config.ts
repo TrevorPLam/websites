@@ -3,6 +3,10 @@
 //          information for the hair salon website. Defines site structure, theme colors,
 //          contact details, and conversion flow settings.
 //
+// Relationship: Typed by @repo/types SiteConfig. Consumed by layout, pages, Navigation, Footer, ThemeInjector.
+// System role: Single siteConfig export; drives nav, footer, theme, conversionFlow (booking), features.
+// Assumptions: url from NEXT_PUBLIC_SITE_URL or localhost:3100; industry 'salon'.
+//
 // Exports / Entry: siteConfig object (default export)
 // Used by: Layout components, SEO metadata, navigation, and site-wide configuration
 //

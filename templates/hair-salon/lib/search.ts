@@ -3,6 +3,10 @@
 //          @repo/features/search. Provides getSearchIndex() for layout and
 //          search page. Static pages from route registry; blog from blog feature.
 //
+// Relationship: Uses @repo/features/search (getSearchIndex, SearchItem), lib/routes, features/blog getAllPosts.
+// System role: getSearchIndex() merges getSearchEntries() and blog posts into SearchItem[]; same API as feature.
+// Assumptions: routes and blog posts available; blog items use id `blog-${slug}`, type 'Blog'.
+//
 // Exports / Entry: SearchItem type, getSearchIndex function
 // Used by: app/layout.tsx, app/search/page.tsx, Navigation
 //

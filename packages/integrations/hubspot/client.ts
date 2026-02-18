@@ -1,8 +1,10 @@
 /**
- * HubSpot CRM API client.
- * Search and upsert contacts with idempotency support.
+ * @file packages/integrations/hubspot/client.ts
+ * Purpose: HubSpot CRM API client — search by email, upsert contact with optional idempotency key.
+ * Relationship: Uses @repo/infra for logError. Throws when token missing or API fails.
+ * System role: getToken(), buildHeaders(), getUpsertTarget(); searchHubSpotContact, upsertHubSpotContact.
+ * Assumptions: Server-side only; HUBSPOT_PRIVATE_APP_TOKEN required.
  */
-
 import { logError } from '@repo/infra';
 import type { HubSpotContactResponse } from './types';
 

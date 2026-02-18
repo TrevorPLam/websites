@@ -3,6 +3,10 @@
 //          middleware, logging, and monitoring utilities. Serves as the main interface for
 //          application infrastructure components and services.
 //
+// Relationship: Depends on @repo/utils, zod, server-only. Consumed by templates, @repo/features, @repo/integrations-*.
+// System role: Cross-cutting infra; server-only exports; client-safe surface in index.client.ts.
+// Assumptions: Sentry/rate-limit are optional (peer deps); env validation required at app bootstrap.
+//
 // Exports / Entry: All infrastructure modules, INFRA_PACKAGE_VERSION constant
 // Used by: Application code requiring security, middleware, logging, or monitoring functionality
 //

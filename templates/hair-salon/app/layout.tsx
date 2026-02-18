@@ -3,6 +3,10 @@
 //          and core UI providers for the hair salon website. Handles font loading,
 //          SEO optimization, and analytics consent management.
 //
+// Relationship: Uses @repo/ui (ThemeInjector), @repo/infra (CSP nonce, logError, logWarn), getSearchIndex, siteConfig.
+// System role: Resolves CSP nonce from header or fallback; fonts; metadata; Navigation, Footer, AnalyticsConsentBanner.
+// Assumptions: resolveCspNonce prefers header; fallback nonce used when middleware misses; search index for nav.
+//
 // Exports / Entry: RootLayout component, metadata export
 // Used by: Next.js as the root layout for all pages in the application
 //
