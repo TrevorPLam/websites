@@ -110,6 +110,7 @@ pnpm format:check
 1. Check for existing issues/PRs to avoid duplicates
 2. For large features, open an issue first to discuss approach
 3. Follow the existing code style and patterns
+4. Read [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md) if contributing documentation
 
 ### Code Standards
 
@@ -135,6 +136,8 @@ pnpm format:check
 - [ ] `pnpm format:check` passes
 - [ ] Changes are documented (comments, README updates if needed)
 - [ ] No breaking changes without discussion
+- [ ] Documentation changes: `pnpm validate-docs` passes
+- [ ] Documentation follows [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md)
 
 ## Monorepo Guidelines
 
@@ -198,6 +201,39 @@ docker compose up --build
 - Containers run as a non-root `nextjs` user for security.
 - A `HEALTHCHECK` is configured at `/api/health` for container orchestration.
 - Resource limits are set in `docker-compose.yml` (512 MB memory, 1.0 CPU).
+
+## Code of Conduct
+
+This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md) that all contributors are expected to follow. By participating in this project, you agree to abide by its terms.
+
+## Documentation Contributions
+
+### Documentation Standards
+
+All documentation must follow the [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md), including:
+- Complete metaheaders
+- Proper formatting
+- Accessibility compliance
+- Link validation
+
+### Documentation Workflow
+
+1. **Identify need**: Find missing or outdated documentation
+2. **Create issue**: Use [documentation issue template](.github/ISSUE_TEMPLATE/documentation.md)
+3. **Write documentation**: Follow standards and templates
+4. **Validate**: Run `pnpm validate-docs` before submitting
+5. **Submit PR**: Use [documentation PR template](.github/PULL_REQUEST_TEMPLATE/documentation.md)
+
+### Documentation Types
+
+- **Conceptual**: Architecture, design principles, overviews
+- **Procedural**: Step-by-step guides, tutorials
+- **Reference**: API docs, configuration options, component props
+- **Tutorial**: Hands-on learning, examples
+
+### Recognition
+
+Significant documentation contributions are recognized in [CONTRIBUTORS.md](docs/CONTRIBUTORS.md).
 
 ## License
 

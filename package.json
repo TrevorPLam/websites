@@ -31,6 +31,8 @@
     "syncpack:fix": "syncpack fix-mismatches",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "validate-docs": "node scripts/validate-documentation.js",
+    "validate-docs:strict": "node scripts/validate-documentation.js --strict",
     "validate-exports": "node scripts/validate-exports.js",
     "version-packages": "pnpm changeset version && pnpm install --no-frozen-lockfile",
     "release": "pnpm changeset publish"

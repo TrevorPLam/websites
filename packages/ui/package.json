@@ -29,6 +29,7 @@
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "radix-ui": "catalog:",
-    "lucide-react": "catalog:"
+    "lucide-react": "catalog:",
+    "sonner": "catalog:"
   }
 }

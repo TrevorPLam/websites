@@ -143,6 +143,17 @@ We follow coordinated disclosure principles:
 - Credit to security researchers
 - Clear communication about impact and mitigation
 
+## Update Frequency Guidelines
+
+This security policy is reviewed and updated:
+
+- **Quarterly**: Review and update security best practices
+- **After incidents**: Update based on lessons learned
+- **When dependencies change**: Update supported versions table
+- **Annually**: Comprehensive review of all security processes
+
+Security monitoring tools and processes are reviewed monthly to ensure effectiveness.
+
 ## Security Contact Configuration
 
 For repository maintainers: Update this policy with your actual security contact
@@ -155,3 +166,4 @@ information and enable private vulnerability reporting in repository settings.
 3. Add PGP key if encrypted communication is desired
 4. Set up security monitoring alerts
 5. Document your security response team and escalation procedures
+6. Schedule regular security policy reviews

@@ -10,6 +10,62 @@
 
 This document defines the **allowed dependency direction matrix** for the marketing-websites monorepo. Boundary enforcement prevents architecture drift, ensures packages expose only supported entrypoints, and blocks cross-template internal access.
 
+### Dependency Flow Visualization
+
+```mermaid
+graph TD
+    subgraph Templates[Templates Layer]
+        T1[Template 1]
+        T2[Template 2]
+        T3[Template 3]
+    end
+    
+    subgraph Packages[Packages Layer]
+        UI[@repo/ui]
+        Utils[@repo/utils]
+        Infra[@repo/infra]
+        Features[@repo/features]
+        Types[@repo/types]
+        Integrations[@repo/integrations]
+    end
+    
+    T1 --> UI
+    T2 --> UI
+    T3 --> UI
+    T1 --> Utils
+    T2 --> Utils
+    T3 --> Utils
+    T1 --> Infra
+    T2 --> Infra
+    T3 --> Infra
+    T1 --> Features
+    T2 --> Features
+    T3 --> Features
+    T1 --> Types
+    T2 --> Types
+    T3 --> Types
+    T1 --> Integrations
+    T2 --> Integrations
+    T3 --> Integrations
+    
+    Features --> UI
+    Features --> Utils
+    Features --> Types
+    Features --> Infra
+    
+    UI --> Utils
+    Integrations --> Infra
+    
+    T1 -.->|❌ Not Allowed| T2
+    T2 -.->|❌ Not Allowed| T3
+    T3 -.->|❌ Not Allowed| T1
+    
+    Packages -.->|❌ Not Allowed| Templates
+    
+    style Templates fill:#e3f2fd
+    style Packages fill:#f1f8e9
+```
+
 ## Dependency Direction Matrix
 
 | From (Consumer) | To (Provider) | Allowed | Notes |

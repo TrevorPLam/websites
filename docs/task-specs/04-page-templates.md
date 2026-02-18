@@ -9,17 +9,20 @@
 ## 3.1 Page-Templates Registry and Package Scaffold
 
 ### 1️⃣ Objective Clarification
+
 - Problem: No composable page assembly; templates hand-wired
 - Layer: L3 (Experience)
 - Introduces: Registry (Map), barrel, template types, templates/ directory
 - No switch-based section selection; config-driven keys → registry lookup
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** None
 - **Packages:** @repo/types (in package.json); add @repo/ui, @repo/features, @repo/marketing-components when building templates
 - **Blockers:** None
 
 ### 3️⃣ File System Plan
+
 - **Create:**
   - `packages/page-templates/src/registry.ts` — Map<string, React.ComponentType<SectionProps>>
   - `packages/page-templates/src/types.ts` — SectionProps, TemplateConfig
@@ -29,6 +32,7 @@
 - **Delete:** None
 
 ### 4️⃣ Public API Design
+
 ```ts
 export const sectionRegistry: Map<string, React.ComponentType<SectionProps>>;
 export interface SectionProps {
@@ -37,46 +41,82 @@ export interface SectionProps {
   siteConfig: SiteConfig;
 }
 export interface TemplateConfig {
-  sections: string[];  // ordered section keys
+  sections: string[]; // ordered section keys
 }
 export function composePage(config: TemplateConfig, siteConfig: SiteConfig): JSX.Element;
 ```
 
+- **2025 TypeScript Patterns**: Strict typing with template literal types for section keys
+- **Advanced Types**: Discriminated unions for template configurations
+- **React Compiler Ready**: Stable prop patterns for automatic memoization
+
 ### 5️⃣ Data Contracts & Schemas
+
 - SectionProps: generic; each section defines its own config shape
 - TemplateConfig: sections array; validated by siteConfigSchema (in @repo/types)
 - No new Zod in page-templates; reuse siteConfigSchema
 
 ### 6️⃣ Internal Architecture
+
 - Registry: `sectionRegistry.set('hero', HeroSection);` etc.
 - composePage: map over sections, lookup in registry, render with section config
 - No switch(sectionKey); purely registry-driven
+- **2025-2026 Updates**: React Server Components compatible; support lazy loading with React.lazy();
+  registry can handle both client and server components
+- **React 19.2 Features**: Async components with await, streaming with Suspense, hybrid rendering model
+- **Advanced TypeScript**: Template literal types for section keys, discriminated unions for configurations
+- **Performance**: React Compiler auto-memoization ready, INP optimization (<200ms target)
 
 ### 7️⃣ Performance & SEO
+
 - Sections render in order; lazy below-fold sections optional in future
+- **Core Web Vitals**: Monitor LCP, INP (replaced FID March 2024), CLS metrics for template performance
+- **Code Splitting**: Route-based splitting for template variants; React.lazy() for heavy sections
+- **Bundle Optimization**: Tree-shaking friendly imports; < 10KB gzipped per template
+- **React 19.2**: Consider <Activity /> component for conditional section rendering
+- **SEO**: Semantic HTML5 landmarks; structured data hooks for search engines
 
 ### 8️⃣ Accessibility
+
 - Each section responsible for its own a11y
 - Main landmark; skip links optional
+- **WCAG 2.2 Compliance**: 24×24 CSS pixels minimum for touch targets
+- **WCAG 3.0 Preparation**: Outcomes-based approach; user needs assessment
+- **Screen Readers**: Proper semantic structure and ARIA landmarks
+- **Keyboard Navigation**: Full keyboard access to all interactive elements
 
 ### 9️⃣ Analytics
+
 - Section visibility optional; not in scaffold
+- **2025 Standards**: Component-level tracking patterns
+- **Template Analytics**: Hook-based analytics for template composition
+- **Performance Monitoring**: Core Web Vitals integration
+- **User Interactions**: Section-level engagement tracking
 
 ### 🔟 Testing
+
 - `packages/page-templates/src/__tests__/registry.test.ts` — composePage renders placeholder sections
 - `packages/page-templates/src/__tests__/compose.test.tsx` — mock registry, assert order
+- **2025 Testing Strategy**: Vitest + React Testing Library + Playwright E2E
+- **Component Testing**: Playwright component testing (experimental but maturing)
+- **Accessibility Testing**: Automated axe-core integration
+- **Lazy Loading Tests**: Verify React.lazy() and Suspense boundaries
+- **RSC Compatibility**: Test server/client component composition
 
 ### 1️⃣1️⃣ Example
+
 ```ts
 const config: TemplateConfig = { sections: ['hero', 'services', 'cta'] };
 composePage(config, siteConfig);
 ```
 
 ### 1️⃣2️⃣ Failure Modes
+
 - Missing section key → warn and skip; no crash
 - Circular dependency: registry must not import templates that import registry; use lazy registration if needed
 
 ### 1️⃣3️⃣ Checklist
+
 1. Create src/registry.ts with Map and SectionProps
 2. Create src/types.ts
 3. Create composePage
@@ -86,9 +126,11 @@ composePage(config, siteConfig);
 7. Type-check; build
 
 ### 1️⃣4️⃣ Done Criteria
+
 - Registry exists; composePage works with stub sections; 3.2 can add HomePageTemplate
 
 ### 1️⃣5️⃣ Anti-Overengineering
+
 - No CMS section definitions; config from siteConfig only
 - No visual builder; registry is code-only
 
@@ -97,42 +139,51 @@ composePage(config, siteConfig);
 ## 3.2 HomePageTemplate
 
 ### 1️⃣ Objective Clarification
+
 - Home page: hero, services, CTA, etc.; assembled from registry
 - Layer: L3; uses 2.1 Hero, 2.2 Services, 2.8 CTA, etc.
 - Config-driven section keys from siteConfig.pages.home.sections
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** 3.1, 2.1
 - **Packages:** @repo/marketing-components, @repo/features, @repo/ui
 
 ### 3️⃣ File System Plan
+
 - **Create:** `packages/page-templates/src/templates/HomePageTemplate.tsx`
 - **Update:** registry.ts — register sections used by home
 - **Delete:** None
 
 ### 4️⃣ Public API
+
 ```ts
 export function HomePageTemplate(props: { siteConfig: SiteConfig }): JSX.Element;
 ```
+
 - Reads siteConfig.pages?.home?.sections ?? defaultSections
 - Renders composePage({ sections }, siteConfig)
 
 ### 5️⃣ Data Contracts
+
 - siteConfig.pages.home.sections: string[] (optional)
 - Section configs come from siteConfig.sections?[key] or similar
 
 ### 6️⃣ Internal
+
 - Default sections: ['hero','services','testimonials','cta']
 - Each section pulled from registry
 - Register hero, services, testimonials, cta in 3.1 or 3.2
 
 ### 1️⃣3️⃣ Checklist
+
 1. Register hero, services, cta sections (create minimal section components if needed)
 2. Create HomePageTemplate.tsx
 3. Use composePage
 4. Export; type-check; build
 
 ### 1️⃣5️⃣ Anti-Overengineering
+
 - No hardcoded industry content; all from config
 
 ---
@@ -140,25 +191,31 @@ export function HomePageTemplate(props: { siteConfig: SiteConfig }): JSX.Element
 ## 3.3 ServicesPageTemplate
 
 ### 1️⃣ Objective Clarification
+
 - Services grid/list/tabs; URL-synced filters; uses ServicesOverview, ServiceDetailLayout from features
 - Layer: L3; 2.2 ServiceShowcase
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** 3.1, 2.2
 - **Packages:** @repo/features (services), @repo/marketing-components
 
 ### 3️⃣ File System Plan
+
 - **Create:** `packages/page-templates/src/templates/ServicesPageTemplate.tsx`
 - **Update:** registry (services section)
 - **Delete:** None
 
 ### 4️⃣ Public API
+
 ```ts
 export function ServicesPageTemplate(props: { siteConfig: SiteConfig }): JSX.Element;
 ```
+
 - Layout driven by config; filters from URL searchParams
 
 ### 1️⃣3️⃣ Checklist
+
 - Wire ServicesOverview; URL filter sync; register section; export
 
 ---
@@ -166,19 +223,23 @@ export function ServicesPageTemplate(props: { siteConfig: SiteConfig }): JSX.Ele
 ## 3.4 AboutPageTemplate
 
 ### 1️⃣ Objective Clarification
+
 - Story, Team, Mission, Values, Timeline; trust modules (certs, awards, press)
 - Layer: L3; 2.3 Team, 2.17 Team feature
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** 3.1, 2.3, 2.17
 - **Packages:** @repo/marketing-components, @repo/features
 
 ### 3️⃣ File System Plan
+
 - **Create:** `packages/page-templates/src/templates/AboutPageTemplate.tsx`
 - **Update:** registry
 - **Delete:** None
 
 ### 1️⃣5️⃣ Anti-Overengineering
+
 - No CMS for story/timeline; config-driven content
 
 ---
@@ -186,21 +247,26 @@ export function ServicesPageTemplate(props: { siteConfig: SiteConfig }): JSX.Ele
 ## 3.5 ContactPageTemplate
 
 ### 1️⃣ Objective Clarification
+
 - Form + business info + optional map
 - Layer: L3; 2.10 Contact form variants, @repo/features/contact
 - Uses contact form variants; submission via feature actions
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** 3.1, 2.10, 2.13 (contact feature)
 
 ### 3️⃣ File System Plan
+
 - **Create:** `packages/page-templates/src/templates/ContactPageTemplate.tsx`
 - **Update:** registry
 
 ### 4️⃣ Public API
+
 ```ts
 export function ContactPageTemplate(props: { siteConfig: SiteConfig }): JSX.Element;
 ```
+
 - Renders SimpleContactForm or variant; business info from siteConfig; map optional (4.5 later)
 
 ---
@@ -208,18 +274,22 @@ export function ContactPageTemplate(props: { siteConfig: SiteConfig }): JSX.Elem
 ## 3.6 BlogIndexTemplate
 
 ### 1️⃣ Objective Clarification
+
 - Blog listing; filters, categories, tags; SEO-friendly pagination
 - Layer: L3; 2.14 (blog feature)
 - Uses @repo/features/blog
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** 3.1, 2.14
 
 ### 3️⃣ File System Plan
+
 - **Create:** `packages/page-templates/src/templates/BlogIndexTemplate.tsx`
 - **Update:** registry
 
 ### 1️⃣3️⃣ Checklist
+
 - Wire blog feature listing; pagination; filters from URL
 
 ---
@@ -227,18 +297,22 @@ export function ContactPageTemplate(props: { siteConfig: SiteConfig }): JSX.Elem
 ## 3.7 BlogPostTemplate
 
 ### 1️⃣ Objective Clarification
+
 - Individual post layout; metadata, related posts, inline CTA slots; structured data hooks
 - Layer: L3; 2.14
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** 3.1, 2.14
 - **Packages:** next-mdx-remote for MDX; blog feature
 
 ### 3️⃣ File System Plan
+
 - **Create:** `packages/page-templates/src/templates/BlogPostTemplate.tsx`
 - **Update:** registry
 
 ### 5️⃣ Data Contracts
+
 - Post shape from blog feature; structured data via 4.6 or feature
 - No new schema; use existing blog types
 
@@ -247,23 +321,88 @@ export function ContactPageTemplate(props: { siteConfig: SiteConfig }): JSX.Elem
 ## 3.8 BookingPageTemplate
 
 ### 1️⃣ Objective Clarification
+
 - Booking form with pre-fill context
 - Layer: L3; 2.12 (booking feature), @repo/features/booking
 - Uses BookingForm from features; pre-fill from URL/context
 
 ### 2️⃣ Dependency Check
+
 - **Completed:** 3.1, 2.12
 - **Packages:** @repo/features (booking)
 
 ### 3️⃣ File System Plan
+
 - **Create:** `packages/page-templates/src/templates/BookingPageTemplate.tsx`
 - **Update:** registry
 
 ### 4️⃣ Public API
+
 ```ts
-export function BookingPageTemplate(props: { siteConfig: SiteConfig; prefill?: Partial<BookingFormData> }): JSX.Element;
+export function BookingPageTemplate(props: {
+  siteConfig: SiteConfig;
+  prefill?: Partial<BookingFormData>;
+}): JSX.Element;
 ```
 
 ### 1️⃣5️⃣ Anti-Overengineering
+
 - No provider selection in template; feature handles that
 - Pre-fill only; no session/state beyond URL
+
+---
+
+## 2025-2026 Modern Standards & Best Practices
+
+### React Server Components Compatibility
+
+- **Registry Pattern**: Map-based registry supports both client and server components
+- **Lazy Loading**: React.lazy() with Suspense boundaries for heavy sections
+- **Hybrid Rendering**: Server components for static content, client for interactive elements
+
+### Performance Optimization
+
+- **Core Web Vitals**: LCP, INP, CLS monitoring for template performance
+- **Code Splitting**: Route-based splitting for template variants
+- **Bundle Optimization**: Tree-shaking friendly imports, < 10KB gzipped per template
+- **React 19.2**: <Activity /> component for conditional section rendering
+
+### SEO & Accessibility Standards
+
+- **WCAG 2.2 Compliance**: 24×24 CSS pixels minimum for touch targets
+- **WCAG 3.0 Preparation**: Outcomes-based approach (timeline: 2028+)
+- **Semantic HTML5**: Proper landmarks and structured data hooks
+- **Screen Readers**: Full ARIA landmark navigation
+
+### TypeScript Advanced Patterns
+
+- **Template Literal Types**: For section key validation
+- **Discriminated Unions**: Template configuration type safety
+- **Utility Types**: Configuration validation and transformation
+- **React Compiler Ready**: Stable prop patterns for auto-memoization
+
+### Analytics Integration
+
+- **Component-Level Tracking**: Section visibility and engagement
+- **Performance Analytics**: Core Web Vitals integration
+- **User Interactions**: Template composition analytics
+- **Hook-Based Patterns**: Consistent analytics across templates
+
+### Testing Strategy
+
+- **Vitest + React Testing Library**: Component testing foundation
+- **Playwright Component Testing**: Cross-browser component isolation
+- **Accessibility Testing**: Automated axe-core integration
+- **RSC Compatibility**: Server/client component composition tests
+- **Lazy Loading Tests**: React.lazy() and Suspense verification
+
+### Migration Checklist
+
+- [ ] Update registry to support React Server Components
+- [ ] Implement React.lazy() for heavy sections with Suspense
+- [ ] Add Core Web Vitals monitoring to templates
+- [ ] Update TypeScript patterns with template literal types
+- [ ] Implement component-level analytics tracking
+- [ ] Add Playwright component testing to CI pipeline
+- [ ] Verify WCAG 2.2 compliance (24×24px touch targets)
+- [ ] Prepare for WCAG 3.0 outcomes-based approach
