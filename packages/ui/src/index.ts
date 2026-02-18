@@ -3,12 +3,14 @@
 //          React components driven by CSS custom properties, enabling consistent design
 //          systems across all template applications.
 //
-// Relationship: Depends on @repo/types (ThemeInjector), @repo/utils (cn). Consumed by
-//               @repo/features and templates/hair-salon.
+// Relationship: Depends on @repo/types (ThemeInjector), @repo/utils (cn), radix-ui, sonner.
+//               Consumed by @repo/features, @repo/marketing-components, and all client layouts.
 // System role: UI layer; presentational components only; theme via CSS variables.
 // Assumptions: Consumers supply theme in globals.css; components receive standard HTML props.
+//              Toaster must be mounted once at the app root to display toast notifications.
 //
-// Exports / Entry: All UI components (Container, Section, Button, Card, Input, Select, Textarea, Accordion, Dialog)
+// Exports / Entry: All UI components — layout, primitives, form, disclosure, overlay,
+//                  notification, feedback, navigation
 // Used by: All template applications, any workspace needing UI components
 //
 // Invariants:
@@ -80,3 +82,98 @@ export type {
 // Theme
 export { ThemeInjector } from './components/ThemeInjector';
 export type { ThemeInjectorProps, ThemeColors } from './components/ThemeInjector';
+
+// Notification
+export { Toaster } from './components/Toaster';
+export type { ToasterProps } from './components/Toaster';
+export { toast, useToast } from './components/Toast';
+export type { ToastOptions, ToastVariant } from './components/Toast';
+
+// Navigation / Tabs
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from './components/Tabs';
+export type {
+  TabsProps,
+  TabsListProps,
+  TabsTriggerProps,
+  TabsContentProps,
+  TabsVariant,
+  TabsSize,
+} from './components/Tabs';
+
+// Action Menu
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+} from './components/DropdownMenu';
+
+// Informational Overlay
+export {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipArrow,
+} from './components/Tooltip';
+export type { TooltipContentProps } from './components/Tooltip';
+
+// Interactive Overlay
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverAnchor,
+  PopoverClose,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+} from './components/Popover';
+export type { PopoverHeaderProps } from './components/Popover';
+
+// Status / Labels
+export { Badge } from './components/Badge';
+export type { BadgeProps, BadgeVariant, BadgeSize } from './components/Badge';
+
+// Identity
+export {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from './components/Avatar';
+export type {
+  AvatarProps,
+  AvatarImageProps,
+  AvatarFallbackProps,
+  AvatarSize,
+  AvatarShape,
+  AvatarStatus,
+} from './components/Avatar';
+
+// Loading States
+export { Skeleton } from './components/Skeleton';
+export type { SkeletonProps, SkeletonVariant } from './components/Skeleton';
+
+// Layout Divider
+export { Separator } from './components/Separator';
+export type { SeparatorProps } from './components/Separator';
+
+// Form Controls
+export { Switch } from './components/Switch';
+export type { SwitchProps, SwitchSize, SwitchVariant } from './components/Switch';
