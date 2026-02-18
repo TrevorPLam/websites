@@ -69,6 +69,7 @@ export function Accordion({ items, multiple = false, className, ...props }: Acco
             >
               <span>{item.question}</span>
               <svg
+                aria-hidden
                 className={cn(
                   'h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200',
                   isOpen && 'rotate-180'

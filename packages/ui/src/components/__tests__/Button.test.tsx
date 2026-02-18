@@ -1,14 +1,20 @@
 /**
  * Button component tests.
- * Verifies rendering, variants, sizes, and user interactions.
+ * Verifies rendering, variants, sizes, user interactions, and accessibility.
  */
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import { Button } from '../Button';
 
 describe('Button', () => {
+  it('has no accessibility violations', async () => {
+    const { container } = render(<Button>Click me</Button>);
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
   it('renders with correct text', () => {
     render(<Button>Click me</Button>);
     expect(screen.getByRole('button', { name: /click me/i })).toBeInTheDocument();
@@ -33,7 +39,7 @@ describe('Button', () => {
   it('applies size classes', () => {
     const { container } = render(<Button size="small">Small</Button>);
     const button = container.querySelector('button');
-    expect(button).toHaveClass('h-8');
+    expect(button).toHaveClass('min-h-[44px]');
   });
 
   it('is disabled when disabled prop is set', () => {

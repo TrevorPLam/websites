@@ -1,4 +1,5 @@
 import tseslint from 'typescript-eslint';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import { boundaryRules } from './boundaries.js';
 
 const recommended = tseslint.configs.recommended;
@@ -18,6 +19,7 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
+      'jsx-a11y': jsxA11y,
     },
     rules: {
       ...mergedRules,
@@ -26,6 +28,8 @@ export default [
       // Complexity and size thresholds (code smell analysis recommendations)
       complexity: ['warn', { max: 15 }],
       'max-lines-per-function': ['warn', { max: 50, skipBlankLines: true, skipComments: true }],
+      // Accessibility: jsx-a11y recommended rules
+      ...jsxA11y.configs.recommended.rules,
     },
   },
 ];

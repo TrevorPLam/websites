@@ -51,9 +51,9 @@ const variantStyles: Record<string, string> = {
 // [FEAT:RESPONSIVE]
 // NOTE: Size variant definitions - provides consistent spacing and typography for different contexts.
 const sizeStyles: Record<string, string> = {
-  small: 'h-8 px-3 text-sm',
-  medium: 'h-10 px-5 text-base',
-  large: 'h-12 px-8 text-lg',
+  small: 'min-h-[44px] h-10 px-4 text-sm',
+  medium: 'min-h-[44px] h-10 px-5 text-base',
+  large: 'min-h-[44px] h-12 px-8 text-lg',
 };
 
 /**

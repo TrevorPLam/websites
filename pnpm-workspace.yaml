@@ -28,3 +28,4 @@ catalog:
   'radix-ui': '^1.0.0'
   'lucide-react': '^0.344.0'
   sonner: '^2.0.7'
+  next-intl: '^3.25.0'

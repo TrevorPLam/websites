@@ -161,3 +161,8 @@ jobs:
         continue-on-error: true
         run: |
           pnpm audit --audit-level high || echo "⚠️ High or critical vulnerabilities detected"
+
+      # License compliance audit (informative)
+      - name: License audit
+        continue-on-error: true
+        run: pnpm dlx license-checker --summary

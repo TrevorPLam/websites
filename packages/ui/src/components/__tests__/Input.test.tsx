@@ -6,9 +6,15 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import { Input } from '../Input';
 
 describe('Input', () => {
+  it('has no accessibility violations when labeled', async () => {
+    const { container } = render(<Input label="Email" />);
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
   it('renders without label', () => {
     render(<Input placeholder="Enter text" />);
     expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();

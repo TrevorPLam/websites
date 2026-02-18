@@ -1,10 +1,13 @@
-// Task: [5.1] Edge: experiments, personalization
-// Use direct path to avoid pulling Node-only modules (logger, etc.) into Edge runtime
-import { createMiddleware, getAllowedOriginsFromEnv } from '@repo/infra/middleware/create-middleware';
+/**
+ * @file clients/starter-template/middleware.ts
+ * Purpose: next-intl middleware — locale negotiation, redirects (e.g. / → /en).
+ */
 
-export const middleware = createMiddleware({
-  allowedOrigins: getAllowedOriginsFromEnv(),
-});
+import createMiddleware from 'next-intl/middleware';
+import { routing } from './i18n/routing';
+
+export default createMiddleware(routing);
+
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };

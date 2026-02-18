@@ -44,6 +44,8 @@
  */
 
 require('@testing-library/jest-dom');
+const { toHaveNoViolations } = require('jest-axe');
+expect.extend(toHaveNoViolations);
 
 // Suppress console output in tests (unless test explicitly checks for it)
 const originalError = console.error;

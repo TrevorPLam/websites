@@ -214,74 +214,58 @@ export default function BookingForm({
 
         {/* Customer Information */}
         <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">First Name</label>
-            <Input
-              {...register('firstName')}
-              placeholder="Jane"
-              aria-label="First Name"
-              error={errors.firstName?.message}
-              disabled={isPending}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Last Name</label>
-            <Input
-              {...register('lastName')}
-              placeholder="Doe"
-              aria-label="Last Name"
-              error={errors.lastName?.message}
-              disabled={isPending}
-            />
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
-            <Input
-              {...register('email')}
-              type="email"
-              placeholder="jane@example.com"
-              aria-label="Email Address"
-              error={errors.email?.message}
-              disabled={isPending}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
-            <Input
-              {...register('phone')}
-              type="tel"
-              placeholder="(555) 123-4567"
-              aria-label="Phone Number"
-              error={errors.phone?.message}
-              disabled={isPending}
-            />
-          </div>
-        </div>
-
-        {/* Service Details */}
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Service Type</label>
-          <Select
-            {...register('serviceType')}
-            options={serviceOptions}
-            aria-label="Service Type"
-            error={errors.serviceType?.message}
+          <Input
+            {...register('firstName')}
+            label="First Name"
+            placeholder="Jane"
+            error={errors.firstName?.message}
+            disabled={isPending}
+          />
+          <Input
+            {...register('lastName')}
+            label="Last Name"
+            placeholder="Doe"
+            error={errors.lastName?.message}
             disabled={isPending}
           />
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
+          <Input
+            {...register('email')}
+            label="Email Address"
+            type="email"
+            placeholder="jane@example.com"
+            error={errors.email?.message}
+            disabled={isPending}
+          />
+          <Input
+            {...register('phone')}
+            label="Phone Number"
+            type="tel"
+            placeholder="(555) 123-4567"
+            error={errors.phone?.message}
+            disabled={isPending}
+          />
+        </div>
+
+        {/* Service Details */}
+        <Select
+          {...register('serviceType')}
+          label="Service Type"
+          options={serviceOptions}
+          error={errors.serviceType?.message}
+          disabled={isPending}
+        />
+
+        <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Preferred Date</label>
             <Input
               {...register('preferredDate')}
+              label="Preferred Date"
               type="date"
               min={minDate}
               max={maxDateStr}
-              aria-label="Preferred Date"
               error={errors.preferredDate?.message}
               disabled={isPending}
             />
@@ -289,27 +273,21 @@ export default function BookingForm({
               Bookings available up to {config.maxAdvanceDays} days in advance
             </p>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Preferred Time</label>
-            <Select
-              {...register('timeSlot')}
-              options={timeSlotOptions}
-              aria-label="Preferred Time"
-              error={errors.timeSlot?.message}
-              disabled={isPending}
-            />
-          </div>
+          <Select
+            {...register('timeSlot')}
+            label="Preferred Time"
+            options={timeSlotOptions}
+            error={errors.timeSlot?.message}
+            disabled={isPending}
+          />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
-            {config.notesLabel ?? 'Notes (Optional)'}
-          </label>
           <Textarea
             {...register('notes')}
+            label={config.notesLabel ?? 'Notes (Optional)'}
             placeholder={config.notesPlaceholder ?? 'Any specific requests or notes...'}
             rows={3}
-            aria-label={config.notesLabel ?? 'Notes'}
             error={errors.notes?.message}
             disabled={isPending}
           />

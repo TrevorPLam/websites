@@ -19,6 +19,7 @@
     "@repo/utils": "workspace:*",
     "@repo/infra": "workspace:*",
     "next": "catalog:",
+    "next-intl": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

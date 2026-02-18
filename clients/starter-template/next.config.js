@@ -1,9 +1,13 @@
 /* eslint-env node */
 /**
  * @file clients/starter-template/next.config.js
- * @summary Next.js config — standalone output for Docker, bundle budgets.
+ * @summary Next.js config — standalone output for Docker, bundle budgets, i18n.
  * @see docs/adr/0004-dockerfile-standalone-output.md
  */
+
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -21,4 +25,4 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: false },
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);

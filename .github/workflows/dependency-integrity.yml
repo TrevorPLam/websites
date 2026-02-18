@@ -1,5 +1,5 @@
-# Task: [D.8] Dependency provenance checks
-# Status: Placeholder — TODO implement
+# Task: [D.8] Dependency provenance and integrity checks
+# Runs: pnpm audit (fail on high+), syncpack (version consistency), lockfile verification
 
 name: Dependency Integrity
 
@@ -13,7 +13,7 @@ on:
 
 jobs:
   dependency-integrity:
-    name: Dependency provenance
+    name: Dependency integrity
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,5 +24,9 @@ jobs:
         with:
           node-version: 22.x
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: echo "TODO - dependency integrity / provenance checks"
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+      - name: Version consistency (syncpack)
+        run: pnpm syncpack:check
+      - name: Vulnerability audit
+        run: pnpm audit --audit-level high

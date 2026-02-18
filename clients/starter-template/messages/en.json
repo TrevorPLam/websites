@@ -1,0 +1,92 @@
+{
+  "common": {
+    "skipToContent": "Skip to main content",
+    "templatePending": "This template is scaffolded and will be implemented in a future release.",
+    "templateStatus": "Status: Scaffolded — implementation pending"
+  },
+  "contact": {
+    "formAriaLabel": "Contact form",
+    "honeypotLabel": "Website",
+    "stepProgress": "Step {current} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "ariaSend": "Send message",
+    "ariaSending": "Sending message",
+    "sendButton": "Send Message",
+    "sendButtonLoading": "Sending...",
+    "errorDefault": "Something went wrong. Please try again.",
+    "successDefault": "Thank you for your message! We'll be in touch soon.",
+    "selectOption": "Select an option",
+    "field": {
+      "name": "Name",
+      "namePlaceholder": "John Smith",
+      "email": "Email",
+      "emailPlaceholder": "john@company.com",
+      "company": "Company",
+      "companyPlaceholder": "Your Company",
+      "phone": "Phone",
+      "phonePlaceholder": "(555) 123-4567",
+      "message": "Message",
+      "messagePlaceholder": "Tell us about your needs..."
+    }
+  },
+  "validation": {
+    "email": "Invalid email address",
+    "phoneInvalid": "Please enter a valid phone number",
+    "phoneTooShort": "Phone number is too short",
+    "phoneTooLong": "Phone number is too long",
+    "messageMin": "Message must be at least {min} characters",
+    "messageMax": "Message must be less than {max} characters",
+    "selectField": "Please select {field}",
+    "fieldMin": "{field} must be at least {min} characters",
+    "fieldMax": "{field} must be less than {max} characters",
+    "invalidFormat": "Invalid {field} format",
+    "honeypot": "Honeypot must be empty"
+  },
+  "booking": {
+    "toastSuccess": "Booking request submitted successfully!",
+    "toastError": "Failed to submit booking",
+    "errorUnexpected": "An unexpected error occurred. Please try again.",
+    "successTitle": "Booking Request Received!",
+    "successMessage": "Thank you for your booking request. We'll review your request and send you a confirmation email shortly.",
+    "successCheckEmail": "Please check your email for confirmation details. If you don't receive an email within 24 hours, please contact us.",
+    "submitAnother": "Submit Another Booking",
+    "title": "Request an Appointment",
+    "description": "Fill out the form below and we'll confirm your appointment shortly.",
+    "honeypotAria": "Do not fill",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Jane",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Doe",
+    "email": "Email Address",
+    "emailPlaceholder": "jane@example.com",
+    "phone": "Phone Number",
+    "phonePlaceholder": "(555) 123-4567",
+    "serviceType": "Service Type",
+    "preferredDate": "Preferred Date",
+    "preferredTime": "Preferred Time",
+    "notesLabel": "Notes (Optional)",
+    "notesPlaceholder": "Any specific requests or notes...",
+    "maxChars": "Maximum 500 characters",
+    "maxAdvanceDays": "Bookings available up to {days} days in advance",
+    "submitButton": "Request Appointment",
+    "submitButtonLoading": "Submitting...",
+    "cancellationNotice": "By booking, you agree to our cancellation policy (24-hour notice required)."
+  },
+  "search": {
+    "heading": "Search the site",
+    "subheading": "Find blog posts, service pages, and helpful resources in seconds.",
+    "placeholder": "Search blog posts, services, and pages",
+    "label": "Search",
+    "ariaLabel": "Search",
+    "noResults": "No results found. Try a different keyword.",
+    "openAria": "Open search",
+    "closeAria": "Close search",
+    "tipShortcut": "Tip: Press ⌘K to open search anytime."
+  },
+  "hero": {
+    "carouselAria": "Hero carousel",
+    "carouselSlides": "Carousel slides",
+    "goToSlide": "Go to slide {index}: {title}"
+  }
+}

@@ -20,6 +20,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import {
   Dialog,
   DialogTrigger,
@@ -31,6 +32,22 @@ import {
 } from '../Dialog';
 
 describe('Dialog Components', () => {
+  describe('Accessibility', () => {
+    it('has no accessibility violations when open', async () => {
+      const { container } = render(
+        <Dialog open={true}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Test Title</DialogTitle>
+              <DialogDescription>Test Description</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      );
+      expect(await axe(container)).toHaveNoViolations();
+    });
+  });
+
   describe('Dialog Root', () => {
     it('renders trigger when closed', () => {
       render(

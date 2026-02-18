@@ -11,7 +11,8 @@
     "./contact": "./src/contact/index.ts",
     "./blog": "./src/blog/index.ts",
     "./services": "./src/services/index.ts",
-    "./search": "./src/search/index.ts"
+"./search": "./src/search/index.ts",
+    "./localization": "./src/localization/index.ts"
   },
   "scripts": {
     "lint": "eslint src",
@@ -21,26 +22,26 @@
     "test:watch": "jest --watch"
   },
   "peerDependencies": {
+    "next": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:",
-    "next": "catalog:"
+    "react-dom": "catalog:"
   },
   "dependencies": {
+    "@hookform/resolvers": "3.9.1",
+    "@repo/infra": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@repo/infra": "workspace:*",
-    "@hookform/resolvers": "3.9.1",
-    "react-hook-form": "7.55.0",
-    "sonner": "^2.0.7",
     "date-fns": "^4.1.0",
-    "zod": "catalog:",
-    "lucide-react": "^0.344.0",
     "gray-matter": "4.0.3",
-    "reading-time": "^1.5.0",
+    "lucide-react": "^0.344.0",
     "next-mdx-remote": "5.0.0",
-    "remark-gfm": "^4.0.0",
+    "react-hook-form": "7.55.0",
+    "reading-time": "^1.5.0",
+    "rehype-pretty-code": "^0.14.1",
     "rehype-slug": "^6.0.0",
-    "rehype-pretty-code": "^0.14.1"
+    "remark-gfm": "^4.0.0",
+    "sonner": "^2.0.7",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
@@ -49,9 +50,9 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "next": "catalog:",
     "eslint": "catalog:",
+    "next": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "8.19.1"
+    "typescript-eslint": "8.56.0"
   }
 }

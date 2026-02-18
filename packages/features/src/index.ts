@@ -11,3 +11,4 @@ export * from './contact';
 export * from './blog';
 export * from './services';
 export * from './search';
+export * from './localization';

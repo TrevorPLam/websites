@@ -1,11 +1,12 @@
 /**
  * ContactForm component tests.
- * Verifies rendering and basic form behavior with mocked submission.
+ * Verifies rendering, basic form behavior, and accessibility with mocked submission.
  */
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import ContactForm from '../ContactForm';
 import type { ContactFeatureConfig, ContactSubmissionHandler } from '../../lib/contact-config';
 
@@ -37,6 +38,11 @@ describe('ContactForm', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('has no accessibility violations', async () => {
+    const { container } = render(<ContactForm config={minimalConfig} onSubmit={mockOnSubmit} />);
+    expect(await axe(container)).toHaveNoViolations();
   });
 
   it('renders form with configured fields', () => {

@@ -25,18 +25,49 @@ export interface HeroCarouselProps {
   className?: string;
 }
 
-export function HeroCarousel({ slides, autoPlay, interval, className }: HeroCarouselProps) {
-  // TODO: Implement carousel hero with auto-play
+export function HeroCarousel({
+  slides,
+  autoPlay = false,
+  interval = 5000,
+  className,
+}: HeroCarouselProps) {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const slide = slides[activeIndex];
+
+  React.useEffect(() => {
+    if (!autoPlay || slides.length <= 1) return;
+    const id = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % slides.length);
+    }, interval);
+    return () => clearInterval(id);
+  }, [autoPlay, interval, slides.length]);
+
+  if (!slide) return null;
+
   return (
-    <section className={className}>
-      {slides.map((slide, index) => (
-        <div key={index}>
-          <h1>{slide.title}</h1>
-          {slide.subtitle && <p>{slide.subtitle}</p>}
-          {slide.image && <img src={slide.image.src} alt={slide.image.alt} />}
-          {slide.cta && <a href={slide.cta.href}>{slide.cta.label}</a>}
+    <section className={className} aria-roledescription="carousel" aria-label="Hero carousel">
+      <div>
+        <h1>{slide.title}</h1>
+        {slide.subtitle && <p>{slide.subtitle}</p>}
+        {slide.image && <img src={slide.image.src} alt={slide.image.alt} />}
+        {slide.cta && <a href={slide.cta.href}>{slide.cta.label}</a>}
+      </div>
+      {slides.length > 1 && (
+        <div role="tablist" aria-label="Carousel slides">
+          {slides.map((s, index) => (
+            <button
+              key={index}
+              type="button"
+              role="tab"
+              aria-selected={index === activeIndex}
+              aria-label={`Go to slide ${index + 1}: ${s.title}`}
+              onClick={() => setActiveIndex(index)}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
-      ))}
+      )}
     </section>
   );
 }

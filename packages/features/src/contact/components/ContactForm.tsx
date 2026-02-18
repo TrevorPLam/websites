@@ -258,7 +258,14 @@ export default function ContactForm({
 
       {/* Multi-step progress indicator */}
       {isMultiStep && totalSteps > 1 && (
-        <div className="mb-6" role="progressbar" aria-valuenow={currentStep + 1} aria-valuemin={1} aria-valuemax={totalSteps}>
+        <div
+          className="mb-6"
+          role="progressbar"
+          aria-valuenow={currentStep + 1}
+          aria-valuemin={1}
+          aria-valuemax={totalSteps}
+          aria-valuetext={`Step ${currentStep + 1} of ${totalSteps}`}
+        >
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-muted-foreground">
               Step {currentStep + 1} of {totalSteps}

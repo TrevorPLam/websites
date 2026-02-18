@@ -3,7 +3,7 @@
 # See: docs/deployment/docker.md
 
 # Stage 1: Dependencies
-FROM node:22-alpine AS deps
+FROM node:22.14.0-alpine AS deps
 WORKDIR /app
 
 RUN corepack enable && corepack prepare pnpm@10.29.2 --activate
@@ -15,7 +15,7 @@ COPY clients/starter-template/package.json ./clients/starter-template/
 RUN pnpm install --frozen-lockfile
 
 # Stage 2: Builder
-FROM node:22-alpine AS builder
+FROM node:22.14.0-alpine AS builder
 WORKDIR /app
 
 RUN corepack enable && corepack prepare pnpm@10.29.2 --activate
@@ -27,7 +27,7 @@ COPY . .
 RUN pnpm run build --filter=@clients/starter-template
 
 # Stage 3: Runtime
-FROM node:22-alpine AS runtime
+FROM node:22.14.0-alpine AS runtime
 WORKDIR /app
 
 ENV NODE_ENV=production
