@@ -73,7 +73,6 @@ export const Badge = ({
   <span
     className={cn(
       'inline-flex items-center gap-1 rounded-full border font-semibold transition-colors',
-      'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
       variantStyles[variant],
       sizeStyles[size],
       className
