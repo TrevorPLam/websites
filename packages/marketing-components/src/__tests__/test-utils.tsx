@@ -76,4 +76,23 @@ export const testFixtures = {
     period: 'month',
     features: ['Feature 1', 'Feature 2'],
   },
+  location: {
+    id: '1',
+    name: 'Main Office',
+    address: '123 Main St',
+    city: 'Austin',
+    state: 'TX',
+    zip: '78701',
+    phone: '(512) 555-1234',
+    directionsUrl: 'https://maps.google.com',
+  },
+  menuCategory: {
+    id: '1',
+    name: 'Appetizers',
+    description: 'Start your meal',
+    items: [
+      { id: 'a1', name: 'Soup', price: 600, description: 'Daily soup' },
+      { id: 'a2', name: 'Salad', price: 800, dietaryTags: ['V', 'GF'] },
+    ],
+  },
 };

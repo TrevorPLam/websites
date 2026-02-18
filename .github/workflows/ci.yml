@@ -83,6 +83,10 @@ jobs:
       - name: Validate exports
         run: pnpm validate-exports
 
+      # @repo/marketing-components index.ts → component family validation
+      - name: Validate marketing exports
+        run: pnpm validate-marketing-exports
+
       # Circular dependency detection — blocks merge if cycles exist
       - name: Madge (circular deps)
         run: pnpm madge:circular

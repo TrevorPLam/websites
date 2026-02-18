@@ -11,8 +11,23 @@
     "./contact": "./src/contact/index.ts",
     "./blog": "./src/blog/index.ts",
     "./services": "./src/services/index.ts",
-"./search": "./src/search/index.ts",
-    "./localization": "./src/localization/index.ts"
+    "./search": "./src/search/index.ts",
+    "./localization": "./src/localization/index.ts",
+    "./team": "./src/team/index.ts",
+    "./testimonials": "./src/testimonials/index.ts",
+    "./gallery": "./src/gallery/index.ts",
+    "./pricing": "./src/pricing/index.ts",
+    "./newsletter": "./src/newsletter/index.ts",
+    "./social-media": "./src/social-media/index.ts",
+    "./reviews": "./src/reviews/index.ts",
+    "./analytics": "./src/analytics/index.ts",
+    "./ab-testing": "./src/ab-testing/index.ts",
+    "./chat": "./src/chat/index.ts",
+    "./ecommerce": "./src/ecommerce/index.ts",
+    "./authentication": "./src/authentication/index.ts",
+    "./payment": "./src/payment/index.ts",
+    "./content-management": "./src/content-management/index.ts",
+    "./notification": "./src/notification/index.ts"
   },
   "scripts": {
     "lint": "eslint src",
@@ -29,6 +44,7 @@
   "dependencies": {
     "@hookform/resolvers": "3.9.1",
     "@repo/infra": "workspace:*",
+    "@repo/marketing-components": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "date-fns": "^4.1.0",

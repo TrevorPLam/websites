@@ -1,6 +1,6 @@
 # Testing Strategy Documentation
 
-**Last Updated:** February 17, 2026  
+**Last Updated:** 2026-02-18  
 **Status:** Active  
 **Applies To:** All packages in marketing-websites monorepo
 
@@ -111,6 +111,14 @@ describe('Button Component', () => {
   });
 });
 ```
+
+### @repo/marketing-components (Display Components)
+
+**Test Environment:** `jsdom`
+
+**Focus Areas:** Rendering, accessibility (jest-axe), props, links, and user interactions. Place tests in `packages/marketing-components/src/{family}/__tests__/ComponentName.test.tsx`. Use `testFixtures` from `__tests__/test-utils` for shared data.
+
+**Tested components (2026-02-18):** LocationCard, FilterBar, SearchBar, ComparisonTable, HeroCentered. Pattern: render → a11y (axe) → content → interactions → className.
 
 ### @repo/features (Feature Modules)
 

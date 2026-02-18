@@ -33,6 +33,7 @@ pnpm format                # Prettier write
 pnpm format:check          # Prettier check (no writes)
 pnpm validate-exports      # Validate package.json export maps
 pnpm validate-ui-exports   # Validate @repo/ui index.ts → component files exist
+pnpm validate-marketing-exports   # Validate @repo/marketing-components index.ts → families exist
 pnpm validate-docs         # Validate documentation
 pnpm knip                  # Dead code / unused dependency detection
 pnpm syncpack:check        # Check for cross-workspace version drift

@@ -38,6 +38,7 @@
     "validate-docs:strict": "node scripts/validate-documentation.js --strict",
     "validate-exports": "node scripts/validate-exports.js",
     "validate-ui-exports": "node scripts/validate-ui-exports.js",
+    "validate-marketing-exports": "node scripts/validate-marketing-exports.js",
     "expand-tasks": "node scripts/expand-task-format.js",
     "expand-tasks:dry": "node scripts/expand-task-format.js --dry-run",
     "update-tasks-research": "node scripts/update-tasks-with-research-v2.js",

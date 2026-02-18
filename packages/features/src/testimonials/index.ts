@@ -1,3 +1,9 @@
-// Task: [2.16] Testimonials feature
-// Status: Scaffolded — TODO implement
-export {};
+/**
+ * @file packages/features/src/testimonials/index.ts
+ * Purpose: Testimonials feature barrel export
+ */
+
+export { TestimonialsSection } from './components/TestimonialsSection';
+export type { TestimonialsSectionProps } from './components/TestimonialsSection';
+export * from './lib/testimonials-config';
+export { getTestimonialsFromConfig } from './lib/adapters/config';

@@ -20,6 +20,7 @@
 // - [FEAT:PERFORMANCE] Efficient rendering of large datasets
 
 import * as React from 'react';
+/// <reference path="../shims/react-window.d.ts" />
 import { FixedSizeList, VariableSizeList, ListChildComponentProps } from 'react-window';
 import { cn } from '@repo/utils';
 

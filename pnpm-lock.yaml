@@ -6,54 +6,9 @@ settings:
 
 catalogs:
   default:
-    '@sentry/nextjs':
-      specifier: 10.38.0
-      version: 10.38.0
-    '@types/jest':
-      specifier: ^30.0.0
-      version: 30.0.0
-    '@types/node':
-      specifier: ^22.0.0
-      version: 22.19.11
-    '@types/react':
-      specifier: ^19.0.2
-      version: 19.0.2
-    '@types/react-dom':
-      specifier: ^19.0.2
-      version: 19.0.2
-    eslint:
-      specifier: ^9.18.0
-      version: 9.18.0
-    jest:
-      specifier: ^30.2.0
-      version: 30.2.0
-    lucide-react:
-      specifier: ^0.344.0
-      version: 0.344.0
-    next:
-      specifier: 16.1.5
-      version: 16.1.5
-    next-intl:
-      specifier: ^3.25.0
-      version: 3.26.5
-    radix-ui:
-      specifier: ^1.0.0
-      version: 1.4.3
-    react:
-      specifier: 19.0.0
-      version: 19.0.0
-    react-dom:
-      specifier: 19.0.0
-      version: 19.0.0
-    sonner:
-      specifier: ^2.0.7
-      version: 2.0.7
     typescript:
       specifier: 5.9.3
-      version: 5.9.3
-    zod:
-      specifier: ^3.22.0
-      version: 3.25.76
+      version: 5.7.2
 
 overrides:
   '@eslint/plugin-kit': '>=0.3.4'
@@ -612,6 +567,9 @@ importers:
       '@repo/infra':
         specifier: workspace:*
         version: link:../infra
+      '@repo/marketing-components':
+        specifier: workspace:*
+        version: link:../marketing-components
       '@repo/types':
         specifier: workspace:*
         version: link:../types
@@ -980,9 +938,6 @@ importers:
 
   packages/marketing-components:
     dependencies:
-      '@repo/features':
-        specifier: workspace:*
-        version: link:../features
       '@repo/types':
         specifier: workspace:*
         version: link:../types

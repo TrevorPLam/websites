@@ -16,7 +16,6 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@repo/features": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/utils": "workspace:*",

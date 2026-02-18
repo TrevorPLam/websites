@@ -32,6 +32,7 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 | Lint             | `pnpm turbo run lint`       | Module boundaries, ESLint (many packages lack eslint.config) |
 | Type check       | `pnpm turbo run type-check` | TypeScript strict (@repo/marketing-components fails) |
 | Validate exports | `pnpm validate-exports`     | Package.json exports resolve to files              |
+| Validate marketing exports | `pnpm validate-marketing-exports` | @repo/marketing-components index.ts → families |
 | Madge circular   | `pnpm madge:circular`       | Circular dependency detection                      |
 | Syncpack         | `pnpm syncpack:check`       | Dependency version consistency                     |
 | Build            | `pnpm turbo run build`      | All packages build (Toast.tsx blocks @repo/features) |
@@ -61,6 +62,7 @@ pnpm install
 pnpm turbo run lint type-check build
 pnpm validate-exports
 pnpm validate-ui-exports   # when modifying packages/ui or its index.ts
+pnpm validate-marketing-exports   # when modifying packages/marketing-components or its index.ts
 pnpm madge:circular
 pnpm syncpack:check
 pnpm test:coverage

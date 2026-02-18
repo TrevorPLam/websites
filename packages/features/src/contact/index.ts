@@ -26,7 +26,9 @@
 
 // Component exports
 export { default as ContactForm } from './components/ContactForm';
+export { ContactFormStandard } from './components/ContactFormStandard';
 export type { ContactFormProps } from './components/ContactForm';
+export type { ContactFormStandardProps } from './components/ContactFormStandard';
 
 // Configuration exports
 export * from './lib/contact-config';

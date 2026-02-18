@@ -81,11 +81,12 @@ export const ToggleGroup = React.forwardRef<
     : { value: valueMultiple, defaultValue: defaultValueMultiple, onValueChange: onValueChangeMultiple, disabled, orientation, loop };
   
   return (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Radix discriminated union
     <ToggleGroupPrimitive.Root
       ref={ref}
       type={type}
       className={cn('flex items-center justify-center gap-1', className)}
-      {...rootProps}
+      {...(rootProps as any)}
       {...props}
     >
       {children}

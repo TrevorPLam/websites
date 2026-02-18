@@ -74,14 +74,20 @@
 
 ## Phase 4: Core Features (2-16 through 2-28)
 
-### Current State
+### Current State (updated 2026-02-18)
 
-- features/team: empty
-- features/testimonials: empty
-- features/gallery: exists (index only)
-- features/pricing: exists (index only)
+- features/team: TeamSection, config, config adapter
+- features/testimonials: TestimonialsSection, config, config adapter
+- features/gallery: GallerySection, config, config adapter
+- features/pricing: PricingSection, config, config adapter
+- features/newsletter: NewsletterSection, config
+- features/social-media: SocialMediaSection, config
+- features/reviews: ReviewsSection, config
+- features/analytics: config, tracking helpers (stub)
+- features/ab-testing: config, useVariant hook (stub)
+- features/chat: ChatWidget, config (stub)
 - features/booking: full implementation
-- features/contact: full implementation
+- features/contact: full implementation (ContactFormStandard added)
 - features/blog: full implementation
 - features/search: full implementation
 
@@ -101,6 +107,14 @@
 
 ## Phase 5: Advanced Features (2-29 through 2-47)
 
+### Current State (updated 2026-02-18)
+
+- features/ecommerce: config stub
+- features/authentication: config stub
+- features/payment: config stub
+- features/content-management: config stub
+- features/notification: config stub
+
 ### Potential Issues
 
 1. **Heavy external deps:** E-commerce (Shopify), Payment (Stripe), Auth (NextAuth) — stub interfaces first.
@@ -110,6 +124,24 @@
 ---
 
 ## Phase 6: Industry & Advanced Components (2-48 through 2-62)
+
+### Current State (updated 2026-02-18)
+
+- marketing-components/location: LocationCard, LocationList, types
+- marketing-components/menu: MenuCard, MenuList, types (restaurant)
+- marketing-components/portfolio: PortfolioCard, PortfolioGrid, types
+- marketing-components/case-study: CaseStudyCard, types
+- marketing-components/job-listing: JobListingCard, types
+- marketing-components/course: CourseCard, CourseGrid, types
+- marketing-components/resource: ResourceCard, ResourceGrid, types
+- marketing-components/comparison: ComparisonTable, types
+- marketing-components/filter: FilterBar
+- marketing-components/search: SearchBar
+- marketing-components/social-proof: SocialProofBadge, SocialProofStack
+- marketing-components/video: VideoEmbed (YouTube, Vimeo, native)
+- marketing-components/audio: AudioPlayer
+- marketing-components/interactive: AccordionContent
+- marketing-components/widget: WidgetCard
 
 ### Potential Issues
 

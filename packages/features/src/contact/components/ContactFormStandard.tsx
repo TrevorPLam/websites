@@ -1,14 +1,10 @@
 /**
- * @file packages/marketing-components/src/contact/ContactFormStandard.tsx
- * @role component
- * @summary Standard contact form wrapper (display variant)
- *
- * Wraps @repo/features ContactForm for consistent layout. For full validation and submission,
- * use ContactForm from @repo/features/contact directly.
+ * @file packages/features/src/contact/components/ContactFormStandard.tsx
+ * Purpose: Standard contact form section with title/description layout
  */
 
-import { ContactForm } from '@repo/features/contact';
-import type { ContactFormProps } from '@repo/features/contact';
+import ContactForm from './ContactForm';
+import type { ContactFormProps } from './ContactForm';
 import { Container, Section } from '@repo/ui';
 
 export interface ContactFormStandardProps extends ContactFormProps {
@@ -20,13 +16,6 @@ export interface ContactFormStandardProps extends ContactFormProps {
   className?: string;
 }
 
-/**
- * Standard contact form section variant.
- * Delegates to @repo/features ContactForm.
- *
- * @param props - ContactFormStandardProps
- * @returns Contact form section
- */
 export function ContactFormStandard({
   title,
   description,

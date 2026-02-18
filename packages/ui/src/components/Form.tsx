@@ -21,7 +21,14 @@
 // - [FEAT:ACCESSIBILITY] Accessible error messages
 
 import * as React from 'react';
-import { useForm, FormProvider, UseFormReturn, FieldValues, Path } from 'react-hook-form';
+import {
+  useForm,
+  FormProvider,
+  UseFormReturn,
+  FieldValues,
+  Path,
+  type DefaultValues,
+} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { cn } from '@repo/utils';
@@ -80,8 +87,8 @@ export function Form<T extends FieldValues>({
   ...props
 }: FormProps<T>) {
   const internalForm = useForm<T>({
-    resolver: schema ? zodResolver(schema) : undefined,
-    defaultValues: defaultValues as Partial<T>,
+    resolver: schema ? zodResolver(schema as unknown as Parameters<typeof zodResolver>[0]) : undefined,
+    defaultValues: defaultValues as DefaultValues<T> | undefined,
   });
 
   const form = externalForm || internalForm;
