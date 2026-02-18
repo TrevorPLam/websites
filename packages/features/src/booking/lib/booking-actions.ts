@@ -1,4 +1,4 @@
-// File: packages/features/src/booking/lib/booking-actions.ts  [TRACE:FILE=packages.features.booking.bookingActions]
+// File: packages/features/src/booking/lib/booking-actions.ts [TRACE:FILE=packages.features.booking.bookingActions]
 // Purpose: Booking action handlers providing appointment submission, validation, and provider
 //          integration. Now accepts BookingFeatureConfig for configurable validation.
 //
@@ -108,27 +108,37 @@ function generateConfirmationNumber(): string {
 
 /**
  * Detect suspicious booking patterns (AI-powered fraud detection)
+ *
+ * FIX summary:
+ * 1. Name casing false positive: Previous regex `/^[A-Z\s]+$/` flagged ALL uppercase names
+ *    (e.g., "JANE DOE") as suspicious. Bot detection should instead look for length extremes
+ *    or lack of word boundaries. Updated to check for numeric characters in names instead.
+ * 2. `_ip` parameter: Renamed from `_ip` and used `void ip` to suppress lint warning while
+ *    leaving placeholder for future correlation. Now used to log the IP of suspicious attempts.
  */
 // [TRACE:FUNC=packages.features.booking.detectSuspiciousActivity]
 // [FEAT:SECURITY] [FEAT:FRAUD_DETECTION]
 // NOTE: Fraud detection - analyzes booking patterns for suspicious activity using configurable rules.
-function detectSuspiciousActivity(data: BookingFormData, _ip: string): boolean {
-  void _ip; // Reserved for future rate-limit/fraud correlation
+function detectSuspiciousActivity(data: BookingFormData, ip: string): boolean {
   const suspiciousPatterns = [
-    // Check for obviously fake names
-    /^[A-Z\s]+$/.test(data.firstName) && /^[A-Z\s]+$/.test(data.lastName),
-
+    // Check for numeric characters in names (typical bot behavior)
+    /\d/.test(data.firstName) || /\d/.test(data.lastName),
     // Check for suspicious email domains
     /@(10minutemail|tempmail|guerrillamail)\.com$/i.test(data.email),
-
-    // Check for rapid submissions from same IP
-    false, // Would be implemented with proper rate limiting data
-
-    // Check for unusual booking patterns
+    // Unusual booking patterns
     data.serviceType === 'consultation' && data.notes?.toLowerCase().includes('test'),
   ];
 
-  return suspiciousPatterns.some(Boolean);
+  const isSuspicious = suspiciousPatterns.some(Boolean);
+
+  if (isSuspicious) {
+    console.warn(`[FRAUD] Suspicious booking attempt blocked/flagged from IP: ${ip}`, {
+      email: data.email,
+      name: `${data.firstName} ${data.lastName}`,
+    });
+  }
+
+  return isSuspicious;
 }
 
 /**
@@ -160,7 +170,7 @@ export async function submitBookingRequest(
       notes: formData.get('notes'),
       honeypot: formData.get('honeypot'),
       timestamp: formData.get('timestamp'),
-    } satisfies Record<string, FormDataEntryValue | null>;
+    } satisfies Record<string, unknown>;
 
     // Create schema from config and validate
     const schema = createBookingFormSchema(config);
@@ -182,13 +192,8 @@ export async function submitBookingRequest(
 
     // AI-powered fraud detection (2026 security pattern)
     if (detectSuspiciousActivity(validatedData, clientIp)) {
-      console.warn('Suspicious booking activity detected:', {
-        ip: clientIp,
-        email: validatedData.email,
-        timestamp: new Date().toISOString(),
-        patterns: 'AI detection triggered',
-      });
-      // Allow but flag for review
+      // For demo purposes, we flag but allow. In production, we might return an error here.
+      console.warn('Suspicious activity flagged for review.');
     }
 
     // Generate unique booking ID and confirmation number
@@ -300,6 +305,7 @@ export async function confirmBooking(
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     });
+
     return { success: false, error: 'Failed to confirm booking' };
   }
 }
@@ -358,6 +364,7 @@ export async function cancelBooking(
       error: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString(),
     });
+
     return { success: false, error: 'Failed to cancel booking' };
   }
 }
