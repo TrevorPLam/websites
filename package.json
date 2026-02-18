@@ -46,6 +46,8 @@
     "update-tasks-snippets": "node scripts/update-tasks-with-code-snippets.js",
     "update-tasks-snippets:all": "node scripts/update-tasks-with-code-snippets.js --all",
     "task-update-summary": "node scripts/task-update-summary.js",
+    "validate-task-paths": "node scripts/validate-task-paths.js",
+    "validate-task-paths:fix": "node scripts/validate-task-paths.js --fix",
     "madge:circular": "madge --circular packages/ clients/",
     "version-packages": "pnpm changeset version && pnpm install --no-frozen-lockfile",
     "release": "pnpm changeset publish"
