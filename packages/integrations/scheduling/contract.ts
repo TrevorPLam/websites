@@ -37,4 +37,9 @@ export interface SchedulingAdapter {
    * Returns the configuration for the embed widget.
    */
   getEmbedConfig(eventTypeId?: string): EmbedConfig;
+  
+  /**
+   * Generates a JSON-LD schema for the scheduling service.
+   */
+  generateJsonLd(eventTypeId?: string): string;
 }
