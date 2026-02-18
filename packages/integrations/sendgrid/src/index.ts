@@ -3,6 +3,7 @@
  * Task: [4.1] SendGrid email marketing adapter
  */
 import type { EmailAdapter, EmailSubscriber } from '../../email/contract';
+import { fetchWithRetry } from '../../email/utils';
 
 export class SendGridAdapter implements EmailAdapter {
   id = 'sendgrid';
@@ -11,7 +12,7 @@ export class SendGridAdapter implements EmailAdapter {
 
   async subscribe(subscriber: EmailSubscriber, listId?: string) {
     try {
-      const response = await fetch('https://api.sendgrid.com/v3/marketing/contacts', {
+      const response = await fetchWithRetry('https://api.sendgrid.com/v3/marketing/contacts', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
@@ -27,17 +28,22 @@ export class SendGridAdapter implements EmailAdapter {
           }],
         }),
       });
+
       return { success: response.ok };
     } catch (e) {
       return { success: false, error: String(e) };
     }
   }
 
-  async unsubscribe(email: string, listId?: string) {
-    return { success: false, error: 'Unsubscribe not implemented for SendGrid Marketing API via email only' };
+  async unsubscribe(email: string, _listId?: string) {
+    // Note: SendGrid marketing contacts unsubscribe is typically done by updating the contact's status
+    // or adding to a suppression group. For simplicity in this adapter:
+    return { success: false, error: 'Unsubscribe not fully implemented for SendGrid' };
   }
 
   async sendEvent(email: string, eventName: string, data?: Record<string, any>) {
-    return { success: false, error: 'SendEvent not implemented for SendGrid' };
+    // SendGrid doesn't have a direct "Events" API like Mailchimp for marketing contacts,
+    // but you can use custom fields.
+    return { success: false, error: 'Event sending not implemented for SendGrid' };
   }
 }
