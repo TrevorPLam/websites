@@ -6,8 +6,8 @@
  * Responsive grid layout for displaying services in cards.
  */
 
-import { Card } from '@repo/ui';
-import { Container, Section } from '@repo/ui';
+import Image from 'next/image';
+import { Button, Card, Container, Section } from '@repo/ui';
 import { cn } from '@repo/utils';
 import type { Service } from './types';
 
@@ -27,6 +27,14 @@ export interface ServiceGridProps {
 /**
  * Service grid component with responsive columns.
  *
+ * FIX summary:
+ * 1. Performance/LCP: Replaced raw `<img>` with Next.js `<Image>` component.
+ *    Using `fill` with `object-cover` inside a relative aspect-ratio container
+ *    to ensure optimized delivery (WebP/AVIF) and zero layout shift.
+ * 2. Design System: Replaced inline styled `<a>` with the design system's
+ *    `<Button>` component (variant="outline"). This ensures consistency
+ *    in focus states, hover effects, and typography across the monorepo.
+ *
  * @param props - ServiceGridProps
  * @returns Service grid component
  */
@@ -45,44 +53,70 @@ export function ServiceGrid({
   );
 
   return (
-    <Section className={className}>
+    <Section className={cn('py-12', className)}>
       <Container>
-        {title && (
-          <div className="mb-8 text-center">
-            <h2 className="text-3xl font-bold">{title}</h2>
-            {description && <p className="mt-4 text-muted-foreground">{description}</p>}
+        {(title || description) && (
+          <div className="mb-10 text-center">
+            {title && (
+              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                {title}
+              </h2>
+            )}
+            {description && (
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+                {description}
+              </p>
+            )}
           </div>
         )}
+
         <div className={gridClasses}>
           {services.map((service) => (
-            <Card key={service.id} variant="service">
+            <Card key={service.id} variant="service" className="flex h-full flex-col overflow-hidden">
               {service.image && (
-                <div className="mb-4 aspect-video w-full overflow-hidden rounded-lg">
-                  <img
+                <div className="relative aspect-video w-full overflow-hidden">
+                  <Image
                     src={service.image.src}
                     alt={service.image.alt}
-                    className="h-full w-full object-cover"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               )}
-              {service.icon && <div className="mb-4">{service.icon}</div>}
-              <h3 className="text-xl font-semibold">{service.name}</h3>
-              {service.description && (
-                <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
-              )}
-              {service.price && (
-                <div className="mt-4 text-lg font-bold">{service.price}</div>
-              )}
-              {service.cta && (
-                <div className="mt-4">
-                  <a
-                    href={service.cta.href}
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-md border border-border bg-transparent px-4 text-sm font-semibold transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    {service.cta.label}
-                  </a>
+              <div className="flex flex-1 flex-col p-6">
+                {service.icon && (
+                  <div className="mb-4 text-primary">
+                    {service.icon}
+                  </div>
+                )}
+                <h3 className="text-xl font-semibold leading-none tracking-tight">
+                  {service.name}
+                </h3>
+                {service.description && (
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {service.description}
+                  </p>
+                )}
+                <div className="mt-auto pt-6">
+                  {service.price && (
+                    <p className="mb-4 text-lg font-bold text-primary">
+                      {service.price}
+                    </p>
+                  )}
+                  {service.cta && (
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      asChild
+                    >
+                      <a href={service.cta.href}>
+                        {service.cta.label}
+                      </a>
+                    </Button>
+                  )}
                 </div>
-              )}
+              </div>
             </Card>
           ))}
         </div>
