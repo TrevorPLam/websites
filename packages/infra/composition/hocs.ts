@@ -27,10 +27,10 @@ import * as React from 'react';
  * @example
  * const MyList = withDisplayName(memo(({ items }) => <ul>…</ul>), 'MyList');
  */
-export function withDisplayName<T extends React.ComponentType<never>>(
-  component: T,
+export function withDisplayName<P>(
+  component: React.ComponentType<P>,
   name: string
-): T {
+): React.ComponentType<P> {
   component.displayName = name;
   return component;
 }
