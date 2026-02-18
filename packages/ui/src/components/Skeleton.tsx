@@ -60,9 +60,16 @@ export const Skeleton = ({
   style,
   ...props
 }: SkeletonProps) => {
+  const hasWidthClass = typeof className === 'string' && /\bw-/.test(className);
+  const hasHeightClass = typeof className === 'string' && /\bh-/.test(className);
+
   const inlineStyle: React.CSSProperties = {
-    ...(width !== undefined ? { width: typeof width === 'number' ? `${width}px` : width } : {}),
-    ...(height !== undefined ? { height: typeof height === 'number' ? `${height}px` : height } : {}),
+    ...(width !== undefined && !hasWidthClass
+      ? { width: typeof width === 'number' ? `${width}px` : width }
+      : {}),
+    ...(height !== undefined && !hasHeightClass
+      ? { height: typeof height === 'number' ? `${height}px` : height }
+      : {}),
     ...style,
   };
 
