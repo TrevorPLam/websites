@@ -1,40 +1,62 @@
-// File: packages/marketing-components/src/testimonials/TestimonialCarousel.tsx
-// Purpose: Auto-rotating testimonial quotes
-// Task: 2.4
-// Status: Scaffolded - TODO: Implement
+/**
+ * @file packages/marketing-components/src/testimonials/TestimonialCarousel.tsx
+ * @role component
+ * @summary Auto-rotating testimonial quotes carousel
+ */
 
-export interface Testimonial {
-  id: string;
-  quote: string;
-  author: {
-    name: string;
-    role?: string;
-    company?: string;
-    photo?: {
-      src: string;
-      alt: string;
-    };
-  };
-  rating?: number;
-}
+import { Card, Rating } from '@repo/ui';
+import { Carousel, CarouselContent, CarouselItem } from '@repo/ui';
+import { Container, Section } from '@repo/ui';
+import type { Testimonial } from './types';
 
 export interface TestimonialCarouselProps {
+  /** Section title */
+  title?: string;
+  /** Testimonials */
   testimonials: Testimonial[];
-  autoPlay?: boolean;
-  interval?: number;
+  /** Auto-play interval (ms); 0 to disable */
+  autoPlay?: number;
+  /** Custom CSS class name */
   className?: string;
 }
 
-export function TestimonialCarousel({ testimonials, autoPlay: _autoPlay, interval: _interval, className }: TestimonialCarouselProps) {
-  // TODO: Implement auto-rotating carousel
+function getContent(t: Testimonial): string {
+  return t.quote ?? t.content ?? '';
+}
+
+/**
+ * Testimonial carousel component.
+ *
+ * @param props - TestimonialCarouselProps
+ * @returns Testimonial carousel component
+ */
+export function TestimonialCarousel({
+  title,
+  testimonials,
+  autoPlay,
+  className,
+}: TestimonialCarouselProps) {
   return (
-    <div className={className}>
-      {testimonials.map((testimonial) => (
-        <div key={testimonial.id}>
-          <blockquote>{testimonial.quote}</blockquote>
-          <cite>{testimonial.author.name}</cite>
-        </div>
-      ))}
-    </div>
+    <Section className={className}>
+      <Container>
+        {title && <h2 className="mb-8 text-center text-3xl font-bold">{title}</h2>}
+        <Carousel className="w-full" loop autoplay={autoPlay} showArrows showIndicators>
+          <CarouselContent>
+            {testimonials.map((t) => (
+              <CarouselItem key={t.id}>
+                <Card variant="testimonial">
+                  {t.rating != null && <Rating value={t.rating} readOnly size="sm" className="mb-4" />}
+                  <blockquote className="text-lg">"{getContent(t)}"</blockquote>
+                  <footer className="mt-4">
+                    <cite className="font-semibold not-italic">{t.author.name}</cite>
+                    {t.author.role && <span className="text-muted-foreground"> — {t.author.role}</span>}
+                  </footer>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </Container>
+    </Section>
   );
 }

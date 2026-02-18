@@ -3,7 +3,7 @@
 // Task: 2.2
 // Status: Scaffolded - TODO: Implement
 
-import type { Service } from './ServiceGrid';
+import type { Service } from './types';
 
 export interface ServiceListProps {
   services: Service[];

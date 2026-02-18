@@ -11,4 +11,6 @@ export * from './stats';
 export * from './cta';
 export * from './faq';
 export * from './contact';
+export * from './navigation';
+export * from './footer';
 export * from './experiments/framing';

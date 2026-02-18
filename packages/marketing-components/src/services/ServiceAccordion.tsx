@@ -4,7 +4,7 @@
 // Status: Scaffolded - TODO: Implement
 
 import { Accordion } from '@repo/ui';
-import type { Service } from './ServiceGrid';
+import type { Service } from './types';
 
 export interface ServiceAccordionProps {
   services: Service[];

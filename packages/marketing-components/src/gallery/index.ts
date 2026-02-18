@@ -1,3 +1,8 @@
-// Task: [2.6] Gallery components
-// Status: Scaffolded — TODO implement
-export {};
+/**
+ * @file packages/marketing-components/src/gallery/index.ts
+ * @role barrel
+ * @summary Gallery component variants barrel export
+ */
+
+export { GalleryGrid } from './GalleryGrid';
+export type { GalleryGridProps, GalleryItem } from './GalleryGrid';
