@@ -2281,7 +2281,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.2 Create Toast Component (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 8h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §3.1 (React 19), §4.2 (INP), §2.2 (shadcn/ui), §7.1 (pnpm catalog)
 
@@ -2317,7 +2317,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.3 Create Tabs Component (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 8h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19), §4.2 (INP)
 
@@ -2354,7 +2354,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.4 Create Dropdown Menu Component (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 10h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19)
 
@@ -2393,7 +2393,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.5 Create Tooltip Component (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 8h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19), WCAG 1.4.13
 
@@ -2429,7 +2429,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.6 Create Popover Component (Enhanced)
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 8h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19)
 
@@ -2468,7 +2468,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.7 Create Badge Component
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 2h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19)
 
@@ -2486,7 +2486,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.8 Create Avatar Component
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 3h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19)
 
@@ -2504,7 +2504,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.9 Create Skeleton Component
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 2h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §3.1 (React 19), §4.2 (Perceived performance)
 
@@ -2522,7 +2522,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.10 Create Separator Component
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 1h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19)
 
@@ -2540,7 +2540,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.11 Create Switch Component
 
-**Status:** [ ] TODO | **Batch:** A | **Effort:** 3h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §2.2 (Radix UI), §3.1 (React 19)
 
@@ -3262,7 +3262,7 @@ Wave 0 (Repo Integrity) ──────────────────�
 
 #### 1.7 Create @repo/marketing-components Package Scaffold
 
-**Status:** [🔄] IN_PROGRESS | **Batch:** — | **Effort:** 2h | **Deps:** None
+**Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **Related Research:** §1.3 (Monorepo structure), §2.1 (Atomic design)
 
