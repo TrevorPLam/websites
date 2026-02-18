@@ -54,6 +54,40 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-UI — React 19 component with ref (from RESEARCH-INVENTORY)
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function MyPrimitive({ ref, className, ...props }: MyPrimitiveProps) {
+  return (
+    <Primitive.Root ref={ref} className={cn('base-styles', className)} {...props} />
+  );
+}
+```
+### R-RADIX — ComponentRef type
+```typescript
+type MyPrimitiveRef = React.ComponentRef<typeof Primitive.Root>;
+```
+### R-FORM — Form with Zod resolver (from RESEARCH-INVENTORY)
+```typescript
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const schema = z.object({ name: z.string().min(1), email: z.string().email() });
+type FormData = z.infer<typeof schema>;
+
+const form = useForm<FormData>({
+  resolver: zodResolver(schema),
+  defaultValues: { name: '', email: '' },
+});
+```
+### R-A11Y — Touch target (2.5.8)
+```css
+.touch-target { min-width: 24px; min-height: 24px; }
+```
+
 ### Related Patterns
 - See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples

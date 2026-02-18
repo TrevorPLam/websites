@@ -41,6 +41,9 @@
     "expand-tasks:dry": "node scripts/expand-task-format.js --dry-run",
     "update-tasks-research": "node scripts/update-tasks-with-research-v2.js",
     "update-tasks-research:all": "node scripts/update-tasks-with-research-v2.js --all",
+    "update-tasks-snippets": "node scripts/update-tasks-with-code-snippets.js",
+    "update-tasks-snippets:all": "node scripts/update-tasks-with-code-snippets.js --all",
+    "task-update-summary": "node scripts/task-update-summary.js",
     "madge:circular": "madge --circular packages/ clients/",
     "version-packages": "pnpm changeset version && pnpm install --no-frozen-lockfile",
     "release": "pnpm changeset publish"

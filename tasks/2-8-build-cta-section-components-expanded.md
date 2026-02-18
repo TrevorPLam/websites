@@ -36,6 +36,7 @@
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 - **[2026-02-18] R-PERF**: LCP, INP, CLS, bundle budgets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-perf) for full research findings.
 - **[2026-02-18] R-MARKETING**: Hero, menu, pricing, testimonials, FAQ, sections — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing) for full research findings.
@@ -45,6 +46,7 @@
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH-INVENTORY.md - R-PERF](RESEARCH-INVENTORY.md#r-perf) — Full research findings
 - [RESEARCH-INVENTORY.md - R-MARKETING](RESEARCH-INVENTORY.md#r-marketing) — Full research findings
@@ -63,10 +65,143 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
-### Related Patterns
-- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
-- See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples
-- See [R-MARKETING - Research Findings](RESEARCH-INVENTORY.md#r-marketing) for additional examples
+### R-MARKETING — CTA section with composition
+
+```typescript
+interface CTASectionProps {
+  title: string;
+  description?: string;
+  primaryCta: { text: string; href: string };
+  secondaryCta?: { text: string; href: string };
+  variant?: 'centered' | 'split' | 'with-image' | 'with-video';
+  children?: React.ReactNode;
+}
+export function CTASection({ title, description, primaryCta, secondaryCta, variant = 'centered', children }: CTASectionProps) {
+  return (
+    <section>
+      <h2>{title}</h2>
+      {description && <p>{description}</p>}
+      <a href={primaryCta.href}>{primaryCta.text}</a>
+      {secondaryCta && <a href={secondaryCta.href}>{secondaryCta.text}</a>}
+      {children}
+    </section>
+  );
+}
+```
+
+### R-UI — React 19 component with ref forwarding
+
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function CTASection({ ref, className, ...props }: CTASectionProps) {
+  return (
+    <Primitive.Root
+      ref={ref}
+      className={cn('cta-section', className)}
+      {...props}
+    />
+  );
+}
+```
+
+### ComponentRef type for type-safe ref forwarding
+
+```typescript
+type CTASectionRef = React.ComponentRef<typeof Primitive.Root>;
+```
+
+### R-A11Y — Touch targets and reduced motion
+
+```css
+.cta-button {
+  min-width: 24px;
+  min-height: 24px;
+}
+```
+
+### Reduced motion detection
+
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
+### R-PERF — LCP optimization
+
+- Page shell < 250 KB gzipped; component-level budgets (e.g. CTA < 40 KB)
+- LCP < 2.5s, INP ≤ 200 ms, CLS < 0.1
+- Track via Lighthouse CI / next.config performanceBudgets
+
+### R-RADIX — Primitive wrapper pattern
+
+```typescript
+import * as Primitive from '@radix-ui/react-primitive';
+import { cn } from '@repo/utils';
+
+const CTARoot = React.forwardRef<
+  React.ComponentRef<typeof Primitive.Root>,
+  React.ComponentPropsWithoutRef<typeof Primitive.Root> & { className?: string }
+>(({ className, ...props }, ref) => (
+  <Primitive.Root ref={ref} className={cn('cta-root', className)} {...props} />
+));
+```
+
+### Button integration (from 1.2)
+
+```typescript
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+}
+```
+
+### A/B testing integration
+
+```typescript
+interface CTAVariant {
+  id: string;
+  name: string;
+  title: string;
+  description?: string;
+  primaryCta: { text: string; href: string };
+  secondaryCta?: { text: string; href: string };
+}
+
+interface CTAABTest {
+  experimentId: string;
+  variants: CTAVariant[];
+  tracking?: {
+    onConversion?: (variantId: string) => void;
+    onView?: (variantId: string) => void;
+  };
+}
+```
+
+### Conversion tracking hook
+
+```typescript
+import { useEffect } from 'react';
+
+export function useConversionTracking(
+  experimentId: string,
+  variantId: string,
+  onConversion?: () => void
+) {
+  useEffect(() => {
+    // Track view event
+    console.log(`CTA View: ${experimentId} - ${variantId}`);
+  }, [experimentId, variantId]);
+
+  const handleConversion = () => {
+    console.log(`CTA Conversion: ${experimentId} - ${variantId}`);
+    onConversion?.();
+  };
+
+  return { handleConversion };
+}
+```
 
 ## Acceptance Criteria
 
@@ -110,4 +245,3 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

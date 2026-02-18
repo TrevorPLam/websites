@@ -54,6 +54,34 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-UI — React 19 component with ref
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function Slider({ ref, className, ...props }: SliderProps) {
+  return (
+    <SliderPrimitive.Root ref={ref} className={cn('slider-root', className)} {...props}>
+      <SliderPrimitive.Track><SliderPrimitive.Range /></SliderPrimitive.Track>
+      <SliderPrimitive.Thumb />
+    </SliderPrimitive.Root>
+  );
+}
+```
+
+### R-RADIX — ComponentRef type
+```typescript
+type SliderRef = React.ComponentRef<typeof SliderPrimitive.Root>;
+```
+
+### R-A11Y — Touch target (2.5.8) and reduced motion
+```css
+.slider-thumb { min-width: 24px; min-height: 24px; }
+```
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
 ### Related Patterns
 - See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples

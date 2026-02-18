@@ -37,6 +37,7 @@
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 - **[2026-02-18] R-PERF**: LCP, INP, CLS, bundle budgets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-perf) for full research findings.
 - **[2026-02-18] R-MARKETING**: Hero, menu, pricing, testimonials, FAQ, sections — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing) for full research findings.
@@ -47,6 +48,7 @@
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH-INVENTORY.md - R-PERF](RESEARCH-INVENTORY.md#r-perf) — Full research findings
 - [RESEARCH-INVENTORY.md - R-MARKETING](RESEARCH-INVENTORY.md#r-marketing) — Full research findings
@@ -68,11 +70,149 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
-### Related Patterns
-- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
-- See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples
-- See [R-MARKETING - Research Findings](RESEARCH-INVENTORY.md#r-marketing) for additional examples
-- See [R-CMS - Research Findings](RESEARCH-INVENTORY.md#r-cms) for additional examples
+### R-MARKETING — Blog section with composition
+
+```typescript
+interface BlogProps {
+  posts: BlogPost[];
+  layout?: 'grid' | 'list' | 'masonry' | 'with-sidebar';
+  pagination?: PaginationConfig;
+  filters?: BlogFilters;
+  showRelated?: boolean;
+  children?: React.ReactNode;
+}
+export function BlogSection({ posts, layout = 'grid', pagination, filters, showRelated, children }: BlogProps) {
+  return (
+    <section>
+      <div className={layout}>{/* blog posts */}</div>
+      {pagination && <BlogPagination {...pagination} />}
+      {filters && <BlogFilters {...filters} />}
+      {showRelated && <RelatedPosts posts={posts} />}
+      {children}
+    </section>
+  );
+}
+```
+
+### R-UI — React 19 component with ref forwarding
+
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function BlogPostCard({ ref, className, ...props }: BlogPostCardProps) {
+  return (
+    <Primitive.Root
+      ref={ref}
+      className={cn('blog-post-card', className)}
+      {...props}
+    />
+  );
+}
+```
+
+### ComponentRef type for type-safe ref forwarding
+
+```typescript
+type BlogPostCardRef = React.ComponentRef<typeof Primitive.Root>;
+```
+
+### R-A11Y — Touch targets and reduced motion
+
+```css
+.blog-post-link {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.blog-pagination-button {
+  min-width: 24px;
+  min-height: 24px;
+}
+```
+
+### Reduced motion detection
+
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
+### R-PERF — LCP optimization
+
+- Page shell < 250 KB gzipped; component-level budgets (e.g. blog < 40 KB)
+- LCP < 2.5s, INP ≤ 200 ms, CLS < 0.1
+- Track via Lighthouse CI / next.config performanceBudgets
+
+### R-RADIX — Primitive wrapper pattern
+
+```typescript
+import * as Primitive from '@radix-ui/react-primitive';
+import { cn } from '@repo/utils';
+
+const BlogRoot = React.forwardRef<
+  React.ComponentRef<typeof Primitive.Root>,
+  React.ComponentPropsWithoutRef<typeof Primitive.Root> & { className?: string }
+>(({ className, ...props }, ref) => (
+  <Primitive.Root ref={ref} className={cn('blog-root', className)} {...props} />
+));
+```
+
+### Pagination integration (from 1.41)
+
+```typescript
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  showFirstLast?: boolean;
+}
+```
+
+### R-CMS — Content adapters and pagination
+
+```typescript
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: Author;
+  publishDate: string;
+  categories: Category[];
+  tags: string[];
+  featuredImage?: string;
+  slug: string;
+}
+
+interface PaginationConfig {
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  totalItems: number;
+  onPageChange: (page: number) => void;
+}
+```
+
+### Blog filtering hook
+
+```typescript
+import { useMemo } from 'react';
+
+export function useBlogFiltering(posts: BlogPost[], filters: BlogFilters) {
+  const filteredPosts = useMemo(() => {
+    return posts.filter((post) => {
+      const matchesCategory =
+        !filters.category || post.categories.some((cat) => cat.slug === filters.category);
+      const matchesTag = !filters.tag || post.tags.includes(filters.tag);
+      const matchesAuthor = !filters.author || post.author.slug === filters.author;
+
+      return matchesCategory && matchesTag && matchesAuthor;
+    });
+  }, [posts, filters]);
+
+  return { filteredPosts };
+}
+```
 
 ## Acceptance Criteria
 
@@ -117,4 +257,3 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

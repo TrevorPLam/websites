@@ -50,6 +50,29 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-UI — React 19 component with ref (from RESEARCH-INVENTORY)
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function MyPrimitive({ ref, className, ...props }: MyPrimitiveProps) {
+  return (
+    <Primitive.Root ref={ref} className={cn('base-styles', className)} {...props} />
+  );
+}
+```
+### R-RADIX — ComponentRef type
+```typescript
+type MyPrimitiveRef = React.ComponentRef<typeof Primitive.Root>;
+```
+### R-A11Y — Touch target (2.5.8) and reduced motion
+```css
+.touch-target { min-width: 24px; min-height: 24px; }
+```
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
 ### Related Patterns
 - See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples

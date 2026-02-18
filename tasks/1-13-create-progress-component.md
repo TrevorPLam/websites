@@ -51,6 +51,28 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-UI — React 19 + ComponentRef
+```typescript
+import * as ProgressPrimitive from '@radix-ui/react-progress';
+import { cn } from '@repo/utils';
+
+export function Progress({ ref, className, value, ...props }: ProgressProps) {
+  return (
+    <ProgressPrimitive.Root ref={ref} value={value} className={cn('progress-root', className)} {...props}>
+      <ProgressPrimitive.Indicator className="progress-indicator" style={{ width: `${value}%` }} />
+    </ProgressPrimitive.Root>
+  );
+}
+```
+
+### R-RADIX — Type
+```typescript
+type ProgressRef = React.ComponentRef<typeof ProgressPrimitive.Root>;
+```
+
+### R-A11Y
+- Ensure progress has `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax` (Radix provides these).
+
 ### Related Patterns
 - See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples

@@ -63,6 +63,90 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
+### R-MARKETING — Section with composition
+```typescript
+interface SectionProps {
+  title?: string;
+  description?: string;
+  children?: React.ReactNode;
+}
+export function Section({ title, description, children }: SectionProps) {
+  return (
+    <section>
+      {title && <h2>{title}</h2>}
+      {description && <p>{description}</p>}
+      {children}
+    </section>
+  );
+}
+```
+
+### R-UI — React 19 component with ref forwarding
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function Component({ ref, className, ...props }: ComponentProps) {
+  return (
+    <Primitive.Root
+      ref={ref}
+      className={cn('component', className)}
+      {...props}
+    />
+  );
+}
+```
+
+### R-A11Y — Touch targets and reduced motion
+```css
+.component-button {
+  min-width: 24px;
+  min-height: 24px;
+}
+```
+
+### Reduced motion detection
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
+### R-PERF — LCP optimization
+- Page shell < 250 KB gzipped; component-level budgets (e.g. section < 40 KB)
+- LCP < 2.5s, INP ≤ 200 ms, CLS < 0.1
+- Track via Lighthouse CI / next.config performanceBudgets
+
+### R-RADIX — Primitive wrapper pattern
+```typescript
+import * as Primitive from '@radix-ui/react-primitive';
+import { cn } from '@repo/utils';
+
+const ComponentRoot = React.forwardRef<
+  React.ComponentRef<typeof Primitive.Root>,
+  React.ComponentPropsWithoutRef<typeof Primitive.Root> & { className?: string }
+>(({ className, ...props }, ref) => (
+  <Primitive.Root ref={ref} className={cn('component-root', className)} {...props} />
+));
+```
+
+### R-FORM — Form with Zod resolver
+```typescript
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const schema = z.object({
+  name: z.string().min(1, 'Required'),
+  email: z.string().email('Valid email required'),
+});
+
+type FormData = z.infer<typeof schema>;
+
+const form = useForm<FormData>({
+  resolver: zodResolver(schema),
+  defaultValues: { name: '', email: '' },
+});
+```
+
 ### Related Patterns
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
 - See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples

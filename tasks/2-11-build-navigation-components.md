@@ -36,6 +36,7 @@
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 - **[2026-02-18] R-PERF**: LCP, INP, CLS, bundle budgets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-perf) for full research findings.
 - **[2026-02-18] R-MARKETING**: Hero, menu, pricing, testimonials, FAQ, sections — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing) for full research findings.
@@ -45,6 +46,7 @@
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH-INVENTORY.md - R-PERF](RESEARCH-INVENTORY.md#r-perf) — Full research findings
 - [RESEARCH-INVENTORY.md - R-MARKETING](RESEARCH-INVENTORY.md#r-marketing) — Full research findings
@@ -62,10 +64,151 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Code Snippets / Examples
 
-### Related Patterns
-- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
-- See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples
-- See [R-MARKETING - Research Findings](RESEARCH-INVENTORY.md#r-marketing) for additional examples
+### R-MARKETING — Navigation with composition
+
+```typescript
+interface NavigationProps {
+  items: NavigationItem[];
+  variant?: 'horizontal' | 'vertical' | 'mega-menu' | 'mobile';
+  logo?: React.ReactNode;
+  search?: boolean;
+  children?: React.ReactNode;
+}
+export function Navigation({ items, variant = 'horizontal', logo, search, children }: NavigationProps) {
+  return (
+    <nav>
+      {logo && <div className="nav-logo">{logo}</div>}
+      {search && <input type="search" placeholder="Search..." />}
+      <ul className={variant}>{/* navigation items */}</ul>
+      {children}
+    </nav>
+  );
+}
+```
+
+### R-UI — React 19 component with ref forwarding
+
+```typescript
+import * as React from 'react';
+import { cn } from '@repo/utils';
+
+export function NavigationItem({ ref, className, ...props }: NavigationItemProps) {
+  return (
+    <Primitive.Root
+      ref={ref}
+      className={cn('navigation-item', className)}
+      {...props}
+    />
+  );
+}
+```
+
+### ComponentRef type for type-safe ref forwarding
+
+```typescript
+type NavigationItemRef = React.ComponentRef<typeof Primitive.Root>;
+```
+
+### R-A11Y — Touch targets and keyboard navigation
+
+```css
+.navigation-link {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+/* Focus management for keyboard navigation */
+.navigation-item:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+```
+
+### Reduced motion detection
+
+```typescript
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+```
+
+### R-PERF — LCP optimization
+
+- Page shell < 250 KB gzipped; component-level budgets (e.g. navigation < 40 KB)
+- LCP < 2.5s, INP ≤ 200 ms, CLS < 0.1
+- Track via Lighthouse CI / next.config performanceBudgets
+
+### R-RADIX — Primitive wrapper pattern
+
+```typescript
+import * as Primitive from '@radix-ui/react-primitive';
+import { cn } from '@repo/utils';
+
+const NavigationRoot = React.forwardRef<
+  React.ComponentRef<typeof Primitive.Root>,
+  React.ComponentPropsWithoutRef<typeof Primitive.Root> & { className?: string }
+>(({ className, ...props }, ref) => (
+  <Primitive.Root ref={ref} className={cn('navigation-root', className)} {...props} />
+));
+```
+
+### Navigation Menu integration (from 1.19)
+
+```typescript
+interface NavigationMenuProps {
+  items: NavigationItem[];
+  orientation?: 'horizontal' | 'vertical';
+  triggerMode?: 'hover' | 'click';
+}
+```
+
+### Navigation types and mega menu
+
+```typescript
+interface NavigationItem {
+  id: string;
+  label: string;
+  href?: string;
+  children?: NavigationItem[];
+  icon?: React.ReactNode;
+  badge?: string;
+}
+
+interface MegaMenuProps {
+  items: NavigationItem[];
+  columns?: number;
+  featured?: {
+    title: string;
+    description: string;
+    image?: string;
+    link: string;
+  }[];
+}
+```
+
+### Mobile navigation hook
+
+```typescript
+import { useState, useEffect } from 'react';
+
+export function useMobileNavigation(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < breakpoint);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [breakpoint]);
+
+  const toggle = () => setIsOpen(!isOpen);
+  const close = () => setIsOpen(false);
+
+  return { isMobile, isOpen, toggle, close };
+}
+```
 
 ## Acceptance Criteria
 
@@ -110,4 +253,3 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-
