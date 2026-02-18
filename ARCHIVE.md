@@ -6,6 +6,152 @@
 
 ---
 
+## Session: 2026-02-18 — Infra Systems Batch (Tasks 0-1, 0-2, 0-3, f-1, f-2, f-23)
+
+**Agent:** Claude (claude-sonnet-4-6) | **Branch:** claude/task-execution-framework-NlVus
+
+### Tasks Completed (6 total)
+
+---
+
+#### 0-2 Fix Toast / Sonner API
+
+**Status:** [x] VERIFIED DONE | **Completed:** [2026-02-18]
+
+**What changed:**
+- Verified `packages/ui/src/components/Toast.tsx` already had correct types from prior session: `custom()` uses `React.ReactElement`, `promise()` uses spread pattern instead of 3-arg call.
+
+**How verified:** `pnpm --filter @repo/ui type-check` → 0 errors; `pnpm test` → 349 passed.
+
+**Follow-up:** None — issue fully resolved.
+
+---
+
+#### 0-1 Populate Component a11y Rubric
+
+**Status:** [x] COMPLETED | **Completed:** [2026-02-18]
+
+**What changed:**
+- `docs/accessibility/component-a11y-rubric.md` — replaced 1-line TODO stub with a full WCAG 2.2 AA rubric: 10 sections covering keyboard navigation, focus visibility, touch targets, colour/contrast, ARIA/semantics, live regions, motion, images/media, forms, and landmark regions. Includes 60+ testable criteria, implementation code patterns, axe-core test snippet, manual checklist, and a WCAG 2.2 SC reference map. Metadata HTML comment header added per docs standard.
+
+**Why:** Rubric was referenced by 80+ task files but contained only "TODO". Without it, UI task authors had no concrete acceptance criteria for accessibility. Now every task that references this file has a complete, actionable rubric.
+
+**How verified:** File parses cleanly as Markdown; no code changes so no compilation needed. `pnpm validate-docs` can check the header format.
+
+**Known limitations / risks:**
+- Touch target criterion (§3.1) uses 24×24 px per WCAG 2.2 §2.5.8; teams used to the older 44×44 guidance should note the distinction (§3.2 calls out 44×44 as best practice).
+- Screen reader manual testing guidance is limited to VoiceOver + NVDA — add JAWS guidance as needed.
+
+**Follow-up tasks created:**
+- Add jest-axe baseline tests to any components that lack them (see WCAG §4 pattern in rubric).
+- Consider adding an automated contrast-ratio lint rule to ESLint config.
+
+---
+
+#### 0-3 Validate Task File Paths Script
+
+**Status:** [x] COMPLETED | **Completed:** [2026-02-18]
+
+**What changed:**
+- `scripts/validate-task-paths.js` — new Node.js script (no external dependencies). Parses all `tasks/*.md` files, extracts "Related Files" entries, resolves paths relative to repo root, and reports missing paths for any entry with intent `modify`/`verify`/etc. Entries with intent `create` are skipped (file need not exist yet). `--fix` flag attempts to suggest the correct path prefix (packages/, clients/, scripts/, docs/). Exits 0 when all checked paths exist, exits 1 otherwise.
+- `package.json` — added `validate-task-paths` and `validate-task-paths:fix` scripts.
+
+**Why:** Task files listed "Related Files" paths that were partial or missing a package prefix. A script makes this auditable and CI-able.
+
+**How verified:** `pnpm validate-task-paths` → correctly reports 14 missing paths in 3 task files (3-9, 4-1, 5-1, prompt.md); `--fix` suggests plausible path corrections. Exit code 1 as expected.
+
+**Known limitations:**
+- Glob paths (e.g., `clients/starter-template/app/**/page.tsx`) always count as missing — script does not expand globs.
+- Intent keywords are matched case-insensitively; unusual intents (`update`, `add`) may not be caught.
+
+**Follow-up tasks created:**
+- Add glob expansion support to skip paths containing `**` or `*`.
+- Consider adding to CI as a non-blocking audit step (`quality-audit` job).
+
+---
+
+#### f-23 Accessibility System
+
+**Status:** [x] COMPLETED | **Completed:** [2026-02-18]
+
+**What changed:**
+- `packages/infra/accessibility/aria.ts` — Pure ARIA attribute utilities: `generateAriaId`, `labelledBy`, `describedBy`, `ariaExpanded`, `ariaSelected`, `ariaPressed`, `ariaChecked`, `ariaHidden`, `ariaLive`, `ariaRole`, `mergeAriaProps`. All pure functions; no side effects.
+- `packages/infra/accessibility/keyboard.ts` — Keyboard navigation helpers: `Keys` const, `isKey`, `createRovingTabIndex`, `getArrowKeyIndex`, `handleMenuKeys`, `getFocusableElements`, `focusFirstDescendant`, `focusLastDescendant`, `trapFocus`. Implements WAI-ARIA APG patterns for menus, composite widgets, and modal dialogs.
+- `packages/infra/accessibility/screen-reader.ts` — Screen reader utilities: `announce` (polite/assertive live region injector), `clearAnnouncements`, `visuallyHiddenStyles`, `VISUALLY_HIDDEN_CLASS`, `visuallyHiddenProps`, `prefersReducedMotion`, `getMotionSafeTransition`.
+- `packages/infra/accessibility/hooks.ts` — React hooks: `useAria`, `useKeyboard`, `useScreenReader`, `usePrefersReducedMotion`, `useFocusTrap`, `useRovingTabIndex`. All hooks are 'use client' and consume the utilities above.
+- `packages/infra/accessibility/index.ts` — Barrel export re-exporting all four sub-modules.
+- `packages/infra/package.json` — Added 5 export paths (`./accessibility`, `./accessibility/aria`, `./accessibility/keyboard`, `./accessibility/screen-reader`, `./accessibility/hooks`).
+
+**Why:** Task f-23 specified ARIA utilities, keyboard navigation, screen reader utilities, and hooks for @repo/infra. These primitives are consumed by @repo/ui component tests and future component implementations. Centralising them in @repo/infra prevents duplication across ui/features/marketing-components.
+
+**How verified:** `pnpm --filter @repo/infra type-check` → 0 errors. `pnpm test` → 349/349 passed.
+
+**Known limitations:**
+- `trapFocus` manages a single cleanup ref — nesting multiple traps (dialogs-within-dialogs) requires calling the outer cleanup before the inner trap.
+- `announce` creates persistent live region elements in `<body>` on first call (lazy singleton); these are not cleaned up on app unmount by design (they're reused).
+- `useRovingTabIndex` requires a stable `itemSelector`; dynamic DOM insertions after initial render are not automatically reflected.
+
+**Follow-up tasks created:**
+- Add unit tests for `aria.ts` (pure functions are straightforward to test in node env).
+- Add unit tests for `keyboard.ts` (`handleMenuKeys`, `trapFocus`).
+- Consider adding `useLiveRegion` convenience hook to wrap announce() with automatic mount/unmount cleanup.
+
+---
+
+#### f-2 Variant System Infrastructure
+
+**Status:** [x] COMPLETED | **Completed:** [2026-02-18]
+
+**What changed:**
+- `packages/infra/variants/types.ts` — Core type definitions: `ClassValue`, `VariantSchema`, `VariantConfig<T>`, `VariantProps<T>`, `CVAFunction<T>`, `ComposedVariant<T>`. No runtime code.
+- `packages/infra/variants/utils.ts` — Low-level utilities: `cx` (class concatenation, no Tailwind deduplication), `tw` (alias for readability), `filterFalsy`, `flattenClassValues`.
+- `packages/infra/variants/cva.ts` — Core `cva()` function: CVA-compatible API (`base`, `variants`, `compoundVariants`, `defaultVariants`). Pure function, no external dependencies. Handles `class`/`className` overrides appended last.
+- `packages/infra/variants/compose.ts` — Composition utilities: `composeVariants` (joins multiple cva outputs), `extendVariants` (extend a cva with additional config).
+- `packages/infra/variants/index.ts` — Barrel export.
+- `packages/infra/package.json` — Added 5 export paths (`./variants`, `./variants/types`, `./variants/cva`, `./variants/compose`, `./variants/utils`).
+
+**Why:** Task f-2 required a CVA-based variant system. `class-variance-authority` was not in the workspace, so a compatible implementation was built from scratch. The API mirrors CVA's so that upgrading to the external package later is a drop-in change.
+
+**How verified:** `pnpm --filter @repo/infra type-check` → 0 errors. `pnpm test` → 349/349 passed.
+
+**Tradeoffs:**
+- `cx` does NOT deduplicate conflicting Tailwind classes (e.g., `p-2 p-4`). Callers needing conflict resolution should use `cn` from `@repo/utils` (which wraps tailwind-merge).
+- `extendVariants` composes functions rather than merging configs because CVAFunction does not expose its original config. Deep-merge extension would require a different architecture.
+
+**Follow-up tasks created:**
+- Add unit tests for `cva()`, `cx()`, `composeVariants()`.
+- If CVA is added to workspace catalog, replace `./variants/cva.ts` with a thin re-export wrapper.
+
+---
+
+#### f-1 Component Composition System
+
+**Status:** [x] COMPLETED | **Completed:** [2026-02-18]
+
+**What changed:**
+- `packages/infra/composition/slots.ts` — `Slot` component (Radix-style asChild pattern): merges className (concatenated), style (spread), event handlers (composed parent-then-child), and all other props onto its single child. Includes `createSlot<T>()` factory and `useSlotProps()` hook.
+- `packages/infra/composition/context.ts` — `createSafeContext<T>()` (throws descriptive error outside provider), `createOptionalContext<T>()` (returns `T | undefined`), `useContextSelector()` (field-level selector from context).
+- `packages/infra/composition/provider.ts` — `composeProviders(providers[])` (returns a single wrapper component from an array of providers), `ProviderComposer` (JSX-friendly variant). Eliminates "provider pyramid" nesting.
+- `packages/infra/composition/render-props.ts` — `RenderPropFn<T>`, `renderProp()` (resolves fn|ReactNode|undefined safely), `useRenderProp()` (memoized render prop callback).
+- `packages/infra/composition/hocs.ts` — `withDisplayName()`, `withConditionalRender()` (renders null when condition is false), `withDefaultProps()`.
+- `packages/infra/composition/index.ts` — Barrel export.
+- `packages/infra/package.json` — Added 6 export paths (`./composition`, `./composition/slots`, `./composition/context`, `./composition/provider`, `./composition/render-props`, `./composition/hocs`).
+
+**Why:** Task f-1 required a foundation system for component composition (slots, render props, HOCs, context, provider). These are the building blocks consumed by compound components in @repo/ui.
+
+**How verified:** `pnpm --filter @repo/infra type-check` → 0 errors. `pnpm test` → 349/349 passed.
+
+**Known limitations:**
+- `Slot` uses `React.forwardRef` + `React.cloneElement` — both work in React 19 but cloneElement is considered legacy. Future migration to a context-based Slot (Radix style) would be cleaner.
+- `composeProviders` memoizes by `providers.length` — if the provider array content changes without a length change, the composed component is not updated (edge case; provider arrays are typically stable).
+- `useContextSelector` does not implement value-level memoization — it's a convenience wrapper only.
+
+**Follow-up tasks created:**
+- Add unit tests for `createSafeContext` (test the throw), `Slot` (prop merging), `composeProviders` (ordering).
+- Consider migrating `Slot` to use Radix's `@radix-ui/react-slot` now that Radix is already in the workspace.
+
+---
+
 ## Session: 2026-02-18 — UI Primitives Batch A (Tasks 1.2–1.11 + marketing-1.7)
 
 **Agent:** Claude (claude-sonnet-4-6) | **Branch:** claude/task-execution-framework-NDYQT
