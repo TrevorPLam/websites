@@ -1,4 +1,37 @@
-/**
+/*
+  /**
+   * Generates a JSON-LD schema for the scheduling service.
+   */
+  generateJsonLd(eventTypeId?: string): string {
+    const url = this.getBookingUrl(eventTypeId);
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: this.name,
+      provider: {
+        '@type': 'Organization',
+        name: this.name,
+      },
+      potentialAction: {
+        '@type': 'ReserveAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: url,
+          actionPlatform: [
+            'http://schema.org/DesktopWebPlatform',
+            'http://schema.org/MobileWebPlatform',
+          ],
+        },
+        result: {
+          '@type': 'Reservation',
+          name: 'Booking',
+        },
+      },
+    };
+    return JSON.stringify(schema, null, 2);
+  }
+}
+
  * @file packages/integrations/calendly/src/index.ts
  * Task: [4.2] Calendly scheduling integration
  */
