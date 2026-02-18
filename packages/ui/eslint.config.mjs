@@ -6,8 +6,8 @@ export default [
   {
     files: ['**/*.tsx', '**/*.ts'],
     rules: {
-      // UI components may use explicit any for flexible prop forwarding
-      '@typescript-eslint/no-explicit-any': 'warn',
+      // Enforce type safety (no any in UI components)
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
 ];

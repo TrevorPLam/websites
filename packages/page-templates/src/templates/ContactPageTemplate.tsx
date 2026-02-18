@@ -2,7 +2,13 @@
 // Status: Scaffolded — TODO implement
 
 import type React from 'react';
+import { NotImplementedPlaceholder } from '../NotImplementedPlaceholder';
 
 export function ContactPageTemplate(_props: { config?: unknown }): React.ReactElement {
-  return <div data-template="ContactPageTemplate">TODO</div>;
+  return (
+    <NotImplementedPlaceholder
+      templateName="ContactPageTemplate"
+      description="Contact form, business info, and optional map will be composed from site config."
+    />
+  );
 }

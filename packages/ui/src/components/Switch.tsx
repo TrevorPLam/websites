@@ -30,8 +30,7 @@ import { cn } from '@repo/utils';
 export type SwitchSize = 'sm' | 'md' | 'lg';
 export type SwitchVariant = 'default' | 'destructive';
 
-export interface SwitchProps
-  extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {
+export interface SwitchProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {
   size?: SwitchSize;
   variant?: SwitchVariant;
 }
@@ -54,10 +53,8 @@ const thumbSizeStyles: Record<SwitchSize, string> = {
 
 // [TRACE:CONST=packages.ui.components.Switch.variantStyles]
 const variantStyles: Record<SwitchVariant, string> = {
-  default:
-    'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
-  destructive:
-    'data-[state=checked]:bg-destructive data-[state=unchecked]:bg-input',
+  default: 'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
+  destructive: 'data-[state=checked]:bg-destructive data-[state=unchecked]:bg-input',
 };
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -65,7 +62,7 @@ const variantStyles: Record<SwitchVariant, string> = {
 // [TRACE:FUNC=packages.ui.components.Switch]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 export const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitive.Root>,
+  React.ComponentRef<typeof SwitchPrimitive.Root>,
   SwitchProps
 >(({ className, size = 'md', variant = 'default', ...props }, ref) => (
   <SwitchPrimitive.Root

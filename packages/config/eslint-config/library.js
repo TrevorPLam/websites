@@ -23,6 +23,9 @@ export default [
       ...mergedRules,
       'no-console': 'off',
       ...boundaryRules,
+      // Complexity and size thresholds (code smell analysis recommendations)
+      complexity: ['warn', { max: 15 }],
+      'max-lines-per-function': ['warn', { max: 50, skipBlankLines: true, skipComments: true }],
     },
   },
 ];

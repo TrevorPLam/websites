@@ -8,6 +8,8 @@ export default [
     rules: {
       // Infrastructure code may need console for structured logging internals
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
+      // Enforce type safety; use unknown over any for intentional type bypass (e.g. in tests)
+      '@typescript-eslint/no-explicit-any': 'error',
     },
   },
 ];

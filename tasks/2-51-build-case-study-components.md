@@ -1,36 +1,35 @@
-# 2.20 Build Job Listing Components
+# 2.51 Build Case Study Components
 
 ## Metadata
 
-- **Task ID**: 2-20-build-job-listing-components
+- **Task ID**: 2-51-build-case-study-components
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: TBD
 - **Related Epics / ADRs**: (Add if applicable)
 - **Reviewers / Stakeholders**: @agent
-- **Upstream Tasks**: 1.7, 1.2 (Button), 1.23 (Form)
+- **Upstream Tasks**: 1.7, 2.18 (Portfolio)
 - **Downstream Tasks**: (Tasks that consume this output)
 
 ## Context
 
-10+ Job Listing variants with search and application. L2.
+10+ Case Study variants with metrics and downloads. L2.
 
 **Enhanced Requirements:**
 
-- **Variants:** Grid, List, Featured, With Filters, Searchable, Category Tabs, With Application Form, Minimal, Detailed, With Company Info (10+ total)
-- **Search:** Full-text search, filter by location, department, type
-- **Application:** Application form, file upload, integration
+- **Variants:** Grid, List, Featured, Detail Page, With Metrics, With Testimonials, With Timeline, With Downloads, Minimal, With Images (10+ total)
+- **Metrics:** Key metrics display, charts, statistics
+- **Downloads:** PDF downloads, resource links
 
 ## Dependencies
 
 - **Upstream Task**: 1.7 – required – prerequisite
-- **Upstream Task**: 1.2 (Button) – required – prerequisite
-- **Upstream Task**: 1.23 (Form) – required – prerequisite
+- **Upstream Task**: 2.18 (Portfolio) – required – prerequisite
 - **Package**: @repo/marketing-components – modify – target package
 
 ## Cross-Task Dependencies & Sequencing
 
-- **Upstream**: 1.7, 1.2 (Button), 1.23 (Form)
+- **Upstream**: 1.7, 2.18 (Portfolio)
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: (Work that will consume this output)
 
@@ -40,36 +39,34 @@
 
 ## Related Files
 
-- `packages/marketing-components/src/job-listing/types.ts` – modify – (see task objective)
-- `JobListingGrid.tsx` – modify – (see task objective)
-- `JobListingList.tsx` – modify – (see task objective)
-- `JobListingCard.tsx` – modify – (see task objective)
-- `JobApplication.tsx` – modify – (see task objective)
-- `job-listing/search.tsx` – modify – (see task objective)
-- `job-listing/filters.tsx` – modify – (see task objective)
+- `packages/marketing-components/src/case-study/types.ts` – modify – (see task objective)
+- `CaseStudyGrid.tsx` – modify – (see task objective)
+- `CaseStudyDetail.tsx` – modify – (see task objective)
+- `CaseStudyCard.tsx` – modify – (see task objective)
+- `case-study/metrics.tsx` – modify – (see task objective)
+- `case-study/downloads.tsx` – modify – (see task objective)
 - `index.ts` – modify – (see task objective)
 
 ## Code Snippets / Examples
 
 ```typescript
 // API surface (from task)
-// `JobListingDisplay`, `JobListingCard`, `JobApplication`. Props: `variant`, `jobs` (array), `searchable`, `filterByLocation`, `showApplication`.
+// `CaseStudyDisplay`, `CaseStudyCard`, `CaseStudyDetail`. Props: `variant`, `caseStudies` (array), `showMetrics`, `showDownloads`, `showTimeline`.
 
 // Add usage examples per implementation
 ```
 
 ## Acceptance Criteria
 
-- [ ] Types; variants; search; filters; application form; export.
+- [ ] Types; variants; metrics display; downloads; export.
 - [ ] All 10+ variants render
-- [ ] search works
-- [ ] filters functional
-- [ ] application form works.
+- [ ] metrics display
+- [ ] downloads work.
 
 ## Technical Constraints
 
-- No ATS integration
-- basic form only.
+- No custom chart library
+- basic metrics only.
 
 ## Accessibility & Performance Requirements
 
@@ -78,7 +75,7 @@
 
 ## Implementation Plan
 
-- [ ] Types; variants; search; filters; application form; export.
+- [ ] Types; variants; metrics display; downloads; export.
 
 ## Testing Requirements
 
@@ -101,4 +98,3 @@
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

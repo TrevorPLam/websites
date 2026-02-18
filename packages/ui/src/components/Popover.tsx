@@ -53,7 +53,7 @@ export const PopoverClose = PopoverPrimitive.Close;
 // [FEAT:UI] [FEAT:ANIMATION] [FEAT:ACCESSIBILITY]
 // NOTE: align defaults to "center". sideOffset provides gap between trigger and popover.
 export const PopoverContent = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = 'center', sideOffset = 4, ...props }, ref) => (
   <PopoverPrimitive.Portal>
@@ -88,10 +88,7 @@ export interface PopoverHeaderProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 export const PopoverHeader = ({ className, showClose, children, ...props }: PopoverHeaderProps) => (
-  <div
-    className={cn('flex items-center justify-between pb-2', className)}
-    {...props}
-  >
+  <div className={cn('flex items-center justify-between pb-2', className)} {...props}>
     <div className="flex-1">{children}</div>
     {showClose && (
       <PopoverClose
@@ -111,18 +108,23 @@ PopoverHeader.displayName = 'PopoverHeader';
 
 // [TRACE:FUNC=packages.ui.components.PopoverBody]
 // [FEAT:UI]
-export const PopoverBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('py-1', className)} {...props} />
-));
+export const PopoverBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => <div ref={ref} className={cn('py-1', className)} {...props} />
+);
 PopoverBody.displayName = 'PopoverBody';
 
 // [TRACE:FUNC=packages.ui.components.PopoverFooter]
 // [FEAT:UI]
-export const PopoverFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('flex items-center justify-end gap-2 pt-2 border-t border-border mt-2', className)}
-    {...props}
-  />
-));
+export const PopoverFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'flex items-center justify-end gap-2 pt-2 border-t border-border mt-2',
+        className
+      )}
+      {...props}
+    />
+  )
+);
 PopoverFooter.displayName = 'PopoverFooter';

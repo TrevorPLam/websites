@@ -1,35 +1,36 @@
-# 2.17 Build Menu Components (Restaurant)
+# 2.50 Build Portfolio Components
 
 ## Metadata
 
-- **Task ID**: 2-17-build-menu-components-restaurant
+- **Task ID**: 2-50-build-portfolio-components
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: TBD
 - **Related Epics / ADRs**: (Add if applicable)
 - **Reviewers / Stakeholders**: @agent
-- **Upstream Tasks**: 1.7, 1.3 (Tabs)
+- **Upstream Tasks**: 1.7, 1.46 (Masonry), 2.6 (Gallery)
 - **Downstream Tasks**: (Tasks that consume this output)
 
 ## Context
 
-10+ Menu variants with dietary information. L2.
+12+ Portfolio variants with filtering and lightbox. L2.
 
 **Enhanced Requirements:**
 
-- **Variants:** Grid, List, Tabs, Accordion, With Images, With Prices, With Descriptions, Category Tabs, Filterable, With Dietary Info (10+ total)
-- **Dietary Information:** Vegetarian, vegan, gluten-free, allergen labels
-- **Filtering:** By category, dietary restrictions, price range
+- **Variants:** Grid, Masonry, Carousel, Filterable Grid, Tagged Grid, Category Tabs, With Details, Minimal, Bold, With Case Studies, With Testimonials, With Stats (12+ total)
+- **Filtering:** By category, tag, project type, client
+- **Lightbox:** Image lightbox, project details modal
 
 ## Dependencies
 
 - **Upstream Task**: 1.7 – required – prerequisite
-- **Upstream Task**: 1.3 (Tabs) – required – prerequisite
+- **Upstream Task**: 1.46 (Masonry) – required – prerequisite
+- **Upstream Task**: 2.6 (Gallery) – required – prerequisite
 - **Package**: @repo/marketing-components – modify – target package
 
 ## Cross-Task Dependencies & Sequencing
 
-- **Upstream**: 1.7, 1.3 (Tabs)
+- **Upstream**: 1.7, 1.46 (Masonry), 2.6 (Gallery)
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: (Work that will consume this output)
 
@@ -39,35 +40,35 @@
 
 ## Related Files
 
-- `packages/marketing-components/src/menu/types.ts` – modify – (see task objective)
-- `MenuGrid.tsx` – modify – (see task objective)
-- `MenuTabs.tsx` – modify – (see task objective)
-- `MenuAccordion.tsx` – modify – (see task objective)
-- `MenuItemCard.tsx` – modify – (see task objective)
-- `menu/dietary.tsx` – modify – (see task objective)
-- `menu/filters.tsx` – modify – (see task objective)
+- `packages/marketing-components/src/portfolio/types.ts` – modify – (see task objective)
+- `PortfolioGrid.tsx` – modify – (see task objective)
+- `PortfolioMasonry.tsx` – modify – (see task objective)
+- `PortfolioFilterable.tsx` – modify – (see task objective)
+- `PortfolioCard.tsx` – modify – (see task objective)
+- `portfolio/filters.tsx` – modify – (see task objective)
+- `portfolio/lightbox.tsx` – modify – (see task objective)
 - `index.ts` – modify – (see task objective)
 
 ## Code Snippets / Examples
 
 ```typescript
 // API surface (from task)
-// `MenuDisplay`, `MenuItemCard`. Props: `variant`, `items` (array), `showDietaryInfo`, `filterByCategory`, `filterByDietary`.
+// `PortfolioDisplay`, `PortfolioCard`. Props: `variant`, `items` (array), `filterByCategory`, `showLightbox`, `showDetails`.
 
 // Add usage examples per implementation
 ```
 
 ## Acceptance Criteria
 
-- [ ] Types; variants; dietary info; filtering; export.
-- [ ] All 10+ variants render
-- [ ] dietary info displays
-- [ ] filtering works.
+- [ ] Types; variants; filtering; lightbox; export.
+- [ ] All 12+ variants render
+- [ ] filtering works
+- [ ] lightbox functional.
 
 ## Technical Constraints
 
-- No custom dietary labels
-- standard options only.
+- No custom project templates
+- standard cards only.
 
 ## Accessibility & Performance Requirements
 
@@ -76,7 +77,7 @@
 
 ## Implementation Plan
 
-- [ ] Types; variants; dietary info; filtering; export.
+- [ ] Types; variants; filtering; lightbox; export.
 
 ## Testing Requirements
 
@@ -99,4 +100,3 @@
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

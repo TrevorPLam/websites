@@ -33,6 +33,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Input, Select, Textarea, Button } from '@repo/ui';
 import { setSentryContext, setSentryUser, withSentrySpan } from '@repo/infra/client';
+import { sanitizeHtml } from '@repo/infra/security/sanitize';
 import {
   createContactFormSchema,
   createContactFormDefaults,
@@ -290,7 +291,12 @@ export default function ContactForm({
 
       {/* Consent text */}
       {config.consentText && (
-        <div className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: config.consentText }} />
+        <div
+          className="text-sm text-muted-foreground"
+          dangerouslySetInnerHTML={{
+            __html: sanitizeHtml(config.consentText, { allowBasicHtml: true, strict: false }),
+          }}
+        />
       )}
 
       {/* Status message */}

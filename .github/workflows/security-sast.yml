@@ -1,5 +1,5 @@
 # Task: [C.13] SAST scanning
-# Status: Placeholder — TODO implement
+# CodeQL analysis for JavaScript/TypeScript — finds security vulnerabilities
 
 name: Security SAST
 
@@ -11,11 +11,26 @@ on:
   schedule:
     - cron: '0 6 * * 1'  # Weekly Monday 6am
 
+permissions:
+  security-events: write
+  contents: read
+  actions: read
+
 jobs:
   sast:
-    name: SAST scan
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: SAST placeholder
-        run: echo "TODO: CodeQL or similar SAST"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript
+          queries: security-extended
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: '/language:javascript'

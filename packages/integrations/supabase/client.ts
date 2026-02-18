@@ -112,15 +112,19 @@ export async function insertLead(
   }
 }
 
+/** UUID v4 format regex for leadId validation */
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 /**
  * Updates a lead in Supabase database.
  * Performs lead update with proper error handling and logging.
  *
  * @param client - Configured Supabase client
- * @param leadId - ID of lead to update
+ * @param leadId - ID of lead to update (must be valid UUID format)
  * @param updates - Lead data to update
  * @returns Updated lead record
- * @throws {Error} When update fails
+ * @throws {Error} When update fails or leadId is invalid
  *
  * @example
  * ```typescript
@@ -135,7 +139,10 @@ export async function updateLead(
   leadId: string,
   updates: Partial<SupabaseLeadRow>
 ): Promise<SupabaseLeadRow> {
-  const SUPABASE_LEADS_PATH = `/rest/v1/leads?id=eq.${leadId}`;
+  if (!UUID_REGEX.test(leadId)) {
+    throw new Error('Invalid leadId: must be a valid UUID format');
+  }
+  const SUPABASE_LEADS_PATH = `/rest/v1/leads?id=eq.${encodeURIComponent(leadId)}`;
   const url = `${client.url}${SUPABASE_LEADS_PATH}`;
 
   logInfo('Updating Supabase lead', { leadId });

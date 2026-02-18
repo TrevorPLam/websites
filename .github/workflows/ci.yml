@@ -83,6 +83,10 @@ jobs:
       - name: Validate exports
         run: pnpm validate-exports
 
+      # Circular dependency detection — blocks merge if cycles exist
+      - name: Madge (circular deps)
+        run: pnpm madge:circular
+
       # [Task 0.18] Dependency version consistency across workspace
       - name: Syncpack
         run: pnpm syncpack:check

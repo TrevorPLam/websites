@@ -43,7 +43,7 @@ Checkbox input with indeterminate state needed for form controls and bulk action
 ```typescript
 // Expected API
 export const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  React.ComponentRef<typeof CheckboxPrimitive.Root>,
   ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
 >((props, ref) => (
   <CheckboxPrimitive.Root

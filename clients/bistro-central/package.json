@@ -11,13 +11,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/page-templates": "workspace:*",
     "@repo/features": "workspace:*",
-    "@repo/ui": "workspace:*",
-    "@repo/marketing-components": "workspace:*",
-    "@repo/types": "workspace:*",
-    "@repo/utils": "workspace:*",
     "@repo/infra": "workspace:*",
+    "@repo/marketing-components": "workspace:*",
+    "@repo/page-templates": "workspace:*",
+    "@repo/types": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@repo/utils": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
@@ -27,6 +27,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.0",
+    "@tailwindcss/typography": "^0.5.19",
     "eslint": "catalog:",
     "eslint-config-next": "^16.1.0",
     "postcss": "8.4.49",

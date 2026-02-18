@@ -13,7 +13,8 @@
 
 ## Context
 
-Range input slider with single/multiple thumbs needed for forms and controls. This is a Layer L2 component providing keyboard-accessible slider with orientation support.
+Range input slider with single/multiple thumbs needed for forms and controls.
+This is a Layer L2 component providing keyboard-accessible slider with orientation support.
 
 ## Dependencies
 
@@ -29,19 +30,25 @@ Range input slider with single/multiple thumbs needed for forms and controls. Th
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use Radix UI primitives for accessibility and consistency - [Radix UI Slider](https://www.radix-ui.com/primitives/docs/components/slider)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
+- **Radix UI Slider (v1.3.6)** – Current production version with React 19 compatibility issues resolved
+- **React 19 Compatibility** – Use React.ComponentRef instead of React.ElementRef for forwardRef patterns
+- **WCAG 2.2 AA Compliance** – 2.5.8 Target Size (24×24 CSS pixels minimum), 2.5.7 Dragging Movements (keyboard alternative)
+- **WAI-ARIA Authoring Practices** – Radix UI follows W3C guidelines for slider semantics and keyboard navigation
+- **Accessibility Standards** – Screen reader support, focus management, keyboard navigation (Arrow keys, Home, End)
+- **Performance Standards** – Minimal runtime overhead, tree-shakeable, compatible with edge rendering
 
 ## Related Files
 
-- `packages/ui/src/components/Slider.tsx` – create – component implementation
-- `packages/ui/src/index.ts` – modify – export Slider
+- `packages/ui/src/components/Slider.tsx` – **NOT IMPLEMENTED** – Component needs to be created
+- `packages/ui/src/index.ts` – **NEEDS UPDATE** – Must export Slider component
+- `packages/ui/package.json` – **VERIFIED** – radix-ui catalog dependency available
+- `pnpm-workspace.yaml` – **VERIFIED** – React 19.0.0 catalog entry available
 
 ## Code Snippets / Examples
 
 ```typescript
-// Expected API
-interface SliderProps {
+// Expected API (based on Radix UI Slider v1.3.6)
+interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
   min?: number;
   max?: number;
   step?: number;
@@ -49,53 +56,80 @@ interface SliderProps {
   onValueChange?: (value: number[]) => void;
   disabled?: boolean;
   orientation?: 'horizontal' | 'vertical';
-  multiple?: boolean;
+  inverted?: boolean;
+  name?: string;
 }
 
+// React 19 compatible implementation pattern
+const Slider = React.forwardRef<React.ComponentRef<typeof SliderPrimitive.Root>, SliderProps>(
+  ({ className, ...props }, ref) => (
+    <SliderPrimitive.Root ref={ref} className={cn("slider-root", className)} {...props}>
+      <SliderPrimitive.Track className="slider-track">
+        <SliderPrimitive.Range className="slider-range" />
+      </SliderPrimitive.Track>
+      <SliderPrimitive.Thumb className="slider-thumb" />
+    </SliderPrimitive.Root>
+  )
+);
+
 // Usage examples
-<Slider min={0} max={100} step={1} value={[50]} />
-<Slider min={0} max={100} value={[20, 80]} multiple />
-<Slider orientation="vertical" min={0} max={10} />
+<Slider min={0} max={100} step={1} value={[50]} onValueChange={(value) => console.log(value)} />
+<Slider min={0} max={100} value={[20, 80]} disabled={false} />
+<Slider orientation="vertical" min={0} max={10} step={0.1} />
 ```
 
 ## Acceptance Criteria
 
 - [ ] Component exports from packages/ui correctly
 - [ ] Renders slider with single thumb by default
-- [ ] Supports multiple thumbs for range selection
-- [ ] Keyboard accessible (Arrow keys, Home, End)
-- [ ] Disabled state respected
-- [ ] Horizontal and vertical orientations
-- [ ] TypeScript types are correct
+- [ ] Supports multiple thumbs for range selection (value array)
+- [ ] Keyboard accessible (Arrow keys, Home, End, PageUp, PageDown)
+- [ ] Disabled state respected with proper ARIA attributes
+- [ ] Horizontal and vertical orientations supported
+- [ ] TypeScript types correct with React.ComponentRef pattern
+- [ ] WCAG 2.2 AA compliant (24×24px thumb targets, dragging alternatives)
 - [ ] Build passes without errors
+- [x] React 19 compatible (uses React.ComponentRef – updated)
 
 ## Technical Constraints
 
-- No custom track styling beyond Radix defaults
-- Must be a thin wrapper around Radix UI Slider primitive
-- Follow existing component patterns in the repo
-- Support both single and multiple thumb modes
+- No custom track styling beyond design system CSS custom properties
+- Must be a thin wrapper around Radix UI Slider primitive v1.3.6
+- Follow existing component patterns in the repo (forwardRef, cn utility)
+- Support both single and multiple thumb modes via value array
+- Use React.ComponentRef for React 19 compatibility
+- Thumb size must meet WCAG 2.2 24×24 CSS pixel minimum
 
 ## Accessibility & Performance Requirements
 
-- Accessibility: Reference [docs/accessibility/component-a11y-rubric.md](docs/accessibility/component-a11y-rubric.md) for WCAG 2.2 AA expectations; Radix UI provides base implementation for screen readers and keyboard navigation
-- Performance: Minimal runtime overhead; no heavy dependencies
+- **WCAG 2.2 AA Compliance**: 24×24 CSS pixel thumb targets, keyboard navigation, ARIA live regions
+- **Dragging Movements (2.5.7)**: Keyboard alternative to dragging operations
+- **Target Size (2.5.8)**: Thumb targets meet minimum 24×24 pixel requirement
+- **Screen Reader Support**: Proper ARIA labels, value announcements, state communication
+- **Focus Management**: Visible focus indicators, logical tab order, focus trapping
+- **Performance**: Minimal runtime overhead, tree-shakeable, < 1KB component size
+- **React 19**: Server Component compatible, automatic memoization ready
 
 ## Implementation Plan
 
-- [ ] Import Slider primitive from @radix-ui/react-slider
-- [ ] Create Slider component with forwarding ref
-- [ ] Add support for multiple thumbs when needed
-- [ ] Add TypeScript types matching Radix props
-- [ ] Export component from index.ts
-- [ ] Run typecheck and build to verify
+- [ ] Add @radix-ui/react-slider to @repo/ui dependencies
+- [ ] Create Slider.tsx with React.ComponentRef pattern for React 19
+- [ ] Implement thumb sizing to meet WCAG 2.2 24×24 pixel requirement
+- [ ] Add design system integration via CSS custom properties
+- [ ] Export Slider component from packages/ui/src/index.ts
+- [ ] Add TypeScript types extending Radix props
+- [ ] Run typecheck and build to verify React 19 compatibility
+- [ ] Test keyboard navigation and screen reader compatibility
 
 ## Testing Requirements
 
-- Unit tests for component rendering with different props
-- Accessibility tests with axe-core
-- Keyboard navigation tests
-- Visual regression tests for orientations and thumb modes
+- **Unit Tests**: Component rendering with different props, value changes, orientation switches
+- **Accessibility Tests**: axe-core integration, WCAG 2.2 AA compliance verification
+- **Keyboard Navigation Tests**: Arrow keys, Home/End, PageUp/PageDown, Tab navigation
+- **Visual Regression Tests**: Horizontal/vertical orientations, disabled states, thumb positioning
+- **React 19 Compatibility**: ComponentRef usage, no ElementRef warnings
+- **Performance Tests**: Bundle size impact, interaction latency (< 100ms)
+- **Cross-browser Tests**: Modern browser compatibility, assistive technology support
 - Run `pnpm --filter @repo/ui test`; `pnpm test` to verify
 
 ## Documentation Updates
@@ -109,8 +143,12 @@ interface SliderProps {
 
 ## Definition of Done
 
-- [ ] Code reviewed and approved
-- [ ] All tests passing
-- [ ] Documentation updated
-- [ ] Component builds successfully
-- [ ] Export available in packages/ui
+- [ ] Code reviewed and approved (follows Radix UI patterns)
+- [ ] All tests passing (unit, accessibility, keyboard, visual regression)
+- [ ] Documentation updated (UI library docs, API examples)
+- [ ] Component builds successfully (no TypeScript errors)
+- [ ] Export available in packages/ui with proper types
+- [ ] WCAG 2.2 AA compliant (verified with axe-core)
+- [ ] React 19 compatible (no console warnings)
+- [ ] Performance compliant (bundle size, interaction latency)
+- [ ] Design system integrated (CSS custom properties)

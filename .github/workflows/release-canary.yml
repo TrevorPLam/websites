@@ -22,4 +22,4 @@ jobs:
           node-version: 22.x
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: echo "TODO: canary publish"
+      - run: echo "TODO - canary publish"

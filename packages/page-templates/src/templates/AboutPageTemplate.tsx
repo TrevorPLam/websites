@@ -2,7 +2,13 @@
 // Status: Scaffolded — TODO implement
 
 import type React from 'react';
+import { NotImplementedPlaceholder } from '../NotImplementedPlaceholder';
 
 export function AboutPageTemplate(_props: { config?: unknown }): React.ReactElement {
-  return <div data-template="AboutPageTemplate">TODO</div>;
+  return (
+    <NotImplementedPlaceholder
+      templateName="AboutPageTemplate"
+      description="Story, team, mission, values, and timeline sections will be composed from site config."
+    />
+  );
 }

@@ -2,7 +2,13 @@
 // Status: Scaffolded — TODO implement
 
 import type React from 'react';
+import { NotImplementedPlaceholder } from '../NotImplementedPlaceholder';
 
 export function HomePageTemplate(_props: { config?: unknown }): React.ReactElement {
-  return <div data-template="HomePageTemplate">TODO</div>;
+  return (
+    <NotImplementedPlaceholder
+      templateName="HomePageTemplate"
+      description="Hero, services preview, and CTA sections will be composed from site config."
+    />
+  );
 }

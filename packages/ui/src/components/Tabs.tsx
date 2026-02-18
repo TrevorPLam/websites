@@ -31,14 +31,12 @@ import { cn } from '@repo/utils';
 export type TabsVariant = 'default' | 'underline' | 'pills' | 'enclosed' | 'soft';
 export type TabsSize = 'sm' | 'md' | 'lg' | 'xl';
 
-export interface TabsProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
+export interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
   variant?: TabsVariant;
   size?: TabsSize;
 }
 
-export interface TabsListProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {
+export interface TabsListProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List> {
   variant?: TabsVariant;
   size?: TabsSize;
 }
@@ -55,10 +53,8 @@ export type TabsContentProps = React.ComponentPropsWithoutRef<typeof TabsPrimiti
 
 // [TRACE:CONST=packages.ui.components.Tabs.listVariantStyles]
 const listVariantStyles: Record<TabsVariant, string> = {
-  default:
-    'inline-flex items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
-  underline:
-    'inline-flex items-center justify-start border-b border-border gap-0 bg-transparent',
+  default: 'inline-flex items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
+  underline: 'inline-flex items-center justify-start border-b border-border gap-0 bg-transparent',
   pills: 'inline-flex items-center justify-start gap-1 bg-transparent',
   enclosed:
     'inline-flex items-center justify-start rounded-t-lg border border-b-0 border-border bg-muted/40 px-1 pt-1 gap-0',
@@ -130,20 +126,19 @@ const TabsContext = React.createContext<{ variant: TabsVariant; size: TabsSize }
 
 // [TRACE:FUNC=packages.ui.components.Tabs]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
-export const Tabs = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Root>,
-  TabsProps
->(({ className, variant = 'default', size = 'md', ...props }, ref) => (
-  <TabsContext.Provider value={{ variant, size }}>
-    <TabsPrimitive.Root ref={ref} className={cn('w-full', className)} {...props} />
-  </TabsContext.Provider>
-));
+export const Tabs = React.forwardRef<React.ComponentRef<typeof TabsPrimitive.Root>, TabsProps>(
+  ({ className, variant = 'default', size = 'md', ...props }, ref) => (
+    <TabsContext.Provider value={{ variant, size }}>
+      <TabsPrimitive.Root ref={ref} className={cn('w-full', className)} {...props} />
+    </TabsContext.Provider>
+  )
+);
 Tabs.displayName = 'Tabs';
 
 // [TRACE:FUNC=packages.ui.components.TabsList]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 export const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
+  React.ComponentRef<typeof TabsPrimitive.List>,
   TabsListProps
 >(({ className, variant: variantProp, size: sizeProp, ...props }, ref) => {
   const ctx = React.useContext(TabsContext);
@@ -164,7 +159,7 @@ TabsList.displayName = 'TabsList';
 // [TRACE:FUNC=packages.ui.components.TabsTrigger]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 export const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Trigger>,
+  React.ComponentRef<typeof TabsPrimitive.Trigger>,
   TabsTriggerProps
 >(({ className, variant: variantProp, size: sizeProp, ...props }, ref) => {
   const ctx = React.useContext(TabsContext);
@@ -183,7 +178,7 @@ TabsTrigger.displayName = 'TabsTrigger';
 // [TRACE:FUNC=packages.ui.components.TabsContent]
 // [FEAT:UI]
 export const TabsContent = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Content>,
+  React.ComponentRef<typeof TabsPrimitive.Content>,
   TabsContentProps
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content

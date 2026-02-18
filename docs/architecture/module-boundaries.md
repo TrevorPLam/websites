@@ -73,7 +73,7 @@ graph TD
 | **templates/** | **@repo/ui** | ✅ | Via `import { Button } from '@repo/ui'` — main export only |
 | **templates/** | **@repo/utils** | ✅ | Via `import { cn } from '@repo/utils'` |
 | **templates/** | **@repo/infra** | ✅ | Via `.`, `./client`, `./env`, `./context/*`, `./security/*`, `./logger`, `./sentry/*`, `./middleware/*` |
-| **templates/** | **@repo/shared** | ✅ | Via `./types`, `./site-config` |
+| **templates/** | **@repo/types** | ✅ | Via `.`, `./types`, `./site-config`, `./industry`, `./industry-configs` |
 | **templates/** | **@repo/integrations-*** | ✅ | Via each package's public exports |
 | **templates/** | **templates/other/** | ❌ | Template internals are isolated; no cross-template imports |
 | **templates/** | **@repo/*/src/** | ❌ | Deep internal paths; use package public API |
@@ -104,20 +104,31 @@ Consumers **must** import only from paths explicitly listed in each package's `p
 |--------|---------|---------|
 | `@repo/infra` | ✅ | Main entry (security, middleware, logging) |
 | `@repo/infra/client` | ✅ | Client-safe logger, Sentry, request context |
-| `@repo/infra/env` | ✅ | Composable env validation |
+| `@repo/infra/env` | ✅ | Composable env validation (schemas, validateEnv, getFeatureFlags) |
+| `@repo/infra/env/validate` | ✅ | validateEnv, safeValidateEnv, createEnvSchema, getFeatureFlags, etc. |
 | `@repo/infra/context/request-context` | ✅ | Universal (stub) context |
 | `@repo/infra/context/request-context.server` | ✅ | Server-only AsyncLocalStorage context |
-| `@repo/infra/security/*` | ✅ | request-validation, sanitize, rate-limit, csp, security-headers |
+| `@repo/infra/security/request-validation` | ✅ | getValidatedClientIp, validateRequest, etc. |
+| `@repo/infra/security/sanitize` | ✅ | sanitizeHtml, sanitizeForLog |
+| `@repo/infra/security/rate-limit` | ✅ | checkRateLimit, hashIp, RateLimiterFactory, etc. |
+| `@repo/infra/security/csp` | ✅ | buildContentSecurityPolicy, createCspNonce |
+| `@repo/infra/security/security-headers` | ✅ | getSecurityHeaders |
 | `@repo/infra/logger` | ✅ | Structured logging |
-| `@repo/infra/sentry/*` | ✅ | sanitize, client, server |
-| `@repo/infra/middleware/create-middleware` | ✅ | Middleware factory |
+| `@repo/infra/sentry/sanitize` | ✅ | Sentry event sanitization |
+| `@repo/infra/sentry/client` | ✅ | Client-side Sentry setup |
+| `@repo/infra/sentry/server` | ✅ | Server-side Sentry setup |
+| `@repo/infra/middleware/create-middleware` | ✅ | createMiddleware, getAllowedOriginsFromEnv |
 
-### @repo/shared
+### @repo/types
 
 | Import | Allowed | Exports |
 |--------|---------|---------|
-| `@repo/shared/types` | ✅ | Shared type definitions |
-| `@repo/shared/site-config` | ✅ | SiteConfig types |
+| `@repo/types` | ✅ | Main barrel (SiteConfig, types) |
+| `@repo/types/types` | ✅ | Shared type definitions |
+| `@repo/types/site-config` | ✅ | SiteConfig types and schema |
+| `@repo/types/site-config-schema` | ✅ | SiteConfig schema |
+| `@repo/types/industry` | ✅ | Industry type definitions |
+| `@repo/types/industry-configs` | ✅ | Industry configuration types |
 
 ### @repo/integrations-*
 

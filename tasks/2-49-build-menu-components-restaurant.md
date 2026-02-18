@@ -1,34 +1,36 @@
-# 2.16 Build Location Components
+# 2.49 Build Menu Components (Restaurant)
 
 ## Metadata
 
-- **Task ID**: 2-16-build-location-components
+- **Task ID**: 2-49-build-menu-components-restaurant
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: TBD
 - **Related Epics / ADRs**: (Add if applicable)
 - **Reviewers / Stakeholders**: @agent
-- **Upstream Tasks**: 1.7, 4.5 (Maps Integration)
+- **Upstream Tasks**: 1.7, 1.3 (Tabs)
 - **Downstream Tasks**: (Tasks that consume this output)
 
 ## Context
 
-10+ Location variants with maps integration. L2.
+10+ Menu variants with dietary information. L2.
 
 **Enhanced Requirements:**
 
-- **Variants:** With Map, List, Grid, Single Location, Multiple Locations, With Directions, With Contact, With Hours, With Reviews, Minimal (10+ total)
-- **Maps Integration:** Google Maps, Mapbox, interactive maps, markers, directions
+- **Variants:** Grid, List, Tabs, Accordion, With Images, With Prices, 
+  With Descriptions, Category Tabs, Filterable, With Dietary Info (10+ total)
+- **Dietary Information:** Vegetarian, vegan, gluten-free, allergen labels
+- **Filtering:** By category, dietary restrictions, price range
 
 ## Dependencies
 
 - **Upstream Task**: 1.7 – required – prerequisite
-- **Upstream Task**: 4.5 (Maps Integration) – required – prerequisite
+- **Upstream Task**: 1.3 (Tabs) – required – prerequisite
 - **Package**: @repo/marketing-components – modify – target package
 
 ## Cross-Task Dependencies & Sequencing
 
-- **Upstream**: 1.7, 4.5 (Maps Integration)
+- **Upstream**: 1.7, 1.3 (Tabs)
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: (Work that will consume this output)
 
@@ -38,34 +40,36 @@
 
 ## Related Files
 
-- `packages/marketing-components/src/location/types.ts` – modify – (see task objective)
-- `LocationWithMap.tsx` – modify – (see task objective)
-- `LocationList.tsx` – modify – (see task objective)
-- `LocationGrid.tsx` – modify – (see task objective)
-- `LocationCard.tsx` – modify – (see task objective)
-- `location/maps.tsx` – modify – (see task objective)
+- `packages/marketing-components/src/menu/types.ts` – modify – (see task objective)
+- `MenuGrid.tsx` – modify – (see task objective)
+- `MenuTabs.tsx` – modify – (see task objective)
+- `MenuAccordion.tsx` – modify – (see task objective)
+- `MenuItemCard.tsx` – modify – (see task objective)
+- `menu/dietary.tsx` – modify – (see task objective)
+- `menu/filters.tsx` – modify – (see task objective)
 - `index.ts` – modify – (see task objective)
 
 ## Code Snippets / Examples
 
 ```typescript
 // API surface (from task)
-// `LocationDisplay`, `LocationCard`. Props: `variant`, `locations` (array), `showMap`, `showDirections`, `mapProvider`.
+// `MenuDisplay`, `MenuItemCard`. Props: `variant`, `items` (array), 
+// `showDietaryInfo`, `filterByCategory`, `filterByDietary`.
 
 // Add usage examples per implementation
 ```
 
 ## Acceptance Criteria
 
-- [ ] Types; variants; maps integration; export.
+- [ ] Types; variants; dietary info; filtering; export.
 - [ ] All 10+ variants render
-- [ ] maps display
-- [ ] directions work.
+- [ ] dietary info displays
+- [ ] filtering works.
 
 ## Technical Constraints
 
-- No custom map styling
-- standard providers only.
+- No custom dietary labels
+- standard options only.
 
 ## Accessibility & Performance Requirements
 
@@ -74,7 +78,7 @@
 
 ## Implementation Plan
 
-- [ ] Types; variants; maps integration; export.
+- [ ] Types; variants; dietary info; filtering; export.
 
 ## Testing Requirements
 
@@ -97,4 +101,3 @@
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

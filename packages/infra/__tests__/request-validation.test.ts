@@ -440,7 +440,7 @@ describe('Request Validation', () => {
     test('should handle null header values gracefully', () => {
       const headers = new Headers();
       headers.set('origin', 'https://example.com');
-      headers.set('referer', null as any); // This shouldn't happen but let's be safe
+      headers.set('referer', null as unknown as string); // Edge case: invalid header value
 
       const config = createValidationConfig('https://example.com', mockLogger);
       const result = validateOrigin(headers, config);

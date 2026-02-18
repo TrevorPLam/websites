@@ -12,7 +12,7 @@
     "./context/request-context.server": "./context/request-context.server.ts",
     "./security/request-validation": "./security/request-validation.ts",
     "./security/sanitize": "./security/sanitize.ts",
-    "./security/rate-limit": "./security/rate-limit.ts",
+    "./security/rate-limit": "./security/rate-limit/index.ts",
     "./security/csp": "./security/csp.ts",
     "./security/security-headers": "./security/security-headers.ts",
     "./middleware/create-middleware": "./middleware/create-middleware.ts",

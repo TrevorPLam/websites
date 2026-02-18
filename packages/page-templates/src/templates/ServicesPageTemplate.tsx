@@ -2,7 +2,13 @@
 // Status: Scaffolded — TODO implement
 
 import type React from 'react';
+import { NotImplementedPlaceholder } from '../NotImplementedPlaceholder';
 
 export function ServicesPageTemplate(_props: { config?: unknown }): React.ReactElement {
-  return <div data-template="ServicesPageTemplate">TODO</div>;
+  return (
+    <NotImplementedPlaceholder
+      templateName="ServicesPageTemplate"
+      description="Services grid, list, or tabs with URL-synced filters will be composed from site config."
+    />
+  );
 }

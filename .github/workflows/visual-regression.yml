@@ -21,4 +21,4 @@ jobs:
           node-version: 22.x
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: echo "TODO: Storybook build and visual regression"
+      - run: echo "TODO - Storybook build and visual regression"

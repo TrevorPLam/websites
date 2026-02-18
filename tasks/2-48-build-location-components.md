@@ -1,36 +1,34 @@
-# 2.18 Build Portfolio Components
+# 2.48 Build Location Components
 
 ## Metadata
 
-- **Task ID**: 2-18-build-portfolio-components
+- **Task ID**: 2-48-build-location-components
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: TBD
 - **Related Epics / ADRs**: (Add if applicable)
 - **Reviewers / Stakeholders**: @agent
-- **Upstream Tasks**: 1.7, 1.46 (Masonry), 2.6 (Gallery)
+- **Upstream Tasks**: 1.7, 4.5 (Maps Integration)
 - **Downstream Tasks**: (Tasks that consume this output)
 
 ## Context
 
-12+ Portfolio variants with filtering and lightbox. L2.
+10+ Location variants with maps integration. L2.
 
 **Enhanced Requirements:**
 
-- **Variants:** Grid, Masonry, Carousel, Filterable Grid, Tagged Grid, Category Tabs, With Details, Minimal, Bold, With Case Studies, With Testimonials, With Stats (12+ total)
-- **Filtering:** By category, tag, project type, client
-- **Lightbox:** Image lightbox, project details modal
+- **Variants:** With Map, List, Grid, Single Location, Multiple Locations, With Directions, With Contact, With Hours, With Reviews, Minimal (10+ total)
+- **Maps Integration:** Google Maps, Mapbox, interactive maps, markers, directions
 
 ## Dependencies
 
 - **Upstream Task**: 1.7 – required – prerequisite
-- **Upstream Task**: 1.46 (Masonry) – required – prerequisite
-- **Upstream Task**: 2.6 (Gallery) – required – prerequisite
+- **Upstream Task**: 4.5 (Maps Integration) – required – prerequisite
 - **Package**: @repo/marketing-components – modify – target package
 
 ## Cross-Task Dependencies & Sequencing
 
-- **Upstream**: 1.7, 1.46 (Masonry), 2.6 (Gallery)
+- **Upstream**: 1.7, 4.5 (Maps Integration)
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: (Work that will consume this output)
 
@@ -40,35 +38,34 @@
 
 ## Related Files
 
-- `packages/marketing-components/src/portfolio/types.ts` – modify – (see task objective)
-- `PortfolioGrid.tsx` – modify – (see task objective)
-- `PortfolioMasonry.tsx` – modify – (see task objective)
-- `PortfolioFilterable.tsx` – modify – (see task objective)
-- `PortfolioCard.tsx` – modify – (see task objective)
-- `portfolio/filters.tsx` – modify – (see task objective)
-- `portfolio/lightbox.tsx` – modify – (see task objective)
+- `packages/marketing-components/src/location/types.ts` – modify – (see task objective)
+- `LocationWithMap.tsx` – modify – (see task objective)
+- `LocationList.tsx` – modify – (see task objective)
+- `LocationGrid.tsx` – modify – (see task objective)
+- `LocationCard.tsx` – modify – (see task objective)
+- `location/maps.tsx` – modify – (see task objective)
 - `index.ts` – modify – (see task objective)
 
 ## Code Snippets / Examples
 
 ```typescript
 // API surface (from task)
-// `PortfolioDisplay`, `PortfolioCard`. Props: `variant`, `items` (array), `filterByCategory`, `showLightbox`, `showDetails`.
+// `LocationDisplay`, `LocationCard`. Props: `variant`, `locations` (array), `showMap`, `showDirections`, `mapProvider`.
 
 // Add usage examples per implementation
 ```
 
 ## Acceptance Criteria
 
-- [ ] Types; variants; filtering; lightbox; export.
-- [ ] All 12+ variants render
-- [ ] filtering works
-- [ ] lightbox functional.
+- [ ] Types; variants; maps integration; export.
+- [ ] All 10+ variants render
+- [ ] maps display
+- [ ] directions work.
 
 ## Technical Constraints
 
-- No custom project templates
-- standard cards only.
+- No custom map styling
+- standard providers only.
 
 ## Accessibility & Performance Requirements
 
@@ -77,7 +74,7 @@
 
 ## Implementation Plan
 
-- [ ] Types; variants; filtering; lightbox; export.
+- [ ] Types; variants; maps integration; export.
 
 ## Testing Requirements
 
@@ -100,4 +97,3 @@
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

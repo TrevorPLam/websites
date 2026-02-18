@@ -19,6 +19,25 @@ import { getSecurityHeaders } from '../security/security-headers';
 /** Header that must be stripped to mitigate CVE-2025-29927 (middleware bypass). */
 const X_MIDDLEWARE_SUBREQUEST = 'x-middleware-subrequest';
 
+/**
+ * Builds allowedOrigins from NEXT_PUBLIC_SITE_URL for CSRF defense.
+ * In development, also allows common localhost origins.
+ */
+export function getAllowedOriginsFromEnv(): string[] | undefined {
+  const url = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!url || typeof url !== 'string') return undefined;
+  try {
+    const origin = new URL(url).origin;
+    const origins: string[] = [origin];
+    if (process.env.NODE_ENV === 'development') {
+      origins.push('http://localhost:3000', 'http://localhost:3101', 'http://localhost:3102');
+    }
+    return origins;
+  } catch {
+    return undefined;
+  }
+}
+
 export interface CreateMiddlewareOptions {
   /** Optional CSP violation report endpoint (report-uri / report-to). */
   cspReportEndpoint?: string;

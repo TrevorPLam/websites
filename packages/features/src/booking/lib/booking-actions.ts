@@ -38,7 +38,7 @@ import {
 } from './booking-schema';
 import { getBookingProviders } from './booking-providers';
 import type { BookingProviderResponse } from './booking-provider-adapter';
-import { checkRateLimit } from '@repo/infra';
+import { checkRateLimit, hashIp } from '@repo/infra';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import { validateEnv } from '@repo/infra/env';
 import type { BookingFeatureConfig } from './booking-config';
@@ -82,13 +82,18 @@ const internalBookings = new Map<
 
 /**
  * Generate unique confirmation number
+ * Uses crypto.getRandomValues for cryptographically secure randomness.
  */
 // [TRACE:FUNC=packages.features.booking.generateConfirmationNumber]
 // [FEAT:BOOKING] [FEAT:SECURITY]
-// NOTE: Confirmation generator - creates unique, traceable booking identifiers using timestamp and random data.
+// NOTE: Confirmation generator - creates unique, traceable booking identifiers using timestamp and secure random data.
 function generateConfirmationNumber(): string {
   const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substring(2, 8);
+  const arr = new Uint8Array(4);
+  crypto.getRandomValues(arr);
+  const random = Array.from(arr, (b) => b.toString(36))
+    .join('')
+    .substring(0, 6);
   return `BK-${timestamp}-${random}`.toUpperCase();
 }
 
@@ -155,7 +160,7 @@ export async function submitBookingRequest(
     const rateLimitResult = await checkRateLimit({
       email: validatedData.email,
       clientIp,
-      hashIp: (value: string) => btoa(value).substring(0, 16),
+      hashIp,
     });
 
     if (!rateLimitResult) {

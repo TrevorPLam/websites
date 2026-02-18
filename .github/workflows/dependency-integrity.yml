@@ -25,4 +25,4 @@ jobs:
           node-version: 22.x
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: echo "TODO: dependency integrity / provenance checks"
+      - run: echo "TODO - dependency integrity / provenance checks"

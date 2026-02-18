@@ -47,14 +47,10 @@ export const TooltipTrigger = TooltipPrimitive.Trigger;
 // [TRACE:FUNC=packages.ui.components.TooltipArrow]
 // [FEAT:UI]
 export const TooltipArrow = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Arrow>,
+  React.ComponentRef<typeof TooltipPrimitive.Arrow>,
   React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Arrow>
 >(({ className, ...props }, ref) => (
-  <TooltipPrimitive.Arrow
-    ref={ref}
-    className={cn('fill-popover', className)}
-    {...props}
-  />
+  <TooltipPrimitive.Arrow ref={ref} className={cn('fill-popover', className)} {...props} />
 ));
 TooltipArrow.displayName = 'TooltipArrow';
 
@@ -71,7 +67,7 @@ export interface TooltipContentProps
 // NOTE: sideOffset defaults to 4px for comfortable spacing. Portal renders outside DOM
 //       hierarchy to avoid clipping by overflow:hidden ancestors.
 export const TooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
+  React.ComponentRef<typeof TooltipPrimitive.Content>,
   TooltipContentProps
 >(({ className, sideOffset = 4, showArrow = false, children, ...props }, ref) => (
   <TooltipPrimitive.Portal>

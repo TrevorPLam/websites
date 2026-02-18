@@ -43,7 +43,7 @@ Accessible form label with required indicator needed for form accessibility. Thi
 ```typescript
 // Expected API
 export const Label = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentRef<typeof LabelPrimitive.Root>,
   ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
     required?: boolean;
     variant?: 'default' | 'error';

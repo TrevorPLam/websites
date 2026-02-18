@@ -151,8 +151,8 @@ describe('CSP Module', () => {
 
     it('rejects empty nonce', () => {
       expect(validateCspNonce('')).toBe(false);
-      expect(validateCspNonce(null as any)).toBe(false);
-      expect(validateCspNonce(undefined as any)).toBe(false);
+      expect(validateCspNonce(null as unknown as string)).toBe(false);
+      expect(validateCspNonce(undefined as unknown as string)).toBe(false);
     });
 
     it('rejects invalid base64', () => {
