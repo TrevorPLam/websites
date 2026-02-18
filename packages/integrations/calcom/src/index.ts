@@ -38,20 +38,15 @@ export class CalComAdapter implements SchedulingAdapter {
    */
   getEmbedConfig(eventTypeId?: string): EmbedConfig {
     return {
-      type: 'inline',
-      calLink: eventTypeId ? `${this.username}/${eventTypeId}` : this.username,
-      config: {
-        layout: 'month_view',
-        theme: 'light'
-      }
+      url: this.getBookingUrl(eventTypeId)
     };
   }
 
   /**
    * Generates JSON-LD for the scheduling page.
    */
-  generateJsonLd(eventTypeId?: string) {
-    return {
+  generateJsonLd(eventTypeId?: string): string {
+    const schema = {
       '@context': 'https://schema.org',
       '@type': 'Service',
       'name': this.name,
@@ -62,5 +57,6 @@ export class CalComAdapter implements SchedulingAdapter {
       },
       'url': this.getBookingUrl(eventTypeId)
     };
+    return JSON.stringify(schema, null, 2);
   }
 }
