@@ -6,7 +6,6 @@
  * Sections are registered by template modules (3.2, 3.3). composePage resolves
  * section IDs from config.sections or getSectionsForPage(page, features).
  */
-
 import * as React from 'react';
 import type { SiteConfig } from '@repo/types';
 import type { SectionProps, TemplateConfig } from './types';
@@ -44,6 +43,27 @@ export function getSectionsForPage(
   if (page === 'services') {
     if (features.services) return [`services-${features.services}`];
     return [];
+  }
+  if (page === 'about') {
+    const sections: string[] = ['about-hero'];
+    if (features.team) sections.push('about-team');
+    if (features.testimonials) sections.push('about-testimonials');
+    sections.push('about-cta');
+    return sections;
+  }
+  if (page === 'contact') {
+    return ['contact-form', 'contact-info'];
+  }
+  if (page === 'blog-index') {
+    const sections: string[] = ['blog-grid'];
+    if (features.blog) sections.push('blog-pagination');
+    return sections;
+  }
+  if (page === 'blog-post') {
+    return ['blog-post-content', 'blog-related-posts', 'blog-cta'];
+  }
+  if (page === 'booking') {
+    return ['booking-form'];
   }
   return [];
 }
