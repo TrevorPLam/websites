@@ -118,10 +118,11 @@ PopoverBody.displayName = 'PopoverBody';
 
 // [TRACE:FUNC=packages.ui.components.PopoverFooter]
 // [FEAT:UI]
-export const PopoverFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+export const PopoverFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
   <div
+    ref={ref}
     className={cn('flex items-center justify-end gap-2 pt-2 border-t border-border mt-2', className)}
     {...props}
   />
-);
+));
 PopoverFooter.displayName = 'PopoverFooter';
