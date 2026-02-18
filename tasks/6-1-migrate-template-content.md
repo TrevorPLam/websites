@@ -28,8 +28,18 @@ Move reusable hair-salon components to @repo/marketing-components. Define reusab
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
+### Primary Research Topics
+- **[2026-02-18] R-DOCS**: ADRs, config reference, migration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-docs) for full research findings.
+- **[2026-02-18] R-MIGRATION**: Template-to-client migration, cutover — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-migration) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-DOCS](RESEARCH-INVENTORY.md#r-docs) — Full research findings
+- [RESEARCH-INVENTORY.md - R-MIGRATION](RESEARCH-INVENTORY.md#r-migration) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -37,9 +47,9 @@ Move reusable hair-salon components to @repo/marketing-components. Define reusab
 
 ## Code Snippets / Examples
 
-```typescript
-// Add code snippets and usage examples
-```
+### Related Patterns
+- See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
+- See [R-MIGRATION - Research Findings](RESEARCH-INVENTORY.md#r-migration) for additional examples
 
 ## Acceptance Criteria
 

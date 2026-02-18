@@ -29,8 +29,18 @@ pnpm create-client, validate-config, generate-component; knip/depcheck; validate
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
+### Primary Research Topics
+- **[2026-02-18] R-DOCS**: ADRs, config reference, migration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-docs) for full research findings.
+- **[2026-02-18] R-CLI**: CLI tooling, generators, scaffolding — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-cli) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-DOCS](RESEARCH-INVENTORY.md#r-docs) — Full research findings
+- [RESEARCH-INVENTORY.md - R-CLI](RESEARCH-INVENTORY.md#r-cli) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -38,12 +48,9 @@ pnpm create-client, validate-config, generate-component; knip/depcheck; validate
 
 ## Code Snippets / Examples
 
-```typescript
-// API surface (from task)
-// `pnpm validate-client [path]`, `pnpm health`, `pnpm program:wave0` etc. Exit 0/1.
-
-// Add usage examples per implementation
-```
+### Related Patterns
+- See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
+- See [R-CLI - Research Findings](RESEARCH-INVENTORY.md#r-cli) for additional examples
 
 ## Acceptance Criteria
 

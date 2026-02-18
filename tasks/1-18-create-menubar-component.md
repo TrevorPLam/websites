@@ -29,9 +29,20 @@ Application menu bar with keyboard navigation needed for desktop-style interface
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use Radix UI primitives for accessibility and consistency - [Radix UI Menubar](https://www.radix-ui.com/primitives/docs/components/menubar)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
-- **2026-02-18** Implement proper menubar keyboard patterns - [ARIA Menubar Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -40,45 +51,10 @@ Application menu bar with keyboard navigation needed for desktop-style interface
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API components (full Radix set)
-export const Menubar = React.forwardRef<...>(...)
-export const MenubarMenu = React.forwardRef<...>(...)
-export const MenubarTrigger = React.forwardRef<...>(...)
-export const MenubarContent = React.forwardRef<...>(...)
-export const MenubarItem = React.forwardRef<...>(...)
-export const MenubarSeparator = React.forwardRef<...>(...)
-export const MenubarSub = React.forwardRef<...>(...)
-export const MenubarSubTrigger = React.forwardRef<...>(...)
-export const MenubarSubContent = React.forwardRef<...>(...)
-export const MenubarCheckboxItem = React.forwardRef<...>(...)
-export const MenubarRadioItem = React.forwardRef<...>(...)
-export const MenubarLabel = React.forwardRef<...>(...)
-export const MenubarShortcut = React.forwardRef<...>(...)
-
-// Usage examples
-<Menubar>
-  <MenubarMenu>
-    <MenubarTrigger>File</MenubarTrigger>
-    <MenubarContent>
-      <MenubarItem onSelect={() => console.log('New')}>
-        New <MenubarShortcut>⌘N</MenubarShortcut>
-      </MenubarItem>
-      <MenubarItem onSelect={() => console.log('Open')}>
-        Open <MenubarShortcut>⌘O</MenubarShortcut>
-      </MenubarItem>
-      <MenubarSeparator />
-      <MenubarSub>
-        <MenubarSubTrigger>Share</MenubarSubTrigger>
-        <MenubarSubContent>
-          <MenubarItem>Email</MenubarItem>
-          <MenubarItem>Slack</MenubarItem>
-        </MenubarSubContent>
-      </MenubarSub>
-    </MenubarContent>
-  </MenubarMenu>
-</Menubar>
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
 
 ## Acceptance Criteria
 

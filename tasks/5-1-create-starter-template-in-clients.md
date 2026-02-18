@@ -31,8 +31,20 @@ Thin Next.js shell. Routes: home, about, services, contact, blog, book. site.con
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
+### Primary Research Topics
+- **[2026-02-18] R-INDUSTRY**: JSON-LD, industry patterns — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-industry) for full research findings.
+- **[2026-02-18] R-NEXT**: App Router, RSC, Server Actions — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-next) for full research findings.
+- **[2026-02-18] R-CONFIG-VALIDATION**: Config schema validation, Zod — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-config-validation) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry) — Full research findings
+- [RESEARCH-INVENTORY.md - R-NEXT](RESEARCH-INVENTORY.md#r-next) — Full research findings
+- [RESEARCH-INVENTORY.md - R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -45,9 +57,10 @@ Thin Next.js shell. Routes: home, about, services, contact, blog, book. site.con
 
 ## Code Snippets / Examples
 
-```typescript
-// Add code snippets and usage examples
-```
+### Related Patterns
+- See [R-INDUSTRY - Research Findings](RESEARCH-INVENTORY.md#r-industry) for additional examples
+- See [R-NEXT - Research Findings](RESEARCH-INVENTORY.md#r-next) for additional examples
+- See [R-CONFIG-VALIDATION - Research Findings](RESEARCH-INVENTORY.md#r-config-validation) for additional examples
 
 ## Acceptance Criteria
 

@@ -27,9 +27,18 @@ Accessibility system with ARIA utilities, keyboard navigation, and screen reader
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolvable via RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md R-A11Y**: WCAG 2.2 AA (24×24px touch targets, focus ≥2px 3:1 contrast, keyboard alternatives, ARIA live regions, prefers-reduced-motion). Directs ARIA utilities, keyboard.ts, screen-reader.ts, hooks.
-- **[2026-02-18] WAI-ARIA Authoring Practices**: Use for roving tabindex, roles, and screen reader patterns in packages/infra/accessibility.
+### Primary Research Topics
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-INFRA**: Slot, Provider, Context, Theme, CVA — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-infra) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-INFRA](RESEARCH-INVENTORY.md#r-infra) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -41,12 +50,9 @@ Accessibility system with ARIA utilities, keyboard navigation, and screen reader
 
 ## Code Snippets / Examples
 
-```typescript
-// API surface (from task)
-// `useAria`, `useKeyboard`, `useScreenReader`, `AriaProvider`, `AccessibilityUtils`
-
-// Add usage examples per implementation
-```
+### Related Patterns
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-INFRA - Research Findings](RESEARCH-INVENTORY.md#r-infra) for additional examples
 
 ## Acceptance Criteria
 

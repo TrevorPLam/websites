@@ -35,9 +35,22 @@
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: §2.1 (Architecture), §4.2 (Performance), §2.2 (Component patterns) — see Section Reference Index.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md R-MARKETING, R-A11Y**: Menu/dietary chips, filtering; WCAG 2.2 AA for all UI; packages/marketing-components src/menu/.
-- **[2026-02-18] docs/accessibility/component-a11y-rubric.md**: Apply rubric (task 0-1 to populate); focus, touch targets, keyboard nav for menu controls.
+### Primary Research Topics
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-PERF**: LCP, INP, CLS, bundle budgets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-perf) for full research findings.
+- **[2026-02-18] R-MARKETING**: Hero, menu, pricing, testimonials, FAQ, sections — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing) for full research findings.
+- **[2026-02-18] R-INDUSTRY**: JSON-LD, industry patterns — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-industry) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-PERF](RESEARCH-INVENTORY.md#r-perf) — Full research findings
+- [RESEARCH-INVENTORY.md - R-MARKETING](RESEARCH-INVENTORY.md#r-marketing) — Full research findings
+- [RESEARCH-INVENTORY.md - R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -52,13 +65,11 @@
 
 ## Code Snippets / Examples
 
-```typescript
-// API surface (from task)
-// `MenuDisplay`, `MenuItemCard`. Props: `variant`, `items` (array), 
-// `showDietaryInfo`, `filterByCategory`, `filterByDietary`.
-
-// Add usage examples per implementation
-```
+### Related Patterns
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples
+- See [R-MARKETING - Research Findings](RESEARCH-INVENTORY.md#r-marketing) for additional examples
+- See [R-INDUSTRY - Research Findings](RESEARCH-INVENTORY.md#r-industry) for additional examples
 
 ## Acceptance Criteria
 

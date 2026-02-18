@@ -30,8 +30,30 @@ Automation feature with 5+ implementation patterns, workflow builder, and AI aut
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
+### Primary Research Topics
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-PERF**: LCP, INP, CLS, bundle budgets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-perf) for full research findings.
+- **[2026-02-18] R-MARKETING**: Hero, menu, pricing, testimonials, FAQ, sections — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing) for full research findings.
+- **[2026-02-18] R-AI**: AI Platform: LLM gateway, content engine, agents — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ai) for full research findings.
+- **[2026-02-18] R-MARKETING-OPS**: Campaign orchestration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing-ops) for full research findings.
+- **[2026-02-18] R-OPS**: Operational governance, queue policies — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ops) for full research findings.
+- **[2026-02-18] R-AI-AGENTS**: AI agent playbooks — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ai-agents) for full research findings.
+- **[2026-02-18] R-WORKFLOW**: Durable workflows, Temporal/Trigger.dev — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-workflow) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-PERF](RESEARCH-INVENTORY.md#r-perf) — Full research findings
+- [RESEARCH-INVENTORY.md - R-MARKETING](RESEARCH-INVENTORY.md#r-marketing) — Full research findings
+- [RESEARCH-INVENTORY.md - R-AI](RESEARCH-INVENTORY.md#r-ai) — Full research findings
+- [RESEARCH-INVENTORY.md - R-MARKETING-OPS](RESEARCH-INVENTORY.md#r-marketing-ops) — Full research findings
+- [RESEARCH-INVENTORY.md - R-OPS](RESEARCH-INVENTORY.md#r-ops) — Full research findings
+- [RESEARCH-INVENTORY.md - R-AI-AGENTS](RESEARCH-INVENTORY.md#r-ai-agents) — Full research findings
+- [RESEARCH-INVENTORY.md - R-WORKFLOW](RESEARCH-INVENTORY.md#r-workflow) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -51,12 +73,15 @@ Automation feature with 5+ implementation patterns, workflow builder, and AI aut
 
 ## Code Snippets / Examples
 
-```typescript
-// API surface (from task)
-// `AutomationSection`, `automationSchema`, `createAutomationConfig`, `createWorkflow`, `runAutomation`, `aiAutomate`, `AutomationConfig`, `AutomationWorkflow`, `AutomationAI`, `AutomationRule`, `AutomationHybrid`
-
-// Add usage examples per implementation
-```
+### Related Patterns
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples
+- See [R-MARKETING - Research Findings](RESEARCH-INVENTORY.md#r-marketing) for additional examples
+- See [R-AI - Research Findings](RESEARCH-INVENTORY.md#r-ai) for additional examples
+- See [R-MARKETING-OPS - Research Findings](RESEARCH-INVENTORY.md#r-marketing-ops) for additional examples
+- See [R-OPS - Research Findings](RESEARCH-INVENTORY.md#r-ops) for additional examples
+- See [R-AI-AGENTS - Research Findings](RESEARCH-INVENTORY.md#r-ai-agents) for additional examples
+- See [R-WORKFLOW - Research Findings](RESEARCH-INVENTORY.md#r-workflow) for additional examples
 
 ## Acceptance Criteria
 

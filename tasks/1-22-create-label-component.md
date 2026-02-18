@@ -29,9 +29,20 @@ Accessible form label with required indicator needed for form accessibility. Thi
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use Radix UI primitives for accessibility and consistency - [Radix UI Label](https://www.radix-ui.com/primitives/docs/components/label)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
-- **2026-02-18** Implement proper label patterns - [ARIA Label Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/label/)
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -40,36 +51,10 @@ Accessible form label with required indicator needed for form accessibility. Thi
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API
-export const Label = React.forwardRef<
-  React.ComponentRef<typeof LabelPrimitive.Root>,
-  ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
-    required?: boolean;
-    variant?: 'default' | 'error';
-  }
->(({ className, required, variant, ...props }, ref) => (
-  <LabelPrimitive.Root
-    ref={ref}
-    className={cn(labelVariants({ variant }), className)}
-    {...props}
-  >
-    {props.children}
-    {required && <span className="text-destructive">*</span>}
-  </LabelPrimitive.Root>
-));
-
-// Usage examples
-<Label htmlFor="email">Email Address</Label>
-<Label htmlFor="password" required>Password</Label>
-<Label htmlFor="confirm" variant="error" required>Confirm Password</Label>
-
-// With form control
-<div className="space-y-2">
-  <Label htmlFor="name">Full Name</Label>
-  <Input id="name" placeholder="Enter your name" />
-</div>
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
 
 ## Acceptance Criteria
 

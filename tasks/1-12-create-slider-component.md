@@ -30,12 +30,20 @@ This is a Layer L2 component providing keyboard-accessible slider with orientati
 
 ## Research & Evidence (Date-Stamped)
 
-- **Radix UI Slider (v1.3.6)** – Current production version with React 19 compatibility issues resolved
-- **React 19 Compatibility** – Use React.ComponentRef instead of React.ElementRef for forwardRef patterns
-- **WCAG 2.2 AA Compliance** – 2.5.8 Target Size (24×24 CSS pixels minimum), 2.5.7 Dragging Movements (keyboard alternative)
-- **WAI-ARIA Authoring Practices** – Radix UI follows W3C guidelines for slider semantics and keyboard navigation
-- **Accessibility Standards** – Screen reader support, focus management, keyboard navigation (Arrow keys, Home, End)
-- **Performance Standards** – Minimal runtime overhead, tree-shakeable, compatible with edge rendering
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -46,37 +54,10 @@ This is a Layer L2 component providing keyboard-accessible slider with orientati
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API (based on Radix UI Slider v1.3.6)
-interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
-  min?: number;
-  max?: number;
-  step?: number;
-  value?: number[] | number;
-  onValueChange?: (value: number[]) => void;
-  disabled?: boolean;
-  orientation?: 'horizontal' | 'vertical';
-  inverted?: boolean;
-  name?: string;
-}
-
-// React 19 compatible implementation pattern
-const Slider = React.forwardRef<React.ComponentRef<typeof SliderPrimitive.Root>, SliderProps>(
-  ({ className, ...props }, ref) => (
-    <SliderPrimitive.Root ref={ref} className={cn("slider-root", className)} {...props}>
-      <SliderPrimitive.Track className="slider-track">
-        <SliderPrimitive.Range className="slider-range" />
-      </SliderPrimitive.Track>
-      <SliderPrimitive.Thumb className="slider-thumb" />
-    </SliderPrimitive.Root>
-  )
-);
-
-// Usage examples
-<Slider min={0} max={100} step={1} value={[50]} onValueChange={(value) => console.log(value)} />
-<Slider min={0} max={100} value={[20, 80]} disabled={false} />
-<Slider orientation="vertical" min={0} max={10} step={0.1} />
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
 
 ## Acceptance Criteria
 

@@ -27,8 +27,18 @@ Registry (Map), SectionProps, TemplateConfig, composePage. No switch-based secti
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
+### Primary Research Topics
+- **[2026-02-18] R-NEXT**: App Router, RSC, Server Actions — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-next) for full research findings.
+- **[2026-02-18] R-CMS**: Content adapters, MDX, pagination — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-cms) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-NEXT](RESEARCH-INVENTORY.md#r-next) — Full research findings
+- [RESEARCH-INVENTORY.md - R-CMS](RESEARCH-INVENTORY.md#r-cms) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -36,12 +46,9 @@ Registry (Map), SectionProps, TemplateConfig, composePage. No switch-based secti
 
 ## Code Snippets / Examples
 
-```typescript
-// API surface (from task)
-// `sectionRegistry`, `SectionProps`, `TemplateConfig`, `composePage(config, siteConfig)`
-
-// Add usage examples per implementation
-```
+### Related Patterns
+- See [R-NEXT - Research Findings](RESEARCH-INVENTORY.md#r-next) for additional examples
+- See [R-CMS - Research Findings](RESEARCH-INVENTORY.md#r-cms) for additional examples
 
 ## Acceptance Criteria
 

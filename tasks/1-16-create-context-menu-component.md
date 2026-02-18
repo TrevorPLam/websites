@@ -29,9 +29,20 @@ Right-click context menu with nested submenus needed for rich interactions. This
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use Radix UI primitives for accessibility and consistency - [Radix UI Context Menu](https://www.radix-ui.com/primitives/docs/components/context-menu)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
-- **2026-02-18** Implement proper keyboard navigation patterns - [ARIA Menu Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu/)
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -40,39 +51,10 @@ Right-click context menu with nested submenus needed for rich interactions. This
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API components (full Radix set)
-export const ContextMenu = React.forwardRef<...>(...)
-export const ContextMenuTrigger = React.forwardRef<...>(...)
-export const ContextMenuContent = React.forwardRef<...>(...)
-export const ContextMenuItem = React.forwardRef<...>(...)
-export const ContextMenuSeparator = React.forwardRef<...>(...)
-export const ContextMenuSub = React.forwardRef<...>(...)
-export const ContextMenuSubTrigger = React.forwardRef<...>(...)
-export const ContextMenuSubContent = React.forwardRef<...>(...)
-export const ContextMenuCheckboxItem = React.forwardRef<...>(...)
-export const ContextMenuRadioItem = React.forwardRef<...>(...)
-export const ContextMenuLabel = React.forwardRef<...>(...)
-export const ContextMenuShortcut = React.forwardRef<...>(...)
-
-// Usage examples
-<ContextMenu>
-  <ContextMenuTrigger>Right click here</ContextMenuTrigger>
-  <ContextMenuContent>
-    <ContextMenuItem onSelect={() => console.log('Copy')}>
-      Copy <ContextMenuShortcut>⌘C</ContextMenuShortcut>
-    </ContextMenuItem>
-    <ContextMenuSeparator />
-    <ContextMenuSub>
-      <ContextMenuSubTrigger>More</ContextMenuSubTrigger>
-      <ContextMenuSubContent>
-        <ContextMenuItem>Option 1</ContextMenuItem>
-        <ContextMenuItem>Option 2</ContextMenuItem>
-      </ContextMenuSubContent>
-    </ContextMenuSub>
-  </ContextMenuContent>
-</ContextMenu>
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
 
 ## Acceptance Criteria
 

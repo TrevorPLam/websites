@@ -29,9 +29,20 @@ Card that appears on hover with rich content needed for enhanced interactions. T
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use Radix UI primitives for accessibility and consistency - [Radix UI Hover Card](https://www.radix-ui.com/primitives/docs/components/hover-card)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
-- **2026-02-18** Implement proper hover timing patterns - [Hover Timing Best Practices](https://www.nngroup.com/articles/timing-displays/)
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -40,31 +51,10 @@ Card that appears on hover with rich content needed for enhanced interactions. T
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API components
-export const HoverCard = React.forwardRef<...>(...)
-export const HoverCardTrigger = React.forwardRef<...>(...)
-export const HoverCardContent = React.forwardRef<...>(...)
-
-// Usage examples
-<HoverCard openDelay={300} closeDelay={200}>
-  <HoverCardTrigger asChild>
-    <Button variant="ghost">Hover me</Button>
-  </HoverCardTrigger>
-  <HoverCardContent side="right" align="center">
-    <div className="space-y-2">
-      <h4 className="text-sm font-semibold">User Profile</h4>
-      <p className="text-sm text-muted-foreground">
-        Rich content with images and links
-      </p>
-      <Avatar className="h-8 w-8">
-        <AvatarImage src="/avatar.jpg" />
-        <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
-    </div>
-  </HoverCardContent>
-</HoverCard>
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
 
 ## Acceptance Criteria
 

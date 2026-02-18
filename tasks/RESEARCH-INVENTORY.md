@@ -200,187 +200,270 @@ F.8, docs/operations.
 
 ---
 
-## Research Findings (Placeholders — fill in Phase 2)
+## Research Findings
 
-### R-UI
+### R-UI (Radix UI primitives, React 19, ComponentRef)
 - **[2026-02-18] React 19**: Use `React.ComponentRef<typeof Primitive.Root>` (not `ElementRef`) for forwardRef; React 19 release notes (react.dev/blog).
 - **[2026-02-18] Radix**: All 1.xx components are thin wrappers; use Radix primitives from catalog (radix-ui 1.0.0); tree-shakeable, Server Component safe when no client interactivity.
 - Implications: Every 1.xx task must use ComponentRef and follow existing Button/Dialog patterns in packages/ui.
 
-### R-A11Y
+#### Code Snippets
+- **React 19 component with ref**: Thin wrapper pattern for Radix primitives.
+  ```typescript
+  import * as React from 'react';
+  import { cn } from '@repo/utils';
+
+  export function MyPrimitive({ ref, className, ...props }: MyPrimitiveProps) {
+    return (
+      <Primitive.Root
+        ref={ref}
+        className={cn('base-styles', className)}
+        {...props}
+      />
+    );
+  }
+  ```
+- **ComponentRef type**: Use for type-safe ref forwarding.
+  ```typescript
+  type MyPrimitiveRef = React.ComponentRef<typeof Primitive.Root>;
+  ```
+
+### R-A11Y (WCAG 2.2 AA, ARIA, touch targets, keyboard)
 - **[2026-02-18] WCAG 2.2 AA**: Touch targets minimum 24×24 CSS px (2.5.8); focus visible ≥2px, 3:1 contrast; dragging movements require keyboard alternative (2.5.7).
 - **[2026-02-18] WAI-ARIA**: Use ARIA live regions for dynamic content (alerts, slider value); roving tabindex for composite widgets; proper roles (slider, tablist, etc.).
 - **[2026-02-18] prefers-reduced-motion**: Honor for animations; provide static fallbacks.
 - Repo: docs/accessibility/component-a11y-rubric.md must be populated (task created in Phase 6).
 
-### R-PERF
+#### Code Snippets
+- **Touch target minimum (2.5.8)**: Ensure interactive elements meet 24×24 CSS px.
+  ```css
+  .touch-target {
+    min-width: 24px;
+    min-height: 24px;
+  }
+  ```
+- **Reduced motion**: Honor user preference.
+  ```typescript
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  ```
+
+### R-PERF (LCP, INP, CLS, bundle budgets)
 - **[2026-02-18] Core Web Vitals**: LCP < 2.5s, INP ≤ 200 ms (replaced FID March 2024), CLS < 0.1; web.dev and Lighthouse.
 - **[2026-02-18] Bundle**: Page shell < 250 KB gzipped; component-level budgets (e.g. hero < 40 KB); track via Lighthouse CI / next.config performanceBudgets.
 
-### R-RADIX
+### R-RADIX (Radix component APIs)
 - **[2026-02-18] Radix primitives**: Slider, Label, Select, Tabs, Accordion, etc. — follow radix-ui.com docs; version in pnpm catalog (radix-ui ^1.0.0).
 - **[2026-02-18] shadcn/ui**: Copy/paste pattern; Tailwind + cn(); no runtime dependency on shadcn.
 
-### R-FORM
+#### Code Snippets
+- **Radix primitive wrapper**: Standard pattern for 1.xx components.
+  ```typescript
+  import * as Primitive from '@radix-ui/react-primitive';
+  import { cn } from '@repo/utils';
+
+  const Root = React.forwardRef<
+    React.ComponentRef<typeof Primitive.Root>,
+    React.ComponentPropsWithoutRef<typeof Primitive.Root> & { className?: string }
+  >(({ className, ...props }, ref) => (
+    <Primitive.Root ref={ref} className={cn('primitive-root', className)} {...props} />
+  ));
+  ```
+
+### R-FORM (React Hook Form, Zod, validation)
 - **[2026-02-18] Stack**: React Hook Form + Zod; use `@hookform/resolvers/zod`; schema co-located in feature packages (packages/features).
 - **[2026-02-18] Patterns**: useFormState for async errors; useFieldArray for dynamic fields; ref docs/architecture and existing ContactForm/BookingForm.
 
-### R-MARKETING
+#### Code Snippets
+- **Form with Zod resolver**:
+  ```typescript
+  import { useForm } from 'react-hook-form';
+  import { zodResolver } from '@hookform/resolvers/zod';
+  import { z } from 'zod';
+
+  const schema = z.object({ name: z.string().min(1), email: z.string().email() });
+  type FormData = z.infer<typeof schema>;
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { name: '', email: '' },
+  });
+  ```
+
+### R-MARKETING (Hero, menu, pricing, testimonials, FAQ, sections)
 - **[2026-02-18] RESEARCH.md §11**: Hero variants, menu/dietary chips, pricing tables, testimonial sliders, FAQ; navigation mega menu + mobile Sheet; canonical URLs for blog/pagination.
 - **[2026-02-18] Package**: packages/marketing-components; existing hero, services, team, testimonials, pricing, gallery, stats, cta, faq, contact; add new families per task (e.g. menu under src/menu).
 
-### R-INTEGRATION
+#### Code Snippets
+- **Section with slots**: Composition pattern for marketing sections.
+  ```typescript
+  interface HeroProps {
+    title: string;
+    subtitle?: string;
+    children?: React.ReactNode;
+  }
+  export function HeroSection({ title, subtitle, children }: HeroProps) {
+    return (
+      <section>
+        <h1>{title}</h1>
+        {subtitle && <p>{subtitle}</p>}
+        {children}
+      </section>
+    );
+  }
+  ```
+
+### R-INTEGRATION (Scheduling, OAuth, TCF)
 - **[2026-02-18] Scheduling**: Calendly, Acuity, Cal.com adapters in packages/integrations; adapter contract first; consent gate before loading third-party scripts.
 - **[2026-02-18] OAuth/Privacy**: OAuth 2.1 + PKCE for email/CRM; TCF v2.3 for consent; CMP before third-party embeds.
 
-### R-INDUSTRY
+### R-INDUSTRY (JSON-LD, industry patterns)
 - **[2026-02-18] JSON-LD**: packages/industry-schemas; limit 12 industries; Event, Place, LocalBusiness, etc.; validators for output.
 - **[2026-02-18] Industries**: Services, restaurant, legal, medical, retail, etc.; implementation details in task files.
 
-### R-NEXT
+### R-NEXT (App Router, RSC, Server Actions)
 - **[2026-02-18] Next.js 16**: App Router, Server Components, Server Actions by default; PPR optional (ppr: true); Turbopack dev; see RESEARCH.md §3.1.
 
-### R-INFRA
+### R-INFRA (Slot, Provider, Context, Theme, CVA)
 - **[2026-02-18] Patterns**: CVA for variants; design tokens (packages/config/tailwind-theme.css); Slot/Provider/Context; RESEARCH.md §13 infrastructure systems.
 - **[2026-02-18] Layer**: config → utils → ui/types/infra → features → marketing-components → page-templates → clients; no packages → clients.
 
-### R-CMS
+### R-CMS (Content adapters, MDX, pagination)
 - **[2026-02-18] Adapters**: CMS-agnostic adapters; MDX for content; pagination with rel=prev/next and canonical URLs for SEO.
 
-### R-TEST
+### R-TEST (Jest, axe-core, Playwright)
 - **[2026-02-18] Jest**: Repo uses Jest 30 (root jest.config.js, package.json); node + jsdom projects; jest-axe for a11y; run pnpm test / pnpm test:coverage.
 - **[2026-02-18] E2E**: Playwright for e2e; Vitest mentioned in RESEARCH.md as optional future — use Jest in task specs.
 
-### R-DOCS
+### R-DOCS (ADRs, config reference, migration)
 - **[2026-02-18] ADRs**: Architecture Decision Records in docs/; standard format (context, decision, consequences).
 - **[2026-02-18] Config reference**: docs/configuration/site-config-reference.md; migration in 6.2.
 
-### R-AI
+### R-AI (AI Platform: LLM gateway, content engine, agents)
 - **[2026-02-18] THEGOAL.md Phase 7**: AI Platform (content-engine, llm-gateway, agent-orchestration); multi-provider LLM routing with fallback; Vercel AI SDK router; cost telemetry per tenant.
 - **[2026-02-18] RESEARCH.md §16**: Retrieval-Augmented Generation for search/personalization; agent orchestration with Trigger-based agents; generative content tools.
 
-### R-CONTENT-PLATFORM
+### R-CONTENT-PLATFORM (Visual editor, DAM)
 - **[2026-02-18] THEGOAL.md Phase 8**: Visual editor (drag-drop page builder), DAM-core (asset ingestion, AI tagging, variant generation); Canvas + ComponentPalette patterns.
 
-### R-MARKETING-OPS
+### R-MARKETING-OPS (Campaign orchestration)
 - **[2026-02-18] THEGOAL.md Phase 9**: Campaign orchestration, workflow automation; campaign planning + workflow automation patterns.
 
-### R-TENANT
+### R-TENANT (Multi-tenancy, SaaS)
 - **[2026-02-18] THEGOAL.md Phase 10**: Full SaaS multi-tenancy; tenant-context, tenant-provisioning, feature flags per tenant; packages/infrastructure/tenant-core.
 
-### R-DESIGN-TOKENS
+### R-DESIGN-TOKENS (Three-layer token architecture)
 - **[2026-02-18] THEGOAL.md C.5**: Three-layer architecture: option-tokens.css (raw values), decision-tokens.css (semantic aliases), component-tokens.css (component-specific); DTCG v1.0 alignment; packages/config/tokens/.
 - **[2026-02-18] RESEARCH.md §13**: Design Token pipeline exporting to Tailwind v4 + CSS vars; multi-brand theming with CSS cascade layers.
 
-### R-MOTION
+### R-MOTION (Animation/motion primitives)
 - **[2026-02-18] THEGOAL.md C.6**: Motion primitives (entrance, emphasis, page transitions); Framer Motion 11 presets; packages/ui/motion/primitives.ts, presets.ts.
 - **[2026-02-18] RESEARCH.md §14**: Reduced-motion guards; Activity component gating expensive renders.
 
-### R-EXPERIMENTATION
+### R-EXPERIMENTATION (A/B testing, feature flags, guardrails)
 - **[2026-02-18] THEGOAL.md infra/experiments**: Feature flags (deterministic evaluation + kill-switch), A/B testing (variant assignment + exposure logging), guardrails (SRM checks, minimum run validation).
 - **[2026-02-18] RESEARCH.md §12**: Server actions to enqueue experiments; edge flag resolution (Vercel Edge Config / Cloudflare KV); statistical analysis standards (D.2).
 
-### R-EDGE
+### R-EDGE (Edge middleware, personalization)
 - **[2026-02-18] THEGOAL.md infra/edge**: Edge middleware primitives; tenant-experiment-context (edge variant selection + cache-safe keys).
 - **[2026-02-18] RESEARCH.md §16**: Vercel Edge Functions / Cloudflare Workers for personalization; edge A/B tests; predictive prefetchers using Network Information API.
 
-### R-OPS
+### R-OPS (Operational governance, queue policies)
 - **[2026-02-18] THEGOAL.md infra/ops**: Operational governance; queue-policy.ts (queue fairness, retry budgets, timeout rules).
 - **[2026-02-18] RESEARCH.md §12**: Durable workflows (Temporal/Trigger.dev) for CRM sync; retry/backoff policies; async queue governance (E.7).
 
-### R-SECURITY-ADV
+### R-SECURITY-ADV (Security regression, threat modeling)
 - **[2026-02-18] THEGOAL.md infra/__tests__/security-regression**: SSRF/XSS/injection scenario tests; continuous security program (C.13).
 - **[2026-02-18] RESEARCH.md §17**: SIEM integrations; dependency scanning (GitHub Advanced Security/OWASP Dependency-Track); threat modeling playbooks.
 
-### R-COMPLIANCE
+### R-COMPLIANCE (Industry compliance packs)
 - **[2026-02-18] THEGOAL.md C.17**: Industry compliance renderers; medical privacy, legal disclaimers; packages/features/compliance/renderers.
 - **[2026-02-18] RESEARCH.md §17**: GDPR/CCPA/LGPD checklists; HIPAA-safe contact forms (BAA storage); compliance packs per industry.
 
-### R-PERSONALIZATION
+### R-PERSONALIZATION (Personalization engine, behavioral tracking)
 - **[2026-02-18] THEGOAL.md features/personalization**: Rules engine (privacy-safe, allowlist-only signals), segments (geo, returning visitor, campaign source), co-creation patterns (IKEA-effect participatory UX).
 - **[2026-02-18] RESEARCH.md §12**: Privacy-first behavioral tracking; edge personalization; participatory personalization (F.6).
 
-### R-LOCALIZATION
+### R-LOCALIZATION (i18n, RTL, translation)
 - **[2026-02-18] THEGOAL.md features/localization**: i18n-config.ts (locale routing + fallback chains), dictionaries (per-locale translation files).
 - **[2026-02-18] RESEARCH.md §12**: next-intl integration; RTL support; AI translation options; C.11 i18n/RTL guide.
 
-### R-VISUAL-REG
+### R-VISUAL-REG (Visual regression testing)
 - **[2026-02-18] THEGOAL.md C.7**: Visual regression checks; Storybook visual regression config; Chromatic/Applitools integration.
 - **[2026-02-18] RESEARCH.md §18**: Visual regression gating merges for marketing components; UI tokens alignment.
 
-### R-SPEC-DRIVEN
+### R-SPEC-DRIVEN (Spec-driven development)
 - **[2026-02-18] THEGOAL.md C.15**: Spec-driven development; .kiro/specs (feature spec templates, ADR templates).
 - **[2026-02-18] RESEARCH.md §12**: Spec-driven features; adapter interfaces; server action contracts; analytics taxonomy.
 
-### R-AI-AGENTS
+### R-AI-AGENTS (AI agent playbooks)
 - **[2026-02-18] THEGOAL.md C.16**: AI-assisted delivery playbooks; .windsurf/workflows (implement-feature-from-spec.md, refactor-with-parity-checks.md).
 - **[2026-02-18] RESEARCH.md §16**: Agent orchestration; Trigger-based agents; content-agent, seo-agent patterns.
 
-### R-SERVICE-BLUEPRINT
+### R-SERVICE-BLUEPRINT (Service blueprints, journey mapping)
 - **[2026-02-18] THEGOAL.md E.2**: Service blueprints (booking-flow.md, contact-flow.md, lead-routing-map.md); user journey mapping.
 - **[2026-02-18] docs/service-blueprints**: Blueprint templates; touchpoint identification; frontstage/backstage separation.
 
-### R-UX-PATTERNS
+### R-UX-PATTERNS (Progressive conversion, peak-end, participatory UX)
 - **[2026-02-18] THEGOAL.md E.6, F.4, F.6, F.7, F.12**: Progressive conversion patterns; peak-end journey guidelines; participatory personalization; wayfinding standards; service recovery patterns.
 - **[2026-02-18] RESEARCH.md §12**: Progressive conversion UX primitive (ProgressStepper, StepConfidenceHint); latency-band response behavior; trust recovery after failures.
 
-### R-STRATEGY
+### R-STRATEGY (Cynefin, leverage points, portfolio kanban)
 - **[2026-02-18] THEGOAL.md F.2, F.3, F.10**: Cynefin execution model; leverage-point scoring; portfolio kanban policy; WIP limits by lane.
 - **[2026-02-18] docs/strategy**: Strategic frameworks; decision-making models; portfolio management.
 
-### R-KNOWLEDGE
+### R-KNOWLEDGE (SECI-inspired knowledge flow)
 - **[2026-02-18] THEGOAL.md F.11**: SECI-inspired knowledge flow; pattern capture templates.
 - **[2026-02-18] docs/knowledge**: Knowledge management patterns; explicit/tacit knowledge conversion; pattern library.
 
-### R-GOLDEN-PATH
+### R-GOLDEN-PATH (Golden paths, DevEx metrics)
 - **[2026-02-18] THEGOAL.md E.4**: Golden path new client; golden path new feature; DevEx adoption metrics.
 - **[2026-02-18] docs/platform**: Developer experience standards; onboarding flows; success metrics.
 
-### R-ERROR-BUDGET
+### R-ERROR-BUDGET (Error budgets, SLOs, release gates)
 - **[2026-02-18] THEGOAL.md E.3, C.14, D.5**: Error-budget release gate logic; SLO dashboards; error budget policy; postmortem templates.
 - **[2026-02-18] RESEARCH.md §12**: SLO dashboards; error budget release policy; incident severity matrix.
 
-### R-SPC
+### R-SPC (Statistical process control, delivery metrics)
 - **[2026-02-18] THEGOAL.md F.8**: SPC control charts; delivery quality monitoring; process control thresholds.
 - **[2026-02-18] docs/operations**: Statistical process control; delivery metrics; quality gates.
 
-### R-SEARCH-AI
+### R-SEARCH-AI (AI semantic search, vector embeddings, RAG)
 - **[2026-02-18] RESEARCH.md §12**: AI semantic search pipeline (Encore + OpenAI embeddings + Qdrant) with vector cache per client; hybrid keyword reranking; analytics on zero-result queries.
 - **[2026-02-18] RESEARCH.md §16**: Retrieval-Augmented Generation for search; vector embeddings; semantic ranking.
 
-### R-E-COMMERCE
+### R-E-COMMERCE (Headless commerce, payment gateways)
 - **[2026-02-18] RESEARCH.md §12**: Headless commerce connectors (Shopify Storefront API, Commerce.js); PCI-scoped webhook relays; review ingestion with moderation queue.
 - **[2026-02-18] RESEARCH.md §15**: Product tour components; ROI calculators; e-commerce patterns.
 
-### R-WORKFLOW
+### R-WORKFLOW (Durable workflows, Temporal/Trigger.dev)
 - **[2026-02-18] RESEARCH.md §12**: Durable workflows (Temporal/Trigger.dev) for CRM sync; signed webhook verification (Stripe-style); retry/backoff policies.
 - **[2026-02-18] THEGOAL.md 2.44, 2.46**: Webhook feature; automation feature; workflow builder patterns.
 
-### R-MONITORING
+### R-MONITORING (SLO dashboards, INP monitors, synthetic checks)
 - **[2026-02-18] RESEARCH.md §12**: SLO dashboards; INP monitors; synthetic checks via Playwright; CSP/report-to endpoints.
 - **[2026-02-18] THEGOAL.md 2.40, C.14**: Monitoring feature; performance SLOs; client-slo-dashboard-spec.
 
-### R-CLI
+### R-CLI (CLI tooling, generators, scaffolding)
 - **[2026-02-18] THEGOAL.md 6.8**: CLI tooling; create-client (turbo gen new-client), generate-component, validate-site-config.
 - **[2026-02-18] tooling/**: Developer CLI tools; scaffolding factories; Plop-based generators.
 
-### R-VERSIONING
+### R-VERSIONING (Changesets, versioning strategy)
 - **[2026-02-18] THEGOAL.md 0.12, C.4**: Changesets versioning; release channels (stable + canary); version-packages script.
 - **[2026-02-18] RESEARCH.md**: Changeset workflow; release automation; versioning strategy docs.
 
-### R-PARITY
+### R-PARITY (Parity testing, refactor validation)
 - **[2026-02-18] THEGOAL.md 2.22**: Parity tests vs original template; refactor-parity-matrix.md.
 - **[2026-02-18] docs/testing**: Parity testing strategy; validation against original implementations; regression prevention.
 
-### R-CONFIG-VALIDATION
+### R-CONFIG-VALIDATION (Config schema validation, Zod)
 - **[2026-02-18] THEGOAL.md 6.10a, 5.1**: Config schema validation; Zod runtime validator; validate-client script; site-config.schema.ts.
 - **[2026-02-18] tooling/validation**: Config validation tooling; schema versioning; compatibility checks.
 
-### R-MIGRATION
+### R-MIGRATION (Template-to-client migration, cutover)
 - **[2026-02-18] THEGOAL.md 6.1, 6.2**: Template-to-client migration; cutover-runbook.md; rollback-plan.md; client-go-live-checklist.md.
 - **[2026-02-18] docs/migration**: Migration guides; validation matrix; cutover procedures.
 
-### R-CLEANUP
+### R-CLEANUP (Dead code removal, dependency pruning)
 - **[2026-02-18] THEGOAL.md 6.9**: Dead code removal; dependency pruning; knip config; dependency-pruning-report.md.
 - **[2026-02-18] knip**: Dead code detection; unused dependency identification; cleanup automation.
 

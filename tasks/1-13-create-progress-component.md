@@ -29,9 +29,20 @@ Progress indicator with determinate/indeterminate states needed for loading feed
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use Radix UI primitives for accessibility and consistency - [Radix UI Progress](https://www.radix-ui.com/primitives/docs/components/progress)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
-- **2026-02-18** Implement CSS-only animations for performance - [CSS Animations Best Practices](https://web.dev/css-animation-performance/)
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -40,22 +51,10 @@ Progress indicator with determinate/indeterminate states needed for loading feed
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API
-interface ProgressProps {
-  value?: number;
-  indeterminate?: boolean;
-  variant?: 'default' | 'success' | 'warning' | 'error';
-  size?: 'sm' | 'md' | 'lg';
-  showLabel?: boolean;
-}
-
-// Usage examples
-<Progress value={75} />
-<Progress indeterminate />
-<Progress value={100} variant="success" showLabel />
-<Progress value={30} variant="warning" size="lg" />
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
 
 ## Acceptance Criteria
 

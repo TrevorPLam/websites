@@ -29,9 +29,20 @@ Command palette with search, keyboard navigation, and actions needed for power u
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use cmdk for robust command palette implementation - [cmdk Documentation](https://cmdk.paco.me/)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
-- **2026-02-18** Implement keyboard navigation best practices - [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/menu/)
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -40,32 +51,10 @@ Command palette with search, keyboard navigation, and actions needed for power u
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API components
-export const Command = React.forwardRef<...>(...)
-export const CommandInput = React.forwardRef<...>(...)
-export const CommandList = React.forwardRef<...>(...)
-export const CommandEmpty = React.forwardRef<...>(...)
-export const CommandGroup = React.forwardRef<...>(...)
-export const CommandItem = React.forwardRef<...>(...)
-export const CommandSeparator = React.forwardRef<...>(...)
-export const CommandShortcut = React.forwardRef<...>(...)
-
-// Usage examples
-<Command shouldFilter={false}>
-  <CommandInput placeholder="Type a command or search..." />
-  <CommandList>
-    <CommandEmpty>No results found.</CommandEmpty>
-    <CommandGroup heading="Suggestions">
-      <CommandItem onSelect={() => console.log('Calendar')}>
-        <Calendar />
-        <span>Calendar</span>
-        <CommandShortcut>⌘K</CommandShortcut>
-      </CommandItem>
-    </CommandGroup>
-  </CommandList>
-</Command>
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
 
 ## Acceptance Criteria
 

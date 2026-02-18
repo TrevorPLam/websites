@@ -30,9 +30,22 @@ Form wrapper with validation and error handling needed for robust form experienc
 
 ## Research & Evidence (Date-Stamped)
 
-- **2026-02-18** Use React Hook Form for robust form validation - [React Hook Form](https://react-hook-form.com/)
-- **2026-02-18** Ensure compatibility with React 19 patterns - [React 19 Blog](https://react.dev/blog/2024/12/05/react-v19)
-- **2026-02-18** Implement proper form validation patterns - [Form Validation Best Practices](https://www.w3.org/WAI/ARIA/apg/patterns/form/)
+### Primary Research Topics
+- **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
+- **[2026-02-18] R-FORM**: React Hook Form, Zod, validation — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-form) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
+- [RESEARCH-INVENTORY.md - R-FORM](RESEARCH-INVENTORY.md#r-form) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -41,47 +54,11 @@ Form wrapper with validation and error handling needed for robust form experienc
 
 ## Code Snippets / Examples
 
-```typescript
-// Expected API components
-export const Form = React.forwardRef<...>(...)
-export const FormField = React.forwardRef<...>(...)
-export const FormItem = React.forwardRef<...>(...)
-export const FormLabel = React.forwardRef<...>(...)
-export const FormControl = React.forwardRef<...>(...)
-export const FormDescription = React.forwardRef<...>(...)
-export const FormMessage = React.forwardRef<...>(...)
-
-// Usage examples
-<Form {...form}>
-  <FormField
-    control={form.control}
-    name="email"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Email</FormLabel>
-        <FormControl>
-          <Input placeholder="Enter your email" {...field} />
-        </FormControl>
-        <FormDescription>
-          We'll never share your email with anyone else.
-        </FormDescription>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-  <Button type="submit">Submit</Button>
-</Form>
-
-// With Zod validation
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-const form = useForm<z.infer<typeof formSchema>>({
-  resolver: zodResolver(formSchema),
-});
-```
+### Related Patterns
+- See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples
+- See [R-FORM - Research Findings](RESEARCH-INVENTORY.md#r-form) for additional examples
 
 ## Acceptance Criteria
 

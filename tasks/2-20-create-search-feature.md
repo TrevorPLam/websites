@@ -31,8 +31,28 @@ Search feature with 5+ implementation patterns, AI-powered search, and semantic 
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
+### Primary Research Topics
+- **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
+- **[2026-02-18] R-PERF**: LCP, INP, CLS, bundle budgets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-perf) for full research findings.
+- **[2026-02-18] R-MARKETING**: Hero, menu, pricing, testimonials, FAQ, sections — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing) for full research findings.
+- **[2026-02-18] R-NEXT**: App Router, RSC, Server Actions — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-next) for full research findings.
+- **[2026-02-18] R-CMS**: Content adapters, MDX, pagination — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-cms) for full research findings.
+- **[2026-02-18] R-AI**: AI Platform: LLM gateway, content engine, agents — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ai) for full research findings.
+- **[2026-02-18] R-SEARCH-AI**: AI semantic search, vector embeddings, RAG — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-search-ai) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
+- [RESEARCH-INVENTORY.md - R-PERF](RESEARCH-INVENTORY.md#r-perf) — Full research findings
+- [RESEARCH-INVENTORY.md - R-MARKETING](RESEARCH-INVENTORY.md#r-marketing) — Full research findings
+- [RESEARCH-INVENTORY.md - R-NEXT](RESEARCH-INVENTORY.md#r-next) — Full research findings
+- [RESEARCH-INVENTORY.md - R-CMS](RESEARCH-INVENTORY.md#r-cms) — Full research findings
+- [RESEARCH-INVENTORY.md - R-AI](RESEARCH-INVENTORY.md#r-ai) — Full research findings
+- [RESEARCH-INVENTORY.md - R-SEARCH-AI](RESEARCH-INVENTORY.md#r-search-ai) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -51,12 +71,14 @@ Search feature with 5+ implementation patterns, AI-powered search, and semantic 
 
 ## Code Snippets / Examples
 
-```typescript
-// API surface (from task)
-// `SearchSection`, `searchSchema`, `createSearchConfig`, `performSearch`, `aiSearch`, `semanticSearch`, `SearchConfig`, `SearchAPI`, `SearchCMS`, `SearchAI`, `SearchHybrid`
-
-// Add usage examples per implementation
-```
+### Related Patterns
+- See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
+- See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples
+- See [R-MARKETING - Research Findings](RESEARCH-INVENTORY.md#r-marketing) for additional examples
+- See [R-NEXT - Research Findings](RESEARCH-INVENTORY.md#r-next) for additional examples
+- See [R-CMS - Research Findings](RESEARCH-INVENTORY.md#r-cms) for additional examples
+- See [R-AI - Research Findings](RESEARCH-INVENTORY.md#r-ai) for additional examples
+- See [R-SEARCH-AI - Research Findings](RESEARCH-INVENTORY.md#r-search-ai) for additional examples
 
 ## Acceptance Criteria
 

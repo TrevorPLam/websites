@@ -27,8 +27,16 @@ EmailAdapter interface. Mailchimp, SendGrid, ConvertKit. Retry(3) + timeout(10s)
 
 ## Research & Evidence (Date-Stamped)
 
-- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
-- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
+### Primary Research Topics
+- **[2026-02-18] R-INTEGRATION**: Scheduling, OAuth, TCF — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-integration) for full research findings.
+
+### Key Findings
+
+Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
+
+### References
+- [RESEARCH-INVENTORY.md - R-INTEGRATION](RESEARCH-INVENTORY.md#r-integration) — Full research findings
+- [RESEARCH.md](RESEARCH.md) — Additional context
 
 ## Related Files
 
@@ -40,12 +48,8 @@ EmailAdapter interface. Mailchimp, SendGrid, ConvertKit. Retry(3) + timeout(10s)
 
 ## Code Snippets / Examples
 
-```typescript
-// API surface (from task)
-// `EmailAdapter { subscribe, health }`, `createMailchimpAdapter`, etc.
-
-// Add usage examples per implementation
-```
+### Related Patterns
+- See [R-INTEGRATION - Research Findings](RESEARCH-INVENTORY.md#r-integration) for additional examples
 
 ## Acceptance Criteria
 
