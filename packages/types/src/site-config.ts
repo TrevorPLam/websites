@@ -3,16 +3,16 @@
  * [TRACE:FILE=packages.types.site-config]
  *
  * Purpose: Defines SiteConfig interface and Zod schema as the single source of truth for
- *          every marketing site. Each template implements one of these in site.config.ts.
+ * every marketing site. Each template implements one of these in site.config.ts.
  *
  * Relationship: Exported via packages/types/src/index.ts. Consumed by templates for
- *               typing site.config and by @repo/features for conversion flow and theme.
+ * typing site.config and by @repo/features for conversion flow and theme.
  *
  * System role: Central type definitions for nav, footer, theme, SEO, conversion flow
- *              (booking/contact/quote/dispatch), features, and integrations.
+ * (booking/contact/quote/dispatch), features, and integrations.
  *
  * Assumptions: Theme color values are HSL strings without hsl() wrapper; conversionFlow
- *              is a discriminated union by type; schema validates at build or bootstrap.
+ * is a discriminated union by type; schema validates at build or bootstrap.
  */
 
 import { z } from 'zod';
@@ -164,7 +164,6 @@ export interface SiteConfig {
   description: string;
   /** Canonical production URL (no trailing slash) */
   url: string;
-
   /** Industry classification for schema.org and defaults */
   industry:
     | 'salon'
@@ -179,7 +178,6 @@ export interface SiteConfig {
     | 'construction'
     | 'automotive'
     | 'general';
-
   /** Feature flags and layout variants for major sections */
   features: {
     hero: 'centered' | 'split' | 'video' | 'carousel' | null;
@@ -192,17 +190,57 @@ export interface SiteConfig {
     blog: boolean;
     booking: boolean;
     faq: boolean;
+    // industry features
+    location?: boolean;
+    menu?: boolean;
+    portfolio?: boolean;
+    caseStudy?: boolean;
+    jobListing?: boolean;
+    course?: boolean;
+    resource?: boolean;
+    comparison?: boolean;
+    filter?: boolean;
+    search?: boolean;
+    socialProof?: boolean;
+    video?: boolean;
+    audio?: boolean;
+    interactive?: boolean;
+    widget?: boolean;
   };
-
   /** Third-party and internal integration settings */
   integrations: {
-    analytics?: { provider: 'google' | 'plausible' | 'none'; trackingId?: string };
-    crm?: { provider: 'hubspot' | 'none'; portalId?: string };
-    booking?: { provider: 'internal' | 'calendly' | 'acuity' | 'none' };
-    email?: { provider: 'mailchimp' | 'sendgrid' | 'none' };
-    chat?: { provider: 'intercom' | 'crisp' | 'none' };
+    analytics?: {
+      provider: 'google' | 'plausible' | 'none';
+      trackingId?: string;
+      config?: {
+        eventTracking?: boolean;
+        anonymizeIp?: boolean;
+      };
+    };
+    crm?: {
+      provider: 'hubspot' | 'none';
+      portalId?: string;
+    };
+    booking?: {
+      provider: 'internal' | 'calendly' | 'acuity' | 'none';
+      config?: Record<string, any>;
+    };
+    email?: {
+      provider: 'mailchimp' | 'sendgrid' | 'none';
+      config?: Record<string, any>;
+    };
+    chat?: {
+      provider: 'intercom' | 'crisp' | 'none';
+      config?: {
+        websiteId?: string;
+        theme?: string;
+      };
+    };
+    abTesting?: {
+      provider: 'none';
+      config?: Record<string, any>;
+    };
   };
-
   /** Primary navigation links */
   navLinks: NavLink[];
   /** Social media profiles */
@@ -231,7 +269,10 @@ export interface SiteConfig {
 // ---------------------- Zod Schemas ----------------------
 // Built from smaller schemas for reuse and consistent validation at template bootstrap.
 
-const navLinkSchema = z.object({ href: z.string().min(1), label: z.string().min(1) });
+const navLinkSchema = z.object({
+  href: z.string().min(1),
+  label: z.string().min(1),
+});
 
 const socialLinkSchema = z.object({
   platform: z.enum(['facebook', 'twitter', 'linkedin', 'instagram', 'youtube', 'tiktok']),
@@ -239,12 +280,20 @@ const socialLinkSchema = z.object({
 });
 
 const footerConfigSchema = z.object({
-  columns: z.array(z.object({ heading: z.string().min(1), links: z.array(navLinkSchema) })),
+  columns: z.array(
+    z.object({
+      heading: z.string().min(1),
+      links: z.array(navLinkSchema),
+    })
+  ),
   legalLinks: z.array(navLinkSchema),
   copyrightTemplate: z.string().min(1),
 });
 
-const businessHoursSchema = z.object({ label: z.string().min(1), hours: z.string().min(1) });
+const businessHoursSchema = z.object({
+  label: z.string().min(1),
+  hours: z.string().min(1),
+});
 
 const contactInfoSchema = z.object({
   email: z.string().email(),
@@ -349,20 +398,66 @@ export const siteConfigSchema = z.object({
     blog: z.boolean(),
     booking: z.boolean(),
     faq: z.boolean(),
+    location: z.boolean().optional(),
+    menu: z.boolean().optional(),
+    portfolio: z.boolean().optional(),
+    caseStudy: z.boolean().optional(),
+    jobListing: z.boolean().optional(),
+    course: z.boolean().optional(),
+    resource: z.boolean().optional(),
+    comparison: z.boolean().optional(),
+    filter: z.boolean().optional(),
+    search: z.boolean().optional(),
+    socialProof: z.boolean().optional(),
+    video: z.boolean().optional(),
+    audio: z.boolean().optional(),
+    interactive: z.boolean().optional(),
+    widget: z.boolean().optional(),
   }),
   integrations: z.object({
     analytics: z
       .object({
         provider: z.enum(['google', 'plausible', 'none']),
         trackingId: z.string().optional(),
+        config: z.object({
+          eventTracking: z.boolean().optional(),
+          anonymizeIp: z.boolean().optional(),
+        }).optional(),
       })
       .optional(),
     crm: z
-      .object({ provider: z.enum(['hubspot', 'none']), portalId: z.string().optional() })
+      .object({
+        provider: z.enum(['hubspot', 'none']),
+        portalId: z.string().optional(),
+      })
       .optional(),
-    booking: z.object({ provider: z.enum(['internal', 'calendly', 'acuity', 'none']) }).optional(),
-    email: z.object({ provider: z.enum(['mailchimp', 'sendgrid', 'none']) }).optional(),
-    chat: z.object({ provider: z.enum(['intercom', 'crisp', 'none']) }).optional(),
+    booking: z
+      .object({
+        provider: z.enum(['internal', 'calendly', 'acuity', 'none']),
+        config: z.record(z.any()).optional(),
+      })
+      .optional(),
+    email: z
+      .object({
+        provider: z.enum(['mailchimp', 'sendgrid', 'none']),
+        config: z.record(z.any()).optional(),
+      })
+      .optional(),
+    chat: z
+      .object({
+        provider: z.enum(['intercom', 'crisp', 'none']),
+        config: z.object({
+          websiteId: z.string().optional(),
+          theme: z.string().optional(),
+        }).optional(),
+      })
+      .optional(),
+    abTesting: z
+      .object({
+        provider: z.enum(['none']),
+        config: z.record(z.any()).optional(),
+      })
+      .optional(),
   }),
   navLinks: z.array(navLinkSchema),
   socialLinks: z.array(socialLinkSchema),
