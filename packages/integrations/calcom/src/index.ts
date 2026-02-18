@@ -46,16 +46,31 @@ export class CalComAdapter implements SchedulingAdapter {
    * Generates JSON-LD for the scheduling page.
    */
   generateJsonLd(eventTypeId?: string): string {
+    const url = this.getBookingUrl(eventTypeId);
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      'name': this.name,
-      'provider': {
+      name: this.name,
+      provider: {
         '@type': 'Organization',
-        'name': this.name,
-        'url': 'https://cal.com'
+        name: this.name,
+        url: 'https://cal.com'
       },
-      'url': this.getBookingUrl(eventTypeId)
+      potentialAction: {
+        '@type': 'ReserveAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: url,
+          actionPlatform: [
+            'http://schema.org/DesktopWebPlatform',
+            'http://schema.org/MobileWebPlatform',
+          ],
+        },
+        result: {
+          '@type': 'Reservation',
+          name: 'Booking',
+        },
+      },
     };
     return JSON.stringify(schema, null, 2);
   }
