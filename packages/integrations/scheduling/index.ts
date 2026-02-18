@@ -4,3 +4,6 @@
  */
 
 export * from './contract';
+export { CalendlyAdapter } from '../calendly/src';
+export { AcuityAdapter } from '../acuity/src';
+export { CalComAdapter } from '../calcom/src';
