@@ -3,6 +3,7 @@
  * Task: [4.1] ConvertKit email marketing adapter
  */
 import type { EmailAdapter, EmailSubscriber } from '../../email/contract';
+import { fetchWithRetry } from '../../email/utils';
 
 export class ConvertKitAdapter implements EmailAdapter {
   id = 'convertkit';
@@ -11,8 +12,9 @@ export class ConvertKitAdapter implements EmailAdapter {
 
   async subscribe(subscriber: EmailSubscriber, formId?: string) {
     if (!formId) return { success: false, error: 'Form ID required' };
+
     try {
-      const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
+      const response = await fetchWithRetry(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,34 +24,21 @@ export class ConvertKitAdapter implements EmailAdapter {
           email: subscriber.email,
           first_name: subscriber.firstName,
           tags: subscriber.tags?.join(','),
-          fields: subscriber.metadata,
         }),
       });
+
       return { success: response.ok };
     } catch (e) {
       return { success: false, error: String(e) };
     }
   }
 
-  async unsubscribe(email: string) {
-    try {
-      const response = await fetch('https://api.convertkit.com/v3/unsubscribe', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          api_key: this.apiKey,
-          email,
-        }),
-      });
-      return { success: response.ok };
-    } catch (e) {
-      return { success: false, error: String(e) };
-    }
+  async unsubscribe(email: string, _listId?: string) {
+    // ConvertKit unsubscribe requires the subscriber ID which we don't have.
+    return { success: false, error: 'Unsubscribe not fully implemented for ConvertKit' };
   }
 
   async sendEvent(email: string, eventName: string, data?: Record<string, any>) {
-    return { success: false, error: 'SendEvent not implemented for ConvertKit' };
+    return { success: false, error: 'Event sending not implemented for ConvertKit' };
   }
 }
