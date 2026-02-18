@@ -111,9 +111,9 @@ PopoverHeader.displayName = 'PopoverHeader';
 
 // [TRACE:FUNC=packages.ui.components.PopoverBody]
 // [FEAT:UI]
-export const PopoverBody = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('py-1', className)} {...props} />
-);
+export const PopoverBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn('py-1', className)} {...props} />
+));
 PopoverBody.displayName = 'PopoverBody';
 
 // [TRACE:FUNC=packages.ui.components.PopoverFooter]
