@@ -3,10 +3,10 @@
  * Task: [4.2] Cal.com scheduling integration
  */
 
-import { 
-  SchedulingAdapter, 
-  SchedulingEvent, 
-  EmbedConfig 
+import {
+  SchedulingAdapter,
+  SchedulingEvent,
+  EmbedConfig
 } from '../../scheduling/contract';
 
 /**
@@ -15,7 +15,7 @@ import {
 export class CalComAdapter implements SchedulingAdapter {
   id = 'calcom';
   name = 'Cal.com';
-  
+
   constructor(private username: string) {}
 
   /**
@@ -38,7 +38,29 @@ export class CalComAdapter implements SchedulingAdapter {
    */
   getEmbedConfig(eventTypeId?: string): EmbedConfig {
     return {
-      url: this.getBookingUrl(eventTypeId),
+      type: 'inline',
+      calLink: eventTypeId ? `${this.username}/${eventTypeId}` : this.username,
+      config: {
+        layout: 'month_view',
+        theme: 'light'
+      }
+    };
+  }
+
+  /**
+   * Generates JSON-LD for the scheduling page.
+   */
+  generateJsonLd(eventTypeId?: string) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      'name': this.name,
+      'provider': {
+        '@type': 'Organization',
+        'name': this.name,
+        'url': 'https://cal.com'
+      },
+      'url': this.getBookingUrl(eventTypeId)
     };
   }
 }
