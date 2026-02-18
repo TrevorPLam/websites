@@ -121,6 +121,15 @@ interface RateLimiter {
 }
 
 /**
+ * Shape of Upstash Ratelimit instance (from @upstash/ratelimit).
+ * Structural type to avoid runtime import; matches Ratelimit.limit() return value.
+ */
+interface UpstashRatelimitInstance {
+  limit(identifier: string): Promise<{ success: boolean; remaining?: number; reset?: number }>;
+  reset?(identifier: string): Promise<void>;
+}
+
+/**
  * In-memory rate limiter implementation
  * Fallback for development or when external services are unavailable
  */
@@ -190,10 +199,10 @@ class InMemoryRateLimiter implements RateLimiter {
  * Production-ready distributed rate limiting
  */
 class UpstashRateLimiter implements RateLimiter {
-  private readonly limiter: any;
+  private readonly limiter: UpstashRatelimitInstance;
   private readonly config: RateLimitConfig;
 
-  constructor(limiter: any, config: RateLimitConfig) {
+  constructor(limiter: UpstashRatelimitInstance, config: RateLimitConfig) {
     this.limiter = limiter;
     this.config = config;
   }
