@@ -54,8 +54,9 @@ export interface UseAriaReturn {
  * </dialog>
  */
 export function useAria(prefix = 'aria'): UseAriaReturn {
-  const labelId = React.useId().replace(':', prefix + '-label-').replace(':', '');
-  const descriptionId = React.useId().replace(':', prefix + '-desc-').replace(':', '');
+  const id = React.useId();
+  const labelId = `${prefix}-label-${id}`;
+  const descriptionId = `${prefix}-desc-${id}`;
 
   return React.useMemo(
     () => ({
