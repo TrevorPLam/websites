@@ -24,6 +24,7 @@
 // - [FEAT:ACCESSIBILITY] ARIA live regions via Sonner
 // - [FEAT:DESIGN] Design-system color token integration
 
+import type * as React from 'react';
 import { toast as sonnerToast } from 'sonner';
 import type { ExternalToast } from 'sonner';
 
@@ -62,7 +63,7 @@ export const toast = {
     sonnerToast.loading(message, options),
 
   /** Show a custom JSX notification. */
-  custom: (jsx: (id: string | number) => React.ReactNode, options?: ToastOptions) =>
+  custom: (jsx: (id: string | number) => React.ReactElement, options?: ToastOptions) =>
     sonnerToast.custom(jsx, options),
 
   /**
@@ -79,7 +80,7 @@ export const toast = {
       error: string | ((err: unknown) => string);
     },
     options?: ToastOptions
-  ) => sonnerToast.promise(promise, messages, options),
+  ) => sonnerToast.promise(promise, { ...messages, ...options }),
 
   /** Dismiss a specific toast by id, or all toasts when called without arguments. */
   dismiss: (id?: string | number) => sonnerToast.dismiss(id),
@@ -95,6 +96,3 @@ export const toast = {
 export function useToast() {
   return { toast };
 }
-
-// Re-export React for the custom() callback type
-import type * as React from 'react';

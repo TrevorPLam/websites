@@ -1,5 +1,5 @@
 {
-  "name": "marketing-website-templates",
+  "name": "marketing-websites",
   "version": "1.0.0",
   "private": true,
   "description": "Multi-industry marketing website template system - monorepo for creating and managing client websites across all industries",
@@ -11,8 +11,12 @@
     "packages/config/*",
     "packages/integrations/*",
     "packages/features/*",
+    "packages/ai-platform/*",
+    "packages/content-platform/*",
+    "packages/marketing-ops/*",
+    "packages/infrastructure/*",
     "clients/*",
-    "apps/*"
+    "tooling/*"
   ],
   "scripts": {
     "changeset": "changeset",

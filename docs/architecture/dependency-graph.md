@@ -92,7 +92,6 @@ graph TD
     PageTemplates["@repo/page-templates"]
     
     %% Experience Layer (L3)
-    Templates["templates/*"]
     Clients["clients/*"]
     
     %% Dependencies
@@ -120,24 +119,14 @@ graph TD
     Integrations --> Features
     Integrations --> Marketing
     
-    Templates --> UI
-    Templates --> Utils
-    Templates --> Features
-    Templates --> Marketing
-    Templates --> PageTemplates
-    Templates --> Infra
-    Templates --> Types
-    Templates --> Integrations
-    
-    Clients --> Templates
     Clients --> UI
     Clients --> Utils
     Clients --> Features
     Clients --> Marketing
     Clients --> PageTemplates
+    Clients --> Marketing
     Clients --> Infra
     Clients --> Types
-    Clients --> Integrations
     
     %% Styling
     classDef infra fill:#e1f5fe
@@ -156,7 +145,6 @@ graph TD
     class Features features
     class Marketing marketing
     class PageTemplates marketing
-    class Templates templates
     class Clients clients
 ```
 
@@ -170,23 +158,22 @@ graph LR
     %% Shared Libraries
     Types["@repo/types"] --> |"Type definitions"| UI["@repo/ui"]
     Types --> |"Config schemas"| Features["@repo/features"]
-    Types --> |"Site config"| Templates["templates/*"]
+    Types --> |"Site config"| Clients["clients/*"]
     
     Utils["@repo/utils"] --> |"Helper functions"| UI
     Utils --> |"Utilities"| Features
     
     %% Component Libraries
     UI --> |"UI primitives"| Features
-    UI --> |"Components"| Templates
+    UI --> |"Components"| Clients
     
     Features --> |"Business logic"| Marketing["@repo/marketing-components"]
-    Features --> |"Feature components"| Templates
+    Features --> |"Feature components"| Clients
     
     Marketing --> |"Marketing components"| PageTemplates["@repo/page-templates"]
     
-    %% Templates and Clients
-    PageTemplates --> |"Page templates"| Templates
-    Templates --> |"Template base"| Clients["clients/*"]
+    %% Clients consume page-templates
+    PageTemplates --> |"Page templates"| Clients
     
     %% Integrations
     Integrations["@repo/integrations-*"] --> |"Third-party services"| Features
@@ -201,98 +188,90 @@ graph LR
     class Infra infra
     class Types,Utils shared
     class UI,Features,Marketing,PageTemplates components
-    class Templates,Clients experience
+    class Clients experience
 ```
 
 ---
 
-## Template Architecture
+## Client Architecture
 
-### Template Structure
+### Client Structure (e.g., starter-template)
 
 ```mermaid
 graph TD
-    Template["Template (e.g., hair-salon)"]
+    Client["Client (e.g., starter-template)"]
     
-    %% Core Template Files
-    Template --> App["app/"]
-    Template --> Components["components/"]
-    Template --> Pages["pages/"]
-    Template --> Styles["styles/"]
-    Template --> Config["site.config.ts"]
-    Template --> Env[".env.local"]
+    %% Core Client Files
+    Client --> App["app/"]
+    Client --> Components["components/"]
+    Client --> Config["site.config.ts"]
+    Client --> Env[".env.local"]
+    Client --> I18n["i18n/"]
     
     %% App Structure
     App --> Layout["layout.tsx"]
-    App --> Page["page.tsx"]
-    App --> Loading["loading.tsx"]
-    App --> Error["error.tsx"]
-    App --> NotFound["not-found.tsx"]
+    App --> Locale["[locale]/"]
+    App --> Globals["globals.css"]
     
-    %% Component Structure
-    Components --> UIComponents["UI Components"]
-    Components --> FeatureComponents["Feature Components"]
-    Components --> LayoutComponents["Layout Components"]
-    
-    %% Page Structure
-    Pages --> HomePage["page.tsx"]
-    Pages --> AboutPage["about/page.tsx"]
-    Pages --> ServicesPage["services/page.tsx"]
-    Pages --> ContactPage["contact/page.tsx"]
-    Pages --> BookingPage["booking/page.tsx"]
+    Locale --> Page["page.tsx"]
+    Locale --> AboutPage["about/page.tsx"]
+    Locale --> ServicesPage["services/page.tsx"]
+    Locale --> ContactPage["contact/page.tsx"]
+    Locale --> BookPage["book/page.tsx"]
+    Locale --> BlogPage["blog/"]
     
     %% Dependencies
-    UIComponents -.-> |"imports"| UI["@repo/ui"]
-    FeatureComponents -.-> |"imports"| Features["@repo/features"]
-    LayoutComponents -.-> |"imports"| UI
-    
+    Components -.-> |"imports"| UI["@repo/ui"]
+    Page -.-> |"imports"| PageTemplates["@repo/page-templates"]
     Config --> |"validates"| Types["@repo/types"]
     
     %% Styling
-    classDef template fill:#e8f5e8,stroke:#2e7d32
+    classDef client fill:#e8f5e8,stroke:#2e7d32
     classDef file fill:#fff3e0,stroke:#ef6c00
     classDef package fill:#e3f2fd,stroke:#1565c0
     
-    class Template template
-    class App,Components,Pages,Styles,Config,Env file
-    class UI,Features,Types package
+    class Client client
+    class App,Components,Config,Env,I18n,Locale,Page,AboutPage,ServicesPage,ContactPage,BookPage,BlogPage,Globals file
+    class UI,PageTemplates,Types package
 ```
 
-### Template Dependencies
+### Client Dependencies
 
 ```mermaid
 graph TB
-    %% Template
-    Template["hair-salon template"]
+    %% Client
+    Client["starter-template"]
     
     %% Shared Packages
     UI["@repo/ui"]
     Features["@repo/features"]
+    PageTemplates["@repo/page-templates"]
+    Marketing["@repo/marketing-components"]
     Utils["@repo/utils"]
     Types["@repo/types"]
     Infra["@repo/infra"]
     
     %% Integration Points
-    Template --> |"uses"| UI
-    Template --> |"uses"| Features
-    Template --> |"uses"| Utils
-    Template --> |"validates"| Types
-    Template --> |"configures"| Infra
+    Client --> |"uses"| UI
+    Client --> |"uses"| Features
+    Client --> |"uses"| PageTemplates
+    Client --> |"uses"| Marketing
+    Client --> |"uses"| Utils
+    Client --> |"validates"| Types
+    Client --> |"configures"| Infra
     
     %% Package Dependencies
-    UI --> |"depends on"| Utils
-    UI --> |"depends on"| Types
+    PageTemplates --> |"depends on"| Types
+    Marketing --> |"depends on"| UI
     Features --> |"depends on"| UI
-    Features --> |"depends on"| Utils
-    Features --> |"depends on"| Types
     Features --> |"depends on"| Infra
     
     %% Styling
-    classDef template fill:#e8f5e8,stroke:#2e7d32
+    classDef client fill:#e8f5e8,stroke:#2e7d32
     classDef package fill:#e3f2fd,stroke:#1565c0
     
-    class Template template
-    class UI,Features,Utils,Types,Infra package
+    class Client client
+    class UI,Features,PageTemplates,Marketing,Utils,Types,Infra package
 ```
 
 ---
@@ -306,8 +285,7 @@ flowchart TD
     Start["Start: New Client"]
     
     %% Selection Phase
-    Start --> SelectTemplate["Select Template"]
-    SelectTemplate --> CopyTemplate["Copy Template to clients/"]
+    Start --> CopyTemplate["Copy clients/starter-template to clients/[name]"]
     
     %% Configuration Phase
     CopyTemplate --> ConfigureEnv["Configure .env.local"]
@@ -333,22 +311,18 @@ flowchart TD
     classDef success fill:#e3f2fd,stroke:#1565c0
     
     class Start start
-    class SelectTemplate,CopyTemplate,ConfigureEnv,ConfigureSite,CustomizeContent,InstallDeps,Deploy process
+    class CopyTemplate,ConfigureEnv,ConfigureSite,CustomizeContent,InstallDeps,Deploy process
     class TestBuild decision
     class FixIssues process
     class Success success
 ```
 
-### Client Dependencies
+### Client Runtime Dependencies
 
 ```mermaid
 graph TD
     %% Client Instance
     Client["Client Website"]
-    
-    %% Template Base
-    Template["Template Base"]
-    Client --> |"based on"| Template
     
     %% Shared Dependencies
     UI["@repo/ui"]
@@ -356,10 +330,10 @@ graph TD
     Utils["@repo/utils"]
     Infra["@repo/infra"]
     
-    Template --> |"uses"| UI
-    Template --> |"uses"| Features
-    Template --> |"uses"| Utils
-    Template --> |"uses"| Infra
+    Client --> |"uses"| UI
+    Client --> |"uses"| Features
+    Client --> |"uses"| Utils
+    Client --> |"uses"| Infra
     
     %% External Services
     Database[(Database)]
@@ -382,7 +356,6 @@ graph TD
     classDef external fill:#fce4ec,stroke:#c2185b
     
     class Client client
-    class Template template
     class UI,Features,Utils,Infra package
     class Database,Analytics,CDN external
 ```
@@ -673,10 +646,9 @@ graph TD
     Features --> |"uses"| Supabase
     Features --> |"uses"| Sentry
     
-    Templates --> |"uses"| HubSpot
-    Templates --> |"uses"| Google
-    Templates --> |"uses"| Supabase
-    Templates --> |"uses"| Sentry
+    %% Note: No client currently imports integrations directly; they are scaffolded
+    Clients["clients/*"] -.-> |"future"| HubSpot
+    Clients -.-> |"future"| Google
     
     %% Styling
     classDef integration fill:#e8f5e8,stroke:#2e7d32
@@ -687,7 +659,7 @@ graph TD
     class Integrations,HubSpot,Google,Supabase,Sentry integration
     class HubSpotAdapter,GoogleAdapter,SupabaseAdapter,SentryAdapter adapter
     class HubSpotAPI,GoogleAPI,SupabaseAPI,SentryAPI external
-    class Features,Templates consumer
+    class Features,Clients consumer
 ```
 
 ---

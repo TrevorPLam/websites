@@ -5,11 +5,13 @@
   "description": "Marketing-specific UI component families",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "exports": { ".": "./src/index.ts" },
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
-    "build": "echo build complete"
+    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true}); require('fs').writeFileSync('dist/.stub','')\""
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
@@ -26,6 +28,7 @@
     "@repo/typescript-config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@repo/eslint-config": "workspace:*"
   }
 }

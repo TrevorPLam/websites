@@ -16,27 +16,30 @@ The `clients/` directory allows you to:
 
 ```
 clients/
-├── example-client/        # Example/demo client (for reference)
-├── [client-name-1]/       # Actual client project
-├── [client-name-2]/       # Another client project
+├── starter-template/      # Golden-path template — copy for new clients (port 3101)
+├── luxe-salon/            # Salon industry example (port 3102)
+├── bistro-central/        # Restaurant example
+├── chen-law/              # Law firm example
+├── sunrise-dental/        # Dental example
+├── urban-outfitters/      # Retail example
+├── [client-name]/         # Your new client (assign unique port)
 └── README.md              # This file
 ```
 
-Each client directory is a complete Next.js application based on a template.
+Each client directory is a complete Next.js application. New clients are created by copying `starter-template`.
 
 ## Creating a New Client Project
 
-### Step 1: Copy a Template
+### Step 1: Copy the Starter Template
 
-Choose the appropriate template and copy it to the clients directory:
+Copy the golden-path starter template to create a new client:
 
 ```bash
-# For a hair salon client
-cp -r templates/hair-salon clients/[client-name]
-
-# For a nail salon client (when available)
-cp -r templates/nail-salon clients/[client-name]
+# Copy starter-template as the base for any new client
+cp -r clients/starter-template clients/[client-name]
 ```
+
+The starter-template includes next-intl (i18n), site.config.ts, and full Next.js App Router structure.
 
 ### Step 2: Update Package Configuration
 
@@ -66,12 +69,20 @@ Add the client to `pnpm-workspace.yaml` in the root:
 
 ```yaml
 packages:
-  - 'apps/*'
   - 'packages/*'
   - 'packages/config/*'
-  - 'templates/*'
-  - 'clients/*' # This line should already exist
+  - 'packages/integrations/*'
+  - 'packages/features/*'
+  - 'packages/ai-platform/*'
+  - 'packages/content-platform/*'
+  - 'packages/marketing-ops/*'
+  - 'packages/infrastructure/*'
+  - 'clients/*'
+  - 'apps/*'
+  - 'tooling/*'
 ```
+
+> **Note:** `package.json` workspaces are currently out of sync with `pnpm-workspace.yaml`. See [ISSUES.md](../ISSUES.md).
 
 ### Step 4: Configure Environment Variables
 
@@ -160,29 +171,32 @@ pnpm --filter @clients/[client-name] dev
 
 ## Client Project Structure
 
-Each client project follows this structure:
+Each client project follows this structure (starter-template uses `app/[locale]/` for i18n; others may use flat `app/`):
 
 ```
 client-name/
-├── package.json              # Client-specific dependencies
+├── package.json              # @clients/client-name, depends on @repo/*
+├── site.config.ts            # THE central config (features, theme, integrations)
 ├── .env.local                # Environment variables (gitignored)
 ├── .env.example              # Example environment file
-├── next.config.js            # Next.js configuration
-├── tailwind.config.js        # Customized theme
+├── next.config.js or .ts     # Next.js configuration
+├── tailwind.config.js        # Customized theme (or Tailwind 4 postcss)
 ├── tsconfig.json             # TypeScript config
-├── README.md                 # Client-specific documentation
-├── app/                      # Next.js app directory
-│   ├── layout.tsx           # Customized layout
-│   ├── page.tsx             # Home page
-│   └── [routes]/            # All routes
+├── app/                      # Next.js App Router
+│   ├── layout.tsx           # Root layout
+│   ├── [locale]/            # (starter-template: i18n routes)
+│   │   ├── layout.tsx       # Locale layout
+│   │   ├── page.tsx         # Home
+│   │   ├── about/           # About page
+│   │   ├── services/        # Services page
+│   │   ├── contact/         # Contact page
+│   │   ├── book/            # Booking page
+│   │   └── blog/            # Blog
+│   └── globals.css
+├── i18n/                     # (starter-template: next-intl routing)
 ├── components/               # Client-specific components
-├── features/                 # Business logic
-├── lib/                      # Utilities
 ├── public/                   # Static assets
-│   ├── images/              # Client images
-│   └── logo.svg             # Client logo
-└── content/                  # Content (blog, etc.)
-    └── blog/                # Client blog posts
+└── messages/                 # (starter-template: i18n message files)
 ```
 
 ## Development Workflow
@@ -230,13 +244,11 @@ Each client can be deployed independently:
 
 ### Docker Deployment
 
-```bash
-# Build Docker image for client
-cd clients/[client-name]
-docker build -t [client-name] .
+Only `starter-template` has a Dockerfile. From monorepo root:
 
-# Run container
-docker run -p 3000:3000 [client-name]
+```bash
+docker build -f clients/starter-template/Dockerfile -t starter-template .
+docker run -p 3101:3101 starter-template
 ```
 
 ### Other Platforms
@@ -290,9 +302,9 @@ Create custom components/features in client directory when:
 
 Keep shared code in:
 
-- `packages/` - For truly universal utilities
-- `templates/shared/` - For common template features
-- Original template - For template improvements
+- `packages/` - For universal utilities, UI, features
+- `packages/marketing-components/` - For industry-agnostic marketing sections
+- `packages/features/` - For booking, contact, blog, services, search
 
 ## Client Documentation
 
@@ -305,9 +317,9 @@ Each client should have its own `README.md` with:
 - Content update procedures
 - Maintenance notes
 
-## Example Client
+## Example Clients
 
-See `clients/example-client/` for a complete reference implementation.
+See `clients/starter-template/` for the golden-path reference. See `clients/luxe-salon/`, `clients/bistro-central/`, etc. for industry-specific examples.
 
 ## Best Practices
 
@@ -350,11 +362,11 @@ pnpm --filter @clients/[client-name] type-check
 
 For questions or issues:
 
-1. Check template documentation in `templates/`
-2. Review shared component docs in `templates/shared/`
-3. Consult architecture docs in `docs/`
+1. Check [ISSUES.md](../ISSUES.md) for known codebase issues
+2. Review architecture docs in `docs/architecture/`
+3. Consult [getting-started/onboarding.md](../docs/getting-started/onboarding.md)
 4. Contact team lead or senior developer
 
 ---
 
-**Last Updated:** 2026-02-10
+**Last Updated:** 2026-02-18

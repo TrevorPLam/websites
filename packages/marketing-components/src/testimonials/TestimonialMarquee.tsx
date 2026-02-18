@@ -3,7 +3,6 @@
 // Task: 2.4
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
 import type { Testimonial } from './TestimonialCarousel';
 
 export interface TestimonialMarqueeProps {
@@ -12,7 +11,7 @@ export interface TestimonialMarqueeProps {
   className?: string;
 }
 
-export function TestimonialMarquee({ testimonials, speed = 'normal', className }: TestimonialMarqueeProps) {
+export function TestimonialMarquee({ testimonials, speed: _speed = 'normal', className }: TestimonialMarqueeProps) {
   // TODO: Implement infinite marquee animation
   return (
     <div className={className}>

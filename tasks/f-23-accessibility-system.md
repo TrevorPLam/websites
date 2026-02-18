@@ -17,7 +17,7 @@ Accessibility system with ARIA utilities, keyboard navigation, and screen reader
 
 ## Dependencies
 
-- **Package**: @repo/infrastructure – modify – target package
+- **Package**: @repo/infra – modify – target package (L0 infra; packages/infra)
 
 ## Cross-Task Dependencies & Sequencing
 
@@ -27,15 +27,17 @@ Accessibility system with ARIA utilities, keyboard navigation, and screen reader
 
 ## Research & Evidence (Date-Stamped)
 
-- **Derived from Related Research** – WCAG 2.2, accessibility patterns, ARIA
+- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolvable via RESEARCH.md.
+- **[2026-02-18] tasks/RESEARCH-INVENTORY.md R-A11Y**: WCAG 2.2 AA (24×24px touch targets, focus ≥2px 3:1 contrast, keyboard alternatives, ARIA live regions, prefers-reduced-motion). Directs ARIA utilities, keyboard.ts, screen-reader.ts, hooks.
+- **[2026-02-18] WAI-ARIA Authoring Practices**: Use for roving tabindex, roles, and screen reader patterns in packages/infra/accessibility.
 
 ## Related Files
 
-- `packages/infrastructure/accessibility/index` – create – (see task objective)
-- `packages/infrastructure/accessibility/aria.ts` – create – (see task objective)
-- `packages/infrastructure/accessibility/keyboard.ts` – create – (see task objective)
-- `packages/infrastructure/accessibility/screen-reader.ts` – create – (see task objective)
-- `packages/infrastructure/accessibility/hooks.ts` – create – (see task objective)
+- `packages/infra/accessibility/index.ts` – create – barrel export
+- `packages/infra/accessibility/aria.ts` – create – ARIA utilities
+- `packages/infra/accessibility/keyboard.ts` – create – keyboard navigation helpers
+- `packages/infra/accessibility/screen-reader.ts` – create – screen reader utilities
+- `packages/infra/accessibility/hooks.ts` – create – useAria, useKeyboard, useScreenReader
 
 ## Code Snippets / Examples
 

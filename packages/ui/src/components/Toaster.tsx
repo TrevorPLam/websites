@@ -22,7 +22,6 @@
 // - [FEAT:ACCESSIBILITY] ARIA live regions managed by Sonner
 // - [FEAT:ANIMATION] Slide/fade animations with prefers-reduced-motion support
 
-import * as React from 'react';
 import { Toaster as SonnerToaster } from 'sonner';
 import type { ToasterProps as SonnerToasterProps } from 'sonner';
 

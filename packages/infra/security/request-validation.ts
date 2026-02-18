@@ -88,8 +88,9 @@ export interface OriginValidationResult {
 function validateHeaderUrl(
   headerValue: string,
   expectedHost: string,
-  _headerName: 'origin' | 'referer'
+  headerName: 'origin' | 'referer'
 ): boolean {
+  void headerName; // Reserved for future logging
   try {
     // Parse the URL to extract the host
     const url = new URL(headerValue);

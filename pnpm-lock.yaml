@@ -516,6 +516,9 @@ importers:
 
   packages/ai-platform/agent-orchestration:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -525,6 +528,9 @@ importers:
 
   packages/ai-platform/content-engine:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -534,6 +540,9 @@ importers:
 
   packages/ai-platform/llm-gateway:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -573,6 +582,9 @@ importers:
 
   packages/content-platform/dam-core:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -582,6 +594,9 @@ importers:
 
   packages/content-platform/visual-editor:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -676,6 +691,9 @@ importers:
 
   packages/industry-schemas:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../config/eslint-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../config/typescript-config
@@ -725,6 +743,9 @@ importers:
 
   packages/infrastructure/tenant-core:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -734,6 +755,9 @@ importers:
 
   packages/integrations/acuity:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -747,6 +771,9 @@ importers:
         specifier: workspace:*
         version: link:../../infra
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -759,6 +786,9 @@ importers:
 
   packages/integrations/calcom:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -768,6 +798,9 @@ importers:
 
   packages/integrations/calendly:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -777,6 +810,9 @@ importers:
 
   packages/integrations/convertkit:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -786,6 +822,9 @@ importers:
 
   packages/integrations/crisp:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -795,6 +834,9 @@ importers:
 
   packages/integrations/google-maps:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -804,6 +846,9 @@ importers:
 
   packages/integrations/google-reviews:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -817,6 +862,9 @@ importers:
         specifier: workspace:*
         version: link:../../infra
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -829,6 +877,9 @@ importers:
 
   packages/integrations/intercom:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -838,6 +889,9 @@ importers:
 
   packages/integrations/mailchimp:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -847,6 +901,9 @@ importers:
 
   packages/integrations/sendgrid:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -869,6 +926,9 @@ importers:
         specifier: ^0.0.1
         version: 0.0.1
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: ^22.0.0
         version: 22.19.11
@@ -884,6 +944,9 @@ importers:
 
   packages/integrations/tidio:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -893,6 +956,9 @@ importers:
 
   packages/integrations/trustpilot:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -902,6 +968,9 @@ importers:
 
   packages/integrations/yelp:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -927,6 +996,9 @@ importers:
         specifier: 'catalog:'
         version: 19.0.0(react@19.0.0)
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../config/eslint-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../config/typescript-config
@@ -942,6 +1014,9 @@ importers:
 
   packages/marketing-ops/campaign-orchestration:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.11
@@ -1066,18 +1141,27 @@ importers:
 
   tooling/create-client:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/config/eslint-config
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
 
   tooling/generate-component:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/config/eslint-config
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
 
   tooling/validation:
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/config/eslint-config
       typescript:
         specifier: 'catalog:'
         version: 5.9.3

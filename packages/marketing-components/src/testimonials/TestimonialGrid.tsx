@@ -3,7 +3,6 @@
 // Task: 2.4
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
 import type { Testimonial } from './TestimonialCarousel';
 
 export interface TestimonialGridProps {
@@ -12,7 +11,7 @@ export interface TestimonialGridProps {
   className?: string;
 }
 
-export function TestimonialGrid({ testimonials, columns = 3, className }: TestimonialGridProps) {
+export function TestimonialGrid({ testimonials, columns: _columns = 3, className }: TestimonialGridProps) {
   // TODO: Implement grid layout
   return (
     <div className={className}>

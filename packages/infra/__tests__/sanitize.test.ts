@@ -1,13 +1,10 @@
 import {
   escapeHtml,
-  sanitizeHtml,
   sanitizeEmailSubject,
   textToHtmlParagraphs,
   sanitizeEmail,
   sanitizeName,
   sanitizeUrl,
-  sanitizeInput,
-  validateAndSanitize,
 } from '../security/sanitize';
 
 describe('lib/sanitize', () => {

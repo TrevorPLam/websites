@@ -9,7 +9,6 @@ import {
   createServiceLabels,
   createTimeSlotLabels,
   sanitizeNotes,
-  type BookingFormData,
 } from '../booking-schema';
 import type { BookingFeatureConfig } from '../booking-config';
 import { addDays } from 'date-fns';

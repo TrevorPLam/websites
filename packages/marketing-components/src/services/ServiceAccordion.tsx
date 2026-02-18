@@ -3,7 +3,6 @@
 // Task: 2.2
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
 import { Accordion } from '@repo/ui';
 import type { Service } from './ServiceGrid';
 
@@ -13,12 +12,13 @@ export interface ServiceAccordionProps {
 }
 
 export function ServiceAccordion({ services, className }: ServiceAccordionProps) {
-  // TODO: Implement accordion-based service display
+  const items = services.map((s) => ({
+    question: s.name,
+    answer: s.description ?? '',
+  }));
   return (
     <div className={className}>
-      <Accordion>
-        {/* TODO: Implement accordion items */}
-      </Accordion>
+      <Accordion items={items} />
     </div>
   );
 }

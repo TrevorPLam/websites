@@ -3,7 +3,6 @@
 // Task: 2.5
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
 import type { PricingPlan } from './PricingTable';
 
 export interface PricingCardsProps {

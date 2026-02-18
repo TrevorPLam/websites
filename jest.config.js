@@ -86,6 +86,8 @@ const sharedConfig = {
     '^@repo/types/(.*)$': '<rootDir>/packages/types/src/$1',
     '^@repo/features$': '<rootDir>/packages/features/src/index.ts',
     '^@repo/features/(.*)$': '<rootDir>/packages/features/src/$1',
+    '^@repo/marketing-components$': '<rootDir>/packages/marketing-components/src/index.ts',
+    '^@repo/page-templates$': '<rootDir>/packages/page-templates/src/index.ts',
   },
   testPathIgnorePatterns: ['/node_modules/', '.next', 'dist'],
   modulePathIgnorePatterns: ['<rootDir>/.next', '<rootDir>/.*/\\.next'],

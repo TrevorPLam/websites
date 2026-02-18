@@ -3,7 +3,6 @@
 // Task: 2.3
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
 import type { TeamMember } from './TeamGrid';
 
 export interface TeamDetailedProps {

@@ -30,7 +30,6 @@
 // - hsl() color format provides broad browser support (all modern browsers)
 // - Specificity: :root style from ThemeInjector overrides globals.css :root defaults
 
-import * as React from 'react';
 import type { ThemeColors as ThemeColorsFromTypes } from '@repo/types';
 
 /**

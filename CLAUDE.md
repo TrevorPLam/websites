@@ -124,10 +124,10 @@ Central versions live in `pnpm-workspace.yaml` under `catalog:`. Always use `cat
 
 | Category | Technology | Version |
 |----------|-----------|---------|
-| Framework | Next.js (App Router) | 16.1.0 |
+| Framework | Next.js (App Router) | 16.1.5 |
 | UI | React | 19.0.0 |
 | Styling | Tailwind CSS | 4.1.0 |
-| Language | TypeScript | 5.7.2 |
+| Language | TypeScript | 5.9.3 |
 | Build orchestration | Turborepo | 2.8.9 |
 | Package manager | pnpm | 10.29.2 |
 | Linting | ESLint | 9.18.0 (flat config) |
@@ -166,7 +166,7 @@ Central versions live in `pnpm-workspace.yaml` under `catalog:`. Always use `cat
 ### ESLint
 
 - ESLint 9 **flat config** format (`.eslintrc.*` is NOT used — use `eslint.config.mjs`)
-- Each package has its own `eslint.config.mjs` extending `@repo/eslint-config`
+- Packages with `eslint.config.mjs`: `ui`, `infra`, `features`, `utils`. Many others (integrations, ai-platform, tooling, etc.) lack it and fail lint.
 - Run via Turbo: `pnpm lint` or per-package `pnpm --filter @repo/ui lint`
 
 ### Prettier
@@ -308,12 +308,15 @@ CI is defined in `.github/workflows/ci.yml`. Two jobs run on push to `main`/`dev
 
 ### `quality-gates` (blocking — must pass for merge)
 
-1. `pnpm lint` — ESLint (PR: affected packages only via `--filter="...[origin/main]"`)
-2. `pnpm type-check` — TypeScript
+1. `pnpm lint` — ESLint (PR: affected packages only via `--filter="...[origin/main]"`) — *many packages lack eslint.config.mjs*
+2. `pnpm type-check` — TypeScript — *fails in @repo/marketing-components*
 3. `pnpm validate-exports` — Package export map validation
-4. `pnpm syncpack:check` — Dependency version consistency
-5. `pnpm build` — Full build
-6. `pnpm test` — Jest test suite
+4. `pnpm madge:circular` — Circular dependency detection
+5. `pnpm syncpack:check` — Dependency version consistency
+6. `pnpm build` — Full build — *fails due to Toast.tsx type errors*
+7. `pnpm test:coverage` — Jest test suite — *4 booking-actions tests fail*
+
+**Known issues:** See [ISSUES.md](ISSUES.md) for full analysis and remediation.
 
 ### `quality-audit` (non-blocking, informative)
 
@@ -368,7 +371,9 @@ Key docs:
 - `docs/architecture/README.md` — Layer model and design principles
 - `docs/architecture/module-boundaries.md` — Allowed dependency directions
 - `docs/getting-started/onboarding.md` — Developer setup guide
-- `TODO.md` — Implementation backlog and task tracking (very detailed)
+- `ISSUES.md` — Current codebase issues (from analysis)
+- `TODO.md` — Research update tasks
+- `TASKS.md` — Implementation backlog (if present)
 - `THEGOAL.md` — Vision and roadmap
 - `CONTRIBUTING.md` — Contribution workflow
 
@@ -385,3 +390,4 @@ Key docs:
 - **Starter-template dev port is 3101.** Each client uses a unique port (e.g. luxe-salon: 3102).
 - **Paired environment variables.** Supabase, Upstash Redis, and booking providers require both variables in a pair or neither.
 - **TypeScript build errors block CI.** `typescript.ignoreBuildErrors: false` is set in `next.config.js`.
+- **Workspace sync.** `package.json` workspaces must match `pnpm-workspace.yaml` (run `pnpm validate:workspaces`). Currently out of sync.

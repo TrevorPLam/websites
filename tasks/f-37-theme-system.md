@@ -29,7 +29,8 @@ Theme system with theme switching, dark mode, and theme persistence.
 
 ## Research & Evidence (Date-Stamped)
 
-- **Derived from Related Research** – Theme patterns, dark mode, theme switching
+- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
+- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
 
 ## Related Files
 

@@ -8,7 +8,7 @@
 - **Target Release**: TBD
 - **Related Epics / ADRs**: (Add if applicable)
 - **Reviewers / Stakeholders**: @agent
-- **Upstream Tasks**: 1.7, 1.3 (Tabs)
+- **Upstream Tasks**: @repo/marketing-components (exists), 1.3 (Tabs)
 - **Downstream Tasks**: (Tasks that consume this output)
 
 ## Context
@@ -24,30 +24,31 @@
 
 ## Dependencies
 
-- **Upstream Task**: 1.7 – required – prerequisite
 - **Upstream Task**: 1.3 (Tabs) – required – prerequisite
-- **Package**: @repo/marketing-components – modify – target package
+- **Package**: @repo/marketing-components – modify – target package (exists)
 
 ## Cross-Task Dependencies & Sequencing
 
-- **Upstream**: 1.7, 1.3 (Tabs)
+- **Upstream**: 1.3 (Tabs); marketing-components package exists
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: (Work that will consume this output)
 
 ## Research & Evidence (Date-Stamped)
 
-- **Derived from Related Research** – §2.1, §4.2, §2.2
+- **[2026-02-18] RESEARCH.md**: §2.1 (Architecture), §4.2 (Performance), §2.2 (Component patterns) — see Section Reference Index.
+- **[2026-02-18] tasks/RESEARCH-INVENTORY.md R-MARKETING, R-A11Y**: Menu/dietary chips, filtering; WCAG 2.2 AA for all UI; packages/marketing-components src/menu/.
+- **[2026-02-18] docs/accessibility/component-a11y-rubric.md**: Apply rubric (task 0-1 to populate); focus, touch targets, keyboard nav for menu controls.
 
 ## Related Files
 
-- `packages/marketing-components/src/menu/types.ts` – modify – (see task objective)
-- `MenuGrid.tsx` – modify – (see task objective)
-- `MenuTabs.tsx` – modify – (see task objective)
-- `MenuAccordion.tsx` – modify – (see task objective)
-- `MenuItemCard.tsx` – modify – (see task objective)
-- `menu/dietary.tsx` – modify – (see task objective)
-- `menu/filters.tsx` – modify – (see task objective)
-- `index.ts` – modify – (see task objective)
+- `packages/marketing-components/src/menu/types.ts` – create – menu item types, dietary flags
+- `packages/marketing-components/src/menu/MenuGrid.tsx` – create – grid variant
+- `packages/marketing-components/src/menu/MenuTabs.tsx` – create – category tabs variant
+- `packages/marketing-components/src/menu/MenuAccordion.tsx` – create – accordion variant
+- `packages/marketing-components/src/menu/MenuItemCard.tsx` – create – item card
+- `packages/marketing-components/src/menu/dietary.tsx` – create – dietary/allergen chips
+- `packages/marketing-components/src/menu/filters.tsx` – create – category/dietary filters
+- `packages/marketing-components/src/index.ts` – modify – export menu
 
 ## Code Snippets / Examples
 

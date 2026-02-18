@@ -34,17 +34,16 @@
  * - Starter template: `clients/starter-template` (package `@clients/starter-template`)
  *
  * @issues
- * - None - all claims verified with evidence
+ * - See ISSUES.md for current CI-blocking and other issues
  *
  * @opportunities
  * - Add project badges when repository is public
  * - Add screenshots/gifs for visual demonstration
  *
  * @verification
- * - ✅ Verified: All version numbers match package.json and pnpm-workspace.yaml (2026-02-18)
- * - ✅ Verified: All commands tested and working
- * - ✅ Verified: All documentation links point to existing files
- * - ✅ Verified: Project structure matches actual directory layout
+ * - ✅ Version numbers from pnpm-workspace.yaml catalog (2026-02-18)
+ * - ⚠️ Quality gates (lint, type-check, build, test) currently fail — see ISSUES.md
+ * - ✅ Project structure reflects actual directory layout (packages, clients, tooling)
  *
  * @status
  * - confidence: high
@@ -74,16 +73,18 @@ Professional multi-industry marketing website template system built with modern 
 **Phase:** Wave 0 Complete → Wave 1 In Progress  
 **Timeline:** 12 weeks | **Current State:** Config-driven clients (starter-template, luxe-salon, etc.) → **Target:** 12 industries, 20+ components
 
+> **⚠️ Known Issues:** CI quality gates (lint, type-check, build, test) currently fail. See [ISSUES.md](ISSUES.md) for full analysis and remediation list.
+
 | Layer | Package | Status | Progress |
 |-------|---------|--------|----------|
 | **L0** | `@repo/infra` | 🟢 Complete | Security, middleware, logging, 7 env schemas |
-| **L2** | `@repo/ui` | 🟡 In Progress | 9 of 14 UI primitives complete |
-| **L2** | `@repo/marketing-components` | 🔴 Not Started | Package scaffold needed |
-| **L2** | `@repo/features` | 🟡 Partial | 5 of 9 features (booking, contact, blog, services, search) |
-| **L2** | `@repo/types` | 🟢 Complete | Moved from templates/shared; extended |
-| **L3** | `@repo/page-templates` | 🔴 Scaffolded Only | 0 of 7 templates implemented |
-| **L3** | `clients/starter-template` | 🟢 Active | Golden-path template (port 3101) |
-| **L3** | `clients/luxe-salon`, etc. | 🟢 Active | Industry-specific examples |
+| **L2** | `@repo/ui` | 🟡 In Progress | 9 of 14 UI primitives (Toast type errors block build) |
+| **L2** | `@repo/marketing-components` | 🟡 Partial | Package exists; scaffolded components, type-check fails |
+| **L2** | `@repo/features` | 🟡 Partial | 5 of 9 features (booking, contact, blog, services, search); 4 booking tests fail |
+| **L2** | `@repo/types` | 🟢 Complete | Extended from templates/shared |
+| **L3** | `@repo/page-templates` | 🔴 Scaffolded Only | All 7 templates are NotImplementedPlaceholder |
+| **L3** | `clients/starter-template` | 🟢 Active | Golden-path template (port 3101, next-intl, Docker) |
+| **L3** | `clients/luxe-salon`, etc. | 🟡 Partial | 5 industry clients; no i18n, minimal Next config |
 
 See [TASKS.md](TASKS.md) for detailed progress tracking and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
 
@@ -191,14 +192,20 @@ marketing-websites/
 ├── packages/                      # Shared packages (Layer 0-2)
 │   ├── ui/                       # @repo/ui - UI primitives (Button, Input, Dialog, etc.)
 │   ├── features/                 # @repo/features - Feature modules (booking, contact, blog)
-│   ├── page-templates/           # @repo/page-templates - Page-level layouts (scaffolded)
+│   ├── marketing-components/     # @repo/marketing-components - Hero, services, testimonials
+│   ├── page-templates/           # @repo/page-templates - Page layouts (scaffolded placeholders)
 │   ├── types/                    # @repo/types - Shared TypeScript types
 │   ├── utils/                    # @repo/utils - Utility functions
 │   ├── infra/                    # @repo/infra - Infrastructure (security, middleware, logging)
-│   ├── integrations/             # Integration packages
-│   │   ├── analytics/           # Analytics integration
-│   │   ├── hubspot/              # HubSpot CRM integration
-│   │   └── supabase/             # Supabase database integration
+│   ├── integrations/             # Integration packages (14 total; not yet wired to clients)
+│   │   ├── analytics/           # @repo/integrations-analytics
+│   │   ├── hubspot/              # @repo/integrations-hubspot
+│   │   ├── supabase/             # @repo/integrations-supabase
+│   │   └── ...                   # acuity, calendly, calcom, convertkit, etc.
+│   ├── ai-platform/              # @repo/ai-platform-* (agent-orchestration, llm-gateway, content-engine)
+│   ├── content-platform/        # dam-core, visual-editor
+│   ├── marketing-ops/            # campaign-orchestration
+│   ├── infrastructure/           # tenant-core
 │   └── config/                   # Shared configurations
 │       ├── eslint-config/        # ESLint configuration
 │       └── typescript-config/    # TypeScript configuration
@@ -216,6 +223,7 @@ marketing-websites/
 │   ├── validate-documentation.js
 │   ├── validate-exports.js
 │   └── validate-workspaces.js
+├── tooling/                      # Dev tooling (create-client, generate-component, validation)
 │
 ├── docker-compose.yml            # Docker Compose configuration
 ├── turbo.json                    # Turborepo configuration
@@ -239,10 +247,10 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 |----------|-----------|---------|--------|
 | **Runtime** | Node.js | >=22.0.0 | [package.json](package.json) |
 | **Package Manager** | pnpm | 10.29.2 | [package.json](package.json) |
-| **Frontend Framework** | Next.js | 16.1.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
+| **Frontend Framework** | Next.js | 16.1.5 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
 | **UI Library** | React | 19.0.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
 | **Styling** | Tailwind CSS | 4.1.0 | [clients/starter-template/package.json](clients/starter-template/package.json) |
-| **Type Safety** | TypeScript | 5.7.2 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
+| **Type Safety** | TypeScript | 5.9.3 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
 | **Linting** | ESLint | 9.18.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
 | **Code Formatting** | Prettier | 3.2.5 | [package.json](package.json) |
 | **Monorepo Tool** | Turbo | 2.8.9 | [package.json](package.json) |
@@ -322,6 +330,7 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 | `pnpm validate-docs` | Validate documentation |
 | `pnpm validate-docs:strict` | Validate documentation (strict mode) |
 | `pnpm validate-exports` | Validate package exports |
+| `pnpm validate:workspaces` | Validate package.json vs pnpm-workspace.yaml sync |
 | `pnpm knip` | Find unused dependencies and exports |
 | `pnpm syncpack:check` | Check for dependency version mismatches |
 | `pnpm syncpack:fix` | Fix dependency version mismatches |
@@ -358,7 +367,7 @@ docker-compose down
 ```
 
 The Docker Compose configuration includes:
-- **Hair Salon Template** - Available on `http://localhost:3100`
+- **Starter Template** - Available on `http://localhost:3101`
 
 See [docker-compose.yml](docker-compose.yml) for configuration details and [docs/deployment/docker.md](docs/deployment/docker.md) for deployment documentation.
 
@@ -382,13 +391,16 @@ We welcome contributions! Before contributing, please:
 ### Quality Gates
 
 All pull requests must pass:
-- ✅ Linting (`pnpm lint`)
-- ✅ Type checking (`pnpm type-check`)
-- ✅ Export validation (`pnpm validate-exports`)
-- ✅ Tests (`pnpm test`)
-- ✅ Build (`pnpm build`)
+- Linting (`pnpm lint`) — *currently fails in many packages (missing eslint.config)*
+- Type checking (`pnpm type-check`) — *currently fails in @repo/marketing-components*
+- Workspace validation (`pnpm validate:workspaces`) — *currently fails (package.json sync)*
+- Export validation (`pnpm validate-exports`)
+- Circular deps (`pnpm madge:circular`)
+- Dependency consistency (`pnpm syncpack:check`)
+- Build (`pnpm build`) — *currently fails (@repo/features → Toast types)*
+- Tests (`pnpm test`) — *currently fails (4 booking-actions tests)*
 
-See [docs/ci/required-checks.md](docs/ci/required-checks.md) for CI/CD details.
+See [ISSUES.md](ISSUES.md) for known issues and [docs/ci/required-checks.md](docs/ci/required-checks.md) for CI/CD details.
 
 ## 📄 License
 
@@ -413,7 +425,7 @@ For issues, questions, or suggestions:
 
 **Last Updated:** 2026-02-18  
 **Current Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Next Milestone:** Complete UI primitives and create marketing-components package
+**Next Milestone:** Resolve CI-blocking issues (see [ISSUES.md](ISSUES.md)); complete page templates
 
 For detailed progress tracking, see [TASKS.md](TASKS.md).
 
@@ -423,5 +435,6 @@ For detailed progress tracking, see [TASKS.md](TASKS.md).
 - [🚀 Quick Start](#-quick-start)
 - [📚 Documentation Hub](docs/README.md)
 - [🏗️ Architecture](docs/architecture/README.md)
+- [🐛 Known Issues](ISSUES.md)
 - [🤝 Contributing](CONTRIBUTING.md)
 - [📋 Tasks & Roadmap](TASKS.md)

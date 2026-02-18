@@ -3,8 +3,6 @@
 // Task: 2.4
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
-
 export interface Testimonial {
   id: string;
   quote: string;
@@ -27,7 +25,7 @@ export interface TestimonialCarouselProps {
   className?: string;
 }
 
-export function TestimonialCarousel({ testimonials, autoPlay, interval, className }: TestimonialCarouselProps) {
+export function TestimonialCarousel({ testimonials, autoPlay: _autoPlay, interval: _interval, className }: TestimonialCarouselProps) {
   // TODO: Implement auto-rotating carousel
   return (
     <div className={className}>

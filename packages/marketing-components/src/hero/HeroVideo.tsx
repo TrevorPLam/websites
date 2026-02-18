@@ -3,8 +3,6 @@
 // Task: 2.1
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
-
 export interface HeroVideoProps {
   title: string;
   subtitle?: string;
@@ -24,7 +22,11 @@ export function HeroVideo({ title, subtitle, video, overlay, cta, className }: H
   // TODO: Implement video hero with overlay
   return (
     <section className={className}>
-      {video && <video src={video.src} poster={video.poster} />}
+      {video && (
+        <video src={video.src} poster={video.poster}>
+          <track kind="captions" />
+        </video>
+      )}
       {overlay && <div className="overlay" />}
       <div>
         <h1>{title}</h1>

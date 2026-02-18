@@ -3,8 +3,6 @@
 // Task: 2.3
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
-
 export interface TeamMember {
   id: string;
   name: string;
@@ -27,7 +25,7 @@ export interface TeamGridProps {
   className?: string;
 }
 
-export function TeamGrid({ members, columns = 3, className }: TeamGridProps) {
+export function TeamGrid({ members, columns: _columns = 3, className }: TeamGridProps) {
   // TODO: Implement team grid layout
   return (
     <div className={className}>

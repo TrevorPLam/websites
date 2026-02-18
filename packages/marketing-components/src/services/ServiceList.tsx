@@ -3,7 +3,6 @@
 // Task: 2.2
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
 import type { Service } from './ServiceGrid';
 
 export interface ServiceListProps {

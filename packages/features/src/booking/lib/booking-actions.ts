@@ -63,6 +63,15 @@ export interface BookingSubmissionResult {
 }
 
 /**
+ * Verification params for IDOR prevention — required for confirm, cancel, and getDetails.
+ * Use same error as "not found" when verification fails to avoid enumeration.
+ */
+export interface BookingVerification {
+  confirmationNumber: string;
+  email: string;
+}
+
+/**
  * Internal booking storage (in production, this would be a database)
  * For demo purposes, we'll store bookings in memory
  */
@@ -104,6 +113,7 @@ function generateConfirmationNumber(): string {
 // [FEAT:SECURITY] [FEAT:FRAUD_DETECTION]
 // NOTE: Fraud detection - analyzes booking patterns for suspicious activity using configurable rules.
 function detectSuspiciousActivity(data: BookingFormData, _ip: string): boolean {
+  void _ip; // Reserved for future rate-limit/fraud correlation
   const suspiciousPatterns = [
     // Check for obviously fake names
     /^[A-Z\s]+$/.test(data.firstName) && /^[A-Z\s]+$/.test(data.lastName),
@@ -238,15 +248,26 @@ export async function submitBookingRequest(
 
 /**
  * Confirm booking (typically after email verification)
+ * Requires verification params for IDOR prevention.
  */
 // [TRACE:FUNC=packages.features.booking.confirmBooking]
-// [FEAT:BOOKING]
-// NOTE: Booking confirmation - updates booking status to confirmed.
-export async function confirmBooking(bookingId: string): Promise<BookingSubmissionResult> {
+// [FEAT:BOOKING] [FEAT:SECURITY]
+// NOTE: Booking confirmation - updates booking status to confirmed after verification.
+export async function confirmBooking(
+  bookingId: string,
+  verification: BookingVerification
+): Promise<BookingSubmissionResult> {
   try {
     const booking = internalBookings.get(bookingId);
 
     if (!booking) {
+      return { success: false, error: 'Booking not found' };
+    }
+
+    if (
+      booking.confirmationNumber !== verification.confirmationNumber ||
+      booking.data.email !== verification.email
+    ) {
       return { success: false, error: 'Booking not found' };
     }
 
@@ -285,15 +306,26 @@ export async function confirmBooking(bookingId: string): Promise<BookingSubmissi
 
 /**
  * Cancel booking
+ * Requires verification params for IDOR prevention.
  */
 // [TRACE:FUNC=packages.features.booking.cancelBooking]
-// [FEAT:BOOKING]
-// NOTE: Booking cancellation - updates booking status to cancelled.
-export async function cancelBooking(bookingId: string): Promise<BookingSubmissionResult> {
+// [FEAT:BOOKING] [FEAT:SECURITY]
+// NOTE: Booking cancellation - updates booking status to cancelled after verification.
+export async function cancelBooking(
+  bookingId: string,
+  verification: BookingVerification
+): Promise<BookingSubmissionResult> {
   try {
     const booking = internalBookings.get(bookingId);
 
     if (!booking) {
+      return { success: false, error: 'Booking not found' };
+    }
+
+    if (
+      booking.confirmationNumber !== verification.confirmationNumber ||
+      booking.data.email !== verification.email
+    ) {
       return { success: false, error: 'Booking not found' };
     }
 
@@ -332,14 +364,26 @@ export async function cancelBooking(bookingId: string): Promise<BookingSubmissio
 
 /**
  * Get booking details for confirmation page
+ * Requires verification params for IDOR prevention.
  */
 // [TRACE:FUNC=packages.features.booking.getBookingDetails]
-// [FEAT:BOOKING]
-// NOTE: Booking retrieval - fetches booking details for confirmation page display.
-export async function getBookingDetails(bookingId: string, config: BookingFeatureConfig) {
+// [FEAT:BOOKING] [FEAT:SECURITY]
+// NOTE: Booking retrieval - fetches booking details for confirmation page display after verification.
+export async function getBookingDetails(
+  bookingId: string,
+  config: BookingFeatureConfig,
+  verification: BookingVerification
+) {
   const booking = internalBookings.get(bookingId);
 
   if (!booking) {
+    return null;
+  }
+
+  if (
+    booking.confirmationNumber !== verification.confirmationNumber ||
+    booking.data.email !== verification.email
+  ) {
     return null;
   }
 

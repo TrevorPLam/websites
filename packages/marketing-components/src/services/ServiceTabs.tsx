@@ -3,7 +3,6 @@
 // Task: 2.2
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
 import { Tabs } from '@repo/ui';
 import type { Service } from './ServiceGrid';
 

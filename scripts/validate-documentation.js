@@ -58,7 +58,6 @@ class DocumentationValidator {
     await this.validateLinks(docFiles);
     await this.validateAccessibility(docFiles);
     await this.validateCodeExamples(docFiles);
-    await this.validateCodeExamples(docFiles);
 
     // Print results
     this.printResults();

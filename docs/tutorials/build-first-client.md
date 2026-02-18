@@ -87,9 +87,9 @@ Before starting, ensure you have:
 
 If you need help with setup, see [Developer Onboarding](getting-started/onboarding.md).
 
-## Step 1: Choose a Template (5 minutes)
+## Step 1: Choose a Base (5 minutes)
 
-First, let's see what templates are available:
+First, let's see what clients exist. New clients are created by copying `starter-template`:
 
 ```bash
 # Navigate to repository root
@@ -99,12 +99,15 @@ cd marketing-websites
 ls clients/
 ```
 
-You should see clients like:
-- `starter-template/` - Golden-path template (clone for new projects)
-- `luxe-salon/` - Example: salon industry
-- (More clients as they're added)
+You should see:
+- `starter-template/` - Golden-path template (port 3101, next-intl, Docker — clone for new projects)
+- `luxe-salon/` - Salon industry example (port 3102)
+- `bistro-central/` - Restaurant example
+- `chen-law/` - Law firm example
+- `sunrise-dental/` - Dental example
+- `urban-outfitters/` - Retail example
 
-For this tutorial, we'll use the `starter-template` as the base.
+For this tutorial, we'll use `starter-template` as the base.
 
 ## Step 2: Create Client Project (5 minutes)
 
@@ -125,15 +128,7 @@ cd clients/my-first-client
 
 ## Step 3: Add to Workspace (2 minutes)
 
-Add the new client to the pnpm workspace:
-
-Edit `pnpm-workspace.yaml` in the repository root and add:
-
-```yaml
-packages:
-  - 'packages/*'
-  - 'clients/*'   # Already includes my-first-client
-```
+The `clients/*` glob in `pnpm-workspace.yaml` already includes any new client you add under `clients/`. No edit needed. Just ensure your new client has a valid `package.json` with name `@clients/my-first-client`.
 
 ## Step 4: Install Dependencies (5 minutes)
 

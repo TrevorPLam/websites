@@ -298,7 +298,7 @@ export class BookingProviders {
    */
   async createBookingWithAllProviders(data: BookingFormData): Promise<BookingProviderResponse[]> {
     const enabledProviders = Array.from(this.providers.entries())
-      .filter(([_, adapter]) => adapter.config.enabled)
+      .filter(([, adapter]) => adapter.config.enabled)
       .map(([provider]) => provider);
 
     const results = await Promise.allSettled(

@@ -3,8 +3,6 @@
 // Task: 2.5
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
-
 export interface PricingFeature {
   name: string;
   included: boolean | string; // true/false or feature value

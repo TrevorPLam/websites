@@ -1,10 +1,10 @@
 # Required CI Checks — Branch Protection Mapping
 
-**Last Updated:** 2026-02-14  
+**Last Updated:** 2026-02-18  
 **Task:** 0.13  
-**Related:** `docs/tooling/turborepo.md`, `docs/architecture/module-boundaries.md`
+**Related:** [ISSUES.md](../../ISSUES.md), `docs/architecture/module-boundaries.md`
 
-> **Note:** As of 2026-02-14, the pipeline structure is in place. Pre-existing lint failures (@repo/utils ESLint config) and env schema test failures (NODE_ENV, URL validation) cause CI to fail. These are tracked separately and do not block Task 0.13 completion.
+> **Note:** As of 2026-02-18, several quality gates currently fail. See [ISSUES.md](../../ISSUES.md) for the full list: lint (many packages lack eslint.config), type-check (@repo/marketing-components), build (Toast.tsx types), test (4 booking-actions tests).
 
 ---
 
@@ -27,14 +27,15 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 
 ### Blocking (must pass)
 
-| Step           | Command                    | Notes                                              |
-|----------------|----------------------------|----------------------------------------------------|
-| Lint           | `pnpm turbo run lint`      | Module boundaries, ESLint                           |
-| Type check     | `pnpm turbo run type-check`| TypeScript strict                                  |
-| Validate exports | `pnpm validate-exports`  | Package.json exports resolve to files               |
-| Syncpack       | `pnpm syncpack:check`      | Dependency version consistency                     |
-| Build          | `pnpm turbo run build`    | All packages build                                 |
-| Test           | `pnpm test`                | Root Jest (full monorepo suite)                    |
+| Step             | Command                     | Notes                                              |
+|------------------|-----------------------------|----------------------------------------------------|
+| Lint             | `pnpm turbo run lint`       | Module boundaries, ESLint (many packages lack eslint.config) |
+| Type check       | `pnpm turbo run type-check` | TypeScript strict (@repo/marketing-components fails) |
+| Validate exports | `pnpm validate-exports`     | Package.json exports resolve to files              |
+| Madge circular   | `pnpm madge:circular`       | Circular dependency detection                      |
+| Syncpack         | `pnpm syncpack:check`       | Dependency version consistency                     |
+| Build            | `pnpm turbo run build`      | All packages build (Toast.tsx blocks @repo/features) |
+| Test             | `pnpm test:coverage`        | Root Jest (4 booking-actions tests fail)           |
 
 ### Non-blocking (informative)
 
@@ -59,11 +60,12 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 pnpm install
 pnpm turbo run lint type-check build
 pnpm validate-exports
+pnpm madge:circular
 pnpm syncpack:check
-pnpm test
+pnpm test:coverage
 
-# Exit gate (Wave 0)
-pnpm install && pnpm turbo run lint type-check build && pnpm validate-exports && pnpm syncpack:check && pnpm test
+# Exit gate (Wave 0) — currently fails; fix per ISSUES.md first
+pnpm install && pnpm turbo run lint type-check build && pnpm validate-exports && pnpm madge:circular && pnpm syncpack:check && pnpm test:coverage
 ```
 
 ## Adding New Packages

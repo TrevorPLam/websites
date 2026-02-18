@@ -90,14 +90,14 @@ Every aspect of a client website — theming, page composition, feature selectio
 | Layer  | Package                      | Status                       | Scope                                                 |
 | ------ | ---------------------------- | ---------------------------- | ----------------------------------------------------- |
 | **--** | Housekeeping (Wave 0)        | 🟢 Complete                  | Config fixes, tooling, CI, bug fixes done             |
-| **L2** | `@repo/ui`                   | 🟡 9 of 14                   | +5 UI primitives (Dialog, ThemeInjector)              |
-| **L2** | `@repo/marketing-components` | 🔴 Package does not exist    | Create per 1.7, then 2.1–2.10 (10 component families) |
-| **L2** | `@repo/features`             | 🟡 5 of 9                    | booking, contact, blog, services, search              |
-| **L2** | `@repo/types`                | 🟢 In packages               | Moved from templates/shared; extended                 |
-| **L3** | `@repo/page-templates`       | 🔴 Scaffolded only (no src/) | 0 of 7 templates; add 3.1 then 3.2–3.8                |
-| **L3** | `clients/`                   | 🔴 Not Started               | Only README; add 5.1 (starter) then 5.2–5.6           |
-| **L0** | `@repo/infra`                | 🟢 Exists                    | Security, middleware, logging, 7 env schemas          |
-| **L0** | `@repo/integrations`         | 🟡 Partial                   | 3 exist, 6 more planned                               |
+| **L2** | `@repo/ui`                   | 🟡 9 of 14                   | UI primitives (Dialog, ThemeInjector, Toast); Toast has type errors |
+| **L2** | `@repo/marketing-components` | 🟡 Partial                   | Package exists; Hero, services, team, etc. scaffolded; type-check fails |
+| **L2** | `@repo/features`             | 🟡 5 of 9                    | booking, contact, blog, services, search; 4 booking tests fail |
+| **L2** | `@repo/types`                | 🟢 Complete                  | SiteConfig, industry, schemas                         |
+| **L3** | `@repo/page-templates`       | 🔴 Scaffolded only           | 7 templates exist but all render NotImplementedPlaceholder |
+| **L3** | `clients/`                   | 🟢 Active                    | 6 clients: starter-template, luxe-salon, bistro-central, chen-law, sunrise-dental, urban-outfitters |
+| **L0** | `@repo/infra`                | 🟢 Complete                  | Security, middleware, logging, 7 env schemas          |
+| **L0** | `@repo/integrations-***`     | 🟡 Scaffolded                | 14 packages (hubspot, supabase, analytics, etc.); none used by clients yet |
 
 ---
 
@@ -107,25 +107,33 @@ Every aspect of a client website — theming, page composition, feature selectio
 
 ```text
 marketing-websites/
-├── templates/               # Industry-specific website templates
-│   ├── hair-salon/         # Beauty/wellness industry template
-│   ├── [industry]/         # Future industry templates
-│   └── shared/             # Shared template utilities (removed)
-├── clients/                # Client implementations
-│   ├── [client-name]/      # Production client websites
+├── clients/                # Client implementations (6 clients)
+│   ├── starter-template/  # Golden-path template (port 3101, next-intl, Docker)
+│   ├── luxe-salon/         # Salon industry example (port 3102)
+│   ├── bistro-central/    # Restaurant example
+│   ├── chen-law/           # Law firm example
+│   ├── sunrise-dental/     # Dental example
+│   ├── urban-outfitters/  # Retail example
 │   └── README.md           # Client setup guide
 ├── packages/               # Shared libraries and utilities
-│   ├── ui/                 # React UI component library
-│   ├── utils/              # Shared utility functions
-│   ├── features/           # Business logic components
-│   ├── types/              # TypeScript type definitions
-│   ├── infra/              # Infrastructure and security
-│   ├── integrations/       # Third-party service integrations
-│   └── config/             # Shared configurations
-├── apps/                   # Internal applications (future)
+│   ├── ui/                 # @repo/ui - React UI primitives
+│   ├── utils/              # @repo/utils - cn, utilities
+│   ├── features/           # @repo/features - booking, contact, blog, services, search
+│   ├── marketing-components/ # @repo/marketing-components
+│   ├── page-templates/     # @repo/page-templates (7 placeholders)
+│   ├── types/              # @repo/types - SiteConfig, schemas
+│   ├── infra/              # @repo/infra - Security, middleware, logging
+│   ├── integrations/       # 14 integration packages (analytics, hubspot, supabase, etc.)
+│   ├── ai-platform/        # agent-orchestration, llm-gateway, content-engine
+│   ├── content-platform/    # dam-core, visual-editor
+│   ├── marketing-ops/      # campaign-orchestration
+│   ├── infrastructure/     # tenant-core
+│   ├── industry-schemas/   # Industry schemas
+│   └── config/             # eslint-config, typescript-config
+├── tooling/                # create-client, generate-component, validation
+├── apps/                   # (empty - future)
 ├── docs/                   # Documentation
-├── scripts/                # Utility and automation scripts
-└── infrastructure/         # Deployment and infrastructure code
+└── scripts/                # validate-workspaces, validate-exports, etc.
 ```
 
 ### Package Architecture
@@ -156,19 +164,16 @@ marketing-websites/
 - Integration type contracts
 - Domain model definitions
 
-#### Template System (Layer 3)
+#### Experience Layer (Layer 3)
 
-**Templates** - Industry Solutions
-- Pre-built website templates
-- Industry-specific components
-- Demo content and imagery
-- Configuration examples
+**@repo/page-templates** - Page Compositions
+- HomePageTemplate, ServicesPageTemplate, AboutPageTemplate, etc.
+- Currently all 7 render NotImplementedPlaceholder; compose from marketing-components when implemented
 
 **Clients** - Production Deployments
-- Client-specific configurations
-- Custom content and branding
-- Deployment configurations
-- Environment-specific settings
+- starter-template: Golden path with next-intl, standalone Docker, full config
+- luxe-salon, bistro-central, chen-law, sunrise-dental, urban-outfitters: Industry examples
+- Each client: site.config.ts, app/, components/, custom content
 
 ---
 
@@ -198,9 +203,9 @@ marketing-websites/
 ### 4. Modern Web Standards
 
 - **React 19:** Latest features and optimizations
-- **Next.js 15:** App Router and Server Components
-- **TypeScript:** Strict type safety
-- **Tailwind CSS:** Utility-first styling
+- **Next.js 16:** App Router and Server Components
+- **TypeScript 5.9:** Strict type safety
+- **Tailwind CSS 4:** Utility-first styling
 - **pnpm:** Efficient package management
 
 ---
@@ -307,21 +312,21 @@ graph TD
 | Technology | Version | Purpose | Layer |
 | ----------- | -------- | ------- | ----- |
 | **Node.js** | >=22.0.0 | Runtime environment | Infrastructure |
-| **Next.js** | 15.2.9 | React framework | Experience |
+| **Next.js** | 16.1.5 | React framework | Experience |
 | **React** | 19.0.0 | UI library | Component |
-| **TypeScript** | 5.7.2 | Type safety | All layers |
-| **Tailwind CSS** | 3.4.17 | Styling | Component |
+| **TypeScript** | 5.9.3 | Type safety | All layers |
+| **Tailwind CSS** | 4.1.0 | Styling | Component |
 | **pnpm** | 10.29.2 | Package management | Infrastructure |
 
 ### Development Tools
 
 | Tool | Version | Purpose |
 | ---- | ------- | ------- |
-| **Turbo** | 2.2.3 | Monorepo build system |
-| **ESLint** | 9 | Code linting |
+| **Turbo** | 2.8.10 | Monorepo build system |
+| **ESLint** | 9.18.0 | Code linting (flat config) |
 | **Prettier** | 3.2.5 | Code formatting |
-| **Vitest** | - | Unit testing |
-| **Playwright** | - | End-to-end testing |
+| **Jest** | 30.2.0 | Unit testing |
+| **Knip** | 5.84.0 | Dead code detection |
 
 ### Infrastructure & Integrations
 

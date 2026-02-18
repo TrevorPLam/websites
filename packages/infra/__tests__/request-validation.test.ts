@@ -22,15 +22,6 @@ type Logger = {
   error?: (message: string, error?: unknown, context?: Record<string, unknown>) => void;
 };
 
-type OriginValidationResult = {
-  isValid: boolean;
-  expectedHost: string;
-  origin?: string | null;
-  referer?: string | null;
-  host?: string | null;
-  reason?: string;
-};
-
 // Mock logger for testing
 const mockLogger: Logger = {
   info: jest.fn(),

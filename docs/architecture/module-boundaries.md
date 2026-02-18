@@ -1,8 +1,8 @@
 # Module Boundaries — Architecture
 
-**Last Updated:** 2026-02-14  
+**Last Updated:** 2026-02-18  
 **Status:** Implemented (Task 0.11)  
-**Related:** `ANALYSIS_ENHANCED.md`, `TASKS.md` (Part 2 Research, Part 3 Dependency Health Matrix)
+**Related:** [ISSUES.md](../../ISSUES.md), [Architecture Overview](README.md)
 
 ---
 
@@ -14,10 +14,10 @@ This document defines the **allowed dependency direction matrix** for the market
 
 ```mermaid
 graph TD
-    subgraph Templates[Templates Layer]
-        T1[Template 1]
-        T2[Template 2]
-        T3[Template 3]
+    subgraph Clients[Clients Layer]
+        C1[starter-template]
+        C2[luxe-salon]
+        C3[Other clients]
     end
     
     subgraph Packages[Packages Layer]
@@ -26,43 +26,40 @@ graph TD
         Infra[@repo/infra]
         Features[@repo/features]
         Types[@repo/types]
-        Integrations[@repo/integrations]
+        Marketing[@repo/marketing-components]
+        PageTemplates[@repo/page-templates]
+        Integrations[@repo/integrations-*]
     end
     
-    T1 --> UI
-    T2 --> UI
-    T3 --> UI
-    T1 --> Utils
-    T2 --> Utils
-    T3 --> Utils
-    T1 --> Infra
-    T2 --> Infra
-    T3 --> Infra
-    T1 --> Features
-    T2 --> Features
-    T3 --> Features
-    T1 --> Types
-    T2 --> Types
-    T3 --> Types
-    T1 --> Integrations
-    T2 --> Integrations
-    T3 --> Integrations
+    C1 --> UI
+    C2 --> UI
+    C3 --> UI
+    C1 --> Utils
+    C2 --> Utils
+    C3 --> Utils
+    C1 --> Infra
+    C2 --> Infra
+    C3 --> Infra
+    C1 --> Features
+    C2 --> Features
+    C3 --> Features
+    C1 --> Marketing
+    C2 --> Marketing
+    C3 --> PageTemplates
     
     Features --> UI
     Features --> Utils
     Features --> Types
     Features --> Infra
-    
-    UI --> Utils
+    PageTemplates --> Marketing
+    PageTemplates --> Types
+    Marketing --> UI
     Integrations --> Infra
     
-    T1 -.->|❌ Not Allowed| T2
-    T2 -.->|❌ Not Allowed| T3
-    T3 -.->|❌ Not Allowed| T1
+    C1 -.->|❌ Not Allowed| C2
+    Packages -.->|❌ Not Allowed| Clients
     
-    Packages -.->|❌ Not Allowed| Templates
-    
-    style Templates fill:#e3f2fd
+    style Clients fill:#e3f2fd
     style Packages fill:#f1f8e9
 ```
 
@@ -70,15 +67,18 @@ graph TD
 
 | From (Consumer) | To (Provider) | Allowed | Notes |
 |-----------------|---------------|---------|-------|
-| **templates/** | **@repo/ui** | ✅ | Via `import { Button } from '@repo/ui'` — main export only |
-| **templates/** | **@repo/utils** | ✅ | Via `import { cn } from '@repo/utils'` |
-| **templates/** | **@repo/infra** | ✅ | Via `.`, `./client`, `./env`, `./context/*`, `./security/*`, `./logger`, `./sentry/*`, `./middleware/*` |
-| **templates/** | **@repo/types** | ✅ | Via `.`, `./types`, `./site-config`, `./industry`, `./industry-configs` |
-| **templates/** | **@repo/integrations-*** | ✅ | Via each package's public exports |
-| **templates/** | **templates/other/** | ❌ | Template internals are isolated; no cross-template imports |
-| **templates/** | **@repo/*/src/** | ❌ | Deep internal paths; use package public API |
+| **clients/** | **@repo/ui** | ✅ | Via `import { Button } from '@repo/ui'` — main export only |
+| **clients/** | **@repo/utils** | ✅ | Via `import { cn } from '@repo/utils'` |
+| **clients/** | **@repo/infra** | ✅ | Via `.`, `./client`, `./env`, `./context/*`, `./security/*`, `./logger`, `./sentry/*`, `./middleware/*` |
+| **clients/** | **@repo/types** | ✅ | Via `.`, `./types`, `./site-config`, `./industry`, `./industry-configs` |
+| **clients/** | **@repo/features** | ✅ | Via main and subpath exports |
+| **clients/** | **@repo/page-templates** | ✅ | Via main barrel |
+| **clients/** | **@repo/marketing-components** | ✅ | Via main barrel |
+| **clients/** | **@repo/integrations-*** | ✅ | Via each package's public exports (when wired) |
+| **clients/A** | **clients/B** | ❌ | Cross-client imports forbidden |
+| **clients/** | **@repo/*/src/** | ❌ | Deep internal paths; use package public API |
 | **packages/** | **@repo/*** (siblings) | ✅ | Via declared dependencies and public exports |
-| **packages/** | **templates/** | ❌ | Packages never depend on templates |
+| **packages/** | **clients/** | ❌ | Packages never depend on clients |
 | **packages/** | **@repo/*/src/** | ❌ | Deep internal paths blocked |
 | **External** | **@repo/*/src/** | ❌ | Only supported entrypoints (see package.json exports) |
 
@@ -139,9 +139,9 @@ Each integration exposes its own exports; consult `packages/integrations/<name>/
 The following are **explicitly forbidden** and enforced by ESLint `no-restricted-imports`:
 
 1. **Deep internal imports**: `@repo/*/src/*` — bypasses public API; use package root or documented subpath.
-2. **Cross-template imports**: When multiple templates exist, `templates/<other>` must not be imported from `templates/<current>`.
-3. **Relative escape**: Relative imports that cross package boundaries (e.g. `../../packages/ui/...` from a template) — use `@repo/ui` instead.
-4. **Package-to-template**: No package under `packages/` may import from `templates/` or `clients/`.
+2. **Cross-client imports**: No client may import from another client (e.g. `clients/luxe-salon` cannot import from `clients/starter-template`).
+3. **Relative escape**: Relative imports that cross package boundaries (e.g. `../../packages/ui/...` from a client) — use `@repo/ui` instead.
+4. **Package-to-client**: No package under `packages/` may import from `clients/`.
 
 ## Enforcement
 
@@ -160,9 +160,9 @@ When adding a new public entrypoint:
 
 ## Workspace Policy
 
-- **Workspace changes** must update both `package.json` workspaces and `pnpm-workspace.yaml` in the same PR.
-- **New packages** must declare dependencies only on `@repo/*` siblings; no template dependencies.
-- **New templates** must depend on `@repo/*` packages via workspace protocol; no peer dependency on other templates.
+- **Workspace changes** must update both `package.json` workspaces and `pnpm-workspace.yaml` in the same PR. (Currently out of sync: see [ISSUES.md](../../ISSUES.md).)
+- **New packages** must declare dependencies only on `@repo/*` siblings; no client dependencies.
+- **New clients** must depend on `@repo/*` packages via workspace protocol; no peer dependency on other clients. Copy from `clients/starter-template`.
 
 ---
 

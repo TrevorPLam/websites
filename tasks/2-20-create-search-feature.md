@@ -31,7 +31,8 @@ Search feature with 5+ implementation patterns, AI-powered search, and semantic 
 
 ## Research & Evidence (Date-Stamped)
 
-- **Derived from Related Research** – §5.1 (Spec-driven), §3.4 (CMS), search patterns
+- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
+- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
 
 ## Related Files
 

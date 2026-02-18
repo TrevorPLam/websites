@@ -5,6 +5,31 @@ _Purpose:_ single-source research summary for the marketing-websites monorepo. T
 
 ---
 
+## Section Reference Index (§)
+
+Tasks reference sections by code (e.g. §2.1, §4.2). Use this index to resolve them.
+
+| Code | Section in this document | Summary |
+|------|--------------------------|---------|
+| §2.1 | §2 Architecture Highlights, §3.1 Next.js & React | Dependency order, atomic design, layout, templates |
+| §2.2 | §2 Architecture, §10 UI Primitives / shadcn | Component patterns, Radix, shadcn |
+| §3.1 | §3.1 Next.js & React | Next.js 16, React 19, RSC, Server Actions |
+| §3.4 | §3.4 Security & Privacy, §4 Industry | CMS abstraction, content |
+| §4.1 | §3.4 Security & Privacy, §4 Industry | TCF v2.3, consent, OAuth 2.1, email/CRM |
+| §4.2 | §3.5 Performance Targets, §2 Architecture | INP, LCP, WebP, edge, Core Web Vitals |
+| §5.1 | §12 Feature Implementation Patterns | Spec-driven features, adapters |
+| §6 | §4 Industry & Feature Research, §15 Industry-Specific | Industry schemas, salons, restaurants, legal, medical, retail |
+| §7.1 | §1.2 Toolchain, pnpm-workspace.yaml | pnpm catalog, version pins |
+| §8.2 | §2 Architecture, page-templates | Site Composer, template composition |
+| §C.8 | Strategic / A/B testing | A/B testing as a service |
+| §C.9 | Personalization, edge | Personalization, intent |
+| §C.10 | CMS | CMS abstraction |
+| §C.11 | i18n/RTL | Localization |
+| §C.13 | Security, consent | CSP, consent service |
+| §C.14 | Performance | Performance SLOs |
+
+---
+
 ## 1. Repository Snapshot
 
 ### 1.1 Workspace Overview
@@ -38,8 +63,8 @@ tooling/               # Internal CLIs + scripts
 | Package manager | pnpm 10.x                       | Catalog pins React/Next/TS                       |
 | Task runner     | Turborepo 2.x                   | Remote caching enforced via `TURBO_TOKEN`        |
 | Framework       | Next.js 16.1 + React 19         | App Router + RSC + Server Actions                |
-| Styling         | Tailwind CSS 3.4                | v4 migration optional; document if pursued       |
-| Testing         | Vitest (unit), Playwright (e2e) | Jest references should be removed from new specs |
+| Styling         | Tailwind CSS 4.1                | In use (clients + packages/config); see §3.2     |
+| Testing         | Jest 30 (unit), Playwright (e2e)| Root jest.config.js; Vitest optional future      |
 
 ---
 
@@ -65,9 +90,9 @@ tooling/               # Internal CLIs + scripts
 
 ### 3.2 Styling & Design Tokens
 
-- Tailwind 3.4 with CSS custom properties layering (foundation → semantic → component).
+- Tailwind CSS 4.1 in use (clients, packages/config); CSS custom properties layering (foundation → semantic → component).
 - v4 migration note retained but marked as “evaluate before acting”.
-- Tokens live in `packages/ui/tokens`; keep W3C Design Token alignment.
+- Tokens live in `packages/ui/tokens` and `packages/config/tailwind-theme.css`; keep W3C Design Token alignment.
 
 ### 3.3 Validation & Forms
 

@@ -3,8 +3,6 @@
 // Task: 2.2
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
-
 export interface Service {
   id: string;
   name: string;
@@ -22,7 +20,7 @@ export interface ServiceGridProps {
   className?: string;
 }
 
-export function ServiceGrid({ services, columns = 3, className }: ServiceGridProps) {
+export function ServiceGrid({ services, columns: _columns = 3, className }: ServiceGridProps) {
   // TODO: Implement responsive grid layout
   return (
     <div className={className}>

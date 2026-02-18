@@ -56,7 +56,7 @@
 **Status:** Active Documentation - All links verified  
 **Navigation:** Use the sections below to find specific documentation
 
-> **Note:** This documentation hub has been verified and updated. All links point to existing files. If you find any broken links or outdated information, please report them via GitHub issues.
+> **Note:** Documentation reflects codebase state as of 2026-02-18. Known codebase issues (CI failures) are documented in [ISSUES.md](../ISSUES.md). If you find broken links or outdated information, please report via GitHub issues.
 
 ---
 
@@ -100,10 +100,10 @@ Frequently encountered problems and their solutions.
 
 ### For New Projects
 
-**[Client Directory README](../../clients/README.md)**  
+**[Client Directory README](../clients/README.md)**  
 *Client setup and deployment*
 
-Step-by-step guide to setting up and deploying client projects.
+Step-by-step guide to creating clients from `starter-template` and deploying.
 
 **[Build Your First Client](tutorials/build-first-client.md)**  
 *Step-by-step tutorial*
@@ -462,12 +462,10 @@ All documentation follows the [Documentation Standards](DOCUMENTATION_STANDARDS.
 
 ### Latest Changes (February 2026)
 
-- ✅ **README.md Updated** - Comprehensive root README with verified information
-- ✅ **Documentation Hub Updated** - Fixed broken links, accurate structure
-- ✅ **Template Documentation** - Updated version numbers and structure
-- ✅ **Architecture Documentation** - Complete system architecture docs
-- ✅ **Task Specifications** - Normalized task specification format
-- ✅ **Tutorials** - Step-by-step guides for common tasks
+- ✅ **Documentation aligned with codebase** - Architecture, module-boundaries, clients/README, CI checks reflect actual state
+- ✅ **ISSUES.md** - Comprehensive issue list from codebase analysis
+- ✅ **Architecture** - Repository structure, layer status, tech stack (Next 16, TS 5.9, Tailwind 4)
+- ✅ **Clients** - Copy from `starter-template` (not templates/); 6 clients documented
 
 ### Upcoming Improvements
 

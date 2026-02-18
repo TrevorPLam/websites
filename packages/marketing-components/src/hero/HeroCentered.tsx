@@ -3,8 +3,6 @@
 // Task: 2.1
 // Status: Scaffolded - TODO: Implement
 
-import * as React from 'react';
-
 export interface HeroCenteredProps {
   title: string;
   subtitle?: string;

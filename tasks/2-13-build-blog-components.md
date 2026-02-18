@@ -8,7 +8,7 @@
 - **Target Release**: TBD
 - **Related Epics / ADRs**: (Add if applicable)
 - **Reviewers / Stakeholders**: @agent
-- **Upstream Tasks**: 1.7, 1.41 (Pagination)
+- **Upstream Tasks**: @repo/marketing-components (exists), 1.41 (Pagination)
 - **Downstream Tasks**: (Tasks that consume this output)
 
 ## Context
@@ -24,19 +24,20 @@
 
 ## Dependencies
 
-- **Upstream Task**: 1.7 – required – prerequisite
+- **Upstream Task**: @repo/marketing-components (exists) – required
 - **Upstream Task**: 1.41 (Pagination) – required – prerequisite
 - **Package**: @repo/marketing-components – modify – target package
 
 ## Cross-Task Dependencies & Sequencing
 
-- **Upstream**: 1.7, 1.41 (Pagination)
+- **Upstream**: 1.41 (Pagination); marketing-components exists
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: (Work that will consume this output)
 
 ## Research & Evidence (Date-Stamped)
 
-- **Derived from Related Research** – §2.1, §4.2, §2.2, SEO best practices
+- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
+- **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.
 
 ## Related Files
 
