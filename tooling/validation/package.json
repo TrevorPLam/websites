@@ -1,0 +1,16 @@
+{
+  "name": "@repo/validation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "pnpm validate-config clients/x/site.config.ts",
+  "type": "module",
+  "main": "./src/validate-site-config.ts",
+  "scripts": {
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

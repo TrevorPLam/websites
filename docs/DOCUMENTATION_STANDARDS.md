@@ -729,7 +729,7 @@ What users need before starting:
 
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** - General contribution guidelines
 - **[Architecture Overview](architecture/README.md)** - System architecture
-- **[Task Specifications](task-specs/)** - Implementation details
+- **[TASKS.md](../TASKS.md)** - Implementation details and task specifications
 - **[Testing Strategy](testing-strategy.md)** - Quality assurance
 
 ---

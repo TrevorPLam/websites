@@ -58,7 +58,7 @@ marketing-websites/                          # Root — pnpm monorepo
 │
 ├── turbo.json                               # [0.3][0.29] Upgraded config + globalEnv added
 │
-├── TODO.md                                  # Execution tracking
+├── TASKS.md                                 # Execution tracking (consolidated tasks, specs, research)
 ├── THEGOAL.md                               # This file — target architecture reference
 ├── README.md                                # [6.3] Updated with final architecture diagram
 ├── CONTRIBUTING.md                          # [0.32] Updated with Docker section

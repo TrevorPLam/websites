@@ -6,6 +6,7 @@ packages:
   - 'templates/*'
   - 'clients/*'
   - 'apps/*'
+  - 'tooling/*'
 
 # [Task 0.5.1] Centralized version catalog for monorepo-wide consistency
 catalog:

@@ -79,7 +79,7 @@ In this tutorial, you will:
 
 Before starting, ensure you have:
 
-- ✅ Node.js >=24.0.0 installed
+- ✅ Node.js >=22.0.0 installed
 - ✅ pnpm 10.29.2 installed
 - ✅ Git installed and configured
 - ✅ Code editor (VS Code recommended)
@@ -359,7 +359,7 @@ Options:
 - [ ] Environment variables configured
 - [ ] Build command: `pnpm build`
 - [ ] Output directory: `.next`
-- [ ] Node.js version: >=24.0.0
+- [ ] Node.js version: >=22.0.0
 - [ ] Custom domain configured (optional)
 
 See [Deployment Guide](../deployment/) for platform-specific instructions.

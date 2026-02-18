@@ -174,7 +174,7 @@ v4 auto-detection may miss `packages/ui` from template context. Use `@source "..
 - [Tailwind v4 Functions and Directives](https://tailwindcss.com/docs/functions-and-directives)
 - [@tailwindcss/typography v4](https://tailwindcss.com/docs/plugins#official-plugins)
 - Project: `packages/config/tailwind-preset.js`, `templates/hair-salon/tailwind.config.js`, `templates/hair-salon/app/globals.css`
-- RESEARCH_ENHANCED.md §3.2 (Tailwind v4 note), ANALYSIS_ENHANCED.md §2.6
+- TASKS.md Part 2 §3.2 (Tailwind v4 note), ANALYSIS_ENHANCED.md §2.6
 
 ---
 

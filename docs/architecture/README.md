@@ -13,7 +13,7 @@
  * @depends_on
  * - docs/architecture/module-boundaries.md
  * - docs/architecture/dependency-graph.md
- * - TODO.md (architecture context)
+ * - TASKS.md (architecture context)
  *
  * @used_by
  * - Developers, contributors, system architects
@@ -41,7 +41,7 @@
  * - Create architecture decision records (ADRs)
  *
  * @verification
- * - ✅ Verified: Layer structure matches TODO.md
+ * - ✅ Verified: Layer structure matches TASKS.md
  * - ✅ Verified: Package boundaries align with module-boundaries.md
  *
  * @status
@@ -54,7 +54,7 @@
 
 **Last Updated:** 2026-02-18  
 **Status:** Active Documentation  
-**Related:** [Module Boundaries](module-boundaries.md), [TODO.md](../../TODO.md)
+**Related:** [Module Boundaries](module-boundaries.md), [TASKS.md](../../TASKS.md)
 
 ---
 
@@ -306,7 +306,7 @@ graph TD
 
 | Technology | Version | Purpose | Layer |
 | ----------- | -------- | ------- | ----- |
-| **Node.js** | >=24.0.0 | Runtime environment | Infrastructure |
+| **Node.js** | >=22.0.0 | Runtime environment | Infrastructure |
 | **Next.js** | 15.2.9 | React framework | Experience |
 | **React** | 19.0.0 | UI library | Component |
 | **TypeScript** | 5.7.2 | Type safety | All layers |
@@ -502,7 +502,7 @@ flowchart TD
 - **[Module Boundaries](module-boundaries.md)** - Detailed dependency rules
 - **[Dependency Graph](dependency-graph.md)** - Visual dependency mapping
 - **[Migration Guide](../migration/)** - Structural change documentation
-- **[Task Specifications](../task-specs/)** - Implementation details
+- **[TASKS.md](../../TASKS.md)** - Implementation details and task specifications
 - **[Testing Strategy](../testing-strategy.md)** - Quality assurance
 
 ---

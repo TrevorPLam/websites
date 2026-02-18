@@ -62,7 +62,7 @@ Quick answers to common questions about the marketing-websites platform. For det
 ### Q: What are the system requirements?
 
 **A:** You need:
-- Node.js >=24.0.0
+- Node.js >=22.0.0
 - pnpm 10.29.2 (exactly)
 - Git 2.30.0+
 
@@ -112,7 +112,7 @@ See [Feature Documentation](../features/) for examples.
 - Missing dependencies: Run `pnpm install`
 - Type errors: Run `pnpm type-check`
 - Lint errors: Run `pnpm lint`
-- Version mismatch: Ensure Node.js >=24.0.0 and pnpm 10.29.2
+- Version mismatch: Ensure Node.js >=22.0.0 and pnpm 10.29.2
 
 See [Troubleshooting Guide](getting-started/troubleshooting.md) for more solutions.
 

@@ -1,6 +1,6 @@
 # Marketing Website Monorepo — Task Archive
 
-**Purpose:** Historical record of completed tasks. Moved from TODO.md to maintain focus on active work.
+**Purpose:** Historical record of completed tasks. Moved from TODO.md to maintain focus on active work. (TODO.md and task-specs have been consolidated into TASKS.md.)
 
 **Last Updated:** February 17, 2026
 
@@ -2197,4 +2197,4 @@ export default function HomePage() {
 
 ---
 
-*This archive serves as a historical record. For active work, see TODO.md*
+*This archive serves as a historical record. For active work, see TASKS.md*

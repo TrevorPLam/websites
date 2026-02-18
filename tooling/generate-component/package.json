@@ -1,0 +1,19 @@
+{
+  "name": "@repo/generate-component",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CLI: pnpm generate-component MyComponent --package=marketing",
+  "type": "module",
+  "main": "./src/index.ts",
+  "bin": {
+    "generate-component": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

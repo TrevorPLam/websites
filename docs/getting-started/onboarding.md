@@ -32,11 +32,11 @@
  * - Commands must match current repository state
  *
  * @gotchas
- * - Node.js version requirements (>=24.0.0) may block contributors
+ * - Node.js version requirements (>=22.0.0) may block contributors
  * - pnpm workspace configuration is critical for monorepo functionality
  *
  * @issues
- * - [severity:medium] Some templates may have missing dependencies (see TODO.md)
+ * - [severity:medium] Some templates may have missing dependencies (see TASKS.md)
  *
  * @opportunities
  * - Add automated setup verification script
@@ -92,7 +92,7 @@ Before starting, ensure you have:
 
 | Software | Minimum Version | Recommended | Purpose |
 |----------|-----------------|-------------|---------|
-| **Node.js** | 24.0.0 | Latest LTS | Runtime environment |
+| **Node.js** | >=22.0.0 | Required | Runtime environment |
 | **pnpm** | 10.29.2 | Latest | Package manager |
 | **Git** | 2.30.0 | Latest | Version control |
 
@@ -100,7 +100,7 @@ Before starting, ensure you have:
 
 ```bash
 # Check Node.js version
-node --version  # Should be v24.0.0 or higher
+node --version  # Should be v22.0.0 or higher
 
 # Check pnpm version
 pnpm --version  # Should be 10.29.2 or higher
@@ -109,7 +109,7 @@ pnpm --version  # Should be 10.29.2 or higher
 git --version  # Should be 2.30.0 or higher
 ```
 
-⚠️ **Important:** Node.js version 24.0.0+ is **strictly enforced** by the repository's `package.json` `engines` field. Lower versions will not install dependencies.
+⚠️ **Important:** Node.js version >=22.0.0 is **strictly enforced** by the repository's `package.json` `engines` field. Lower versions will not install dependencies.
 
 ### Installing Required Software
 
@@ -677,7 +677,7 @@ Brief description of changes
 
 - **[Architecture Overview](../architecture/README.md)** - System design
 - **[Documentation Standards](../DOCUMENTATION_STANDARDS.md)** - Writing guidelines
-- **[Task Specifications](../task-specs/)** - Implementation details
+- **[TASKS.md](../../TASKS.md)** - Implementation details and task specifications
 - **[Testing Strategy](../testing-strategy.md)** - Quality practices
 
 ### External Resources
@@ -742,7 +742,7 @@ After completing this onboarding guide:
 
 ### Environment Setup
 
-- [ ] Node.js >=24.0.0 installed
+- [ ] Node.js >=22.0.0 installed
 - [ ] pnpm 10.29.2+ installed
 - [ ] Repository cloned successfully
 - [ ] Dependencies installed without errors

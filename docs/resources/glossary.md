@@ -169,7 +169,7 @@ A text-based diagramming and charting tool used for creating visual documentatio
 The React framework used for building the platform. Version 15.2.9 with App Router.
 
 ### Node.js
-The JavaScript runtime environment. Requires version >=24.0.0.
+The JavaScript runtime environment. Requires version >=22.0.0.
 
 ## O
 

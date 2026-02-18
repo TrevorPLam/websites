@@ -462,7 +462,7 @@ graph TD
 **Resources:**
 - [Architecture Overview](architecture/README.md)
 - [THEGOAL.md](../../THEGOAL.md)
-- [TODO.md](../../TODO.md) - Roadmap
+- [TASKS.md](../../TASKS.md) - Roadmap and task specifications
 
 #### 2. Architecture Deep Dive (3-4 hours)
 
@@ -487,7 +487,7 @@ graph TD
 
 **Resources:**
 - [Architecture Overview](architecture/README.md#design-principles)
-- [Task Specifications](../task-specs/)
+- [TASKS.md](../../TASKS.md)
 - Code examples in packages
 
 #### 4. Decision Making (2-3 hours)
@@ -511,9 +511,9 @@ graph TD
 - [ ] Plan for scale
 
 **Resources:**
-- [TODO.md](../../TODO.md)
+- [TASKS.md](../../TASKS.md)
 - [Architecture Evolution](architecture/README.md#evolution-roadmap)
-- [Innovation Specs](../task-specs/09-innovation-future.md)
+- [Innovation Specs](TASKS.md) (Part 4, Innovation & Future)
 
 #### 6. Leadership (Ongoing)
 

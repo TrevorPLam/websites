@@ -96,5 +96,5 @@ class MindbodyProvider extends BaseBookingProviderAdapter {
 ## References
 
 - Task 2.12: Extract Booking Feature
-- RESEARCH_ENHANCED.md: Adapter Pattern best practices
+- TASKS.md (Part 2 Research): Adapter Pattern best practices
 - ANALYSIS_ENHANCED.md: Provider duplication findings (INT-1)

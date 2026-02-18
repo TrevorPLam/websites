@@ -1,0 +1,19 @@
+{
+  "name": "@repo/create-client",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CLI: pnpm create-client my-client --industry=restaurant",
+  "type": "module",
+  "main": "./src/index.ts",
+  "bin": {
+    "create-client": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

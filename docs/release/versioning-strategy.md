@@ -58,5 +58,4 @@ canary`, then exits pre mode.
 ## References
 
 - ANALYSIS_ENHANCED.md §1.2 (workspace config)
-- TODO.md Task 0.12
-- RESEARCH_ENHANCED.md §1.2 (2026 tooling landscape)
+- TASKS.md Part 4 (Task 0.12), Part 2 §1.2 (2026 tooling landscape)

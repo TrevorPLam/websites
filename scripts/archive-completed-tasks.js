@@ -3,13 +3,17 @@
  * Archives completed tasks from TODO.md to ARCHIVE.md.
  * - Moves all [x] COMPLETED task blocks to ARCHIVE.md
  * - Rebuilds TODO.md with only open tasks
+ *
+ * NOTE: TODO.md has been retired. Tasks are now in TASKS.md. This script
+ * is deprecated and will fail if TODO.md does not exist. Update to work
+ * with TASKS.md structure if archive functionality is needed.
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const TODO_PATH = path.join(ROOT, 'TODO.md');
+const TODO_PATH = path.join(ROOT, 'TODO.md'); // Legacy: TODO.md retired, use TASKS.md
 const ARCHIVE_PATH = path.join(ROOT, 'ARCHIVE.md');
 
 const content = fs.readFileSync(TODO_PATH, 'utf8');

@@ -67,7 +67,7 @@ Before diving into specific issues, run these diagnostic commands:
 
 ```bash
 # Check Node.js version
-node --version  # Should be >=24.0.0
+node --version  # Should be >=22.0.0
 
 # Check pnpm version
 pnpm --version  # Should be 10.29.2
@@ -115,7 +115,7 @@ corepack prepare pnpm@10.29.2 --activate
 - Build fails with syntax errors
 
 **Solutions:**
-1. Upgrade Node.js to >=24.0.0
+1. Upgrade Node.js to >=22.0.0
 2. Use `nvm` (Node Version Manager) if available:
    ```bash
    nvm install 24
@@ -181,7 +181,7 @@ pnpm install
 **Common Causes & Solutions:**
 
 1. **Node.js version mismatch:**
-   - Ensure CI uses Node.js >=24.0.0
+   - Ensure CI uses Node.js >=22.0.0
    - Check `.github/workflows/*.yml` for version
 
 2. **Missing environment variables:**

@@ -20,10 +20,10 @@ Complete hair salon website template with:
 
 **Tech Stack:**
 
-- Next.js 15.2.9 (App Router)
+- Next.js 16.1.0 (App Router)
 - React 19.0.0
 - TypeScript 5.7.2
-- Tailwind CSS
+- Tailwind CSS 4.1.0
 - Supabase integration
 - HubSpot CRM integration
 

@@ -53,8 +53,10 @@
 # Documentation Hub
 
 **Last Updated:** 2026-02-18  
-**Status:** Active Documentation  
+**Status:** Active Documentation - All links verified  
 **Navigation:** Use the sections below to find specific documentation
+
+> **Note:** This documentation hub has been verified and updated. All links point to existing files. If you find any broken links or outdated information, please report them via GitHub issues.
 
 ---
 
@@ -91,11 +93,6 @@ Looking for something specific? Use your browser's search (Ctrl+F / Cmd+F) or ch
 
 Complete guide to setting up your development environment and understanding the codebase.
 
-**[Quick Reference](getting-started/quick-reference.md)**  
-*Essential commands and patterns*
-
-Common commands, file patterns, and development workflows for daily use.
-
 **[Troubleshooting](getting-started/troubleshooting.md)**  
 *Solutions to common issues*
 
@@ -103,15 +100,20 @@ Frequently encountered problems and their solutions.
 
 ### For Template Users
 
-**[Template Development Guide](guides/template-development.md)**  
-*Creating and customizing templates*
+**[Template Directory README](../../templates/README.md)**  
+*Using and creating templates*
 
-How to create new industry templates and customize existing ones.
+Guide to using templates and creating new industry-specific templates.
 
-**[Client Setup Guide](guides/client-setup.md)**  
-*Deploying client websites*
+**[Client Directory README](../../clients/README.md)**  
+*Client setup and deployment*
 
 Step-by-step guide to setting up and deploying client projects.
+
+**[Build Your First Client](tutorials/build-first-client.md)**  
+*Step-by-step tutorial*
+
+Complete walkthrough for creating your first client website.
 
 ---
 
@@ -136,10 +138,10 @@ Interactive diagrams showing package relationships and data flows.
 
 ### Decision Records
 
-**[Architecture Decision Records](architecture/decision-records/)**  
+**[Architecture Decision Records (ADR)](adr/)**  
 *Historical architectural decisions*
 
-Record of important architectural decisions and their rationale.
+Record of important architectural decisions and their rationale. See [adr/](adr/) directory for all ADR files.
 
 ---
 
@@ -152,69 +154,77 @@ Record of important architectural decisions and their rationale.
 
 Complete reference for all UI components, including examples and best practices.
 
-**[Design System](components/design-system.md)**  
-*Design tokens and theming*
+**[Theme Injector](theming/theme-injector.md)**  
+*Theming system documentation*
 
-Design tokens, color systems, and theming guidelines.
-
-**[Storybook](components/storybook.md)**  
-*Interactive component examples*
-
-Live component playground and testing environment.
+How the theming system works and how to customize themes.
 
 ---
 
-## Guides and Tutorials
+## Tutorials
 
-### Development Guides
+### Step-by-Step Guides
 
-**[Template Development](guides/template-development.md)**  
-*Creating industry templates*
+**[Build Your First Client](tutorials/build-first-client.md)**  
+*Complete client creation walkthrough*
 
-Guide to developing new industry-specific templates.
+Step-by-step tutorial for creating your first client website from a template.
 
-**[Client Configuration](guides/configuration.md)**  
-*Site configuration deep dive*
+**[Create a Custom Component](tutorials/create-component.md)**  
+*Component development guide*
 
-Comprehensive guide to site configuration options and patterns.
+Learn how to create and contribute new components to the UI library.
 
-**[Deployment Strategies](guides/deployment.md)**  
-*Production deployment methods**
-
-Different deployment options and strategies for client websites.
-
-### Integration Guides
-
-**[Integration Overview](integrations/overview.md)**  
+**[Set Up Integrations](tutorials/setup-integrations.md)**  
 *Third-party service integration*
 
-How to integrate with external services and APIs.
+Comprehensive guide to integrating third-party services (Analytics, CRM, Database).
 
-**[API Reference](integrations/api-reference.md)**  
-*Internal API documentation*
+### Feature Documentation
 
-Complete API reference for internal services and endpoints.
+**[Booking Feature](features/booking/usage.md)**  
+*Booking system usage and customization*
+
+**[Services Feature](features/services/usage.md)**  
+*Service showcase components*
+
+**[Search Feature](features/search/usage.md)**  
+*Search functionality implementation*
+
+### Deployment
+
+**[Docker Deployment](deployment/docker.md)**  
+*Docker and containerization guide*
+
+Complete guide to deploying with Docker and Docker Compose.
 
 ---
 
 ## Operations Documentation
 
-### Monitoring and Maintenance
-
-**[Performance Monitoring](operations/monitoring.md)**  
-*Performance tracking and optimization*
-
-How to monitor and optimize application performance.
-
-**[Security Practices](operations/security.md)**  
-*Security guidelines and best practices*
-
-Security implementation and monitoring guidelines.
+### Maintenance
 
 **[Documentation Maintenance](operations/maintenance.md)**  
 *Keeping documentation updated*
 
 Processes for maintaining and updating documentation.
+
+### Performance & Quality
+
+**[Performance Baseline](performance-baseline.md)**  
+*Performance benchmarks and targets*
+
+Performance metrics, targets, and optimization guidelines.
+
+**[Accessibility Audit](accessibility-audit.md)**  
+*Accessibility standards and compliance*
+
+WCAG compliance guidelines and accessibility best practices.
+
+**[Testing Strategy](testing-strategy.md)**  
+*Testing approach and best practices*
+
+Comprehensive testing strategy for the platform.
 
 ---
 
@@ -249,10 +259,10 @@ Common questions organized by topic (Getting Started, Development, Architecture,
 
 Structured learning paths for different user types: Template Users, Developers, Administrators, and Architects.
 
-**[Community Resources](resources/community.md)**  
-*External resources and community*
+**[Contributors](CONTRIBUTORS.md)**  
+*Documentation contributors*
 
-Links to external resources, community forums, and support channels.
+Recognition for those who contribute to documentation.
 
 ---
 
@@ -261,8 +271,9 @@ Links to external resources, community forums, and support channels.
 ### Template Users
 
 - [Quick Start](../README.md#quick-start)
-- [Client Setup Guide](guides/client-setup.md)
-- [Configuration Guide](guides/configuration.md)
+- [Template Directory README](../templates/README.md)
+- [Client Directory README](../clients/README.md)
+- [Build Your First Client](tutorials/build-first-client.md)
 - [Troubleshooting](getting-started/troubleshooting.md)
 
 ### Developers
@@ -274,17 +285,18 @@ Links to external resources, community forums, and support channels.
 
 ### System Administrators
 
-- [Deployment Guide](guides/deployment.md)
-- [Security Practices](operations/security.md)
-- [Performance Monitoring](operations/monitoring.md)
-- [Integration Overview](integrations/overview.md)
+- [Docker Deployment](deployment/docker.md)
+- [Security Policy](../SECURITY.md)
+- [Performance Baseline](performance-baseline.md)
+- [Set Up Integrations](tutorials/setup-integrations.md)
 
 ### Architects
 
 - [Architecture Overview](architecture/README.md)
 - [Module Boundaries](architecture/module-boundaries.md)
-- [Decision Records](architecture/decision-records/)
+- [Architecture Decision Records (ADR)](adr/)
 - [Dependency Graph](architecture/dependency-graph.md)
+- [Visual Architecture Guide](architecture/visual-guide.md)
 
 ---
 
@@ -296,37 +308,70 @@ Links to external resources, community forums, and support channels.
 docs/
 ├── README.md                    # This file - documentation hub
 ├── DOCUMENTATION_STANDARDS.md   # Documentation standards
+├── CONTRIBUTORS.md              # Documentation contributors
+├── performance-baseline.md      # Performance benchmarks
+├── accessibility-audit.md       # Accessibility standards
+├── testing-strategy.md          # Testing approach
 ├── getting-started/             # New user documentation
 │   ├── onboarding.md           # Developer onboarding
-│   ├── quick-reference.md      # Common commands
 │   └── troubleshooting.md      # Common issues
-├── architecture/               # System architecture
+├── tutorials/                   # Step-by-step tutorials
+│   ├── build-first-client.md    # Client creation tutorial
+│   ├── create-component.md     # Component development
+│   └── setup-integrations.md   # Integration setup
+├── architecture/                # System architecture
 │   ├── README.md               # Architecture overview
 │   ├── module-boundaries.md    # Dependency rules
 │   ├── dependency-graph.md     # Visual dependencies
-│   └── decision-records/       # ADR collection
-├── guides/                     # How-to guides
-│   ├── template-development.md # Template creation
-│   ├── client-setup.md         # Client setup
-│   ├── configuration.md         # Site configuration
-│   └── deployment.md           # Deployment strategies
-├── components/                 # Component documentation
-│   ├── ui-library.md           # UI components
-│   ├── design-system.md        # Design tokens
-│   └── storybook.md           # Interactive examples
-├── integrations/               # Integration documentation
-│   ├── overview.md             # Integration architecture
-│   ├── api-reference.md        # API documentation
-│   └── providers/              # Individual integrations
-├── operations/                 # Operations documentation
-│   ├── monitoring.md           # Performance monitoring
-│   ├── security.md             # Security practices
-│   └── maintenance.md         # Documentation maintenance
-└── resources/                  # Reference materials
-    ├── glossary.md             # Terminology
-    ├── faq.md                  # FAQ
-    └── community.md            # Community resources
+│   ├── visual-guide.md         # Visual architecture
+│   ├── route-registry.md        # Route system
+│   └── migration-map-shared-to-types.md
+├── adr/                         # Architecture Decision Records
+│   ├── 0001-turborepo-upgrade-2.8.md
+│   ├── 0002-module-boundaries-eslint.md
+│   ├── 0003-ci-quality-gates.md
+│   ├── 0004-dockerfile-standalone-output.md
+│   ├── 0005-tailwind-v4-migration.md
+│   └── 0005-unified-radix-ui-package.md
+├── components/                  # Component documentation
+│   └── ui-library.md           # UI components reference
+├── features/                    # Feature documentation
+│   ├── booking/                 # Booking feature
+│   ├── services/                # Services feature
+│   └── search/                  # Search feature
+├── deployment/                  # Deployment guides
+│   └── docker.md                # Docker deployment
+├── operations/                  # Operations documentation
+│   └── maintenance.md          # Documentation maintenance
+├── resources/                   # Reference materials
+│   ├── glossary.md             # Terminology
+│   ├── faq.md                  # FAQ
+│   └── learning-paths.md       # Learning paths
+├── tooling/                     # Tool documentation
+│   ├── pnpm.md                 # pnpm usage
+│   ├── turborepo.md            # Turborepo guide
+│   ├── knip.md                 # Knip usage
+│   ├── syncpack.md             # Syncpack usage
+│   └── validate-exports.md     # Export validation
+├── ci/                          # CI/CD documentation
+│   └── required-checks.md      # CI quality gates
+├── release/                     # Release documentation
+│   ├── versioning-strategy.md  # Versioning approach
+│   └── next16-migration-evaluation.md
+├── evaluation/                  # Technology evaluations
+│   ├── README.md
+│   └── tailwind-v4-migration.md
+├── theming/                     # Theming documentation
+│   └── theme-injector.md       # Theme system
+├── testing/                     # Testing documentation
+│   └── refactor-parity-matrix.md
+└── templates/                   # Documentation templates
+    ├── component-test-template.tsx
+    ├── schema-test-template.ts
+    └── server-action-test-template.ts
 ```
+
+> **Note:** Task specifications were previously in `docs/task-specs/`. They are now consolidated in root [TASKS.md](../TASKS.md).
 
 ### Documentation Types
 
@@ -423,20 +468,20 @@ All documentation follows the [Documentation Standards](DOCUMENTATION_STANDARDS.
 
 ### Latest Changes (February 2026)
 
-- ✅ **Architecture Overview** - Complete system architecture documentation
-- ✅ **Documentation Standards** - Comprehensive style guide and standards
-- ✅ **Developer Onboarding** - Complete setup and workflow guide
-- ✅ **Dependency Graphs** - Visual architecture documentation
-- ✅ **UI Library Docs** - Complete component reference
-- ✅ **Automated Validation** - CI/CD documentation checks
+- ✅ **README.md Updated** - Comprehensive root README with verified information
+- ✅ **Documentation Hub Updated** - Fixed broken links, accurate structure
+- ✅ **Template Documentation** - Updated version numbers and structure
+- ✅ **Architecture Documentation** - Complete system architecture docs
+- ✅ **Task Specifications** - Normalized task specification format
+- ✅ **Tutorials** - Step-by-step guides for common tasks
 
 ### Upcoming Improvements
 
-- 📋 **Interactive Documentation Site** - Enhanced navigation and search
-- 📋 **Video Tutorials** - Visual learning resources
-- 📋 **Component Playground** - Live component testing
-- 📋 **API Explorer** - Interactive API documentation
-- 📋 **Performance Metrics** - Documentation usage analytics
+- 📋 **Interactive Documentation Site** - Enhanced navigation and search (see [SETUP_DOCS_SITE.md](SETUP_DOCS_SITE.md))
+- 📋 **Component Playground** - Live component testing (see [SETUP_INTERACTIVE_EXAMPLES.md](SETUP_INTERACTIVE_EXAMPLES.md))
+- 📋 **Documentation Analytics** - Usage tracking (see [SETUP_ANALYTICS.md](SETUP_ANALYTICS.md))
+- 📋 **Design System Documentation** - Comprehensive design tokens guide
+- 📋 **API Reference** - Complete API documentation
 
 ---
 

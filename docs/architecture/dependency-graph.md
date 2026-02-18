@@ -13,7 +13,7 @@
  * @depends_on
  * - docs/architecture/README.md (architecture overview)
  * - docs/architecture/module-boundaries.md (dependency rules)
- * - TODO.md (package status and relationships)
+ * - TASKS.md (package status and relationships)
  *
  * @used_by
  * - Developers, architects, system administrators

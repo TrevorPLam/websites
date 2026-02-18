@@ -85,7 +85,7 @@ Professional multi-industry marketing website template system built with modern 
 | **L3** | `templates/hair-salon` | 🟢 Active | Production-ready template |
 | **L3** | `clients/` | 🔴 Not Started | Directory exists but empty |
 
-See [TODO.md](TODO.md) for detailed progress tracking and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
+See [TASKS.md](TASKS.md) for detailed progress tracking and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
 
 ### Key Features
 
@@ -216,7 +216,7 @@ marketing-websites/
 │   ├── components/               # Component documentation
 │   ├── resources/                # Glossary, FAQ, learning paths
 │   ├── operations/               # Maintenance guides
-│   └── task-specs/               # Normalized task specifications
+│   └── (task specs consolidated in TASKS.md)
 │
 ├── scripts/                      # Utility scripts
 │   ├── validate-documentation.js
@@ -307,8 +307,7 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 
 ### Planning & Roadmap
 
-- **[TODO.md](TODO.md)** - Implementation backlog and phased tasks
-- **[Task Specifications](docs/task-specs/)** - Normalized task specifications
+- **[TASKS.md](TASKS.md)** - Implementation backlog, task specifications, research, and phased execution
 
 ## 🧪 Available Scripts
 
@@ -424,7 +423,7 @@ For issues, questions, or suggestions:
 **Current Phase:** Wave 0 Complete → Wave 1 In Progress  
 **Next Milestone:** Complete UI primitives and create marketing-components package
 
-For detailed progress tracking, see [TODO.md](TODO.md).
+For detailed progress tracking, see [TASKS.md](TASKS.md).
 
 ---
 
@@ -433,4 +432,4 @@ For detailed progress tracking, see [TODO.md](TODO.md).
 - [📚 Documentation Hub](docs/README.md)
 - [🏗️ Architecture](docs/architecture/README.md)
 - [🤝 Contributing](CONTRIBUTING.md)
-- [📋 TODO & Roadmap](TODO.md)
+- [📋 Tasks & Roadmap](TASKS.md)
