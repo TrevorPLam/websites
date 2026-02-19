@@ -8,3 +8,4 @@ export * from './templates/ContactPageTemplate';
 export * from './templates/BlogIndexTemplate';
 export * from './templates/BlogPostTemplate';
 export * from './templates/BookingPageTemplate';
+export { NotImplementedPlaceholder } from './NotImplementedPlaceholder';

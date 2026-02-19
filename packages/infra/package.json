@@ -66,6 +66,7 @@
   "peerDependencies": {
     "@sentry/nextjs": "^10.0.0",
     "next": "^16.0.0",
+    "react": "^19.0.0",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.34.3"
   },
@@ -73,7 +74,9 @@
     "@repo/eslint-config": "workspace:*",
     "@sentry/nextjs": "catalog:",
     "@types/node": "catalog:",
+    "@types/react": "catalog:",
     "eslint": "catalog:",
+    "react": "catalog:",
     "typescript": "catalog:"
   },
   "dependencies": {
