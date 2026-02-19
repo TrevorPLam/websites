@@ -6,5 +6,5 @@
 
 export { routing, type Locale } from './routing';
 export { getLocaleDir } from './rtl';
-export { formatCurrency } from './format';
+export { formatCurrency, formatNumber } from './format';
 export type { LocaleConfig } from './routing';
