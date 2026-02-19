@@ -64,6 +64,12 @@ Implement `pnpm create-client <name> --industry=X` in tooling/create-client. Cur
 
 - Create test client; validate; remove
 
+## Execution notes
+
+- **Related files — current state:** CLI entry (e.g. tooling/create-client or scripts) — to be created or wired. `clients/starter-template/` — exists as copy source. Reuse pattern from 6-8a (copy + transform package.json, site.config.ts).
+- **Potential issues / considerations:** Coordinate with 6-8a (Plop vs standalone CLI); run `pnpm validate-client clients/<name>/` after creation; support `--industry` optional flag.
+- **Verification:** Create test client, run `pnpm validate-client`, remove test client.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

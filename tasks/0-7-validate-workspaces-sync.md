@@ -67,6 +67,12 @@
 
 - Run `pnpm validate:workspaces` to verify
 
+## Execution notes
+
+- **Related files — current state:** `package.json` — workspaces array present; `pnpm-workspace.yaml` — packages list present; `scripts/validate-workspaces.js` — exists and compares both. Current repo lists match (packages/*, clients/*, tooling/*, etc.). If script fails, check for glob or quoting differences.
+- **Potential issues / considerations:** CLAUDE.md says "currently out of sync" — confirm whether script passes now or if missing/extra globs cause failure; adding new workspace roots requires updating both files.
+- **Verification:** `pnpm validate:workspaces`.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

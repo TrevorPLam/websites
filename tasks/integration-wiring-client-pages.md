@@ -65,6 +65,12 @@ Wire scheduling, chat, reviews, and maps integration adapters into client pages.
 
 - Manual or E2E: verify scheduling, chat, reviews, maps appear when configured
 
+## Execution notes
+
+- **Related files — current state:** `packages/page-templates/`, `packages/features/` — exist; add integration usage. Upstream tasks 4-2, 4-3, 4-4, 4-5 are in archive (integrations implemented). site.config drives which adapters load.
+- **Potential issues / considerations:** Consent gates for chat, maps (TCF/cookie); config-driven — no integration if not in site.config; test with at least one client per integration.
+- **Verification:** Manual or E2E: scheduling, chat, reviews, maps appear when configured; build passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

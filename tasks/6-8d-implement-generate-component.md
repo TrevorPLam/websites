@@ -64,6 +64,12 @@ Implement `pnpm generate-component MyComponent --package=marketing` in tooling/g
 
 - Generate component; verify it builds and exports
 
+## Execution notes
+
+- **Related files — current state:** Generator script/CLI — to be created. `packages/ui/src/components/` and `packages/marketing-components` — exist; follow existing component layout and index exports.
+- **Potential issues / considerations:** Support --package=ui|marketing-components, --variant, --story; create .tsx with props and cn(); add export to package index; align with validate-ui-exports / validate-marketing-exports.
+- **Verification:** Generate component for ui and marketing-components; verify build and exports.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

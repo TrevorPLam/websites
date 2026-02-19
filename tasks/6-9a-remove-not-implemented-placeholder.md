@@ -57,6 +57,12 @@ NotImplementedPlaceholder exists in packages/page-templates but has no imports. 
 
 - Run `pnpm build`, `pnpm test` after removal.
 
+## Execution notes
+
+- **Related files — current state:** `packages/page-templates/src/NotImplementedPlaceholder.tsx` — exists; verify with grep that no imports reference it. Package index — check if exported.
+- **Potential issues / considerations:** Grep for "NotImplementedPlaceholder" across repo before delete; if retained, add comment explaining why; update index exports if removed.
+- **Verification:** `pnpm build`, `pnpm test` after removal.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

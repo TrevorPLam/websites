@@ -68,6 +68,12 @@ Add packages/infra/experiments/ with feature-flags.ts (deterministic evaluation,
 - Unit tests for guardrails
 - Run `pnpm test`, `pnpm type-check`
 
+## Execution notes
+
+- **Related files — current state:** infra/experiments or feature-flag layer — to be created or extended. R-EXPERIMENTATION; A/B, guardrails, SRM checks.
+- **Potential issues / considerations:** Config-driven; no breaking changes; optional guardrails for experiment assignment.
+- **Verification:** Build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

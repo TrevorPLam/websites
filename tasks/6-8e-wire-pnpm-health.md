@@ -64,6 +64,12 @@ Wire `pnpm health` to run lint + type-check + build + test (and optionally valid
 
 - Run `pnpm health` and verify it executes all steps
 
+## Execution notes
+
+- **Related files — current state:** `scripts/health-check.ts` — exists (root package.json has `"health": "npx tsx scripts/health-check.ts"`). Wire into pipeline or document as pnpm health.
+- **Potential issues / considerations:** Ensure `pnpm health` runs all required steps; may need to add script name `health` or alias; document in CLAUDE.md if added.
+- **Verification:** Run `pnpm health` and verify it executes all steps.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

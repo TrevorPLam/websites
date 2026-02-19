@@ -63,6 +63,12 @@ Add api/[...routes] catch-all route with health and OG image handlers. THEGOAL s
 - Verify health returns 200
 - Verify OG image generates for a page
 
+## Execution notes
+
+- **Related files — current state:** `clients/starter-template/app/api/` — health route may exist at app/api/health/route.ts; catch-all or OG route to be added. site.config.ts — has seo (title, description, ogImage).
+- **Potential issues / considerations:** Next.js App Router; use @vercel/og or ImageResponse for OG; consolidate health under catch-all per THEGOAL or document why separate; propagate to other clients.
+- **Verification:** Health returns 200; OG image generates from siteConfig.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

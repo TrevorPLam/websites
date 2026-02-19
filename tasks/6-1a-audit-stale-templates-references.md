@@ -60,6 +60,12 @@ Task 6-1 referenced templates/hair-salon; templates/ directory no longer exists.
 
 - Run `pnpm validate-docs` if applicable
 
+## Execution notes
+
+- **Related files — current state:** Various docs, RESEARCH-INVENTORY.md, task files — audit with grep for `templates/hair-salon`, `templates/shared`, `templates/`. Exclude .kiro/specs/templates/ and known test paths.
+- **Potential issues / considerations:** Replace refs with clients/ or packages/ as appropriate; do not change .kiro/specs/templates/ (spec templates).
+- **Verification:** Grep returns no unintended references; `pnpm validate-docs` if applicable.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

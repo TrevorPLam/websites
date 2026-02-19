@@ -68,6 +68,12 @@ Add packages/features/src/personalization/ with rules-engine.ts (privacy-safe, a
 - Unit tests for rules and segments
 - Run `pnpm test`, `pnpm type-check`
 
+## Execution notes
+
+- **Related files — current state:** features/personalization — to be created or extended. R-PERSONALIZATION; align with c-18 edge if applicable.
+- **Potential issues / considerations:** Config-driven; behavioral tracking and variant selection; consent where required.
+- **Verification:** Build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

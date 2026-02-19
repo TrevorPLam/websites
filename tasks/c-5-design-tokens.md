@@ -70,6 +70,12 @@ Add three-layer design token architecture per THEGOAL: packages/config/tokens/ w
 - Verify tokens resolve in a client build
 - Run `pnpm build` for affected packages
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; design token architecture may extend tailwind-theme.css, site.config theme, or new token layer. Config-driven; no breaking changes to current flow.
+- **Potential issues / considerations:** Align with R-DESIGN-TOKENS, DTCG; three-layer tokens (option/decision/component) if adopted; preserve existing theme injection.
+- **Verification:** Build passes; docs updated; tokens integrated per acceptance criteria.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

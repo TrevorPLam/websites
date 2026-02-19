@@ -78,6 +78,12 @@ Four booking-actions tests fail: `confirmBooking`, `cancelBooking`, and `getBook
 
 - Run `pnpm test` — booking-actions tests must pass
 
+## Execution notes
+
+- **Related files — current state:** `packages/features/src/booking/lib/booking-actions.ts` — exists; server actions without verification params. `packages/features/src/booking/lib/__tests__/booking-actions.test.ts` — exists; four tests fail expecting verification.
+- **Potential issues / considerations:** Prefer adding verification (IDOR protection) over changing tests; `confirmBooking`, `cancelBooking`, `getBookingDetails` need verification shape `{ confirmationNumber, email }`; reject or return null on mismatch.
+- **Verification:** `pnpm test` — booking-actions tests must pass.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

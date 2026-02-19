@@ -67,6 +67,12 @@ When @repo/features or @repo/marketing-components builds, it type-checks @repo/u
 
 - Run `pnpm type-check`, `pnpm build`, `pnpm test` to verify
 
+## Execution notes
+
+- **Related files — current state:** `packages/ui/src/components/Toast.tsx` — exists; wraps Sonner; `toast.custom` and `toast.promise` are the two call sites to fix.
+- **Potential issues / considerations:** Sonner 2.0.7 typings use `ReactElement` for `custom`; third argument to `promise` may be unsupported — check `node_modules/sonner` types; preserve existing public `toast` API for consumers (e.g. BookingForm).
+- **Verification:** `pnpm type-check`, `pnpm build`, `pnpm test`.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

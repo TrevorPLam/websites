@@ -57,6 +57,12 @@ Update README, docs/architecture/README.md, and any docs that claim "all page te
 
 - Run `pnpm validate-docs`.
 
+## Execution notes
+
+- **Related files — current state:** `README.md`, `docs/architecture/README.md` — exist; may still say "scaffolded only" or reference NotImplementedPlaceholder. Grep docs for outdated page-templates claims.
+- **Potential issues / considerations:** Align wording with current page-templates (registry + real sections); avoid breaking doc links.
+- **Verification:** `pnpm validate-docs`.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

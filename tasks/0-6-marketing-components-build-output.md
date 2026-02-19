@@ -67,6 +67,12 @@
 
 - Run `pnpm build` to verify
 
+## Execution notes
+
+- **Related files — current state:** `packages/marketing-components/package.json` — build script is `"build": "echo build complete"`. `turbo.json` — pipeline expects outputs; no matching files. Package may be source-only.
+- **Potential issues / considerations:** Either add real build (e.g. tsc emit to dist/) or set package-specific `outputs` in turbo.json (e.g. `[]` or sentinel file); other packages depend on it — imports must still resolve.
+- **Verification:** `pnpm build` completes with no Turbo "no output files found" warning for @repo/marketing-components.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

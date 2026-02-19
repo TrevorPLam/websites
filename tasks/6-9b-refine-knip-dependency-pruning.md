@@ -59,6 +59,12 @@ Refine knip.config.ts for dead code detection; run dependency pruning. Remove un
 
 - Run `pnpm knip`, `pnpm build`, `pnpm test` after changes.
 
+## Execution notes
+
+- **Related files — current state:** `knip.config.ts` (or knip config in package.json) — may exist at root; tune entry/project/ignore for packages and clients. `docs/cleanup/dependency-pruning-report.md` — reference or create.
+- **Potential issues / considerations:** Knip can report false positives; set ignore for generated/spec files; remove unused deps only where safe (check peer deps and transitive use).
+- **Verification:** `pnpm knip`, `pnpm build`, `pnpm test`.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

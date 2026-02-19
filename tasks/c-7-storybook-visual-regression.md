@@ -64,6 +64,12 @@ Set up Storybook and wire visual-regression.yml. THEGOAL [C.7]; visual-regressio
 
 - Run Storybook; run visual-regression workflow; confirm build.
 
+## Execution notes
+
+- **Related files — current state:** Storybook config and visual regression setup — to be added or extended. Align with R-VISUAL-REG; Chromatic or similar if adopted.
+- **Potential issues / considerations:** Storybook for packages/ui and/or marketing-components; baseline capture; CI integration.
+- **Verification:** Visual regression runs; build and tests pass.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

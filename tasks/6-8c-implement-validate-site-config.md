@@ -64,6 +64,12 @@ Implement standalone `validate-site-config` (or `pnpm validate-config`) in tooli
 
 - Run against valid and invalid configs; verify exit codes
 
+## Execution notes
+
+- **Related files — current state:** validate-site-config script — to be created or extended. `scripts/validate-client.ts` — exists; may already validate config; reuse Zod/schema logic if applicable.
+- **Potential issues / considerations:** Load site.config.ts (or .js); use SiteConfig type/schema from @repo/types; exit 0 on valid, 1 on invalid with clear errors.
+- **Verification:** Run against valid and invalid configs; verify exit codes and error output.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

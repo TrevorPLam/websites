@@ -82,6 +82,12 @@ Implement Plop-based scaffolding so `turbo gen new-client` (or equivalent) creat
 
 - Create a test client; run `pnpm validate-client clients/<test>/`; delete test client
 
+## Execution notes
+
+- **Related files — current state:** `turbo/generators/config.ts` — exists as stub (default export with TODO). `turbo.json` — no gen pipeline yet. `clients/starter-template/` — exists; use as copy source.
+- **Potential issues / considerations:** Plop API is CommonJS; ensure `package.json` name and `site.config.ts` id/name are transformed; run `pnpm validate-client clients/<name>/` after generation; no hardcoded industry logic.
+- **Verification:** Create a test client, run `pnpm validate-client clients/<name>/`, delete test client.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

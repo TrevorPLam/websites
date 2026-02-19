@@ -58,6 +58,12 @@ Wire and document scripts/architecture/check-dependency-graph.ts. Detects circul
 
 - Run the wired script; verify it fails on a deliberate violation and passes on clean graph.
 
+## Execution notes
+
+- **Related files — current state:** `scripts/architecture/check-dependency-graph.ts` — exists; currently stub (`console.log('check-dependency-graph: TODO')`). `docs/architecture/dependency-graph.md` — exists. Root package.json — wire script (e.g. script:check-deps).
+- **Potential issues / considerations:** Implement cycle detection and layer violations (clients→clients, packages→clients); exit 1 on violation; document usage in dependency-graph.md.
+- **Verification:** Run script; verify it fails on deliberate violation and passes on clean graph.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

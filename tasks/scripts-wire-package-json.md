@@ -72,6 +72,12 @@ Add scripts to root package.json so the following are runnable via pnpm: archite
 
 - Run each new script; fix or document failures
 
+## Execution notes
+
+- **Related files — current state:** `scripts/architecture/check-dependency-graph.ts` — exists as stub. Other scripts (ci/report-cache-hit-rate, governance/validate-schema-versioning, etc.) — audit for existence. Root `package.json` — add script entries.
+- **Potential issues / considerations:** Use tsx for .ts scripts; consistent naming (e.g. script:check-deps); document in README or docs/architecture.
+- **Verification:** Run each new script; fix or document failures.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved
