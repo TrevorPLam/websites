@@ -6,19 +6,12 @@
 
 import { Container, Section } from '@repo/ui';
 import { cn } from '@repo/utils';
-
-export interface GalleryItem {
-  id: string;
-  src: string;
-  alt: string;
-  caption?: string;
-  href?: string;
-}
+import type { GalleryItem } from '../types';
 
 export interface GalleryGridProps {
   /** Section title */
   title?: string;
-  /** Gallery items */
+  /** Gallery items (shared GalleryItem: id, title, image, description?) */
   items: GalleryItem[];
   /** Columns */
   columns?: 2 | 3 | 4;
@@ -26,12 +19,7 @@ export interface GalleryGridProps {
   className?: string;
 }
 
-export function GalleryGrid({
-  title,
-  items,
-  columns = 3,
-  className,
-}: GalleryGridProps) {
+export function GalleryGrid({ title, items, columns = 3, className }: GalleryGridProps) {
   const gridClasses = cn(
     'grid gap-4',
     columns === 2 && 'grid-cols-1 sm:grid-cols-2',
@@ -48,24 +36,18 @@ export function GalleryGrid({
             const content = (
               <figure>
                 <img
-                  src={item.src}
-                  alt={item.alt}
+                  src={item.image}
+                  alt={item.title}
                   className="aspect-square w-full rounded-lg object-cover"
                 />
-                {item.caption && (
+                {item.description && (
                   <figcaption className="mt-2 text-center text-sm text-muted-foreground">
-                    {item.caption}
+                    {item.description}
                   </figcaption>
                 )}
               </figure>
             );
-            return item.href ? (
-              <a key={item.id} href={item.href} className="block">
-                {content}
-              </a>
-            ) : (
-              <div key={item.id}>{content}</div>
-            );
+            return <div key={item.id}>{content}</div>;
           })}
         </div>
       </Container>

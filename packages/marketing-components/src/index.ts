@@ -18,6 +18,8 @@ export type { TeamDetailedProps } from './team/TeamDetailed';
 // Component families
 export * from './components/Testimonials';
 export * from './components/Gallery';
+export { GalleryGrid } from './gallery';
+export type { GalleryGridProps } from './gallery';
 export * from './components/Pricing';
 export * from './components/Hero';
 export * from './components/CTA';

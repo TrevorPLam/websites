@@ -26,7 +26,9 @@ function getSiteConfig(props: SectionProps): SiteConfig {
 // --- Blog Index Sections ---
 
 function BlogGridAdapter(_props: SectionProps) {
-  return React.createElement(BlogGrid, { posts: [] });
+  return React.createElement(BlogGrid, {
+    posts: [],
+  });
 }
 
 function BlogPaginationAdapter(props: SectionProps) {

@@ -232,8 +232,8 @@ export const VideoEmbed: React.FC<{ url: string; title?: string }> = ({ url, tit
   </div>
 );
 
-export const AudioPlayer: React.FC<{ url: string; title?: string }> = ({ url, title: _title }) => (
-  <audio controls className="w-full">
+export const AudioPlayer: React.FC<{ url: string; title?: string }> = ({ url, title }) => (
+  <audio controls className="w-full" title={title}>
     <source src={url} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>

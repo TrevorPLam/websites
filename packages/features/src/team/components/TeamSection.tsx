@@ -20,7 +20,6 @@ export function TeamSection({
   members = [],
   ...rest
 }: TeamSectionProps) {
-
   if (members.length === 0) return null;
 
   const common = { title, description, members, ...rest };
@@ -36,7 +35,7 @@ export function TeamSection({
             {description && <p className="mb-8 text-muted-foreground">{description}</p>}
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {members.map((member) => (
-                <TeamDetailed key={member.id} member={member} />
+                <TeamDetailed key={member.id} members={[member]} />
               ))}
             </div>
           </Container>

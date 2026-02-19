@@ -25,6 +25,13 @@ interface ServiceItem {
   category?: string;
 }
 
+/** Category shape for ServiceTabs (matches ServiceCategory from marketing-components). */
+interface ServiceCategoryItem {
+  id: string;
+  name: string;
+  services: ServiceItem[];
+}
+
 function getSiteConfig(props: SectionProps): SiteConfig {
   const config = props.siteConfig;
   if (!config || typeof config !== 'object') {
@@ -100,10 +107,29 @@ function ServicesListAdapter(props: SectionProps) {
 
 function ServicesTabsAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
-  const services = getServicesFromConfig(config);
-  if (services.length === 0) return null;
-  const categoryNames = [...new Set(services.map((s) => s.category).filter(Boolean))] as string[];
-  return <ServiceTabs services={services} categories={categoryNames} />;
+  const rawServices = getServicesFromConfig(config);
+  if (rawServices.length === 0) return null;
+  const categoryMap = new Map<string, ServiceItem[]>();
+  for (const s of rawServices) {
+    const cat = s.category ?? 'General';
+    const list = categoryMap.get(cat) ?? [];
+    list.push(s);
+    categoryMap.set(cat, list);
+  }
+  const categories: ServiceCategoryItem[] = Array.from(categoryMap.entries()).map(
+    ([name, services]) => ({
+      id: name.toLowerCase().replace(/\s+/g, '-'),
+      name,
+      services,
+    })
+  );
+  if (categories.length === 0) return null;
+  return (
+    <ServiceTabs
+      services={categories.flatMap((c) => c.services)}
+      categories={categories.map((c) => c.name)}
+    />
+  );
 }
 
 function ServicesAccordionAdapter(props: SectionProps) {
