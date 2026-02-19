@@ -28,15 +28,41 @@ export interface HslColor {
 /**
  * Parse the project HSL format string ("H S% L%") into components.
  * @param hslString - HSL string, e.g. "174 85% 33%"
- * @throws Error if the format is invalid
+ * @throws Error if the format is invalid or values are out of the allowed ranges
  */
 export function parseHsl(hslString: string): HslColor {
-  const match = hslString.trim().match(/^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/);
+  const match = hslString
+    .trim()
+    .match(/^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/);
+
   if (!match) {
-    throw new Error(`Invalid HSL format: "${hslString}". Expected "H S% L%" (e.g. "174 85% 33%")`);
+    throw new Error(
+      `Invalid HSL format: "${hslString}". Expected "H S% L%" (e.g. "174 85% 33%")`,
+    );
   }
-  const [, h, s, l] = match;
-  return { h: Number(h), s: Number(s), l: Number(l) };
+
+  const [, hStr, sStr, lStr] = match;
+  const h = Number(hStr);
+  const s = Number(sStr);
+  const l = Number(lStr);
+
+  if (
+    !Number.isFinite(h) ||
+    !Number.isFinite(s) ||
+    !Number.isFinite(l) ||
+    h < 0 ||
+    h > 360 ||
+    s < 0 ||
+    s > 100 ||
+    l < 0 ||
+    l > 100
+  ) {
+    throw new Error(
+      `Invalid HSL range: "${hslString}". Expected H in [0, 360] and S/L in [0, 100].`,
+    );
+  }
+
+  return { h, s, l };
 }
 
 /**
