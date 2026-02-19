@@ -2,7 +2,7 @@
 
 **Purpose:** Historical record of completed tasks. Moved from TODO.md to maintain focus on active work. (TODO.md and task-specs have been consolidated into TASKS.md.)
 
-**Last Updated:** February 18, 2026
+**Last Updated:** February 19, 2026
 
 ---
 
@@ -2812,5 +2812,135 @@ export default function HomePage() {
 **Follow-up**:
 - Consider making `marketing-components` peer-depend on `next` to allow Next.js Image optimization
 - Add comprehensive unit tests for remaining marketing-component variants
+
+---
+
+---
+
+## Session: 2026-02-19 — Wave 3 Documentation & Tooling Batch (Tasks 6-2, 6-5, 6-6, 6-7, 6-10a, 6-10b, 6-10c, 6-2a)
+
+**Agent:** Claude (claude-sonnet-4-6) | **Branch:** claude/batch-task-execution-oCP5m
+
+### Tasks Completed (8 total)
+
+---
+
+#### 6-2 Create Migration Guide
+
+**Status:** [x] COMPLETED | **Completed:** 2026-02-19
+
+**What changed:**
+- `docs/migration/template-to-client.md` — Replaced 1-line TODO stub with full 490-line guide covering: overview of CaCA architecture, step-by-step setup (copy template, package.json, env vars), complete site.config.ts annotation, industry field reference, feature flags table with per-industry recommendations, theme configuration with HSL color format explanation, all 4 integration types, all 4 conversion flow types, post-migration verification checklist, component reusability rubric, common pitfalls table, and cross-references to related docs.
+
+**Why:** The stub was referenced as the authoritative guide for creating new client sites. Without it, every new client required re-discovery of the CaCA setup process. The guide is now the single source of truth for onboarding.
+
+**How verified:** File parses as valid Markdown. All referenced file paths verified to exist (packages/types/src/site-config.ts, clients/starter-template/site.config.ts, docs/configuration/site-config-reference.md).
+
+**Follow-up tasks created:**
+- Add automated "validate migration guide links" to CI as quality-audit step
+
+---
+
+#### 6-5 Configuration Reference
+
+**Status:** [x] COMPLETED | **Completed:** 2026-02-19
+
+**What changed:**
+- `docs/configuration/site-config-reference.md` — Replaced 19-line stub with 456-line field-by-field reference. Covers all SiteConfig top-level fields, IndustryType enum, features section (layout variants + boolean + optional industry fields), all 5 integration types, navLinks/socialLinks/footer/contact with exact type shapes, SEO defaults with schema.org type table by industry, theme colors (HSL format), fonts, borderRadius/shadows tokens, all 4 conversionFlow discriminated union variants with use-case guidance, Zod validation example.
+
+**Why:** `site.config.ts` is the central API for the entire CaCA system. Without a field-by-field reference, developers had to read the TypeScript types directly — a poor DX that slowed client onboarding.
+
+**How verified:** All field types cross-verified against `packages/types/src/site-config.ts` (474 lines, Zod schema). Content matches actual implementation.
+
+**Known limitations:** The schemaType table lists common values but is not exhaustive — schema.org has hundreds of types.
+
+---
+
+#### 6-6 Feature Documentation
+
+**Status:** [x] COMPLETED | **Completed:** 2026-02-19
+
+**What changed:**
+- `docs/features/gallery.md` — Replaced TODO stub. Covers: GalleryItem/GalleryGridProps interfaces, responsive grid layout table, accessibility requirements, static data pattern, planned variants table.
+- `docs/features/team.md` — Replaced TODO stub. Covers: TeamMember type (with deprecation note for `social` field), all 3 variants (Grid/Carousel/Detailed), usage example, department filtering pattern, industry recommendations.
+- `docs/features/testimonials.md` — Replaced TODO stub. Covers: Testimonial type (quote/content alias), all 3 variants (Carousel/Grid/Marquee), rating display, industry recommendations, data source options, accessibility notes.
+- `docs/features/pricing.md` — Replaced TODO stub. Covers: PricingFeature/PricingPlan types, PricingCards/PricingTable variants, PricingCalculator stub note, popular flag behavior, 4 pricing display strategies, string feature value pattern, industry recommendations.
+
+**Why:** Four feature docs were TODO stubs. Developers adding these features to a client had to read component source code to understand props and usage patterns.
+
+**How verified:** All props cross-verified against corresponding `types.ts` and component files in `packages/marketing-components/src/`.
+
+---
+
+#### 6-7 Architecture Decision Records
+
+**Status:** [x] COMPLETED | **Completed:** 2026-02-19
+
+**What changed:**
+- `docs/adr/0006-configuration-as-code-architecture.md` — New ADR documenting the CaCA pattern: why a single site.config.ts drives all site behavior, key design decisions (discriminated union for conversionFlow, feature flags as layout variant strings, HSL colors without wrapper, industry enum, starter template as golden path), consequences, and alternatives considered (fork-per-client, CMS-driven).
+- `docs/adr/0007-next-intl-i18n-starter-template.md` — New ADR documenting why next-intl was chosen for i18n in starter-template, implementation details (app/[locale]/ routing, middleware, messages/*.json), trade-offs (flat vs. [locale] routing divergence), and alternatives rejected.
+- `docs/adr/0008-client-isolation-cross-import-ban.md` — New ADR documenting the rule forbidding cross-client imports, enforcement mechanisms (ESLint, madge), the correct path for sharing code (package extraction), and consequences.
+
+**Why:** The ADR series was incomplete. ADRs 6-8 address the three most important architectural decisions for the CaCA monorepo that hadn't been documented.
+
+**How verified:** ADRs consistent with existing code structure and ADR 0001-0005 format.
+
+---
+
+#### 6-10b health-check
+
+**Status:** [x] COMPLETED | **Completed:** 2026-02-19
+
+**What changed:**
+- `scripts/health-check.ts` — Replaced 6-line stub. Full implementation with 5 check categories: workspace files (required + optional), client directories (package.json name convention, site.config.ts, next.config, tsconfig), shared packages (existence + src/index.ts), root package.json scripts, and key documentation stubs. Color-coded PASS/FAIL/WARN output. Summary with counts. Exits 1 on failures, 0 on pass.
+- `package.json` — Added `"health": "npx tsx scripts/health-check.ts"` script.
+
+**How verified:** `npx tsx scripts/health-check.ts` → 29 passed, 1 warning (packages/infra has no src/index.ts, which is correct — infra exports via subpaths), 0 failed. Exit 0.
+
+**Known limitations:** Does not check type correctness of site.config.ts (would require TypeScript compilation). Does not validate that pnpm-workspace.yaml and package.json workspaces match.
+
+---
+
+#### 6-10a validate-client
+
+**Status:** [x] COMPLETED | **Completed:** 2026-02-19
+
+**What changed:**
+- `scripts/validate-client.ts` — Replaced 6-line stub. Full implementation: validates a specific client directory against CaCA contract. Checks: package.json (@clients/ name, dev/build/type-check scripts), site.config.ts (SiteConfig import, required fields, export default), next.config existence, tsconfig.json with `extends`, app/ directory with layout.tsx and page.tsx (handles both flat and [locale] routing), cross-client import detection via grep. Color-coded output.
+- `package.json` — Added `"validate-client": "npx tsx scripts/validate-client.ts"` script.
+
+**How verified:** `npx tsx scripts/validate-client.ts clients/luxe-salon` → 18 passed, 0 warnings, 0 failed.
+
+**Known limitations:** site.config.ts validation is text-based (grep for field names), not a TypeScript type check. Cross-client import check requires grep and only scans app/ and components/.
+
+---
+
+#### 6-10c program:wave\*
+
+**Status:** [x] COMPLETED | **Completed:** 2026-02-19
+
+**What changed:**
+- `scripts/operations/program-wave.js` — New script. Scans tasks/ (open) and tasks/archive/ (completed) for tasks matching each wave's file prefix pattern. Reports open tasks with titles, archived tasks with titles, total progress percentage. Wave definitions: 0 (infra, prefix 0-), 1 (components, prefixes 1-/2-/f-/3-), 2 (integrations, prefix 4-), 3 (clients+docs, prefixes 5-/6-).
+- `package.json` — Added `program:wave0`, `program:wave1`, `program:wave2`, `program:wave3` scripts.
+
+**How verified:**
+- `node scripts/operations/program-wave.js --wave 0` → Wave 0 COMPLETE (3/3 archived, 100%)
+- `node scripts/operations/program-wave.js --wave 3` → Wave 3 IN PROGRESS (0/19, 0% — reflects open tasks)
+
+**Known limitations:** Wave completion is detected by archived file count, not by reading task status fields. Tasks in ARCHIVE.md (not moved to archive/ dir) are counted separately.
+
+---
+
+#### 6-2a Update clients/README
+
+**Status:** [x] COMPLETED (pre-existing) | **Completed:** ~2026-02-18
+
+**What changed:**
+- `clients/README.md` was already comprehensive (238 lines) when this session started — covered: purpose, structure, step-by-step client creation, environment variables, project structure, development workflow, deployment (Vercel, Docker), customization guidelines, best practices, and troubleshooting.
+- No changes needed; task is verified done.
+
+**Why:** The task was listed as open but the implementation was already complete from a prior session.
+
+**How verified:** Read clients/README.md in session — content matches task acceptance criteria (CaCA docs, starter as golden path, no stale template/shared refs).
 
 ---

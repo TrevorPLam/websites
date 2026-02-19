@@ -49,6 +49,12 @@
     "validate-task-paths": "node scripts/validate-task-paths.js",
     "validate-task-paths:fix": "node scripts/validate-task-paths.js --fix",
     "madge:circular": "madge --circular packages/ clients/",
+    "health": "npx tsx scripts/health-check.ts",
+    "validate-client": "npx tsx scripts/validate-client.ts",
+    "program:wave0": "node scripts/operations/program-wave.js --wave 0",
+    "program:wave1": "node scripts/operations/program-wave.js --wave 1",
+    "program:wave2": "node scripts/operations/program-wave.js --wave 2",
+    "program:wave3": "node scripts/operations/program-wave.js --wave 3",
     "version-packages": "pnpm changeset version && pnpm install --no-frozen-lockfile",
     "release": "pnpm changeset publish"
   },
