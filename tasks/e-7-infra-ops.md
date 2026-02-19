@@ -66,6 +66,12 @@ Add packages/infra/ops/ with queue-policy.ts for queue fairness, retry budgets, 
 - Unit tests for policy logic
 - Run `pnpm test`, `pnpm type-check`
 
+## Execution notes
+
+- **Related files — current state:** infra/ops (Queue Policy) — to be created or extended. R-OPS; operational governance, retry/timeout policies.
+- **Potential issues / considerations:** Config-driven; document in docs; align with THEGOAL if cited.
+- **Verification:** Build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

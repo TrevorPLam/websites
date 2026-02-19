@@ -53,6 +53,12 @@ Add docs/reusability-rubric.md. Task 6-1 referenced this; defines when a compone
 
 - Run `pnpm validate-docs`.
 
+## Execution notes
+
+- **Related files — current state:** docs/reusability-rubric.md or similar — to be created. Reusability criteria for components/features.
+- **Potential issues / considerations:** Run `pnpm validate-docs` after creating doc; follow doc standards (file header, etc.).
+- **Verification:** Documentation created; `pnpm validate-docs` passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

@@ -59,6 +59,12 @@ Add event-contract.ts to packages/integrations/analytics/ per THEGOAL. Defines c
 
 - Unit tests for event types; build pass.
 
+## Execution notes
+
+- **Related files — current state:** Analytics event taxonomy — define in docs or types; wire into @repo/integrations-analytics if present.
+- **Potential issues / considerations:** Consistent event names and payloads; document in docs/ or ADR; align with C.12 spec.
+- **Verification:** Taxonomy documented; build passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

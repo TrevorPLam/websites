@@ -67,6 +67,12 @@ Add packages/types/src/compliance-packs.ts (industry compliance overlays) and pa
 - Unit tests for renderers
 - Run `pnpm test`, `pnpm type-check`
 
+## Execution notes
+
+- **Related files — current state:** features/compliance, types/compliance-packs — to be created or extended. R-COMPLIANCE; industry compliance (e.g. HIPAA), legal disclaimers.
+- **Potential issues / considerations:** Config-driven; no breaking changes; optional compliance packs per industry.
+- **Verification:** Build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

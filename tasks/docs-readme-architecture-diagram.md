@@ -54,6 +54,12 @@ Update README.md with final architecture diagram per THEGOAL [6.3]. High-level v
 
 - View README in editor or GitHub; confirm diagram renders.
 
+## Execution notes
+
+- **Related files — current state:** README (root or docs) — update with architecture diagram; diagram asset may be in docs/assets or generated.
+- **Potential issues / considerations:** Keep diagram in sync with dependency-graph or module-boundaries; run validate-docs.
+- **Verification:** README updated; diagram present; validate-docs passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

@@ -65,6 +65,12 @@ Add packages/infra/edge/ with tenant-experiment-context.ts for edge variant sele
 
 - Unit tests where possible; edge context may need integration tests
 
+## Execution notes
+
+- **Related files — current state:** infra/edge (Edge Middleware Primitives) — to be created or extended. R-EDGE; align with docs-c18-edge-personalization.
+- **Potential issues / considerations:** Next.js middleware; personalization/variant selection at edge; document in docs.
+- **Verification:** Build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

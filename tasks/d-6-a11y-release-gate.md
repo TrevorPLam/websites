@@ -59,6 +59,12 @@ Implement or document a11y release gate per docs/accessibility/release-a11y-gate
 
 - Run validate-docs; optionally run a11y checks per doc.
 
+## Execution notes
+
+- **Related files — current state:** a11y release gate — CI step or script; axe-core, WCAG 2.2 AA; reference docs/accessibility where present.
+- **Potential issues / considerations:** Gate can block release on a11y failures; document in CI and docs.
+- **Verification:** Gate runs in CI or locally; build passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

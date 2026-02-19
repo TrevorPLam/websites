@@ -54,6 +54,12 @@ Add docs/architecture/package-management-policy.md per THEGOAL [C.2]. Documents 
 
 - Run `pnpm validate-docs`.
 
+## Execution notes
+
+- **Related files — current state:** docs/package-management-policy.md or similar — to be created. Package management, pnpm, version catalog.
+- **Potential issues / considerations:** Align with CLAUDE.md (pnpm 10.29.2, catalog); run validate-docs.
+- **Verification:** Doc created; `pnpm validate-docs` passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

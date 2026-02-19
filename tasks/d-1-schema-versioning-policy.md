@@ -57,6 +57,12 @@ Wire scripts/governance/validate-schema-versioning.ts. Document schema version c
 
 - Run script; run pnpm build.
 
+## Execution notes
+
+- **Related files — current state:** governance/validate-schema-versioning or similar script — see scripts-wire; schema versioning policy doc — to be created or updated.
+- **Potential issues / considerations:** Wire script via scripts-wire-package-json; document policy in docs/.
+- **Verification:** Script runs; docs complete; build passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

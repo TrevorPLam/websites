@@ -54,6 +54,12 @@ Add docs/architecture/edge-personalization.md per THEGOAL [C.18]. Documents edge
 
 - Run `pnpm validate-docs`.
 
+## Execution notes
+
+- **Related files — current state:** docs/edge-personalization.md or similar — to be created. Edge personalization; align with c-18, R-EDGE.
+- **Potential issues / considerations:** Cross-reference c-18 task; run validate-docs.
+- **Verification:** Doc created; `pnpm validate-docs` passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

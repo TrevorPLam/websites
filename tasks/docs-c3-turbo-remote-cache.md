@@ -54,6 +54,12 @@ Add docs/ci/turbo-remote-cache.md per THEGOAL [C.3]. Documents Turbo remote cach
 
 - Run `pnpm validate-docs`.
 
+## Execution notes
+
+- **Related files — current state:** docs/turbo-remote-cache.md or similar — to be created. Turborepo remote cache setup.
+- **Potential issues / considerations:** Align with turbo.json and CI; run validate-docs.
+- **Verification:** Doc created; `pnpm validate-docs` passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

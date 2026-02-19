@@ -58,6 +58,12 @@ Verify sbom-generation.yml and dependency-integrity.yml are effective. Document 
 
 - Run workflows; confirm artifacts; run validate-docs.
 
+## Execution notes
+
+- **Related files — current state:** SBOM/dependency integrity — CI (e.g. quality-audit job) or script; Anchore or similar if already in use.
+- **Potential issues / considerations:** Wire to scripts if standalone; document in docs; non-blocking audit per CLAUDE.md.
+- **Verification:** SBOM generation runs; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

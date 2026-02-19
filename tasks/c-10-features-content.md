@@ -74,6 +74,12 @@ Add packages/features/src/content/ with content-provider.ts (unified content int
 - Unit tests for content-provider and MDX adapter
 - Run `pnpm test`, `pnpm type-check`
 
+## Execution notes
+
+- **Related files — current state:** features/content (CMS abstraction) — to be created or extended. R-CMS; content adapters, MDX, canonical URLs.
+- **Potential issues / considerations:** Config-driven; adapter pattern for CMS backends; no breaking changes to current pages.
+- **Verification:** Build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

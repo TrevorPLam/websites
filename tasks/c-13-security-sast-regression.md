@@ -59,6 +59,12 @@ Ensure security-sast.yml and secret-scan.yml are effective. Add infra/__tests__/
 
 - Run workflows; run regression tests; build pass.
 
+## Execution notes
+
+- **Related files — current state:** SAST/regression security — CI step or script; R-SECURITY-ADV; threat model references.
+- **Potential issues / considerations:** SSRF/XSS/injection checks; regression tests; document in docs or CI workflow.
+- **Verification:** Security checks run in CI or locally; build passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

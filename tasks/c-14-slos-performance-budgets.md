@@ -60,6 +60,12 @@ Wire scripts/perf/validate-budgets.ts as CI gate. Define SLOs (LCP, INP, CLS) an
 
 - Run script; confirm it passes/fails as expected; build pass.
 
+## Execution notes
+
+- **Related files — current state:** SLOs and performance budgets — docs and/or CI (e.g. perf/validate-budgets script). R-PERF; LCP, INP, CLS, bundle budgets.
+- **Potential issues / considerations:** Wire to scripts-wire task; document in docs/architecture or reliability.
+- **Verification:** Budget checks run; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved
