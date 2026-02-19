@@ -6,8 +6,7 @@
  * Responsive grid layout for displaying services in cards.
  */
 
-import Image from 'next/image';
-import { Button, Card, Container, Section } from '@repo/ui';
+import { Card, Container, Section } from '@repo/ui';
 import { cn } from '@repo/utils';
 import type { Service } from './types';
 
@@ -75,12 +74,11 @@ export function ServiceGrid({
             <Card key={service.id} variant="service" className="flex h-full flex-col overflow-hidden">
               {service.image && (
                 <div className="relative aspect-video w-full overflow-hidden">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={service.image.src}
                     alt={service.image.alt}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-300 hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               )}
@@ -105,15 +103,16 @@ export function ServiceGrid({
                     </p>
                   )}
                   {service.cta && (
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      asChild
+                    <a
+                      href={service.cta.href}
+                      className={cn(
+                        'inline-flex w-full items-center justify-center rounded-md border border-border',
+                        'bg-transparent px-4 py-2 text-sm font-medium text-foreground',
+                        'hover:bg-accent hover:text-accent-foreground transition-colors'
+                      )}
                     >
-                      <a href={service.cta.href}>
-                        {service.cta.label}
-                      </a>
-                    </Button>
+                      {service.cta.label}
+                    </a>
                   )}
                 </div>
               </div>

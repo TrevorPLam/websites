@@ -27,7 +27,8 @@ function BookingFormAdapter(props: SectionProps) {
     return null;
   }
   const bookingConfig = createBookingConfig(flow);
-  const prefilledService = props.searchParams?.service as string | undefined;
+  const searchParams = (props.searchParams ?? {}) as Record<string, string | string[] | undefined>;
+  const prefilledService = searchParams['service'] as string | undefined;
   return React.createElement(BookingForm, {
     config: bookingConfig,
     prefilledService,

@@ -8,19 +8,19 @@
 import * as React from 'react';
 import type { SiteConfig } from '@repo/types';
 import {
-  LocationSection,
-  MenuSection,
+  LocationList,
+  MenuList,
   PortfolioGrid,
   CourseGrid,
-  ResourceLibrary,
+  ResourceGrid,
   ComparisonTable,
-  FilterSystem,
+  FilterBar,
   SearchBar,
-  SocialProof,
+  SocialProofStack,
   VideoEmbed,
   AudioPlayer,
-  InteractiveWidget,
-  GenericWidget,
+  AccordionContent,
+  WidgetCard,
 } from '@repo/marketing-components';
 import { registerSection } from '../registry';
 import type { SectionProps } from '../types';
@@ -36,46 +36,45 @@ function getSiteConfig(props: SectionProps): SiteConfig {
 function LocationAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.location) return null;
-  return React.createElement(LocationSection, {
-    address: config.contact.address,
-    hours: config.contact.hours,
+  return React.createElement(LocationList, {
+    locations: [],
   });
 }
 
 function MenuAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.menu) return null;
-  return React.createElement(MenuSection, { name: config.name });
+  return React.createElement(MenuList, { categories: [] });
 }
 
 function PortfolioAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.portfolio) return null;
-  return React.createElement(PortfolioGrid, { title: 'Our Portfolio' });
+  return React.createElement(PortfolioGrid, { title: 'Our Portfolio', items: [] });
 }
 
 function CourseAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.course) return null;
-  return React.createElement(CourseGrid, { title: 'Available Courses' });
+  return React.createElement(CourseGrid, { title: 'Available Courses', courses: [] });
 }
 
 function ResourceAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.resource) return null;
-  return React.createElement(ResourceLibrary, { title: 'Resources' });
+  return React.createElement(ResourceGrid, { title: 'Resources', resources: [] });
 }
 
 function ComparisonAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.comparison) return null;
-  return React.createElement(ComparisonTable, { title: 'Compare Plans' });
+  return React.createElement(ComparisonTable, { title: 'Compare Plans', columns: [], rows: [] });
 }
 
 function FilterAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.filter) return null;
-  return React.createElement(FilterSystem, {});
+  return React.createElement(FilterBar, { options: [] });
 }
 
 function SearchAdapter(props: SectionProps) {
@@ -87,31 +86,31 @@ function SearchAdapter(props: SectionProps) {
 function SocialProofAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.socialProof) return null;
-  return React.createElement(SocialProof, {});
+  return React.createElement(SocialProofStack, { items: [] });
 }
 
 function VideoAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.video) return null;
-  return React.createElement(VideoEmbed, {});
+  return React.createElement(VideoEmbed, { src: '' });
 }
 
 function AudioAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.audio) return null;
-  return React.createElement(AudioPlayer, {});
+  return React.createElement(AudioPlayer, { src: '' });
 }
 
 function InteractiveAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.interactive) return null;
-  return React.createElement(InteractiveWidget, {});
+  return React.createElement(AccordionContent, { items: [] });
 }
 
 function WidgetAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.widget) return null;
-  return React.createElement(GenericWidget, {});
+  return React.createElement(WidgetCard, { children: null });
 }
 
 /** Register all industry sections. Called once on module load. */

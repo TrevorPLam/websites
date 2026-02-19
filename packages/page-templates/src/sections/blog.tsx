@@ -26,33 +26,33 @@ function getSiteConfig(props: SectionProps): SiteConfig {
 // --- Blog Index Sections ---
 
 function BlogGridAdapter(props: SectionProps) {
-  const searchParams = props.searchParams ?? {};
+  const searchParams = (props.searchParams ?? {}) as Record<string, string | string[] | undefined>;
   const page = Number(searchParams['page'] ?? 1);
-  const category = searchParams['category'] as string | undefined;
   return React.createElement(BlogGrid, {
     posts: [],
-    currentPage: page,
-    category,
+    pagination: {
+      currentPage: page,
+      totalPages: 1,
+      onPageChange: () => {},
+    },
   });
 }
 
 function BlogPaginationAdapter(props: SectionProps) {
-  const searchParams = props.searchParams ?? {};
+  const searchParams = (props.searchParams ?? {}) as Record<string, string | string[] | undefined>;
   const page = Number(searchParams['page'] ?? 1);
   return React.createElement(BlogPagination, {
     currentPage: page,
     totalPages: 1,
-    basePath: '/blog',
+    onPageChange: () => {},
   });
 }
 
 // --- Blog Post Sections ---
 
-function BlogPostContentAdapter(props: SectionProps) {
-  const searchParams = props.searchParams ?? {};
-  const slug = searchParams['slug'] as string | undefined;
+function BlogPostContentAdapter(_props: SectionProps) {
   return React.createElement(BlogPostContent, {
-    slug: slug ?? '',
+    content: '',
   });
 }
 
@@ -63,8 +63,8 @@ function BlogRelatedPostsAdapter(_props: SectionProps) {
 function BlogCTAAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   return React.createElement(CTASection, {
-    headline: `Stay updated with ${config.name}`,
-    subheadline: 'Subscribe to our newsletter for the latest updates.',
+    title: `Stay updated with ${config.name}`,
+    description: 'Subscribe to our newsletter for the latest updates.',
     primaryCta: { label: 'Contact Us', href: '/contact' },
   });
 }

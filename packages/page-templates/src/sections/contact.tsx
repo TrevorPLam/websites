@@ -7,9 +7,16 @@
  */
 
 import type { SiteConfig } from '@repo/types';
-import { ContactForm } from '@repo/features';
+import { ContactForm, createContactConfig } from '@repo/features';
+import type { ContactSubmissionHandler } from '@repo/features';
 import { registerSection } from '../registry';
 import type { SectionProps } from '../types';
+
+/** Placeholder submission handler — clients override with real server action. */
+const defaultContactHandler: ContactSubmissionHandler = async (_data, _metadata) => ({
+  success: true,
+  message: 'Thank you for your message!',
+});
 
 function getSiteConfig(props: SectionProps): SiteConfig {
   const config = props.siteConfig;
@@ -21,25 +28,17 @@ function getSiteConfig(props: SectionProps): SiteConfig {
 
 function ContactFormAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
+  const contactConfig = createContactConfig({
+    successMessage: `Thank you for contacting ${config.name}! We'll be in touch soon.`,
+  });
   return ContactForm({
-    businessName: config.name,
-    address: config.address ?? undefined,
-    phone: config.phone ?? undefined,
-    email: config.email ?? undefined,
+    config: contactConfig,
+    onSubmit: defaultContactHandler,
   });
 }
 
-function ContactInfoAdapter(props: SectionProps) {
-  const config = getSiteConfig(props);
-  // Render business info section
-  const { name, address, phone, email } = config;
-  const items: Array<{ label: string; value: string }> = [];
-  if (address) items.push({ label: 'Address', value: address });
-  if (phone) items.push({ label: 'Phone', value: phone });
-  if (email) items.push({ label: 'Email', value: email });
-
-  const { createElement: h } = await import('react').catch(() => ({ createElement: (tag: string, props: Record<string, unknown>, ...children: unknown[]) => ({ tag, props, children }) }));
-  // Fallback: return null — ContactForm handles all info
+function ContactInfoAdapter(_props: SectionProps) {
+  // ContactForm handles all business info display via config
   return null;
 }
 

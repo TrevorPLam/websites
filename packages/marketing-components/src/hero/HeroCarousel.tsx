@@ -104,7 +104,7 @@ export function HeroCarousel({
                   )}
                   {slide.cta && (
                     <div className="mt-6">
-                      <HeroCTAButton cta={slide.cta} />
+                      <HeroCTAButton {...slide.cta} />
                     </div>
                   )}
                 </Container>
