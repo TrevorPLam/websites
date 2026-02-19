@@ -82,7 +82,7 @@ export async function processDLQEntry(entryId: string): Promise<DLQEntry | null>
   const entry = dlqStore[index];
   dlqStore.splice(index, 1);
 
-  return entry;
+  return entry ?? null;
 }
 
 /**

@@ -44,7 +44,7 @@ export * from './security/rate-limit';
 export * from './security/request-validation';
 
 // Tenant Context Module (Task security-2 - COMPLETED)
-export * from './auth/tenant-context';
+export * from './src/auth/tenant-context';
 
 // [TRACE:BLOCK=packages.infra.exports.middleware]
 // [FEAT:MIDDLEWARE]

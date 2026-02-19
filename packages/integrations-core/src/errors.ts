@@ -28,7 +28,9 @@ export class IntegrationError extends Error {
   ) {
     super(message);
     this.name = 'IntegrationError';
-    Error.captureStackTrace(this, IntegrationError);
+    if ((Error as any).captureStackTrace) {
+      (Error as any).captureStackTrace(this, IntegrationError);
+    }
   }
 
   /**

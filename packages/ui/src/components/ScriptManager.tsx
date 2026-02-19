@@ -19,10 +19,20 @@
 
 'use client';
 
-import Script from 'next/script';
 import * as React from 'react';
 import { useConsent } from '../hooks/useConsent';
 import type { ConsentState } from '../contexts/ConsentContext';
+
+// Accept Script component as prop to avoid direct Next.js dependency
+// Consumers must pass the framework-specific Script (e.g., next/script)
+export interface ScriptComponentProps {
+  src?: string;
+  strategy?: 'afterInteractive' | 'lazyOnload' | 'beforeInteractive';
+  id?: string;
+  onLoad?: () => void;
+  onError?: () => void;
+  [key: string]: unknown;
+}
 
 export interface ScriptConfig {
   id: string;
@@ -35,6 +45,7 @@ export interface ScriptConfig {
 }
 
 interface ScriptManagerProps {
+  Script: React.ComponentType<ScriptComponentProps>;
   scripts: ScriptConfig[];
 }
 
@@ -80,7 +91,7 @@ function shouldLoadScript(script: ScriptConfig, consent: ConsentState): boolean 
  * />
  * ```
  */
-export function ScriptManager({ scripts }: ScriptManagerProps) {
+export function ScriptManager({ Script, scripts }: ScriptManagerProps) {
   const consent = useConsent();
 
   const scriptsToLoad = React.useMemo(

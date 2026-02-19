@@ -49,10 +49,9 @@ export function cssVarName(category: string, key: string): string {
  * tokenCategoryToCSS('colors', { primary: '174 85% 33%' })
  * // → '--dt-colors-primary: 174 85% 33%;'
  */
-function tokenCategoryToCSS(
-  category: string,
-  tokens: Record<string, string>
-): string {
+type TokenMap = Record<string, string | undefined>;
+
+function tokenCategoryToCSS(category: string, tokens: TokenMap): string {
   return Object.entries(tokens)
     .filter(([, v]) => v !== undefined && v !== '')
     .map(([key, value]) => `  ${cssVarName(category, key)}: ${value};`)
@@ -75,17 +74,15 @@ export function tokensToCSSVars(
   mode: 'light' | 'dark' = 'light',
   selector = ':root'
 ): string {
-  const colors =
-    mode === 'dark'
-      ? { ...tokens.colors, ...tokens.darkColors }
-      : tokens.colors;
+  const colors: TokenMap =
+    mode === 'dark' ? { ...tokens.colors, ...tokens.darkColors } : tokens.colors;
 
   const sections = [
-    tokenCategoryToCSS('colors', colors as Record<string, string>),
-    tokenCategoryToCSS('radius', tokens.radius),
-    tokenCategoryToCSS('shadows', tokens.shadows),
-    tokenCategoryToCSS('typography', tokens.typography),
-    tokenCategoryToCSS('animation', tokens.animation),
+    tokenCategoryToCSS('colors', colors),
+    tokenCategoryToCSS('radius', tokens.radius as TokenMap),
+    tokenCategoryToCSS('shadows', tokens.shadows as TokenMap),
+    tokenCategoryToCSS('typography', tokens.typography as TokenMap),
+    tokenCategoryToCSS('animation', tokens.animation as TokenMap),
   ].filter(Boolean);
 
   return `${selector} {\n${sections.join('\n')}\n}`;
@@ -103,14 +100,12 @@ export function tokensToStyleObject(
   tokens: DesignTokens,
   mode: 'light' | 'dark' = 'light'
 ): Record<string, string> {
-  const colors =
-    mode === 'dark'
-      ? { ...tokens.colors, ...tokens.darkColors }
-      : tokens.colors;
+  const colors: TokenMap =
+    mode === 'dark' ? { ...tokens.colors, ...tokens.darkColors } : tokens.colors;
 
   const result: Record<string, string> = {};
 
-  const add = (category: string, map: Record<string, string>) => {
+  const add = (category: string, map: TokenMap) => {
     for (const [key, value] of Object.entries(map)) {
       if (value !== undefined && value !== '') {
         result[cssVarName(category, key)] = value;
@@ -118,11 +113,11 @@ export function tokensToStyleObject(
     }
   };
 
-  add('colors', colors as Record<string, string>);
-  add('radius', tokens.radius);
-  add('shadows', tokens.shadows);
-  add('typography', tokens.typography);
-  add('animation', tokens.animation);
+  add('colors', colors);
+  add('radius', tokens.radius as TokenMap);
+  add('shadows', tokens.shadows as TokenMap);
+  add('typography', tokens.typography as TokenMap);
+  add('animation', tokens.animation as TokenMap);
 
   return result;
 }

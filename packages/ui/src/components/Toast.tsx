@@ -47,12 +47,10 @@ export type PromiseToastOptions = Omit<ExternalToast, 'description'>;
 // toast.promise is included for async operation feedback patterns.
 export const toast = {
   /** Show a success notification (green). */
-  success: (message: string, options?: ToastOptions) =>
-    sonnerToast.success(message, options),
+  success: (message: string, options?: ToastOptions) => sonnerToast.success(message, options),
 
   /** Show an error notification (red). */
-  error: (message: string, options?: ToastOptions) =>
-    sonnerToast.error(message, options),
+  error: (message: string, options?: ToastOptions) => sonnerToast.error(message, options),
 
   /** Show a warning notification (amber). Maps to Sonner's warning if available, else info. */
   warning: (message: string, options?: ToastOptions) =>
@@ -61,15 +59,13 @@ export const toast = {
       : sonnerToast(message, { ...options, className: 'toast-warning' }),
 
   /** Show an info notification (blue). */
-  info: (message: string, options?: ToastOptions) =>
-    sonnerToast.info(message, options),
+  info: (message: string, options?: ToastOptions) => sonnerToast.info(message, options),
 
   /** Show a loading spinner notification. Returns the toast id for later dismissal. */
-  loading: (message: string, options?: ToastOptions) =>
-    sonnerToast.loading(message, options),
+  loading: (message: string, options?: ToastOptions) => sonnerToast.loading(message, options),
 
   /** Show a custom JSX notification. */
-  custom: (jsx: (id: string | number) => React.ReactNode, options?: ToastOptions) =>
+  custom: (jsx: (id: string | number) => React.ReactElement, options?: ToastOptions) =>
     sonnerToast.custom(jsx, options),
 
   /**

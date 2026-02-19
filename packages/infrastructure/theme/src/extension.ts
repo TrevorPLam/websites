@@ -46,17 +46,18 @@ export interface ThemeVariant {
  *   colors: { primary: '262 83% 58%' },
  * });
  */
-export function extendTokens(
-  base: DesignTokens,
-  override: TokenOverride
-): DesignTokens {
+function mergeCategory<T>(base: T, override?: Partial<T>): T {
+  return { ...base, ...override } as T;
+}
+
+export function extendTokens(base: DesignTokens, override: TokenOverride): DesignTokens {
   return {
-    colors: { ...base.colors, ...override.colors },
-    darkColors: { ...base.darkColors, ...override.darkColors },
-    radius: { ...base.radius, ...override.radius },
-    shadows: { ...base.shadows, ...override.shadows },
-    typography: { ...base.typography, ...override.typography },
-    animation: { ...base.animation, ...override.animation },
+    colors: mergeCategory(base.colors, override.colors),
+    darkColors: mergeCategory(base.darkColors, override.darkColors),
+    radius: mergeCategory(base.radius, override.radius),
+    shadows: mergeCategory(base.shadows, override.shadows),
+    typography: mergeCategory(base.typography, override.typography),
+    animation: mergeCategory(base.animation, override.animation),
   };
 }
 
@@ -67,14 +68,8 @@ export function extendTokens(
  * @example
  * const finalTheme = mergeTokens(DEFAULT_TOKENS, brandOverride, clientOverride);
  */
-export function mergeTokens(
-  base: DesignTokens,
-  ...overrides: TokenOverride[]
-): DesignTokens {
-  return overrides.reduce(
-    (acc, override) => extendTokens(acc, override),
-    base
-  );
+export function mergeTokens(base: DesignTokens, ...overrides: TokenOverride[]): DesignTokens {
+  return overrides.reduce<DesignTokens>((acc, override) => extendTokens(acc, override), base);
 }
 
 /**

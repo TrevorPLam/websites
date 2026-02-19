@@ -20,12 +20,7 @@
 import { withRetry, type RetryOptions } from './retry';
 import { CircuitBreaker, type CircuitBreakerOptions } from './circuit-breaker';
 import { addToDLQ } from './dlq';
-import {
-  IntegrationError,
-  RateLimitError,
-  NetworkError,
-  CircuitBreakerOpenError,
-} from './errors';
+import { IntegrationError, RateLimitError, NetworkError, CircuitBreakerOpenError } from './errors';
 
 export interface ResilientHttpClientOptions {
   /** Integration name for DLQ entries */
@@ -67,7 +62,12 @@ export class ResilientHttpClient {
   private circuitBreaker: CircuitBreaker;
 
   constructor(private options: ResilientHttpClientOptions) {
-    this.circuitBreaker = new CircuitBreaker(options.circuitBreaker);
+    this.circuitBreaker = new CircuitBreaker({
+      failureThreshold: 5,
+      timeoutMs: 60000,
+      halfOpenMaxAttempts: 2,
+      ...options.circuitBreaker,
+    });
   }
 
   /**

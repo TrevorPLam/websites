@@ -23,6 +23,7 @@
 
 /** Color tokens — HSL without wrapper */
 export interface ColorTokens {
+  [key: string]: string;
   primary: string;
   primaryForeground: string;
   secondary: string;
@@ -44,6 +45,7 @@ export interface ColorTokens {
 
 /** Border radius tokens */
 export interface RadiusTokens {
+  [key: string]: string;
   none: string;
   sm: string;
   md: string;
@@ -54,6 +56,7 @@ export interface RadiusTokens {
 
 /** Box shadow tokens */
 export interface ShadowTokens {
+  [key: string]: string;
   none: string;
   sm: string;
   md: string;
@@ -63,6 +66,7 @@ export interface ShadowTokens {
 
 /** Typography scale tokens */
 export interface TypographyTokens {
+  [key: string]: string;
   fontSizeBase: string;
   fontSizeSm: string;
   fontSizeLg: string;
@@ -80,6 +84,7 @@ export interface TypographyTokens {
 
 /** Animation/transition tokens */
 export interface AnimationTokens {
+  [key: string]: string;
   durationFast: string;
   durationNormal: string;
   durationSlow: string;
