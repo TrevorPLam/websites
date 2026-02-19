@@ -5,6 +5,8 @@ node_modules/
 dist/
 build/
 target/
+.next/
+.turbo/
 
 # TypeScript/JavaScript build output
 *.js.map
@@ -37,6 +39,9 @@ htmlcov/
 .env.local
 .env.*
 *.env.*
+
+# Cursor / Claude AI agent worktrees (local-only, do not commit)
+.claude/
 
 # IDE
 .vscode/
