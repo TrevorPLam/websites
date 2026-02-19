@@ -65,6 +65,12 @@ Extend industry-schemas to accept custom schema types. Generate JSON-LD from con
 
 - Unit tests; JSON-LD validation; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; structured data schema registry — JSON-LD schemas; @repo/industry-schemas or types.
+- **Potential issues / considerations:** No breaking changes; validate JSON-LD output; align with industry schemas.
+- **Verification:** Build passes; tests pass; docs updated; JSON-LD validates.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

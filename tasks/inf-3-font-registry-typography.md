@@ -68,6 +68,12 @@ Add theme.fonts extension: custom font URLs, font-display, per-section font over
 
 - Manual verification of font loading; run build and type-check.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; font registry / theme typography — extend theme or add registry.
+- **Potential issues / considerations:** Config-driven; site.config theme fonts; no breaking changes.
+- **Verification:** Font config works; build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

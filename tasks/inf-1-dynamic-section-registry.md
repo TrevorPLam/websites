@@ -64,6 +64,12 @@ Allow site.config to register custom section IDs that resolve to components at r
 
 - Unit tests for getSectionsForPage with config.sections; test unknown ID fallback.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; dynamic section registry — extend existing registries or add new one; config-driven.
+- **Potential issues / considerations:** No breaking changes to current flow; align with page-templates and site.config section composition.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

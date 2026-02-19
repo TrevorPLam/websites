@@ -64,6 +64,12 @@ Allow site.config to provide partial token overrides (colors, spacing, radius) t
 
 - Unit tests for merge; run build and type-check.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; design token overrides — extend token layer or theme; align with c-5 if done.
+- **Potential issues / considerations:** No breaking changes; override mechanism for client-specific tokens.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

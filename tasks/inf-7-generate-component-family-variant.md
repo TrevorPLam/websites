@@ -65,6 +65,12 @@ Extend generate-component CLI to support --family (marketing component family) a
 
 - Run generate-component with --family and --variant; verify build and exports.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; generate-component with --family and --variant — align with 6-8d implement-generate-component; CLI or script.
+- **Potential issues / considerations:** Support family and variant args; follow existing component layout; no breaking changes.
+- **Verification:** CLI works for family and variant; build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

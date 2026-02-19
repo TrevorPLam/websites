@@ -65,6 +65,12 @@ Pluggable families: register new families (e.g. events, careers, partners) via c
 
 - Unit tests for registry resolution; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; marketing component family registry — @repo/marketing-components; align with validate-marketing-exports.
+- **Potential issues / considerations:** Config-driven; no breaking changes; family/variant discovery.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

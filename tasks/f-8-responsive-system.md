@@ -89,6 +89,12 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 - (Add links to mockups or design assets if applicable)
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; responsive system — breakpoints, Tailwind; align with existing theme/layout.
+- **Potential issues / considerations:** No breaking changes; document breakpoints and patterns; R-INFRA.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

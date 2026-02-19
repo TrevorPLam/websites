@@ -91,6 +91,12 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 - (Add links to mockups or design assets if applicable)
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; animation system — R-MOTION; Framer Motion or primitives; reduced-motion.
+- **Potential issues / considerations:** Align with R-INFRA, inf-13 animation presets; no breaking changes to existing components.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

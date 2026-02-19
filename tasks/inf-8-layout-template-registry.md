@@ -66,6 +66,12 @@ Beyond 7 fixed templates: register custom page layouts by ID. Page route maps to
 
 - Unit tests for layout resolution; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; layout template registry — @repo/page-templates or similar; align with existing composePage/getSectionsForPage.
+- **Potential issues / considerations:** No breaking changes; config-driven layout selection.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

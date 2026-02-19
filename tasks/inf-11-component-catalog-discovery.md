@@ -68,6 +68,12 @@ Docs or tooling to browse components by tag, industry, feature. Searchable props
 
 - Unit tests for discovery; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; component catalog/discovery — expose catalog for tooling or docs; align with inf-5, validate-*-exports.
+- **Potential issues / considerations:** No breaking changes; catalog may drive Storybook or CLI.
+- **Verification:** Catalog available; docs updated; `pnpm validate-docs` passes.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

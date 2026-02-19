@@ -65,6 +65,12 @@ Allow custom industry identifiers beyond the 12. Industry config as optional ove
 
 - Unit tests for custom industry resolution; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; industry extensibility — @repo/industry-schemas or feature packs; config-driven.
+- **Potential issues / considerations:** No breaking changes; limit 12 industries per RESEARCH; JSON-LD and patterns.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

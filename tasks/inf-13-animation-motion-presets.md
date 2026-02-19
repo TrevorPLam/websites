@@ -65,6 +65,12 @@ Named motion presets (fadeIn, slideUp, stagger) as config. Components reference 
 
 - Manual or unit tests; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; animation/motion presets — R-MOTION; reduced-motion support required.
+- **Potential issues / considerations:** No breaking changes; respect prefers-reduced-motion; align with f-6 animation system.
+- **Verification:** Presets work; reduced motion respected; build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

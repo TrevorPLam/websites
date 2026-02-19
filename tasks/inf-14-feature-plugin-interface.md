@@ -67,6 +67,12 @@ Define feature module contract: export id, schema, components, sections. Load fe
 
 - Unit tests for feature resolution; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; feature plugin interface — extensibility for features; config-driven.
+- **Potential issues / considerations:** No breaking changes; plugin contract for features; align with R-INFRA.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

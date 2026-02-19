@@ -92,6 +92,12 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 - (Add links to mockups or design assets if applicable)
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; interaction system — R-MOTION, R-UX-PATTERNS; touch, keyboard, focus.
+- **Potential issues / considerations:** Align with R-INFRA; no breaking changes; accessibility (focus, keyboard).
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

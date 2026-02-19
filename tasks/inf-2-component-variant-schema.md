@@ -64,6 +64,12 @@ Extend SiteConfig so features accept arbitrary variant strings (not just 'center
 
 - Unit tests for resolveVariant; build and test pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; component variant schema — types or runtime schema; CVA or similar if adopted.
+- **Potential issues / considerations:** No breaking changes; align with R-INFRA, existing variant patterns in @repo/ui.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

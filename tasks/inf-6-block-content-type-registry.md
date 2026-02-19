@@ -67,6 +67,12 @@ Content blocks as first-class config: define block types (text, image, video, CT
 
 - Unit tests for block resolution; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; block/content type registry — for CMS or section blocks; config-driven.
+- **Potential issues / considerations:** No breaking changes; align with R-CMS if applicable.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

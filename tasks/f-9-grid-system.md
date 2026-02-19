@@ -89,6 +89,12 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 - (Add links to mockups or design assets if applicable)
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; grid system — layout grid; Tailwind or custom; align with f-8 responsive.
+- **Potential issues / considerations:** No breaking changes; document grid usage; R-INFRA.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

@@ -65,6 +65,12 @@ Discovery of integrations by provider ID. Custom adapters register via package o
 
 - Unit tests for adapter resolution; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; integration adapter registry — packages/integrations/*; adapter pattern; site.config integrations.
+- **Potential issues / considerations:** No breaking changes; align with integration-wiring-client-pages; consent where required.
+- **Verification:** Build passes; tests pass; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved

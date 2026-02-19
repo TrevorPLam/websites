@@ -66,6 +66,12 @@ Curated theme presets (e.g. minimal, bold, professional) as JSON/TS. Apply via t
 
 - Manual verification or unit tests; build pass.
 
+## Execution notes
+
+- **Related files — current state:** See task Related Files; theme preset library — extend theme layer; presets for common themes.
+- **Potential issues / considerations:** Config-driven; no breaking changes; align with c-5 design tokens if done.
+- **Verification:** Presets work; build passes; docs updated.
+
 ## Definition of Done
 
 - [ ] Code reviewed and approved
