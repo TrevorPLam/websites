@@ -25,6 +25,12 @@ Add three-layer design token architecture per THEGOAL: packages/config/tokens/ w
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: Theme extensions, INF-4 token overrides
 
+## Research
+
+- **Primary topics**: [R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture). THEGOAL [C.5].
+- **[2026-02] Three-layer tokens**: option-tokens.css (raw), decision-tokens.css (semantic), component-tokens.css; DTCG v1.0; Tailwind v4 @theme; ThemeInjector overrides from site.config.
+- **References**: [RESEARCH-INVENTORY.md – R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `packages/config/tokens/option-tokens.css` – create – Raw values
@@ -54,6 +60,10 @@ Add three-layer design token architecture per THEGOAL: packages/config/tokens/ w
 - [ ] Define component tokens
 - [ ] Wire into build/import chain
 - [ ] Update design docs
+
+## Sample code / examples
+
+- **option-tokens.css**: Raw CSS vars (e.g. `--color-raw-500: 174 100% 26%;`). **decision-tokens.css**: Semantic aliases (`--color-primary: var(--color-raw-500);`). **component-tokens.css**: Component tokens (`--button-bg: var(--color-primary);`). Import in tailwind-theme.css.
 
 ## Testing Requirements
 

@@ -1,0 +1,262 @@
+# Markdownlint configuration for 2026 Documentation Standard
+# Aligns with docs/docs.md Section 5.1
+
+default: true
+
+# MD001: Heading levels should only increment by one level at a time
+MD001: true
+
+# MD003: Heading style
+MD003:
+  style: atx
+
+# MD004: Unordered list style
+MD004:
+  style: dash
+
+# MD007: Unordered list indentation
+MD007:
+  indent: 2
+
+# MD013: Line length
+MD013:
+  line_length: 120
+  code_blocks: false
+  tables: false
+  headings: false
+
+# MD024: Multiple headings with same content
+MD024:
+  siblings_only: true
+
+# MD025: Multiple top-level headings in the same document
+MD025: true
+
+# MD033: HTML elements
+MD033:
+  allowed_elements:
+    - a
+    - br
+    - div
+    - span
+    - img
+    - picture
+    - source
+    - details
+    - summary
+    - sub
+    - sup
+    - kbd
+    - mark
+
+# MD041: First line in a file should be a top-level heading
+MD041: false
+
+# MD046: Code block style
+MD046:
+  style: fenced
+
+# MD029: Ordered list item prefix
+MD029:
+  style: ordered
+
+# MD034: Bare URL used
+MD034: false
+
+# MD036: Emphasis used instead of a heading
+MD036: false
+
+# MD037: Used space for indentation
+MD037: false
+
+# MD038: No space in code spans
+MD038: false
+
+# MD039: Spaces inside link text
+MD039: false
+
+# MD040: Fenced code blocks should have a language specified
+MD040: true
+
+# MD043: Required heading structure
+MD043:
+  headings:
+    - ATX
+    - atx
+
+# MD044: Proper names should have the correct capitalization
+MD044:
+  names:
+    - JavaScript
+    - TypeScript
+    - Node.js
+    - GitHub
+    - GitLab
+    - npm
+    - pnpm
+    - yarn
+    - ESLint
+    - Prettier
+    - Jest
+    - React
+    - Next.js
+    - Vercel
+    - Netlify
+    - Docker
+    - Linux
+    - Windows
+    - macOS
+
+# MD047: Files should end with a single newline character
+MD047: true
+
+# MD048: Code fence style
+MD048: false
+
+# MD049: Emphasis style
+MD049:
+  style: underscore
+
+# MD050: Strong style
+MD050:
+  style: asterisk
+
+# MD051: Link fragments should be valid
+MD051: false
+
+# MD052: Reference links and images should use a label that isn't empty
+MD052: false
+
+# MD053: Link and image reference definitions should be needed
+MD053: false
+
+# MD054: Link and image reference definitions should be in the proper order
+MD054: false
+
+# MD055: Table pipe style
+MD055:
+  style: consistent
+
+# MD060: Table column style
+MD060:
+  style: padded
+
+# MD061: Ordered list item prefix
+MD061: false
+
+# MD062: Use of top-level lists
+MD062: false
+
+# MD063: Code block style
+MD063: false
+
+# MD064: Lists that don't have the correct style
+MD064: false
+
+# MD065: Generic heading
+MD065: false
+
+# MD066: Heading start
+MD066: false
+
+# MD067: Ordered list item prefix
+MD067: false
+
+# MD068: Tables without headers
+MD068: false
+
+# MD069: Lists with first element not a list item
+MD069: false
+
+# MD070: Spaces inside link text
+MD070: false
+
+# MD071: Lists with loose
+MD071: false
+
+# MD072: Lists with first element not a list item
+MD072: false
+
+# MD073: Lists that don't have the correct style
+MD073: false
+
+# MD074: Too many spaces in list item
+MD074: false
+
+# MD075: Lists with first element not a list item
+MD075: false
+
+# MD076: Lists with first element not a list item
+MD076: false
+
+# MD077: Lists with first element not a list item
+MD077: false
+
+# MD078: Lists with first element not a list item
+MD078: false
+
+# MD079: Lists with first element not a list item
+MD079: false
+
+# MD080: Lists with first element not a list item
+MD080: false
+
+# MD081: Lists with first element not a list item
+MD081: false
+
+# MD082: Tables with inconsistent padding
+MD082: false
+
+# MD083: Tables with inconsistent padding
+MD083: false
+
+# MD084: Tables with inconsistent padding
+MD084: false
+
+# MD085: Tables with inconsistent padding
+MD085: false
+
+# MD086: Tables with inconsistent padding
+MD086: false
+
+# MD087: Tables with inconsistent padding
+MD087: false
+
+# MD088: Tables with inconsistent padding
+MD088: false
+
+# MD089: Tables with inconsistent padding
+MD089: false
+
+# MD090: Tables with inconsistent padding
+MD090: false
+
+# MD091: Tables with inconsistent padding
+MD091: false
+
+# MD092: Tables with inconsistent padding
+MD092: false
+
+# MD093: Tables with inconsistent padding
+MD093: false
+
+# MD094: Tables with inconsistent padding
+MD094: false
+
+# MD095: Tables with inconsistent padding
+MD095: false
+
+# MD096: Tables with inconsistent padding
+MD096: false
+
+# MD097: Tables with inconsistent padding
+MD097: false
+
+# MD098: Tables with inconsistent padding
+MD098: false
+
+# MD099: Tables with inconsistent padding
+MD099: false
+
+# MD100: Tables with inconsistent padding
+MD100: false

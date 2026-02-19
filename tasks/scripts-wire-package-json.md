@@ -25,6 +25,12 @@ Add scripts to root package.json so the following are runnable via pnpm: archite
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: CI jobs, docs
 
+## Research
+
+- **Primary topics**: [R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding). THEGOAL scripts section.
+- **[2026-02] Script wiring**: Root package.json scripts call tsx/node for scripts/; consistent names (script:check-deps, script:cache-report, etc.); document in README.
+- **References**: [RESEARCH-INVENTORY.md – R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `package.json` – modify – Add script entries
@@ -57,6 +63,10 @@ Add scripts to root package.json so the following are runnable via pnpm: archite
 - [ ] Audit each script for runnability
 - [ ] Add package.json entries with consistent naming
 - [ ] Document in README or docs
+
+## Sample code / examples
+
+- **package.json**: Add entries like `"script:check-deps": "tsx scripts/architecture/check-dependency-graph.ts"`, `"script:cache-report": "tsx scripts/ci/report-cache-hit-rate.ts"`, etc. Use tsx for .ts scripts.
 
 ## Testing Requirements
 

@@ -26,6 +26,12 @@ Wire `pnpm health` to run lint + type-check + build + test (and optionally valid
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: Single-command health check
 
+## Research
+
+- **Primary topics**: [R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding), THEGOAL INNOV-3.
+- **[2026-02] Health check**: scripts/health-check.ts runs lint, type-check, build, test; optional validate-exports/validate-client; exit 0 on success. Local dev aid, not full CI duplicate.
+- **References**: [scripts/health-check.ts](../scripts/health-check.ts), [THEGOAL.md](../THEGOAL.md), [CLAUDE.md](../CLAUDE.md).
+
 ## Related Files
 
 - `scripts/health-check.ts` – modify – Extend or verify
@@ -49,6 +55,10 @@ Wire `pnpm health` to run lint + type-check + build + test (and optionally valid
 - [ ] Add or wire: pnpm lint, pnpm type-check, pnpm build, pnpm test
 - [ ] Update package.json "health" script
 - [ ] Document in README
+
+## Sample code / examples
+
+- **package.json**: `"health": "tsx scripts/health-check.ts"` (or node). health-check.ts: run `pnpm lint`, `pnpm type-check`, `pnpm build`, `pnpm test` in sequence; exit with first failure code.
 
 ## Testing Requirements
 

@@ -19,6 +19,17 @@ Add api/[...routes] catch-all route with health and OG image handlers. THEGOAL s
 
 - **Upstream Task**: 5.1 – clients exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 5.1
+- **Downstream**: Client deployment
+
+## Research
+
+- **Primary topics**: [R-NEXT](RESEARCH-INVENTORY.md#r-next-app-router-rsc-server-actions) (App Router API routes).
+- **[2026-02] Next.js App Router**: API routes in app/api/; Route Handlers; OG with @vercel/og or ImageResponse from siteConfig (title, description, ogImage).
+- **References**: [RESEARCH-INVENTORY.md – R-NEXT](RESEARCH-INVENTORY.md#r-next-app-router-rsc-server-actions), [THEGOAL.md](../THEGOAL.md), [docs/api/health.md](../docs/api/health.md).
+
 ## Related Files
 
 - `clients/starter-template/app/api/` – modify – Add catch-all or OG route
@@ -42,6 +53,10 @@ Add api/[...routes] catch-all route with health and OG image handlers. THEGOAL s
 - [ ] Add api/[...routes]/route.ts or consolidate health + add opengraph-image
 - [ ] OG reads from siteConfig
 - [ ] Update starter-template; propagate to clients
+
+## Sample code / examples
+
+- **Health**: Keep or move to catch-all; GET returns 200. **OG**: Use siteConfig.seo (title, description, ogImage) in app/api/... or generate opengraph-image; @vercel/og or Next ImageResponse.
 
 ## Testing Requirements
 

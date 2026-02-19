@@ -16,93 +16,99 @@ on:
 jobs:
   validate-docs:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'pnpm'
-          
+
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 10.29.2
-          
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        
+
       - name: Run documentation validation
         run: pnpm validate-docs:strict
-        
+
       - name: Check markdown formatting
         run: pnpm lint:markdown
-        
-      - name: Validate links
+
+      - name: Validate links with lychee
         run: |
-          # Install markdown-link-check if not present
-          npm install -g markdown-link-check
-          
-          # Check all markdown files
-          find docs -name "*.md" -exec markdown-link-check {} \; || true
-          
-      - name: Upload validation results
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: docs-validation-results
-          path: |
-            docs-validation-report.json
-            markdown-link-check-results.json
-          
+          # Install lychee for fast link checking
+          cargo install lychee-bin || {
+            # Fallback to binary download if cargo install fails
+            curl -L https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-musl.tar.gz | tar xz
+            sudo mv lychee /usr/local/bin/
+          }
+
+          # Check all markdown files with lychee
+          lychee --verbose --no-progress --exclude-mail --exclude 'http://localhost' --exclude 'https://localhost' '**/*.md' || true
+
+          # Generate link health report
+          lychee --format json --output lychee-report.json '**/*.md' || true
+
+      - name: Check documentation review schedule
+        run: |
+          # Check for overdue documentation reviews
+          node scripts/check-review-schedule.js
+
+          # Generate review status report
+          echo "Review schedule check completed"
+
   docs-quality-check:
     runs-on: ubuntu-latest
     needs: validate-docs
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'pnpm'
-          
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        
+
       - name: Check documentation coverage
         run: |
           # Check that all packages have documentation
           echo "Checking documentation coverage..."
-          
+
           # Count documented packages
           DOCS_COUNT=$(find docs -name "*.md" | wc -l)
           PACKAGES_COUNT=$(find packages -name "package.json" | wc -l)
-          
+
           echo "Documentation files: $DOCS_COUNT"
           echo "Packages: $PACKAGES_COUNT"
-          
+
           # Require at least 80% documentation coverage
           COVERAGE=$((DOCS_COUNT * 100 / PACKAGES_COUNT))
           echo "Documentation coverage: $COVERAGE%"
-          
+
           if [ $COVERAGE -lt 80 ]; then
             echo "❌ Documentation coverage below 80%"
             exit 1
           else
             echo "✅ Documentation coverage acceptable"
           fi
-          
+
       - name: Validate metaheader standards
         run: |
           # Check that all documentation files have proper metaheaders
           echo "Validating metaheader standards..."
-          
+
           MISSING_HEADERS=0
           for file in $(find docs -name "*.md"); do
             if ! grep -q "@file" "$file"; then
@@ -110,61 +116,61 @@ jobs:
               MISSING_HEADERS=$((MISSING_HEADERS + 1))
             fi
           done
-          
+
           if [ $MISSING_HEADERS -gt 0 ]; then
             echo "❌ $MISSING_HEADERS files missing metaheaders"
             exit 1
           else
             echo "✅ All files have proper metaheaders"
           fi
-          
+
       - name: Check accessibility compliance
         run: |
           # Check for accessibility issues in documentation
           echo "Checking accessibility compliance..."
-          
+
           # Install axe-core for accessibility checking
           npm install -g axe-core
-          
+
           # Check for missing alt text, proper heading structure, etc.
           # This would need to be implemented based on specific requirements
           echo "✅ Accessibility checks passed"
-          
+
   docs-build:
     runs-on: ubuntu-latest
     needs: [validate-docs, docs-quality-check]
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'pnpm'
-          
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        
+
       - name: Build documentation site
         run: |
           # Build documentation site (if using a static site generator)
           echo "Building documentation site..."
           # This would depend on the chosen documentation platform
-          
+
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/dist
-          
+
   notify:
     runs-on: ubuntu-latest
     needs: [validate-docs, docs-quality-check, docs-build]
     if: failure()
-    
+
     steps:
       - name: Notify team on failure
         uses: 8398a7/action-slack@v3

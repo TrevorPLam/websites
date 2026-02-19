@@ -19,6 +19,17 @@ Wire scripts/governance/validate-schema-versioning.ts. Document schema version c
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: Governance
+
+## Research
+
+- **Primary topics**: [R-VERSIONING](RESEARCH-INVENTORY.md#r-versioning-changesets-versioning-strategy), [R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation-config-schema-validation-zod).
+- **[2026-02] Schema versioning**: validate-schema-versioning script checks compatibility; governance docs define version rules and change checklist.
+- **References**: [RESEARCH-INVENTORY.md – R-VERSIONING](RESEARCH-INVENTORY.md#r-versioning-changesets-versioning-strategy), [THEGOAL.md](../THEGOAL.md) [D.1].
+
 ## Related Files
 
 - `scripts/governance/validate-schema-versioning.ts` – modify or create
@@ -37,6 +48,14 @@ Wire scripts/governance/validate-schema-versioning.ts. Document schema version c
 - [ ] Implement or refine validate-schema-versioning
 - [ ] Create/update governance docs
 - [ ] Wire to package.json
+
+## Sample code / examples
+
+- **package.json**: `"script:validate-schema": "tsx scripts/governance/validate-schema-versioning.ts"`. Script and docs per THEGOAL [D.1].
+
+## Testing Requirements
+
+- Run script; run pnpm build.
 
 ## Definition of Done
 

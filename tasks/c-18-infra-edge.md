@@ -26,6 +26,12 @@ Add packages/infra/edge/ with tenant-experiment-context.ts for edge variant sele
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: docs/architecture/edge-personalization.md
 
+## Research
+
+- **Primary topics**: [R-EDGE](RESEARCH-INVENTORY.md#r-edge-edge-middleware-personalization). THEGOAL [C.18].
+- **[2026-02] Edge primitives**: tenant-experiment-context for variant selection; cache-safe keys; Edge Runtime only; no Node APIs.
+- **References**: [RESEARCH-INVENTORY.md – R-EDGE](RESEARCH-INVENTORY.md#r-edge-edge-middleware-personalization), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `packages/infra/edge/tenant-experiment-context.ts` – create
@@ -50,6 +56,10 @@ Add packages/infra/edge/ with tenant-experiment-context.ts for edge variant sele
 - [ ] Implement tenant-experiment-context
 - [ ] Add to infra exports
 - [ ] Document
+
+## Sample code / examples
+
+- **tenant-experiment-context.ts**: getVariant(experimentId, context) with cache-safe keys; export from infra (client-safe); document edge flow.
 
 ## Testing Requirements
 

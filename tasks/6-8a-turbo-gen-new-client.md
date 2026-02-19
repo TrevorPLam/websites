@@ -26,6 +26,13 @@ Implement Plop-based scaffolding so `turbo gen new-client` (or equivalent) creat
 - **Parallel Work**: 6-8b (create-client)
 - **Downstream**: Golden path for new clients
 
+## Research
+
+- **Primary topics**: [R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding).
+- **[2026-02] Plop 3.x**: `setGenerator(name, { description, prompts, actions })`; prompts collect name/industry; actions copy from starter-template and transform package.json and site.config.ts.
+- **[2026-02] Turborepo**: Wire via root script e.g. `"gen": "plop --plopfile turbo/generators/config.ts"` or `turbo gen new-client`; source: clients/starter-template; run `pnpm validate-client clients/<name>/` after creation.
+- **References**: [RESEARCH-INVENTORY.md – R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding), [turbo/generators/config.ts](../turbo/generators/config.ts), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `turbo/generators/config.ts` – modify – Plop config
@@ -51,6 +58,25 @@ Implement Plop-based scaffolding so `turbo gen new-client` (or equivalent) creat
 - [ ] Implement Plop config for new-client generator
 - [ ] Wire to pnpm/turbo
 - [ ] Test with sample client creation
+
+## Sample code / examples
+
+- **Plop generator** (turbo/generators/config.ts): Implement setGenerator for `new-client` with prompts for name and optional industry; actions copy clients/starter-template to clients/{{name}}/ and update package.json name to `@clients/{{name}}`, site.config.ts id/name.
+  ```javascript
+  export default function (plop) {
+    plop.setGenerator('new-client', {
+      description: 'Scaffold a new client from starter-template',
+      prompts: [
+        { type: 'input', name: 'name', message: 'Client name (kebab-case):' },
+        { type: 'input', name: 'industry', message: 'Industry (optional):' },
+      ],
+      actions: [
+        // Copy starter-template to clients/{{name}}/; transform package.json, site.config.ts
+      ],
+    });
+  }
+  ```
+- Root package.json: `"gen": "plop --plopfile turbo/generators/config.ts"`. After generation run `pnpm validate-client clients/<name>/`.
 
 ## Testing Requirements
 

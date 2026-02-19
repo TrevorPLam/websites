@@ -36,6 +36,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "validate-docs": "node scripts/validate-documentation.js",
     "validate-docs:strict": "node scripts/validate-documentation.js --strict",
+    "check-review-schedule": "node scripts/check-review-schedule.js",
     "validate-exports": "node scripts/validate-exports.js",
     "validate-ui-exports": "node scripts/validate-ui-exports.js",
     "validate-marketing-exports": "node scripts/validate-marketing-exports.js",

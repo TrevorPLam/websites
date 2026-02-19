@@ -25,6 +25,12 @@ Add packages/infra/experiments/ with feature-flags.ts (deterministic evaluation,
 - **Parallel Work**: D.2 (experiment stats)
 - **Downstream**: C.18 edge context, marketing experiments
 
+## Research
+
+- **Primary topics**: [R-EXPERIMENTATION](RESEARCH-INVENTORY.md#r-experimentation-ab-testing-feature-flags-guardrails). THEGOAL [C.8].
+- **[2026-02] Experiments**: feature-flags (deterministic, kill-switch), ab-testing (variant, exposure), guardrails (SRM, min run); server/edge safe; no PII in logs.
+- **References**: [RESEARCH-INVENTORY.md – R-EXPERIMENTATION](RESEARCH-INVENTORY.md#r-experimentation-ab-testing-feature-flags-guardrails), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `packages/infra/experiments/feature-flags.ts` – create
@@ -52,6 +58,10 @@ Add packages/infra/experiments/ with feature-flags.ts (deterministic evaluation,
 - [ ] Implement feature-flags, ab-testing, guardrails
 - [ ] Add tests
 - [ ] Export from infra
+
+## Sample code / examples
+
+- **feature-flags.ts**: evaluate(flagId, context) returns boolean; kill-switch override. **guardrails.ts**: SRM check, minimum run validation; unit tests.
 
 ## Testing Requirements
 

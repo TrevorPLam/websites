@@ -25,6 +25,12 @@ Add packages/types/src/compliance-packs.ts (industry compliance overlays) and pa
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: Industry clients (dental, law, medical)
 
+## Research
+
+- **Primary topics**: [R-COMPLIANCE](RESEARCH-INVENTORY.md#r-compliance-industry-compliance-packs). THEGOAL [C.17].
+- **[2026-02] Compliance**: compliance-packs (industry overlays); renderers for medical privacy, legal disclaimers; config-driven; industry from site.config.
+- **References**: [RESEARCH-INVENTORY.md – R-COMPLIANCE](RESEARCH-INVENTORY.md#r-compliance-industry-compliance-packs), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `packages/types/src/compliance-packs.ts` – create
@@ -51,6 +57,10 @@ Add packages/types/src/compliance-packs.ts (industry compliance overlays) and pa
 - [ ] Create compliance/renderers in features
 - [ ] Add to exports
 - [ ] Document
+
+## Sample code / examples
+
+- **compliance-packs.ts**: Industry overlay types (medical, legal). **renderers/**: medical-privacy.tsx, legal-disclaimer.tsx; industry from config.
 
 ## Testing Requirements
 

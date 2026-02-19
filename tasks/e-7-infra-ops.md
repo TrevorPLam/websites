@@ -25,6 +25,12 @@ Add packages/infra/ops/ with queue-policy.ts for queue fairness, retry budgets, 
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: docs/operations/async-queue-governance.md, retry-timeout-policy
 
+## Research
+
+- **Primary topics**: [R-OPS](RESEARCH-INVENTORY.md#r-ops-operational-governance-queue-policies).
+- **[2026-02] Queue policy**: queue-policy.ts for fairness, retry budgets, timeout rules; server-only; align with existing rate-limit/retry in @repo/infra.
+- **References**: [RESEARCH-INVENTORY.md – R-OPS](RESEARCH-INVENTORY.md#r-ops-operational-governance-queue-policies), [THEGOAL.md](../THEGOAL.md) [E.7].
+
 ## Related Files
 
 - `packages/infra/ops/queue-policy.ts` – create
@@ -50,6 +56,10 @@ Add packages/infra/ops/ with queue-policy.ts for queue fairness, retry budgets, 
 - [ ] Implement queue-policy
 - [ ] Add to infra exports
 - [ ] Document
+
+## Sample code / examples
+
+- **queue-policy.ts**: Export types/functions for fairness rules, retry budgets, timeout rules. Use server-only; export from packages/infra (server entry only).
 
 ## Testing Requirements
 

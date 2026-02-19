@@ -20,6 +20,17 @@ Implement or document a11y release gate per docs/accessibility/release-a11y-gate
 - **Upstream Task**: 0-1 – a11y rubric (optional)
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 0-1 (optional)
+- **Downstream**: Release process
+
+## Research
+
+- **Primary topics**: [R-A11Y](RESEARCH-INVENTORY.md#r-a11y-wcag-22-aa-aria-touch-targets-keyboard).
+- **[2026-02] a11y gate**: release-a11y-gate.md defines criteria; axe-core/jest-axe or Lighthouse; runnable in release/PR; document CI integration.
+- **References**: [RESEARCH-INVENTORY.md – R-A11Y](RESEARCH-INVENTORY.md#r-a11y-wcag-22-aa-aria-touch-targets-keyboard), [THEGOAL.md](../THEGOAL.md) [D.6].
+
 ## Related Files
 
 - `docs/accessibility/release-a11y-gate.md` – create or update
@@ -39,6 +50,14 @@ Implement or document a11y release gate per docs/accessibility/release-a11y-gate
 - [ ] Define gate steps (which checks, thresholds)
 - [ ] Wire to CI or release workflow (optional)
 - [ ] Document
+
+## Sample code / examples
+
+- **release-a11y-gate.md**: Sections for gate criteria, tools (jest-axe, Lighthouse), thresholds, and CI/release wiring.
+
+## Testing Requirements
+
+- Run validate-docs; optionally run a11y checks per doc.
 
 ## Definition of Done
 

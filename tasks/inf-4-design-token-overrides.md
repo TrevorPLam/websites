@@ -19,6 +19,17 @@ Allow site.config to provide partial token overrides (colors, spacing, radius) t
 
 - **Upstream Task**: C-5 – design tokens
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: C-5
+- **Downstream**: INF-12
+
+## Research
+
+- **Primary topics**: [R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). ThemeInjector.
+- **[2026-02] Token overrides**: site.config.theme partial overrides (colors, spacing, radius); merge with base; ThemeInjector at runtime; HSL convention.
+- **References**: [RESEARCH-INVENTORY.md – R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture).
+
 ## Related Files
 
 - `packages/types/src/site-config.ts` – modify – theme extend
@@ -44,6 +55,14 @@ Allow site.config to provide partial token overrides (colors, spacing, radius) t
 - [ ] ThemeInjector applies merged tokens
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **Merge logic**: Base tokens + site.config.theme overrides (shallow or deep merge); ThemeInjector injects CSS vars from merged result.
+
+## Testing Requirements
+
+- Unit tests for merge; run build and type-check.
 
 ## Definition of Done
 

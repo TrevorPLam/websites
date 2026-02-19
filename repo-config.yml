@@ -1,0 +1,16 @@
+# Repository metadata for 2026 Master Repository Documentation Standard (v2.0)
+# See docs/docs.md for tier and conditional requirements.
+
+standard_version: "2.0"
+tier: extended
+type: library
+ai_enabled: true
+regulated: false
+audience: developer
+
+licenses:
+  primary: MIT
+  dependencies_include:
+    - MIT
+    - Apache-2.0
+    - BSD-3-Clause

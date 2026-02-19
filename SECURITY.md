@@ -1,3 +1,14 @@
+---
+diataxis: reference
+audience: developer
+last_reviewed: 2026-02-19
+review_interval_days: 30
+project: marketing-websites
+description: Security policy and vulnerability reporting
+tags: [security, vulnerability, reporting, policy]
+primary_language: typescript
+---
+
 <!--
 /**
  * @file SECURITY.md

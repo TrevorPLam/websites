@@ -1,7 +1,7 @@
 # Research Topic Inventory
 
-_Last updated:_ 2026-02-18  
-_Purpose:_ Complete topic map and task→topic mapping for Task Research Audit. Research findings (Phase 2) fill the placeholder sections below.
+_Last updated:_ 2026-02  
+_Purpose:_ Complete topic map and task→topic mapping for Task Research Audit. Research findings (Phase 2) fill the placeholder sections below. Refreshed 2026-02 for active-task standardization (0-*, 6-8*, 6-9*, api-*, c-*, d-*, docs-*, e-*, inf-*, integration-*, scripts-*, f-*).
 
 ---
 
@@ -203,8 +203,9 @@ F.8, docs/operations.
 ## Research Findings
 
 ### R-UI (Radix UI primitives, React 19, ComponentRef)
-- **[2026-02-18] React 19**: Use `React.ComponentRef<typeof Primitive.Root>` (not `ElementRef`) for forwardRef; React 19 release notes (react.dev/blog).
-- **[2026-02-18] Radix**: All 1.xx components are thin wrappers; use Radix primitives from catalog (radix-ui 1.0.0); tree-shakeable, Server Component safe when no client interactivity.
+- **[2026-02] React 19**: Use `React.ComponentRef<typeof Primitive.Root>` (not `ElementRef`) for forwardRef; React 19 release notes (react.dev/blog).
+- **[2026-02] Radix**: All 1.xx components are thin wrappers; use Radix primitives from catalog (radix-ui 1.0.0); tree-shakeable, Server Component safe when no client interactivity.
+- **[2026-02] Sonner (toast)**: Repo uses Sonner 2.0.7 (CLAUDE.md). `toast.custom(render, options)` expects render to return `React.ReactElement` (not just ReactNode); `toast.promise(promise, messages, options)` — check current Sonner API for exact signature (1–2 vs 3 args). Fix type assertions or callback return type to satisfy consumers (0-4).
 - Implications: Every 1.xx task must use ComponentRef and follow existing Button/Dialog patterns in packages/ui.
 
 #### Code Snippets
@@ -321,7 +322,19 @@ F.8, docs/operations.
 - **[2026-02-18] Industries**: Services, restaurant, legal, medical, retail, etc.; implementation details in task files.
 
 ### R-NEXT (App Router, RSC, Server Actions)
-- **[2026-02-18] Next.js 16**: App Router, Server Components, Server Actions by default; PPR optional (ppr: true); Turbopack dev; see RESEARCH.md §3.1.
+- **[2026-02] Next.js 16**: App Router, Server Components, Server Actions by default; PPR optional (ppr: true); Turbopack dev; see RESEARCH.md §3.1.
+- **[2026-02] Server Actions — IDOR prevention**: For actions that fetch/update by ID (e.g. booking confirm/cancel/getDetails), require verification params (e.g. `confirmationNumber` + `email`) so the server can reject requests when the caller cannot prove ownership. Pattern: `confirmBooking(bookingId, { confirmationNumber, email })`; reject when mismatch. Align tests with this design (0-5).
+
+#### Code Snippets (R-NEXT — IDOR)
+- **Server Action with verification** — packages/features/src/booking/lib/booking-actions.ts:
+  ```typescript
+  export async function confirmBooking(bookingId: string, verification: { confirmationNumber: string; email: string }) {
+    const booking = await getBooking(bookingId);
+    if (!booking || booking.confirmationNumber !== verification.confirmationNumber || booking.email !== verification.email)
+      return { success: false, error: 'Verification failed' };
+    // ... perform confirm
+  }
+  ```
 
 ### R-INFRA (Slot, Provider, Context, Theme, CVA)
 - **[2026-02-18] Patterns**: CVA for variants; design tokens (packages/config/tailwind-theme.css); Slot/Provider/Context; RESEARCH.md §13 infrastructure systems.
@@ -444,8 +457,28 @@ F.8, docs/operations.
 - **[2026-02-18] THEGOAL.md 2.40, C.14**: Monitoring feature; performance SLOs; client-slo-dashboard-spec.
 
 ### R-CLI (CLI tooling, generators, scaffolding)
-- **[2026-02-18] THEGOAL.md 6.8**: CLI tooling; create-client (turbo gen new-client), generate-component, validate-site-config.
-- **[2026-02-18] tooling/**: Developer CLI tools; scaffolding factories; Plop-based generators.
+- **[2026-02] THEGOAL.md 6.8**: CLI tooling; create-client (turbo gen new-client), generate-component, validate-site-config.
+- **[2026-02] Plop**: Use Plop 3.x; `setGenerator(name, { description, prompts, actions })`; actions can use `templateFiles` or custom `type: 'add'` with path templates; integrate with Turbo via root package.json script (e.g. `gen`: `plop --plopfile turbo/generators/config.ts`). Repo stub: turbo/generators/config.ts.
+- **[2026-02] Turborepo generators**: Turbo can run generators via `turbo gen <generator>` if wired in turbo.json; alternatively `pnpm gen new-client` calling Plop. Source of truth for new client: copy from clients/starter-template; update package.json name to @clients/<name>; update site.config.ts id/name; run pnpm validate-client.
+- **[2026-02] create-*-app UX**: Optional --industry=X; config-driven; no hardcoded industry logic. Active tasks: 6-8a (Plop new-client), 6-8b (create-client CLI), 6-8c (validate-site-config), 6-8d (generate-component), 6-8e (wire pnpm health).
+
+#### Code Snippets (R-CLI)
+- **Plop new-client generator (conceptual)** — implement in turbo/generators/config.ts:
+  ```javascript
+  export default function (plop) {
+    plop.setGenerator('new-client', {
+      description: 'Scaffold a new client from starter-template',
+      prompts: [
+        { type: 'input', name: 'name', message: 'Client name (kebab-case):' },
+        { type: 'input', name: 'industry', message: 'Industry (optional):' },
+      ],
+      actions: [
+        // Copy clients/starter-template to clients/{{name}}/ then transform package.json, site.config.ts
+      ],
+    });
+  }
+  ```
+- **Package.json script**: `"gen": "plop --plopfile turbo/generators/config.ts"` or wire via turbo.json.
 
 ### R-VERSIONING (Changesets, versioning strategy)
 - **[2026-02-18] THEGOAL.md 0.12, C.4**: Changesets versioning; release channels (stable + canary); version-packages script.

@@ -19,6 +19,17 @@ Set up Storybook and wire visual-regression.yml. THEGOAL [C.7]; visual-regressio
 
 - **Upstream Task**: 6-4 – optional (component docs)
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 6-4
+- **Downstream**: Visual QA
+
+## Research
+
+- **Primary topics**: [R-VISUAL-REG](RESEARCH-INVENTORY.md#r-visual-reg-visual-regression-testing), [R-TEST](RESEARCH-INVENTORY.md#r-test-jest-axe-core-playwright). THEGOAL [C.7].
+- **[2026-02] Storybook 7+**: React 19; visual-regression.yml; Chromatic or static build; key components have stories.
+- **References**: [RESEARCH-INVENTORY.md – R-VISUAL-REG](RESEARCH-INVENTORY.md#r-visual-reg-visual-regression-testing), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `packages/ui/` – modify – Add Storybook config
@@ -44,6 +55,14 @@ Set up Storybook and wire visual-regression.yml. THEGOAL [C.7]; visual-regressio
 - [ ] Create stories for representative components
 - [ ] Wire visual-regression workflow
 - [ ] Document
+
+## Sample code / examples
+
+- **Storybook config**: Add to packages/ui and/or marketing-components; stories for Button, Hero; wire .github/workflows/visual-regression.yml to Storybook build.
+
+## Testing Requirements
+
+- Run Storybook; run visual-regression workflow; confirm build.
 
 ## Definition of Done
 

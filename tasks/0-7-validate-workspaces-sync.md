@@ -25,6 +25,13 @@
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: CI
 
+## Research
+
+- **Primary topics**: [R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding), pnpm workspace contract.
+- **[2026-02] pnpm workspaces**: `pnpm-workspace.yaml` defines `packages:` globs; root `package.json` may have a `workspaces` field. Both must list the same roots so install and scripts see all packages.
+- **[2026-02] CLAUDE.md**: "Workspace sync: package.json workspaces must match pnpm-workspace.yaml (run pnpm validate:workspaces). Currently out of sync."
+- **References**: [pnpm workspaces](https://pnpm.io/workspaces), [CLAUDE.md](../CLAUDE.md), [scripts/validate-workspaces.js](../scripts/validate-workspaces.js) (or .ts).
+
 ## Related Files
 
 - `package.json` – modify – workspaces array
@@ -47,6 +54,14 @@
 - [ ] Compare package.json workspaces vs pnpm-workspace.yaml
 - [ ] Add any missing globs to package.json (or remove from pnpm-workspace if not desired)
 - [ ] Run validate:workspaces and fix until pass
+
+## Sample code / examples
+
+- **package.json workspaces** must mirror pnpm-workspace.yaml globs (e.g. `packages/*`, `clients/*`, `tooling/*`). Check scripts/validate-workspaces for exact comparison logic.
+  ```json
+  "workspaces": ["packages/*", "packages/integrations/*", "clients/*", "tooling/*"]
+  ```
+- Run `pnpm validate:workspaces` after edits to confirm pass.
 
 ## Testing Requirements
 

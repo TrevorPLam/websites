@@ -1,3 +1,14 @@
+---
+diataxis: tutorial
+audience: developer
+last_reviewed: 2026-02-19
+review_interval_days: 90
+project: marketing-websites
+description: Contribution guidelines and developer workflow
+tags: [contributing, development, workflow, guidelines]
+primary_language: typescript
+---
+
 <!--
 /**
  * @file CONTRIBUTING.md
@@ -211,6 +222,7 @@ This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md) that all contrib
 ### Documentation Standards
 
 All documentation must follow the [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md), including:
+
 - Complete metaheaders
 - Proper formatting
 - Accessibility compliance

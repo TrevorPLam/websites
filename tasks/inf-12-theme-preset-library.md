@@ -20,6 +20,17 @@ Curated theme presets (e.g. minimal, bold, professional) as JSON/TS. Apply via t
 - **Upstream Task**: C-5 – tokens
 - **Upstream Task**: INF-4 – token overrides
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: C-5, INF-4
+- **Downstream**: Client theming
+
+## Research
+
+- **Primary topics**: [R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). Theme presets.
+- **[2026-02] Presets**: minimal, bold, professional; theme.preset or theme.extend; merge with base; ThemeInjector applies.
+- **References**: [RESEARCH-INVENTORY.md – R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture).
+
 ## Related Files
 
 - `packages/config/tokens/presets/` – create
@@ -46,6 +57,14 @@ Curated theme presets (e.g. minimal, bold, professional) as JSON/TS. Apply via t
 - [ ] ThemeInjector applies preset
 - [ ] Document
 - [ ] Add tests or manual verification
+
+## Sample code / examples
+
+- **presets/minimal.ts**: Export token overrides; preset('minimal') in theme; ThemeInjector merges and applies.
+
+## Testing Requirements
+
+- Manual verification or unit tests; build pass.
 
 ## Definition of Done
 

@@ -19,6 +19,17 @@ Add docs/architecture/package-management-policy.md per THEGOAL [C.2]. Documents 
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: Contributor onboarding
+
+## Research
+
+- **Primary topics**: [R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration). THEGOAL [C.2].
+- **[2026-02] Package management**: Adding packages, version catalog (pnpm-workspace.yaml), workspace boundaries; reference CLAUDE.md and module-boundaries.
+- **References**: [RESEARCH-INVENTORY.md – R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration), [CLAUDE.md](../CLAUDE.md).
+
 ## Related Files
 
 - `docs/architecture/package-management-policy.md` – create
@@ -34,6 +45,14 @@ Add docs/architecture/package-management-policy.md per THEGOAL [C.2]. Documents 
 
 - [ ] Create package-management-policy.md
 - [ ] Run pnpm validate-docs
+
+## Sample code / examples
+
+- **docs/architecture/package-management-policy.md**: Sections for adding packages, catalog usage, workspace boundaries; links to pnpm-workspace.yaml, CLAUDE.md, docs/architecture/module-boundaries.md.
+
+## Testing Requirements
+
+- Run `pnpm validate-docs`.
 
 ## Definition of Done
 

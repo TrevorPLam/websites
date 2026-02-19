@@ -19,6 +19,17 @@ Extend industry-schemas to accept custom schema types. Generate JSON-LD from con
 
 - **Upstream Task**: 4-6 – industry-schemas exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 4-6
+- **Downstream**: Custom JSON-LD
+
+## Research
+
+- **Primary topics**: [R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry-json-ld-industry-patterns), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). Schema.org, JSON-LD.
+- **[2026-02] Schema registry**: schemaType custom string; custom template/override; generateOrganizationJsonLd etc. use config; fallback for unknown.
+- **References**: [RESEARCH-INVENTORY.md – R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry-json-ld-industry-patterns).
+
 ## Related Files
 
 - `packages/industry-schemas/` – modify
@@ -45,6 +56,14 @@ Extend industry-schemas to accept custom schema types. Generate JSON-LD from con
 - [ ] Update industry-schemas to use custom types
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **schemaType**: Extend config; schema registry or override map; industry-schemas use custom types; output valid JSON-LD.
+
+## Testing Requirements
+
+- Unit tests; JSON-LD validation; build pass.
 
 ## Definition of Done
 

@@ -1,3 +1,14 @@
+---
+diataxis: tutorial
+audience: user
+last_reviewed: 2026-02-19
+review_interval_days: 90
+project: marketing-websites
+description: Multi-industry template system for marketing websites
+tags: [marketing, templates, react, nextjs, typescript]
+primary_language: typescript
+---
+
 <!--
 /**
  * @file README.md
@@ -41,13 +52,13 @@
  * - Add screenshots/gifs for visual demonstration
  *
  * @verification
- * - ✅ Version numbers from pnpm-workspace.yaml catalog (2026-02-18)
+ * - Version numbers from pnpm-workspace.yaml catalog and package.json (2026-02-19)
  * - Quality gates: run `pnpm lint type-check build test` to verify
- * - ✅ Project structure reflects actual directory layout (packages, clients, tooling)
+ * - Project structure reflects actual directory layout (packages, clients, tooling)
  *
  * @status
  * - confidence: high
- * - last_audited: 2026-02-18
+ * - last_audited: 2026-02-19
  */
 -->
 
@@ -57,9 +68,9 @@
 
 [![Node.js](https://img.shields.io/badge/Node.js-22.0.0+-green.svg)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.29.2-blue.svg)](https://pnpm.io/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.0-black.svg)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.5-black.svg)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0.0-blue.svg)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7.2-blue.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ## 🎯 Overview
@@ -71,22 +82,23 @@ Professional multi-industry marketing website template system built with modern 
 ### Current Status
 
 **Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Timeline:** 12 weeks | **Current State:** Config-driven clients (starter-template, luxe-salon, etc.) → **Target:** 12 industries, 20+ components
+**Timeline:** 12 weeks | **Current State:** Config-driven clients (6 industry clients) → **Target:** 12 industries, 20+ components
 
 > **Quality gates:** Run `pnpm lint type-check build test` to verify. Historical issue analysis is in [docs/archive/ISSUES.md](docs/archive/ISSUES.md).
 
-| Layer | Package | Status | Progress |
-|-------|---------|--------|----------|
-| **L0** | `@repo/infra` | 🟢 Complete | Security, middleware, logging, 7 env schemas |
-| **L2** | `@repo/ui` | 🟡 In Progress | 9 of 14 UI primitives (Toast type errors block build) |
-| **L2** | `@repo/marketing-components` | 🟡 Partial | Package exists; scaffolded components, type-check fails |
-| **L2** | `@repo/features` | 🟡 Partial | 5 of 9 features (booking, contact, blog, services, search); 4 booking tests fail |
-| **L2** | `@repo/types` | 🟢 Complete | Extended from templates/shared |
-| **L3** | `@repo/page-templates` | 🔴 Scaffolded Only | All 7 templates are NotImplementedPlaceholder |
-| **L3** | `clients/starter-template` | 🟢 Active | Golden-path template (port 3101, next-intl, Docker) |
-| **L3** | `clients/luxe-salon`, etc. | 🟡 Partial | 5 industry clients; no i18n, minimal Next config |
+| Layer  | Package                      | Status             | Progress                                                                        |
+| ------ | ---------------------------- | ------------------ | ------------------------------------------------------------------------------- |
+| **L0** | `@repo/infra`                | 🟢 Complete        | Security, middleware, logging, 7 env schemas                                    |
+| **L2** | `@repo/ui`                   | 🟡 In Progress     | 9+ UI primitives (Button, Dialog, Input, Slider, Toast, etc.)                   |
+| **L2** | `@repo/marketing-components` | 🟡 Partial         | Package exists; scaffolded component families                                   |
+| **L2** | `@repo/features`             | 🟡 Partial         | 5 features (booking, contact, blog, services, search); all tests pass           |
+| **L2** | `@repo/types`                | 🟢 Complete        | Shared TypeScript types/interfaces                                              |
+| **L2** | `@repo/infrastructure-*`     | 🟡 Partial         | tenant-core, theme, layout, ui (type-check fails in infrastructure-ui)          |
+| **L3** | `@repo/page-templates`       | 🔴 Scaffolded Only | All 7 templates are NotImplementedPlaceholder                                   |
+| **L3** | `clients/starter-template`   | 🟢 Active          | Golden-path template (port 3101, next-intl, Docker)                             |
+| **L3** | `clients/luxe-salon`, etc.   | 🟡 Partial         | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
 
-See [TASKS.md](TASKS.md) for detailed progress tracking and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
+See task specs in [tasks/](tasks/) (e.g. tasks/0-4-fix-toast-sonner-api.md) and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
 
 ### Key Features
 
@@ -94,7 +106,7 @@ See [TASKS.md](TASKS.md) for detailed progress tracking and [docs/architecture/R
 - 🚀 **Multi-Client Support** - Manage unlimited client projects in one repository
 - 🔧 **Highly Customizable** - Configuration-driven architecture with easy branding and feature customization
 - 📦 **Shared Components** - Reusable UI primitives, marketing components, and features across templates
-- 🏗️ **Modern Architecture** - Next.js 16, React 19, TypeScript 5.7, Tailwind CSS 4
+- 🏗️ **Modern Architecture** - Next.js 16, React 19, TypeScript 5.9, Tailwind CSS 4
 - 🔒 **Production-Ready** - Security, performance, and SEO optimized
 - 📱 **Responsive** - Mobile-first design approach
 - ♿ **Accessible** - WCAG 2.2 AA compliance built-in
@@ -177,6 +189,7 @@ pnpm --filter @clients/my-client-name dev --port 3001
 ```
 
 For detailed instructions, see:
+
 - **[Developer Onboarding](docs/getting-started/onboarding.md)** - Complete setup guide
 - **[Build First Client](docs/tutorials/build-first-client.md)** - Step-by-step tutorial
 
@@ -186,55 +199,61 @@ For detailed instructions, see:
 marketing-websites/
 ├── clients/                      # Client implementations
 │   ├── starter-template/        # Golden-path template (@clients/starter-template, port 3101)
-│   ├── luxe-salon/              # Example: salon industry
-│   └── [client-name]/            # Your client projects
+│   ├── luxe-salon/              # Salon industry
+│   ├── bistro-central/          # Restaurant industry
+│   ├── chen-law/                # Law firm
+│   ├── sunrise-dental/          # Dental practice
+│   ├── urban-outfitters/        # Retail
+│   └── [client-name]/           # Your client projects
 │
-├── packages/                      # Shared packages (Layer 0-2)
-│   ├── ui/                       # @repo/ui - UI primitives (Button, Input, Dialog, etc.)
+├── packages/                     # Shared packages (Layer 0-2)
+│   ├── ui/                      # @repo/ui - UI primitives (Button, Input, Dialog, Toast, etc.)
 │   ├── features/                 # @repo/features - Feature modules (booking, contact, blog)
-│   ├── marketing-components/     # @repo/marketing-components - Hero, services, testimonials
-│   ├── page-templates/           # @repo/page-templates - Page layouts (scaffolded placeholders)
-│   ├── types/                    # @repo/types - Shared TypeScript types
-│   ├── utils/                    # @repo/utils - Utility functions
-│   ├── infra/                    # @repo/infra - Infrastructure (security, middleware, logging)
-│   ├── integrations/             # Integration packages (14 total; not yet wired to clients)
+│   ├── marketing-components/    # @repo/marketing-components - Hero, services, testimonials
+│   ├── page-templates/          # @repo/page-templates - Page layouts (scaffolded placeholders)
+│   ├── types/                   # @repo/types - Shared TypeScript types
+│   ├── utils/                   # @repo/utils - Utility functions (cn, etc.)
+│   ├── infra/                   # @repo/infra - Security, middleware, logging, env schemas
+│   ├── industry-schemas/        # @repo/industry-schemas - JSON-LD per industry
+│   ├── integrations/            # 20+ integration packages
 │   │   ├── analytics/           # @repo/integrations-analytics
-│   │   ├── hubspot/              # @repo/integrations-hubspot
-│   │   ├── supabase/             # @repo/integrations-supabase
-│   │   └── ...                   # acuity, calendly, calcom, convertkit, etc.
-│   ├── ai-platform/              # @repo/ai-platform-* (agent-orchestration, llm-gateway, content-engine)
-│   ├── content-platform/        # dam-core, visual-editor
-│   ├── marketing-ops/            # campaign-orchestration
-│   ├── infrastructure/           # tenant-core
-│   └── config/                   # Shared configurations
-│       ├── eslint-config/        # ESLint configuration
-│       └── typescript-config/    # TypeScript configuration
+│   │   ├── hubspot/             # @repo/integrations-hubspot
+│   │   ├── supabase/            # @repo/integrations-supabase
+│   │   ├── scheduling/          # @repo/integrations-scheduling (Calendly, Acuity, Cal.com)
+│   │   ├── chat/                # @repo/integrations-chat (Intercom, Crisp, Tidio)
+│   │   ├── reviews/             # @repo/integrations-reviews (Google, Yelp, Trustpilot)
+│   │   ├── maps/                # @repo/integrations-maps
+│   │   └── ...                  # acuity, calendly, convertkit, mailchimp, sendgrid, etc.
+│   ├── ai-platform/             # @repo/ai-platform-* (agent-orchestration, llm-gateway, content-engine)
+│   ├── content-platform/       # dam-core, visual-editor
+│   ├── marketing-ops/           # campaign-orchestration
+│   ├── infrastructure/          # tenant-core, theme, layout, ui
+│   └── config/                  # eslint-config, typescript-config
 │
-├── docs/                         # Documentation
-│   ├── getting-started/          # Onboarding guides
-│   ├── tutorials/                # Step-by-step tutorials
+├── tooling/                     # Dev tooling
+│   ├── create-client/           # @repo/create-client
+│   ├── generate-component/     # @repo/generate-component
+│   └── validation/              # @repo/validation
+│
+├── docs/                        # Documentation hub
+│   ├── getting-started/         # Onboarding guides
+│   ├── tutorials/               # Step-by-step tutorials
 │   ├── architecture/            # Architecture documentation
-│   ├── components/               # Component documentation
-│   ├── resources/                # Glossary, FAQ, learning paths
-│   ├── operations/               # Maintenance guides
-│   └── (task specs consolidated in TASKS.md)
+│   ├── ci/                      # CI/CD (required-checks.md)
+│   └── ...
 │
-├── scripts/                      # Utility scripts
-│   ├── validate-documentation.js
-│   ├── validate-exports.js
-│   └── validate-workspaces.js
-├── tooling/                      # Dev tooling (create-client, generate-component, validation)
-│
-├── docker-compose.yml            # Docker Compose configuration
-├── turbo.json                    # Turborepo configuration
-├── pnpm-workspace.yaml           # pnpm workspace configuration
-└── package.json                  # Root package.json
+├── tasks/                       # Task specifications (e.g. 0-4-fix-toast-sonner-api.md)
+├── scripts/                     # validate-documentation, validate-exports, validate-workspaces
+├── docker-compose.yml           # Docker Compose configuration
+├── turbo.json                   # Turborepo pipeline config
+├── pnpm-workspace.yaml          # Workspace globs + version catalog
+└── package.json                 # Root package.json
 ```
 
 ### Architecture Layers
 
-- **Layer 0 (Infrastructure):** `@repo/infra` - Security, middleware, logging, environment schemas
-- **Layer 2 (Components):** `@repo/ui`, `@repo/marketing-components`, `@repo/features` - Reusable components and features
+- **Layer 0 (Infrastructure):** `@repo/infra`, `@repo/integrations-*` - Security, middleware, logging, env schemas
+- **Layer 2 (Components):** `@repo/ui`, `@repo/marketing-components`, `@repo/features`, `@repo/infrastructure-*` - Reusable components
 - **Layer 3 (Experience):** `@repo/page-templates`, `clients/` - Composed sites
 
 See [Architecture Overview](docs/architecture/README.md) for detailed architecture documentation.
@@ -243,21 +262,21 @@ See [Architecture Overview](docs/architecture/README.md) for detailed architectu
 
 All versions verified against [package.json](package.json) and [pnpm-workspace.yaml](pnpm-workspace.yaml):
 
-| Category | Technology | Version | Source |
-|----------|-----------|---------|--------|
-| **Runtime** | Node.js | >=22.0.0 | [package.json](package.json) |
-| **Package Manager** | pnpm | 10.29.2 | [package.json](package.json) |
-| **Frontend Framework** | Next.js | 16.1.5 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **UI Library** | React | 19.0.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Styling** | Tailwind CSS | 4.1.0 | [clients/starter-template/package.json](clients/starter-template/package.json) |
-| **Type Safety** | TypeScript | 5.9.3 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Linting** | ESLint | 9.18.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Code Formatting** | Prettier | 3.2.5 | [package.json](package.json) |
-| **Monorepo Tool** | Turbo | 2.8.9 | [package.json](package.json) |
-| **Testing** | Jest | 30.2.0 | [package.json](package.json) |
-| **Database** | Supabase | - | PostgreSQL with RLS |
-| **Error Tracking** | Sentry | 10.38.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Container** | Docker | - | [docker-compose.yml](docker-compose.yml) |
+| Category               | Technology   | Version  | Source                                                                         |
+| ---------------------- | ------------ | -------- | ------------------------------------------------------------------------------ |
+| **Runtime**            | Node.js      | >=22.0.0 | [package.json](package.json)                                                   |
+| **Package Manager**    | pnpm         | 10.29.2  | [package.json](package.json)                                                   |
+| **Frontend Framework** | Next.js      | 16.1.5   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **UI Library**         | React        | 19.0.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Styling**            | Tailwind CSS | 4.1.0    | [clients/starter-template/package.json](clients/starter-template/package.json) |
+| **Type Safety**        | TypeScript   | 5.9.3    | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Linting**            | ESLint       | 9.18.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Code Formatting**    | Prettier     | 3.8.1    | [package.json](package.json)                                                   |
+| **Monorepo Tool**      | Turbo        | 2.8.10   | [package.json](package.json)                                                   |
+| **Testing**            | Jest         | 30.2.0   | [package.json](package.json)                                                   |
+| **Database**           | Supabase     | -        | PostgreSQL with RLS                                                            |
+| **Error Tracking**     | Sentry       | 10.38.0  | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Container**          | Docker       | -        | [docker-compose.yml](docker-compose.yml)                                       |
 
 ### Key Dependencies
 
@@ -309,31 +328,31 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 
 ### Planning & Roadmap
 
-- **[TASKS.md](TASKS.md)** - Implementation backlog, task specifications, research, and phased execution
+- **[tasks/](tasks/)** - Task specifications (e.g. 0-4-fix-toast-sonner-api.md), implementation backlog
 
 ## 🧪 Available Scripts
 
 ### Workspace Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm install` | Install all dependencies |
-| `pnpm build` | Build all packages and projects |
-| `pnpm dev` | Start development servers (via Turbo) |
-| `pnpm lint` | Run ESLint across workspace |
-| `pnpm type-check` | Run TypeScript type checking |
-| `pnpm test` | Run Jest tests |
-| `pnpm test:watch` | Run tests in watch mode |
-| `pnpm test:coverage` | Generate test coverage report |
-| `pnpm format` | Format code with Prettier |
-| `pnpm format:check` | Check formatting without changes |
-| `pnpm validate-docs` | Validate documentation |
-| `pnpm validate-docs:strict` | Validate documentation (strict mode) |
-| `pnpm validate-exports` | Validate package exports |
-| `pnpm validate:workspaces` | Validate package.json vs pnpm-workspace.yaml sync |
-| `pnpm knip` | Find unused dependencies and exports |
-| `pnpm syncpack:check` | Check for dependency version mismatches |
-| `pnpm syncpack:fix` | Fix dependency version mismatches |
+| Command                     | Description                                       |
+| --------------------------- | ------------------------------------------------- |
+| `pnpm install`              | Install all dependencies                          |
+| `pnpm build`                | Build all packages and projects                   |
+| `pnpm dev`                  | Start development servers (via Turbo)             |
+| `pnpm lint`                 | Run ESLint across workspace                       |
+| `pnpm type-check`           | Run TypeScript type checking                      |
+| `pnpm test`                 | Run Jest tests                                    |
+| `pnpm test:watch`           | Run tests in watch mode                           |
+| `pnpm test:coverage`        | Generate test coverage report                     |
+| `pnpm format`               | Format code with Prettier                         |
+| `pnpm format:check`         | Check formatting without changes                  |
+| `pnpm validate-docs`        | Validate documentation                            |
+| `pnpm validate-docs:strict` | Validate documentation (strict mode)              |
+| `pnpm validate-exports`     | Validate package exports                          |
+| `pnpm validate:workspaces`  | Validate package.json vs pnpm-workspace.yaml sync |
+| `pnpm knip`                 | Find unused dependencies and exports              |
+| `pnpm syncpack:check`       | Check for dependency version mismatches           |
+| `pnpm syncpack:fix`         | Fix dependency version mismatches                 |
 
 ### Client Commands
 
@@ -367,6 +386,7 @@ docker-compose down
 ```
 
 The Docker Compose configuration includes:
+
 - **Starter Template** - Available on `http://localhost:3101`
 
 See [docker-compose.yml](docker-compose.yml) for configuration details and [docs/deployment/docker.md](docs/deployment/docker.md) for deployment documentation.
@@ -391,14 +411,18 @@ We welcome contributions! Before contributing, please:
 ### Quality Gates
 
 All pull requests must pass:
-- Linting (`pnpm lint`) — *currently fails in many packages (missing eslint.config)*
-- Type checking (`pnpm type-check`) — *currently fails in @repo/marketing-components*
-- Workspace validation (`pnpm validate:workspaces`) — *currently fails (package.json sync)*
+
+- Linting (`pnpm lint`) — _many packages lack eslint.config.mjs_
+- Type checking (`pnpm type-check`) — _currently fails in @repo/infrastructure-ui_
 - Export validation (`pnpm validate-exports`)
+- Marketing exports (`pnpm validate-marketing-exports`)
+- Client validation (`pnpm validate-all-clients`)
 - Circular deps (`pnpm madge:circular`)
 - Dependency consistency (`pnpm syncpack:check`)
-- Build (`pnpm build`) — *currently fails (@repo/features → Toast types)*
-- Tests (`pnpm test`) — *currently fails (4 booking-actions tests)*
+- Build (`pnpm build`)
+- Tests (`pnpm test`) — _all 646 tests pass_
+
+Workspace validation (`pnpm validate:workspaces`) passes; CI runs full pipeline on push, affected packages only on PRs.
 
 See [docs/ci/required-checks.md](docs/ci/required-checks.md) for CI/CD details.
 
@@ -423,18 +447,19 @@ For issues, questions, or suggestions:
 
 ## 📊 Project Status
 
-**Last Updated:** 2026-02-18  
+**Last Updated:** 2026-02-19  
 **Current Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Next Milestone:** Ensure CI quality gates pass; complete page template wiring
+**Next Milestone:** Fix @repo/infrastructure-ui type-check; ensure full CI pipeline passes
 
-For detailed progress tracking, see [TASKS.md](TASKS.md).
+For task specifications, see [tasks/](tasks/).
 
 ---
 
 **Quick Links:**
+
 - [🚀 Quick Start](#-quick-start)
 - [📚 Documentation Hub](docs/README.md)
 - [🏗️ Architecture](docs/architecture/README.md)
 - [📁 Archived docs](docs/archive/)
 - [🤝 Contributing](CONTRIBUTING.md)
-- [📋 Tasks & Roadmap](TASKS.md)
+- [📋 Task specs](tasks/)

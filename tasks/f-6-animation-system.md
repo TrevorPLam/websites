@@ -25,7 +25,7 @@ Animation system with presets, easing functions, and transitions.
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: (Work that will consume this output)
 
-## Research & Evidence (Date-Stamped)
+## Research
 
 ### Primary Research Topics
 - **[2026-02-18] R-INFRA**: Slot, Provider, Context, Theme, CVA — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-infra) for full research findings.
@@ -48,7 +48,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 - `packages/infrastructure/animation/transitions.ts` – create – (see task objective)
 - `packages/infrastructure/animation/hooks.ts` – create – (see task objective)
 
-## Code Snippets / Examples
+## Sample code / examples
 
 ### Related Patterns
 - See [R-INFRA - Research Findings](RESEARCH-INVENTORY.md#r-infra) for additional examples

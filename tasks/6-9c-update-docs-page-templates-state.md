@@ -19,6 +19,17 @@ Update README, docs/architecture/README.md, and any docs that claim "all page te
 
 - **Upstream Task**: 6-9
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 6-9
+- **Downstream**: Documentation accuracy
+
+## Research
+
+- **Primary topics**: [R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration).
+- **[2026-02] Doc accuracy**: README and docs/architecture must match current registry/sections; remove claims about NotImplementedPlaceholder for page-templates.
+- **References**: [RESEARCH-INVENTORY.md – R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration), [docs/DOCUMENTATION_STANDARDS.md](../docs/DOCUMENTATION_STANDARDS.md).
+
 ## Related Files
 
 - `README.md` – modify
@@ -37,6 +48,14 @@ Update README, docs/architecture/README.md, and any docs that claim "all page te
 - [ ] Grep for NotImplementedPlaceholder, "scaffolded", page-templates claims
 - [ ] Update each reference to reflect current state
 - [ ] Run validate-docs
+
+## Sample code / examples
+
+- **Grep**: `rg "NotImplementedPlaceholder|scaffolded only" docs/ README.md`; update each to reflect current page-templates state (registry + real sections).
+
+## Testing Requirements
+
+- Run `pnpm validate-docs`.
 
 ## Definition of Done
 

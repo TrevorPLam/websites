@@ -19,6 +19,17 @@ Pluggable families: register new families (e.g. events, careers, partners) via c
 
 - **Upstream Task**: 2.x – marketing-components exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 2.x
+- **Downstream**: INF-7, INF-8
+
+## Research
+
+- **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), [R-MARKETING](RESEARCH-INVENTORY.md#r-marketing-hero-menu-pricing-testimonials-faq-sections). Pluggable families.
+- **[2026-02] Family registry**: Discoverable by ID; config or convention; section adapters resolve with fallback; document how to add families.
+- **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
+
 ## Related Files
 
 - `packages/marketing-components/src/` – modify – Family registry
@@ -45,6 +56,14 @@ Pluggable families: register new families (e.g. events, careers, partners) via c
 - [ ] Update section adapters to use registry
 - [ ] Document family addition workflow
 - [ ] Add tests
+
+## Sample code / examples
+
+- **Family registry**: Map family ID to component module; discovery via package structure or config; section adapter calls registry.resolve(familyId).
+
+## Testing Requirements
+
+- Unit tests for registry resolution; build pass.
 
 ## Definition of Done
 

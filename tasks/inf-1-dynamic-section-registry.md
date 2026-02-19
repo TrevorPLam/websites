@@ -19,6 +19,17 @@ Allow site.config to register custom section IDs that resolve to components at r
 
 - **Upstream Task**: 3.1, 3.2 – registry and sections exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 3.1, 3.2
+- **Downstream**: INF-2, INF-5, INF-8
+
+## Research
+
+- **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), [R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation-config-schema-validation-zod).
+- **[2026-02] Config-driven registries**: site.config sections array overrides default getSectionsForPage; section IDs map to registry; unknown IDs fallback (skip or placeholder). No breaking change to existing flow.
+- **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), [packages/page-templates/src/registry.ts](../packages/page-templates/src/registry.ts), [packages/types/src/site-config.ts](../packages/types/src/site-config.ts).
+
 ## Related Files
 
 - `packages/page-templates/src/registry.ts` – modify
@@ -44,6 +55,14 @@ Allow site.config to register custom section IDs that resolve to components at r
 - [ ] Update composePage to prefer config sections
 - [ ] Document config-driven sections
 - [ ] Add tests
+
+## Sample code / examples
+
+- **SiteConfig**: Add optional `sections?: string[]`. **getSectionsForPage**: When config.sections present, use it; resolve each ID via registry; skip or placeholder unknown. **composePage**: Prefer config sections over defaults.
+
+## Testing Requirements
+
+- Unit tests for getSectionsForPage with config.sections; test unknown ID fallback.
 
 ## Definition of Done
 

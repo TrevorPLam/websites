@@ -19,6 +19,17 @@ Content blocks as first-class config: define block types (text, image, video, CT
 
 - **Upstream Task**: C-10 – optional (content adapters)
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: C-10
+- **Downstream**: Blog, static pages
+
+## Research
+
+- **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), [R-CMS](RESEARCH-INVENTORY.md#r-cms-content-adapters-mdx-pagination). Block composition.
+- **[2026-02] Block registry**: Block type schema (type, props, children); registry; renderer by type; integrate with BlogPost and page templates.
+- **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
+
 ## Related Files
 
 - `packages/features/src/content/` – modify – Block types
@@ -47,6 +58,14 @@ Content blocks as first-class config: define block types (text, image, video, CT
 - [ ] Integrate with BlogPost, page templates
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **Block schema**: `{ type: 'text'|'image'|'video'|'cta', props: object, children?: Block[] }`. Registry maps type to renderer; page template iterates block sequence.
+
+## Testing Requirements
+
+- Unit tests for block resolution; build pass.
 
 ## Definition of Done
 

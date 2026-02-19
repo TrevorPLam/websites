@@ -140,11 +140,11 @@ Define the conditions that must be met for the task to be considered complete. E
 
 **Good criteria:**
 
-- “Form submission is blocked when the selected time is already booked.”
-- “User sees the error message 'This time is unavailable' within 500ms.”
-- “The `validateBookingTime` function returns `{ valid: false, error: { code: 'double_booking' } }` for conflicting slots.”
+- "Form submission is blocked when the selected time is already booked."
+- "User sees the error message 'This time is unavailable' within 500ms."
+- "The `validateBookingTime` function returns `{ valid: false, error: { code: 'double_booking' } }` for conflicting slots."
 
-**Avoid vague statements like** “Make sure it works well.”
+**Avoid vague statements like** "Make sure it works well."
 
 ### 6. Technical Constraints & Considerations
 
@@ -152,11 +152,11 @@ Document any non‑functional requirements that could affect implementation.
 
 **Areas to cover:**
 
-- **Performance** – e.g., “API response must be under 200ms.”
-- **Security** – e.g., “All user input must be sanitized to prevent XSS.”
-- **Accessibility** – e.g., “Form error messages must be announced by screen readers (WCAG 2.2 AA).”
-- **Browser/device support** – e.g., “Must work on iOS Safari 14+.”
-- **Compliance** – e.g., “No tracking cookies without explicit consent.”
+- **Performance** – e.g., "API response must be under 200ms."
+- **Security** – e.g., "All user input must be sanitized to prevent XSS."
+- **Accessibility** – e.g., "Form error messages must be announced by screen readers (WCAG 2.2 AA)."
+- **Browser/device support** – e.g., "Must work on iOS Safari 14+."
+- **Compliance** – e.g., "No tracking cookies without explicit consent."
 
 **Example:**
 
@@ -164,7 +164,7 @@ Document any non‑functional requirements that could affect implementation.
 ## Technical Constraints
 
 - The booking form must function without JavaScript (progressive enhancement).
-- All timestamps must be stored in UTC and converted to the user’s local time zone on the client.
+- All timestamps must be stored in UTC and converted to the user's local time zone on the client.
 - Error messages must support internationalization (i18n) via `next-intl`.
 ```
 
@@ -239,7 +239,7 @@ Identify any existing documentation that needs to be updated as part of the task
 - [ ] Update `docs/features/booking.md` with conflict prevention details.
 - [ ] Add JSDoc comments to `validateBookingTime`.
 - [ ] Update API examples in `docs/api/booking.md`.
-- [ ] Note the change in `CHANGELOG.md` under “Added”.
+- [ ] Note the change in `CHANGELOG.md` under "Added".
 ```
 
 ### 10. Design References & Assets
@@ -268,7 +268,7 @@ Explicitly note how this work fits into the broader program so multiple contribu
 
 ### 12. Accessibility & Performance Guardrails
 
-Tie every UI or feature change back to the repo’s concrete standards so no requirement is left implicit.
+Tie every UI or feature change back to the repo's concrete standards so no requirement is left implicit.
 
 - Reference `docs/accessibility/component-a11y-rubric.md` for WCAG 2.2 AA expectations (focus styles, touch targets, screen-reader copy).
 - Link to performance budgets (e.g., `docs/architecture/README.md` or feature-specific specs) and restate target metrics (LCP < 2.5s, INP ≤ 200ms, bundle caps, etc.).
@@ -403,8 +403,8 @@ Use this template as a starting point. Customize sections based on task complexi
 | **Link everything** | Make it easy to navigate to related issues, designs, and files. |
 | **Keep tasks atomic** | One task should do one thing; avoid scope creep. |
 | **Include error paths** | Edge cases are where bugs hide. |
-| **Specify “why” not just “what”** | Enables better decision‑making during implementation. |
-| **Make criteria testable** | “Works well” is not testable; “returns 200 OK” is. |
+| **Specify "why" not just "what"** | Enables better decision‑making during implementation. |
+| **Make criteria testable** | "Works well" is not testable; "returns 200 OK" is. |
 
 ## 💡 Pro Tips for Cursor AI & Monorepos
 
@@ -438,4 +438,3 @@ Before marking a task as complete, verify that:
 By following these guidelines, you'll create tasks that are clear, executable, and ready for both human and AI collaboration. This consistency will pay dividends in reduced friction, fewer bugs, and faster delivery across your entire monorepo.
 
 Would you like me to tailor this further for a specific type of task (e.g., adding a new UI component, setting up a client, or integrating a third‑party service)?
-```

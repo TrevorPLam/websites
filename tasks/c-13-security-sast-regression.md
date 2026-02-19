@@ -19,6 +19,17 @@ Ensure security-sast.yml and secret-scan.yml are effective. Add infra/__tests__/
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: Security posture
+
+## Research
+
+- **Primary topics**: [R-SECURITY-ADV](RESEARCH-INVENTORY.md#r-security-adv-security-regression-threat-modeling). THEGOAL [C.13].
+- **[2026-02] SAST and regression**: security-sast.yml, secret-scan.yml; security-regression tests for SSRF, XSS, injection.
+- **References**: [RESEARCH-INVENTORY.md – R-SECURITY-ADV](RESEARCH-INVENTORY.md#r-security-adv-security-regression-threat-modeling), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `.github/workflows/security-sast.yml` – verify
@@ -39,6 +50,14 @@ Ensure security-sast.yml and secret-scan.yml are effective. Add infra/__tests__/
 - [ ] Add security regression test suite
 - [ ] Document
 - [ ] Address any critical findings
+
+## Sample code / examples
+
+- **security-regression**: Test cases for SSRF, XSS, injection; workflows run in CI; document in docs/security/continuous-security-program.md.
+
+## Testing Requirements
+
+- Run workflows; run regression tests; build pass.
 
 ## Definition of Done
 

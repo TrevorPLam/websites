@@ -19,6 +19,17 @@ Extend generate-component CLI to support --family (marketing component family) a
 
 - **Upstream Task**: 6-8d – generate-component base
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 6-8d
+- **Downstream**: Component scaling
+
+## Research
+
+- **Primary topics**: [R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). CVA variants.
+- **[2026-02] generate-component**: --family and --variant flags; output to family folder; CVA pattern; index and Storybook.
+- **References**: [RESEARCH-INVENTORY.md – R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding), task 6-8d.
+
 ## Related Files
 
 - `tooling/generate-component/src/index.ts` – modify
@@ -45,6 +56,14 @@ Extend generate-component CLI to support --family (marketing component family) a
 - [ ] Add Storybook story template
 - [ ] Document
 - [ ] Test
+
+## Sample code / examples
+
+- **CLI**: Parse --family=hero, --variant=compact; template outputs to packages/marketing-components/src/<family>/; update family index and add .stories.tsx.
+
+## Testing Requirements
+
+- Run generate-component with --family and --variant; verify build and exports.
 
 ## Definition of Done
 

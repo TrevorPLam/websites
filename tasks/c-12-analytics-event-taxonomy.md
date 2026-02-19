@@ -19,6 +19,17 @@ Add event-contract.ts to packages/integrations/analytics/ per THEGOAL. Defines c
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: Conversion tracking
+
+## Research
+
+- **Primary topics**: THEGOAL [C.12]. Analytics event contract.
+- **[2026-02] Event taxonomy**: Typed event names and payloads; page_view, conversion (booking, contact), custom; consent flags; document in docs/analytics.
+- **References**: [THEGOAL.md](../THEGOAL.md), [RESEARCH-INVENTORY.md – R-SPEC-DRIVEN](RESEARCH-INVENTORY.md#r-spec-driven-spec-driven-development).
+
 ## Related Files
 
 - `packages/integrations/analytics/src/event-contract.ts` – create
@@ -39,6 +50,14 @@ Add event-contract.ts to packages/integrations/analytics/ per THEGOAL. Defines c
 - [ ] Add tests
 - [ ] Integrate with existing analytics package
 - [ ] Document
+
+## Sample code / examples
+
+- **event-contract.ts**: EventName union, EventPayload types; page_view, conversion events; consent field where needed.
+
+## Testing Requirements
+
+- Unit tests for event types; build pass.
 
 ## Definition of Done
 

@@ -19,6 +19,17 @@ Beyond 7 fixed templates: register custom page layouts by ID. Page route maps to
 
 - **Upstream Task**: 3.x – page templates exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 3.x
+- **Downstream**: Custom layouts
+
+## Research
+
+- **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). Layout registry.
+- **[2026-02] Layout registry**: Map layout ID to template; site.config or route config; custom layouts; default for unknown.
+- **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
+
 ## Related Files
 
 - `packages/page-templates/src/registry.ts` – modify – Layout registry
@@ -46,6 +57,14 @@ Beyond 7 fixed templates: register custom page layouts by ID. Page route maps to
 - [ ] Update client routes to use layout resolution
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **Registry**: layoutRegistry.get(id) returns template component; route or config supplies layout ID; fallback to default layout.
+
+## Testing Requirements
+
+- Unit tests for layout resolution; build pass.
 
 ## Definition of Done
 

@@ -19,6 +19,17 @@ Verify sbom-generation.yml and dependency-integrity.yml are effective. Document 
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: Supply chain security
+
+## Research
+
+- **Primary topics**: THEGOAL [D.8], supply chain security. SBOM, dependency provenance.
+- **[2026-02] SBOM**: sbom-generation.yml produces artifact; dependency-integrity.yml checks provenance; docs/security/supply-chain-security.md.
+- **References**: [THEGOAL.md](../THEGOAL.md) [D.8], [RESEARCH-INVENTORY.md – R-SECURITY-ADV](RESEARCH-INVENTORY.md#r-security-adv-security-regression-threat-modeling).
+
 ## Related Files
 
 - `.github/workflows/sbom-generation.yml` – verify
@@ -38,6 +49,14 @@ Verify sbom-generation.yml and dependency-integrity.yml are effective. Document 
 - [ ] Create/update supply-chain-security.md
 - [ ] Document artifact usage
 - [ ] Fix any workflow issues
+
+## Sample code / examples
+
+- **Workflows**: Verify .github/workflows/sbom-generation.yml and dependency-integrity.yml; supply-chain-security.md describes artifact and process.
+
+## Testing Requirements
+
+- Run workflows; confirm artifacts; run validate-docs.
 
 ## Definition of Done
 

@@ -26,6 +26,12 @@ Implement standalone `validate-site-config` (or `pnpm validate-config`) in tooli
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: Config validation in CI or pre-commit
 
+## Research
+
+- **Primary topics**: [R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation-config-schema-validation-zod).
+- **[2026-02] Zod**: Use SiteConfig schema from @repo/types; validate file at path; report errors; exit 0/1.
+- **References**: [RESEARCH-INVENTORY.md – R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation-config-schema-validation-zod), scripts/validate-client.ts.
+
 ## Related Files
 
 - `tooling/validation/src/validate-site-config.ts` – modify – Implementation
@@ -49,6 +55,10 @@ Implement standalone `validate-site-config` (or `pnpm validate-config`) in tooli
 - [ ] Implement validate-site-config.ts
 - [ ] Add package.json bin/script
 - [ ] Wire to root package.json
+
+## Sample code / examples
+
+- **validate-site-config**: Load site.config.ts (or .js), run Zod schema parse; print errors; process.exit(success ? 0 : 1). Reuse logic from scripts/validate-client.ts if it already validates config.
 
 ## Testing Requirements
 

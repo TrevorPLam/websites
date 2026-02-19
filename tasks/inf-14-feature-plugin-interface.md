@@ -19,6 +19,17 @@ Define feature module contract: export id, schema, components, sections. Load fe
 
 - **Upstream Task**: 2.x – features exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 2.x
+- **Downstream**: Custom features
+
+## Research
+
+- **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). Feature module contract.
+- **[2026-02] Feature contract**: id, schema, components, sections; registry by ID; sections auto-register when feature enabled.
+- **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
+
 ## Related Files
 
 - `packages/features/src/` – modify – Feature contract
@@ -47,6 +58,14 @@ Define feature module contract: export id, schema, components, sections. Load fe
 - [ ] Migrate existing features to contract (optional)
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **FeatureModule interface**: { id, schema, components, sections }; featureRegistry.get(id); page-templates resolve features from config.
+
+## Testing Requirements
+
+- Unit tests for feature resolution; build pass.
 
 ## Definition of Done
 

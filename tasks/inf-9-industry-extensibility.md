@@ -19,6 +19,17 @@ Allow custom industry identifiers beyond the 12. Industry config as optional ove
 
 - **Upstream Task**: 4-6 – industry-schemas exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 4-6
+- **Downstream**: Custom industries
+
+## Research
+
+- **Primary topics**: [R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry-json-ld-industry-patterns), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). Custom industry beyond core 12.
+- **[2026-02] Industry extensibility**: industry as string or union; custom config override; schemaType for JSON-LD; getIndustryConfig fallback.
+- **References**: [RESEARCH-INVENTORY.md – R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry-json-ld-industry-patterns).
+
 ## Related Files
 
 - `packages/types/src/industry-configs.ts` – modify
@@ -45,6 +56,14 @@ Allow custom industry identifiers beyond the 12. Industry config as optional ove
 - [ ] Update industry-schemas for custom schemaType
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **industry-configs**: Extend type; resolve custom industry; fallback to 'general'. schemaType from config for JSON-LD.
+
+## Testing Requirements
+
+- Unit tests for custom industry resolution; build pass.
 
 ## Definition of Done
 

@@ -19,6 +19,17 @@ Add docs/ci/turbo-remote-cache.md per THEGOAL [C.3]. Documents Turbo remote cach
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: CI optimization
+
+## Research
+
+- **Primary topics**: [R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration). THEGOAL [C.3].
+- **[2026-02] Turbo remote cache**: Vercel or self-hosted; cache hit rate via scripts/ci/report-cache-hit-rate.ts.
+- **References**: [RESEARCH-INVENTORY.md – R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration), [docs/DOCUMENTATION_STANDARDS.md](../docs/DOCUMENTATION_STANDARDS.md).
+
 ## Related Files
 
 - `docs/ci/turbo-remote-cache.md` – create
@@ -34,6 +45,14 @@ Add docs/ci/turbo-remote-cache.md per THEGOAL [C.3]. Documents Turbo remote cach
 
 - [ ] Create turbo-remote-cache.md
 - [ ] Run pnpm validate-docs
+
+## Sample code / examples
+
+- **docs/ci/turbo-remote-cache.md**: Sections for remote cache setup, cache hit rate reporting, usage of report-cache-hit-rate script.
+
+## Testing Requirements
+
+- Run `pnpm validate-docs`.
 
 ## Definition of Done
 

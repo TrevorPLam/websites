@@ -25,6 +25,13 @@
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: Build pipeline
 
+## Research
+
+- **Primary topics**: [R-PERF](RESEARCH-INVENTORY.md#r-perf-lcp-inp-cls-bundle-budgets) (build/bundle), Turborepo outputs.
+- **[2026-02] Turborepo**: Pipeline tasks declare `outputs` (e.g. `[".next/**", "dist/**"]`); if a package produces no files matching outputs, Turbo may warn. Source-only packages can use `outputs: []` or a sentinel file.
+- **[2026-02] Best practice**: Either emit real output (tsc, bundle) or explicitly set package-specific `outputs` in turbo.json so the pipeline is deterministic.
+- **References**: [RESEARCH-INVENTORY.md – R-PERF](RESEARCH-INVENTORY.md#r-perf-lcp-inp-cls-bundle-budgets), [turbo.json](../turbo.json), [CLAUDE.md](../CLAUDE.md).
+
 ## Related Files
 
 - `packages/marketing-components/package.json` – modify – Build script
@@ -47,6 +54,14 @@
 - [ ] Option A: Add tsc/build step that emits to dist/
 - [ ] Option B: Add turbo.json override for this package (e.g. outputs: [] or different pattern)
 - [ ] Verify build pipeline
+
+## Sample code / examples
+
+- **turbo.json package override** (if source-only): In turbo.json, add a target override for `@repo/marketing-components` so outputs match reality (e.g. empty or a single sentinel).
+  ```json
+  "//@repo/marketing-components": { "outputs": [] }
+  ```
+- **Real build**: If adding tsc emit, use `packages/marketing-components/tsconfig.json` with `"outDir": "dist"` and script `"build": "tsc"`.
 
 ## Testing Requirements
 

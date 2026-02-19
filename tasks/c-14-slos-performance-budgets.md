@@ -19,6 +19,17 @@ Wire scripts/perf/validate-budgets.ts as CI gate. Define SLOs (LCP, INP, CLS) an
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: Performance gates
+
+## Research
+
+- **Primary topics**: [R-PERF](RESEARCH-INVENTORY.md#r-perf-lcp-inp-cls-bundle-budgets), [R-ERROR-BUDGET](RESEARCH-INVENTORY.md#r-error-budget-error-budgets-slos-release-gates). THEGOAL [C.14].
+- **[2026-02] SLOs**: LCP, INP, CLS targets; validate-budgets script; bundle size optional; docs/performance/slo-definition.md.
+- **References**: [RESEARCH-INVENTORY.md – R-PERF](RESEARCH-INVENTORY.md#r-perf-lcp-inp-cls-bundle-budgets), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `scripts/perf/validate-budgets.ts` – modify or create
@@ -40,6 +51,14 @@ Wire scripts/perf/validate-budgets.ts as CI gate. Define SLOs (LCP, INP, CLS) an
 - [ ] Define budget thresholds
 - [ ] Document SLOs
 - [ ] Wire to package.json and optionally CI
+
+## Sample code / examples
+
+- **validate-budgets.ts**: Read build output or run Lighthouse; compare LCP/INP/CLS to thresholds; exit 1 on breach. Document in slo-definition.md.
+
+## Testing Requirements
+
+- Run script; confirm it passes/fails as expected; build pass.
 
 ## Definition of Done
 

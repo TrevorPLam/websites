@@ -19,6 +19,17 @@ Extend SiteConfig so features accept arbitrary variant strings (not just 'center
 
 - **Upstream Task**: None – required – prerequisite
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: None
+- **Downstream**: INF-5, INF-7
+
+## Research
+
+- **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), [R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture). CVA variants.
+- **[2026-02] Variant schema**: features.hero (and similar) accept string or union; resolveVariant(id, value) with fallback to default; backward compatible.
+- **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), packages/types/src/site-config.ts.
+
 ## Related Files
 
 - `packages/types/src/site-config.ts` – modify – features schema
@@ -44,6 +55,14 @@ Extend SiteConfig so features accept arbitrary variant strings (not just 'center
 - [ ] Update section adapters to use resolution
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **SiteConfig features**: Extend with flexible variant (e.g. `hero?: string`); resolveVariant('hero', config.features?.hero) returns resolved variant or default ('split'). Section adapters use resolution.
+
+## Testing Requirements
+
+- Unit tests for resolveVariant; build and test pass.
 
 ## Definition of Done
 

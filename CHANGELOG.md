@@ -1,3 +1,14 @@
+---
+diataxis: reference
+audience: user
+last_reviewed: 2026-02-19
+review_interval_days: 7
+project: marketing-websites
+description: Changelog tracking all notable changes
+tags: [changelog, changes, versions, releases]
+primary_language: typescript
+---
+
 <!--
 /**
  * @file CHANGELOG.md
@@ -59,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Comprehensive documentation excellence improvements
 - CODE_OF_CONDUCT.md for community standards
 - Enhanced SECURITY.md with vulnerability reporting
@@ -66,16 +78,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interactive documentation site (planned)
 
 ### Changed
+
 - Enhanced documentation standards and practices
 - Improved documentation discoverability
 
 ### Fixed
+
 - Documentation link validation
 - Missing essential documentation files
 
 ## [1.0.0] - TBD
 
 ### Added
+
 - Initial release of multi-industry marketing website template system
 - Core template system with hair salon template
 - Shared component library (@repo/ui)
@@ -87,6 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline with quality gates
 
 ### Security
+
 - Security monitoring and vulnerability scanning
 - Dependency scanning and SBOM generation
 - Secret scanning integration
@@ -105,6 +121,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Format
 
 We follow [Semantic Versioning](https://semver.org/):
+
 - **MAJOR** version for incompatible API changes
 - **MINOR** version for functionality added in a backwards compatible manner
 - **PATCH** version for backwards compatible bug fixes

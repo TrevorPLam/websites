@@ -19,6 +19,17 @@ NotImplementedPlaceholder exists in packages/page-templates but has no imports. 
 
 - **Upstream Task**: 6-9
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 6-9
+- **Downstream**: 6-9 complete
+
+## Research
+
+- **Primary topics**: [R-CLEANUP](RESEARCH-INVENTORY.md#r-cleanup-dead-code-removal-dependency-pruning).
+- **[2026-02] Dead code**: Remove unused components; grep for imports before delete; update index exports.
+- **References**: [RESEARCH-INVENTORY.md – R-CLEANUP](RESEARCH-INVENTORY.md#r-cleanup-dead-code-removal-dependency-pruning).
+
 ## Related Files
 
 - `packages/page-templates/src/NotImplementedPlaceholder.tsx` – delete or retain
@@ -37,6 +48,14 @@ NotImplementedPlaceholder exists in packages/page-templates but has no imports. 
 - [ ] If unused: delete file, update any index exports
 - [ ] If retained: add comment explaining why
 - [ ] Run build and tests
+
+## Sample code / examples
+
+- **Verify no imports**: `rg "NotImplementedPlaceholder" --type-add 'ts:*.ts' -t ts -t tsx` (or grep); remove from packages/page-templates index if exported.
+
+## Testing Requirements
+
+- Run `pnpm build`, `pnpm test` after removal.
 
 ## Definition of Done
 

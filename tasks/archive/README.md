@@ -22,3 +22,13 @@ All 62 marketing component and feature tasks (2-1 through 2-62) were implemented
 **Follow-on:** See [tasks/3-9-wire-2-tasks-output-into-templates.md](../3-9-wire-2-tasks-output-into-templates.md) for wiring into templates and site.config.
 
 **Reference:** [docs/qa/qa-analysis-2-tasks-implementation.md](../../docs/qa/qa-analysis-2-tasks-implementation.md)
+
+---
+
+## Historic process / meta (archived 2026-02)
+
+The following files are process, gameplan, or prompt documentation—not task specs. They were moved here so only actionable task files remain at `tasks/` root.
+
+- **TASK-UPDATE-PROGRESS.md** — Progress log for batch-updating task files with research/snippets.
+- **TASK-UPDATE-GAMEPLAN.md** — Game plan for systematically updating all task files.
+- **prompt.md** — Guide to task documentation (template and best practices for Cursor AI).

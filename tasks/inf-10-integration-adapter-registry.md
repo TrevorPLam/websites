@@ -19,6 +19,17 @@ Discovery of integrations by provider ID. Custom adapters register via package o
 
 - **Upstream Task**: 4-1 through 4-5 – integrations exist
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 4-1..4-5
+- **Downstream**: Custom integrations
+
+## Research
+
+- **Primary topics**: [R-INTEGRATION](RESEARCH-INVENTORY.md#r-integration-scheduling-oauth-tcf), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). Adapter registry.
+- **[2026-02] Adapter registry**: provider ID to adapter; discovery via package or config; site.config.integrations selects by ID.
+- **References**: [RESEARCH-INVENTORY.md – R-INTEGRATION](RESEARCH-INVENTORY.md#r-integration-scheduling-oauth-tcf).
+
 ## Related Files
 
 - `packages/integrations/*/` – modify – Registry pattern
@@ -45,6 +56,14 @@ Discovery of integrations by provider ID. Custom adapters register via package o
 - [ ] Update existing integrations to use registry
 - [ ] Document
 - [ ] Add tests
+
+## Sample code / examples
+
+- **Registry**: integrationRegistry.get(providerId) returns adapter; discovery from package exports or config; document @repo/integrations-<provider> pattern.
+
+## Testing Requirements
+
+- Unit tests for adapter resolution; build pass.
 
 ## Definition of Done
 

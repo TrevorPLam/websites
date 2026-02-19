@@ -1,0 +1,42 @@
+# CODEOWNERS for reviewer assignment
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default reviewers for the entire repository
+*       @TrevorPLam
+
+# Core infrastructure and configuration
+/packages/infra/          @TrevorPLam
+/packages/config/         @TrevorPLam
+tooling/                  @TrevorPLam
+scripts/                  @TrevorPLam
+
+# UI components and design system
+/packages/ui/             @TrevorPLam
+/packages/marketing-components/ @TrevorPLam
+
+# Business logic and features
+/packages/features/       @TrevorPLam
+/packages/page-templates/ @TrevorPLam
+
+# Type definitions and schemas
+/packages/types/          @TrevorPLam
+packages/industry-schemas/ @TrevorPLam
+
+# Integrations and external services
+packages/integrations/    @TrevorPLam
+
+# Client implementations
+clients/                  @TrevorPLam
+
+# Documentation
+docs/                     @TrevorPLam
+*.md                      @TrevorPLam
+
+# GitHub workflows and CI/CD
+.github/workflows/        @TrevorPLam
+
+# Emergency fallback - any maintainer can review
+*.ts                      @TrevorPLam
+*.tsx                     @TrevorPLam
+*.js                      @TrevorPLam
+*.jsx                     @TrevorPLam

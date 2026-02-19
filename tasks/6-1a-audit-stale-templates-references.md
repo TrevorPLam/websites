@@ -25,6 +25,12 @@ Task 6-1 referenced templates/hair-salon; templates/ directory no longer exists.
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: Documentation accuracy
 
+## Research
+
+- **Primary topics**: [R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration), [R-MIGRATION](RESEARCH-INVENTORY.md#r-migration-template-to-client-migration-cutover).
+- **[2026-02] templates/ removed**: 6-3 removed templates/; references should point to clients/ or packages/. Exclude .kiro/specs/templates/ and verify docs/templates/ before changing.
+- **References**: [RESEARCH-INVENTORY.md – R-DOCS](RESEARCH-INVENTORY.md#r-docs-adrs-config-reference-migration), [RESEARCH-INVENTORY.md – R-MIGRATION](RESEARCH-INVENTORY.md#r-migration-template-to-client-migration-cutover).
+
 ## Related Files
 
 - Various docs, RESEARCH.md, task files – audit – Grep for templates/ refs
@@ -45,6 +51,10 @@ Task 6-1 referenced templates/hair-salon; templates/ directory no longer exists.
 - [ ] Run grep for templates/hair-salon, templates/shared
 - [ ] Update or remove each reference
 - [ ] Validate docs
+
+## Sample code / examples
+
+- **Grep**: `rg "templates/hair-salon|templates/shared|templates/"` (exclude .kiro/specs/templates/ and known test paths); update each hit to clients/ or packages/ as appropriate.
 
 ## Testing Requirements
 

@@ -26,6 +26,12 @@ Add packages/features/src/personalization/ with rules-engine.ts (privacy-safe, a
 - **Parallel Work**: (Tasks to coordinate with)
 - **Downstream**: Personalization in pages, F.6
 
+## Research
+
+- **Primary topics**: [R-PERSONALIZATION](RESEARCH-INVENTORY.md#r-personalization-personalization-engine-behavioral-tracking). THEGOAL [C.9].
+- **[2026-02] Personalization**: rules-engine (allowlist-only, privacy-safe), segments (geo, returning, campaign), co-creation optional; no PII; consent-aware.
+- **References**: [RESEARCH-INVENTORY.md – R-PERSONALIZATION](RESEARCH-INVENTORY.md#r-personalization-personalization-engine-behavioral-tracking), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `packages/features/src/personalization/rules-engine.ts` – create
@@ -52,6 +58,10 @@ Add packages/features/src/personalization/ with rules-engine.ts (privacy-safe, a
 - [ ] Implement rules-engine, segments
 - [ ] Add to features exports
 - [ ] Document
+
+## Sample code / examples
+
+- **rules-engine.ts**: evaluate(signals) with allowlist; **segments.ts**: getSegment(context) returns geo/returning/campaign; export from @repo/features.
 
 ## Testing Requirements
 

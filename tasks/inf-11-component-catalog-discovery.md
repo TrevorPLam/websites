@@ -20,6 +20,17 @@ Docs or tooling to browse components by tag, industry, feature. Searchable props
 - **Upstream Task**: 6-4 – component docs
 - **Upstream Task**: C-7 – optional (Storybook)
 
+## Cross-Task Dependencies & Sequencing
+
+- **Upstream**: 6-4, C-7
+- **Downstream**: Component discovery
+
+## Research
+
+- **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva). Component catalog.
+- **[2026-02] Catalog discovery**: Component metadata (family, variant, tags); discovery API; Storybook integration.
+- **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
+
 ## Related Files
 
 - `docs/components/` – modify
@@ -48,6 +59,14 @@ Docs or tooling to browse components by tag, industry, feature. Searchable props
 - [ ] Add tags to components
 - [ ] Document
 - [ ] Integrate with Storybook if present
+
+## Sample code / examples
+
+- **Catalog**: Metadata per component (family, variant, tags); getCatalog() or similar; optional Storybook integration.
+
+## Testing Requirements
+
+- Unit tests for discovery; build pass.
 
 ## Definition of Done
 

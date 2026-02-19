@@ -25,6 +25,12 @@ Add packages/features/src/content/ with content-provider.ts (unified content int
 - **Parallel Work**: D.3 (editorial workflow)
 - **Downstream**: Blog, page content, INF-6 blocks
 
+## Research
+
+- **Primary topics**: [R-CMS](RESEARCH-INVENTORY.md#r-cms-content-adapters-mdx-pagination). THEGOAL [C.10].
+- **[2026-02] Content adapters**: content-provider unified interface; workflow-state; MDX, Sanity, Storyblok adapters; site.config selects provider.
+- **References**: [RESEARCH-INVENTORY.md – R-CMS](RESEARCH-INVENTORY.md#r-cms-content-adapters-mdx-pagination), [THEGOAL.md](../THEGOAL.md).
+
 ## Related Files
 
 - `packages/features/src/content/content-provider.ts` – create
@@ -44,6 +50,10 @@ Add packages/features/src/content/ with content-provider.ts (unified content int
 - [ ] Storyblok adapter: Storyblok integration (optional stub)
 - [ ] Export from @repo/features
 - [ ] Document in docs/content/content-source-adapters.md
+
+## Sample code / examples
+
+- **content-provider.ts**: getContent(id), listContent(); adapters implement interface; site.config.content.provider selects adapter.
 
 ## Technical Constraints
 
