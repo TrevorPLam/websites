@@ -62,6 +62,17 @@ _Purpose:_ Complete topic map and task→topic mapping for Task Research Audit. 
 | R-OBSERVABILITY | OpenTelemetry, distributed tracing, tenant-aware logging | infrastructure-1 |
 | R-E2E-TESTING | Playwright E2E testing, multi-tenant test strategy, visual regression | infrastructure-2 |
 | R-INTEGRATION-RESILIENCE | Retry logic, circuit breaker, DLQ for integrations | infrastructure-3 |
+| R-PNPM-SECURITY | pnpm 10 security features (allowBuilds, blockExoticSubdeps, integrityHash) | security-5 |
+| R-REACT-TAINT-API | React Taint API for data leakage prevention (experimental_taintObjectReference) | security-6 |
+| R-MIDDLEWARE-BYPASS | CVE-2025-29927 mitigation, multi-layered authentication, DAL verification | security-7 |
+| R-PARTYTOWN | Third-party script offloading to Web Workers, Core Web Vitals optimization | infrastructure-4 |
+| R-CONTRACT-TESTING | Pact contract testing, consumer-driven contracts, API reliability | infrastructure-5 |
+| R-SCAFFOLD-MCP | AI-assisted development governance, scaffold.yaml patterns, architectural consistency | infrastructure-6 |
+| R-CCPA-2026 | CCPA 2026 compliance (DROP integration, expanded lookback, minor rights) | compliance-1 |
+| R-EU-AI-ACT | EU AI Act compliance (governance framework, human review, risk assessment) | compliance-2 |
+| R-CACHE-COMPONENTS | Next.js 16 Cache Components/PPR (use cache directive, cacheLife) | (future) |
+| R-APCA | Advanced Perceptual Contrast Algorithm (WCAG 3.0 preparation) | (future) |
+| R-OKLCH | OKLCH color space, color-mix() function, perceptual uniformity | (future) |
 
 ---
 

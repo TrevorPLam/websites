@@ -11,40 +11,69 @@ Open tasks for the marketing-websites monorepo. Each row links to the task file.
 
 ### Phase 0: Security Foundation (Critical Security - Wave 1)
 
-**Tasks:** `security-1`, `security-2`, `security-3`, `security-4`, `infrastructure-1`, `infrastructure-2`, `infrastructure-3`
+**Tasks:** `security-1`, `security-2`, `security-3`, `security-4`, `security-5`, `security-6`, `security-7`, `infrastructure-1`, `infrastructure-2`, `infrastructure-3`, `infrastructure-4`, `infrastructure-5`, `infrastructure-6`, `compliance-1`, `compliance-2`
 
-**Strategy:** Sequential execution with parallel work where dependencies allow. These address critical security gaps identified in research (perplexity research Topics #1, #3, #7, #16, #20, #21, #22).
+**Strategy:** Sequential execution with parallel work where dependencies allow. These address critical security gaps identified in research (perplexity research Topics #1, #3, #7, #16, #20, #21, #22; ChatGPT/Gemini research on pnpm security, React Taint API, middleware bypass, Partytown, Pact, Scaffold MCP, CCPA 2026, EU AI Act).
 
 **Dependencies:**
-- **security-1** (Server Action Hardening) → **security-2** (RLS), **infrastructure-1** (Observability)
-- **security-1** → **security-3** (Webhooks)
+- **security-1** (Server Action Hardening) → **security-2** (RLS), **security-6** (React Taint API), **infrastructure-1** (Observability)
+- **security-1** → **security-3** (Webhooks), **security-7** (Middleware Bypass)
 - **security-2** → **infrastructure-2** (E2E Testing - tenant isolation tests)
 - **security-3** → **infrastructure-3** (Integration Resilience - idempotency complements retry)
+- **security-4** (Consent Management) → **infrastructure-4** (Partytown), **compliance-1** (CCPA 2026)
+- **security-5** (pnpm Security) — Independent, quick win
+- **infrastructure-5** (Contract Testing) — Independent, can work in parallel
+- **infrastructure-6** (Scaffold MCP) — Independent, enables better AI-assisted development
+- **compliance-2** (EU AI Act) — Relates to ai-platform packages (future work)
 
 **Execution Order:**
-1. **security-1** (Server Action Hardening) — Foundation for all security tasks
+1. **security-5** (pnpm Supply Chain Hardening) — Quick win (S effort)
+   - Configure `allowBuilds` and `blockExoticSubdeps` in pnpm-workspace.yaml
+   - Prevents supply chain attacks
+2. **security-1** (Server Action Hardening) — Foundation for all security tasks
    - Creates `secureAction` wrapper pattern
    - Adds tenant-scoped queries
    - Adds security audit logging
-2. **security-2** (Multi-Tenant RLS) — Can start in parallel with security-1
+3. **security-6** (React Taint API) — After security-1
+   - Integrates with secureAction wrapper
+   - Prevents sensitive data leakage
+4. **security-7** (Middleware Bypass Mitigation) — After security-1
+   - Uses secureAction pattern for DAL verification
+   - Defense-in-depth against CVE-2025-29927
+5. **security-2** (Multi-Tenant RLS) — Can start in parallel with security-1
    - RLS policies complement secureAction
    - Database-level tenant isolation
-3. **security-3** (Webhook Security) — After security-1
+6. **security-3** (Webhook Security) — After security-1
    - Uses secureAction pattern
    - Unified verification framework
-4. **security-4** (Consent Management) — Independent
+7. **security-4** (Consent Management) — Independent
    - ScriptManager component
    - GDPR/CCPA compliance
-5. **infrastructure-1** (Observability) — After security-1
+8. **infrastructure-1** (Observability) — After security-1
    - Uses audit logs from secureAction
    - OpenTelemetry integration
-6. **infrastructure-2** (E2E Testing) — After security-2
+9. **infrastructure-2** (E2E Testing) — After security-2
    - Tests tenant isolation (requires RLS)
    - Playwright test harness
-7. **infrastructure-3** (Integration Resilience) — After security-3
-   - Retry/circuit breaker complements webhook idempotency
+10. **infrastructure-3** (Integration Resilience) — After security-3
+    - Retry/circuit breaker complements webhook idempotency
+11. **infrastructure-4** (Partytown Integration) — After security-4
+    - Offloads consent-gated scripts to Web Workers
+    - Improves Core Web Vitals (INP)
+12. **infrastructure-5** (Contract Testing with Pact) — Independent
+    - Consumer-driven contract tests
+    - Prevents API breakage
+13. **infrastructure-6** (Scaffold MCP) — Independent
+    - AI-assisted development governance
+    - Enforces architectural patterns
+14. **compliance-1** (CCPA 2026 Updates) — After security-4
+    - DROP integration
+    - Expanded lookback support
+15. **compliance-2** (EU AI Act) — Future work
+    - Relates to ai-platform packages
+    - Governance framework and human review workflows
 
-**Estimated Timeline:** 2-3 weeks for all security tasks (Wave 1 priority)
+**Estimated Timeline:** 3-4 weeks for all security/infrastructure/compliance tasks (Wave 1 priority)
 
 ---
 

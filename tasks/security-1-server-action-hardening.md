@@ -9,7 +9,7 @@
 - **Related Epics / ADRs**: IDOR protection, booking feature, THEGOAL security
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 0-5-booking-actions-verification
-- **Downstream Tasks**: security-2-rls-multi-tenant, infrastructure-1-observability-opentelemetry
+- **Downstream Tasks**: security-2-rls-multi-tenant, security-6-react-taint-api, infrastructure-1-observability-opentelemetry
 
 ## Context
 
@@ -34,16 +34,21 @@ This addresses **Research Topic #1: Server Action Security & IDOR Mitigation** f
 
 ## Research
 
-- **Primary topics**: [R-SECURITY-ADV](RESEARCH-INVENTORY.md#r-security-adv-security-regression-threat-modeling), [R-NEXT](RESEARCH-INVENTORY.md#r-next-app-router-rsc-server-actions), [R-SECURITY-SERVER-ACTIONS](RESEARCH-INVENTORY.md#r-security-server-actions) (new)
-- **[2026-02] Research Topic #1**: Every Server Action handling sensitive data must enforce:
+- **Primary topics**: [R-SECURITY-ADV](RESEARCH-INVENTORY.md#r-security-adv-security-regression-threat-modeling), [R-NEXT](RESEARCH-INVENTORY.md#r-next-app-router-rsc-server-actions), [R-SECURITY-SERVER-ACTIONS](RESEARCH-INVENTORY.md#r-security-server-actions) (new), [R-REACT-TAINT-API](RESEARCH-INVENTORY.md#r-react-taint-api) (new)
+- **[2026-02] Research Topic #1** (Perplexity): Every Server Action handling sensitive data must enforce:
   - Input validation (Zod/valibot)
   - Authentication (session or access token)
   - Authorization (ownership / role / tenant checks)
   - Rate limiting and idempotency for side-effectful actions
-- **Threat Model**: IDOR/Broken object-level authorization exposing other tenants' bookings; business logic abuse (over-booking, resource quota violations)
+- **[2026-02] Additional Research** (Gemini): React Taint API should be used to prevent sensitive data leakage:
+  - Use `experimental_taintObjectReference` to mark sensitive objects
+  - Sanitize DTOs before serialization to client
+  - See `security-6-react-taint-api` for full implementation
+- **Threat Model**: IDOR/Broken object-level authorization exposing other tenants' bookings; business logic abuse (over-booking, resource quota violations); accidental PII exposure via DTOs
 - **References**: 
   - [RESEARCH-INVENTORY.md – R-SECURITY-ADV](RESEARCH-INVENTORY.md#r-security-adv-security-regression-threat-modeling)
   - [docs/research/perplexity-security-2026.md](../docs/research/perplexity-security-2026.md) (Topic #1)
+  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Server Action Security)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
 
 ## Related Files
