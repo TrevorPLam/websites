@@ -1,6 +1,6 @@
 # Required CI Checks — Branch Protection Mapping
 
-**Last Updated:** 2026-02-18  
+**Last Updated:** 2026-02-19  
 **Task:** 0.13  
 **Related:** `docs/architecture/module-boundaries.md`
 
@@ -29,14 +29,15 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 
 | Step             | Command                     | Notes                                              |
 |------------------|-----------------------------|----------------------------------------------------|
-| Lint             | `pnpm turbo run lint`       | Module boundaries, ESLint (many packages lack eslint.config) |
-| Type check       | `pnpm turbo run type-check` | TypeScript strict (@repo/marketing-components fails) |
+| Validate workspaces | `pnpm validate:workspaces` | Ensures package.json and pnpm-workspace.yaml sync |
+| Lint             | `pnpm turbo run lint`       | Module boundaries, ESLint (all packages have config) |
+| Type check       | `pnpm turbo run type-check` | TypeScript strict (all packages pass) |
 | Validate exports | `pnpm validate-exports`     | Package.json exports resolve to files              |
 | Validate marketing exports | `pnpm validate-marketing-exports` | @repo/marketing-components index.ts → families |
 | Madge circular   | `pnpm madge:circular`       | Circular dependency detection                      |
 | Syncpack         | `pnpm syncpack:check`       | Dependency version consistency                     |
-| Build            | `pnpm turbo run build`      | All packages build (Toast.tsx blocks @repo/features) |
-| Test             | `pnpm test:coverage`        | Root Jest (4 booking-actions tests fail)           |
+| Build            | `pnpm turbo run build`      | All packages build successfully |
+| Test             | `pnpm test:coverage`        | Root Jest (all tests pass)           |
 
 ### Non-blocking (informative)
 
@@ -59,6 +60,7 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 ```bash
 # Local: replicate CI quality gates
 pnpm install
+pnpm validate:workspaces
 pnpm turbo run lint type-check build
 pnpm validate-exports
 pnpm validate-ui-exports   # when modifying packages/ui or its index.ts

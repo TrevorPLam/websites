@@ -141,7 +141,7 @@ Central versions live in `pnpm-workspace.yaml` under `catalog:`. Always use `cat
 | Build orchestration | Turborepo | 2.8.9 |
 | Package manager | pnpm | 10.29.2 |
 | Linting | ESLint | 9.18.0 (flat config) |
-| Formatting | Prettier | 3.2.5 |
+| Formatting | Prettier | 3.8.1 |
 | Testing | Jest | 30.2.0 |
 | Error tracking | Sentry | 10.38.0 |
 | DB/auth | Supabase | — |

@@ -55,6 +55,13 @@ _Purpose:_ Complete topic map and task→topic mapping for Task Research Audit. 
 | R-CONFIG-VALIDATION | Config schema validation, Zod runtime checks | 6.10a, 5.1 |
 | R-MIGRATION | Template-to-client migration, cutover runbooks | 6.1, 6.2 |
 | R-CLEANUP | Dead code removal, dependency pruning | 6.9 |
+| R-SECURITY-SERVER-ACTIONS | Server action security, IDOR mitigation, secureAction wrapper | security-1, 0-5 |
+| R-SECURITY-RLS | Multi-tenant RLS, tenant isolation, JWT claims | security-2 |
+| R-SECURITY-WEBHOOKS | Webhook signature verification, idempotency, replay protection | security-3 |
+| R-SECURITY-CONSENT | Third-party script consent management, GDPR/CCPA compliance | security-4 |
+| R-OBSERVABILITY | OpenTelemetry, distributed tracing, tenant-aware logging | infrastructure-1 |
+| R-E2E-TESTING | Playwright E2E testing, multi-tenant test strategy, visual regression | infrastructure-2 |
+| R-INTEGRATION-RESILIENCE | Retry logic, circuit breaker, DLQ for integrations | infrastructure-3 |
 
 ---
 

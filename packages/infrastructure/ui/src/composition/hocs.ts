@@ -28,8 +28,10 @@ export type HOC<TIn extends object, TOut extends object = TIn> = (
 // ─── Display name utilities ───────────────────────────────────────────────────
 
 /** Get a component's display name for debugging */
-export function getDisplayName(Component: React.ComponentType<unknown>): string {
-  return Component.displayName ?? Component.name ?? 'Component';
+export function getDisplayName<P = unknown>(Component: React.ComponentType<P>): string {
+  return (Component as { displayName?: string; name?: string }).displayName ?? 
+         (Component as { displayName?: string; name?: string }).name ?? 
+         'Component';
 }
 
 /** Set a display name on a HOC-wrapped component */
@@ -37,9 +39,9 @@ export function withDisplayName<P extends object>(
   Component: React.ComponentType<P>,
   hocName: string
 ): React.ComponentType<P> {
-  const wrapped = Component;
-  wrapped.displayName = `${hocName}(${getDisplayName(Component)})`;
-  return wrapped;
+  const Wrapped = Component as React.ComponentType<P> & { displayName?: string };
+  Wrapped.displayName = `${hocName}(${getDisplayName(Component)})`;
+  return Wrapped;
 }
 
 // ─── Default props HOC ────────────────────────────────────────────────────────
@@ -138,9 +140,10 @@ export function composeHOCs<P extends object>(
 export function withForwardRef<P extends object, TRef = HTMLElement>(
   Component: React.ComponentType<P & { innerRef?: React.Ref<TRef> }>
 ): React.ForwardRefExoticComponent<React.PropsWithoutRef<P> & React.RefAttributes<TRef>> {
-  const WithForwardRef = React.forwardRef<TRef, P>((props, ref) =>
-    React.createElement(Component, { ...props, innerRef: ref })
-  );
+  const WithForwardRef = React.forwardRef<TRef, P>((props, ref) => {
+    const componentProps = { ...props, innerRef: ref } as P & { innerRef?: React.Ref<TRef> };
+    return React.createElement(Component, componentProps);
+  });
   WithForwardRef.displayName = `WithForwardRef(${getDisplayName(Component as React.ComponentType<unknown>)})`;
   return WithForwardRef;
 }

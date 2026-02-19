@@ -93,7 +93,7 @@ Professional multi-industry marketing website template system built with modern 
 | **L2** | `@repo/marketing-components` | 🟡 Partial         | Package exists; scaffolded component families                                   |
 | **L2** | `@repo/features`             | 🟡 Partial         | 5 features (booking, contact, blog, services, search); all tests pass           |
 | **L2** | `@repo/types`                | 🟢 Complete        | Shared TypeScript types/interfaces                                              |
-| **L2** | `@repo/infrastructure-*`     | 🟡 Partial         | tenant-core, theme, layout, ui (type-check fails in infrastructure-ui)          |
+| **L2** | `@repo/infrastructure-*`     | 🟡 Partial         | tenant-core, theme, layout, ui (type-check passes)          |
 | **L3** | `@repo/page-templates`       | 🔴 Scaffolded Only | All 7 templates are NotImplementedPlaceholder                                   |
 | **L3** | `clients/starter-template`   | 🟢 Active          | Golden-path template (port 3101, next-intl, Docker)                             |
 | **L3** | `clients/luxe-salon`, etc.   | 🟡 Partial         | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
@@ -413,7 +413,7 @@ We welcome contributions! Before contributing, please:
 All pull requests must pass:
 
 - Linting (`pnpm lint`) — _many packages lack eslint.config.mjs_
-- Type checking (`pnpm type-check`) — _currently fails in @repo/infrastructure-ui_
+- Type checking (`pnpm type-check`) — _all packages pass_
 - Export validation (`pnpm validate-exports`)
 - Marketing exports (`pnpm validate-marketing-exports`)
 - Client validation (`pnpm validate-all-clients`)
@@ -449,7 +449,7 @@ For issues, questions, or suggestions:
 
 **Last Updated:** 2026-02-19  
 **Current Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Next Milestone:** Fix @repo/infrastructure-ui type-check; ensure full CI pipeline passes
+**Next Milestone:** Continue Wave 1 implementation; all CI quality gates passing
 
 For task specifications, see [tasks/](tasks/).
 

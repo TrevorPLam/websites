@@ -61,6 +61,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # [Task 0.7] Workspace sync validation — ensures package.json and pnpm-workspace.yaml match
+      - name: Validate workspaces
+        run: pnpm validate:workspaces
+
       # [Task 0.11] Lint enforces module boundaries — docs/architecture/module-boundaries.md
       # [Task 0.13] PRs use affected-package filter for speed; push runs full pipeline
       - name: Lint
