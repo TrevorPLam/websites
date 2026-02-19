@@ -44,9 +44,7 @@ const siteConfig: SiteConfig = {
 import { createBookingConfig } from '@repo/features/booking';
 import type { BookingFeatureConfig } from '@repo/features/booking';
 
-const bookingConfig: BookingFeatureConfig = createBookingConfig(
-  siteConfig.conversionFlow
-);
+const bookingConfig: BookingFeatureConfig = createBookingConfig(siteConfig.conversionFlow);
 ```
 
 ### 3. Use BookingForm Component
@@ -82,11 +80,13 @@ export default function BookPage() {
 Creates booking feature configuration from site config conversion flow.
 
 **Parameters:**
+
 - `flowConfig`: BookingFlowConfig from `site.config.ts`
 
 **Returns:** `BookingFeatureConfig` with services, timeSlots, and maxAdvanceDays
 
 **Example:**
+
 ```typescript
 const config = createBookingConfig(siteConfig.conversionFlow);
 // {
@@ -107,6 +107,7 @@ const config = createBookingConfig(siteConfig.conversionFlow);
 Configurable booking form component.
 
 **Props:**
+
 - `config: BookingFeatureConfig` (required) - Booking configuration
 - `className?: string` - Optional CSS class
 - `prefilledService?: string` - Pre-select a service type
@@ -114,6 +115,7 @@ Configurable booking form component.
 - `onError?: (error: string) => void` - Error callback
 
 **Example:**
+
 ```typescript
 <BookingForm
   config={bookingConfig}
@@ -129,12 +131,14 @@ Configurable booking form component.
 Server action for submitting booking requests.
 
 **Parameters:**
+
 - `formData: FormData` - Form data from BookingForm
 - `config: BookingFeatureConfig` - Booking configuration
 
 **Returns:** `Promise<BookingSubmissionResult>`
 
 **Example:**
+
 ```typescript
 'use server';
 
@@ -195,33 +199,36 @@ SQUARE_BUSINESS_ID=your_business_id
 
 ## Migration from Template
 
-If migrating from `templates/hair-salon/features/booking/`:
+If migrating from `clients/starter-template/features/booking/`:
 
 1. **Remove hardcoded imports:**
+
    ```typescript
    // Old
    import { SERVICE_TYPES, TIME_SLOTS } from '@/features/booking';
-   
+
    // New
    import { createBookingConfig } from '@repo/features/booking';
    ```
 
 2. **Update BookingForm usage:**
+
    ```typescript
    // Old
    <BookingForm />
-   
+
    // New
    const config = createBookingConfig(siteConfig.conversionFlow);
    <BookingForm config={config} />
    ```
 
 3. **Update server actions:**
+
    ```typescript
    // Old
    import { submitBookingRequest } from '@/features/booking';
    await submitBookingRequest(formData);
-   
+
    // New
    import { submitBookingRequest, createBookingConfig } from '@repo/features/booking';
    const config = createBookingConfig(siteConfig.conversionFlow);

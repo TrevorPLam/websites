@@ -13,13 +13,13 @@ export const ImageGrid: React.FC<ImageGridProps> = ({ items, columns = 3 }) => {
       {items.map((item) => (
         <div key={item.id} className="relative group overflow-hidden rounded-lg">
           <img
-            src={item.image}
-            alt={item.title}
+            src={item.src}
+            alt={item.alt}
             className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300">
             <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-              <h3 className="font-semibold">{item.title}</h3>
+              <h3 className="font-semibold">{item.title ?? item.alt}</h3>
               {item.description && <p className="text-sm">{item.description}</p>}
             </div>
           </div>
@@ -41,11 +41,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({ items, showThumbna
         <div className="flex space-x-4">
           {items.map((item) => (
             <div key={item.id} className="flex-shrink-0">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-96 object-cover"
-              />
+              <img src={item.src} alt={item.alt} className="w-full h-96 object-cover" />
             </div>
           ))}
         </div>
@@ -55,8 +51,8 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({ items, showThumbna
           {items.map((item) => (
             <img
               key={item.id}
-              src={item.image}
-              alt={item.title}
+              src={item.src}
+              alt={item.alt}
               className="flex-shrink-0 w-20 h-20 object-cover rounded cursor-pointer"
             />
           ))}

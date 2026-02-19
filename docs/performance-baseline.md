@@ -13,7 +13,7 @@
 
 - **Max asset size:** 250 KB
 - **Max entrypoint size:** 550 KB
-- **Hints:** warnings during `next build` (see `templates/hair-salon/next.config.js`).
+- **Hints:** warnings during `next build` (see `clients/starter-template/next.config.js`).
 
 ## How to run the baseline locally (evidence-only)
 
@@ -56,7 +56,7 @@
 - To inspect bundle composition:
 
   ```bash
-  cd templates/hair-salon
+  cd clients/starter-template
   ANALYZE=true next build
   ```
 

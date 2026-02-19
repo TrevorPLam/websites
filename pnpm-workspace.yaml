@@ -10,6 +10,15 @@ packages:
   - 'clients/*'
   - 'tooling/*'
 
+# [Task security-5] Supply chain hardening — pnpm 10 security features
+# Only these packages are permitted to run install-time scripts (install/postinstall).
+# All other packages with lifecycle scripts will be silently skipped.
+# To add a new package: audit its install script, confirm it is safe, then add it here.
+# See docs/architecture/security/supply-chain.md for the full policy.
+onlyBuiltDependencies:
+  - sharp # Image processing — native bindings required (node-gyp/libvips)
+  - unrs-resolver # Rust-based module resolver — postinstall downloads native binary
+
 # [Task 0.5.1] Centralized version catalog for monorepo-wide consistency
 catalog:
   next: '16.1.5'

@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-02-15  
 **Status:** Implemented (Task 0.25)  
-**Location:** `templates/hair-salon/lib/routes.ts`
+**Location:** `clients/starter-template/lib/routes.ts`
 
 ---
 
@@ -85,6 +85,6 @@ The registry is designed as the foundation for config-driven routing. In the ref
 
 ## Related Files
 
-- `templates/hair-salon/lib/routes.ts` — Canonical registry
-- `templates/hair-salon/app/sitemap.ts` — Sitemap consumer
-- `templates/hair-salon/lib/search.ts` — Search index consumer
+- `clients/starter-template/lib/routes.ts` — Canonical registry
+- `clients/starter-template/app/sitemap.ts` — Sitemap consumer
+- `clients/starter-template/lib/search.ts` — Search index consumer

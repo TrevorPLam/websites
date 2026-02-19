@@ -15,7 +15,7 @@ and preview gates; defer default switch until pilot success.
 
 ## Scope & Evidence
 
-- Current version: Next.js 15.5.12 (Maintenance LTS) @ `templates/hair-salon` (app router).
+- Current version: Next.js 15.5.12 (Maintenance LTS) @ `clients/starter-template` (app router).
 - Node engines: `>=22.0.0` (meets Next 16 requirement ≥18.17).
 - Tooling: Turborepo 2.8.9, Tailwind v4 migrated, React 19 already in catalog, TypeScript 5.7.
 - No custom webpack overrides; `next.config.js` minimal (standalone output, transpilePackages, poweredByHeader:

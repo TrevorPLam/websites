@@ -44,7 +44,10 @@ export const MenuList: React.FC<MenuListProps> = ({ items }) => {
   return (
     <div className="space-y-6">
       {items.map((item) => (
-        <div key={item.id} className="flex justify-between items-start bg-white p-4 rounded-lg shadow-sm">
+        <div
+          key={item.id}
+          className="flex justify-between items-start bg-white p-4 rounded-lg shadow-sm"
+        >
           <div>
             <h3 className="font-semibold">{item.name}</h3>
             <p className="text-gray-600 text-sm">{item.description}</p>
@@ -183,13 +186,13 @@ export const ComparisonTable: React.FC<{ items: any[] }> = ({ items }) => (
         <tr>
           <th className="border p-2">Feature</th>
           {items.map((item, idx) => (
-            <th key={idx} className="border p-2">{item.name}</th>
+            <th key={idx} className="border p-2">
+              {item.name}
+            </th>
           ))}
         </tr>
       </thead>
-      <tbody>
-        {/* Placeholder comparison rows */}
-      </tbody>
+      <tbody>{/* Placeholder comparison rows */}</tbody>
     </table>
   </div>
 );
@@ -225,16 +228,11 @@ export const SocialProofStack: React.FC<{ items: any[] }> = ({ items }) => (
 
 export const VideoEmbed: React.FC<{ url: string; title?: string }> = ({ url, title }) => (
   <div className="aspect-w-16 aspect-h-9">
-    <iframe
-      src={url}
-      title={title}
-      className="w-full h-full rounded"
-      allowFullScreen
-    />
+    <iframe src={url} title={title} className="w-full h-full rounded" allowFullScreen />
   </div>
 );
 
-export const AudioPlayer: React.FC<{ url: string; title?: string }> = ({ url, title }) => (
+export const AudioPlayer: React.FC<{ url: string; title?: string }> = ({ url, title: _title }) => (
   <audio controls className="w-full">
     <source src={url} type="audio/mpeg" />
     Your browser does not support the audio element.
@@ -252,7 +250,10 @@ export const AccordionContent: React.FC<{ items: any[] }> = ({ items }) => (
   </div>
 );
 
-export const WidgetCard: React.FC<{ title: string; content: React.ReactNode }> = ({ title, content }) => (
+export const WidgetCard: React.FC<{ title: string; content: React.ReactNode }> = ({
+  title,
+  content,
+}) => (
   <div className="bg-white rounded-lg shadow-sm p-6">
     <h3 className="font-semibold mb-4">{title}</h3>
     {content}

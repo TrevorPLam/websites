@@ -25,13 +25,6 @@ interface ServiceItem {
   category?: string;
 }
 
-/** Category shape for ServiceTabs (matches ServiceCategory from marketing-components). */
-interface ServiceCategoryItem {
-  id: string;
-  name: string;
-  services: ServiceItem[];
-}
-
 function getSiteConfig(props: SectionProps): SiteConfig {
   const config = props.siteConfig;
   if (!config || typeof config !== 'object') {
@@ -64,12 +57,10 @@ function getServicesFromConfig(config: SiteConfig): ServiceItem[] {
 type SearchParams = Record<string, string | string[] | undefined>;
 
 /** Filter services by searchParams.category and searchParams.tag (single string or first of array). */
-function filterServices(
-  services: ServiceItem[],
-  searchParams?: SearchParams
-): ServiceItem[] {
+function filterServices(services: ServiceItem[], searchParams?: SearchParams): ServiceItem[] {
   if (!searchParams) return services;
-  const category = typeof searchParams.category === 'string' ? searchParams.category : searchParams.category?.[0];
+  const category =
+    typeof searchParams.category === 'string' ? searchParams.category : searchParams.category?.[0];
   const tag = typeof searchParams.tag === 'string' ? searchParams.tag : searchParams.tag?.[0];
   return services.filter((s) => {
     if (category && s.category !== category) return false;
@@ -104,31 +95,15 @@ function ServicesListAdapter(props: SectionProps) {
   const searchParams = getSearchParams(props);
   const services = filterServices(getServicesFromConfig(config), searchParams);
   if (services.length === 0) return null;
-  return (
-    <ServiceList services={services} />
-  );
+  return <ServiceList services={services} />;
 }
 
 function ServicesTabsAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
-  const rawServices = getServicesFromConfig(config);
-  if (rawServices.length === 0) return null;
-  const categoryMap = new Map<string, ServiceItem[]>();
-  for (const s of rawServices) {
-    const cat = s.category ?? 'General';
-    const list = categoryMap.get(cat) ?? [];
-    list.push(s);
-    categoryMap.set(cat, list);
-  }
-  const categories: ServiceCategoryItem[] = Array.from(categoryMap.entries()).map(([name, services]) => ({
-    id: name.toLowerCase().replace(/\s+/g, '-'),
-    name,
-    services,
-  }));
-  if (categories.length === 0) return null;
-  return (
-    <ServiceTabs categories={categories} />
-  );
+  const services = getServicesFromConfig(config);
+  if (services.length === 0) return null;
+  const categoryNames = [...new Set(services.map((s) => s.category).filter(Boolean))] as string[];
+  return <ServiceTabs services={services} categories={categoryNames} />;
 }
 
 function ServicesAccordionAdapter(props: SectionProps) {
@@ -136,9 +111,7 @@ function ServicesAccordionAdapter(props: SectionProps) {
   const searchParams = getSearchParams(props);
   const services = filterServices(getServicesFromConfig(config), searchParams);
   if (services.length === 0) return null;
-  return (
-    <ServiceAccordion services={services} />
-  );
+  return <ServiceAccordion services={services} />;
 }
 
 /** Register all services page sections. Call once when module loads. */

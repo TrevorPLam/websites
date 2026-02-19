@@ -22,7 +22,7 @@
     "@repo/eslint-config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@types/react-window": "^2.0.0",
+    "@types/react-window": "^1.8.8",
     "eslint": "catalog:",
     "typescript": "catalog:"
   },

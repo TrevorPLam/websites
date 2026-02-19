@@ -63,7 +63,7 @@ const siteConfig: SiteConfig = {
     borderRadius: 'medium',
     shadows: 'medium',
   },
-  contact: { email: 'hello@sunrisedental.com', phone: '', address: '' },
+  contact: { email: 'hello@sunrisedental.com', phone: '' },
   conversionFlow: {
     type: 'booking',
     serviceCategories: ['Checkup', 'Cleaning'],

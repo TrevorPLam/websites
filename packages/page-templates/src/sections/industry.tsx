@@ -44,37 +44,37 @@ function LocationAdapter(props: SectionProps) {
 function MenuAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.menu) return null;
-  return React.createElement(MenuList, { categories: [] });
+  return React.createElement(MenuList, { items: [] });
 }
 
 function PortfolioAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.portfolio) return null;
-  return React.createElement(PortfolioGrid, { title: 'Our Portfolio', items: [] });
+  return React.createElement(PortfolioGrid, { items: [] });
 }
 
 function CourseAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.course) return null;
-  return React.createElement(CourseGrid, { title: 'Available Courses', courses: [] });
+  return React.createElement(CourseGrid, { courses: [] });
 }
 
 function ResourceAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.resource) return null;
-  return React.createElement(ResourceGrid, { title: 'Resources', resources: [] });
+  return React.createElement(ResourceGrid, { resources: [] });
 }
 
 function ComparisonAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.comparison) return null;
-  return React.createElement(ComparisonTable, { title: 'Compare Plans', columns: [], rows: [] });
+  return React.createElement(ComparisonTable, { items: [] });
 }
 
 function FilterAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.filter) return null;
-  return React.createElement(FilterBar, { options: [] });
+  return React.createElement(FilterBar, { filters: [] });
 }
 
 function SearchAdapter(props: SectionProps) {
@@ -92,13 +92,13 @@ function SocialProofAdapter(props: SectionProps) {
 function VideoAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.video) return null;
-  return React.createElement(VideoEmbed, { src: '' });
+  return React.createElement(VideoEmbed, { url: '' });
 }
 
 function AudioAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.audio) return null;
-  return React.createElement(AudioPlayer, { src: '' });
+  return React.createElement(AudioPlayer, { url: '' });
 }
 
 function InteractiveAdapter(props: SectionProps) {
@@ -110,7 +110,7 @@ function InteractiveAdapter(props: SectionProps) {
 function WidgetAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   if (!config.features.widget) return null;
-  return React.createElement(WidgetCard, { children: null });
+  return React.createElement(WidgetCard, { title: '', content: null });
 }
 
 /** Register all industry sections. Called once on module load. */

@@ -64,7 +64,7 @@ const siteConfig: SiteConfig = {
     borderRadius: 'medium',
     shadows: 'medium',
   },
-  contact: { email: 'hello@bistrocentral.com', phone: '', address: '' },
+  contact: { email: 'hello@bistrocentral.com', phone: '' },
   conversionFlow: {
     type: 'booking',
     serviceCategories: ['Reservation'],

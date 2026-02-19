@@ -18,6 +18,7 @@
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "@repo/infra": "workspace:*",
+    "@repo/industry-schemas": "workspace:*",
     "next": "catalog:",
     "next-intl": "catalog:",
     "react": "catalog:",

@@ -6,15 +6,12 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { axe } from 'jest-axe';
 import { HeroCentered } from '../HeroCentered';
 import { testA11y } from '../../__tests__/test-utils';
 
 describe('HeroCentered', () => {
   it('has no accessibility violations', async () => {
-    const { container } = render(
-      <HeroCentered title="Test Hero" subtitle="Test Subtitle" />
-    );
+    const { container } = render(<HeroCentered title="Test Hero" subtitle="Test Subtitle" />);
     await testA11y(container);
   });
 
@@ -34,12 +31,7 @@ describe('HeroCentered', () => {
   });
 
   it('renders CTA link when provided', () => {
-    render(
-      <HeroCentered
-        title="Test Hero"
-        cta={{ label: 'Get Started', href: '/signup' }}
-      />
-    );
+    render(<HeroCentered title="Test Hero" cta={{ label: 'Get Started', href: '/signup' }} />);
     const link = screen.getByRole('link', { name: /get started/i });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', '/signup');
@@ -60,9 +52,7 @@ describe('HeroCentered', () => {
   });
 
   it('applies custom className', () => {
-    const { container } = render(
-      <HeroCentered title="Test Hero" className="custom-class" />
-    );
+    const { container } = render(<HeroCentered title="Test Hero" className="custom-class" />);
     expect(container.firstChild).toHaveClass('custom-class');
   });
 
