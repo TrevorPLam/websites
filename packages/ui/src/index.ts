@@ -34,6 +34,13 @@
  * Each site defines its own palette in globals.css; components adapt automatically.
  */
 
+// Consent Management
+export { ConsentProvider, useConsentContext } from './contexts/ConsentContext';
+export type { ConsentState } from './contexts/ConsentContext';
+export { useConsent } from './hooks/useConsent';
+export { ScriptManager } from './components/ScriptManager';
+export type { ScriptConfig } from './components/ScriptManager';
+
 // Layout
 export { Container } from './components/Container';
 export type { ContainerProps } from './components/Container';

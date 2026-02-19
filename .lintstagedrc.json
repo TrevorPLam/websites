@@ -1,0 +1,13 @@
+{
+  "*.{ts,tsx,js,jsx}": [
+    "prettier --write",
+    "eslint --fix"
+  ],
+  "*.{json,md}": [
+    "prettier --write"
+  ],
+  "docs/**/*.md": [
+    "prettier --write",
+    "pnpm validate-docs --staged"
+  ]
+}

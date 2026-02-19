@@ -15,6 +15,7 @@
     "./security/rate-limit": "./security/rate-limit/index.ts",
     "./security/csp": "./security/csp.ts",
     "./security/security-headers": "./security/security-headers.ts",
+    "./auth/tenant-context": "./auth/tenant-context.ts",
     "./middleware/create-middleware": "./middleware/create-middleware.ts",
     "./sentry/sanitize": "./sentry/sanitize.ts",
     "./sentry/client": "./sentry/client.ts",

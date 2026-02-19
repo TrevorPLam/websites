@@ -28,7 +28,7 @@ const path = require('path');
  * Aligned with pnpm-workspace.yaml globs. Each root is scanned recursively;
  * packages/config/* and packages/integrations/* are under packages/.
  */
-const WORKSPACE_ROOTS = ['packages', 'clients', 'apps', 'tooling'];
+const WORKSPACE_ROOTS = ['packages', 'clients', 'tooling'];
 
 /**
  * Recursively finds all package.json files under a directory, excluding node_modules.

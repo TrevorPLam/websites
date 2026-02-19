@@ -43,6 +43,9 @@ export * from './security/rate-limit';
 // Request Validation Module (Task 1.1.6 - COMPLETED)
 export * from './security/request-validation';
 
+// Tenant Context Module (Task security-2 - COMPLETED)
+export * from './auth/tenant-context';
+
 // [TRACE:BLOCK=packages.infra.exports.middleware]
 // [FEAT:MIDDLEWARE]
 // NOTE: Middleware module exports - middleware factory for request processing.

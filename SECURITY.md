@@ -63,7 +63,7 @@ primary_language: typescript
 
 - ✅ Updated with 2026 security best practices
 - ✅ Added private vulnerability reporting guidance
-- ⚠️ Repository maintainer should update contact email below
+- ✅ Security contact updated to reference maintainer
 
 ## Supported Versions
 
@@ -93,8 +93,9 @@ This is the preferred method as it provides a secure, structured workflow:
 
 If you prefer email or cannot use GitHub's private reporting:
 
-1. Email security concerns to: `security@example.com`
-   - **Note:** This should be updated to the actual maintainer's email
+1. Contact the repository maintainer via GitHub: [@TrevorPLam](https://github.com/TrevorPLam)
+   - For sensitive security issues, use GitHub's private vulnerability reporting (preferred method above)
+   - For general security questions, you may open a discussion or contact via GitHub
 2. Include the following information:
    - Type of vulnerability
    - Full paths of source file(s) related to the vulnerability
@@ -172,8 +173,8 @@ information and enable private vulnerability reporting in repository settings.
 
 ### Recommended Actions for Maintainers
 
-1. Update `security@example.com` to your actual security email
-2. Enable private vulnerability reporting in repository settings
+1. Ensure private vulnerability reporting is enabled in repository settings (preferred method)
+2. Consider adding a dedicated security email if high-volume security reports are expected
 3. Add PGP key if encrypted communication is desired
 4. Set up security monitoring alerts
 5. Document your security response team and escalation procedures

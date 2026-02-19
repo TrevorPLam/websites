@@ -53,7 +53,10 @@ describe('Dialog Components', () => {
       render(
         <Dialog open={false}>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogContent ariaTitle="Dialog">Content</DialogContent>
+          <DialogContent>
+            <DialogTitle>Dialog</DialogTitle>
+            Content
+          </DialogContent>
         </Dialog>
       );
       expect(screen.getByRole('button', { name: /open dialog/i })).toBeInTheDocument();
@@ -63,7 +66,10 @@ describe('Dialog Components', () => {
       render(
         <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogContent ariaTitle="Dialog">Content</DialogContent>
+          <DialogContent>
+            <DialogTitle>Dialog</DialogTitle>
+            Content
+          </DialogContent>
         </Dialog>
       );
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -76,7 +82,10 @@ describe('Dialog Components', () => {
       render(
         <Dialog open={false} onOpenChange={mockOnOpenChange}>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogContent ariaTitle="Dialog">Content</DialogContent>
+          <DialogContent>
+            <DialogTitle>Dialog</DialogTitle>
+            Content
+          </DialogContent>
         </Dialog>
       );
       await user.click(screen.getByRole('button', { name: /open dialog/i }));
@@ -88,7 +97,10 @@ describe('Dialog Components', () => {
     it('renders with close button by default when open', () => {
       render(
         <Dialog open={true}>
-          <DialogContent ariaTitle="Dialog">Content</DialogContent>
+          <DialogContent>
+            <DialogTitle>Dialog</DialogTitle>
+            Content
+          </DialogContent>
         </Dialog>
       );
       expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument();
@@ -97,7 +109,10 @@ describe('Dialog Components', () => {
     it('hides close button when showCloseButton is false', () => {
       render(
         <Dialog open={true}>
-          <DialogContent ariaTitle="Dialog" showCloseButton={false}>Content</DialogContent>
+          <DialogContent showCloseButton={false}>
+            <DialogTitle>Dialog</DialogTitle>
+            Content
+          </DialogContent>
         </Dialog>
       );
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -107,7 +122,10 @@ describe('Dialog Components', () => {
     it('passes className prop correctly', () => {
       render(
         <Dialog open={true}>
-          <DialogContent ariaTitle="Dialog" className="custom-class">Content</DialogContent>
+          <DialogContent className="custom-class">
+            <DialogTitle>Dialog</DialogTitle>
+            Content
+          </DialogContent>
         </Dialog>
       );
       const dialog = screen.getByRole('dialog');

@@ -134,9 +134,11 @@ pnpm format:check
 
 1. Create a feature branch: `git checkout -b feat/your-feature-name`
 2. Make your changes following code standards
-3. Run `pnpm lint` and `pnpm format` before committing
+3. Pre-commit hooks will automatically run `lint-staged` (format, lint) before commit
 4. Commit with clear, descriptive messages
 5. Push and open a Pull Request
+
+**Note:** Pre-commit hooks are configured via Husky and lint-staged. They automatically format and lint staged files before commit. To bypass (not recommended), use `git commit --no-verify`.
 
 ### Pull Request Checklist
 
@@ -145,10 +147,44 @@ pnpm format:check
 - [ ] `pnpm type-check` passes
 - [ ] `pnpm format:check` passes
 - [ ] Changes are documented (comments, README updates if needed)
-- [ ] No breaking changes without discussion
+- [ ] No breaking changes without discussion (see Breaking Changes policy below)
 - [ ] Documentation changes: `pnpm validate-docs` passes
 - [ ] When modifying `@repo/ui` or `packages/ui/src/index.ts`: `pnpm validate-ui-exports` passes
 - [ ] Documentation follows [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md)
+- [ ] Changeset added for non-patch changes (see Versioning & Changesets below)
+
+## Architecture & Layer Model
+
+This repository follows a **layered monorepo architecture** with clear separation of concerns. Understanding the layer model is essential for making contributions.
+
+### Layer Structure
+
+```
+L0 - Infrastructure Layer:     @repo/infra (security, middleware, logging, env)
+L2 - Component Library:         @repo/ui, @repo/features, @repo/types, @repo/marketing-components
+L3 - Experience Layer:         @repo/page-templates, clients/*
+```
+
+### Dependency Rules
+
+**Allowed:**
+- Clients → `@repo/*` packages (via public exports)
+- `@repo/features` → `@repo/ui`, `@repo/utils`, `@repo/types`, `@repo/infra`
+- `@repo/ui` → `@repo/utils`, `@repo/types`
+
+**Forbidden:**
+- Packages → Clients (never)
+- Client A → Client B (never - cross-client isolation)
+- Deep imports like `@repo/infra/src/internal` (use public exports only)
+
+### Module Boundaries
+
+ESLint enforces module boundaries via `no-restricted-imports` rules. See [docs/architecture/module-boundaries.md](docs/architecture/module-boundaries.md) for details.
+
+**Validation:**
+- `pnpm validate:circular` - Check for circular dependencies
+- `pnpm validate-exports` - Verify package exports resolve correctly
+- `pnpm madge:circular` - Alternative circular dependency check
 
 ## Monorepo Guidelines
 
@@ -216,6 +252,67 @@ docker compose up --build
 ## Code of Conduct
 
 This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md) that all contributors are expected to follow. By participating in this project, you agree to abide by its terms.
+
+## Versioning & Changesets
+
+This repository uses [Changesets](https://github.com/changesets/changesets) for version management and changelog generation.
+
+### When to Create a Changeset
+
+**Required for:**
+- Any non-patch changes (features, bug fixes that affect behavior)
+- Breaking changes (API changes, configuration changes)
+- New features or significant enhancements
+
+**Not required for:**
+- Documentation-only changes
+- Internal refactoring that doesn't change public APIs
+- Dependency updates (handled separately)
+
+### Creating a Changeset
+
+```bash
+pnpm changeset
+```
+
+Follow the interactive prompts to:
+1. Select packages affected
+2. Choose change type (patch, minor, major)
+3. Write a description
+
+### Breaking Changes Policy
+
+Breaking changes require:
+1. **Discussion first** - Open an issue or discuss in PR comments before implementing
+2. **Changeset with major version bump** - Use `pnpm changeset` and select "major"
+3. **Migration guide** - Document migration path in PR description or linked issue
+4. **Deprecation period** - When possible, deprecate old APIs before removing (see Deprecation Policy below)
+
+### Deprecation Policy
+
+When deprecating features or APIs:
+
+1. **Mark as deprecated** - Add `@deprecated` JSDoc tag or `DEPRECATED:` prefix in comments
+2. **Document replacement** - Clearly state what to use instead
+3. **Timeline** - Specify removal timeline (e.g., "Will be removed in v2.0.0")
+4. **Update ADRs** - Document deprecation decision in an ADR if significant
+5. **Remove after grace period** - Remove deprecated code after specified timeline
+
+Deprecated code should be removed during major version bumps when possible.
+
+## Environment Variables
+
+### Paired Variables
+
+Some environment variables must be set together or not at all. These pairs include:
+
+- **Supabase:** `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`
+- **Upstash Redis:** `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`
+- **Booking providers:** Provider-specific pairs (e.g., `MINDBODY_API_KEY` + `MINDBODY_BUSINESS_ID`)
+
+**Rule:** Both variables in a pair must be set, or neither should be set. Partial configuration will cause validation errors.
+
+See `.env.example` for all available environment variables and their pairings.
 
 ## Documentation Contributions
 

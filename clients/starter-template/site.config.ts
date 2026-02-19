@@ -85,6 +85,14 @@ const siteConfig: SiteConfig = {
     titleTemplate: '%s | Starter Template',
     defaultDescription: 'Config-driven marketing site',
   },
+  consent: {
+    cmpProvider: 'custom', // Use 'termly' or 'cookie-script' for CMP integration
+    categories: {
+      analytics: false, // Set to true when analytics integration is added
+      marketing: false, // Set to true when marketing scripts are added
+      functional: true, // Always true
+    },
+  },
 };
 
 export default siteConfig;

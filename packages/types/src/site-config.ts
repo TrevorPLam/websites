@@ -276,6 +276,17 @@ export interface SiteConfig {
   };
   /** Conversion flow config */
   conversionFlow: ConversionFlowConfig;
+  /** Consent management configuration for GDPR/CCPA compliance */
+  consent?: {
+    /** Consent Management Platform provider */
+    cmpProvider?: 'termly' | 'cookie-script' | 'custom';
+    /** Which script categories are used (determines consent requirements) */
+    categories?: {
+      analytics?: boolean;
+      marketing?: boolean;
+      functional?: boolean; // Always true, but can be explicit
+    };
+  };
 }
 
 // ---------------------- Zod Schemas ----------------------
@@ -501,4 +512,16 @@ export const siteConfigSchema = z.object({
     shadows: z.enum(['none', 'small', 'medium', 'large']).optional(),
   }),
   conversionFlow: conversionFlowSchema,
+  consent: z
+    .object({
+      cmpProvider: z.enum(['termly', 'cookie-script', 'custom']).optional(),
+      categories: z
+        .object({
+          analytics: z.boolean().optional(),
+          marketing: z.boolean().optional(),
+          functional: z.boolean().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
 });

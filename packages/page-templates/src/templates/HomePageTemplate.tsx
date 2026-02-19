@@ -15,7 +15,15 @@ import '../sections/home'; // side-effect: register home sections
 export function HomePageTemplate({ config }: PageTemplateProps): React.ReactElement | null {
   const result = composePage({ page: 'home' }, config);
   if (result === null) {
-    return React.createElement('div', { 'data-template': 'HomePageTemplate' }, null);
+    // Return helpful message instead of empty div
+    return (
+      <div data-template="HomePageTemplate" className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-2xl font-bold mb-4">Home Page</h1>
+        <p className="text-muted-foreground">
+          Configure sections in site.config.ts features to see content here.
+        </p>
+      </div>
+    );
   }
   return result;
 }

@@ -523,7 +523,7 @@ docs/
 │   ├── 0003-ci-quality-gates.md
 │   ├── 0004-dockerfile-standalone-output.md
 │   ├── 0005-tailwind-v4-migration.md
-│   └── 0005-unified-radix-ui-package.md
+│   └── 0010-unified-radix-ui-package.md
 ├── components/                  # Component documentation
 │   └── ui-library.md           # UI components reference
 ├── features/                    # Feature documentation

@@ -2564,7 +2564,7 @@ export default function HomePage() {
 - ✅ Smooth animations with reduced motion support
 - ✅ TypeScript interfaces for all props with proper extending from Radix primitives
 - ✅ Added comprehensive metaheader documentation following existing patterns
-- ✅ Created ADR-0005 documenting unified radix-ui package strategy
+- ✅ Created ADR-0010 documenting unified radix-ui package strategy
 - ✅ Added to UI package exports with proper TypeScript types
 - ✅ Verified with type-check and lint - all passing
 - ✅ Added comprehensive unit test suite (requires Jest setup for full validation)

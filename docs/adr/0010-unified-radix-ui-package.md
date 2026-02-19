@@ -1,4 +1,4 @@
-# ADR-0005: Unified Radix UI Package Strategy
+# ADR-0010: Unified Radix UI Package Strategy
 
 ## Status
 Accepted
@@ -105,4 +105,4 @@ import { Dialog as DialogPrimitive } from 'radix-ui';
 
 ---
 
-*This ADR was created as part of Task 1.1 (Dialog Component implementation) and will guide all future UI primitive development.*
+*This ADR was created as part of Task 1.1 (Dialog Component implementation) and will guide all future UI primitive development. Renumbered from ADR-0005 to ADR-0010 to resolve duplicate numbering conflict.*
