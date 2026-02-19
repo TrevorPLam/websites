@@ -5,13 +5,18 @@
   "description": "pnpm validate-config clients/x/site.config.ts",
   "type": "module",
   "main": "./src/validate-site-config.ts",
+  "exports": {
+    ".": "./src/validate-site-config.ts"
+  },
   "scripts": {
     "lint": "eslint src",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "jest"
   },
   "dependencies": {},
   "devDependencies": {
-    "typescript": "catalog:",
-    "@repo/eslint-config": "workspace:*"
+    "@repo/eslint-config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   }
 }
