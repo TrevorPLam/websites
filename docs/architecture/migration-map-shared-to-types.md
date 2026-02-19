@@ -2,21 +2,21 @@
 
 ## Summary
 
-- Objective: Relocate the shared SiteConfig types from `templates/shared` to a dedicated workspace package
+- Objective: Relocate the shared SiteConfig types from `packages/types` to a dedicated workspace package
   `packages/types` while preserving all consumers.
 - Current state: `@repo/types` exists with SiteConfig + Zod schema; all template imports point to `@repo/types`; Jest
   alias updated.
-- Outcome: No remaining references to `templates/shared/*`; package is workspace-scoped and versioned; ready for future
+- Outcome: No remaining references to `packages/types/*`; package is workspace-scoped and versioned; ready for future
   industry/type expansions.
 
 ## Old → New Paths
 
-| Scope              | Old import                                               | New import                                                | Notes                                  |
-| ------------------ | -------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------- |
-| Types entrypoint   | `@repo/shared/types`                                     | `@repo/types`                                             | Barrel exports SiteConfig + flow types |
-| Site config schema | (none)                                                   | `@repo/types/site-config`                                 | Zod schema co-located                  |
-| Site config schema | (none)                                                   | `@repo/types/site-config-schema`                          | Zod schema co-located (alias)          |
-| Jest alias         | `'^@repo/shared/(.*)$': '<rootDir>/templates/shared/$1'` | `'^@repo/types/(.*)$': '<rootDir>/packages/types/src/$1'` | Implemented in `jest.config.js`        |
+| Scope              | Old import                                             | New import                                                | Notes                                  |
+| ------------------ | ------------------------------------------------------ | --------------------------------------------------------- | -------------------------------------- |
+| Types entrypoint   | `@repo/shared/types`                                   | `@repo/types`                                             | Barrel exports SiteConfig + flow types |
+| Site config schema | (none)                                                 | `@repo/types/site-config`                                 | Zod schema co-located                  |
+| Site config schema | (none)                                                 | `@repo/types/site-config-schema`                          | Zod schema co-located (alias)          |
+| Jest alias         | `'^@repo/shared/(.*)$': '<rootDir>/packages/types/$1'` | `'^@repo/types/(.*)$': '<rootDir>/packages/types/src/$1'` | Implemented in `jest.config.js`        |
 
 ## Compatibility & Safety
 
@@ -30,7 +30,7 @@
 
 ## Verification
 
-- Grep confirms no remaining `@repo/shared` or `templates/shared` imports in code.
+- Grep confirms no remaining `@repo/shared` or `packages/types` imports in code.
 - `jest.config.js` aliases point to `@repo/types` sources.
 - No code was moved in this pass; only documentation/status updates were required because migration already exists in
   repo state.

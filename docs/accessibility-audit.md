@@ -6,7 +6,7 @@
 
 ## Scope
 
-- Template: `templates/hair-salon`
+- Template: `clients/starter-template`
 - Target pages: `/` (home), `/services`, `/services/haircuts`, `/services/coloring`, `/services/treatments`,
   `/services/special-occasions`, `/services/bridal`, `/pricing`, `/gallery`, `/team`, `/about`, `/blog`,
   `/contact`, `/book`, `/search`, `/privacy`, `/terms`
@@ -38,7 +38,7 @@ node scripts/a11y-scan.js
 - 2026-02-15 (home page, desktop): pa11y (WCAG2AA) — **PASS** after contrast fix (primary color darkened to
   `hsl(174 100% 26%)`).
 - Prior failure: contrast ratio 3.41:1 on “Learn More” links and primary CTA; resolved by updating `theme.colors.primary`
-  in `templates/hair-salon/site.config.ts`.
+  in `clients/starter-template/site.config.ts`.
 - 2026-02-15 route sweep (desktop): **PASS** on `/services`, `/services/haircuts`, `/services/coloring`,
   `/services/treatments`, `/services/special-occasions`, `/services/bridal`, `/pricing`.
 - `/gallery`: initial fail (contrast on hero h1). Fixed by switching heading to `text-white`; now **PASS**.

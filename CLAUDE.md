@@ -77,7 +77,7 @@ marketing-websites/
 │   ├── features/            # @repo/features — L2: domain feature modules
 │   ├── types/               # @repo/types — shared TypeScript types/interfaces
 │   ├── utils/               # @repo/utils — utility functions (cn, etc.)
-│   ├── page-templates/      # @repo/page-templates — L3 page layouts (scaffolded only)
+│   ├── page-templates/      # @repo/page-templates — L3 page layouts (section registry)
 │   ├── integrations/
 │   │   ├── analytics/       # @repo/integrations-analytics
 │   │   ├── hubspot/         # @repo/integrations-hubspot
@@ -109,11 +109,11 @@ marketing-websites/
 
 ### Layer model (current layers only)
 
-| Layer | Packages | Status |
-|-------|----------|--------|
-| L0 — Infrastructure | `@repo/infra`, `@repo/integrations-*` | Complete |
-| L2 — Components | `@repo/ui`, `@repo/features`, `@repo/types`, `@repo/utils` | Partial |
-| L3 — Experience | `clients/*` (e.g. starter-template, luxe-salon) | Multiple clients |
+| Layer               | Packages                                                   | Status           |
+| ------------------- | ---------------------------------------------------------- | ---------------- |
+| L0 — Infrastructure | `@repo/infra`, `@repo/integrations-*`                      | Complete         |
+| L2 — Components     | `@repo/ui`, `@repo/features`, `@repo/types`, `@repo/utils` | Partial          |
+| L3 — Experience     | `clients/*` (e.g. starter-template, luxe-salon)            | Multiple clients |
 
 ### Allowed dependency direction
 
@@ -132,22 +132,22 @@ Central versions live in `pnpm-workspace.yaml` under `catalog:`. Always use `cat
 
 ## Technology Stack
 
-| Category | Technology | Version |
-|----------|-----------|---------|
-| Framework | Next.js (App Router) | 16.1.5 |
-| UI | React | 19.0.0 |
-| Styling | Tailwind CSS | 4.1.0 |
-| Language | TypeScript | 5.9.3 |
-| Build orchestration | Turborepo | 2.8.9 |
-| Package manager | pnpm | 10.29.2 |
-| Linting | ESLint | 9.18.0 (flat config) |
-| Formatting | Prettier | 3.8.1 |
-| Testing | Jest | 30.2.0 |
-| Error tracking | Sentry | 10.38.0 |
-| DB/auth | Supabase | — |
-| UI primitives | Radix UI | 1.0.0 |
-| Icons | Lucide React | 0.344.0 |
-| Toasts | Sonner | 2.0.7 |
+| Category            | Technology           | Version              |
+| ------------------- | -------------------- | -------------------- |
+| Framework           | Next.js (App Router) | 16.1.5               |
+| UI                  | React                | 19.0.0               |
+| Styling             | Tailwind CSS         | 4.1.0                |
+| Language            | TypeScript           | 5.9.3                |
+| Build orchestration | Turborepo            | 2.8.9                |
+| Package manager     | pnpm                 | 10.29.2              |
+| Linting             | ESLint               | 9.18.0 (flat config) |
+| Formatting          | Prettier             | 3.8.1                |
+| Testing             | Jest                 | 30.2.0               |
+| Error tracking      | Sentry               | 10.38.0              |
+| DB/auth             | Supabase             | —                    |
+| UI primitives       | Radix UI             | 1.0.0                |
+| Icons               | Lucide React         | 0.344.0              |
+| Toasts              | Sonner               | 2.0.7                |
 
 ---
 
@@ -182,8 +182,15 @@ Central versions live in `pnpm-workspace.yaml` under `catalog:`. Always use `cat
 ### Prettier
 
 ```json
-{ "semi": true, "singleQuote": true, "trailingComma": "es5",
-  "printWidth": 100, "tabWidth": 2, "useTabs": false, "endOfLine": "lf" }
+{
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "endOfLine": "lf"
+}
 ```
 
 ### Imports
@@ -211,10 +218,10 @@ Source files use a structured comment block at the top documenting purpose, expo
 
 Jest uses two projects (defined in root `jest.config.js`):
 
-| Environment | Used for | Test patterns |
-|-------------|----------|---------------|
-| `node` | Server utilities, infra, server actions, lib/ | `packages/utils/**`, `packages/infra/**`, `packages/features/**/lib/**` |
-| `jsdom` | React components, UI primitives | `packages/ui/**`, `packages/features/**/components/**` |
+| Environment | Used for                                      | Test patterns                                                           |
+| ----------- | --------------------------------------------- | ----------------------------------------------------------------------- |
+| `node`      | Server utilities, infra, server actions, lib/ | `packages/utils/**`, `packages/infra/**`, `packages/features/**/lib/**` |
+| `jsdom`     | React components, UI primitives               | `packages/ui/**`, `packages/features/**/components/**`                  |
 
 ### Running tests
 
@@ -253,14 +260,14 @@ cp .env.example clients/starter-template/.env.local
 
 Key variables (all optional locally):
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SITE_URL` | Public site URL (default: `http://localhost:3101` for starter-template) |
-| `NEXT_PUBLIC_SENTRY_DSN` | Sentry error tracking DSN |
-| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | Must be set together (pair) |
-| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (pair; falls back to in-memory) |
-| `HUBSPOT_PRIVATE_APP_TOKEN` | CRM integration |
-| `MINDBODY_API_KEY` + `MINDBODY_BUSINESS_ID` | Booking provider (pair) |
+| Variable                                              | Description                                                             |
+| ----------------------------------------------------- | ----------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                                | Public site URL (default: `http://localhost:3101` for starter-template) |
+| `NEXT_PUBLIC_SENTRY_DSN`                              | Sentry error tracking DSN                                               |
+| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`          | Must be set together (pair)                                             |
+| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (pair; falls back to in-memory)                           |
+| `HUBSPOT_PRIVATE_APP_TOKEN`                           | CRM integration                                                         |
+| `MINDBODY_API_KEY` + `MINDBODY_BUSINESS_ID`           | Booking provider (pair)                                                 |
 
 Environment schemas are defined in `packages/infra/env/schemas/*.ts`.
 
@@ -271,6 +278,7 @@ Environment schemas are defined in `packages/infra/env/schemas/*.ts`.
 The `site.config.ts` file in each template/client root is the **single source of truth** for all site behavior. It is typed by `SiteConfig` from `@repo/types`.
 
 Key sections:
+
 - `features` — toggle/configure page sections (hero layout, services grid, booking, blog…)
 - `integrations` — analytics, CRM, booking, email, chat provider selections
 - `navLinks` / `footer` — navigation structure
@@ -323,13 +331,13 @@ CI is defined in `.github/workflows/ci.yml`. Two jobs run on push to `main`/`dev
 
 ### `quality-gates` (blocking — must pass for merge)
 
-1. `pnpm lint` — ESLint (PR: affected packages only via `--filter="...[origin/main]"`) — *many packages lack eslint.config.mjs*
-2. `pnpm type-check` — TypeScript — *fails in @repo/marketing-components*
+1. `pnpm lint` — ESLint (PR: affected packages only via `--filter="...[origin/main]"`) — _many packages lack eslint.config.mjs_
+2. `pnpm type-check` — TypeScript — _fails in @repo/marketing-components_
 3. `pnpm validate-exports` — Package export map validation
 4. `pnpm madge:circular` — Circular dependency detection
 5. `pnpm syncpack:check` — Dependency version consistency
-6. `pnpm build` — Full build — *fails due to Toast.tsx type errors*
-7. `pnpm test:coverage` — Jest test suite — *4 booking-actions tests fail*
+6. `pnpm build` — Full build — _fails due to Toast.tsx type errors_
+7. `pnpm test:coverage` — Jest test suite — _4 booking-actions tests fail_
 
 **Known issues:** Previously documented in [docs/archive/ISSUES.md](docs/archive/ISSUES.md) (archived); refer to CI output and current codebase state.
 
@@ -383,6 +391,7 @@ pnpm validate-docs:strict    # Strict mode
 ```
 
 Key docs:
+
 - `docs/architecture/README.md` — Layer model and design principles
 - `docs/architecture/module-boundaries.md` — Allowed dependency directions
 - `docs/getting-started/onboarding.md` — Developer setup guide

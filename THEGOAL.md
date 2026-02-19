@@ -137,7 +137,7 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │
 │   │  ── TYPES LAYER (was @repo/shared) ───────────────────────────────
 │   │
-│   ├── types/                               # [0.8] MOVED from templates/shared/ → packages/types/
+│   ├── types/                               # [0.8] Shared types package — SiteConfig, industry, integration contracts
 │   │   ├── src/
 │   │   │   ├── index.ts                     #   Barrel export for all types
 │   │   │   ├── site-config.ts               # [1.8] EXTENDED: +industry, +features, +integrations, +theme
@@ -313,7 +313,7 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │   ├── src/
 │   │   │   ├── index.ts                     #   Barrel: all 9 features
 │   │   │   │
-│   │   │   ├── booking/                     # [2.12] EXTRACTED from templates/hair-salon/
+│   │   │   ├── booking/                     # [2.12] EXTRACTED from clients/starter-template/
 │   │   │   │   ├── components/
 │   │   │   │   │   └── BookingForm.tsx      #   Services/slots from props, not hardcoded
 │   │   │   │   ├── lib/
@@ -324,7 +324,7 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │   │   │   │   └── parity/              # [2.22] Parity tests vs original template
 │   │   │   │   └── index.ts
 │   │   │   │
-│   │   │   ├── contact/                     # [2.13] EXTRACTED from templates/hair-salon/
+│   │   │   ├── contact/                     # [2.13] EXTRACTED from clients/starter-template/
 │   │   │   │   ├── components/
 │   │   │   │   ├── lib/
 │   │   │   │   ├── __tests__/parity/
@@ -352,7 +352,7 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │   │   │   │   ├── SearchDialog.tsx     #   [0.30] Broken Tailwind class FIXED
 │   │   │   │   │   └── SearchPage.tsx
 │   │   │   │   ├── lib/
-│   │   │   │   │   └── search.ts            #   Moved FROM templates/hair-salon/lib/
+│   │   │   │   │   └── search.ts            #   Moved FROM clients/starter-template/lib/
 │   │   │   │   ├── __tests__/parity/
 │   │   │   │   └── index.ts
 │   │   │   │
@@ -845,19 +845,19 @@ marketing-websites/                          # Root — pnpm monorepo
 
 ## Key Architectural Shifts
 
-| Dimension | Before (1 template) | After (config-driven platform) |
-|-----------|---------------------|-------------------------------|
-| **Business logic** | Hardcoded in `templates/hair-salon/` | Extracted to `packages/features/` (9 modules) |
-| **UI components** | 8 primitives in `@repo/ui` | 14 primitives + 10 marketing families (30+) |
-| **Page composition** | Direct JSX in template routes | Config-driven via section registry + templates |
-| **Theming** | Broken — config has no effect | CSS vars generated from `site.config.ts` at runtime |
-| **Client creation** | Copy entire template, edit everything | `turbo gen new-client` → edit only `site.config.ts` |
-| **Industries** | Hair salon only | 12 typed industries with defaults + schema.org |
-| **Content source** | MDX files in template | Adapter pattern: MDX / Sanity / Storyblok |
-| **Integrations** | 3 (analytics, hubspot, supabase) | 15+ (email, scheduling, chat, reviews, maps) |
-| **Testing** | 13 scattered test files | Pyramid + parity suite + visual regression |
-| **CI/CD** | Basic | Affected builds + remote cache + gates + changesets |
-| **templates/** | Exists (source of truth) | **Deleted** — all code in packages/ + clients/ |
+| Dimension            | Before (1 template)                      | After (config-driven platform)                      |
+| -------------------- | ---------------------------------------- | --------------------------------------------------- |
+| **Business logic**   | Hardcoded in `clients/starter-template/` | Extracted to `packages/features/` (9 modules)       |
+| **UI components**    | 8 primitives in `@repo/ui`               | 14 primitives + 10 marketing families (30+)         |
+| **Page composition** | Direct JSX in template routes            | Config-driven via section registry + templates      |
+| **Theming**          | Broken — config has no effect            | CSS vars generated from `site.config.ts` at runtime |
+| **Client creation**  | Copy entire template, edit everything    | `turbo gen new-client` → edit only `site.config.ts` |
+| **Industries**       | Hair salon only                          | 12 typed industries with defaults + schema.org      |
+| **Content source**   | MDX files in template                    | Adapter pattern: MDX / Sanity / Storyblok           |
+| **Integrations**     | 3 (analytics, hubspot, supabase)         | 15+ (email, scheduling, chat, reviews, maps)        |
+| **Testing**          | 13 scattered test files                  | Pyramid + parity suite + visual regression          |
+| **CI/CD**            | Basic                                    | Affected builds + remote cache + gates + changesets |
+| **templates/**       | Exists (source of truth)                 | **Deleted** — all code in packages/ + clients/      |
 
 ---
 

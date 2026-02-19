@@ -87,17 +87,17 @@ Every aspect of a client website — theming, page composition, feature selectio
 
 ### Current Implementation Status
 
-| Layer  | Package                      | Status                       | Scope                                                 |
-| ------ | ---------------------------- | ---------------------------- | ----------------------------------------------------- |
-| **--** | Housekeeping (Wave 0)        | 🟢 Complete                  | Config fixes, tooling, CI, bug fixes done             |
-| **L2** | `@repo/ui`                   | 🟡 9 of 14                   | UI primitives (Dialog, ThemeInjector, Toast); Toast has type errors |
-| **L2** | `@repo/marketing-components` | 🟡 Partial                   | Package exists; Hero, services, team, etc. scaffolded; type-check fails |
-| **L2** | `@repo/features`             | 🟡 5 of 9                    | booking, contact, blog, services, search; 4 booking tests fail |
-| **L2** | `@repo/types`                | 🟢 Complete                  | SiteConfig, industry, schemas                         |
-| **L3** | `@repo/page-templates`       | 🔴 Scaffolded only           | 7 templates exist but all render NotImplementedPlaceholder |
-| **L3** | `clients/`                   | 🟢 Active                    | 6 clients: starter-template, luxe-salon, bistro-central, chen-law, sunrise-dental, urban-outfitters |
-| **L0** | `@repo/infra`                | 🟢 Complete                  | Security, middleware, logging, 7 env schemas          |
-| **L0** | `@repo/integrations-***`     | 🟡 Scaffolded                | 14 packages (hubspot, supabase, analytics, etc.); none used by clients yet |
+| Layer  | Package                      | Status        | Scope                                                                                               |
+| ------ | ---------------------------- | ------------- | --------------------------------------------------------------------------------------------------- |
+| **--** | Housekeeping (Wave 0)        | 🟢 Complete   | Config fixes, tooling, CI, bug fixes done                                                           |
+| **L2** | `@repo/ui`                   | 🟡 9 of 14    | UI primitives (Dialog, ThemeInjector, Toast); Toast has type errors                                 |
+| **L2** | `@repo/marketing-components` | 🟡 Partial    | Package exists; Hero, services, team, gallery, etc. implemented; type-check passes                  |
+| **L2** | `@repo/features`             | 🟡 5 of 9     | booking, contact, blog, services, search; 4 booking tests fail                                      |
+| **L2** | `@repo/types`                | 🟢 Complete   | SiteConfig, industry, schemas                                                                       |
+| **L3** | `@repo/page-templates`       | 🟡 Wired      | 7 templates use section registry; compose from marketing-components via adapters                    |
+| **L3** | `clients/`                   | 🟢 Active     | 6 clients: starter-template, luxe-salon, bistro-central, chen-law, sunrise-dental, urban-outfitters |
+| **L0** | `@repo/infra`                | 🟢 Complete   | Security, middleware, logging, 7 env schemas                                                        |
+| **L0** | `@repo/integrations-***`     | 🟡 Scaffolded | 14 packages (hubspot, supabase, analytics, etc.); none used by clients yet                          |
 
 ---
 
@@ -120,7 +120,7 @@ marketing-websites/
 │   ├── utils/              # @repo/utils - cn, utilities
 │   ├── features/           # @repo/features - booking, contact, blog, services, search
 │   ├── marketing-components/ # @repo/marketing-components
-│   ├── page-templates/     # @repo/page-templates (7 placeholders)
+│   ├── page-templates/     # @repo/page-templates (7 templates via section registry)
 │   ├── types/              # @repo/types - SiteConfig, schemas
 │   ├── infra/              # @repo/infra - Security, middleware, logging
 │   ├── integrations/       # 14 integration packages (analytics, hubspot, supabase, etc.)
@@ -141,24 +141,28 @@ marketing-websites/
 #### Core Packages (Layer 0-2)
 
 **@repo/infra** - Infrastructure Foundation
+
 - Security middleware and validation
 - Environment schema validation
 - Logging and error tracking
 - Request context management
 
 **@repo/ui** - Component Library
+
 - Atomic React components
 - Design system implementation
 - Theme injection and styling
 - Accessibility primitives
 
 **@repo/features** - Business Logic
+
 - Domain-specific feature components
 - Booking and scheduling logic
 - Contact forms and workflows
 - Content management features
 
 **@repo/types** - Type Definitions
+
 - Shared TypeScript interfaces
 - Site configuration schemas
 - Integration type contracts
@@ -167,10 +171,12 @@ marketing-websites/
 #### Experience Layer (Layer 3)
 
 **@repo/page-templates** - Page Compositions
+
 - HomePageTemplate, ServicesPageTemplate, AboutPageTemplate, etc.
-- Currently all 7 render NotImplementedPlaceholder; compose from marketing-components when implemented
+- 7 templates wired via a section registry; each section is composed from marketing-components adapters
 
 **Clients** - Production Deployments
+
 - starter-template: Golden path with next-intl, standalone Docker, full config
 - luxe-salon, bistro-central, chen-law, sunrise-dental, urban-outfitters: Industry examples
 - Each client: site.config.ts, app/, components/, custom content
@@ -255,7 +261,7 @@ flowchart TD
     F --> G[Page Composition]
     G --> H[Build Process]
     H --> I[Client Deployment]
-    
+
     style A fill:#e1f5ff
     style I fill:#c8e6c9
     style D fill:#ffcdd2
@@ -271,7 +277,7 @@ flowchart LR
     D --> E[User Interface]
     E --> F[User Interaction]
     F --> G[Analytics & Tracking]
-    
+
     style A fill:#fff3e0
     style E fill:#e1f5ff
     style G fill:#f3e5f5
@@ -284,18 +290,18 @@ graph TD
     A[Page Template] --> B[Feature Components]
     B --> C[UI Components]
     C --> D[UI Primitives]
-    
+
     B1[Booking Feature] --> C1[Form Components]
     B2[Contact Feature] --> C2[Input Components]
     B3[Blog Feature] --> C3[Card Components]
-    
+
     C1 --> D1[Button]
     C2 --> D1
     C3 --> D2[Card]
-    
+
     D1 --> E[Radix UI]
     D2 --> E
-    
+
     style A fill:#e3f2fd
     style B fill:#f1f8e9
     style C fill:#fff3e0
@@ -309,33 +315,33 @@ graph TD
 
 ### Core Technologies
 
-| Technology | Version | Purpose | Layer |
-| ----------- | -------- | ------- | ----- |
-| **Node.js** | >=22.0.0 | Runtime environment | Infrastructure |
-| **Next.js** | 16.1.5 | React framework | Experience |
-| **React** | 19.0.0 | UI library | Component |
-| **TypeScript** | 5.9.3 | Type safety | All layers |
-| **Tailwind CSS** | 4.1.0 | Styling | Component |
-| **pnpm** | 10.29.2 | Package management | Infrastructure |
+| Technology       | Version  | Purpose             | Layer          |
+| ---------------- | -------- | ------------------- | -------------- |
+| **Node.js**      | >=22.0.0 | Runtime environment | Infrastructure |
+| **Next.js**      | 16.1.5   | React framework     | Experience     |
+| **React**        | 19.0.0   | UI library          | Component      |
+| **TypeScript**   | 5.9.3    | Type safety         | All layers     |
+| **Tailwind CSS** | 4.1.0    | Styling             | Component      |
+| **pnpm**         | 10.29.2  | Package management  | Infrastructure |
 
 ### Development Tools
 
-| Tool | Version | Purpose |
-| ---- | ------- | ------- |
-| **Turbo** | 2.8.10 | Monorepo build system |
-| **ESLint** | 9.18.0 | Code linting (flat config) |
-| **Prettier** | 3.2.5 | Code formatting |
-| **Jest** | 30.2.0 | Unit testing |
-| **Knip** | 5.84.0 | Dead code detection |
+| Tool         | Version | Purpose                    |
+| ------------ | ------- | -------------------------- |
+| **Turbo**    | 2.8.10  | Monorepo build system      |
+| **ESLint**   | 9.18.0  | Code linting (flat config) |
+| **Prettier** | 3.2.5   | Code formatting            |
+| **Jest**     | 30.2.0  | Unit testing               |
+| **Knip**     | 5.84.0  | Dead code detection        |
 
 ### Infrastructure & Integrations
 
-| Service | Purpose | Integration |
-| ------- | ------- | ---------- |
-| **Supabase** | Database & Auth | @repo/infra |
-| **Sentry** | Error tracking | @repo/infra |
-| **HubSpot** | CRM integration | @repo/integrations |
-| **Google Analytics** | Analytics | @repo/integrations |
+| Service              | Purpose         | Integration        |
+| -------------------- | --------------- | ------------------ |
+| **Supabase**         | Database & Auth | @repo/infra        |
+| **Sentry**           | Error tracking  | @repo/infra        |
+| **HubSpot**          | CRM integration | @repo/integrations |
+| **Google Analytics** | Analytics       | @repo/integrations |
 
 ---
 
@@ -405,37 +411,37 @@ graph TB
         T2[Template 2]
         T3[Template 3]
     end
-    
+
     subgraph Clients[Clients Directory]
         C1[Client A]
         C2[Client B]
         C3[Client C]
     end
-    
+
     subgraph Deploy[Deployment Platforms]
         V1[Vercel]
         V2[Netlify]
         V3[Self-Hosted]
     end
-    
+
     subgraph Domains[Domains]
         D1[client-a.com]
         D2[client-b.com]
         D3[client-c.com]
     end
-    
+
     T1 --> C1
     T2 --> C2
     T3 --> C3
-    
+
     C1 --> V1
     C2 --> V2
     C3 --> V3
-    
+
     V1 --> D1
     V2 --> D2
     V3 --> D3
-    
+
     style Repo fill:#e3f2fd
     style Clients fill:#f1f8e9
     style Deploy fill:#fff3e0
@@ -458,7 +464,7 @@ flowchart TD
     H --> I[Optimize Assets]
     I --> J[Generate Static Pages]
     J --> K[Deploy]
-    
+
     style A fill:#e1f5ff
     style K fill:#c8e6c9
     style D fill:#ffcdd2
@@ -483,18 +489,21 @@ flowchart TD
 ## Evolution Roadmap
 
 ### Current Phase (Phase 1: Core MVP)
+
 - ✅ Basic template system
 - ✅ Core component library
 - 🔄 Feature extraction and standardization
 - ⏳ Page template system
 
 ### Near Future (Phase 2: Market Readiness)
+
 - ⏳ Multi-industry templates
 - ⏳ Advanced marketing components
 - ⏳ Client factory automation
 - ⏳ Enhanced analytics integration
 
 ### Long-term Vision (Phase 3+)
+
 - 📋 AI-powered content generation
 - 📋 Advanced personalization
 - 📋 Multi-channel marketing automation

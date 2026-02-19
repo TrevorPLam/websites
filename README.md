@@ -86,17 +86,17 @@ Professional multi-industry marketing website template system built with modern 
 
 > **Quality gates:** Run `pnpm lint type-check build test` to verify. Historical issue analysis is in [docs/archive/ISSUES.md](docs/archive/ISSUES.md).
 
-| Layer  | Package                      | Status             | Progress                                                                        |
-| ------ | ---------------------------- | ------------------ | ------------------------------------------------------------------------------- |
-| **L0** | `@repo/infra`                | 🟢 Complete        | Security, middleware, logging, 7 env schemas                                    |
-| **L2** | `@repo/ui`                   | 🟡 In Progress     | 9+ UI primitives (Button, Dialog, Input, Slider, Toast, etc.)                   |
-| **L2** | `@repo/marketing-components` | 🟡 Partial         | Package exists; scaffolded component families                                   |
-| **L2** | `@repo/features`             | 🟡 Partial         | 5 features (booking, contact, blog, services, search); all tests pass           |
-| **L2** | `@repo/types`                | 🟢 Complete        | Shared TypeScript types/interfaces                                              |
-| **L2** | `@repo/infrastructure-*`     | 🟡 Partial         | tenant-core, theme, layout, ui (type-check passes)          |
-| **L3** | `@repo/page-templates`       | 🔴 Scaffolded Only | All 7 templates are NotImplementedPlaceholder                                   |
-| **L3** | `clients/starter-template`   | 🟢 Active          | Golden-path template (port 3101, next-intl, Docker)                             |
-| **L3** | `clients/luxe-salon`, etc.   | 🟡 Partial         | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
+| Layer  | Package                      | Status         | Progress                                                                        |
+| ------ | ---------------------------- | -------------- | ------------------------------------------------------------------------------- |
+| **L0** | `@repo/infra`                | 🟢 Complete    | Security, middleware, logging, 7 env schemas                                    |
+| **L2** | `@repo/ui`                   | 🟡 In Progress | 9+ UI primitives (Button, Dialog, Input, Slider, Toast, etc.)                   |
+| **L2** | `@repo/marketing-components` | 🟡 Partial     | Package exists; scaffolded component families                                   |
+| **L2** | `@repo/features`             | 🟡 Partial     | 5 features (booking, contact, blog, services, search); all tests pass           |
+| **L2** | `@repo/types`                | 🟢 Complete    | Shared TypeScript types/interfaces                                              |
+| **L2** | `@repo/infrastructure-*`     | 🟡 Partial     | tenant-core, theme, layout, ui (type-check passes)                              |
+| **L3** | `@repo/page-templates`       | 🟡 Wired       | 7 templates use section registry + marketing-components adapters                |
+| **L3** | `clients/starter-template`   | 🟢 Active      | Golden-path template (port 3101, next-intl, Docker)                             |
+| **L3** | `clients/luxe-salon`, etc.   | 🟡 Partial     | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
 
 See task specs in [tasks/](tasks/) (e.g. tasks/0-4-fix-toast-sonner-api.md) and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
 

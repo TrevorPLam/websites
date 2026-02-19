@@ -7,7 +7,7 @@
 
 ## Context
 
-The booking feature was originally implemented in `templates/hair-salon/features/booking/` with hardcoded service types and time slots. This prevented reuse across different industries and required code duplication for each new template.
+The booking feature was originally implemented in `clients/starter-template/features/booking/` with hardcoded service types and time slots. This prevented reuse across different industries and required code duplication for each new template.
 
 ## Decision
 
@@ -72,7 +72,7 @@ class BaseBookingProviderAdapter {
   abstract mapTimeSlot(timeSlot: string): string;
   abstract buildRequestBody(data: BookingFormData): Record<string, unknown>;
   abstract parseResponse(json: unknown): BookingProviderResponse;
-  
+
   // Common createBooking logic with error handling
   async createBooking(data: BookingFormData): Promise<BookingProviderResponse> {
     // Shared implementation
@@ -81,7 +81,9 @@ class BaseBookingProviderAdapter {
 
 // Provider-specific implementations
 class MindbodyProvider extends BaseBookingProviderAdapter {
-  mapServiceId(serviceType: string): string { /* ... */ }
+  mapServiceId(serviceType: string): string {
+    /* ... */
+  }
   // ...
 }
 ```

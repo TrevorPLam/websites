@@ -15,7 +15,7 @@ Modal search triggered by button or Cmd/Ctrl+K. Uses `@repo/ui` Dialog for acces
 ```tsx
 import { SearchDialog } from '@repo/features/search';
 
-<SearchDialog items={searchItems} variant="desktop" />
+<SearchDialog items={searchItems} variant="desktop" />;
 ```
 
 **Props:**
@@ -31,7 +31,7 @@ Full-page search with URL-synced query (`?q=`).
 ```tsx
 import { SearchPage } from '@repo/features/search';
 
-<SearchPage items={searchItems} />
+<SearchPage items={searchItems} />;
 ```
 
 **Props:**
@@ -69,4 +69,4 @@ Both components use `filterSearchItems` for substring matching across title, des
 
 ## Template Integration
 
-See `templates/hair-salon/lib/search.ts` for the adapter pattern: template wires route registry + blog content into the feature's `getSearchIndex`.
+See `clients/starter-template/lib/search.ts` for the adapter pattern: template wires route registry + blog content into the feature's `getSearchIndex`.
