@@ -1,38 +1,38 @@
 {
   "name": "@repo/marketing-components",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "description": "Marketing-specific UI components for the monorepo",
   "private": true,
-  "description": "Marketing-specific UI component families",
   "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "module": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./server": "./src/server.ts"
   },
+  "types": "./src/index.ts",
   "scripts": {
-    "lint": "eslint src",
-    "type-check": "tsc --noEmit",
-    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true}); require('fs').writeFileSync('dist/.stub','')\"",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/utils": "workspace:*",
-    "lucide-react": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "zod": "catalog:"
-  },
-  "peerDependencies": {
+    "@repo/types": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
-    "typescript": "catalog:"
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.2"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }

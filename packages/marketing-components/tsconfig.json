@@ -1,12 +1,9 @@
 {
-  "extends": "@repo/typescript-config/base.json",
+  "extends": "@repo/typescript-config/react.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "outDir": "./dist",
-    "rootDir": ".",
-    "skipLibCheck": true
+    "outDir": "dist",
+    "rootDir": "src"
   },
-  "include": ["**/*.ts", "**/*.tsx", "../ui/src/shims/**/*.d.ts"],
-  "exclude": ["node_modules", "dist", "**/__tests__/**"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
