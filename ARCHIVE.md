@@ -2574,3 +2574,243 @@ export default function HomePage() {
 ---
 
 *This archive serves as a historical record. For active work, see TASKS.md*
+
+---
+
+## Session: 2026-02-19 — Page Templates Type-Fix Batch (Tasks 3-4, 3-5, 3-6, 3-7, 3-8, 3-9)
+
+- **Agent**: Claude (claude-sonnet-4-6)
+- **Branch**: claude/batch-task-execution-D0k8m
+- **Tasks Completed**: 6 (3-4, 3-5, 3-6, 3-7, 3-8, 3-9)
+
+### Task 3-4: AboutPageTemplate — Section Adapter Type Fixes
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- `packages/page-templates/src/sections/about.tsx`
+- Fixed `HeroCentered` call: `headline` → `title`, `subheadline` → `subtitle`, removed invalid `theme` prop
+- Fixed `TeamSection` call: replaced invalid `siteConfig` prop with correct `{ title, members, layout }` shape
+- Fixed `CTASection` call: `headline` → `title`, `subheadline` → `description`
+- Removed unused `getSectionsForPage` import (TS6133)
+- Removed duplicate `import { getSectionsForPage as _base }` at end of file (invalid module syntax)
+
+**Why**: Props were mismatched with actual component APIs in `@repo/marketing-components` and `@repo/features`.
+
+**How verified**: `pnpm --filter @repo/page-templates type-check` → 0 errors (after all section fixes below).
+
+**Follow-up tasks**:
+- AboutTeamAdapter always renders empty members list — wire real team data from siteConfig when `TeamMember[]` type support is added to `SiteConfig`
+
+---
+
+### Task 3-5: ContactPageTemplate — Section Adapter Type Fixes
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- `packages/page-templates/src/sections/contact.tsx`
+- Fixed `ContactForm` usage: added `createContactConfig` for proper `ContactFeatureConfig`, replaced incorrect field props with correct `config` + `onSubmit` API
+- Added `defaultContactHandler: ContactSubmissionHandler` placeholder (typed `(data, metadata) => Promise<{ success, message }>`) — clients override with real server action
+- Removed `await import('react')` in non-async function (was causing TS1308)
+- Fixed `config.address/phone/email` references (these live in `config.contact.*` on `SiteConfig`)
+- Simplified `ContactInfoAdapter` to return `null` (ContactForm handles display)
+
+**Why**: `ContactForm` requires `config: ContactFeatureConfig` and typed `onSubmit: ContactSubmissionHandler` — not ad-hoc business info props.
+
+**Limitations**: Default handler is a no-op — starter template shows form but doesn't actually submit. Client templates must inject a real server action.
+
+---
+
+### Task 3-6 + 3-7: BlogIndexTemplate + BlogPostTemplate — Section Adapter Type Fixes
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- `packages/page-templates/src/sections/blog.tsx`
+- Fixed `BlogGrid` call: removed non-existent `currentPage`/`category` props, used `pagination: PaginationConfig` shape instead
+- Fixed `BlogPagination` call: added required `onPageChange` handler (was missing), removed non-existent `basePath` prop
+- Fixed `BlogPostContent` call: changed `slug` prop to `content: string` (component renders MDX content, not slug)
+- Fixed searchParams type: cast `{}` to `Record<string, string | string[] | undefined>` to allow index access without implicit `any`
+- Fixed `CTASection` call in BlogCTAAdapter: `headline` → `title`, `subheadline` → `description`
+
+**Limitations**: BlogPostContent always renders empty content — real content fetching by slug is not wired. Pagination `onPageChange` is a no-op client-side handler.
+
+---
+
+### Task 3-8: BookingPageTemplate — Section Adapter Type Fix
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- `packages/page-templates/src/sections/booking.tsx`
+- Fixed `props.searchParams?.service` (TypeScript couldn't index `{}`) → typed cast to `Record<string, string | string[] | undefined>` before indexing
+
+---
+
+### Task 3-9: IndustrySection Adapters — Type Fixes and Correct Component Names
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- `packages/page-templates/src/sections/industry.tsx`
+- Fixed all wrong import names:
+  - `LocationSection` → `LocationList` (actual export)
+  - `MenuSection` → `MenuList`
+  - `ResourceLibrary` → `ResourceGrid`
+  - `FilterSystem` → `FilterBar`
+  - `SocialProof` → `SocialProofStack`
+  - `InteractiveWidget` → `AccordionContent`
+  - `GenericWidget` → `WidgetCard`
+- Added required props for all components:
+  - `PortfolioGrid`: `items: []`
+  - `CourseGrid`: `courses: []`
+  - `ComparisonTable`: `columns: [], rows: []`
+  - `LocationList`: `locations: []`
+  - `MenuList`: `categories: []`
+  - `ResourceGrid`: `resources: []`
+  - `FilterBar`: `options: []`
+  - `SocialProofStack`: `items: []`
+  - `AccordionContent`: `items: []`
+  - `WidgetCard`: `children: null`
+  - `VideoEmbed`: `src: ''`
+  - `AudioPlayer`: `src: ''`
+
+**Follow-up**: All industry adapters render empty state — wire real data from siteConfig per industry type (location cards from `config.contact`, menu from a data source, etc.)
+
+---
+
+### Bonus Fixes (marketing-components type errors, blocking page-templates type-check)
+
+**What changed**:
+- `packages/marketing-components/src/hero/HeroCarousel.tsx`: Fixed `<HeroCTAButton cta={slide.cta} />` → `<HeroCTAButton {...slide.cta} />` (props are spread, not nested)
+- `packages/marketing-components/src/services/ServiceGrid.tsx`:
+  - Removed `import Image from 'next/image'` (next is not a dep of marketing-components)
+  - Replaced `<Image fill ...>` with standard `<img>` with absolute positioning CSS
+  - Removed `Button` import (unused after fix)
+  - Replaced `<Button asChild>` with a `<a>` styled as button (Button in @repo/ui doesn't support `asChild`)
+
+**Risk**: `<img>` tag without Next.js optimization loses LCP hints — acceptable in a shared package since clients wrap in Next.js app with its own image optimization pipeline. Added eslint-disable comment.
+
+---
+
+---
+
+## Session: 2026-02-19 — Design System Infrastructure Batch (Tasks f-10, f-11, f-12, f-13, f-14)
+
+- **Agent**: Claude (claude-sonnet-4-6)
+- **Branch**: claude/batch-task-execution-D0k8m
+- **Tasks Completed**: 5 (f-10, f-11, f-12, f-13, f-14)
+
+### Task f-10: Spacing System
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- Created `packages/infra/spacing/` module with:
+  - `scale.ts`: Full Tailwind spacing scale (px/rem/tailwindClass), semantic aliases (xs → 5xl), `spacingTailwindSuffix()`
+  - `utils.ts`: `pxToRem`, `remToPx`, `getSpacingValue`, `getSemanticSpacing`, `spacingVar`, `getSpacingCssVars`, `clampSpacing`, `scaleSpacing`
+  - `hooks.ts`: `useResponsiveSpacing`, `useSpacingScale`, `useBreakpoint` (ResizeObserver-based, SSR-safe)
+  - `index.ts`: barrel export
+- Added `./spacing`, `./spacing/scale`, `./spacing/utils`, `./spacing/hooks` exports to `packages/infra/package.json`
+- Added `packages/infra/__tests__/spacing.test.ts` with 15 tests
+
+**How verified**: All 15 spacing tests passed. `pnpm test` → 463 tests passing.
+
+**Known limitations**:
+- `useResponsiveSpacing` and `useBreakpoint` hooks require `'use client'` at call site (annotated in file headers)
+- ResizeObserver cleanup handles single observer — nested responsive containers work independently
+
+**Follow-up**: Consider adding `useContainerQuery` hook once container queries have broader SSR support
+
+---
+
+### Task f-11: Typography System
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- Created `packages/infra/typography/` module with:
+  - `fonts.ts`: Font stack definitions (13 stacks: system-sans/serif/mono, inter, geist, roboto, open-sans, lato, poppins, playfair-display, merriweather, source-code-pro, fira-code), `getFontStack`, `getFontStacksByCategory`
+  - `scale.ts`: Full Tailwind type scale (xs → 9xl) with px/rem/defaultLineHeight/tailwindClass, `getTypeScale`, `getTailwindTextClass`, `nearestTypeScaleKey`
+  - `line-height.ts`: Line height scale (none, tight, snug, normal, relaxed, loose + fixed rem keys), `getLineHeight`, `getLeadingClass`, `recommendedLineHeight`
+  - `utils.ts`: `getTypographyCssVars`, `isWebFontLoaded`, `truncateText`, `estimateTextWidth`, `fontWeightToString`
+  - `index.ts`: barrel export
+- Added typography export paths to `packages/infra/package.json`
+- Added `packages/infra/__tests__/typography.test.ts` with 20 tests
+
+**How verified**: All 20 typography tests passed.
+
+**Known limitations**:
+- `estimateTextWidth` uses 0.6 average char width ratio — only an approximation, use canvas `measureText` for pixel-perfect measurement
+- `isWebFontLoaded` uses CSS Font Loading API which has ~97% browser support (IE lacks it)
+
+---
+
+### Task f-12: Color System
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- Created `packages/infra/color/` module with:
+  - `utils.ts`: `parseHsl`, `formatHsl`, `hslToCss`, `hslToCssVar`, `adjustLightness`, `adjustSaturation`, `hslToRgb`, `toHexFromHsl`, `mixColors` — all handle the project's HSL format ("H S% L%")
+  - `contrast.ts`: `getRelativeLuminance`, `getContrastRatio`, `meetsWcagAA`, `meetsWcagAAA`, `getWcagLevel`, `suggestForeground` — full WCAG 2.2 compliance checking
+  - `palette.ts`: `NEUTRAL_PALETTE`, `DEFAULT_THEME_COLORS`, `REQUIRED_COLOR_KEYS`, `validateThemeColors`, `mergeWithDefaults`
+  - `index.ts`: barrel export
+- Added color export paths to `packages/infra/package.json`
+- Added `packages/infra/__tests__/color.test.ts` with 22 tests
+
+**How verified**: All 22 color tests passed, including WCAG contrast ratio verification (21:1 for black on white).
+
+**Known limitations**:
+- `mixColors` interpolates H/S/L linearly — does not account for perceptual uniformity (for design tools, use OKLab color space instead)
+- Contrast ratio calculation uses standard WCAG 2.2 gamma correction formula, not display-profile-aware
+
+---
+
+### Task f-13: Shadow System
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- Created `packages/infra/shadow/` module with:
+  - `scale.ts`: Shadow scale (none, sm, md, lg, xl, 2xl, inner) with CSS values and Tailwind classes; `SHADOW_INTENSITY_MAP` for SiteConfig.theme.shadows; `getShadow`, `shadowIntensityToKey`, `getShadowClass`
+  - `utils.ts`: `getShadowCssVars`, `coloredShadow`, `elevationToShadow` (0–5 elevation levels), `combineShadows`, `shadowVar`
+  - `index.ts`: barrel export
+- Added shadow export paths to `packages/infra/package.json`
+- Added `packages/infra/__tests__/shadow.test.ts` with 15 tests
+
+**How verified**: All 15 shadow tests passed.
+
+**Follow-up**: Add dark-mode shadow variants (shadows need lower opacity in dark mode)
+
+---
+
+### Task f-14: Border System
+
+**Status**: COMPLETED (2026-02-19)
+
+**What changed**:
+- Created `packages/infra/border/` module with:
+  - `radius.ts`: Border radius scale (none, sm, md, lg, xl, 2xl, 3xl, full) with CSS/rem/px/tailwindClass; `RADIUS_INTENSITY_MAP` for SiteConfig.theme.borderRadius; `getRadius`, `radiusIntensityToKey`, `getRadiusClass`
+  - `width.ts`: Border width scale (0, default/1px, 2, 4, 8) with CSS/px/tailwindClass; `getBorderWidth`, `getBorderWidthClass`
+  - `utils.ts`: `getRadiusCssVars`, `getBorderCssVars`, `radiusVar`, `borderShorthand`, `getAllBorderCssVars`
+  - `index.ts`: barrel export
+- Added border export paths to `packages/infra/package.json`
+- Added `packages/infra/__tests__/border.test.ts` with 18 tests
+
+**How verified**: All 18 border tests passed.
+
+---
+
+### Bonus Fixes (marketing-components, resolved in this session)
+
+**What changed**:
+- `packages/marketing-components/src/hero/HeroCarousel.tsx`: Fixed `<HeroCTAButton cta={slide.cta} />` → `<HeroCTAButton {...slide.cta} />` (spread instead of nested prop)
+- `packages/marketing-components/src/services/ServiceGrid.tsx`: Removed `import Image from 'next/image'` (next is not a dep of marketing-components), replaced with `<img>` + absolute CSS; replaced `asChild` Button with styled `<a>` tag; removed unused `Button` import
+
+**Follow-up**:
+- Consider making `marketing-components` peer-depend on `next` to allow Next.js Image optimization
+- Add comprehensive unit tests for remaining marketing-component variants
+
+---

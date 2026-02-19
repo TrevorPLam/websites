@@ -13,7 +13,7 @@ import {
   TestimonialCarousel,
 } from '@repo/marketing-components';
 import { TeamSection } from '@repo/features';
-import { registerSection, getSectionsForPage } from '../registry';
+import { registerSection } from '../registry';
 import type { SectionProps } from '../types';
 
 function getSiteConfig(props: SectionProps): SiteConfig {
@@ -26,18 +26,14 @@ function getSiteConfig(props: SectionProps): SiteConfig {
 
 function StoryAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
-  return (
-    HeroCentered({
-      headline: `About ${config.name}`,
-      subheadline: config.tagline ?? config.description,
-      theme: 'light',
-    })
-  );
+  return HeroCentered({
+    title: `About ${config.name}`,
+    subtitle: config.tagline ?? config.description,
+  });
 }
 
-function AboutTeamAdapter(props: SectionProps) {
-  const config = getSiteConfig(props);
-  return TeamSection({ siteConfig: config });
+function AboutTeamAdapter(_props: SectionProps) {
+  return TeamSection({ title: 'Our Team', members: [], layout: 'grid' });
 }
 
 function AboutTestimonialsAdapter(_props: SectionProps) {
@@ -52,8 +48,8 @@ function AboutCTAAdapter(props: SectionProps) {
   const primaryHref = contactLink?.href ?? '/contact';
   const primaryLabel = contactLink?.label ?? 'Get in Touch';
   return CTASection({
-    headline: `Ready to work with ${config.name}?`,
-    subheadline: config.tagline,
+    title: `Ready to work with ${config.name}?`,
+    description: config.tagline,
     primaryCta: { label: primaryLabel, href: primaryHref },
   });
 }
@@ -80,6 +76,3 @@ export function registerAboutSections(): void {
 // Side-effect: register on module load so AboutPageTemplate can use composePage
 registerAboutSections();
 
-// Extend getSectionsForPage to handle 'about' — patch registry
-import { getSectionsForPage as _base } from '../registry';
-// Note: registry getSectionsForPage is extended in registry.ts update (task 3.9)
