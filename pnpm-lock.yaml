@@ -902,6 +902,18 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  packages/integrations/scheduling:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.11
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   packages/integrations/sendgrid:
     devDependencies:
       '@repo/eslint-config':
@@ -1071,7 +1083,7 @@ importers:
         version: 9.18.0(jiti@2.6.1)
       jest:
         specifier: 'catalog:'
-        version: 30.2.0(@types/node@25.2.3)
+        version: 30.2.0(@types/node@22.19.11)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -12321,6 +12333,25 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
+  jest-cli@30.2.0(@types/node@22.19.11):
+    dependencies:
+      '@jest/core': 30.2.0
+      '@jest/test-result': 30.2.0
+      '@jest/types': 30.2.0
+      chalk: 4.1.2
+      exit-x: 0.2.2
+      import-local: 3.2.0
+      jest-config: 30.2.0(@types/node@22.19.11)
+      jest-util: 30.2.0
+      jest-validate: 30.2.0
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - esbuild-register
+      - supports-color
+      - ts-node
+
   jest-cli@30.2.0(@types/node@25.2.3):
     dependencies:
       '@jest/core': 30.2.0
@@ -12652,6 +12683,19 @@ snapshots:
       jest-util: 30.2.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
+
+  jest@30.2.0(@types/node@22.19.11):
+    dependencies:
+      '@jest/core': 30.2.0
+      '@jest/types': 30.2.0
+      import-local: 3.2.0
+      jest-cli: 30.2.0(@types/node@22.19.11)
+    transitivePeerDependencies:
+      - '@types/node'
+      - babel-plugin-macros
+      - esbuild-register
+      - supports-color
+      - ts-node
 
   jest@30.2.0(@types/node@25.2.3):
     dependencies:
