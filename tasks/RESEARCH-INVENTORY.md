@@ -9,72 +9,73 @@ _Purpose:_ Complete topic map and task→topic mapping for Task Research Audit. 
 
 ## Topic Index
 
-| Topic ID                  | Topic                                                                                 | Task Count                        |
-| ------------------------- | ------------------------------------------------------------------------------------- | --------------------------------- |
-| R-UI                      | Radix UI primitives, React 19 patterns, ComponentRef                                  | 1.xx                              |
-| R-A11Y                    | WCAG 2.2 AA, ARIA, touch targets (24×24), keyboard nav                                | 1.xx, 2.xx, f-23                  |
-| R-PERF                    | LCP, INP, CLS, bundle budgets, Core Web Vitals                                        | 2.xx, f-24, f-28                  |
-| R-RADIX                   | Radix Slider, Label, Select, Tabs, Accordion, etc.                                    | 1.xx                              |
-| R-FORM                    | React Hook Form, Zod, validation, form builders                                       | 2.xx (forms), f-19, f-20          |
-| R-MARKETING               | Hero, menu/dietary, pricing, testimonials, FAQ, sections                              | 2.1–2.62                          |
-| R-INTEGRATION             | Calendly/Acuity/Cal.com, OAuth 2.1, TCF v2.3                                          | 4.1–4.6                           |
-| R-INDUSTRY                | JSON-LD schemas, industry-specific patterns                                           | 4.6, 5.xx, 2.49                   |
-| R-NEXT                    | App Router, RSC, Server Actions, PPR                                                  | 3.xx, 5.1, 2.xx                   |
-| R-INFRA                   | Slot, Provider, Context, Theme, CVA, design tokens                                    | f-1–f-40                          |
-| R-CMS                     | Content adapters, MDX, pagination, canonical URLs                                     | 2.13, 2.16, 2.19, 2.20, 3.xx      |
-| R-TEST                    | Jest, axe-core, Playwright, coverage                                                  | All                               |
-| R-DOCS                    | ADRs, config reference, migration guides                                              | 6.1–6.10                          |
-| R-AI                      | AI Platform: LLM gateway, content engine, agent orchestration                         | 7.x (future), 2.20 (search AI)    |
-| R-CONTENT-PLATFORM        | Visual editor, DAM, asset management                                                  | 8.x (future)                      |
-| R-MARKETING-OPS           | Campaign orchestration, workflow automation                                           | 9.x (future), 2.46                |
-| R-TENANT                  | Multi-tenancy, tenant-core, SaaS architecture                                         | 10.x (future)                     |
-| R-DESIGN-TOKENS           | Three-layer tokens (option/decision/component), DTCG v1.0                             | f-12, f-13, f-14, f-11, C.5       |
-| R-MOTION                  | Animation primitives, Framer Motion, reduced-motion                                   | f-6, f-7, C.6                     |
-| R-EXPERIMENTATION         | A/B testing, feature flags, guardrails, SRM checks                                    | 2.24, C.8, D.2, infra/experiments |
-| R-EDGE                    | Edge middleware, personalization, variant selection                                   | C.18, C.9, 2.25                   |
-| R-OPS                     | Operational governance, queue policies, retry/timeout                                 | E.7, infra/ops                    |
-| R-SECURITY-ADV            | Security regression, SSRF/XSS/injection, threat modeling                              | C.13, 2.39                        |
-| R-COMPLIANCE              | Industry compliance packs, HIPAA, legal disclaimers                                   | C.17, 5.xx                        |
-| R-PERSONALIZATION         | Personalization engine, behavioral tracking, co-creation                              | 2.25, C.9, F.6                    |
-| R-LOCALIZATION            | i18n, RTL, locale routing, translation                                                | 2.36, C.11                        |
-| R-VISUAL-REG              | Visual regression testing, Storybook, Chromatic                                       | C.7                               |
-| R-SPEC-DRIVEN             | Spec-driven development, feature specs, ADRs                                          | C.15, 6.7                         |
-| R-AI-AGENTS               | AI agent playbooks, workflow automation                                               | C.16, 2.46                        |
-| R-SERVICE-BLUEPRINT       | Service blueprints, user journey mapping                                              | E.2                               |
-| R-UX-PATTERNS             | Progressive conversion, peak-end, participatory UX, wayfinding, service recovery      | E.6, F.4, F.6, F.7, F.12          |
-| R-STRATEGY                | Cynefin model, leverage points, portfolio kanban                                      | F.2, F.3, F.10                    |
-| R-KNOWLEDGE               | SECI-inspired knowledge flow, pattern capture                                         | F.11                              |
-| R-GOLDEN-PATH             | Golden paths, DevEx metrics, adoption tracking                                        | E.4                               |
-| R-ERROR-BUDGET            | Error budgets, SLOs, release gates                                                    | E.3, C.14, D.5                    |
-| R-SPC                     | Statistical process control, delivery metrics                                         | F.8                               |
-| R-SEARCH-AI               | AI semantic search, vector embeddings, Qdrant, RAG                                    | 2.20                              |
-| R-E-COMMERCE              | Headless commerce, payment gateways, PCI compliance                                   | 2.29, 2.32                        |
-| R-WORKFLOW                | Durable workflows, Temporal/Trigger.dev, retry policies                               | 2.44, 2.46                        |
-| R-MONITORING              | SLO dashboards, INP monitors, synthetic checks                                        | 2.40, C.14                        |
-| R-CLI                     | CLI tooling, generators, scaffolding                                                  | 6.8                               |
-| R-VERSIONING              | Changesets, versioning strategy, release channels                                     | 0.12, C.4                         |
-| R-PARITY                  | Parity testing, refactor validation                                                   | 2.22                              |
-| R-CONFIG-VALIDATION       | Config schema validation, Zod runtime checks                                          | 6.10a, 5.1                        |
-| R-MIGRATION               | Template-to-client migration, cutover runbooks                                        | 6.1, 6.2                          |
-| R-CLEANUP                 | Dead code removal, dependency pruning                                                 | 6.9                               |
-| R-SECURITY-SERVER-ACTIONS | Server action security, IDOR mitigation, secureAction wrapper                         | security-1, 0-5                   |
-| R-SECURITY-RLS            | Multi-tenant RLS, tenant isolation, JWT claims                                        | security-2                        |
-| R-SECURITY-WEBHOOKS       | Webhook signature verification, idempotency, replay protection                        | security-3                        |
-| R-SECURITY-CONSENT        | Third-party script consent management, GDPR/CCPA compliance                           | security-4                        |
-| R-OBSERVABILITY           | OpenTelemetry, distributed tracing, tenant-aware logging                              | infrastructure-1                  |
-| R-E2E-TESTING             | Playwright E2E testing, multi-tenant test strategy, visual regression                 | infrastructure-2                  |
-| R-INTEGRATION-RESILIENCE  | Retry logic, circuit breaker, DLQ for integrations                                    | infrastructure-3                  |
-| R-PNPM-SECURITY           | pnpm 10 security features (allowBuilds, blockExoticSubdeps, integrityHash)            | security-5                        |
-| R-REACT-TAINT-API         | React Taint API for data leakage prevention (experimental_taintObjectReference)       | security-6                        |
-| R-MIDDLEWARE-BYPASS       | CVE-2025-29927 mitigation, multi-layered authentication, DAL verification             | security-7                        |
-| R-PARTYTOWN               | Third-party script offloading to Web Workers, Core Web Vitals optimization            | infrastructure-4                  |
-| R-CONTRACT-TESTING        | Pact contract testing, consumer-driven contracts, API reliability                     | infrastructure-5                  |
-| R-SCAFFOLD-MCP            | AI-assisted development governance, scaffold.yaml patterns, architectural consistency | infrastructure-6                  |
-| R-CCPA-2026               | CCPA 2026 compliance (DROP integration, expanded lookback, minor rights)              | compliance-1                      |
-| R-EU-AI-ACT               | EU AI Act compliance (governance framework, human review, risk assessment)            | compliance-2                      |
-| R-CACHE-COMPONENTS        | Next.js 16 Cache Components/PPR (use cache directive, cacheLife)                      | (future)                          |
-| R-APCA                    | Advanced Perceptual Contrast Algorithm (WCAG 3.0 preparation)                         | (future)                          |
-| R-OKLCH                   | OKLCH color space, color-mix() function, perceptual uniformity                        | (future)                          |
+| Topic ID                  | Topic                                                                                 | Task Count                                            |
+| ------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| R-UI                      | Radix UI primitives, React 19 patterns, ComponentRef                                  | 1.xx                                                  |
+| R-A11Y                    | WCAG 2.2 AA, ARIA, touch targets (24×24), keyboard nav                                | 1.xx, 2.xx, f-23                                      |
+| R-PERF                    | LCP, INP, CLS, bundle budgets, Core Web Vitals                                        | 2.xx, f-24, f-28                                      |
+| R-RADIX                   | Radix Slider, Label, Select, Tabs, Accordion, etc.                                    | 1.xx                                                  |
+| R-FORM                    | React Hook Form, Zod, validation, form builders                                       | 2.xx (forms), f-19, f-20                              |
+| R-MARKETING               | Hero, menu/dietary, pricing, testimonials, FAQ, sections                              | 2.1–2.62                                              |
+| R-INTEGRATION             | Calendly/Acuity/Cal.com, OAuth 2.1, TCF v2.3                                          | 4.1–4.6                                               |
+| R-INDUSTRY                | JSON-LD schemas, industry-specific patterns                                           | 4.6, 5.xx, 2.49                                       |
+| R-NEXT                    | App Router, RSC, Server Actions, PPR                                                  | 3.xx, 5.1, 2.xx                                       |
+| R-INFRA                   | Slot, Provider, Context, Theme, CVA, design tokens                                    | f-1–f-40                                              |
+| R-CMS                     | Content adapters, MDX, pagination, canonical URLs                                     | 2.13, 2.16, 2.19, 2.20, 3.xx                          |
+| R-TEST                    | Jest, axe-core, Playwright, coverage                                                  | All                                                   |
+| R-DOCS                    | ADRs, config reference, migration guides                                              | 6.1–6.10                                              |
+| R-AI                      | AI Platform: LLM gateway, content engine, agent orchestration                         | 7.x (future), 2.20 (search AI)                        |
+| R-CONTENT-PLATFORM        | Visual editor, DAM, asset management                                                  | 8.x (future)                                          |
+| R-MARKETING-OPS           | Campaign orchestration, workflow automation                                           | 9.x (future), 2.46                                    |
+| R-TENANT                  | Multi-tenancy, tenant-core, SaaS architecture                                         | 10.x (future)                                         |
+| R-DESIGN-TOKENS           | Three-layer tokens (option/decision/component), DTCG v1.0                             | f-12, f-13, f-14, f-11, C.5                           |
+| R-MOTION                  | Animation primitives, Framer Motion, reduced-motion                                   | f-6, f-7, C.6                                         |
+| R-EXPERIMENTATION         | A/B testing, feature flags, guardrails, SRM checks                                    | 2.24, C.8, D.2, infra/experiments                     |
+| R-EDGE                    | Edge middleware, personalization, variant selection                                   | C.18, C.9, 2.25                                       |
+| R-OPS                     | Operational governance, queue policies, retry/timeout                                 | E.7, infra/ops                                        |
+| R-SECURITY-ADV            | Security regression, SSRF/XSS/injection, threat modeling                              | C.13, 2.39                                            |
+| R-COMPLIANCE              | Industry compliance packs, HIPAA, legal disclaimers                                   | C.17, 5.xx                                            |
+| R-PERSONALIZATION         | Personalization engine, behavioral tracking, co-creation                              | 2.25, C.9, F.6                                        |
+| R-LOCALIZATION            | i18n, RTL, locale routing, translation                                                | 2.36, C.11                                            |
+| R-VISUAL-REG              | Visual regression testing, Storybook, Chromatic                                       | C.7                                                   |
+| R-SPEC-DRIVEN             | Spec-driven development, feature specs, ADRs                                          | C.15, 6.7                                             |
+| R-AI-AGENTS               | AI agent playbooks, workflow automation                                               | C.16, 2.46                                            |
+| R-SERVICE-BLUEPRINT       | Service blueprints, user journey mapping                                              | E.2                                                   |
+| R-UX-PATTERNS             | Progressive conversion, peak-end, participatory UX, wayfinding, service recovery      | E.6, F.4, F.6, F.7, F.12                              |
+| R-STRATEGY                | Cynefin model, leverage points, portfolio kanban                                      | F.2, F.3, F.10                                        |
+| R-KNOWLEDGE               | SECI-inspired knowledge flow, pattern capture                                         | F.11                                                  |
+| R-GOLDEN-PATH             | Golden paths, DevEx metrics, adoption tracking                                        | E.4                                                   |
+| R-ERROR-BUDGET            | Error budgets, SLOs, release gates                                                    | E.3, C.14, D.5                                        |
+| R-SPC                     | Statistical process control, delivery metrics                                         | F.8                                                   |
+| R-SEARCH-AI               | AI semantic search, vector embeddings, Qdrant, RAG                                    | 2.20                                                  |
+| R-E-COMMERCE              | Headless commerce, payment gateways, PCI compliance                                   | 2.29, 2.32                                            |
+| R-WORKFLOW                | Durable workflows, Temporal/Trigger.dev, retry policies                               | 2.44, 2.46                                            |
+| R-MONITORING              | SLO dashboards, INP monitors, synthetic checks                                        | 2.40, C.14                                            |
+| R-CLI                     | CLI tooling, generators, scaffolding                                                  | 6.8                                                   |
+| R-VERSIONING              | Changesets, versioning strategy, release channels                                     | 0.12, C.4                                             |
+| R-PARITY                  | Parity testing, refactor validation                                                   | 2.22                                                  |
+| R-CONFIG-VALIDATION       | Config schema validation, Zod runtime checks                                          | 6.10a, 5.1                                            |
+| R-MIGRATION               | Template-to-client migration, cutover runbooks                                        | 6.1, 6.2                                              |
+| R-CLEANUP                 | Dead code removal, dependency pruning                                                 | 6.9                                                   |
+| R-SECURITY-SERVER-ACTIONS | Server action security, IDOR mitigation, secureAction wrapper                         | security-1, 0-5                                       |
+| R-SECURITY-RLS            | Multi-tenant RLS, tenant isolation, JWT claims                                        | security-2                                            |
+| R-SECURITY-WEBHOOKS       | Webhook signature verification, idempotency, replay protection                        | security-3                                            |
+| R-SECURITY-CONSENT        | Third-party script consent management, GDPR/CCPA compliance                           | security-4                                            |
+| R-OBSERVABILITY           | OpenTelemetry, distributed tracing, tenant-aware logging                              | infrastructure-1                                      |
+| R-E2E-TESTING             | Playwright E2E testing, multi-tenant test strategy, visual regression                 | infrastructure-2                                      |
+| R-INTEGRATION-RESILIENCE  | Retry logic, circuit breaker, DLQ for integrations                                    | infrastructure-3                                      |
+| R-PNPM-SECURITY           | pnpm 10 security features (allowBuilds, blockExoticSubdeps, integrityHash)            | security-5                                            |
+| R-REACT-TAINT-API         | React Taint API for data leakage prevention (experimental_taintObjectReference)       | security-6                                            |
+| R-MIDDLEWARE-BYPASS       | CVE-2025-29927 mitigation, multi-layered authentication, DAL verification             | security-7                                            |
+| R-PARTYTOWN               | Third-party script offloading to Web Workers, Core Web Vitals optimization            | infrastructure-4                                      |
+| R-CONTRACT-TESTING        | Pact contract testing, consumer-driven contracts, API reliability                     | infrastructure-5                                      |
+| R-SCAFFOLD-MCP            | AI-assisted development governance, scaffold.yaml patterns, architectural consistency | infrastructure-6                                      |
+| R-CCPA-2026               | CCPA 2026 compliance (DROP integration, expanded lookback, minor rights)              | compliance-1                                          |
+| R-EU-AI-ACT               | EU AI Act compliance (governance framework, human review, risk assessment)            | compliance-2                                          |
+| R-CACHE-COMPONENTS        | Next.js 16 Cache Components/PPR (use cache directive, cacheLife)                      | (future)                                              |
+| R-ADVANCED-PATTERNS       | Advanced code patterns inventory; CVA, registries, design tokens, error boundaries    | inf-1, inf-2, inf-4, inf-8, inf-10, inf-12, c-5, f-21 |
+| R-APCA                    | Advanced Perceptual Contrast Algorithm (WCAG 3.0 preparation)                         | (future)                                              |
+| R-OKLCH                   | OKLCH color space, color-mix() function, perceptual uniformity                        | (future)                                              |
 
 ---
 
@@ -119,6 +120,12 @@ Same as R-UI for 1.xx.
 ### R-INFRA (Slot, Provider, Context, Theme, CVA)
 
 f-1 through f-40.
+
+### R-ADVANCED-PATTERNS (Advanced code patterns inventory)
+
+inf-1, inf-2, inf-4, inf-8, inf-10, inf-12, c-5, f-21.
+
+**Reference:** [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md), [TODO.md](../TODO.md) (game plan waves). Each listed task has an "Advanced Code Pattern Expectations" section with updated research and acceptance criteria.
 
 ### R-CMS (Content adapters, MDX, pagination)
 

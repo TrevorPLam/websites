@@ -31,6 +31,14 @@ Curated theme presets (e.g. minimal, bold, professional) as JSON/TS. Apply via t
 - **[2026-02] Presets**: minimal, bold, professional; theme.preset or theme.extend; merge with base; ThemeInjector applies.
 - **References**: [RESEARCH-INVENTORY.md – R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture).
 
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **Prerequisite**: Must follow C-5 and inf-4. Execution order: C-5 → inf-4 → inf-12.
+- **Initial presets**: minimal, bold, professional (token override objects).
+- **Light/dark theme**: Deferred to Wave 4 (separate task); ThemeProvider + useTheme for client-side toggle.
+
 ## Related Files
 
 - `packages/config/tokens/presets/` – create

@@ -30,6 +30,13 @@ Discovery of integrations by provider ID. Custom adapters register via package o
 - **[2026-02] Adapter registry**: provider ID to adapter; discovery via package or config; site.config.integrations selects by ID.
 - **References**: [RESEARCH-INVENTORY.md – R-INTEGRATION](RESEARCH-INVENTORY.md#r-integration-scheduling-oauth-tcf).
 
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **Reference implementation**: Booking provider registry in `packages/features/src/booking/lib/booking-providers.ts` — add `registerBookingProvider(id, factory)`; BookingProviders reads from registry instead of hardcoding; provider modules register on load.
+- **Pattern**: `registerX(id: string, factory: (config) => Adapter)`; enables Calendly, Acuity, Cal.com without editing central BookingProviders.
+
 ## Related Files
 
 - `packages/integrations/*/` – modify – Registry pattern
@@ -67,7 +74,7 @@ Discovery of integrations by provider ID. Custom adapters register via package o
 
 ## Execution notes
 
-- **Related files — current state:** See task Related Files; integration adapter registry — packages/integrations/*; adapter pattern; site.config integrations.
+- **Related files — current state:** See task Related Files; integration adapter registry — packages/integrations/\*; adapter pattern; site.config integrations.
 - **Potential issues / considerations:** No breaking changes; align with integration-wiring-client-pages; consent where required.
 - **Verification:** Build passes; tests pass; docs updated.
 

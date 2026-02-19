@@ -28,6 +28,7 @@ Error handling system with error boundaries, error logging, and user-friendly er
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-INFRA**: Slot, Provider, Context, Theme, CVA — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-infra) for full research findings.
 
 ### Key Findings
@@ -35,8 +36,16 @@ Error handling system with error boundaries, error logging, and user-friendly er
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-INFRA](RESEARCH-INVENTORY.md#r-infra) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
+
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **Wave 1 withErrorBoundary**: Add `withErrorBoundary(Component, fallback?)` HOC wrapping class-based Error Boundary; fallback optional.
+- **Error Boundary**: Use class component (required by React API); call `logError` from `@repo/infra/client` in `componentDidCatch` for Sentry integration.
 
 ## Related Files
 
@@ -49,6 +58,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### Related Patterns
+
 - See [R-INFRA - Research Findings](RESEARCH-INVENTORY.md#r-infra) for additional examples
 
 ## Acceptance Criteria
@@ -94,4 +104,3 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

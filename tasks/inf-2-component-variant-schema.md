@@ -30,6 +30,13 @@ Extend SiteConfig so features accept arbitrary variant strings (not just 'center
 - **[2026-02] Variant schema**: features.hero (and similar) accept string or union; resolveVariant(id, value) with fallback to default; backward compatible.
 - **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), packages/types/src/site-config.ts.
 
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **Wave 1 (CVA for Button)**: Migrate `@repo/ui` Button from manual variants to CVA (`cva()`, `variant`, `compoundVariants`); keeps API backward compatible.
+- **Batch migration**: Hero, Card, Section components follow in Wave 2; avoid big-bang migration.
+
 ## Related Files
 
 - `packages/types/src/site-config.ts` – modify – features schema

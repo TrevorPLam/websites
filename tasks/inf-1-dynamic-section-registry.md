@@ -30,6 +30,16 @@ Allow site.config to register custom section IDs that resolve to components at r
 - **[2026-02] Config-driven registries**: site.config sections array overrides default getSectionsForPage; section IDs map to registry; unknown IDs fallback (skip or placeholder). No breaking change to existing flow.
 - **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), [packages/page-templates/src/registry.ts](../packages/page-templates/src/registry.ts), [packages/types/src/site-config.ts](../packages/types/src/site-config.ts).
 
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **Typed SectionType**: Define `SectionType` union from known section IDs (e.g. `'hero-split' | 'hero-centered' | 'services-preview' | 'cta' | ...`).
+- **SectionDefinition with configSchema**: Introduce `SectionDefinition<Cfg>` interface with optional `configSchema: z.ZodType<Cfg>`; extend `registerSection` to accept schema.
+- **composePage validation**: When section has configSchema, validate searchParams or section-specific config before render.
+- **Unknown ID handling**: Add `console.warn('[composePage] Unknown section ID:', id)` for dev feedback.
+- **Downstream**: This task enables 2.4 Dynamic Section Loading; consider Section Adapter File Split (one adapter per file) as prerequisite for per-section code-splitting.
+
 ## Related Files
 
 - `packages/page-templates/src/registry.ts` – modify

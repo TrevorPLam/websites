@@ -15,6 +15,8 @@
 **Purpose:** Optimize task execution through batching, automation, and dependency-aware sequencing.  
 **Status:** All tasks extracted from TODO.md and ANALYSIS.md. Game plan reflects current state with completed tasks archived.
 
+**Advanced Code Patterns (2026-02-19):** See [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) for pattern inventory and tiered recommendations. Execution waves and sequencing are in [TODO.md](../TODO.md). Individual tasks (inf-1, inf-2, inf-4, inf-8, inf-10, inf-12, c-5, f-21) include an "Advanced Code Pattern Expectations" section with updated research and acceptance criteria.
+
 ### Pre-Phase: Critical Blockers (Must Complete First - Unblocks All Work)
 
 **Tasks:** `0-1`, `0-3`, `0-2`

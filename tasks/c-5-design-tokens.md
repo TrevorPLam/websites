@@ -31,6 +31,14 @@ Add three-layer design token architecture per THEGOAL: packages/config/tokens/ w
 - **[2026-02] Three-layer tokens**: option-tokens.css (raw), decision-tokens.css (semantic), component-tokens.css; DTCG v1.0; Tailwind v4 @theme; ThemeInjector overrides from site.config.
 - **References**: [RESEARCH-INVENTORY.md – R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture), [THEGOAL.md](../THEGOAL.md).
 
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **DTCG 2025.10**: W3C Design Tokens Community Group spec; use standard token types (color, dimension, fontFamily, etc.).
+- **Tailwind v4**: Already migrated (ADR 0005); wire tokens into tailwind-theme.css; ThemeInjector overrides at runtime via site.config.
+- **Downstream**: Blocks inf-4 (token overrides) and inf-12 (theme presets). Execute C-5 first.
+
 ## Related Files
 
 - `packages/config/tokens/option-tokens.css` – create – Raw values

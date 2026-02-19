@@ -30,6 +30,13 @@ Beyond 7 fixed templates: register custom page layouts by ID. Page route maps to
 - **[2026-02] Layout registry**: Map layout ID to template; site.config or route config; custom layouts; default for unknown.
 - **References**: [RESEARCH-INVENTORY.md – R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **SlotProvider**: Use `@repo/infrastructure-ui` SlotProvider for slot-based composition; page-templates should add this dependency.
+- **Root vs [locale] layout**: Root layout has ConsentProvider; [locale] layout has NextIntlClientProvider; provider composition applies to [locale] only.
+
 ## Related Files
 
 - `packages/page-templates/src/registry.ts` – modify – Layout registry

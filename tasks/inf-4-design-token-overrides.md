@@ -30,6 +30,14 @@ Allow site.config to provide partial token overrides (colors, spacing, radius) t
 - **[2026-02] Token overrides**: site.config.theme partial overrides (colors, spacing, radius); merge with base; ThemeInjector at runtime; HSL convention.
 - **References**: [RESEARCH-INVENTORY.md – R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture).
 
+## Advanced Code Pattern Expectations (2026-02-19)
+
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+
+- **Prerequisite**: Must follow C-5 (design tokens). Execution order: C-5 → inf-4 → inf-12.
+- **Merge strategy**: Config overrides base; base fills gaps. Shallow or deep merge per override key.
+- **Tailwind v4**: Already migrated (ADR 0005); coordinate with `@theme` variable naming.
+
 ## Related Files
 
 - `packages/types/src/site-config.ts` – modify – theme extend
