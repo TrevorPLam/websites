@@ -162,8 +162,15 @@ export function mixColors(colorA: string, colorB: string, ratio: number): string
   const a = parseHsl(colorA);
   const b = parseHsl(colorB);
   const r = Math.max(0, Math.min(1, ratio));
+
+  const d = b.h - a.h;
+  const h =
+    Math.abs(d) > 180
+      ? a.h + (d > 0 ? d - 360 : d + 360) * r
+      : a.h + d * r;
+
   return formatHsl({
-    h: a.h + (b.h - a.h) * r,
+    h: (h + 360) % 360,
     s: a.s + (b.s - a.s) * r,
     l: a.l + (b.l - a.l) * r,
   });
