@@ -116,6 +116,7 @@ module.exports = {
         '<rootDir>/packages/industry-schemas/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/tooling/validation/src/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/infrastructure/theme/src/__tests__/**/*.test.{ts,tsx}',
+        '<rootDir>/scripts/__tests__/**/*.test.{ts,tsx}',
       ],
       collectCoverageFrom: [
         'packages/utils/src/**/*.{ts,tsx}',

@@ -32,6 +32,10 @@ export function generateOrganizationJsonLd(
     url: siteConfig.url,
   };
 
+  if (siteConfig.seo?.ogImage) {
+    schema.image = siteConfig.seo.ogImage;
+  }
+
   if (siteConfig.contact?.address) {
     schema.address = {
       '@type': 'PostalAddress',
@@ -49,6 +53,15 @@ export function generateOrganizationJsonLd(
       ...(siteConfig.contact.email && { email: siteConfig.contact.email }),
       ...(siteConfig.contact.phone && { telephone: siteConfig.contact.phone }),
     };
+  }
+
+  if (siteConfig.contact?.hours?.length) {
+    schema.openingHoursSpecification = siteConfig.contact.hours.map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.label,
+      opens: '00:00',
+      closes: '23:59',
+    }));
   }
 
   return JSON.stringify(schema, null, 2);

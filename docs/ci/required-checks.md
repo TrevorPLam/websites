@@ -2,9 +2,9 @@
 
 **Last Updated:** 2026-02-18  
 **Task:** 0.13  
-**Related:** [ISSUES.md](../../ISSUES.md), `docs/architecture/module-boundaries.md`
+**Related:** `docs/architecture/module-boundaries.md`
 
-> **Note:** As of 2026-02-18, several quality gates currently fail. See [ISSUES.md](../../ISSUES.md) for the full list: lint (many packages lack eslint.config), type-check (@repo/marketing-components), build (Toast.tsx types), test (4 booking-actions tests).
+> **Note:** Run `pnpm lint type-check build test` to verify quality gates. Historical issue analysis is in [docs/archive/ISSUES.md](../archive/ISSUES.md).
 
 ---
 
@@ -67,7 +67,7 @@ pnpm madge:circular
 pnpm syncpack:check
 pnpm test:coverage
 
-# Exit gate (Wave 0) — currently fails; fix per ISSUES.md first
+# Exit gate (Wave 0) — fix blockers before merge
 pnpm install && pnpm turbo run lint type-check build && pnpm validate-exports && pnpm madge:circular && pnpm syncpack:check && pnpm test:coverage
 ```
 

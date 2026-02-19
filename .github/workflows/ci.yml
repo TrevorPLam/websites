@@ -87,6 +87,10 @@ jobs:
       - name: Validate marketing exports
         run: pnpm validate-marketing-exports
 
+      # [Task 5-*] Validate all clients (CaCA contract, site.config, routes, cross-client imports)
+      - name: Validate clients
+        run: pnpm validate-all-clients
+
       # Circular dependency detection — blocks merge if cycles exist
       - name: Madge (circular deps)
         run: pnpm madge:circular

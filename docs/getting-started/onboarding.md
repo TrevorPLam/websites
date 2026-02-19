@@ -270,6 +270,10 @@ pnpm lint
 
 # Testing
 pnpm test
+
+# Validate client (CaCA contract — run before committing)
+pnpm validate-client clients/starter-template
+pnpm validate-all-clients   # Validate all clients
 ```
 
 ### Working with Packages

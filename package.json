@@ -51,6 +51,7 @@
     "madge:circular": "madge --circular packages/ clients/",
     "health": "npx tsx scripts/health-check.ts",
     "validate-client": "npx tsx scripts/validate-client.ts",
+    "validate-all-clients": "npx tsx scripts/validate-all-clients.ts",
     "program:wave0": "node scripts/operations/program-wave.js --wave 0",
     "program:wave1": "node scripts/operations/program-wave.js --wave 1",
     "program:wave2": "node scripts/operations/program-wave.js --wave 2",

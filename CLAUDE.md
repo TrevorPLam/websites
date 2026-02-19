@@ -34,6 +34,8 @@ pnpm format:check          # Prettier check (no writes)
 pnpm validate-exports      # Validate package.json export maps
 pnpm validate-ui-exports   # Validate @repo/ui index.ts → component files exist
 pnpm validate-marketing-exports   # Validate @repo/marketing-components index.ts → families exist
+pnpm validate-client [path]      # Validate single client (CaCA contract; e.g. clients/luxe-salon)
+pnpm validate-all-clients         # Validate all clients in clients/ (runs in CI)
 pnpm validate-docs         # Validate documentation
 pnpm knip                  # Dead code / unused dependency detection
 pnpm syncpack:check        # Check for cross-workspace version drift
@@ -329,7 +331,7 @@ CI is defined in `.github/workflows/ci.yml`. Two jobs run on push to `main`/`dev
 6. `pnpm build` — Full build — *fails due to Toast.tsx type errors*
 7. `pnpm test:coverage` — Jest test suite — *4 booking-actions tests fail*
 
-**Known issues:** See [ISSUES.md](ISSUES.md) for full analysis and remediation.
+**Known issues:** Previously documented in [docs/archive/ISSUES.md](docs/archive/ISSUES.md) (archived); refer to CI output and current codebase state.
 
 ### `quality-audit` (non-blocking, informative)
 
@@ -384,7 +386,7 @@ Key docs:
 - `docs/architecture/README.md` — Layer model and design principles
 - `docs/architecture/module-boundaries.md` — Allowed dependency directions
 - `docs/getting-started/onboarding.md` — Developer setup guide
-- `ISSUES.md` — Current codebase issues (from analysis)
+- `docs/archive/ISSUES.md` — Archived codebase analysis (historical)
 - `TODO.md` — Research update tasks
 - `TASKS.md` — Implementation backlog (if present)
 - `THEGOAL.md` — Vision and roadmap

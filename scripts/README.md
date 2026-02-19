@@ -1,3 +1,30 @@
+# Scripts
+
+This directory contains automation scripts including task updates and client validation.
+
+## Client Validation (Task 5-*)
+
+### `validate-client.ts`
+
+Validates a single client directory against the CaCA contract. Use before committing client changes.
+
+```bash
+pnpm validate-client clients/luxe-salon
+pnpm validate-client clients/starter-template
+```
+
+Checks: `package.json` (@clients/ name, scripts), `site.config.ts` (required fields), Next.js/tsconfig, app structure, cross-client imports.
+
+### `validate-all-clients.ts`
+
+Validates all clients in `clients/`. Runs in CI as part of quality gates.
+
+```bash
+pnpm validate-all-clients
+```
+
+---
+
 # Task Automation Scripts
 
 This directory contains automation scripts for updating tasks with research-based code snippets.

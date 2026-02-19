@@ -82,7 +82,7 @@ packages:
   - 'tooling/*'
 ```
 
-> **Note:** `package.json` workspaces are currently out of sync with `pnpm-workspace.yaml`. See [ISSUES.md](../ISSUES.md).
+> **Note:** Ensure `package.json` workspaces match `pnpm-workspace.yaml` when adding packages.
 
 ### Step 4: Configure Environment Variables
 
@@ -321,6 +321,20 @@ Each client should have its own `README.md` with:
 
 See `clients/starter-template/` for the golden-path reference. See `clients/luxe-salon/`, `clients/bistro-central/`, etc. for industry-specific examples.
 
+## Validation
+
+Before committing client changes, run validation to ensure CaCA compliance:
+
+```bash
+# Validate a single client
+pnpm validate-client clients/luxe-salon
+
+# Validate all clients (same as CI)
+pnpm validate-all-clients
+```
+
+Validation checks: `package.json` (@clients/ name, dev/build/type-check scripts), `site.config.ts` (required fields, export default), Next.js/tsconfig, app layout and page structure, and cross-client import detection.
+
 ## Best Practices
 
 1. **Use unique ports** - Assign different dev ports to avoid conflicts
@@ -362,7 +376,7 @@ pnpm --filter @clients/[client-name] type-check
 
 For questions or issues:
 
-1. Check [ISSUES.md](../ISSUES.md) for known codebase issues
+1. Run `pnpm validate-all-clients` to verify client config
 2. Review architecture docs in `docs/architecture/`
 3. Consult [getting-started/onboarding.md](../docs/getting-started/onboarding.md)
 4. Contact team lead or senior developer

@@ -290,6 +290,8 @@ contact: {
 }
 ```
 
+**JSON-LD mapping:** `contact.hours` is converted to `openingHoursSpecification` (OpeningHoursSpecification) in `@repo/industry-schemas` JSON-LD output.
+
 > **Gotcha:** `address` is an object, not a string. Passing a string will fail TypeScript type-checking.
 
 ---
@@ -306,6 +308,8 @@ seo: {
 }
 ```
 
+**JSON-LD mapping:** `ogImage` and `schemaType` feed into `@repo/industry-schemas` — `ogImage` becomes the Organization `image` in schema.org JSON-LD; `schemaType` overrides the industry default.
+
 Common `schemaType` values by industry:
 
 | Industry | schemaType |
@@ -315,7 +319,7 @@ Common `schemaType` values by industry:
 | law-firm | `LegalService` |
 | dental | `Dentist` |
 | medical | `MedicalClinic` |
-| fitness | `ExerciseGym` |
+| fitness | `HealthClub` |
 | retail | `Store` |
 | consulting | `ProfessionalService` |
 | realestate | `RealEstateAgent` |

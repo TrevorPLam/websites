@@ -56,7 +56,7 @@
 **Status:** Active Documentation - All links verified  
 **Navigation:** Use the sections below to find specific documentation
 
-> **Note:** Documentation reflects codebase state as of 2026-02-18. Known codebase issues (CI failures) are documented in [ISSUES.md](../ISSUES.md). If you find broken links or outdated information, please report via GitHub issues.
+> **Note:** Documentation reflects codebase state. Historical issue analysis is in [docs/archive/ISSUES.md](archive/ISSUES.md). If you find broken links or outdated information, please report via GitHub issues.
 
 ---
 
@@ -470,7 +470,7 @@ All documentation follows the [Documentation Standards](DOCUMENTATION_STANDARDS.
 ### Latest Changes (February 2026)
 
 - ✅ **Documentation aligned with codebase** - Architecture, module-boundaries, clients/README, CI checks reflect actual state
-- ✅ **ISSUES.md** - Comprehensive issue list from codebase analysis
+- ✅ **docs/archive/ISSUES.md** - Archived issue analysis (historical)
 - ✅ **Architecture** - Repository structure, layer status, tech stack (Next 16, TS 5.9, Tailwind 4)
 - ✅ **Clients** - Copy from `starter-template` (not templates/); 6 clients documented
 

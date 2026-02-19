@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-02-18  
 **Status:** Implemented (Task 0.11)  
-**Related:** [ISSUES.md](../../ISSUES.md), [Architecture Overview](README.md)
+**Related:** [Architecture Overview](README.md)
 
 ---
 
@@ -160,7 +160,7 @@ When adding a new public entrypoint:
 
 ## Workspace Policy
 
-- **Workspace changes** must update both `package.json` workspaces and `pnpm-workspace.yaml` in the same PR. (Currently out of sync: see [ISSUES.md](../../ISSUES.md).)
+- **Workspace changes** must update both `package.json` workspaces and `pnpm-workspace.yaml` in the same PR.
 - **New packages** must declare dependencies only on `@repo/*` siblings; no client dependencies.
 - **New clients** must depend on `@repo/*` packages via workspace protocol; no peer dependency on other clients. Copy from `clients/starter-template`.
 

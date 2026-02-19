@@ -34,7 +34,7 @@
  * - Starter template: `clients/starter-template` (package `@clients/starter-template`)
  *
  * @issues
- * - See ISSUES.md for current CI-blocking and other issues
+ * - Known issues were documented in docs/archive/ISSUES.md (archived)
  *
  * @opportunities
  * - Add project badges when repository is public
@@ -42,7 +42,7 @@
  *
  * @verification
  * - ✅ Version numbers from pnpm-workspace.yaml catalog (2026-02-18)
- * - ⚠️ Quality gates (lint, type-check, build, test) currently fail — see ISSUES.md
+ * - Quality gates: run `pnpm lint type-check build test` to verify
  * - ✅ Project structure reflects actual directory layout (packages, clients, tooling)
  *
  * @status
@@ -73,7 +73,7 @@ Professional multi-industry marketing website template system built with modern 
 **Phase:** Wave 0 Complete → Wave 1 In Progress  
 **Timeline:** 12 weeks | **Current State:** Config-driven clients (starter-template, luxe-salon, etc.) → **Target:** 12 industries, 20+ components
 
-> **⚠️ Known Issues:** CI quality gates (lint, type-check, build, test) currently fail. See [ISSUES.md](ISSUES.md) for full analysis and remediation list.
+> **Quality gates:** Run `pnpm lint type-check build test` to verify. Historical issue analysis is in [docs/archive/ISSUES.md](docs/archive/ISSUES.md).
 
 | Layer | Package | Status | Progress |
 |-------|---------|--------|----------|
@@ -400,7 +400,7 @@ All pull requests must pass:
 - Build (`pnpm build`) — *currently fails (@repo/features → Toast types)*
 - Tests (`pnpm test`) — *currently fails (4 booking-actions tests)*
 
-See [ISSUES.md](ISSUES.md) for known issues and [docs/ci/required-checks.md](docs/ci/required-checks.md) for CI/CD details.
+See [docs/ci/required-checks.md](docs/ci/required-checks.md) for CI/CD details.
 
 ## 📄 License
 
@@ -425,7 +425,7 @@ For issues, questions, or suggestions:
 
 **Last Updated:** 2026-02-18  
 **Current Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Next Milestone:** Resolve CI-blocking issues (see [ISSUES.md](ISSUES.md)); complete page templates
+**Next Milestone:** Ensure CI quality gates pass; complete page template wiring
 
 For detailed progress tracking, see [TASKS.md](TASKS.md).
 
@@ -435,6 +435,6 @@ For detailed progress tracking, see [TASKS.md](TASKS.md).
 - [🚀 Quick Start](#-quick-start)
 - [📚 Documentation Hub](docs/README.md)
 - [🏗️ Architecture](docs/architecture/README.md)
-- [🐛 Known Issues](ISSUES.md)
+- [📁 Archived docs](docs/archive/)
 - [🤝 Contributing](CONTRIBUTING.md)
 - [📋 Tasks & Roadmap](TASKS.md)
