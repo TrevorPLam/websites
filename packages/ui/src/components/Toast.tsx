@@ -69,7 +69,7 @@ export const toast = {
     sonnerToast.loading(message, options),
 
   /** Show a custom JSX notification. */
-  custom: (jsx: (id: string | number) => React.ReactElement, options?: ToastOptions) =>
+  custom: (jsx: (id: string | number) => React.ReactNode, options?: ToastOptions) =>
     sonnerToast.custom(jsx, options),
 
   /**
