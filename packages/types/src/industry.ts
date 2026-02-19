@@ -76,6 +76,8 @@ export interface IndustryConfig {
     crm: { provider: 'hubspot' | 'none'; portalId?: string };
     booking: { provider: 'internal' | 'calendly' | 'acuity' | 'none' };
     email: { provider: 'mailchimp' | 'sendgrid' | 'none' };
-    chat: { provider: 'intercom' | 'crisp' | 'none' };
+    chat: { provider: 'intercom' | 'crisp' | 'tidio' | 'none' };
+    reviews: { provider: 'google' | 'yelp' | 'trustpilot' | 'none' };
+    maps: { provider: 'google' | 'none' };
   }>;
 }

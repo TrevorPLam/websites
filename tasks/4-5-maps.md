@@ -40,7 +40,11 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Related Files
 
-- (Add file paths)
+- `packages/integrations/maps/contract.ts` – create – MapsAdapter (getStaticMapUrl, getEmbedConfig)
+- `packages/integrations/maps/consent.ts` – create – hasMapsConsent for interactive script load
+- `packages/integrations/maps/index.ts` – create – Central export
+- `packages/integrations/google-maps/src/index.ts` – modify – GoogleMapsAdapter implementation
+- `packages/integrations/maps/__tests__/adapters.test.ts` – create – Unit tests
 
 ## Code Snippets / Examples
 

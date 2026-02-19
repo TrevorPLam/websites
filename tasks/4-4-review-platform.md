@@ -40,7 +40,12 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Related Files
 
-- (Add file paths)
+- `packages/integrations/reviews/contract.ts` – create – ReviewAdapter interface (read-only getReviews)
+- `packages/integrations/reviews/index.ts` – create – Central export
+- `packages/integrations/google-reviews/src/index.ts` – modify – GoogleReviewsAdapter implementation
+- `packages/integrations/yelp/src/index.ts` – modify – YelpAdapter implementation
+- `packages/integrations/trustpilot/src/index.ts` – modify – TrustpilotAdapter implementation
+- `packages/integrations/reviews/__tests__/adapters.test.ts` – create – Unit tests
 
 ## Code Snippets / Examples
 

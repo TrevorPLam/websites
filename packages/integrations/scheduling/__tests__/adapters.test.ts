@@ -2,6 +2,21 @@ import { CalendlyAdapter } from '../../calendly/src';
 import { AcuityAdapter } from '../../acuity/src';
 import { CalComAdapter } from '../../calcom/src';
 
+/** Validates JSON-LD output has schema.org context, type, and ReserveAction structure. */
+function assertValidSchedulingJsonLd(jsonLd: string): void {
+  const schema = JSON.parse(jsonLd);
+  expect(schema['@context']).toBe('https://schema.org');
+  expect(typeof schema['@type']).toBe('string');
+  expect(schema['@type']).toBe('Service');
+  expect(typeof schema.name).toBe('string');
+  expect(schema.potentialAction).toBeDefined();
+  expect(schema.potentialAction['@type']).toBe('ReserveAction');
+  expect(schema.potentialAction.target).toBeDefined();
+  expect(schema.potentialAction.target['@type']).toBe('EntryPoint');
+  expect(typeof schema.potentialAction.target.urlTemplate).toBe('string');
+  expect(schema.potentialAction.target.urlTemplate.length).toBeGreaterThan(0);
+}
+
 describe('Scheduling Integrations', () => {
   describe('CalendlyAdapter', () => {
     const adapter = new CalendlyAdapter('test-user');
@@ -31,10 +46,10 @@ describe('Scheduling Integrations', () => {
       expect(config.url).toBe('https://calendly.com/test-user');
     });
 
-    it('should generate a valid JSON-LD schema', () => {
+    it('should generate valid JSON-LD schema with @context, @type, and ReserveAction', () => {
       const jsonLd = adapter.generateJsonLd();
+      assertValidSchedulingJsonLd(jsonLd);
       const schema = JSON.parse(jsonLd);
-      expect(schema['@type']).toBe('Service');
       expect(schema.name).toBe('Calendly');
     });
   });
@@ -62,10 +77,10 @@ describe('Scheduling Integrations', () => {
       expect(config.url).toBe('https://app.acuityscheduling.com/schedule.php?owner=test-id');
     });
 
-    it('should generate a valid JSON-LD schema', () => {
+    it('should generate valid JSON-LD schema with @context, @type, and ReserveAction', () => {
       const jsonLd = adapter.generateJsonLd();
+      assertValidSchedulingJsonLd(jsonLd);
       const schema = JSON.parse(jsonLd);
-      expect(schema['@type']).toBe('Service');
       expect(schema.name).toBe('Acuity');
     });
   });
@@ -93,10 +108,10 @@ describe('Scheduling Integrations', () => {
       expect(config.url).toBe('https://cal.com/test-user');
     });
 
-    it('should generate a valid JSON-LD schema', () => {
+    it('should generate valid JSON-LD schema with @context, @type, and ReserveAction', () => {
       const jsonLd = adapter.generateJsonLd();
+      assertValidSchedulingJsonLd(jsonLd);
       const schema = JSON.parse(jsonLd);
-      expect(schema['@type']).toBe('Service');
       expect(schema.name).toBe('Cal.com');
     });
   });

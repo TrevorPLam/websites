@@ -693,6 +693,10 @@ importers:
         version: 8.56.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
 
   packages/industry-schemas:
+    dependencies:
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../types
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -811,6 +815,18 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  packages/integrations/chat:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.11
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   packages/integrations/convertkit:
     devDependencies:
       '@repo/eslint-config':
@@ -891,6 +907,30 @@ importers:
         version: 5.9.3
 
   packages/integrations/mailchimp:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.11
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
+  packages/integrations/maps:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.11
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
+  packages/integrations/reviews:
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*

@@ -16,7 +16,7 @@
  * - `borderRadius` and `shadows` are optional scale tokens, not raw CSS values.
  *
  * @verification
- * - ✅ All fields cross-checked against packages/types/src/site-config.ts (474 lines)
+ * - ✅ All fields cross-checked against packages/types/src/site-config.ts; integrations include chat (tidio), reviews, maps.
  * - ✅ Zod schema constraints documented where relevant
  *
  * @status
@@ -181,14 +181,46 @@ integrations: {
 ```typescript
 integrations: {
   chat: {
-    provider: 'intercom' | 'crisp' | 'none',
+    provider: 'intercom' | 'crisp' | 'tidio' | 'none',
     config?: {
-      websiteId?: string,   // Crisp website ID or Intercom app ID
+      websiteId?: string,   // Crisp website ID, Intercom app ID, or Tidio public key
       theme?: string,       // 'light' | 'dark'
     }
   }
 }
 ```
+
+Chat widget scripts are loaded only after user consent (see `@repo/integrations-chat` consent helpers).
+
+### Reviews
+
+```typescript
+integrations: {
+  reviews: {
+    provider: 'google' | 'yelp' | 'trustpilot' | 'none',
+    config?: Record<string, unknown>,  // Provider-specific (e.g. placeId, businessId)
+  }
+}
+```
+
+Read-only aggregation for display; no review response. Adapters in `@repo/integrations-reviews`.
+
+### Maps
+
+```typescript
+integrations: {
+  maps: {
+    provider: 'google' | 'none',
+    config?: {
+      static?: boolean,      // Use static map image (no JS)
+      interactive?: boolean, // Load Maps JS when consent granted
+      apiKey?: string,      // Google Maps API key (or use env)
+    }
+  }
+}
+```
+
+Static map via image URL; interactive map script loaded only after consent (see `@repo/integrations-maps`).
 
 ---
 

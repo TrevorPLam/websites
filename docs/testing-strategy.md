@@ -553,7 +553,7 @@ When adding a new feature:
 
 ## Implementation Notes (Task 2.21)
 
-- **Jest configuration:** Root `jest.config.js` uses `projects` for separate `node` and `jsdom` environments. Node: utils, infra, feature libs, template lib. jsdom: packages/ui, feature components, template components.
+- **Jest configuration:** Root `jest.config.js` uses `projects` for separate `node` and `jsdom` environments. Node: utils, types, infra, feature libs, **packages/integrations** (scheduling, email, chat, reviews, maps), and **packages/industry-schemas**. jsdom: packages/ui, feature components, template components.
 - **Test scripts:** `packages/ui`, `packages/features`, and `packages/utils` include `test` and `test:watch` scripts that invoke root Jest.
 - **Templates:** Copy-paste templates live in `docs/templates/` (component-test-template.tsx, server-action-test-template.ts, schema-test-template.ts).
 - **Known pre-existing failures:** Some infra env and template env tests assume mutable `NODE_ENV`; Dialog.test.tsx uses a partial Radix mock that omits DialogFooter/DialogHeader. These are outside the scope of the strategy task; address in follow-up tasks.

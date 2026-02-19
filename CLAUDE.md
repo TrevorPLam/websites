@@ -79,7 +79,13 @@ marketing-websites/
 │   ├── integrations/
 │   │   ├── analytics/       # @repo/integrations-analytics
 │   │   ├── hubspot/         # @repo/integrations-hubspot
-│   │   └── supabase/        # @repo/integrations-supabase
+│   │   ├── supabase/        # @repo/integrations-supabase
+│   │   ├── scheduling/      # @repo/integrations-scheduling (Calendly, Acuity, Cal.com)
+│   │   ├── email/           # @repo/integrations-* (Mailchimp, SendGrid, ConvertKit)
+│   │   ├── chat/            # @repo/integrations-chat (Intercom, Crisp, Tidio)
+│   │   ├── reviews/        # @repo/integrations-reviews (Google, Yelp, Trustpilot)
+│   │   └── maps/            # @repo/integrations-maps (Google Maps static + interactive)
+│   ├── industry-schemas/   # @repo/industry-schemas — JSON-LD per industry (limit 12)
 │   └── config/
 │       ├── eslint-config/   # @repo/eslint-config
 │       ├── typescript-config/ # @repo/typescript-config

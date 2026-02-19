@@ -42,7 +42,9 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Related Files
 
-- (Add file paths)
+- `packages/industry-schemas/src/index.ts` – modify – generateOrganizationJsonLd(siteConfig, industryConfig)
+- `packages/industry-schemas/__tests__/jsonld.test.ts` – create – JSON-LD structure tests
+- `packages/types/src/industry-configs.ts` – reference – schemaType per industry (limit 12)
 
 ## Code Snippets / Examples
 

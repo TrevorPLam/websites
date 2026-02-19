@@ -106,12 +106,16 @@ module.exports = {
         '<rootDir>/packages/infra/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/lib/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/features/**/lib/**/*.test.{ts,tsx}',
+        '<rootDir>/packages/integrations/**/__tests__/**/*.test.{ts,tsx}',
+        '<rootDir>/packages/industry-schemas/**/__tests__/**/*.test.{ts,tsx}',
       ],
       collectCoverageFrom: [
         'packages/utils/src/**/*.{ts,tsx}',
         'packages/types/src/**/*.{ts,tsx}',
         'packages/infra/**/*.{ts,tsx}',
         'packages/features/**/lib/**/*.{ts,tsx}',
+        'packages/integrations/**/*.{ts,tsx}',
+        'packages/industry-schemas/src/**/*.{ts,tsx}',
         '!**/*.d.ts',
         '!**/index.ts',
         '!**/index.tsx',
@@ -151,6 +155,10 @@ module.exports = {
     'packages/features/src/**/*.{ts,tsx}',
     // Infra
     'packages/infra/**/*.{ts,tsx}',
+    // Integrations (scheduling, email, chat, reviews, maps)
+    'packages/integrations/**/*.{ts,tsx}',
+    // Industry JSON-LD schemas
+    'packages/industry-schemas/src/**/*.{ts,tsx}',
     // Exclude
     '!**/*.d.ts',
     '!**/index.ts', // Re-exports

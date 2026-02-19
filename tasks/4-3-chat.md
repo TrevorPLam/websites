@@ -40,7 +40,13 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Related Files
 
-- (Add file paths)
+- `packages/integrations/chat/contract.ts` – create – ChatAdapter interface
+- `packages/integrations/chat/consent.ts` – create – hasChatConsent, setChatConsent
+- `packages/integrations/chat/index.ts` – create – Central export
+- `packages/integrations/intercom/src/index.ts` – modify – IntercomAdapter implementation
+- `packages/integrations/crisp/src/index.ts` – modify – CrispAdapter implementation
+- `packages/integrations/tidio/src/index.ts` – modify – TidioAdapter implementation
+- `packages/integrations/chat/__tests__/adapters.test.ts` – create – Unit tests
 
 ## Code Snippets / Examples
 

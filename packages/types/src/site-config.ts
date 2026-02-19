@@ -230,10 +230,22 @@ export interface SiteConfig {
       config?: Record<string, any>;
     };
     chat?: {
-      provider: 'intercom' | 'crisp' | 'none';
+      provider: 'intercom' | 'crisp' | 'tidio' | 'none';
       config?: {
         websiteId?: string;
         theme?: string;
+      };
+    };
+    reviews?: {
+      provider: 'google' | 'yelp' | 'trustpilot' | 'none';
+      config?: Record<string, unknown>;
+    };
+    maps?: {
+      provider: 'google' | 'none';
+      config?: {
+        static?: boolean;
+        interactive?: boolean;
+        apiKey?: string;
       };
     };
     abTesting?: {
@@ -445,11 +457,29 @@ export const siteConfigSchema = z.object({
       .optional(),
     chat: z
       .object({
-        provider: z.enum(['intercom', 'crisp', 'none']),
+        provider: z.enum(['intercom', 'crisp', 'tidio', 'none']),
         config: z.object({
           websiteId: z.string().optional(),
           theme: z.string().optional(),
         }).optional(),
+      })
+      .optional(),
+    reviews: z
+      .object({
+        provider: z.enum(['google', 'yelp', 'trustpilot', 'none']),
+        config: z.record(z.unknown()).optional(),
+      })
+      .optional(),
+    maps: z
+      .object({
+        provider: z.enum(['google', 'none']),
+        config: z
+          .object({
+            static: z.boolean().optional(),
+            interactive: z.boolean().optional(),
+            apiKey: z.string().optional(),
+          })
+          .optional(),
       })
       .optional(),
     abTesting: z
