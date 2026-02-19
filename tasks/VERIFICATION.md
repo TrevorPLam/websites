@@ -24,7 +24,7 @@
 ### Research
 
 - [ ] **Date** is set (e.g. 2026-02).
-- [ ] **R-*** links point to existing sections in [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md).
+- [ ] **R-\*** links point to existing sections in [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md).
 - [ ] No outdated library versions (Sonner 2.x, Next 16, React 19 per [CLAUDE.md](../CLAUDE.md)).
 
 ### Related Files
