@@ -957,7 +957,7 @@ export const PopoverClose: typeof PopoverPrimitive.Close;
 
 #### 1.7 Create @repo/marketing-components Package Scaffold | **Effort:** 2 hrs | **Dependencies:** None
 
-**Status:** [🔄] IN_PROGRESS | **Assigned To:** Cascade | **Completed:** [ ]
+**Status:** [x] COMPLETED | **Assigned To:** Assistant | **Completed:** [2026-02-19]
 
 **AI Agent Implementation Guide (15-Section Format):**
 
@@ -1095,9 +1095,7 @@ export {};
 
 #### 2.1 Build HeroVariants Components | **Effort:** 6 hrs | **Dependencies:** 1.7 | **Batch:** B
 
-**Status:** [🚫] BLOCKED | **Assigned To:** [ ] | **Completed:** [ ]
-
-**BLOCKER:** Task 1.7 must be completed first - @repo/marketing-components package does not exist
+**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
 
 **AI Agent Implementation Guide (15-Section Format):**
 
@@ -1272,7 +1270,7 @@ const heroPropsSchema = z.object({
 
 **Status:** [🚫] BLOCKED | **Assigned To:** [ ] | **Completed:** [ ]
 
-**BLOCKER:** Tasks 1.7 and 1.3 must be completed first - @repo/marketing-components package does not exist and Tabs component missing
+**BLOCKER:** Task 1.3 must be completed first - Tabs component missing
 
 **AI Agent Implementation Guide (15-Section Format):**
 
@@ -1466,9 +1464,7 @@ const servicesPropsSchema = z.object({
 
 #### 2.3 Build TeamDisplay Components | **Effort:** 5 hrs | **Dependencies:** 1.7 | **Batch:** B
 
-**Status:** [🚫] BLOCKED | **Assigned To:** [ ] | **Completed:** [ ]
-
-**BLOCKER:** Task 1.7 must be completed first - @repo/marketing-components package does not exist
+**Status:** [ ] TODO | **Assigned To:** [ ] | **Completed:** [ ]
 
 **AI Agent Implementation Guide (15-Section Format):**
 

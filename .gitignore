@@ -1,120 +1,57 @@
-# /**
-#  * @file .gitignore
-#  * @role config
-#  * @summary Git ignore rules for generated, vendor, and local-only files.
-#  *
-#  * @entrypoints
-#  * - Git reads this for status/add/commit operations
-#  *
-#  * @exports
-#  * - N/A
-#  *
-#  * @depends_on
-#  * - External: git
-#  *
-#  * @used_by
-#  * - Developers and CI when checking repo state
-#  *
-#  * @runtime
-#  * - environment: build
-#  * - side_effects: prevents accidental commits of build and local files
-#  *
-#  * @data_flow
-#  * - inputs: file paths in this list
-#  * - outputs: git ignored paths
-#  *
-#  * @invariants
-#  * - Keep outputs and secrets out of version control
-#  *
-#  * @gotchas
-#  * - Later ignore rules can override earlier negations
-#  *
-#  * @issues
-#  * - [severity:med] .vscode/ is ignored again later, overriding earlier negations for settings.json.
-#  *
-#  * @opportunities
-#  * - Consolidate IDE ignores to avoid conflicting rules
-#  *
-#  * @verification
-#  * - Run `git check-ignore -v .vscode/settings.json` to confirm desired behavior
-#  *
-#  * @status
-#  * - confidence: medium
-#  * - last_audited: 2026-02-09
-#  */
+```
+# Dependencies
+node_modules/
+
+# TypeScript/JavaScript build output
+dist/
+build/
+*.js.map
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+*.env.*
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# IDE files
+.vscode/
+.idea/
+*.iml
 
 # OS files
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# Editor directories and files
-.idea/
-*.swp
-*.swo
-*~
-.project
-.classpath
-.settings/
-*.sublime-project
-*.sublime-workspace
-
-# VS Code local settings (keep .vscode/settings.json in repo)
-.vscode/*
-!.vscode/settings.json
-!.vscode/extensions.json
-!.vscode/launch.json
-
-# Temporary files
-*.tmp
-*.log
-*.cache
-*.bak
-
-# Node modules and pnpm
-node_modules/
-pnpm-store/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Environment files (keep .env.example in repo)
-.env
-.env.local
-.env.*.local
-
-# Build artifacts
-dist/
-build/
-out/
-
-# Next.js
-.next/
-next-env.d.ts
-
-# Turbo
-.turbo/
-
-# Test coverage
+# Coverage reports
 coverage/
-*.lcov
+htmlcov/
+*.coverage
 
-# IDE
-.idea/
+# Python cache (if any Python present)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Python virtual environments (specific paths to avoid conflicts with packages/infra/env/)
-**/python/env/
-**/python/venv/
-**/python/ENV/
-./env/
-./venv/
-./ENV/
-.env/
-.env.*.local
+# Testing
+.nyc_output/
+.mypy_cache/
+.pytest_cache/
 
-# Misc
-*.egg-info/
-.DS_Store
-
-# Chrome browser binaries (too large for GitHub)
-chrome/
+# Package manager caches
+.pnp.*
+.pnpm-store/
+.yarn/
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+```
