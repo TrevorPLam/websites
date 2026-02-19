@@ -95,11 +95,7 @@ function HeroCenteredAdapter(props: SectionProps) {
 function HeroVideoAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   return (
-    <HeroVideo
-      title={config.name}
-      subtitle={config.tagline}
-      description={config.description}
-    />
+    <HeroVideo title={config.name} subtitle={config.tagline} description={config.description} />
   );
 }
 
@@ -145,24 +141,12 @@ function TeamAdapter(props: SectionProps) {
 }
 
 function TestimonialsAdapter(_props: SectionProps) {
-  return (
-    <TestimonialCarousel
-      title="What Our Clients Say"
-      testimonials={[]}
-      autoPlay={0}
-    />
-  );
+  return <TestimonialCarousel title="What Our Clients Say" testimonials={[]} />;
 }
 
 function PricingAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
-  return (
-    <PricingCards
-      title="Pricing"
-      description={config.description ?? undefined}
-      plans={[]}
-    />
-  );
+  return <PricingCards title="Pricing" description={config.description ?? undefined} plans={[]} />;
 }
 
 function CTAAdapter(props: SectionProps) {

@@ -27,9 +27,14 @@ export interface Testimonial {
 
 export interface GalleryItem {
   id: string;
-  title: string;
+  /** Image source URL */
+  src: string;
+  /** Image alt text */
+  alt: string;
+  title?: string;
   description?: string;
-  image: string;
+  caption?: string;
+  href?: string;
   category?: string;
   tags?: string[];
 }

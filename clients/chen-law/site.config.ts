@@ -62,7 +62,7 @@ const siteConfig: SiteConfig = {
     borderRadius: 'medium',
     shadows: 'medium',
   },
-  contact: { email: 'contact@chenlaw.com', phone: '', address: '' },
+  contact: { email: 'contact@chenlaw.com', phone: '' },
   conversionFlow: {
     type: 'contact',
   },

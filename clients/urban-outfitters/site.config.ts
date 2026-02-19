@@ -62,7 +62,7 @@ const siteConfig: SiteConfig = {
     borderRadius: 'medium',
     shadows: 'medium',
   },
-  contact: { email: 'hello@urbanoutfitters.com', phone: '', address: '' },
+  contact: { email: 'hello@urbanoutfitters.com', phone: '' },
   conversionFlow: {
     type: 'contact',
   },

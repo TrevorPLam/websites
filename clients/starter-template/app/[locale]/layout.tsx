@@ -5,7 +5,6 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { hasLocale } from 'next-intl';
 import { ThemeInjector } from '@repo/ui';
 import { getTranslations } from 'next-intl/server';
 import siteConfig from '@/site.config';
@@ -29,7 +28,7 @@ export const metadata: Metadata = {
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
+  if (!(routing.locales as readonly string[]).includes(locale)) {
     notFound();
   }
   setRequestLocale(locale);

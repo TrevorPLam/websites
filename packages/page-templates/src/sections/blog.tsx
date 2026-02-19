@@ -25,17 +25,8 @@ function getSiteConfig(props: SectionProps): SiteConfig {
 
 // --- Blog Index Sections ---
 
-function BlogGridAdapter(props: SectionProps) {
-  const searchParams = (props.searchParams ?? {}) as Record<string, string | string[] | undefined>;
-  const page = Number(searchParams['page'] ?? 1);
-  return React.createElement(BlogGrid, {
-    posts: [],
-    pagination: {
-      currentPage: page,
-      totalPages: 1,
-      onPageChange: () => {},
-    },
-  });
+function BlogGridAdapter(_props: SectionProps) {
+  return React.createElement(BlogGrid, { posts: [] });
 }
 
 function BlogPaginationAdapter(props: SectionProps) {

@@ -64,7 +64,7 @@ const siteConfig: SiteConfig = {
     borderRadius: 'medium',
     shadows: 'medium',
   },
-  contact: { email: 'hello@luxesalon.com', phone: '', address: '' },
+  contact: { email: 'hello@luxesalon.com', phone: '' },
   conversionFlow: {
     type: 'booking',
     serviceCategories: ['Hair', 'Color'],

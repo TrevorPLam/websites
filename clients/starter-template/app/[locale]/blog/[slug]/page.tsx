@@ -9,5 +9,5 @@ type Props = {
 export default async function BlogPostPage({ params }: Props) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  return <BlogPostTemplate config={{ ...siteConfig, slug }} />;
+  return <BlogPostTemplate config={siteConfig} searchParams={{ slug }} />;
 }
