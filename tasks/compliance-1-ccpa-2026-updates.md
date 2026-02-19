@@ -14,6 +14,7 @@
 ## Context
 
 CCPA 2026 introduces significant updates:
+
 1. Expanded lookback period (data requests must cover Jan 2022 onwards)
 2. DROP (Delete Request and Opt-Out Platform) integration requirement
 3. Enhanced rights for minors
@@ -38,8 +39,8 @@ This addresses **Research Topic: CCPA 2026 Compliance** from gemini2.md.
   - Enhanced minor rights: Auto-classify <16 data as sensitive PII
   - Geolocation restrictions: Ban on sales of precise geolocation (<1,750 feet)
 - **Threat Model**: Legal liability, fines, loss of customer trust
-- **References**: 
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Topic: Compliance)
+- **References**:
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md) (Topic: Compliance)
 
 ## Related Files
 
@@ -77,6 +78,7 @@ This addresses **Research Topic: CCPA 2026 Compliance** from gemini2.md.
 ## Implementation Plan
 
 ### Phase 1: DROP Integration
+
 - [ ] Research DROP API documentation
 - [ ] Create `packages/infra/src/compliance/drop-integration.ts`:
   - DROP API client
@@ -84,18 +86,21 @@ This addresses **Research Topic: CCPA 2026 Compliance** from gemini2.md.
 - [ ] Create scheduled workflow: `.github/workflows/compliance-drop.yml`
 
 ### Phase 2: Data Deletion
+
 - [ ] Create `packages/infra/src/compliance/data-deletion.ts`:
   - Expanded lookback data retrieval (Jan 2022+)
   - Comprehensive data deletion (all systems)
   - Audit logging
 
 ### Phase 3: Minor Data Handling
+
 - [ ] Implement age classification:
   - Auto-detect <16 users
   - Enhanced PII classification
   - Stricter consent requirements
 
 ### Phase 4: Documentation & Testing
+
 - [ ] Document CCPA 2026 compliance requirements
 - [ ] Create compliance test suite
 - [ ] Document data deletion procedures

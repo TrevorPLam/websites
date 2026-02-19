@@ -34,8 +34,8 @@ This addresses **Research Topic: EU AI Act Compliance** from gemini2.md.
   - Risk assessment and mitigation strategies
   - Compliance documentation and audit trails
 - **Threat Model**: Legal liability, fines, inability to operate in EU
-- **References**: 
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Topic: AI Platform Governance)
+- **References**:
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md) (Topic: AI Platform Governance)
 
 ## Related Files
 
@@ -72,6 +72,7 @@ This addresses **Research Topic: EU AI Act Compliance** from gemini2.md.
 ## Implementation Plan
 
 ### Phase 1: Governance Framework
+
 - [ ] Create `packages/ai-platform/governance/` directory structure
 - [ ] Document AI governance framework:
   - Risk classification criteria
@@ -79,6 +80,7 @@ This addresses **Research Topic: EU AI Act Compliance** from gemini2.md.
   - Compliance procedures
 
 ### Phase 2: Human Review Workflows
+
 - [ ] Create `packages/ai-platform/governance/human-review.ts`:
   - Review queue management
   - Approval workflow
@@ -86,12 +88,14 @@ This addresses **Research Topic: EU AI Act Compliance** from gemini2.md.
 - [ ] Create admin UI for review queue (if needed)
 
 ### Phase 3: Risk Assessment
+
 - [ ] Create `packages/ai-platform/governance/risk-assessment.ts`:
   - Automated risk classification
   - Risk mitigation recommendations
   - Compliance validation
 
 ### Phase 4: Documentation & Testing
+
 - [ ] Document EU AI Act compliance requirements
 - [ ] Create compliance test suite
 - [ ] Set up audit workflow

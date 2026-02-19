@@ -33,8 +33,8 @@ This addresses **Research Topic: Middleware Bypass Mitigation** from gemini2.md.
   - Never rely solely on middleware for security
   - Verify authentication at every data access point
 - **Threat Model**: Bypassed middleware allows unauthorized access to protected routes and Server Actions
-- **References**: 
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Topic: Security Hardening)
+- **References**:
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md) (Topic: Security Hardening)
 
 ## Related Files
 
@@ -68,23 +68,27 @@ This addresses **Research Topic: Middleware Bypass Mitigation** from gemini2.md.
 ## Implementation Plan
 
 ### Phase 1: Detection
+
 - [ ] Create `packages/infra/src/security/middleware-bypass.ts`:
   - Detect `x-middleware-subrequest` header
   - Validate middleware execution state
   - Log security events
 
 ### Phase 2: DAL Verification
+
 - [ ] Create `packages/infra/src/dal/context.ts`:
   - Independent session verification
   - JWT validation at DAL level
   - Tenant context extraction
 
 ### Phase 3: Integration
+
 - [ ] Integrate bypass detection into `secureAction` wrapper
 - [ ] Update middleware/proxy.ts to set verification headers
 - [ ] Add DAL verification to all data access functions
 
 ### Phase 4: Testing & Monitoring
+
 - [ ] Security tests simulate bypass attempts
 - [ ] Verify legitimate requests still work
 - [ ] Set up monitoring alerts for bypass attempts

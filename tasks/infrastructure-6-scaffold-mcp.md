@@ -34,8 +34,8 @@ This addresses **Research Topic: Scaffold MCP** from gemini2.md.
   - Provides AI agents with structured templates
   - Validates variables (e.g., PascalCase for service names)
 - **Threat Model**: Architectural drift, inconsistent code patterns, violation of module boundaries
-- **References**: 
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Topic: AI Platform Governance)
+- **References**:
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md) (Topic: AI Platform Governance)
 
 ## Related Files
 
@@ -53,7 +53,7 @@ This addresses **Research Topic: Scaffold MCP** from gemini2.md.
 - [ ] Scaffold templates created:
   - Component scaffold (enforces @repo/ui patterns)
   - Server Action scaffold (enforces secureAction pattern)
-  - Integration scaffold (enforces @repo/integrations-* patterns)
+  - Integration scaffold (enforces @repo/integrations-\* patterns)
 - [ ] Validation rules configured:
   - Variable naming conventions (PascalCase, camelCase)
   - Module boundary enforcement
@@ -71,11 +71,13 @@ This addresses **Research Topic: Scaffold MCP** from gemini2.md.
 ## Implementation Plan
 
 ### Phase 1: MCP Server Setup
+
 - [ ] Research Scaffold MCP server options
 - [ ] Install/configure MCP server
 - [ ] Configure Cursor to use Scaffold MCP server
 
 ### Phase 2: Scaffold Templates
+
 - [ ] Create root `scaffold.yaml`:
   - Common patterns (imports, exports, file structure)
   - Validation rules (naming conventions)
@@ -85,11 +87,13 @@ This addresses **Research Topic: Scaffold MCP** from gemini2.md.
   - `packages/integrations-*/scaffold.yaml` — Integration patterns
 
 ### Phase 3: Validation
+
 - [ ] Test scaffold templates with AI assistants
 - [ ] Verify generated code follows patterns
 - [ ] Add CI check for scaffold.yaml validation
 
 ### Phase 4: Documentation
+
 - [ ] Document Scaffold MCP usage
 - [ ] Create guide for creating new scaffolds
 - [ ] Document best practices for AI-assisted development

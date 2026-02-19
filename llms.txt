@@ -167,10 +167,15 @@ cp .env.example clients/starter-template/.env.local
 - **docs/architecture/README.md** - Detailed architecture documentation
 - **docs/getting-started/onboarding.md** - Comprehensive developer guide
 
-### AI Context
+### AI Context (platform-discovered)
+- **AGENTS.md** (root) - Cursor, Codex, Windsurf primary briefing
+- **CLAUDE.md** (root) - Claude Code primary guide
+- **QWEN.md** (root) - Qwen Code context (via .qwen/settings.json)
 - **.context/MAP.md** - Semantic concept to file mapping
 - **.context/RULES.md** - AI assistant guardrails and conventions
-- **CLAUDE.md** - Original AI assistant guide (migrated to RULES.md)
+- **.cursor/rules/*.mdc** - Cursor file-scoped rules
+- **.claude/rules/*.md** - Claude Code modular rules
+- **.windsurf/rules/** - Windsurf workspace rules
 
 ### Decision Records
 - **Location:** `docs/adr/` (adaptation from standard root ADRs/)

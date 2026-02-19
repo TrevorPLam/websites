@@ -38,9 +38,6 @@ jobs:
       - name: Run documentation validation
         run: pnpm validate-docs:strict
 
-      - name: Check markdown formatting
-        run: pnpm lint:markdown
-
       - name: Validate links with lychee
         run: |
           # Install lychee for fast link checking

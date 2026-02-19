@@ -98,7 +98,7 @@ Professional multi-industry marketing website template system built with modern 
 | **L3** | `clients/starter-template`   | 🟢 Active      | Golden-path template (port 3101, next-intl, Docker)                             |
 | **L3** | `clients/luxe-salon`, etc.   | 🟡 Partial     | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
 
-See task specs in [tasks/](tasks/) (e.g. tasks/0-4-fix-toast-sonner-api.md) and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
+See task specs in [tasks/](tasks/) (e.g. [tasks/archive/0-4-fix-toast-sonner-api.md](tasks/archive/0-4-fix-toast-sonner-api.md)) and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
 
 ### Key Features
 

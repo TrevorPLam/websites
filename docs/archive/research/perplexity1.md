@@ -4,7 +4,7 @@
 "This repository is well-aligned with the current state of the art: pnpm-based monorepo, Next.js App Router, config-as-code, env validation, and adapter-style integrations are all mainstream best practices. The main opportunities are to harden security (especially booking actions and IDOR), formalize API contracts and observability, and complete the migration to edge-aware, OpenTelemetry‑based instrumentation.",
 "Across all topics, the most important cross-cutting themes are: (1) strict runtime validation at all trust boundaries (Zod/Typia + env schemas); (2) short‑lived credentials and OIDC in CI; (3) graph‑aware, affected‑only builds in CI/CD; (4) business‑logic threat modeling for booking flows; and (5) consistent use of App Router patterns (RSC‑first, server actions as RPC endpoints) with strong error and type contracts."
 ],
-"top_recommendations": [
+"top*recommendations": [
 {
 "id": "R1",
 "title": "Treat booking actions as critical business‑logic APIs with explicit contracts and threat models",
@@ -20,8 +20,8 @@
 "title": "Standardize pnpm monorepo + task orchestration with affected‑only CI and workspace protocol",
 "impact": "High – reduces CI time and flakiness for all teams; foundational for scaling number of client sites.",
 "next_steps": [
-"Use pnpm workspaces with `workspace:*` for all internal packages and enable strict dependency resolution; avoid `shamefully-hoist` except via targeted `public-hoist-pattern`. [cite:11][cite:14][cite:8]",
-"Introduce Turborepo or Nx for dependency‑graph‑aware `build/test/lint` and use affected‑only pipelines in GitHub Actions (Nx affected or Turbo caching). [cite:5][cite:39]",
+"Use pnpm workspaces with `workspace:*`for all internal packages and enable strict dependency resolution; avoid`shamefully-hoist`except via targeted`public-hoist-pattern`. [cite:11][cite:14][cite:8]",
+"Introduce Turborepo or Nx for dependency‑graph‑aware `build/test/lint`and use affected‑only pipelines in GitHub Actions (Nx affected or Turbo caching). [cite:5][cite:39]",
 "Cache pnpm store and per‑package build artifacts in Actions; run full matrix builds nightly and affected‑only on PRs. [cite:39][cite:33]"
 ]
 },
@@ -30,7 +30,7 @@
 "title": "Lean into Next.js App Router, React Server Components, and edge runtimes with strict boundaries",
 "impact": "High – large performance and infra wins; simplifies data‑fetching and secret handling.",
 "next_steps": [
-"Keep components server‑first; mark only interaction shells as `\"use client\"`, following App Router migration guidance. [cite:67][cite:76][cite:64][cite:70]",
+"Keep components server‑first; mark only interaction shells as`\"use client\"`, following App Router migration guidance. [cite:67][cite:76][cite:64][cite:70]",
 "Centralize auth in middleware + data‑access layer; deploy auth checks to edge where possible for latency gains. [cite:6][cite:55]",
 "Define per‑route rendering modes (SSG/ISR/SSR/no‑store) and runtime (node vs edge) in a single routing/infra manifest."
 ]
@@ -61,8 +61,8 @@
 "impact": "High – prevents vendor lock‑in and gives full RSC/server action visibility.",
 "next_steps": [
 "Use Next.js built‑in OpenTelemetry integration (`@vercel/otel`) as the primary tracing mechanism; export traces to your chosen backend (Tempo, OTLP collector, etc.). [cite:55][cite:61]",
-"Integrate Sentry with `skipOpenTelemetrySetup: true` and configure the required Sentry context manager and sampler to avoid clashing tracers. [cite:49][cite:52]",
-"Instrument booking actions, external API adapters, and slow marketing components with spans and structured logs carrying `siteId`, `client`, `template`, and `provider` fields."
+"Integrate Sentry with `skipOpenTelemetrySetup: true`and configure the required Sentry context manager and sampler to avoid clashing tracers. [cite:49][cite:52]",
+"Instrument booking actions, external API adapters, and slow marketing components with spans and structured logs carrying`siteId`, `client`, `template`, and `provider` fields."
 ]
 },
 {
@@ -109,18 +109,18 @@
 },
 "topics": {
 "monorepo_architecture": {
-"summary": "Modern JS monorepos typically pair a workspace‑aware package manager (pnpm) with a task orchestrator (Turborepo or Nx). pnpm workspaces emphasize strict dependency hygiene, `workspace:*` protocol for internal packages, and configurable hoisting, while Turborepo/Nx provide dependency‑graph‑aware `build/test/lint` with caching and affected‑only execution. Best practice is to keep apps, packages, and tooling separated, adopt a clear dependency graph and enforce it via linting, and design CI to run only what changed plus a periodic full build. [cite:11][cite:14][cite:5][cite:39]",
+"summary": "Modern JS monorepos typically pair a workspace‑aware package manager (pnpm) with a task orchestrator (Turborepo or Nx). pnpm workspaces emphasize strict dependency hygiene, `workspace:_`protocol for internal packages, and configurable hoisting, while Turborepo/Nx provide dependency‑graph‑aware`build/test/lint`with caching and affected‑only execution. Best practice is to keep apps, packages, and tooling separated, adopt a clear dependency graph and enforce it via linting, and design CI to run only what changed plus a periodic full build. [cite:11][cite:14][cite:5][cite:39]",
 "actionable_rules": [
-"Use `pnpm-workspace.yaml` with logical groupings (`apps/*`, `packages/*`, `tools/*`) and declare all internal deps via `workspace:*` to avoid accidental registry resolution. [cite:11][cite:14][cite:5]",
-"Avoid `shamefully-hoist` globally; if absolutely required for legacy packages, prefer targeted `public-hoist-pattern` at workspace root, understanding it applies to the entire virtual store. [cite:8][cite:11]",
-"Adopt Turborepo or Nx to run `build/test/lint` only on affected packages in CI, backed by remote cache; run nightly full matrix builds to catch cross‑package issues. [cite:5][cite:39]"
+"Use`pnpm-workspace.yaml` with logical groupings (`apps/_`, `packages/_`, `tools/_`) and declare all internal deps via `workspace:_`to avoid accidental registry resolution. [cite:11][cite:14][cite:5]",
+"Avoid`shamefully-hoist`globally; if absolutely required for legacy packages, prefer targeted`public-hoist-pattern`at workspace root, understanding it applies to the entire virtual store. [cite:8][cite:11]",
+"Adopt Turborepo or Nx to run`build/test/lint`only on affected packages in CI, backed by remote cache; run nightly full matrix builds to catch cross‑package issues. [cite:5][cite:39]"
 ],
 "tools": [
 {
 "name": "pnpm (workspaces)",
 "version_guidance": "Use current stable 9.x+ or higher; repo currently uses 10.x, which is within maintained range as of Feb 2026. [cite:11][cite:14]",
 "pros": "Fast, content‑addressable store; strict dependency resolution prevents phantom deps; first‑class workspace support.",
-"cons": "Hoisting semantics differ from npm/yarn; some legacy tooling assumes flat `node_modules` and may require workarounds.",
+"cons": "Hoisting semantics differ from npm/yarn; some legacy tooling assumes flat`node_modules` and may require workarounds.",
 "monorepo_considerations": "Use one shared virtual store; hoisting config is global to the workspace, so plan for that when dealing with legacy packages. [cite:8]"
 },
 {
@@ -134,7 +134,7 @@
 "example_snippet": {
 "language": "yaml",
 "description": "pnpm workspace + Turborepo pipeline for affected‑only builds in CI.",
-"code": "packages:\n - \"apps/_\"\n - \"packages/_\"\n - \"tools/\*\"\n\n# turbo.json\n{\n \"$schema\": \"https://turbo.build/schema.json\",\n \"pipeline\": {\n \"lint\": {\n \"outputs\": []\n },\n \"test\": {\n \"dependsOn\": [\"^build\"],\n \"outputs\": [\"coverage/**\"]\n },\n \"build\": {\n \"dependsOn\": [\"^build\"],\n \"outputs\": [\"dist/**\"]\n }\n }\n}\n\n# GitHub Actions (snippet)\n- uses: pnpm/action-setup@v2\n with:\n version: 10\n- uses: actions/setup-node@v4\n with:\n node-version: 22\n cache: pnpm\n- run: pnpm install --frozen-lockfile\n- run: pnpm turbo run lint test build --filter=...[HEAD^]"
+"code": "packages:\n - \"apps/_\"\n - \"packages/\_\"\n - \"tools/\*\"\n\n# turbo.json\n{\n \"$schema\": \"https://turbo.build/schema.json\",\n \"pipeline\": {\n \"lint\": {\n \"outputs\": []\n },\n \"test\": {\n \"dependsOn\": [\"^build\"],\n \"outputs\": [\"coverage/**\"]\n },\n \"build\": {\n \"dependsOn\": [\"^build\"],\n \"outputs\": [\"dist/**\"]\n }\n }\n}\n\n# GitHub Actions (snippet)\n- uses: pnpm/action-setup@v2\n with:\n version: 10\n- uses: actions/setup-node@v4\n with:\n node-version: 22\n cache: pnpm\n- run: pnpm install --frozen-lockfile\n- run: pnpm turbo run lint test build --filter=...[HEAD^]"
 },
 "risks": [
 "Global hoisting flags (`shamefully-hoist=true`) applied to the whole monorepo can hide missing dependency declarations and create nondeterministic builds; avoid except as a last resort. [cite:8]",

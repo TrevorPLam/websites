@@ -1,0 +1,12 @@
+---
+description: "Client conventions when editing clients/"
+globs: "clients/**/*.ts,clients/**/*.tsx,clients/**/site.config.ts"
+alwaysApply: false
+---
+
+# Client Conventions
+
+- Copy from starter-template when creating new clients; only change site.config.ts and .env.local
+- No cross-client imports; no hardcoded client values in components
+- Run `pnpm validate-client clients/<path>` before commit
+- Starter template: port 3101; use `pnpm --filter @clients/starter-template dev`

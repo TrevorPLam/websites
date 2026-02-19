@@ -1,39 +1,15 @@
 <!--
 /**
- * @file REPODETAILED.md
- * @role docs
+ * @file docs/archive/REPODETAILED.md
+ * @role docs (archived)
  * @summary Comprehensive AI-readable repository reference — architecture, patterns, data flow, features, integrations, known issues, roadmap.
- *
- * @entrypoints
- * - Alternate/detailed view of project documentation
- *
- * @exports
- * - N/A
- *
- * @depends_on
- * - N/A
- *
- * @used_by
- * - Developers and operators
- *
- * @runtime
- * - environment: docs
- * - side_effects: none
- *
- * @data_flow
- * - inputs: repository configuration and tooling
- * - outputs: onboarding guidance
- *
- * @invariants
- * - Version claims must match package.json files and pnpm-workspace.yaml catalog
- * - All links must point to existing files
- * - Project structure must reflect actual directory layout
- *
- * @status
- * - confidence: high
- * - last_audited: 2026-02-19
+ * ARCHIVED: 2026-02-19 — Moved from root; use README.md, CLAUDE.md, and docs/ for current guidance.
  */
 -->
+
+**Archived:** This document was moved from the repository root to reduce documentation sprawl. For current guidance, see [README.md](../../README.md) and [CLAUDE.md](../../CLAUDE.md).
+
+---
 
 # Marketing Websites Platform
 
@@ -59,19 +35,19 @@ Professional multi-industry marketing website template system built with modern 
 
 > **Quality gates:** Run `pnpm lint type-check build test` to verify. Historical issue analysis is in [docs/archive/ISSUES.md](docs/archive/ISSUES.md).
 
-| Layer | Package | Status | Progress |
-|-------|---------|--------|----------|
-| **L0** | `@repo/infra` | 🟢 Complete | Security, middleware, logging, 7 env schemas |
-| **L2** | `@repo/ui` | 🟡 In Progress | 9+ UI primitives (Button, Dialog, Input, Slider, Toast, etc.) |
-| **L2** | `@repo/marketing-components` | 🟡 Partial | Package exists; scaffolded component families |
-| **L2** | `@repo/features` | 🟡 Partial | 5 features (booking, contact, blog, services, search); all tests pass |
-| **L2** | `@repo/types` | 🟢 Complete | Shared TypeScript types/interfaces |
-| **L2** | `@repo/infrastructure-*` | 🟡 Partial | tenant-core, theme, layout, ui (type-check fails in infrastructure-ui) |
-| **L3** | `@repo/page-templates` | 🔴 Scaffolded Only | All 7 templates are NotImplementedPlaceholder |
-| **L3** | `clients/starter-template` | 🟢 Active | Golden-path template (port 3101, next-intl, Docker) |
-| **L3** | `clients/luxe-salon`, etc. | 🟡 Partial | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
+| Layer  | Package                      | Status             | Progress                                                                        |
+| ------ | ---------------------------- | ------------------ | ------------------------------------------------------------------------------- |
+| **L0** | `@repo/infra`                | 🟢 Complete        | Security, middleware, logging, 7 env schemas                                    |
+| **L2** | `@repo/ui`                   | 🟡 In Progress     | 9+ UI primitives (Button, Dialog, Input, Slider, Toast, etc.)                   |
+| **L2** | `@repo/marketing-components` | 🟡 Partial         | Package exists; scaffolded component families                                   |
+| **L2** | `@repo/features`             | 🟡 Partial         | 5 features (booking, contact, blog, services, search); all tests pass           |
+| **L2** | `@repo/types`                | 🟢 Complete        | Shared TypeScript types/interfaces                                              |
+| **L2** | `@repo/infrastructure-*`     | 🟡 Partial         | tenant-core, theme, layout, ui (type-check fails in infrastructure-ui)          |
+| **L3** | `@repo/page-templates`       | 🔴 Scaffolded Only | All 7 templates are NotImplementedPlaceholder                                   |
+| **L3** | `clients/starter-template`   | 🟢 Active          | Golden-path template (port 3101, next-intl, Docker)                             |
+| **L3** | `clients/luxe-salon`, etc.   | 🟡 Partial         | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
 
-See task specs in [tasks/](tasks/) (e.g. tasks/0-4-fix-toast-sonner-api.md) and [docs/architecture/README.md](docs/architecture/README.md) for architecture details. **Related:** [CLAUDE.md](CLAUDE.md) (AI assistant guide), [THEGOAL.md](THEGOAL.md) (target architecture), [docs/archive/ISSUES.md](docs/archive/ISSUES.md) (known issues), [docs/architecture/](docs/architecture/) (module boundaries, dependency graph).
+See task specs in [tasks/](../../tasks/) (e.g. [tasks/archive/0-4-fix-toast-sonner-api.md](../../tasks/archive/0-4-fix-toast-sonner-api.md)) and [docs/architecture/README.md](../architecture/README.md) for architecture details. **Related:** [CLAUDE.md](CLAUDE.md) (AI assistant guide), [THEGOAL.md](THEGOAL.md) (target architecture), [docs/archive/ISSUES.md](docs/archive/ISSUES.md) (known issues), [docs/architecture/](docs/architecture/) (module boundaries, dependency graph).
 
 ### Key Features
 
@@ -108,8 +84,8 @@ graph TD
 
 **Module boundaries** ([docs/architecture/module-boundaries.md](docs/architecture/module-boundaries.md)):
 
-- **Allowed:** clients → @repo/* via public exports; features → ui, utils, types, infra; marketing → ui; page-templates → marketing, features
-- **Blocked:** clients/A → clients/B; packages → clients; deep imports (@repo/*/src/*)
+- **Allowed:** clients → @repo/\* via public exports; features → ui, utils, types, infra; marketing → ui; page-templates → marketing, features
+- **Blocked:** clients/A → clients/B; packages → clients; deep imports (@repo/_/src/_)
 - **Enforcement:** ESLint no-restricted-imports, pnpm validate-exports, CI lint
 
 **@repo/infra subpath exports:** `@repo/infra` (main: security, middleware, logging), `@repo/infra/client` (client-safe logger, Sentry, request context), `@repo/infra/env`, `@repo/infra/env/validate`, `@repo/infra/context/request-context`, `@repo/infra/context/request-context.server`, `@repo/infra/security/request-validation`, `@repo/infra/security/sanitize`, `@repo/infra/security/rate-limit`, `@repo/infra/security/csp`, `@repo/infra/security/security-headers`, `@repo/infra/logger`, `@repo/infra/sentry/sanitize`, `@repo/infra/sentry/client`, `@repo/infra/sentry/server`, `@repo/infra/middleware/create-middleware`
@@ -122,37 +98,37 @@ graph TD
 
 **Full SiteConfig schema** ([packages/types/src/site-config.ts](packages/types/src/site-config.ts)):
 
-| Section | Purpose | Key Fields / Types |
-|---------|---------|-------------------|
-| `id` | Machine-readable ID | string (e.g. "luxe-salon") |
-| `name`, `tagline`, `description` | Branding | string |
-| `url` | Canonical URL | string, no trailing slash |
-| `industry` | 12-industry enum | salon, restaurant, law-firm, dental, medical, fitness, retail, consulting, realestate, construction, automotive, general |
-| `features` | Section variants | hero: centered/split/video/carousel \| null; services: grid/list/tabs/accordion \| null; team: grid/carousel/detailed \| null; testimonials: carousel/grid/marquee \| null; pricing: table/cards/calculator \| null; contact: simple/multi-step/with-booking \| null; gallery: grid/carousel/lightbox \| null; blog, booking, faq: boolean; industry flags: location, menu, portfolio, caseStudy, jobListing, course, resource, comparison, filter, search, socialProof, video, audio, interactive, widget |
-| `integrations` | Provider selection | analytics (google/plausible/none), crm (hubspot/none), booking (internal/calendly/acuity/none), email, chat, reviews, maps, abTesting |
-| `navLinks`, `socialLinks` | Nav structure | NavLink[], SocialLink (platform + url) |
-| `footer` | Footer layout | columns (heading + links), legalLinks, copyrightTemplate with {year} |
-| `contact` | Business info | email, phone?, address?, hours? (BusinessHours[]) |
-| `theme` | HSL palette | colors (17 keys), fonts (heading, body, accent?), borderRadius, shadows |
-| `conversionFlow` | Discriminated union | booking: serviceCategories, timeSlots, maxAdvanceDays; contact: subjects?; quote; dispatch: urgencyLevels |
-| `seo` | Meta + schema | titleTemplate, defaultDescription, ogImage?, twitterHandle?, schemaType? |
+| Section                          | Purpose             | Key Fields / Types                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| -------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`                             | Machine-readable ID | string (e.g. "luxe-salon")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `name`, `tagline`, `description` | Branding            | string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `url`                            | Canonical URL       | string, no trailing slash                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `industry`                       | 12-industry enum    | salon, restaurant, law-firm, dental, medical, fitness, retail, consulting, realestate, construction, automotive, general                                                                                                                                                                                                                                                                                                                                                                                   |
+| `features`                       | Section variants    | hero: centered/split/video/carousel \| null; services: grid/list/tabs/accordion \| null; team: grid/carousel/detailed \| null; testimonials: carousel/grid/marquee \| null; pricing: table/cards/calculator \| null; contact: simple/multi-step/with-booking \| null; gallery: grid/carousel/lightbox \| null; blog, booking, faq: boolean; industry flags: location, menu, portfolio, caseStudy, jobListing, course, resource, comparison, filter, search, socialProof, video, audio, interactive, widget |
+| `integrations`                   | Provider selection  | analytics (google/plausible/none), crm (hubspot/none), booking (internal/calendly/acuity/none), email, chat, reviews, maps, abTesting                                                                                                                                                                                                                                                                                                                                                                      |
+| `navLinks`, `socialLinks`        | Nav structure       | NavLink[], SocialLink (platform + url)                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `footer`                         | Footer layout       | columns (heading + links), legalLinks, copyrightTemplate with {year}                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `contact`                        | Business info       | email, phone?, address?, hours? (BusinessHours[])                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `theme`                          | HSL palette         | colors (17 keys), fonts (heading, body, accent?), borderRadius, shadows                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `conversionFlow`                 | Discriminated union | booking: serviceCategories, timeSlots, maxAdvanceDays; contact: subjects?; quote; dispatch: urgencyLevels                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `seo`                            | Meta + schema       | titleTemplate, defaultDescription, ogImage?, twitterHandle?, schemaType?                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 **Industry configs** ([packages/types/src/industry-configs.ts](packages/types/src/industry-configs.ts)) — per-industry defaults:
 
-| Industry | schemaType | defaultIntegrations |
-|----------|------------|---------------------|
-| salon | HairSalon | booking:internal, crm:hubspot |
-| restaurant | Restaurant | booking:calendly |
-| law-firm | LegalService | crm:hubspot |
-| dental | Dentist | booking:internal |
-| medical | MedicalClinic | booking:calendly |
-| fitness | HealthClub | booking:internal |
-| retail | Store | — |
-| consulting | ProfessionalService | — |
-| realestate | RealEstateAgent | — |
-| construction | HomeAndConstructionBusiness | — |
-| automotive | AutoRepair | booking:internal |
-| general | LocalBusiness | — |
+| Industry     | schemaType                  | defaultIntegrations           |
+| ------------ | --------------------------- | ----------------------------- |
+| salon        | HairSalon                   | booking:internal, crm:hubspot |
+| restaurant   | Restaurant                  | booking:calendly              |
+| law-firm     | LegalService                | crm:hubspot                   |
+| dental       | Dentist                     | booking:internal              |
+| medical      | MedicalClinic               | booking:calendly              |
+| fitness      | HealthClub                  | booking:internal              |
+| retail       | Store                       | —                             |
+| consulting   | ProfessionalService         | —                             |
+| realestate   | RealEstateAgent             | —                             |
+| construction | HomeAndConstructionBusiness | —                             |
+| automotive   | AutoRepair                  | booking:internal              |
+| general      | LocalBusiness               | —                             |
 
 **Zod schema:** `siteConfigSchema` exported for runtime validation at build/bootstrap. See [CLAUDE.md](CLAUDE.md) for CaCA usage.
 
@@ -189,15 +165,15 @@ HTTP Request → middleware (next-intl: locale, redirect / → /en)
 
 ## Section Registry — All Registered Sections
 
-| File | Sections registered |
-|------|---------------------|
-| home.tsx | hero-split, hero-centered, hero-video, hero-carousel, services-preview, team, testimonials, pricing, cta |
-| services.tsx | services-grid, services-list, services-tabs, services-accordion |
-| about.tsx | about-story, about-team, about-testimonials, about-cta |
-| contact.tsx | contact-form, contact-info |
-| booking.tsx | booking-form |
-| blog.tsx | blog-grid, blog-pagination, blog-post-content, blog-related-posts, blog-cta |
-| features.tsx | feature-analytics, feature-chat, feature-ab-testing |
+| File         | Sections registered                                                                                                                                                                                                                           |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| home.tsx     | hero-split, hero-centered, hero-video, hero-carousel, services-preview, team, testimonials, pricing, cta                                                                                                                                      |
+| services.tsx | services-grid, services-list, services-tabs, services-accordion                                                                                                                                                                               |
+| about.tsx    | about-story, about-team, about-testimonials, about-cta                                                                                                                                                                                        |
+| contact.tsx  | contact-form, contact-info                                                                                                                                                                                                                    |
+| booking.tsx  | booking-form                                                                                                                                                                                                                                  |
+| blog.tsx     | blog-grid, blog-pagination, blog-post-content, blog-related-posts, blog-cta                                                                                                                                                                   |
+| features.tsx | feature-analytics, feature-chat, feature-ab-testing                                                                                                                                                                                           |
 | industry.tsx | industry-location, industry-menu, industry-portfolio, industry-course, industry-resource, industry-comparison, industry-filter, industry-search, industry-social-proof, industry-video, industry-audio, industry-interactive, industry-widget |
 
 **getSectionsForPage(page, features):** home → hero-{features.hero}, services-preview, team, testimonials, pricing, cta; services → services-{features.services}; about → about-hero, about-team?, about-testimonials?, about-cta; contact → contact-form, contact-info; blog-index → blog-grid, blog-pagination?; blog-post → blog-post-content, blog-related-posts, blog-cta; booking → booking-form.
@@ -224,20 +200,20 @@ HTTP Request → middleware (next-intl: locale, redirect / → /en)
 
 ## Feature Modules — Full Detail
 
-| Feature | components/ | lib/ | Key pattern |
-|---------|-------------|------|-------------|
-| booking | BookingForm | booking-actions, booking-schema, booking-config, booking-providers | submitBookingRequest; rate limit (checkRateLimit), IP (getValidatedClientIp), provider sync |
-| contact | ContactForm, ContactFormStandard | contact-actions, contact-config, contact-schema | createContactConfig(successMessage); ContactSubmissionHandler |
-| blog | BlogPostContent | blog.ts, blog-content-source, blog-mdx-source | BlogContentSource adapter; MDX |
-| services | ServicesOverview, ServiceDetailLayout | — | Presentational; data from template |
-| search | SearchDialog, SearchPage | search-index, filter-items | getSearchIndex(config) |
-| localization | — | format, rtl (getLocaleDir), routing | i18n |
-| team | TeamSection | team-schema | — |
-| testimonials | TestimonialsSection | testimonial-schema, testimonial-actions | — |
-| gallery | GallerySection | gallery-schema | — |
-| pricing | PricingSection | pricing-schema | — |
-| newsletter, analytics, ab-testing, chat | (various) | *-config | — |
-| ecommerce, authentication, payment, content-management, notification | — | *-config | — |
+| Feature                                                              | components/                           | lib/                                                               | Key pattern                                                                                 |
+| -------------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| booking                                                              | BookingForm                           | booking-actions, booking-schema, booking-config, booking-providers | submitBookingRequest; rate limit (checkRateLimit), IP (getValidatedClientIp), provider sync |
+| contact                                                              | ContactForm, ContactFormStandard      | contact-actions, contact-config, contact-schema                    | createContactConfig(successMessage); ContactSubmissionHandler                               |
+| blog                                                                 | BlogPostContent                       | blog.ts, blog-content-source, blog-mdx-source                      | BlogContentSource adapter; MDX                                                              |
+| services                                                             | ServicesOverview, ServiceDetailLayout | —                                                                  | Presentational; data from template                                                          |
+| search                                                               | SearchDialog, SearchPage              | search-index, filter-items                                         | getSearchIndex(config)                                                                      |
+| localization                                                         | —                                     | format, rtl (getLocaleDir), routing                                | i18n                                                                                        |
+| team                                                                 | TeamSection                           | team-schema                                                        | —                                                                                           |
+| testimonials                                                         | TestimonialsSection                   | testimonial-schema, testimonial-actions                            | —                                                                                           |
+| gallery                                                              | GallerySection                        | gallery-schema                                                     | —                                                                                           |
+| pricing                                                              | PricingSection                        | pricing-schema                                                     | —                                                                                           |
+| newsletter, analytics, ab-testing, chat                              | (various)                             | \*-config                                                          | —                                                                                           |
+| ecommerce, authentication, payment, content-management, notification | —                                     | \*-config                                                          | —                                                                                           |
 
 **Server action flow (booking-actions.ts):** `submitBookingRequest(data, config)` → createBookingFormSchema(config), checkRateLimit, validateBookingSecurity, getValidatedClientIp, hashIp, getBookingProviders, revalidatePath('/book').
 
@@ -253,11 +229,11 @@ HTTP Request → middleware (next-intl: locale, redirect / → /en)
 
 **hubspot:** HUBSPOT_PRIVATE_APP_TOKEN.
 
-**booking** ([packages/infra/env/schemas/booking.ts](packages/infra/env/schemas/booking.ts)): MINDBODY_API_KEY + MINDBODY_BUSINESS_ID, VAGARO_*, SQUARE_* — **pairs per provider**.
+**booking** ([packages/infra/env/schemas/booking.ts](packages/infra/env/schemas/booking.ts)): MINDBODY*API_KEY + MINDBODY_BUSINESS_ID, VAGARO*\_, SQUARE\_\_ — **pairs per provider**.
 
 **sentry:** NEXT_PUBLIC_SENTRY_DSN (client-safe), sample rate.
 
-**public:** Client-safe vars (NEXT_PUBLIC_*).
+**public:** Client-safe vars (NEXT*PUBLIC*\*).
 
 **Validation:** validateEnv(), safeValidateEnv(), createEnvSchema(), getFeatureFlags(), validateEnvForEnvironment().
 
@@ -295,7 +271,7 @@ HTTP Request → middleware (next-intl: locale, redirect / → /en)
 
 **starter-template app routes:** app/layout.tsx (root: lang, dir); app/[locale]/layout.tsx (ThemeInjector, metadata, NextIntlProvider, main); app/[locale]/page.tsx (HomePageTemplate); app/[locale]/services, about, contact, book, blog, blog/[slug]; app/api/health/route.ts.
 
-**middleware** ([clients/starter-template/middleware.ts](clients/starter-template/middleware.ts)): next-intl createMiddleware(routing); matcher excludes api, _next, _vercel, static files.
+**middleware** ([clients/starter-template/middleware.ts](clients/starter-template/middleware.ts)): next-intl createMiddleware(routing); matcher excludes api, \_next, \_vercel, static files.
 
 **validate-client** ([scripts/validate-client.ts](scripts/validate-client.ts)): Checks site.config.ts exists and parses; package.json has @clients/ name; app/ has layout + page; tsconfig extends base. **Cross-client import scan:** app/, components/ scanned for `@clients/` — forbidden. Exits 0/1; API: validateClient(clientPath, root?, opts?).
 
@@ -317,7 +293,7 @@ HTTP Request → middleware (next-intl: locale, redirect / → /en)
 
 ## Testing
 
-**Jest** (jest.config.js): node (packages/utils, infra, features/**/lib), jsdom (packages/ui, features/**/components). **ResizeObserver** (jest.setup.js): polyfill for Radix Slider. **Parity tests:** packages/features/__tests__/parity/ — extraction vs original template. **UI tests:** packages/ui/src/components/__tests__/ — Button, Dialog, Input, Label, Slider, Alert, Checkbox; @testing-library/react, jest-axe, userEvent.
+**Jest** (jest.config.js): node (packages/utils, infra, features/**/lib), jsdom (packages/ui, features/**/components). **ResizeObserver** (jest.setup.js): polyfill for Radix Slider. **Parity tests:** packages/features/**tests**/parity/ — extraction vs original template. **UI tests:** packages/ui/src/components/**tests**/ — Button, Dialog, Input, Label, Slider, Alert, Checkbox; @testing-library/react, jest-axe, userEvent.
 
 ---
 
@@ -327,27 +303,27 @@ HTTP Request → middleware (next-intl: locale, redirect / → /en)
 
 **File map:**
 
-| Concern | Primary Files |
-|---------|---------------|
-| SiteConfig type/schema | packages/types/src/site-config.ts |
-| Industry configs | packages/types/src/industry-configs.ts |
-| Section registry | packages/page-templates/src/registry.ts |
-| Section adapters | packages/page-templates/src/sections/{home,services,about,contact,booking,blog,features,industry}.tsx |
-| Page template types | packages/page-templates/src/types.ts |
-| ThemeInjector | packages/ui/src/components/ThemeInjector.tsx |
-| Starter layout | clients/starter-template/app/[locale]/layout.tsx |
-| Starter middleware | clients/starter-template/middleware.ts |
-| Booking config | packages/features/src/booking/lib/booking-config.ts |
-| Booking actions | packages/features/src/booking/lib/booking-actions.ts |
-| Contact config | packages/features (createContactConfig) |
-| Env schemas | packages/infra/env/schemas/*.ts |
-| Module boundaries | docs/architecture/module-boundaries.md |
-| Target architecture | THEGOAL.md |
-| Known issues | docs/archive/ISSUES.md |
-| Validate client | scripts/validate-client.ts |
-| CI workflow | .github/workflows/ci.yml |
-| Turbo config | turbo.json |
-| Version catalog | pnpm-workspace.yaml catalog |
+| Concern                | Primary Files                                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------------------------- |
+| SiteConfig type/schema | packages/types/src/site-config.ts                                                                     |
+| Industry configs       | packages/types/src/industry-configs.ts                                                                |
+| Section registry       | packages/page-templates/src/registry.ts                                                               |
+| Section adapters       | packages/page-templates/src/sections/{home,services,about,contact,booking,blog,features,industry}.tsx |
+| Page template types    | packages/page-templates/src/types.ts                                                                  |
+| ThemeInjector          | packages/ui/src/components/ThemeInjector.tsx                                                          |
+| Starter layout         | clients/starter-template/app/[locale]/layout.tsx                                                      |
+| Starter middleware     | clients/starter-template/middleware.ts                                                                |
+| Booking config         | packages/features/src/booking/lib/booking-config.ts                                                   |
+| Booking actions        | packages/features/src/booking/lib/booking-actions.ts                                                  |
+| Contact config         | packages/features (createContactConfig)                                                               |
+| Env schemas            | packages/infra/env/schemas/\*.ts                                                                      |
+| Module boundaries      | docs/architecture/module-boundaries.md                                                                |
+| Target architecture    | THEGOAL.md                                                                                            |
+| Known issues           | docs/archive/ISSUES.md                                                                                |
+| Validate client        | scripts/validate-client.ts                                                                            |
+| CI workflow            | .github/workflows/ci.yml                                                                              |
+| Turbo config           | turbo.json                                                                                            |
+| Version catalog        | pnpm-workspace.yaml catalog                                                                           |
 
 ---
 
@@ -427,6 +403,7 @@ pnpm --filter @clients/my-client-name dev --port 3001
 ```
 
 For detailed instructions, see:
+
 - **[Developer Onboarding](docs/getting-started/onboarding.md)** - Complete setup guide
 - **[Build First Client](docs/tutorials/build-first-client.md)** - Step-by-step tutorial
 
@@ -499,21 +476,21 @@ See [Architecture Overview](docs/architecture/README.md) for detailed architectu
 
 All versions verified against [package.json](package.json) and [pnpm-workspace.yaml](pnpm-workspace.yaml):
 
-| Category | Technology | Version | Source |
-|----------|-----------|---------|--------|
-| **Runtime** | Node.js | >=22.0.0 | [package.json](package.json) |
-| **Package Manager** | pnpm | 10.29.2 | [package.json](package.json) |
-| **Frontend Framework** | Next.js | 16.1.5 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **UI Library** | React | 19.0.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Styling** | Tailwind CSS | 4.1.0 | [clients/starter-template/package.json](clients/starter-template/package.json) |
-| **Type Safety** | TypeScript | 5.9.3 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Linting** | ESLint | 9.18.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Code Formatting** | Prettier | 3.8.1 | [package.json](package.json) |
-| **Monorepo Tool** | Turbo | 2.8.10 | [package.json](package.json) |
-| **Testing** | Jest | 30.2.0 | [package.json](package.json) |
-| **Database** | Supabase | - | PostgreSQL with RLS |
-| **Error Tracking** | Sentry | 10.38.0 | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml) |
-| **Container** | Docker | - | [docker-compose.yml](docker-compose.yml) |
+| Category               | Technology   | Version  | Source                                                                         |
+| ---------------------- | ------------ | -------- | ------------------------------------------------------------------------------ |
+| **Runtime**            | Node.js      | >=22.0.0 | [package.json](package.json)                                                   |
+| **Package Manager**    | pnpm         | 10.29.2  | [package.json](package.json)                                                   |
+| **Frontend Framework** | Next.js      | 16.1.5   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **UI Library**         | React        | 19.0.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Styling**            | Tailwind CSS | 4.1.0    | [clients/starter-template/package.json](clients/starter-template/package.json) |
+| **Type Safety**        | TypeScript   | 5.9.3    | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Linting**            | ESLint       | 9.18.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Code Formatting**    | Prettier     | 3.8.1    | [package.json](package.json)                                                   |
+| **Monorepo Tool**      | Turbo        | 2.8.10   | [package.json](package.json)                                                   |
+| **Testing**            | Jest         | 30.2.0   | [package.json](package.json)                                                   |
+| **Database**           | Supabase     | -        | PostgreSQL with RLS                                                            |
+| **Error Tracking**     | Sentry       | 10.38.0  | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
+| **Container**          | Docker       | -        | [docker-compose.yml](docker-compose.yml)                                       |
 
 ### Key Dependencies
 
@@ -565,31 +542,31 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 
 ### Planning & Roadmap
 
-- **[tasks/](tasks/)** - Task specifications (e.g. 0-4-fix-toast-sonner-api.md), implementation backlog
+- **[tasks/](../../tasks/)** - Task specifications (e.g. [tasks/archive/0-4-fix-toast-sonner-api.md](../../tasks/archive/0-4-fix-toast-sonner-api.md)), implementation backlog
 
 ## 🧪 Available Scripts
 
 ### Workspace Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm install` | Install all dependencies |
-| `pnpm build` | Build all packages and projects |
-| `pnpm dev` | Start development servers (via Turbo) |
-| `pnpm lint` | Run ESLint across workspace |
-| `pnpm type-check` | Run TypeScript type checking |
-| `pnpm test` | Run Jest tests |
-| `pnpm test:watch` | Run tests in watch mode |
-| `pnpm test:coverage` | Generate test coverage report |
-| `pnpm format` | Format code with Prettier |
-| `pnpm format:check` | Check formatting without changes |
-| `pnpm validate-docs` | Validate documentation |
-| `pnpm validate-docs:strict` | Validate documentation (strict mode) |
-| `pnpm validate-exports` | Validate package exports |
-| `pnpm validate:workspaces` | Validate package.json vs pnpm-workspace.yaml sync |
-| `pnpm knip` | Find unused dependencies and exports |
-| `pnpm syncpack:check` | Check for dependency version mismatches |
-| `pnpm syncpack:fix` | Fix dependency version mismatches |
+| Command                     | Description                                       |
+| --------------------------- | ------------------------------------------------- |
+| `pnpm install`              | Install all dependencies                          |
+| `pnpm build`                | Build all packages and projects                   |
+| `pnpm dev`                  | Start development servers (via Turbo)             |
+| `pnpm lint`                 | Run ESLint across workspace                       |
+| `pnpm type-check`           | Run TypeScript type checking                      |
+| `pnpm test`                 | Run Jest tests                                    |
+| `pnpm test:watch`           | Run tests in watch mode                           |
+| `pnpm test:coverage`        | Generate test coverage report                     |
+| `pnpm format`               | Format code with Prettier                         |
+| `pnpm format:check`         | Check formatting without changes                  |
+| `pnpm validate-docs`        | Validate documentation                            |
+| `pnpm validate-docs:strict` | Validate documentation (strict mode)              |
+| `pnpm validate-exports`     | Validate package exports                          |
+| `pnpm validate:workspaces`  | Validate package.json vs pnpm-workspace.yaml sync |
+| `pnpm knip`                 | Find unused dependencies and exports              |
+| `pnpm syncpack:check`       | Check for dependency version mismatches           |
+| `pnpm syncpack:fix`         | Fix dependency version mismatches                 |
 
 ### Client Commands
 
@@ -623,6 +600,7 @@ docker-compose down
 ```
 
 The Docker Compose configuration includes:
+
 - **Starter Template** - Available on `http://localhost:3101`
 
 See [docker-compose.yml](docker-compose.yml) for configuration details and [docs/deployment/docker.md](docs/deployment/docker.md) for deployment documentation.
@@ -647,15 +625,16 @@ We welcome contributions! Before contributing, please:
 ### Quality Gates
 
 All pull requests must pass:
-- Linting (`pnpm lint`) — *many packages lack eslint.config.mjs*
-- Type checking (`pnpm type-check`) — *currently fails in @repo/infrastructure-ui*
+
+- Linting (`pnpm lint`) — _many packages lack eslint.config.mjs_
+- Type checking (`pnpm type-check`) — _currently fails in @repo/infrastructure-ui_
 - Export validation (`pnpm validate-exports`)
 - Marketing exports (`pnpm validate-marketing-exports`)
 - Client validation (`pnpm validate-all-clients`)
 - Circular deps (`pnpm madge:circular`)
 - Dependency consistency (`pnpm syncpack:check`)
 - Build (`pnpm build`)
-- Tests (`pnpm test`) — *all 646 tests pass*
+- Tests (`pnpm test`) — _all 646 tests pass_
 
 Workspace validation (`pnpm validate:workspaces`) passes; CI runs full pipeline on push, affected packages only on PRs.
 
@@ -691,6 +670,7 @@ For task specifications, see [tasks/](tasks/).
 ---
 
 **Quick Links:**
+
 - [🚀 Quick Start](#-quick-start)
 - [📚 Documentation Hub](docs/README.md)
 - [🏗️ Architecture](docs/architecture/README.md)

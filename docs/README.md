@@ -51,26 +51,26 @@ _Step-by-step learning paths_
 ### New to the Platform?
 
 1. **[Getting Started](1-getting-started/)** - Set up your environment
-2. **[Quick Start Tutorial](5-tutorials/quick-start/)** - Build your first site
-3. **[Platform Basics](1-getting-started/platform-basics/)** - Understand core concepts
+2. **[Quick Start Tutorial](tutorials/build-first-client.md)** - Build your first site
+3. **[Platform Basics](getting-started/onboarding.md)** - Understand core concepts
 
 ### Need to Solve a Problem?
 
 1. **[Guides](2-guides/)** - Find your specific problem
 2. **[Reference](3-reference/)** - Look up technical details
-3. **[Troubleshooting](2-guides/troubleshooting/)** - Solve common issues
+3. **[Troubleshooting](getting-started/troubleshooting.md)** - Solve common issues
 
 ### Want to Understand?
 
 1. **[Architecture](4-explanation/architecture/)** - System design
-2. **[Decision Records](4-explanation/adr/)** - Why we made choices
-3. **[Performance](4-explanation/performance/)** - Performance strategies
+2. **[Decision Records](adr/)** - Why we made choices
+3. **[Performance](performance/)** - Performance strategies
 
 ### Looking for Technical Details?
 
-1. **[API Reference](3-reference/api/)** - Complete API documentation
-2. **[Components](3-reference/components/)** - UI component library
-3. **[Configuration](3-reference/configuration/)** - All configuration options
+1. **[Reference](3-reference/)** - Technical documentation
+2. **[Components](components/ui-library.md)** - UI component library
+3. **[Configuration](configuration/)** - Configuration options
 
 ## 🎯 By Role
 
@@ -134,9 +134,9 @@ This documentation follows the **2026 Master Repository Documentation Standard (
 
 ### Quick Help
 
-- **[FAQ](2-guides/faq/)** - Common questions and answers
-- **[Troubleshooting](2-guides/troubleshooting/)** - Solve common problems
-- **[Glossary](3-reference/glossary/)** - Understand terminology
+- **[FAQ](resources/faq.md)** - Common questions and answers
+- **[Troubleshooting](getting-started/troubleshooting.md)** - Solve common problems
+- **[Glossary](resources/glossary.md)** - Understand terminology
 
 ### Community Support
 
@@ -158,14 +158,13 @@ The following legacy documentation has been migrated to the new structure:
 
 - **Architecture** → [4-explanation/architecture/](4-explanation/architecture/)
 - **Getting Started** → [1-getting-started/](1-getting-started/)
-- **ADRs** → [4-explanation/adr/](4-explanation/adr/)
+- **ADRs** → [adr/](adr/)
 
 ### Archive
 
 Old documentation that is no longer maintained can be found in:
 
-- **[ARCHIVE.md](ARCHIVE.md)** - Historical documentation
-- **[docs/archive/](archive/)** - Archived content
+- **[docs/archive/](archive/)** - Archived content (ISSUES.md, REPODETAILED.md, docs standard, research outputs)
 
 ## 🤝 Contributing to Documentation
 

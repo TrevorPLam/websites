@@ -14,6 +14,7 @@
 ## Context
 
 pnpm 10 introduces critical security features that prevent supply chain attacks:
+
 1. `allowBuilds` configuration blocks arbitrary build scripts from git-hosted dependencies
 2. `blockExoticSubdeps` prevents resolution of untrusted protocols (git+ssh, tarball URLs) in transitive dependencies
 3. Integrity hash verification for HTTP tarballs
@@ -35,9 +36,9 @@ This addresses **Research Topic: pnpm 10 Security Features** from gemini1.md and
   - `blockExoticSubdeps`: Prevents resolution of exotic protocols in transitive dependencies
   - `integrityHash`: Auto-calculated for HTTP tarballs to ensure content integrity
 - **Threat Model**: Supply chain attacks via compromised git repositories, malicious build scripts, typosquatting
-- **References**: 
-  - [docs/research/gemini-strategic-architecture-2026.md](../docs/research/gemini-strategic-architecture-2026.md)
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md)
+- **References**:
+  - [docs/archive/research/gemini-strategic-architecture-2026.md](../docs/archive/research/gemini-strategic-architecture-2026.md)
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md)
 
 ## Related Files
 
@@ -64,6 +65,7 @@ This addresses **Research Topic: pnpm 10 Security Features** from gemini1.md and
 ## Implementation Plan
 
 ### Phase 1: Configuration
+
 - [ ] Review current dependencies for build script usage
 - [ ] Configure `allowBuilds` in `pnpm-workspace.yaml`:
   ```yaml
@@ -74,11 +76,13 @@ This addresses **Research Topic: pnpm 10 Security Features** from gemini1.md and
 - [ ] Enable `blockExoticSubdeps: true`
 
 ### Phase 2: Validation
+
 - [ ] Add CI check to validate pnpm security settings
 - [ ] Test installation with new configuration
 - [ ] Verify no build failures
 
 ### Phase 3: Documentation
+
 - [ ] Document security features in `docs/architecture/security/supply-chain.md`
 - [ ] Create migration guide for adding dependencies with build scripts
 - [ ] Update CLAUDE.md with pnpm security best practices

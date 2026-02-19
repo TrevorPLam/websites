@@ -1,0 +1,13 @@
+---
+description: "Package conventions when editing packages/"
+globs: "packages/**/*.ts,packages/**/*.tsx"
+alwaysApply: false
+---
+
+# Package Conventions
+
+- Add file headers per .context/RULES.md (@file, @summary, @exports, @invariants)
+- Export via package index.ts; run `pnpm validate-exports` after changes
+- @repo/ui: React is peerDependency, not direct
+- Tests: Node env for lib/actions; jsdom for components (jest-axe, @testing-library/react)
+- ESLint 9 flat config (eslint.config.mjs); extend @repo/eslint-config

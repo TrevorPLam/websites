@@ -403,6 +403,23 @@ Key docs:
 
 ---
 
+## Task Execution Non-Negotiables
+
+**Every task must satisfy all 10.** Full checklist: `.context/RULES.md` (Task Execution Non-Negotiables section).
+
+1. **THEGOAL alignment** — Read THEGOAL.md before starting; align with repo direction
+2. **Research** — 02/2026 basics, fundamentals, best practices per task; research if absent
+3. **Examples** — Code snippets from research + current implementation
+4. **Refactor tasks** — If research contradicts existing patterns but suggests better, create follow-up tasks
+5. **QA (3 passes)** — (1) isolation (2) related files (3) full codebase
+6. **Testing** — Create/update/run tests + validation; task incomplete without this
+7. **Documentation** — Meta headers, inline commentary, repo docs; task incomplete without this
+8. **Additional tasks** — After completion, determine if new tasks needed
+9. **Lessons learned** — Attach to related tasks/docs
+10. **Commit & push** — After each task
+
+---
+
 ## Common Pitfalls
 
 - **pnpm version is strictly enforced.** Use exactly `pnpm@10.29.2`. Running with a different version will fail.
@@ -414,4 +431,13 @@ Key docs:
 - **Starter-template dev port is 3101.** Each client uses a unique port (e.g. luxe-salon: 3102).
 - **Paired environment variables.** Supabase, Upstash Redis, and booking providers require both variables in a pair or neither.
 - **TypeScript build errors block CI.** `typescript.ignoreBuildErrors: false` is set in `next.config.js`.
-- **Workspace sync.** `package.json` workspaces must match `pnpm-workspace.yaml` (run `pnpm validate:workspaces`). Currently out of sync.
+- **Workspace sync.** `package.json` workspaces must match `pnpm-workspace.yaml`
+  (run `pnpm validate:workspaces`). ✅ RESOLVED - Now in sync.
+- **Type safety chain reactions.** Single type mismatches (e.g., `image` vs `src`)
+  can cascade and block entire builds. Always verify component props match type definitions.
+- **Export management.** Barrel files (index.ts) must avoid duplicate exports -
+  identifier collisions cause compilation failures. Centralize component family exports.
+- **Cross-package build dependencies.** Marketing-components build failures can block
+  dependent packages. Test builds across the dependency chain, not just individual packages.
+- **Component API consistency.** Use singular props for single items (`member`) vs
+  arrays (`members`). Mismatches cause TypeScript errors that may surface in dependent packages first.

@@ -34,9 +34,9 @@ This addresses **Research Topic: Contract Testing with Pact** from chatgpt.md an
   - Validates request/response schemas
   - Runs in CI pipeline
 - **Threat Model**: Breaking API changes, integration failures, production outages
-- **References**: 
+- **References**:
   - [docs/research/chatgpt-comprehensive-2026.md](../docs/research/chatgpt-comprehensive-2026.md) (Topic: API Integration Patterns)
-  - [docs/research/gemini-strategic-architecture-2026.md](../docs/research/gemini-strategic-architecture-2026.md) (Topic: Testing)
+  - [docs/archive/research/gemini-strategic-architecture-2026.md](../docs/archive/research/gemini-strategic-architecture-2026.md) (Topic: Testing)
 
 ## Related Files
 
@@ -71,6 +71,7 @@ This addresses **Research Topic: Contract Testing with Pact** from chatgpt.md an
 ## Implementation Plan
 
 ### Phase 1: Setup
+
 - [ ] Install Pact dependencies:
   ```bash
   pnpm add -D @pact-foundation/pact @pact-foundation/pact-node
@@ -81,6 +82,7 @@ This addresses **Research Topic: Contract Testing with Pact** from chatgpt.md an
   - Test fixtures
 
 ### Phase 2: Contract Tests
+
 - [ ] Create contract tests for HubSpot integration:
   - Contact creation contract
   - Contact search contract
@@ -92,12 +94,14 @@ This addresses **Research Topic: Contract Testing with Pact** from chatgpt.md an
   - Template rendering contract
 
 ### Phase 3: CI Integration
+
 - [ ] Add Pact validation to CI pipeline:
   - Run consumer tests on PR
   - Publish contracts to Pact Broker (if available)
   - Provider verification (optional, if backend available)
 
 ### Phase 4: Documentation
+
 - [ ] Document Pact usage patterns
 - [ ] Create guide for adding new contract tests
 - [ ] Document contract versioning strategy

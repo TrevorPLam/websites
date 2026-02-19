@@ -33,8 +33,8 @@ This addresses **Research Topic: React Taint API** from gemini2.md.
   - `experimental_taintUniqueValue`: Marks unique values (IDs, tokens) as tainted
   - Build-time and runtime errors if tainted data reaches Client Components
 - **Threat Model**: Accidental PII exposure, session token leakage, internal ID exposure
-- **References**: 
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Topic: Server Action Security)
+- **References**:
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md) (Topic: Server Action Security)
 
 ## Related Files
 
@@ -68,31 +68,36 @@ This addresses **Research Topic: React Taint API** from gemini2.md.
 ## Implementation Plan
 
 ### Phase 1: Core Infrastructure
+
 - [ ] Create `packages/infra/src/security/taint.ts`:
+
   ```typescript
   import { experimental_taintObjectReference, experimental_taintUniqueValue } from 'react';
-  
+
   export function taintSensitiveObject<T extends object>(obj: T, reason: string): T {
     experimental_taintObjectReference(reason, obj);
     return obj;
   }
-  
+
   export function taintUniqueValue(value: string | number, reason: string): void {
     experimental_taintUniqueValue(reason, value);
   }
   ```
 
 ### Phase 2: Integration
+
 - [ ] Integrate taint API into `secureAction` wrapper
 - [ ] Create DTO sanitization helpers:
   - `sanitizeBookingDTO`: Removes sensitive fields, taints remaining sensitive data
   - `sanitizeUserDTO`: Removes PII, taints internal IDs
 
 ### Phase 3: Application
+
 - [ ] Refactor booking actions to use taint API
 - [ ] Add taint checks to other Server Actions (user profile, admin actions)
 
 ### Phase 4: Documentation & Testing
+
 - [ ] Document taint API usage patterns
 - [ ] Write unit tests for taint utilities
 - [ ] Verify build-time errors catch violations

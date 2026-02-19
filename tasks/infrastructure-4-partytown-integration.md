@@ -34,8 +34,8 @@ This addresses **Research Topic: Partytown Integration** from gemini2.md.
   - Improves INP (Interaction to Next Paint) metric
   - Click-to-load strategy for non-essential scripts
 - **Threat Model**: Performance degradation, poor user experience, Core Web Vitals failures
-- **References**: 
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Topic: Observability & Performance)
+- **References**:
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md) (Topic: Observability & Performance)
 
 ## Related Files
 
@@ -69,11 +69,13 @@ This addresses **Research Topic: Partytown Integration** from gemini2.md.
 ## Implementation Plan
 
 ### Phase 1: Setup
+
 - [ ] Install `@builder.io/partytown`
 - [ ] Configure Next.js plugin in `next.config.js`:
+
   ```javascript
   const partytown = require('@builder.io/partytown/utils');
-  
+
   module.exports = {
     // ... existing config
     plugins: [
@@ -85,6 +87,7 @@ This addresses **Research Topic: Partytown Integration** from gemini2.md.
   ```
 
 ### Phase 2: Script Integration
+
 - [ ] Update ScriptManager to use Partytown for compatible scripts:
   - Analytics scripts (GA4, Plausible)
   - Tracking pixels (Meta Pixel)
@@ -94,11 +97,13 @@ This addresses **Research Topic: Partytown Integration** from gemini2.md.
   - Load actual script on user interaction
 
 ### Phase 3: Testing & Optimization
+
 - [ ] Performance testing: Measure INP before/after
 - [ ] Compatibility testing: Verify scripts function correctly
 - [ ] Monitor Core Web Vitals in production
 
 ### Phase 4: Documentation
+
 - [ ] Document Partytown usage patterns
 - [ ] Create guide for adding new scripts with Partytown
 - [ ] Document compatibility limitations

@@ -36,8 +36,8 @@ export function GalleryGrid({ title, items, columns = 3, className }: GalleryGri
             const content = (
               <figure>
                 <img
-                  src={item.image}
-                  alt={item.title}
+                  src={item.src}
+                  alt={item.alt}
                   className="aspect-square w-full rounded-lg object-cover"
                 />
                 {item.description && (

@@ -64,9 +64,11 @@ Four booking-actions tests fail: `confirmBooking`, `cancelBooking`, and `getBook
     verification: { confirmationNumber: string; email: string }
   ) {
     const booking = await getBookingById(bookingId);
-    if (!booking ||
-        booking.confirmationNumber !== verification.confirmationNumber ||
-        booking.email !== verification.email) {
+    if (
+      !booking ||
+      booking.confirmationNumber !== verification.confirmationNumber ||
+      booking.email !== verification.email
+    ) {
       return { success: false, error: 'Verification failed' };
     }
     // ... perform confirm

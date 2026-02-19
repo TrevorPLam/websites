@@ -3,30 +3,32 @@
 _Last updated:_ February 18, 2026  
 _Purpose:_ single-source research summary for the marketing-websites monorepo. Task specs live under `tasks/*.md`; only keep cross-cutting research here.
 
+**Relationship to RESEARCH-INVENTORY:** This file (RESEARCH.md) is the **content digest** — narrative sections and §-index for task references. Use [tasks/RESEARCH-INVENTORY.md](tasks/RESEARCH-INVENTORY.md) for the **topic index** (R-UI, R-A11Y, etc.) and task→topic mapping. Tasks reference RESEARCH-INVENTORY by topic ID; use this file for §-section references.
+
 ---
 
 ## Section Reference Index (§)
 
 Tasks reference sections by code (e.g. §2.1, §4.2). Use this index to resolve them.
 
-| Code | Section in this document | Summary |
-|------|--------------------------|---------|
-| §2.1 | §2 Architecture Highlights, §3.1 Next.js & React | Dependency order, atomic design, layout, templates |
-| §2.2 | §2 Architecture, §10 UI Primitives / shadcn | Component patterns, Radix, shadcn |
-| §3.1 | §3.1 Next.js & React | Next.js 16, React 19, RSC, Server Actions |
-| §3.4 | §3.4 Security & Privacy, §4 Industry | CMS abstraction, content |
-| §4.1 | §3.4 Security & Privacy, §4 Industry | TCF v2.3, consent, OAuth 2.1, email/CRM |
-| §4.2 | §3.5 Performance Targets, §2 Architecture | INP, LCP, WebP, edge, Core Web Vitals |
-| §5.1 | §12 Feature Implementation Patterns | Spec-driven features, adapters |
-| §6 | §4 Industry & Feature Research, §15 Industry-Specific | Industry schemas, salons, restaurants, legal, medical, retail |
-| §7.1 | §1.2 Toolchain, pnpm-workspace.yaml | pnpm catalog, version pins |
-| §8.2 | §2 Architecture, page-templates | Site Composer, template composition |
-| §C.8 | Strategic / A/B testing | A/B testing as a service |
-| §C.9 | Personalization, edge | Personalization, intent |
-| §C.10 | CMS | CMS abstraction |
-| §C.11 | i18n/RTL | Localization |
-| §C.13 | Security, consent | CSP, consent service |
-| §C.14 | Performance | Performance SLOs |
+| Code  | Section in this document                              | Summary                                                       |
+| ----- | ----------------------------------------------------- | ------------------------------------------------------------- |
+| §2.1  | §2 Architecture Highlights, §3.1 Next.js & React      | Dependency order, atomic design, layout, templates            |
+| §2.2  | §2 Architecture, §10 UI Primitives / shadcn           | Component patterns, Radix, shadcn                             |
+| §3.1  | §3.1 Next.js & React                                  | Next.js 16, React 19, RSC, Server Actions                     |
+| §3.4  | §3.4 Security & Privacy, §4 Industry                  | CMS abstraction, content                                      |
+| §4.1  | §3.4 Security & Privacy, §4 Industry                  | TCF v2.3, consent, OAuth 2.1, email/CRM                       |
+| §4.2  | §3.5 Performance Targets, §2 Architecture             | INP, LCP, WebP, edge, Core Web Vitals                         |
+| §5.1  | §12 Feature Implementation Patterns                   | Spec-driven features, adapters                                |
+| §6    | §4 Industry & Feature Research, §15 Industry-Specific | Industry schemas, salons, restaurants, legal, medical, retail |
+| §7.1  | §1.2 Toolchain, pnpm-workspace.yaml                   | pnpm catalog, version pins                                    |
+| §8.2  | §2 Architecture, page-templates                       | Site Composer, template composition                           |
+| §C.8  | Strategic / A/B testing                               | A/B testing as a service                                      |
+| §C.9  | Personalization, edge                                 | Personalization, intent                                       |
+| §C.10 | CMS                                                   | CMS abstraction                                               |
+| §C.11 | i18n/RTL                                              | Localization                                                  |
+| §C.13 | Security, consent                                     | CSP, consent service                                          |
+| §C.14 | Performance                                           | Performance SLOs                                              |
 
 ---
 
@@ -57,14 +59,14 @@ tooling/               # Internal CLIs + scripts
 
 ### 1.2 Toolchain
 
-| Layer           | Current Choice                  | Notes                                            |
-| --------------- | ------------------------------- | ------------------------------------------------ |
-| Runtime         | Node 22+                        | Matches pnpm/Turbo requirements                  |
-| Package manager | pnpm 10.x                       | Catalog pins React/Next/TS                       |
-| Task runner     | Turborepo 2.x                   | Remote caching enforced via `TURBO_TOKEN`        |
-| Framework       | Next.js 16.1 + React 19         | App Router + RSC + Server Actions                |
-| Styling         | Tailwind CSS 4.1                | In use (clients + packages/config); see §3.2     |
-| Testing         | Jest 30 (unit), Playwright (e2e)| Root jest.config.js; Vitest optional future      |
+| Layer           | Current Choice                   | Notes                                        |
+| --------------- | -------------------------------- | -------------------------------------------- |
+| Runtime         | Node 22+                         | Matches pnpm/Turbo requirements              |
+| Package manager | pnpm 10.x                        | Catalog pins React/Next/TS                   |
+| Task runner     | Turborepo 2.x                    | Remote caching enforced via `TURBO_TOKEN`    |
+| Framework       | Next.js 16.1 + React 19          | App Router + RSC + Server Actions            |
+| Styling         | Tailwind CSS 4.1                 | In use (clients + packages/config); see §3.2 |
+| Testing         | Jest 30 (unit), Playwright (e2e) | Root jest.config.js; Vitest optional future  |
 
 ---
 

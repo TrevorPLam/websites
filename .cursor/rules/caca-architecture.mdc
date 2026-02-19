@@ -1,0 +1,12 @@
+---
+description: "Configuration-as-Code (CaCA) and layer architecture rules"
+alwaysApply: true
+---
+
+# CaCA and Layer Architecture
+
+- **site.config.ts** is the single source of truth for all client behavior. Never hardcode client-specific values in components.
+- **Layers:** L0 = @repo/infra, integrations; L2 = @repo/ui, features, types, utils; L3 = clients
+- **Dependencies:** clients → @repo/* only; never packages → clients; never clients → clients
+- **Imports:** Use public package exports only; no deep paths like @repo/infra/src/internal
+- **Validation:** Run `pnpm validate-client [path]` for client changes; `pnpm validate-exports` for package exports

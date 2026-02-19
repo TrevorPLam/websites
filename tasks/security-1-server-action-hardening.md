@@ -14,6 +14,7 @@
 ## Context
 
 Booking actions (`confirmBooking`, `cancelBooking`, `getBookingDetails`) currently have basic verification but lack:
+
 1. Unified `secureAction` wrapper pattern for auth + validation + logging
 2. Tenant-scoped queries (all queries must include `tenant_id`)
 3. Security audit logging for sensitive state changes
@@ -45,10 +46,10 @@ This addresses **Research Topic #1: Server Action Security & IDOR Mitigation** f
   - Sanitize DTOs before serialization to client
   - See `security-6-react-taint-api` for full implementation
 - **Threat Model**: IDOR/Broken object-level authorization exposing other tenants' bookings; business logic abuse (over-booking, resource quota violations); accidental PII exposure via DTOs
-- **References**: 
+- **References**:
   - [RESEARCH-INVENTORY.md – R-SECURITY-ADV](RESEARCH-INVENTORY.md#r-security-adv-security-regression-threat-modeling)
   - [docs/research/perplexity-security-2026.md](../docs/research/perplexity-security-2026.md) (Topic #1)
-  - [docs/research/gemini-production-audit-2026.md](../docs/research/gemini-production-audit-2026.md) (Server Action Security)
+  - [docs/archive/research/gemini-production-audit-2026.md](../docs/archive/research/gemini-production-audit-2026.md) (Server Action Security)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
 
 ## Related Files
@@ -90,13 +91,14 @@ This addresses **Research Topic #1: Server Action Security & IDOR Mitigation** f
 ## Implementation Plan
 
 ### Phase 1: Core Infrastructure
+
 - [ ] Create `packages/infra/src/security/secure-action.ts`:
   ```typescript
   export async function secureAction<TInput, TOutput>(
     input: TInput,
     schema: z.ZodSchema<TInput>,
     handler: (ctx: ActionContext, input: TInput) => Promise<TOutput>
-  ): Promise<Result<TOutput, ActionError>>
+  ): Promise<Result<TOutput, ActionError>>;
   ```
 - [ ] Create `packages/infra/src/security/audit-logger.ts`:
   - Structured logging with tenant/user context
@@ -106,26 +108,30 @@ This addresses **Research Topic #1: Server Action Security & IDOR Mitigation** f
   - Configurable limits per action type
 
 ### Phase 2: Database Layer
+
 - [ ] Update `packages/database/src/booking.ts`:
   - Add `getBookingForTenant({bookingId, tenantId})`
   - Add `updateBookingStatus({bookingId, tenantId, ...})`
   - Ensure all queries include tenant_id filter
 
 ### Phase 3: Action Refactoring
+
 - [ ] Refactor `confirmBooking` to use `secureAction`
 - [ ] Refactor `cancelBooking` to use `secureAction`
 - [ ] Refactor `getBookingDetails` to use `secureAction`
 - [ ] Add rate limiting to mutation actions
 
 ### Phase 4: Testing & Documentation
+
 - [ ] Unit tests for `secureAction` wrapper
 - [ ] Integration tests for IDOR protection
 - [ ] Create `docs/architecture/security/server-actions.md`
-- [ ] Update `tasks/0-5-booking-actions-verification.md` to reference this task
+- [ ] Update `tasks/archive/0-5-booking-actions-verification.md` to reference this task
 
 ## Sample code / examples
 
 ### secureAction Wrapper
+
 ```typescript
 // packages/infra/src/security/secure-action.ts
 import { z } from 'zod';
@@ -225,6 +231,7 @@ export async function secureAction<TInput, TOutput>(
 ```
 
 ### Refactored Booking Action
+
 ```typescript
 // packages/features/src/booking/lib/booking-actions.ts
 import { secureAction } from '@repo/infra/security/secure-action';
@@ -288,14 +295,14 @@ export async function confirmBooking(input: unknown) {
 
 ## Execution notes
 
-- **Related files — current state:** 
+- **Related files — current state:**
   - `packages/features/src/booking/lib/booking-actions.ts` — exists with verification params (task 0-5)
   - `packages/infra/src/security/` — may not exist yet
-- **Potential issues / considerations:** 
+- **Potential issues / considerations:**
   - Auth system integration (Supabase vs session-based)
   - Rate limiting backend (Upstash Redis vs in-memory)
   - Audit log storage (structured logs vs database)
-- **Verification:** 
+- **Verification:**
   - `pnpm test` — all tests pass
   - `pnpm type-check` — no type errors
   - Manual test: cross-tenant access fails

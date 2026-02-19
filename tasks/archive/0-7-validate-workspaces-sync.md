@@ -13,7 +13,7 @@
 
 ## Context
 
-`pnpm validate:workspaces` exits 1 when package.json workspaces and pnpm-workspace.yaml are out of sync. package.json may omit packages/ai-platform/*, packages/content-platform/*, packages/marketing-ops/*, packages/infrastructure/*, tooling/*. Ensure both files list the same workspace globs.
+`pnpm validate:workspaces` exits 1 when package.json workspaces and pnpm-workspace.yaml are out of sync. package.json may omit packages/ai-platform/_, packages/content-platform/_, packages/marketing-ops/_, packages/infrastructure/_, tooling/\*. Ensure both files list the same workspace globs.
 
 ## Dependencies
 
@@ -41,7 +41,7 @@
 ## Acceptance Criteria
 
 - [ ] package.json workspaces and pnpm-workspace.yaml packages are consistent
-- [ ] All workspace packages (packages/*, packages/config/*, packages/integrations/*, packages/features/*, packages/ai-platform/*, packages/content-platform/*, packages/marketing-ops/*, packages/infrastructure/*, clients/*, tooling/*) are represented
+- [ ] All workspace packages (packages/_, packages/config/_, packages/integrations/_, packages/features/_, packages/ai-platform/_, packages/content-platform/_, packages/marketing-ops/_, packages/infrastructure/_, clients/_, tooling/_) are represented
 - [ ] `pnpm validate:workspaces` passes
 
 ## Technical Constraints
@@ -69,7 +69,7 @@
 
 ## Execution notes
 
-- **Related files — current state:** `package.json` — workspaces array present; `pnpm-workspace.yaml` — packages list present; `scripts/validate-workspaces.js` — exists and compares both. Current repo lists match (packages/*, clients/*, tooling/*, etc.). If script fails, check for glob or quoting differences.
+- **Related files — current state:** `package.json` — workspaces array present; `pnpm-workspace.yaml` — packages list present; `scripts/validate-workspaces.js` — exists and compares both. Current repo lists match (packages/_, clients/_, tooling/\*, etc.). If script fails, check for glob or quoting differences.
 - **Potential issues / considerations:** CLAUDE.md says "currently out of sync" — confirm whether script passes now or if missing/extra globs cause failure; adding new workspace roots requires updating both files.
 - **Verification:** `pnpm validate:workspaces`.
 
