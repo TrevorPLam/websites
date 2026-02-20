@@ -1,7 +1,7 @@
-# scaffold-integrations-convertkit-events Implement ConvertKit event sending scaffold
+# scaffold-integrations-convertkit Implement ConvertKit integration package scaffold
 
 ## Metadata
-- **Task ID**: scaffold-integrations-convertkit-events
+- **Task ID**: scaffold-integrations-convertkit
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: TBD
