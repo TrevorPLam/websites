@@ -37,17 +37,17 @@ NotImplementedPlaceholder exists in packages/page-templates but has no imports. 
 
 ## Acceptance Criteria
 
-- [ ] Grep confirms no imports of NotImplementedPlaceholder
-- [ ] File removed OR documented as intentionally retained
-- [ ] No broken references
-- [ ] Build and tests pass
+- [x] Grep confirms no imports of NotImplementedPlaceholder
+- [x] File removed OR documented as intentionally retained
+- [x] No broken references
+- [x] Build and tests pass
 
 ## Implementation Plan
 
-- [ ] Grep for NotImplementedPlaceholder imports
-- [ ] If unused: delete file, update any index exports
-- [ ] If retained: add comment explaining why
-- [ ] Run build and tests
+- [x] Grep for NotImplementedPlaceholder imports
+- [x] If unused: delete file, update any index exports
+- [x] If retained: add comment explaining why (N/A — file already removed)
+- [x] Run build and tests
 
 ## Sample code / examples
 
@@ -65,6 +65,6 @@ NotImplementedPlaceholder exists in packages/page-templates but has no imports. 
 
 ## Definition of Done
 
-- [ ] Code reviewed and approved
-- [ ] Dead code removed or documented
-- [ ] Build passes
+- [x] Code reviewed and approved
+- [x] Dead code removed or documented
+- [x] Build passes

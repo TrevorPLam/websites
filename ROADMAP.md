@@ -174,10 +174,10 @@ Primary execution plan: Strangler Fig — new system grows around existing. **So
    - Implement remaining features (blog, services, search)
    - Standardize Server Actions patterns
 
-3. **Page Template Implementation**
-   - Replace NotImplementedPlaceholder with actual templates
-   - Implement template composition from marketing components
-   - Add template validation and testing
+3. **Page Template Hardening**
+   - Expand section registry coverage and composition quality
+   - Add template-level validation and stronger test coverage
+   - Improve performance via selective/dynamic section loading
 
 ### Near-term (Phase 2)
 
