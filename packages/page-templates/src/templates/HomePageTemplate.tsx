@@ -10,7 +10,7 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/home'; // side-effect: register home sections
+import '../sections/home/index'; // side-effect: register home sections
 
 export function HomePageTemplate({ config }: PageTemplateProps): React.ReactElement | null {
   const result = composePage({ page: 'home' }, config);

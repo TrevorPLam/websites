@@ -21,7 +21,8 @@
   "dependencies": {
     "@repo/features": "workspace:*",
     "@repo/marketing-components": "workspace:*",
-    "@repo/types": "workspace:*"
+    "@repo/types": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

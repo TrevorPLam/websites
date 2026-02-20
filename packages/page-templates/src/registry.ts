@@ -1,35 +1,32 @@
 /**
  * @file packages/page-templates/src/registry.ts
- * Task: [3.1] Section registry — Map<string, Component>, composePage, registerSection
+ * Task: [3.1] Section registry — Map<string, SectionDefinition>, composePage, registerSection
  *
- * Purpose: Registry-based page composition. No switch-based section selection.
- * Sections are registered by template modules (3.2, 3.3). composePage resolves
- * section IDs from config.sections or getSectionsForPage(page, features).
+ * Purpose: Registry-based page composition with typed SectionType and optional
+ * configSchema per section. Unknown section IDs log a console.warn in composePage.
  */
 import * as React from 'react';
 import type { SiteConfig } from '@repo/types';
-import type { SectionProps, TemplateConfig } from './types';
+import type { SectionDefinition, SectionProps, TemplateConfig } from './types';
 
-export const sectionRegistry = new Map<string, React.ComponentType<SectionProps>>();
+export const sectionRegistry = new Map<string, SectionDefinition>();
 
 /**
  * Register a section component by ID. Use kebab-case (e.g. hero-split, services-grid).
- * Called by template modules (HomePageTemplate, ServicesPageTemplate) to register adapters.
+ * Optional configSchema enables validation of section-specific config in composePage.
  */
 export function registerSection(
   id: string,
-  component: React.ComponentType<SectionProps>
+  component: React.ComponentType<SectionProps>,
+  configSchema?: SectionDefinition['configSchema']
 ): void {
-  sectionRegistry.set(id, component);
+  sectionRegistry.set(id, { component, configSchema });
 }
 
 /**
  * Derive section IDs for a page from features. Used when config.sections is not provided.
  */
-export function getSectionsForPage(
-  page: string,
-  features: SiteConfig['features']
-): string[] {
+export function getSectionsForPage(page: string, features: SiteConfig['features']): string[] {
   if (page === 'home') {
     const sections: string[] = [];
     if (features.hero) sections.push(`hero-${features.hero}`);
@@ -78,8 +75,7 @@ export function composePage(
   siteConfig: SiteConfig
 ): React.ReactElement | null {
   const sections =
-    config.sections ??
-    (config.page ? getSectionsForPage(config.page, siteConfig.features) : []);
+    config.sections ?? (config.page ? getSectionsForPage(config.page, siteConfig.features) : []);
 
   if (sections.length === 0) {
     return null;
@@ -87,16 +83,30 @@ export function composePage(
 
   const nodes = sections
     .map((id) => {
-      const Section = sectionRegistry.get(id);
-      if (!Section) {
+      const definition = sectionRegistry.get(id);
+      if (!definition) {
+        if (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production') {
+          console.warn('[composePage] Unknown section ID:', id);
+        }
         return null;
       }
-      return React.createElement(Section, {
+      const { component: Section, configSchema } = definition;
+      let sectionProps: SectionProps = {
         key: id,
         id,
         siteConfig,
         searchParams: config.searchParams,
-      } as SectionProps);
+      };
+      if (configSchema && config.searchParams) {
+        const parsed = configSchema.safeParse(config.searchParams);
+        if (parsed.success && parsed.data && typeof parsed.data === 'object') {
+          sectionProps = {
+            ...sectionProps,
+            ...(parsed.data as Record<string, unknown>),
+          } as SectionProps;
+        }
+      }
+      return React.createElement(Section, sectionProps as SectionProps);
     })
     .filter((n) => n !== null) as React.ReactElement[];
 

@@ -106,6 +106,12 @@ module.exports = {
       ...sharedConfig,
       displayName: 'node',
       testEnvironment: 'node',
+      testPathIgnorePatterns: [
+        '/node_modules/',
+        '.next',
+        'dist',
+        'packages/infra/composition/__tests__', // React HOC tests run in jsdom
+      ],
       testMatch: [
         '<rootDir>/packages/utils/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/types/**/__tests__/**/*.test.{ts,tsx}',
@@ -145,6 +151,7 @@ module.exports = {
         '<rootDir>/packages/marketing-components/**/*.test.{ts,tsx}',
         '<rootDir>/packages/infrastructure/ui/src/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/infrastructure/layout/src/__tests__/**/*.test.{ts,tsx}',
+        '<rootDir>/packages/infra/composition/__tests__/**/*.test.{ts,tsx}',
       ],
       collectCoverageFrom: [
         'packages/ui/src/**/*.{ts,tsx}',

@@ -9,16 +9,13 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/contact'; // side-effect: register contact sections
+import '../sections/contact/index'; // side-effect: register contact sections
 
 export function ContactPageTemplate({
   config,
   searchParams,
 }: PageTemplateProps): React.ReactElement | null {
-  const result = composePage(
-    { page: 'contact', searchParams },
-    config
-  );
+  const result = composePage({ page: 'contact', searchParams }, config);
   if (result === null) {
     return React.createElement('div', { 'data-template': 'ContactPageTemplate' }, null);
   }

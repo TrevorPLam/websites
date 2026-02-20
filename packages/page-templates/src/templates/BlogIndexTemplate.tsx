@@ -10,16 +10,13 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/blog'; // side-effect: register blog sections
+import '../sections/blog/index'; // side-effect: register blog sections
 
 export function BlogIndexTemplate({
   config,
   searchParams,
 }: PageTemplateProps): React.ReactElement | null {
-  const result = composePage(
-    { page: 'blog', searchParams },
-    config
-  );
+  const result = composePage({ page: 'blog', searchParams }, config);
   if (result === null) {
     return React.createElement('div', { 'data-template': 'BlogIndexTemplate' }, null);
   }

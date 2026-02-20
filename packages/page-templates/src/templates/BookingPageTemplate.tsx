@@ -10,16 +10,13 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/booking'; // side-effect: register booking sections
+import '../sections/booking/index'; // side-effect: register booking sections
 
 export function BookingPageTemplate({
   config,
   searchParams,
 }: PageTemplateProps): React.ReactElement | null {
-  const result = composePage(
-    { page: 'booking', searchParams },
-    config
-  );
+  const result = composePage({ page: 'booking', searchParams }, config);
   if (result === null) {
     return React.createElement('div', { 'data-template': 'BookingPageTemplate' }, null);
   }

@@ -1216,6 +1216,9 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.0.0(react@19.0.0)
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.76
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -1269,6 +1272,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.1(react-hook-form@7.55.0(react@19.0.0))
+      '@repo/infra':
+        specifier: workspace:*
+        version: link:../infra
       '@repo/types':
         specifier: workspace:*
         version: link:../types
