@@ -71,7 +71,7 @@ See [Developer Onboarding](getting-started/onboarding.md) for complete setup ins
 ### Q: How do I create a new client website?
 
 **A:** 
-1. Choose a template from `templates/`
+1. Choose a starter from `clients/` (or copy `clients/starter-template`)
 2. Copy it to `clients/[client-name]`
 3. Configure `site.config.ts`
 4. Customize branding and content
@@ -124,7 +124,7 @@ See [Troubleshooting Guide](getting-started/troubleshooting.md) for more solutio
 - **Templates**: Reusable starting points for specific industries (e.g., hair salon template)
 - **Clients**: Production websites created from templates, customized for specific businesses
 
-Templates live in `templates/`, clients in `clients/`.
+Website implementations live in `clients/`; shared building blocks live in `packages/`.
 
 ### Q: What is Configuration-as-Code Architecture (CaCA)?
 

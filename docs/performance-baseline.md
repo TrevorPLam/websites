@@ -6,7 +6,7 @@
 
 ## Objectives
 
-- Capture Core Web Vitals baseline (LCP, INP, CLS, TTFB, FCP) for the hair-salon template.
+- Capture Core Web Vitals baseline (LCP, INP, CLS, TTFB, FCP) for the starter client.
 - Establish budgets and repeatable measurement steps to detect regressions.
 
 ## Budgets now enforced (webpack)
@@ -21,13 +21,13 @@
 
    ```bash
    pnpm install
-   pnpm --filter @templates/websites build
+   pnpm --filter ./clients/starter-template build
    ```
 
 2. Serve the built app on port 3100 (in another shell):
 
    ```bash
-   pnpm --filter @templates/websites start -- --port 3100
+   pnpm --filter ./clients/starter-template start -- --port 3100
    ```
 
 3. Run Lighthouse (desktop) against the live server (requires Chrome):

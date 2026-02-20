@@ -10,13 +10,13 @@ The hair-salon template Dockerfile relied on Next.js standalone output (`output:
 
 1. **Config mismatch:** `next.config.js` had `output: 'standalone'` commented out (per CODEBASE_AUDIT.md BUG-3), while the Dockerfile's `COPY` and `CMD` expected standalone output. Docker builds would fail with file-not-found.
 
-2. **Build filter mismatch:** The Dockerfile used `pnpm run build --filter=@clients/starter-template`, but the package name in `package.json` is `@templates/websites`. Turbo reports "No package found with name '@clients/starter-template'", causing the build step to fail.
+2. **Build filter mismatch:** The Dockerfile used `pnpm run build --filter=@clients/starter-template`, and the package is now targeted by path filter (`./clients/starter-template`). Turbo reports "No package found with name '@clients/starter-template'", causing the build step to fail.
 
 ## Decision
 
 1. **Keep `output: 'standalone'` enabled** in `next.config.js`. Standalone output is the recommended approach for Docker deployments: it produces a self-contained `.next/standalone/` directory with only production dependencies, reducing image size significantly (~180MB vs. full node_modules). This was already re-enabled in a prior session; verified as correct.
 
-2. **Use path-based pnpm filter:** Change `--filter=@clients/starter-template` to `--filter=./clients/starter-template`. The path-based filter correctly targets the hair-salon template regardless of package name. Resolves the package name mismatch (see CODEBASE_AUDIT.md recommendation to rename to `@clients/starter-template`).
+2. **Use path-based pnpm filter:** Change `--filter=@clients/starter-template` to `--filter=./clients/starter-template`. The path-based filter correctly targets the hair-salon template regardless of package name. Avoids package-name coupling and remains correct if names change.
 
 3. **Preserve Dockerfile structure:** Next.js 15.5+ with pnpm workspaces produces standalone output at `.next/standalone/clients/starter-template/` (directory-path nested). The existing COPY and CMD paths are correct:
    - `COPY --from=builder .../standalone ./` → places `clients/starter-template/server.js` at `/app/clients/starter-template/server.js`
