@@ -1,7 +1,7 @@
 # Advanced Patterns Implementation Game Plan
 
 **Source:** [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md)
-**Last Updated:** 2026-02-20 (session: claude/review-goals-update-tasks-zRee6)
+**Last Updated:** 2026-02-20 (session: claude/review-project-goals-UqHpq)
 **Status:** Implementation roadmap with research-backed refinements and corrected task dependencies.
 
 ---
@@ -58,11 +58,12 @@
 
 ### [ ] 2.3 CVA Batch Migration
 
-- **Status: PARTIAL** — Button ✅, Badge ✅, Alert ✅ migrated. Tabs still uses manual Record<> style maps.
-  ~57 other components (Card, Container, Input, Checkbox, Switch, Skeleton, etc.) still use manual `cn()`.
-- **Remaining:** Tabs, Toggle, Switch, Skeleton, Sheet, Rating, Progress, RadioGroup, Checkbox, Card,
-  Container, Avatar, Input, Select, Textarea — use Button as pattern reference.
-- **Order:** Tabs (priority — complex context pattern), then remaining list.
+- **Status: PARTIAL** — Button ✅, Badge ✅, Alert ✅, Tabs ✅, Toggle ✅, Card ✅, Container ✅,
+  Skeleton ✅ migrated (8 complete). ~49 other components still use manual `cn()` or `Record<>` style maps.
+- **Remaining (priority order):** Switch, Input, Checkbox, Textarea, RadioGroup, Progress, Sheet, Rating,
+  Avatar, Select, Breadcrumb, Stepper, Timeline, Pagination, and more — use Button/Tabs as pattern references.
+- **Order:** Switch (size + variant → two CVA instances), Input (compound validationState), Checkbox (size),
+  Textarea (mirrors Input), RadioGroup (size → two CVA instances), Progress (size + variant).
 
 ### [x] 2.4 Dynamic Section Loading
 
@@ -175,9 +176,9 @@
 
 ## Recommended Execution Order
 
-- **Immediate (complete):** 2.3 Tabs CVA ✅, 3.3 Theme presets ✅, 3.5 Booking registry ✅
-- **Next:** 3.4 Slot-based templates, remaining CVA batch (Card, Input, Switch, etc.)
-- **Month 2:** 4.1 use cache, 4.3 Light/dark theme
+- **Immediate (complete):** 2.3 CVA Tabs/Toggle/Card/Container/Skeleton ✅, 3.3 Theme presets ✅, 3.5 Booking registry ✅
+- **Next (in progress):** 2.3 remaining CVA batch (Switch, Input, Checkbox, Textarea, RadioGroup, Progress),
+  3.4 Slot-based templates, 4.1 use cache, 4.3 Light/dark theme
 - **Month 3+:** 4.2 React Compiler
 
 ---

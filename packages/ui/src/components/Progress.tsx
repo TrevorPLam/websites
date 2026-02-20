@@ -1,9 +1,9 @@
 // File: packages/ui/src/components/Progress.tsx  [TRACE:FILE=packages.ui.components.Progress]
 // Purpose: Progress indicator with determinate and indeterminate states.
 //          Built on Radix UI Progress which provides correct role="progressbar",
-//          aria-valuenow, aria-valuemin, and aria-valuemax attributes.
+//          aria-valuenow, aria-valuemin, and aria-valuemax attributes. Uses CVA for variants.
 //
-// Relationship: Depends on radix-ui, @repo/utils (cn).
+// Relationship: Depends on radix-ui, @repo/infra/variants (cva), @repo/utils (cn).
 // System role: Feedback primitive (Layer L2 @repo/ui).
 // Assumptions: Used for loading states, file uploads, and progress tracking.
 //
@@ -14,6 +14,7 @@
 // - Radix manages role="progressbar", aria-valuenow, aria-valuemin, aria-valuemax
 // - CSS-only animations (no JavaScript animation libraries)
 // - Supports determinate (value) and indeterminate (no value) states
+// - Two CVA instances: progressTrackVariants (Root) and progressIndicatorVariants (Indicator)
 //
 // Status: @public
 // Features:
@@ -21,9 +22,11 @@
 // - [FEAT:UI] Multiple variants (default, success, warning, error)
 // - [FEAT:UI] Size variants (sm, md, lg)
 // - [FEAT:ACCESSIBILITY] WAI-ARIA progressbar pattern via Radix
+// - [FEAT:VARIANTS] CVA for type-safe size/variant resolution
 
 import * as React from 'react';
 import { Progress as ProgressPrimitive } from 'radix-ui';
+import { cva } from '@repo/infra/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -41,25 +44,41 @@ export interface ProgressProps
   label?: string;
 }
 
-// ─── Style Maps ──────────────────────────────────────────────────────────────
+// ─── CVA Variant Definitions ─────────────────────────────────────────────────
 
-const sizeStyles: Record<ProgressSize, string> = {
-  sm: 'h-1',
-  md: 'h-2',
-  lg: 'h-3',
-};
+// [TRACE:CONST=packages.ui.components.Progress.progressTrackVariants]
+// Track (Root element): controls track height by size. Background is always bg-secondary.
+const progressTrackVariants = cva({
+  base: 'relative w-full overflow-hidden rounded-full bg-secondary',
+  variants: {
+    size: {
+      sm: 'h-1',
+      md: 'h-2',
+      lg: 'h-3',
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
 
-const variantStyles: Record<ProgressVariant, string> = {
-  default: 'bg-primary',
-  success: 'bg-green-500',
-  warning: 'bg-yellow-500',
-  error: 'bg-destructive',
-};
+// [TRACE:CONST=packages.ui.components.Progress.progressIndicatorVariants]
+// Indicator (fill bar): controls fill color by semantic variant.
+const progressIndicatorVariants = cva({
+  base: 'h-full w-full flex-1 transition-all',
+  variants: {
+    variant: {
+      default: 'bg-primary',
+      success: 'bg-green-500',
+      warning: 'bg-yellow-500',
+      error: 'bg-destructive',
+    },
+  },
+  defaultVariants: { variant: 'default' },
+});
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
 // [TRACE:FUNC=packages.ui.components.Progress]
-// [FEAT:UI] [FEAT:ACCESSIBILITY]
+// [FEAT:UI] [FEAT:ACCESSIBILITY] [FEAT:VARIANTS]
 export const Progress = React.forwardRef<
   React.ComponentRef<typeof ProgressPrimitive.Root>,
   ProgressProps
@@ -74,18 +93,11 @@ export const Progress = React.forwardRef<
     <ProgressPrimitive.Root
       ref={ref}
       value={value}
-      className={cn(
-        'relative h-2 w-full overflow-hidden rounded-full bg-secondary',
-        sizeStyles[size],
-        className
-      )}
+      className={cn(progressTrackVariants({ size }), className)}
       {...props}
     >
       <ProgressPrimitive.Indicator
-        className={cn(
-          'h-full w-full flex-1 bg-primary transition-all',
-          variantStyles[variant]
-        )}
+        className={progressIndicatorVariants({ variant })}
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>
