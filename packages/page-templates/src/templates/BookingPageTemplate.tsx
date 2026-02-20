@@ -1,10 +1,11 @@
 /**
  * @file packages/page-templates/src/templates/BookingPageTemplate.tsx
- * Task: [3.8] Booking form with pre-fill context
+ * Task: [3.8] Booking form with pre-fill context + slot-based content injection
  *
  * Purpose: Renders booking page via composePage. Sections: booking-form.
  * Booking config derived from siteConfig.conversionFlow (type: 'booking').
  * searchParams may pre-fill service/date. Registration via import side-effect.
+ * Slots allow injecting nav/banner/footer without modifying the section registry.
  */
 
 import * as React from 'react';
@@ -15,10 +16,16 @@ import '../sections/booking/index'; // side-effect: register booking sections
 export function BookingPageTemplate({
   config,
   searchParams,
-}: PageTemplateProps): React.ReactElement | null {
-  const result = composePage({ page: 'booking', searchParams }, config);
-  if (result === null) {
-    return React.createElement('div', { 'data-template': 'BookingPageTemplate' }, null);
-  }
-  return result;
+  slots,
+}: PageTemplateProps): React.ReactElement {
+  const content = composePage({ page: 'booking', searchParams }, config);
+
+  return (
+    <>
+      {slots?.header}
+      {slots?.aboveFold}
+      {content ?? <div data-template="BookingPageTemplate" />}
+      {slots?.footer}
+    </>
+  );
 }

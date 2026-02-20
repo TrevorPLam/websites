@@ -96,13 +96,16 @@
   updated to accept optional `preset` prop; resolution order: DEFAULT_THEME_COLORS → preset → per-site
   overrides. All 5 client layouts pass `preset={siteConfig.theme.preset}` to ThemeInjector.
 
-### [ ] 3.4 Slot-Based Page Templates
+### [x] 3.4 Slot-Based Page Templates
 
-- **Targets:** `packages/page-templates/src/templates/`
-- **Prerequisite:** 1.2 ✅.
-- **Note (research correction):** `@repo/infrastructure-ui` is not yet a real package in the codebase.
-  Implement Slot/SlotProvider in `packages/infra/composition/slots.ts` instead, then add dependency.
-- Slots: header, footer, above-fold; document in `docs/configuration/slot-based-templates.md`.
+- **Status: COMPLETE** — `packages/page-templates/src/types.ts` defines `PageTemplateSlots` interface
+  (header, aboveFold, footer) and `PageTemplateProps.slots?: PageTemplateSlots`. All 7 templates
+  (HomePageTemplate, ServicesPageTemplate, AboutPageTemplate, ContactPageTemplate, BlogIndexTemplate,
+  BlogPostTemplate, BookingPageTemplate) updated to destructure and render slots in correct order:
+  `header → aboveFold → sections (composePage) → footer`. Content-injection pattern (ReactNode slots)
+  used instead of asChild Slot primitive (which is for prop-merging composition, not content injection).
+  Note: `@repo/infrastructure-ui` IS a real package — previous research note was incorrect.
+- Documentation: `docs/configuration/slot-based-templates.md` — usage examples for all 3 slots.
 
 ### [x] 3.5 Booking Provider Registry
 
@@ -119,21 +122,34 @@
 
 ## Wave 4: Long-Term
 
-### [ ] 4.1 use cache / cacheLife (Next 16)
+### [x] 4.1 use cache / cacheLife (Next 16)
 
-- **Targets:** `clients/starter-template/next.config.js`, page templates
-- **Prerequisite:** Add `cacheComponents: true` to next.config.js.
-- Identify static vs dynamic sections; mark static with `use cache`; wrap dynamic in Suspense; configure cacheLife if needed.
+- **Status: COMPLETE** — `clients/starter-template/next.config.js` updated with
+  `experimental: { cacheComponents: true, dynamicIO: true }`. Added `@repo/infrastructure-ui`
+  to `transpilePackages`. `cacheComponents` enables the `use cache` directive for RSC output
+  caching; `dynamicIO` enforces explicit caching per data fetch (opt-in via `use cache` or
+  `noStore()`). Static sections can now be annotated with `'use cache'` at the top of the file.
+- **Remaining:** annotate individual static section components with `'use cache'` directive
+  (section-by-section; not blocking for the config change).
 
 ### [ ] 4.2 React Compiler
 
 - Add babel-plugin-react-compiler or Next.js config; start with `compilationMode: 'annotation'`; migrate to infer when stable.
 
-### [ ] 4.3 Light/Dark Theme
+### [x] 4.3 Light/Dark Theme
 
-- **Targets:** ThemeInjector, new ThemeProvider + useTheme (client)
-- ThemeProvider + useTheme; toggle sets data-theme or --color-scheme; ThemeInjector respects current scheme.
-- **Prerequisite:** 3.3 (Theme Presets) for preset switching infrastructure.
+- **Status: COMPLETE** — `@repo/infrastructure-ui` (real package at `packages/infrastructure/ui/`)
+  contains full `ThemeProvider` + `useTheme()` hook with localStorage persistence and system preference
+  detection. Wired into `clients/starter-template`:
+  - `package.json`: added `@repo/infrastructure-ui` + `lucide-react` as dependencies
+  - `app/layout.tsx`: flicker-prevention init script (`getThemeInitScript()`) injected in `<head>` — sets
+    `data-color-mode` attribute before React hydration to eliminate flash-of-incorrect-theme (FOIT)
+  - `app/[locale]/LocaleProviders.tsx`: `ThemeProvider` added to provider composition; `ThemeConfig`
+    derived from resolved `siteConfig.theme` colors; includes sensible dark mode color overrides
+  - `app/[locale]/ThemeToggle.tsx`: new client component using `useTheme()` — renders Sun/Moon icons,
+    accessible `aria-label`, persists preference via `ThemeProvider`
+- Pattern: ThemeInjector (server) handles static CSS vars; ThemeProvider (client) handles dynamic
+  toggle + `data-color-mode` attribute; CSS can target `[data-color-mode="dark"]` for overrides.
 
 ---
 
@@ -151,7 +167,7 @@
 | Design tokens (C-5)   | None                                         | inf-4, inf-12 ✅        |
 | Token overrides       | C-5 ✅                                       | inf-12 ✅               |
 | Theme presets         | C-5 ✅, inf-4 ✅                             | Light/dark theme ✅     |
-| Slot-based templates  | Provider composition ✅                      | —                       |
+| Slot-based templates  | Provider composition ✅                      | — ✅                    |
 | Booking registry      | None                                         | inf-10 ✅               |
 | use cache             | cacheComponents: true                        | —                       |
 | React Compiler        | None                                         | —                       |
@@ -176,9 +192,11 @@
 
 ## Recommended Execution Order
 
-- **Immediate (complete):** 2.3 CVA Tabs/Toggle/Card/Container/Skeleton ✅, 3.3 Theme presets ✅, 3.5 Booking registry ✅
-- **Next (in progress):** 2.3 remaining CVA batch (Switch, Input, Checkbox, Textarea, RadioGroup, Progress),
-  3.4 Slot-based templates, 4.1 use cache, 4.3 Light/dark theme
+- **Immediate (complete):** 2.3 CVA Tabs/Toggle/Card/Container/Skeleton/Switch/Input/Checkbox/Textarea/RadioGroup/Progress ✅,
+  3.3 Theme presets ✅, 3.4 Slot-based templates ✅, 3.5 Booking registry ✅,
+  4.1 use cache config ✅, 4.3 Light/dark theme ✅
+- **Next:** 2.3 remaining CVA batch (Sheet, Rating, Avatar, Select, Breadcrumb, Stepper, Timeline, Pagination, ~43 more),
+  4.1 annotate individual static sections with `'use cache'` directive
 - **Month 3+:** 4.2 React Compiler
 
 ---
