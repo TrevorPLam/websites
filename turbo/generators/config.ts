@@ -53,7 +53,8 @@ const INDUSTRIES = [
   'realestate',
   'construction',
   'automotive',
-  'general',
+  'education',
+  'nonprofit',
 ];
 
 function isValidClientName(value: string): true | string {
