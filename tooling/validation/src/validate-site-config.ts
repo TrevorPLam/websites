@@ -246,5 +246,9 @@ function runCli(): void {
 //   pnpm validate-config [path...]
 
 // Export a named function so tests can import it without side-effects.
-// The CLI runner below is intentionally never called in test environments.
 export { runCli };
+
+const isCliInvocation = process.argv[1] && path.basename(process.argv[1]) === 'validate-site-config.ts';
+if (isCliInvocation) {
+  runCli();
+}
