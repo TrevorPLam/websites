@@ -20,3 +20,7 @@ Clients import `@repo/config/tailwind-theme.css`, which imports the three token 
 ## Verification
 
 - Build a client; tokens resolve. Run `pnpm build` for affected packages.
+
+## Evolution (evol-2)
+
+Per [evolution-roadmap](../architecture/evolution-roadmap.md), evol-2 refines the token system: DTCG 2025.10 alignment, Layer 2/3 consolidation, and CSS-first theming. The three-layer structure (option → decision → component) remains; evol-2 focuses on cleanup and schema improvements. See tasks/evol-2-cva-token-completion.md.

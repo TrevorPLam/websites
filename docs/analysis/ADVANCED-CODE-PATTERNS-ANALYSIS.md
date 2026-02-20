@@ -410,6 +410,20 @@ const AppProviders = composeProviders([
 3. **Medium-term (1–2 months):** Theme presets + context; Slot-based templates; Booking provider registry
 4. **Long-term (3+ months):** use cache / PPR; Design tokens; React Compiler; Edge personalization
 
+### Evolution Phase Mapping
+
+Per [evolution-roadmap](../architecture/evolution-roadmap.md) and [NEW.md](../../NEW.md):
+
+| Phase   | Weeks | Focus                     | evol-\* Tasks                                                            |
+| ------- | ----- | ------------------------- | ------------------------------------------------------------------------ |
+| Phase 1 | 1–4   | Foundation locked         | evol-1 (registry), evol-2 (tokens), evol-3 (light/dark)                  |
+| Phase 2 | 5–10  | Data contracts seeded     | evol-4 (canonical seed), evol-5 (booking canonical), evol-6 (repository) |
+| Phase 3 | 11–16 | Capability core active    | evol-7 (defineFeature), evol-8 (capability composition)                  |
+| Phase 4 | 17–22 | Universal renderer proven | evol-9 (universal renderer), evol-10 (legacy bridge)                     |
+| Phase 5 | 23–26 | Platform converged        | evol-11, evol-12                                                         |
+
+Patterns in this analysis map to evolution phases as they are implemented; see tasks/evol-\*.md for specs.
+
 ### Files to Update (Consolidated)
 
 | Pattern           | Primary                         | Secondary                            |

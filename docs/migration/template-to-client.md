@@ -40,6 +40,8 @@ This guide walks through creating a new marketing website client from `clients/s
 
 > **Key principle:** In the CaCA model, all customization happens in `site.config.ts`. You should rarely need to touch component or layout code to spin up a new client.
 
+**Evolution note:** Per [NEW.md](../../NEW.md), a **universal renderer** path (Phase 4) will allow new clients to opt in via `renderer: 'universal'` and capability-driven composition. A **legacy bridge** (evol-10) maintains compatibility for existing clients. This guide covers the current **classic** path; universal path details will be added when evol-9/evol-10 are implemented.
+
 ### What the Template Provides
 
 - Next.js 15 App Router with full i18n support (next-intl)
@@ -84,15 +86,15 @@ Edit `clients/<client-name>/package.json`:
 
 **Port assignment** (pick a unique port to avoid conflicts):
 
-| Client | Port |
-|--------|------|
-| starter-template | 3101 |
-| luxe-salon | 3102 |
-| bistro-central | 3103 |
-| chen-law | 3104 |
-| sunrise-dental | 3105 |
-| urban-outfitters | 3106 |
-| _next client_ | 3107+ |
+| Client           | Port  |
+| ---------------- | ----- |
+| starter-template | 3101  |
+| luxe-salon       | 3102  |
+| bistro-central   | 3103  |
+| chen-law         | 3104  |
+| sunrise-dental   | 3105  |
+| urban-outfitters | 3106  |
+| _next client_    | 3107+ |
 
 ### Step 3 — Install Dependencies
 
@@ -142,7 +144,7 @@ import type { SiteConfig } from '@repo/types';
 
 const siteConfig: SiteConfig = {
   // ---- Identity ----
-  id: '<client-name>',           // unique slug, kebab-case
+  id: '<client-name>', // unique slug, kebab-case
   name: '<Client Name>',
   tagline: 'Short brand tagline',
   description: 'Used in meta description',
@@ -150,10 +152,14 @@ const siteConfig: SiteConfig = {
   industry: 'salon', // see Industry section below
 
   // ---- Feature Flags ----
-  features: { /* see Features section */ },
+  features: {
+    /* see Features section */
+  },
 
   // ---- Integrations ----
-  integrations: { /* see Integrations section */ },
+  integrations: {
+    /* see Integrations section */
+  },
 
   // ---- Navigation ----
   navLinks: [
@@ -205,10 +211,14 @@ const siteConfig: SiteConfig = {
   },
 
   // ---- Theme ----
-  theme: { /* see Theme section */ },
+  theme: {
+    /* see Theme section */
+  },
 
   // ---- Conversion Flow ----
-  conversionFlow: { /* see Conversion Flow section */ },
+  conversionFlow: {
+    /* see Conversion Flow section */
+  },
 
   // ---- SEO ----
   seo: {
@@ -230,9 +240,18 @@ export default siteConfig;
 The `industry` field activates industry-specific schema markup and can affect component defaults:
 
 ```typescript
-industry: 'salon' | 'restaurant' | 'law-firm' | 'dental' | 'medical'
-        | 'fitness' | 'retail' | 'consulting' | 'realestate'
-        | 'construction' | 'automotive' | 'general'
+industry: 'salon' |
+  'restaurant' |
+  'law-firm' |
+  'dental' |
+  'medical' |
+  'fitness' |
+  'retail' |
+  'consulting' |
+  'realestate' |
+  'construction' |
+  'automotive' |
+  'general';
 ```
 
 ---
@@ -439,6 +458,7 @@ pnpm --filter @clients/<client-name> dev
 ```
 
 Open `http://localhost:<port>` and verify:
+
 - [ ] Brand colors applied correctly (ThemeInjector loads CSS custom properties)
 - [ ] Correct sections shown per feature flags
 - [ ] Nav links match configured `navLinks`
@@ -453,17 +473,20 @@ Open `http://localhost:<port>` and verify:
 When creating client-specific components, evaluate whether they belong in shared packages:
 
 ### Component belongs in `@repo/marketing-components` if:
+
 - Display-only (no CMS or API calls)
 - Industry-agnostic (works for any business type with different data)
 - Reused across 2+ client types
 - Accepts data via props (no direct config access)
 
 ### Component belongs in `@repo/features` if:
+
 - Contains business logic (form handling, API integration)
 - Wraps `@repo/marketing-components` with `@repo/infra` adapters
 - Used by multiple clients but may have integration-specific code
 
 ### Component belongs in the client's `components/` directory if:
+
 - Client-specific (unique to one business)
 - Tightly coupled to client's domain model
 - One-off requirement unlikely to recur
@@ -472,14 +495,14 @@ When creating client-specific components, evaluate whether they belong in shared
 
 ## Common Pitfalls
 
-| Issue | Resolution |
-|-------|-----------|
-| Dev server port conflict | Assign a unique port in `package.json` |
-| `address` field type error | Use object `{ street, city, state, zip, country }` not a string |
-| Theme colors do not apply | Ensure `ThemeInjector` is in the root layout |
-| `noUncheckedIndexedAccess` error | Handle `array[i]` as `T \| undefined` |
-| Cross-client import | Never import from another client; use `@repo/*` packages |
-| `catalog:` version drift | Always use `catalog:` entries from `pnpm-workspace.yaml` |
+| Issue                            | Resolution                                                      |
+| -------------------------------- | --------------------------------------------------------------- |
+| Dev server port conflict         | Assign a unique port in `package.json`                          |
+| `address` field type error       | Use object `{ street, city, state, zip, country }` not a string |
+| Theme colors do not apply        | Ensure `ThemeInjector` is in the root layout                    |
+| `noUncheckedIndexedAccess` error | Handle `array[i]` as `T \| undefined`                           |
+| Cross-client import              | Never import from another client; use `@repo/*` packages        |
+| `catalog:` version drift         | Always use `catalog:` entries from `pnpm-workspace.yaml`        |
 
 ---
 

@@ -5,6 +5,8 @@
 **Deciders:** Auto (AI Agent)  
 **Context:** Task 2.12 - Extract Booking Feature
 
+**Evolution note:** Per [evolution-roadmap](../../architecture/evolution-roadmap.md), booking will evolve toward **canonical types** (Phase 2) and a **repository pattern** for internal storage. Adapters will translate to/from canonical; ADR-001 adapter pattern remains valid.
+
 ## Context
 
 The booking feature was originally implemented in `clients/starter-template/features/booking/` with hardcoded service types and time slots. This prevented reuse across different industries and required code duplication for each new template.

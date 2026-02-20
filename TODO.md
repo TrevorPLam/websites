@@ -4,6 +4,16 @@
 **Last Updated:** 2026-02-20 (session: claude/review-project-goals-UqHpq)  
 **Status:** Waves 1–3 complete; Wave 4 mostly complete (4.1 use cache ✅, 4.2 React Compiler ⏳, 4.3 Light/dark ✅).
 
+**Evolution alignment:** This game plan maps to [NEW.md](NEW.md) organic evolution phases. See [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md) for the 26-week Strangler Fig path.
+
+| Waves               | NEW.md Phase          | Checkpoint                                     |
+| ------------------- | --------------------- | ---------------------------------------------- |
+| Waves 1–4 (partial) | Phase 1 (Weeks 1–4)   | Foundation locked — evol-1, evol-2, evol-3     |
+| —                   | Phase 2 (Weeks 5–10)  | Data contracts seeded — evol-4, evol-5, evol-6 |
+| —                   | Phase 3 (Weeks 11–16) | Capability core active — evol-7, evol-8        |
+| —                   | Phase 4 (Weeks 17–22) | Universal renderer proven — evol-9, evol-10    |
+| —                   | Phase 5 (Weeks 23–26) | Platform converged — evol-11, evol-12          |
+
 ---
 
 ## Research Findings Applied

@@ -262,8 +262,17 @@ import type {
 
 See `packages/features/src/booking/lib/__tests__/` for test examples.
 
+## Evolution: Canonical Types and Repository
+
+Per [NEW.md](../../NEW.md) and [ADR-012](../../adr/0012-canonical-types-data-contracts.md) (Phase 2):
+
+- **Canonical types** — Booking will move to canonical types in `@repo/types/src/canonical/` (e.g. `CanonicalBookingRequest`, `CanonicalBookingResult`). Integration adapters translate provider-specific types to/from canonical.
+- **Repository pattern** — Internal booking storage may use a `BookingRepository` interface; external providers remain adapter-based.
+- **Current state** — Existing `BookingFormData`, `BookingSubmissionResult` continue; canonical migration is incremental (evol-5, evol-6).
+
 ## Related Documentation
 
 - [ADR-001: Booking Feature Extraction](./ADR-001-booking-extraction.md)
+- [ADR-012: Canonical Types and Data Contracts](../../adr/0012-canonical-types-data-contracts.md)
 - [Site Configuration Guide](../../configuration/site-config.md)
 - [Provider Integration Guide](./providers.md)

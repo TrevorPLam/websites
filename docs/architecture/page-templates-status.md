@@ -41,7 +41,7 @@
 
 **Last Updated:** 2026-02-19  
 **Status:** Active Documentation  
-**Related:** [@repo/page-templates](../../packages/page-templates), [@repo/marketing-components](../../packages/marketing-components)
+**Related:** [@repo/page-templates](../../packages/page-templates), [@repo/marketing-components](../../packages/marketing-components), [evolution-roadmap](evolution-roadmap.md)
 
 ---
 
@@ -51,15 +51,15 @@ Page templates use a registry-based composition pattern where sections are regis
 
 ## Implementation Status
 
-| Template | Status | Sections Registered | Usage |
-|----------|--------|-------------------|-------|
-| **HomePageTemplate** | ✅ Implemented | hero-*, services-preview, team, testimonials, pricing, cta | Used in starter-template |
-| **ServicesPageTemplate** | ✅ Implemented | services-* (grid/list/tabs/accordion) | Available for use |
-| **AboutPageTemplate** | ✅ Implemented | about-hero, about-team, about-testimonials, about-cta | Available for use |
-| **ContactPageTemplate** | ✅ Implemented | contact-form, contact-info | Available for use |
-| **BlogIndexTemplate** | ✅ Implemented | blog-grid, blog-pagination | Available for use |
-| **BlogPostTemplate** | ✅ Implemented | blog-post-content, blog-related-posts, blog-cta | Available for use |
-| **BookingPageTemplate** | ✅ Implemented | booking-form | Available for use |
+| Template                 | Status         | Sections Registered                                         | Usage                    |
+| ------------------------ | -------------- | ----------------------------------------------------------- | ------------------------ |
+| **HomePageTemplate**     | ✅ Implemented | hero-\*, services-preview, team, testimonials, pricing, cta | Used in starter-template |
+| **ServicesPageTemplate** | ✅ Implemented | services-\* (grid/list/tabs/accordion)                      | Available for use        |
+| **AboutPageTemplate**    | ✅ Implemented | about-hero, about-team, about-testimonials, about-cta       | Available for use        |
+| **ContactPageTemplate**  | ✅ Implemented | contact-form, contact-info                                  | Available for use        |
+| **BlogIndexTemplate**    | ✅ Implemented | blog-grid, blog-pagination                                  | Available for use        |
+| **BlogPostTemplate**     | ✅ Implemented | blog-post-content, blog-related-posts, blog-cta             | Available for use        |
+| **BookingPageTemplate**  | ✅ Implemented | booking-form                                                | Available for use        |
 
 ## Architecture
 
@@ -144,6 +144,16 @@ export default function HomePage() {
 1. **Visual editor:** Allow non-developers to compose pages (task c-10)
 2. **Template variants:** Support multiple template variants per page type
 3. **A/B testing:** Built-in template variant testing
+
+## Evolution: Capability-Based Composition and Universal Renderer
+
+Per [NEW.md](../../NEW.md) (Phase 3–4), page composition will evolve:
+
+- **Capability-based composition** — Sections can reference `capability: 'booking'`; capabilities provide sections. evol-8.
+- **Universal renderer** — New clients may opt in via `renderer: 'universal'`; capability-driven composition with `activateCapabilities` and `CapabilityProvider`. evol-9.
+- **Classic vs universal** — Classic clients continue using the current registry; universal renderer is opt-in for new clients.
+
+See [evolution-roadmap.md](evolution-roadmap.md) for phase sequencing.
 
 ## Related Documentation
 

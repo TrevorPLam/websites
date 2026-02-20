@@ -10,6 +10,8 @@
 - **L2:** `@repo/ui`, `@repo/features`, `@repo/types`, `@repo/utils` — components, business logic
 - **L3:** `clients/*` — experience layer (consumes packages)
 
+**Evolution (Phase 3+):** Capability layer — `@repo/infra/features` with `defineFeature`, `featureRegistry`. Features self-declare sections, integrations, dataContracts. See [evolution-roadmap](../docs/architecture/evolution-roadmap.md) and tasks/evol-7, evol-8.
+
 ---
 
 ## Dependency rules

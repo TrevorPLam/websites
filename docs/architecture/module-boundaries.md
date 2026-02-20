@@ -2,7 +2,18 @@
 
 **Last Updated:** 2026-02-18  
 **Status:** Implemented (Task 0.11)  
-**Related:** [Architecture Overview](README.md)
+**Related:** [Architecture Overview](README.md), [Evolution Roadmap](evolution-roadmap.md)
+
+---
+
+## Evolution: Capability and Data Contract Layers
+
+Per [NEW.md](../../NEW.md) and [evolution-roadmap.md](evolution-roadmap.md), the architecture will evolve to include:
+
+- **Capability layer** — `@repo/infra/features` with `defineFeature`, `featureRegistry`; features self-declare provides (sections, integrations, dataContracts). Phase 3 (Weeks 11–16).
+- **Data contracts layer** — `packages/types/src/canonical/` with canonical types and adapters; integration types do not leak into features. Phase 2 (Weeks 5–10).
+
+These layers sit alongside the existing package structure; boundaries will be documented as they are implemented.
 
 ---
 
@@ -19,7 +30,7 @@ graph TD
         C2[luxe-salon]
         C3[Other clients]
     end
-    
+
     subgraph Packages[Packages Layer]
         UI[@repo/ui]
         Utils[@repo/utils]
@@ -30,7 +41,7 @@ graph TD
         PageTemplates[@repo/page-templates]
         Integrations[@repo/integrations-*]
     end
-    
+
     C1 --> UI
     C2 --> UI
     C3 --> UI
@@ -46,7 +57,7 @@ graph TD
     C1 --> Marketing
     C2 --> Marketing
     C3 --> PageTemplates
-    
+
     Features --> UI
     Features --> Utils
     Features --> Types
@@ -55,32 +66,32 @@ graph TD
     PageTemplates --> Types
     Marketing --> UI
     Integrations --> Infra
-    
+
     C1 -.->|❌ Not Allowed| C2
     Packages -.->|❌ Not Allowed| Clients
-    
+
     style Clients fill:#e3f2fd
     style Packages fill:#f1f8e9
 ```
 
 ## Dependency Direction Matrix
 
-| From (Consumer) | To (Provider) | Allowed | Notes |
-|-----------------|---------------|---------|-------|
-| **clients/** | **@repo/ui** | ✅ | Via `import { Button } from '@repo/ui'` — main export only |
-| **clients/** | **@repo/utils** | ✅ | Via `import { cn } from '@repo/utils'` |
-| **clients/** | **@repo/infra** | ✅ | Via `.`, `./client`, `./env`, `./context/*`, `./security/*`, `./logger`, `./sentry/*`, `./middleware/*` |
-| **clients/** | **@repo/types** | ✅ | Via `.`, `./types`, `./site-config`, `./industry`, `./industry-configs` |
-| **clients/** | **@repo/features** | ✅ | Via main and subpath exports |
-| **clients/** | **@repo/page-templates** | ✅ | Via main barrel |
-| **clients/** | **@repo/marketing-components** | ✅ | Via main barrel |
-| **clients/** | **@repo/integrations-*** | ✅ | Via each package's public exports (when wired) |
-| **clients/A** | **clients/B** | ❌ | Cross-client imports forbidden |
-| **clients/** | **@repo/*/src/** | ❌ | Deep internal paths; use package public API |
-| **packages/** | **@repo/*** (siblings) | ✅ | Via declared dependencies and public exports |
-| **packages/** | **clients/** | ❌ | Packages never depend on clients |
-| **packages/** | **@repo/*/src/** | ❌ | Deep internal paths blocked |
-| **External** | **@repo/*/src/** | ❌ | Only supported entrypoints (see package.json exports) |
+| From (Consumer) | To (Provider)                  | Allowed | Notes                                                                                                   |
+| --------------- | ------------------------------ | ------- | ------------------------------------------------------------------------------------------------------- |
+| **clients/**    | **@repo/ui**                   | ✅      | Via `import { Button } from '@repo/ui'` — main export only                                              |
+| **clients/**    | **@repo/utils**                | ✅      | Via `import { cn } from '@repo/utils'`                                                                  |
+| **clients/**    | **@repo/infra**                | ✅      | Via `.`, `./client`, `./env`, `./context/*`, `./security/*`, `./logger`, `./sentry/*`, `./middleware/*` |
+| **clients/**    | **@repo/types**                | ✅      | Via `.`, `./types`, `./site-config`, `./industry`, `./industry-configs`                                 |
+| **clients/**    | **@repo/features**             | ✅      | Via main and subpath exports                                                                            |
+| **clients/**    | **@repo/page-templates**       | ✅      | Via main barrel                                                                                         |
+| **clients/**    | **@repo/marketing-components** | ✅      | Via main barrel                                                                                         |
+| **clients/**    | **@repo/integrations-\***      | ✅      | Via each package's public exports (when wired)                                                          |
+| **clients/A**   | **clients/B**                  | ❌      | Cross-client imports forbidden                                                                          |
+| **clients/**    | **@repo/\*/src/**              | ❌      | Deep internal paths; use package public API                                                             |
+| **packages/**   | **@repo/\*** (siblings)        | ✅      | Via declared dependencies and public exports                                                            |
+| **packages/**   | **clients/**                   | ❌      | Packages never depend on clients                                                                        |
+| **packages/**   | **@repo/\*/src/**              | ❌      | Deep internal paths blocked                                                                             |
+| **External**    | **@repo/\*/src/**              | ❌      | Only supported entrypoints (see package.json exports)                                                   |
 
 ## Supported Entrypoints
 
@@ -88,49 +99,49 @@ Consumers **must** import only from paths explicitly listed in each package's `p
 
 ### @repo/ui
 
-| Import | Allowed | Exports |
-|--------|---------|---------|
-| `@repo/ui` | ✅ | `"."` → main barrel |
+| Import     | Allowed | Exports             |
+| ---------- | ------- | ------------------- |
+| `@repo/ui` | ✅      | `"."` → main barrel |
 
 ### @repo/utils
 
-| Import | Allowed | Exports |
-|--------|---------|---------|
-| `@repo/utils` | ✅ | `"."` → main barrel |
+| Import        | Allowed | Exports             |
+| ------------- | ------- | ------------------- |
+| `@repo/utils` | ✅      | `"."` → main barrel |
 
 ### @repo/infra
 
-| Import | Allowed | Exports |
-|--------|---------|---------|
-| `@repo/infra` | ✅ | Main entry (security, middleware, logging) |
-| `@repo/infra/client` | ✅ | Client-safe logger, Sentry, request context |
-| `@repo/infra/env` | ✅ | Composable env validation (schemas, validateEnv, getFeatureFlags) |
-| `@repo/infra/env/validate` | ✅ | validateEnv, safeValidateEnv, createEnvSchema, getFeatureFlags, etc. |
-| `@repo/infra/context/request-context` | ✅ | Universal (stub) context |
-| `@repo/infra/context/request-context.server` | ✅ | Server-only AsyncLocalStorage context |
-| `@repo/infra/security/request-validation` | ✅ | getValidatedClientIp, validateRequest, etc. |
-| `@repo/infra/security/sanitize` | ✅ | sanitizeHtml, sanitizeForLog |
-| `@repo/infra/security/rate-limit` | ✅ | checkRateLimit, hashIp, RateLimiterFactory, etc. |
-| `@repo/infra/security/csp` | ✅ | buildContentSecurityPolicy, createCspNonce |
-| `@repo/infra/security/security-headers` | ✅ | getSecurityHeaders |
-| `@repo/infra/logger` | ✅ | Structured logging |
-| `@repo/infra/sentry/sanitize` | ✅ | Sentry event sanitization |
-| `@repo/infra/sentry/client` | ✅ | Client-side Sentry setup |
-| `@repo/infra/sentry/server` | ✅ | Server-side Sentry setup |
-| `@repo/infra/middleware/create-middleware` | ✅ | createMiddleware, getAllowedOriginsFromEnv |
+| Import                                       | Allowed | Exports                                                              |
+| -------------------------------------------- | ------- | -------------------------------------------------------------------- |
+| `@repo/infra`                                | ✅      | Main entry (security, middleware, logging)                           |
+| `@repo/infra/client`                         | ✅      | Client-safe logger, Sentry, request context                          |
+| `@repo/infra/env`                            | ✅      | Composable env validation (schemas, validateEnv, getFeatureFlags)    |
+| `@repo/infra/env/validate`                   | ✅      | validateEnv, safeValidateEnv, createEnvSchema, getFeatureFlags, etc. |
+| `@repo/infra/context/request-context`        | ✅      | Universal (stub) context                                             |
+| `@repo/infra/context/request-context.server` | ✅      | Server-only AsyncLocalStorage context                                |
+| `@repo/infra/security/request-validation`    | ✅      | getValidatedClientIp, validateRequest, etc.                          |
+| `@repo/infra/security/sanitize`              | ✅      | sanitizeHtml, sanitizeForLog                                         |
+| `@repo/infra/security/rate-limit`            | ✅      | checkRateLimit, hashIp, RateLimiterFactory, etc.                     |
+| `@repo/infra/security/csp`                   | ✅      | buildContentSecurityPolicy, createCspNonce                           |
+| `@repo/infra/security/security-headers`      | ✅      | getSecurityHeaders                                                   |
+| `@repo/infra/logger`                         | ✅      | Structured logging                                                   |
+| `@repo/infra/sentry/sanitize`                | ✅      | Sentry event sanitization                                            |
+| `@repo/infra/sentry/client`                  | ✅      | Client-side Sentry setup                                             |
+| `@repo/infra/sentry/server`                  | ✅      | Server-side Sentry setup                                             |
+| `@repo/infra/middleware/create-middleware`   | ✅      | createMiddleware, getAllowedOriginsFromEnv                           |
 
 ### @repo/types
 
-| Import | Allowed | Exports |
-|--------|---------|---------|
-| `@repo/types` | ✅ | Main barrel (SiteConfig, types) |
-| `@repo/types/types` | ✅ | Shared type definitions |
-| `@repo/types/site-config` | ✅ | SiteConfig types and schema |
-| `@repo/types/site-config-schema` | ✅ | SiteConfig schema |
-| `@repo/types/industry` | ✅ | Industry type definitions |
-| `@repo/types/industry-configs` | ✅ | Industry configuration types |
+| Import                           | Allowed | Exports                         |
+| -------------------------------- | ------- | ------------------------------- |
+| `@repo/types`                    | ✅      | Main barrel (SiteConfig, types) |
+| `@repo/types/types`              | ✅      | Shared type definitions         |
+| `@repo/types/site-config`        | ✅      | SiteConfig types and schema     |
+| `@repo/types/site-config-schema` | ✅      | SiteConfig schema               |
+| `@repo/types/industry`           | ✅      | Industry type definitions       |
+| `@repo/types/industry-configs`   | ✅      | Industry configuration types    |
 
-### @repo/integrations-*
+### @repo/integrations-\*
 
 Each integration exposes its own exports; consult `packages/integrations/<name>/package.json`.
 

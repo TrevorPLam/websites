@@ -44,7 +44,19 @@
 
 **Last Updated:** 2026-02-19  
 **Status:** Active Documentation  
-**Related:** [Architecture Overview](README.md), [starter-template](../../clients/starter-template/README.md)
+**Related:** [Architecture Overview](README.md), [starter-template](../../clients/starter-template/README.md), [evolution-roadmap](evolution-roadmap.md)
+
+---
+
+## Evolution: Capabilities Structure
+
+Per [NEW.md](../../NEW.md) (Phase 3+), `site.config.ts` may gain a `capabilities` structure:
+
+- **Classic clients:** Continue with `features` flags; no change required.
+- **Universal renderer clients:** May use `renderer: 'universal'` and `capabilities: { booking: true, contact: true, ... }` to drive capability-based composition.
+- **Capability activation:** `activateCapabilities(siteConfig)` drives which sections and integrations are available.
+
+See [evolution-roadmap.md](evolution-roadmap.md) for phase sequencing.
 
 ---
 
@@ -59,6 +71,7 @@ The repository contains multiple client implementations with varying configurati
 **Purpose:** Golden-path template for new clients
 
 **Configuration:**
+
 - `next.config.js` (CommonJS)
 - `output: 'standalone'` (Docker-ready)
 - `poweredByHeader: false`
@@ -73,6 +86,7 @@ The repository contains multiple client implementations with varying configurati
 ### Other Clients (luxe-salon, bistro-central, chen-law, sunrise-dental, urban-outfitters)
 
 **Configuration:**
+
 - `next.config.ts` (TypeScript)
 - Minimal config (only `transpilePackages`)
 - No `output: 'standalone'`
@@ -89,6 +103,7 @@ The repository contains multiple client implementations with varying configurati
 ### When to Use starter-template Pattern
 
 Use the starter-template configuration when:
+
 - Multi-locale support is required
 - Docker deployment is needed
 - Production-grade TypeScript strictness is required
@@ -98,6 +113,7 @@ Use the starter-template configuration when:
 ### When Divergence is Acceptable
 
 Divergence is acceptable when:
+
 - Single locale is sufficient (no i18n needed)
 - Deployment doesn't require Docker
 - Simpler configuration reduces maintenance overhead
@@ -106,6 +122,7 @@ Divergence is acceptable when:
 ### Standardization Recommendations
 
 **For New Clients:**
+
 1. Start with `starter-template` as the base
 2. Remove i18n if single-locale: delete `[locale]` routing, remove `next-intl`
 3. Keep Docker support unless explicitly not needed
@@ -113,6 +130,7 @@ Divergence is acceptable when:
 5. Maintain TypeScript strictness (`ignoreBuildErrors: false`)
 
 **For Existing Clients:**
+
 - Document intentional divergence in client-specific README
 - Consider gradual alignment with starter-template if requirements evolve
 - Ensure critical features (security headers, type safety) are not compromised

@@ -77,6 +77,21 @@ This document serves as the master index for integrating research findings from 
 | ---------------------------- | ------- | ------------------------ | ------ | --------------------------------- |
 | AI Governance & Cost Control | #25     | `ai-platform-governance` | Future | `packages/ai-platform/` [7.1-7.3] |
 
+### Evolution (Organic Evolution / Strangler Fig)
+
+Research topics relevant to the [evolution roadmap](../architecture/evolution-roadmap.md):
+
+| Topic                    | evol-\* / Task | Phase    |
+| ------------------------ | -------------- | -------- |
+| Canonical types          | evol-4, evol-5 | Phase 2  |
+| Repository pattern       | evol-6         | Phase 2  |
+| Capability layer         | evol-7, evol-8 | Phase 3  |
+| Universal renderer       | evol-9         | Phase 4  |
+| Legacy bridge            | evol-10        | Phase 4  |
+| Config schema versioning | d-1, evol-\*   | Phase 2+ |
+
+See tasks/evol-\*.md and tasks/TASKS.md for full specs.
+
 ---
 
 ## Research Document Structure
