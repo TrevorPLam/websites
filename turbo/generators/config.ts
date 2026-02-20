@@ -125,7 +125,7 @@ export default function registerGenerators(plop: PlopLike): void {
         type: 'modify',
         path: 'clients/{{name}}/site.config.ts',
         pattern: /name:\s*'Starter Template'/,
-        template: "name: '{{displayName}}'",
+        template: "name: '{{name}}'",
         abortOnFail: true,
       },
       {
