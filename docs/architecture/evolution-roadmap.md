@@ -9,7 +9,7 @@
  *
  * @depends_on
  * - NEW.md (source content)
- * - THEPLAN.md (execution plan)
+ * - THEPLAN executed 2026-02-20; archived
  *
  * @status
  * - confidence: high
@@ -20,7 +20,7 @@
 # Evolution Roadmap — Organic Path to Capability Platform
 
 **Last Updated:** 2026-02-19  
-**Source:** [NEW.md](../../NEW.md), [THEPLAN.md](../../THEPLAN.md)  
+**Source:** [NEW.md](../../NEW.md). THEPLAN executed 2026-02-20; see [docs/archive/NEW-THEPLAN-EXTRACTION-INDEX.md](../archive/NEW-THEPLAN-EXTRACTION-INDEX.md).  
 **Timeline:** 26 weeks (6 months)  
 **Pattern:** Strangler Fig — new system grows around existing, then replaces.
 

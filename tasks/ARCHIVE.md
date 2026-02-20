@@ -2,7 +2,27 @@
 
 **Purpose:** Historical record of completed tasks. Moved from TODO.md to maintain focus on active work. (TODO.md and task-specs have been consolidated into TASKS.md.)
 
-**Last Updated:** February 19, 2026
+**Last Updated:** February 20, 2026
+
+---
+
+## Session: 2026-02-20 — NEW.md + THEPLAN.md Extraction and Archival
+
+**Agent:** Claude (Composer) | **Branch:** main
+
+### Plan Execution Complete
+
+**Status:** [x] COMPLETED
+
+**What changed:**
+
+- All information from NEW.md and THEPLAN.md extracted into authoritative docs: evolution-roadmap.md, THEGOAL.md, tasks/TASKS.md, evol-\* tasks, ADR-012, and 25+ doc updates.
+- Created [docs/archive/NEW-THEPLAN-EXTRACTION-INDEX.md](../docs/archive/NEW-THEPLAN-EXTRACTION-INDEX.md) — verification index mapping every NEW.md and THEPLAN.md item to its extracted location.
+- Archived THEPLAN to [docs/archive/THEPLAN-2026-02-19-executed.md](../docs/archive/THEPLAN-2026-02-19-executed.md). Root THEPLAN.md now redirects to evolution-roadmap.
+
+**Why:** Plan execution was complete; authoritative sources are evolution-roadmap, THEGOAL, TASKS.md. Archival preserves history and confirms no information was lost.
+
+**How verified:** Extraction index documents 100% coverage. All 15 implementation steps from THEPLAN Section 6 marked done.
 
 ---
 
@@ -19,6 +39,7 @@
 **Status:** [x] VERIFIED DONE | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - Verified `packages/ui/src/components/Toast.tsx` already had correct types from prior session: `custom()` uses `React.ReactElement`, `promise()` uses spread pattern instead of 3-arg call.
 
 **How verified:** `pnpm --filter @repo/ui type-check` → 0 errors; `pnpm test` → 349 passed.
@@ -32,6 +53,7 @@
 **Status:** [x] COMPLETED | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `docs/accessibility/component-a11y-rubric.md` — replaced 1-line TODO stub with a full WCAG 2.2 AA rubric: 10 sections covering keyboard navigation, focus visibility, touch targets, colour/contrast, ARIA/semantics, live regions, motion, images/media, forms, and landmark regions. Includes 60+ testable criteria, implementation code patterns, axe-core test snippet, manual checklist, and a WCAG 2.2 SC reference map. Metadata HTML comment header added per docs standard.
 
 **Why:** Rubric was referenced by 80+ task files but contained only "TODO". Without it, UI task authors had no concrete acceptance criteria for accessibility. Now every task that references this file has a complete, actionable rubric.
@@ -39,10 +61,12 @@
 **How verified:** File parses cleanly as Markdown; no code changes so no compilation needed. `pnpm validate-docs` can check the header format.
 
 **Known limitations / risks:**
+
 - Touch target criterion (§3.1) uses 24×24 px per WCAG 2.2 §2.5.8; teams used to the older 44×44 guidance should note the distinction (§3.2 calls out 44×44 as best practice).
 - Screen reader manual testing guidance is limited to VoiceOver + NVDA — add JAWS guidance as needed.
 
 **Follow-up tasks created:**
+
 - Add jest-axe baseline tests to any components that lack them (see WCAG §4 pattern in rubric).
 - Consider adding an automated contrast-ratio lint rule to ESLint config.
 
@@ -53,6 +77,7 @@
 **Status:** [x] COMPLETED | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `scripts/validate-task-paths.js` — new Node.js script (no external dependencies). Parses all `tasks/*.md` files, extracts "Related Files" entries, resolves paths relative to repo root, and reports missing paths for any entry with intent `modify`/`verify`/etc. Entries with intent `create` are skipped (file need not exist yet). `--fix` flag attempts to suggest the correct path prefix (packages/, clients/, scripts/, docs/). Exits 0 when all checked paths exist, exits 1 otherwise.
 - `package.json` — added `validate-task-paths` and `validate-task-paths:fix` scripts.
 
@@ -61,10 +86,12 @@
 **How verified:** `pnpm validate-task-paths` → correctly reports 14 missing paths in 3 task files (3-9, 4-1, 5-1, prompt.md); `--fix` suggests plausible path corrections. Exit code 1 as expected.
 
 **Known limitations:**
+
 - Glob paths (e.g., `clients/starter-template/app/**/page.tsx`) always count as missing — script does not expand globs.
 - Intent keywords are matched case-insensitively; unusual intents (`update`, `add`) may not be caught.
 
 **Follow-up tasks created:**
+
 - Add glob expansion support to skip paths containing `**` or `*`.
 - Consider adding to CI as a non-blocking audit step (`quality-audit` job).
 
@@ -75,6 +102,7 @@
 **Status:** [x] COMPLETED | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/infra/accessibility/aria.ts` — Pure ARIA attribute utilities: `generateAriaId`, `labelledBy`, `describedBy`, `ariaExpanded`, `ariaSelected`, `ariaPressed`, `ariaChecked`, `ariaHidden`, `ariaLive`, `ariaRole`, `mergeAriaProps`. All pure functions; no side effects.
 - `packages/infra/accessibility/keyboard.ts` — Keyboard navigation helpers: `Keys` const, `isKey`, `createRovingTabIndex`, `getArrowKeyIndex`, `handleMenuKeys`, `getFocusableElements`, `focusFirstDescendant`, `focusLastDescendant`, `trapFocus`. Implements WAI-ARIA APG patterns for menus, composite widgets, and modal dialogs.
 - `packages/infra/accessibility/screen-reader.ts` — Screen reader utilities: `announce` (polite/assertive live region injector), `clearAnnouncements`, `visuallyHiddenStyles`, `VISUALLY_HIDDEN_CLASS`, `visuallyHiddenProps`, `prefersReducedMotion`, `getMotionSafeTransition`.
@@ -87,11 +115,13 @@
 **How verified:** `pnpm --filter @repo/infra type-check` → 0 errors. `pnpm test` → 349/349 passed.
 
 **Known limitations:**
+
 - `trapFocus` manages a single cleanup ref — nesting multiple traps (dialogs-within-dialogs) requires calling the outer cleanup before the inner trap.
 - `announce` creates persistent live region elements in `<body>` on first call (lazy singleton); these are not cleaned up on app unmount by design (they're reused).
 - `useRovingTabIndex` requires a stable `itemSelector`; dynamic DOM insertions after initial render are not automatically reflected.
 
 **Follow-up tasks created:**
+
 - Add unit tests for `aria.ts` (pure functions are straightforward to test in node env).
 - Add unit tests for `keyboard.ts` (`handleMenuKeys`, `trapFocus`).
 - Consider adding `useLiveRegion` convenience hook to wrap announce() with automatic mount/unmount cleanup.
@@ -103,6 +133,7 @@
 **Status:** [x] COMPLETED | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/infra/variants/types.ts` — Core type definitions: `ClassValue`, `VariantSchema`, `VariantConfig<T>`, `VariantProps<T>`, `CVAFunction<T>`, `ComposedVariant<T>`. No runtime code.
 - `packages/infra/variants/utils.ts` — Low-level utilities: `cx` (class concatenation, no Tailwind deduplication), `tw` (alias for readability), `filterFalsy`, `flattenClassValues`.
 - `packages/infra/variants/cva.ts` — Core `cva()` function: CVA-compatible API (`base`, `variants`, `compoundVariants`, `defaultVariants`). Pure function, no external dependencies. Handles `class`/`className` overrides appended last.
@@ -115,10 +146,12 @@
 **How verified:** `pnpm --filter @repo/infra type-check` → 0 errors. `pnpm test` → 349/349 passed.
 
 **Tradeoffs:**
+
 - `cx` does NOT deduplicate conflicting Tailwind classes (e.g., `p-2 p-4`). Callers needing conflict resolution should use `cn` from `@repo/utils` (which wraps tailwind-merge).
 - `extendVariants` composes functions rather than merging configs because CVAFunction does not expose its original config. Deep-merge extension would require a different architecture.
 
 **Follow-up tasks created:**
+
 - Add unit tests for `cva()`, `cx()`, `composeVariants()`.
 - If CVA is added to workspace catalog, replace `./variants/cva.ts` with a thin re-export wrapper.
 
@@ -129,6 +162,7 @@
 **Status:** [x] COMPLETED | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/infra/composition/slots.ts` — `Slot` component (Radix-style asChild pattern): merges className (concatenated), style (spread), event handlers (composed parent-then-child), and all other props onto its single child. Includes `createSlot<T>()` factory and `useSlotProps()` hook.
 - `packages/infra/composition/context.ts` — `createSafeContext<T>()` (throws descriptive error outside provider), `createOptionalContext<T>()` (returns `T | undefined`), `useContextSelector()` (field-level selector from context).
 - `packages/infra/composition/provider.ts` — `composeProviders(providers[])` (returns a single wrapper component from an array of providers), `ProviderComposer` (JSX-friendly variant). Eliminates "provider pyramid" nesting.
@@ -142,11 +176,13 @@
 **How verified:** `pnpm --filter @repo/infra type-check` → 0 errors. `pnpm test` → 349/349 passed.
 
 **Known limitations:**
+
 - `Slot` uses `React.forwardRef` + `React.cloneElement` — both work in React 19 but cloneElement is considered legacy. Future migration to a context-based Slot (Radix style) would be cleaner.
 - `composeProviders` memoizes by `providers.length` — if the provider array content changes without a length change, the composed component is not updated (edge case; provider arrays are typically stable).
 - `useContextSelector` does not implement value-level memoization — it's a convenience wrapper only.
 
 **Follow-up tasks created:**
+
 - Add unit tests for `createSafeContext` (test the throw), `Slot` (prop merging), `composeProviders` (ordering).
 - Consider migrating `Slot` to use Radix's `@radix-ui/react-slot` now that Radix is already in the workspace.
 
@@ -165,6 +201,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Toast.tsx` — typed wrapper around `sonner`'s `toast` API; exports `toast.success/error/warning/info/loading/custom/promise/dismiss/dismissAll` and `useToast()` hook
 - `packages/ui/src/components/Toaster.tsx` — thin wrapper around Sonner's `<Toaster>` with design-system defaults (position=bottom-right, richColors, closeButton, expand=true; Tailwind classNames for toast/title/description/buttons)
 - `packages/ui/src/index.ts` — added exports for `Toaster`, `ToasterProps`, `toast`, `useToast`, `ToastOptions`, `ToastVariant`
@@ -176,6 +213,7 @@
 **Tradeoffs:** No custom queue logic beyond Sonner's built-in. `toast.warning` falls back gracefully when Sonner version doesn't expose `.warning` method.
 
 **Follow-up:**
+
 - Migrate `packages/features/src/booking/components/BookingForm.tsx` line 29 from direct sonner import to `@repo/ui` `toast` (when node_modules are installed)
 - Add Storybook stories for each variant + position
 
@@ -186,6 +224,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Tabs.tsx` — Radix UI Tabs wrapper; exports `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`; React Context carries `variant`/`size` to avoid prop-drilling
 - `packages/ui/src/index.ts` — exports added
 
@@ -197,6 +236,7 @@
 **How verified:** `pnpm --filter @repo/ui type-check` → 0 errors.
 
 **Follow-up:**
+
 - URL hash/query param sync hook (1.3c)
 - Scrollable overflow for many tabs (1.3d)
 
@@ -207,6 +247,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/DropdownMenu.tsx` — full Radix DropdownMenu export set: Root, Trigger, Content, Group, Portal, Sub, SubTrigger (with ChevronRight), SubContent, RadioGroup, Item, CheckboxItem (with Check icon), RadioItem (with Circle icon), Label, Separator, Shortcut
 - `packages/ui/src/index.ts` — all sub-components exported
 
@@ -215,6 +256,7 @@
 **How verified:** `pnpm --filter @repo/ui type-check` → 0 errors.
 
 **Follow-up:**
+
 - Icon slot helper component for leading/trailing icons
 
 ---
@@ -224,6 +266,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Tooltip.tsx` — exports `TooltipProvider`, `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipArrow`; `showArrow` prop on content renders the arrow; portal rendering prevents clipping
 - `packages/ui/src/index.ts` — exports added
 
@@ -232,6 +275,7 @@
 **How verified:** `pnpm --filter @repo/ui type-check` → 0 errors.
 
 **Follow-up:**
+
 - TooltipProvider should be mounted in client layout.tsx for shared delay config
 
 ---
@@ -241,6 +285,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Popover.tsx` — exports `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverAnchor`, `PopoverClose`, `PopoverHeader` (with optional showClose), `PopoverBody`, `PopoverFooter`
 - `packages/ui/src/index.ts` — exports added
 
@@ -249,6 +294,7 @@
 **How verified:** `pnpm --filter @repo/ui type-check` → 0 errors.
 
 **Follow-up:**
+
 - Nest in DatePicker, ColorPicker, filter panels
 
 ---
@@ -258,6 +304,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Badge.tsx` — pure CSS component; 5 variants (default/secondary/destructive/outline/ghost), 3 sizes (sm/md/lg), optional `dot` prop
 - `packages/ui/src/index.ts` — exports added
 
@@ -272,6 +319,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Avatar.tsx` — Radix Avatar wrapper; exports `Avatar`, `AvatarImage`, `AvatarFallback`; status indicator is an absolutely-positioned ring overlaying the avatar corner
 - `packages/ui/src/index.ts` — exports added
 
@@ -282,6 +330,7 @@
 **How verified:** `pnpm --filter @repo/ui type-check` → 0 errors.
 
 **Follow-up:**
+
 - AvatarGroup component for stacked overlapping avatars (new backlog item)
 
 ---
@@ -291,6 +340,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Skeleton.tsx` — CSS-only shimmer loading placeholder; `motion-safe:animate-pulse` respects prefers-reduced-motion; variants: text/circular/rectangular; explicit width/height props
 - `packages/ui/src/index.ts` — exports added
 
@@ -305,6 +355,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Separator.tsx` — Radix Separator; horizontal (`h-px w-full`) or vertical (`h-full w-px`); decorative defaults to true
 - `packages/ui/src/index.ts` — exports added
 
@@ -319,6 +370,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed:**
+
 - `packages/ui/src/components/Switch.tsx` — Radix Switch wrapper; thumb translates on checked via CSS translate; 3 sizes (sm/md/lg), 2 variants (default/destructive)
 - `packages/ui/src/index.ts` — exports added
 
@@ -327,6 +379,7 @@
 **How verified:** `pnpm --filter @repo/ui type-check` → 0 errors.
 
 **Follow-up:**
+
 - Compose with Label component (1.22) for accessible switch+label patterns
 
 ---
@@ -336,6 +389,7 @@
 **Status:** [x] COMPLETED | **Assigned To:** [Claude] | **Completed:** [2026-02-18]
 
 **What changed (verified existing):**
+
 - `packages/marketing-components/package.json` — name @repo/marketing-components, deps: @repo/ui, @repo/utils, @repo/types
 - `packages/marketing-components/tsconfig.json` — extends @repo/typescript-config/base.json, jsx: react-jsx
 - `packages/marketing-components/src/index.ts` — barrel re-exporting hero, services, team, testimonials, pricing, gallery, stats, cta, faq, contact, experiments/framing
@@ -351,6 +405,7 @@
 ### Session Summary
 
 **Files created/modified:**
+
 - `packages/ui/src/components/Toast.tsx` (new implementation)
 - `packages/ui/src/components/Toaster.tsx` (new implementation)
 - `packages/ui/src/components/Tabs.tsx` (new implementation)
@@ -368,6 +423,7 @@
 **Verification:** `pnpm --filter @repo/ui type-check` → 0 errors, 0 warnings.
 
 **Backlog items added:**
+
 1. Fix pnpm catalog missing `jest` entry so `pnpm install` can complete across all packages
 2. BookingForm migration: change direct `sonner` import to `@repo/ui` `toast`
 3. AvatarGroup component for stacked overlapping avatars
@@ -376,6 +432,7 @@
 6. Scrollable Tabs overflow for many triggers (task 1.3d)
 
 **Architecture decisions:**
+
 - All Radix-based components import from unified `radix-ui` package (not individual `@radix-ui/react-*`) per ADR-0005
 - Context pattern used in Tabs to pass variant/size without prop-drilling
 - Toaster wraps Sonner with project defaults; all options are passable via spread
@@ -387,6 +444,7 @@
 ### Batch A — Config & Dependency Fixes
 
 #### 0.1 Resolve Config File Conflicts ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `.npmrc` sets `node-linker = hoisted` while `.pnpmrc` sets `node-linker=pnpm`. These conflict. Since the project uses pnpm workspaces, `.pnpmrc` should win.
@@ -396,6 +454,7 @@
 ---
 
 #### 0.2 Sync Workspace Glob Configuration ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `package.json` workspaces field is missing `packages/integrations/*`, `packages/features/*`, and `apps/*` that `pnpm-workspace.yaml` includes.
@@ -405,9 +464,11 @@
 ---
 
 #### 0.9 Fix Infra Dependency Placement ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `@repo/infra` has runtime dependencies in `devDependencies`:
+
 - `zod` — unconditionally imported at module load (all 7 env schemas). Must be `dependencies`.
 - `@upstash/ratelimit` + `@upstash/redis` — dynamically imported with try/catch. Should be `peerDependencies`.
 
@@ -416,6 +477,7 @@
 ---
 
 #### 0.10 Fix Broken Infra Export Path ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `packages/infra/package.json:18` exports `"./security/create-middleware": "./security/create-middleware.ts"` but the file is at `middleware/create-middleware.ts`.
@@ -425,9 +487,11 @@
 ---
 
 #### 0.15 Align Sentry DSN Environment Variable Naming ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** All runtime code uses `NEXT_PUBLIC_SENTRY_DSN` but:
+
 - `packages/infra/env/schemas/sentry.ts` validates `SENTRY_DSN` (wrong name)
 - `.env.example:28-29` documents `SENTRY_DSN` (wrong name)
 
@@ -436,6 +500,7 @@
 ---
 
 #### 0.20 Fix Port Number Inconsistency ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Three different port numbers referenced across template files.
@@ -445,6 +510,7 @@
 ---
 
 #### 0.27 Run pnpm Catalog Codemod for Dependency Consistency ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Template dependencies use hardcoded versions instead of `catalog:` protocol, causing version drift.
@@ -454,6 +520,7 @@
 ---
 
 #### 0.28 Fix Node.js Engine Requirement ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `package.json:7` requires `"node": ">=24.0.0"`. Node 24 entered Current April 2025, LTS Oct 2025. This blocks contributors on LTS 20 and 22.
@@ -463,6 +530,7 @@
 ---
 
 #### 0.29 Add globalEnv to turbo.json ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `turbo.json` has no `globalEnv` or `globalPassThroughEnv`. Environment variables like `NODE_ENV` and `NEXT_PUBLIC_SITE_URL` could produce incorrect cache hits.
@@ -474,6 +542,7 @@
 ### Batch B — Code Fixes
 
 #### 0.14 Wire Theme Config to CSS Generation ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-15]
 
 **What:** The entire config-driven theming story was broken. `site.config.ts` defines HSL theme values but `globals.css` used hardcoded hex values. No code read `siteConfig.theme` to generate CSS custom properties.
@@ -483,6 +552,7 @@
 ---
 
 #### 0.21 Replace Local `cn` Imports with `@repo/utils` ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Template components import a duplicate `cn()` from `@/lib/utils` instead of the canonical `@repo/utils` version.
@@ -492,6 +562,7 @@
 ---
 
 #### 0.22 Fix Hardcoded Colors in not-found.tsx and loading.tsx ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Error and loading pages used hardcoded Tailwind colors instead of semantic tokens.
@@ -501,6 +572,7 @@
 ---
 
 #### 0.23 Fix Social Links Missing target/rel Attributes ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Social media links lack `target="_blank"` and `rel="noopener noreferrer"`.
@@ -510,6 +582,7 @@
 ---
 
 #### 0.24 Fix Supabase Client Eager Initialization ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `packages/integrations/supabase/client.ts:200` — `export const supabaseClient = createSupabaseClient();` executes at module load time.
@@ -519,6 +592,7 @@
 ---
 
 #### 0.25 Create Unified Route Registry ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-15]
 
 **What:** Two separate hardcoded lists of site pages exist in sitemap.ts and search.ts.
@@ -528,6 +602,7 @@
 ---
 
 #### 0.26 Fix error.tsx and global-error.tsx Sentry Usage ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Error boundaries used direct Sentry imports instead of `@repo/infra` abstraction.
@@ -537,6 +612,7 @@
 ---
 
 #### 0.30 Fix SearchDialog Broken Tailwind Class ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `templates/hair-salon/features/search/components/SearchDialog.tsx:141` — `hover:bg-primary/90-50` is not a valid Tailwind class.
@@ -546,6 +622,7 @@
 ---
 
 #### 0.31 Remove Deprecated bookingProviders Export ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `templates/hair-salon/features/booking/lib/booking-providers.ts:433` — Deprecated export still executing at module load time.
@@ -557,6 +634,7 @@
 ### Batch C — Tooling Setup
 
 #### 0.17 Add knip for Dead Code/Dependency Detection ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-14]
 
 **What:** [knip](https://knip.dev/) finds unused files, exports, and dependencies in monorepos.
@@ -566,6 +644,7 @@
 ---
 
 #### 0.19 Add Export Map Validation Script ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Codex] | **Completed:** [2026-02-14]
 
 **What:** Validate that every entry in every `package.json` `exports` field resolves to an actual file on disk.
@@ -575,6 +654,7 @@
 ---
 
 #### 0.32 Create .env.production.local.example for Docker ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** `docker-compose.yml:17` references `.env.production.local` but no example file exists.
@@ -586,6 +666,7 @@
 ### Batch D — Upgrades & CI
 
 #### 0.3 Upgrade Turborepo ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
 **What:** Turbo 2.2.3 → 2.8.9 (latest stable). 6-minor-version gap with significant improvements.
@@ -595,6 +676,7 @@
 ---
 
 #### 0.11 Enforce Monorepo Boundaries ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
 **What:** Prevent cross-package architecture drift by enforcing import and dependency boundaries.
@@ -604,6 +686,7 @@
 ---
 
 #### 0.13 Strengthen CI Quality Gates ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
 **What:** Ensure every PR runs consistent checks: type safety, tests, build, lint, affected packages.
@@ -613,6 +696,7 @@
 ---
 
 #### 0.16 Fix Dockerfile Standalone Output ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-15]
 
 **What:** Dockerfile expected standalone output but it was commented out.
@@ -622,6 +706,7 @@
 ---
 
 #### 0.4 Evaluate Tailwind CSS v4 Migration ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Composer] | **Completed:** [2026-02-14]
 
 **What:** Tailwind v4.0 (released Jan 2025) is a major architectural change.
@@ -631,6 +716,7 @@
 ---
 
 #### 0.5 Evaluate Next.js 16 Migration ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Next.js 16 (released Oct 2025) includes React 19.2, stabilized Turbopack.
@@ -644,6 +730,7 @@
 ### Track A — Config + Types
 
 #### 0.8 Move @repo/shared to packages/types ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-14]
 
 **What:** Move @repo/shared from templates/shared/ to packages/types/ for proper layering.
@@ -653,6 +740,7 @@
 ---
 
 #### 2.11 Create packages/features Structure ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Create the shared features package directory structure.
@@ -664,6 +752,7 @@
 ### Track B — Feature Extraction
 
 #### 2.12 Extract Booking Feature ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Auto] | **Completed:** [2026-02-17]
 
 **What:** Move booking from template to shared package. Remove hair-salon specific hardcoding.
@@ -673,6 +762,7 @@
 ---
 
 #### 2.13 Extract Contact Feature ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Auto] | **Completed:** [2026-02-17]
 
 **What:** Move contact from template to shared package. Make fields configurable.
@@ -682,6 +772,7 @@
 ---
 
 #### 2.14 Extract Blog Feature ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Auto] | **Completed:** [2026-02-17]
 
 **What:** Move blog from template to shared package. Add content source abstraction.
@@ -691,6 +782,7 @@
 ---
 
 #### 2.15 Extract Services Feature ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Auto] | **Completed:** [2026-02-17]
 
 **What:** Move services from template to shared package. Make generic.
@@ -700,6 +792,7 @@
 ---
 
 #### 2.20 Extract Search Feature ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Auto] | **Completed:** [2026-02-17]
 
 **What:** Move search from template to shared package. Search has 2 substantial components plus library code.
@@ -711,6 +804,7 @@
 ### Track C — Testing
 
 #### 2.21 Establish Testing Strategy ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Auto] | **Completed:** [2026-02-17]
 
 **What:** Define testing approach for all new packages.
@@ -720,6 +814,7 @@
 ---
 
 #### 2.22 Build Parity Test Suite ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Auto] | **Completed:** [2026-02-18]
 
 **What:** Ensure extracted features behave the same as originals before deleting template code.
@@ -731,6 +826,7 @@
 ## Wave 3: Page Templates (Partial)
 
 #### 3.1 Create Page Templates Package ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Create page templates package scaffold.
@@ -742,6 +838,7 @@
 ## Wave 5: Client Factory (Planning)
 
 #### 5.1 Create Client Starter Template ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Minimal client template demonstrating configuration-only approach.
@@ -751,6 +848,7 @@
 ---
 
 #### 5.2 Create Salon Client Example ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Example client with hair-salon industry config.
@@ -760,6 +858,7 @@
 ---
 
 #### 5.3 Create Restaurant Client Example ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Example client with restaurant industry config.
@@ -769,6 +868,7 @@
 ---
 
 #### 5.7 Create Migration Validation Matrix ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Page-by-page validation matrix for each client migration.
@@ -780,6 +880,7 @@
 ## Wave 6: Migration (Planning)
 
 #### 6.10 Execute Final Cutover and Rollback Runbook ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Define and execute final cutover from template-based to package/client architecture.
@@ -791,6 +892,7 @@
 ## Marketing Components Package (Planning)
 
 #### 1.7 Create Marketing Components Package ✅
+
 **Status:** [x] COMPLETED | **Assigned To:** [Cascade] | **Completed:** [2026-02-17]
 
 **What:** Set up `packages/marketing-components/` with package scaffold.
@@ -810,6 +912,7 @@
 **Wave 3-6:** Planning and scaffolding complete
 
 **Key Achievements:**
+
 - ✅ Solid foundation with proper security, logging, and validation
 - ✅ Feature extraction framework established
 - ✅ Testing infrastructure in place
@@ -818,6 +921,7 @@
 - ✅ Monorepo boundaries enforced
 
 **Remaining Critical Path:**
+
 1. Create `@repo/marketing-components` package
 2. Complete remaining 4 feature extractions
 3. Populate `@repo/page-templates` with actual templates
@@ -858,7 +962,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 
 ---
 
-
 ---
 
 #### 0.2 Sync Workspace Glob Configuration
@@ -898,7 +1001,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 
 ---
 
-
 ---
 
 #### 0.9 Fix Infra Dependency Placement
@@ -930,7 +1032,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 
 ---
 
-
 ---
 
 #### 0.10 Fix Broken Infra Export Path
@@ -956,7 +1057,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 - Fix: `packages/infra/package.json` — correct export path
 
 ---
-
 
 ---
 
@@ -991,7 +1091,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 
 ---
 
-
 ---
 
 #### 0.20 Fix Port Number Inconsistency
@@ -1019,7 +1118,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 - Fix: `templates/hair-salon/lib/constants.ts`
 
 ---
-
 
 ---
 
@@ -1049,7 +1147,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 
 ---
 
-
 ---
 
 #### 0.28 Fix Node.js Engine Requirement
@@ -1070,7 +1167,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 - Fix: `package.json` — engines field
 
 ---
-
 
 ---
 
@@ -1110,7 +1206,6 @@ Complete task documentation for all 47 completed tasks, moved from TODO.md to ma
 All tasks in Batch B can be executed in parallel with each other and with Batch A.
 
 ---
-
 
 ---
 
@@ -1170,7 +1265,6 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 
 ---
 
-
 ---
 
 #### 0.21 Replace Local `cn` Imports with `@repo/utils`
@@ -1198,7 +1292,6 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 
 ---
 
-
 ---
 
 #### 0.22 Fix Hardcoded Colors in not-found.tsx and loading.tsx
@@ -1224,7 +1317,6 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 
 ---
 
-
 ---
 
 #### 0.23 Fix Social Links Missing target/rel Attributes
@@ -1248,7 +1340,6 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 - Fix: `templates/hair-salon/components/Footer.tsx`
 
 ---
-
 
 ---
 
@@ -1278,7 +1369,6 @@ All tasks in Batch B can be executed in parallel with each other and with Batch 
 - Fix: `packages/integrations/supabase/types.ts`
 
 ---
-
 
 ---
 
@@ -1321,7 +1411,6 @@ When a route is added or removed, both files must be updated independently.
 
 ---
 
-
 ---
 
 #### 0.26 Fix error.tsx and global-error.tsx Sentry Usage
@@ -1349,7 +1438,6 @@ When a route is added or removed, both files must be updated independently.
 
 ---
 
-
 ---
 
 #### 0.30 Fix SearchDialog Broken Tailwind Class
@@ -1370,7 +1458,6 @@ When a route is added or removed, both files must be updated independently.
 - Fix: `templates/hair-salon/features/search/components/SearchDialog.tsx`
 
 ---
-
 
 ---
 
@@ -1399,7 +1486,6 @@ When a route is added or removed, both files must be updated independently.
 These tasks depend on Batch A config fixes being complete. Can run in parallel with each other.
 
 ---
-
 
 ---
 
@@ -1430,7 +1516,6 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 
 ---
 
-
 ---
 
 #### 0.19 Add Export Map Validation Script
@@ -1459,7 +1544,6 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 
 ---
 
-
 ---
 
 #### 0.32 Create .env.production.local.example for Docker
@@ -1487,7 +1571,6 @@ These tasks depend on Batch A config fixes being complete. Can run in parallel w
 These tasks must run after config/code fixes and tooling are in place.
 
 ---
-
 
 ---
 
@@ -1529,7 +1612,6 @@ These tasks must run after config/code fixes and tooling are in place.
 
 ---
 
-
 ---
 
 #### 0.11 Enforce Monorepo Boundaries
@@ -1567,7 +1649,6 @@ These tasks must run after config/code fixes and tooling are in place.
 
 ---
 
-
 ---
 
 #### 0.13 Strengthen CI Quality Gates
@@ -1604,7 +1685,6 @@ These tasks must run after config/code fixes and tooling are in place.
 
 ---
 
-
 ---
 
 #### 0.16 Fix Dockerfile Standalone Output
@@ -1634,7 +1714,6 @@ These tasks must run after config/code fixes and tooling are in place.
 These are investigation-only tasks. They produce a decision document, not code changes.
 
 ---
-
 
 ---
 
@@ -1669,7 +1748,6 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 ---
 
-
 ---
 
 #### 0.5 Evaluate Next.js 16 Migration
@@ -1701,7 +1779,6 @@ These are investigation-only tasks. They produce a decision document, not code c
 
 ---
 
-
 ---
 
 #### 0.7 Accessibility Audit
@@ -1725,7 +1802,6 @@ These are investigation-only tasks. They produce a decision document, not code c
 - Create: `docs/accessibility-audit.md`
 
 ---
-
 
 ---
 
@@ -1764,7 +1840,6 @@ These are investigation-only tasks. They produce a decision document, not code c
 ### Track A — Config + Types
 
 ---
-
 
 ---
 
@@ -1809,7 +1884,6 @@ These are investigation-only tasks. They produce a decision document, not code c
 - Delete: `templates/shared/`
 
 ---
-
 
 ---
 
@@ -1894,7 +1968,6 @@ interface SiteConfig {
 
 ---
 
-
 ---
 
 #### 1.9 Create Industry Types Package
@@ -1943,7 +2016,6 @@ interface SiteConfig {
 
 ---
 
-
 ---
 
 #### 2.11 Create packages/features Structure
@@ -1985,7 +2057,6 @@ interface SiteConfig {
 - Create: Feature subdirectories
 
 ---
-
 
 ---
 
@@ -2052,7 +2123,6 @@ interface SiteConfig {
 
 ---
 
-
 ---
 
 #### 2.13 Extract Contact Feature
@@ -2076,7 +2146,6 @@ interface SiteConfig {
 **Target:** `packages/features/src/contact/`
 
 ---
-
 
 ---
 
@@ -2110,7 +2179,6 @@ interface SiteConfig {
 - Build verified; docs at `docs/features/services/usage.md`
 
 ---
-
 
 ---
 
@@ -2153,7 +2221,6 @@ interface SiteConfig {
 
 ---
 
-
 ---
 
 #### 2.14 Extract Blog Feature
@@ -2178,7 +2245,6 @@ interface SiteConfig {
 **Note:** Search is a SEPARATE feature with its own components. Do not conflate with blog extraction.
 
 ---
-
 
 ---
 
@@ -2223,7 +2289,6 @@ interface SiteConfig {
 
 ---
 
-
 ---
 
 #### 2.22 Add Feature Parity Regression Tests
@@ -2264,7 +2329,6 @@ interface SiteConfig {
 
 ---
 
-
 ---
 
 #### 3.1 Create Page Templates Package
@@ -2303,7 +2367,6 @@ interface SiteConfig {
 
 ---
 
-
 ---
 
 #### 3.2 Build HomePageTemplate
@@ -2340,7 +2403,6 @@ export function HomePageTemplate({ config }: { config: SiteConfig }) {
 
 ---
 
-
 ---
 
 #### 1.7 Create Marketing Components Package
@@ -2368,7 +2430,6 @@ packages/marketing-components/
 **Dependency boundaries:** May consume `@repo/ui`, `@repo/types`, `@repo/utils`. No deep imports.
 
 ---
-
 
 ---
 
@@ -2437,7 +2498,6 @@ export default function HomePage() {
 
 ---
 
-
 ---
 
 #### 5.2 Create Salon Client Example
@@ -2453,7 +2513,6 @@ export default function HomePage() {
 
 ---
 
-
 ---
 
 #### 5.3 Create Restaurant Client Example
@@ -2468,7 +2527,6 @@ export default function HomePage() {
 **Industry:** restaurant
 
 ---
-
 
 ---
 
@@ -2494,7 +2552,6 @@ export default function HomePage() {
 - Create: `docs/migration/checklists/client-go-live-checklist.md`
 
 ---
-
 
 ---
 
@@ -2526,7 +2583,6 @@ export default function HomePage() {
 ---
 
 ## UI Primitives Completion
-
 
 ---
 
@@ -2573,7 +2629,7 @@ export default function HomePage() {
 
 ---
 
-*This archive serves as a historical record. For active work, see TASKS.md*
+_This archive serves as a historical record. For active work, see TASKS.md_
 
 ---
 
@@ -2588,6 +2644,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - `packages/page-templates/src/sections/about.tsx`
 - Fixed `HeroCentered` call: `headline` → `title`, `subheadline` → `subtitle`, removed invalid `theme` prop
 - Fixed `TeamSection` call: replaced invalid `siteConfig` prop with correct `{ title, members, layout }` shape
@@ -2600,6 +2657,7 @@ export default function HomePage() {
 **How verified**: `pnpm --filter @repo/page-templates type-check` → 0 errors (after all section fixes below).
 
 **Follow-up tasks**:
+
 - AboutTeamAdapter always renders empty members list — wire real team data from siteConfig when `TeamMember[]` type support is added to `SiteConfig`
 
 ---
@@ -2609,6 +2667,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - `packages/page-templates/src/sections/contact.tsx`
 - Fixed `ContactForm` usage: added `createContactConfig` for proper `ContactFeatureConfig`, replaced incorrect field props with correct `config` + `onSubmit` API
 - Added `defaultContactHandler: ContactSubmissionHandler` placeholder (typed `(data, metadata) => Promise<{ success, message }>`) — clients override with real server action
@@ -2627,6 +2686,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - `packages/page-templates/src/sections/blog.tsx`
 - Fixed `BlogGrid` call: removed non-existent `currentPage`/`category` props, used `pagination: PaginationConfig` shape instead
 - Fixed `BlogPagination` call: added required `onPageChange` handler (was missing), removed non-existent `basePath` prop
@@ -2643,6 +2703,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - `packages/page-templates/src/sections/booking.tsx`
 - Fixed `props.searchParams?.service` (TypeScript couldn't index `{}`) → typed cast to `Record<string, string | string[] | undefined>` before indexing
 
@@ -2653,6 +2714,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - `packages/page-templates/src/sections/industry.tsx`
 - Fixed all wrong import names:
   - `LocationSection` → `LocationList` (actual export)
@@ -2683,6 +2745,7 @@ export default function HomePage() {
 ### Bonus Fixes (marketing-components type errors, blocking page-templates type-check)
 
 **What changed**:
+
 - `packages/marketing-components/src/hero/HeroCarousel.tsx`: Fixed `<HeroCTAButton cta={slide.cta} />` → `<HeroCTAButton {...slide.cta} />` (props are spread, not nested)
 - `packages/marketing-components/src/services/ServiceGrid.tsx`:
   - Removed `import Image from 'next/image'` (next is not a dep of marketing-components)
@@ -2707,6 +2770,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - Created `packages/infra/spacing/` module with:
   - `scale.ts`: Full Tailwind spacing scale (px/rem/tailwindClass), semantic aliases (xs → 5xl), `spacingTailwindSuffix()`
   - `utils.ts`: `pxToRem`, `remToPx`, `getSpacingValue`, `getSemanticSpacing`, `spacingVar`, `getSpacingCssVars`, `clampSpacing`, `scaleSpacing`
@@ -2718,6 +2782,7 @@ export default function HomePage() {
 **How verified**: All 15 spacing tests passed. `pnpm test` → 463 tests passing.
 
 **Known limitations**:
+
 - `useResponsiveSpacing` and `useBreakpoint` hooks require `'use client'` at call site (annotated in file headers)
 - ResizeObserver cleanup handles single observer — nested responsive containers work independently
 
@@ -2730,6 +2795,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - Created `packages/infra/typography/` module with:
   - `fonts.ts`: Font stack definitions (13 stacks: system-sans/serif/mono, inter, geist, roboto, open-sans, lato, poppins, playfair-display, merriweather, source-code-pro, fira-code), `getFontStack`, `getFontStacksByCategory`
   - `scale.ts`: Full Tailwind type scale (xs → 9xl) with px/rem/defaultLineHeight/tailwindClass, `getTypeScale`, `getTailwindTextClass`, `nearestTypeScaleKey`
@@ -2742,6 +2808,7 @@ export default function HomePage() {
 **How verified**: All 20 typography tests passed.
 
 **Known limitations**:
+
 - `estimateTextWidth` uses 0.6 average char width ratio — only an approximation, use canvas `measureText` for pixel-perfect measurement
 - `isWebFontLoaded` uses CSS Font Loading API which has ~97% browser support (IE lacks it)
 
@@ -2752,6 +2819,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - Created `packages/infra/color/` module with:
   - `utils.ts`: `parseHsl`, `formatHsl`, `hslToCss`, `hslToCssVar`, `adjustLightness`, `adjustSaturation`, `hslToRgb`, `toHexFromHsl`, `mixColors` — all handle the project's HSL format ("H S% L%")
   - `contrast.ts`: `getRelativeLuminance`, `getContrastRatio`, `meetsWcagAA`, `meetsWcagAAA`, `getWcagLevel`, `suggestForeground` — full WCAG 2.2 compliance checking
@@ -2763,6 +2831,7 @@ export default function HomePage() {
 **How verified**: All 22 color tests passed, including WCAG contrast ratio verification (21:1 for black on white).
 
 **Known limitations**:
+
 - `mixColors` interpolates H/S/L linearly — does not account for perceptual uniformity (for design tools, use OKLab color space instead)
 - Contrast ratio calculation uses standard WCAG 2.2 gamma correction formula, not display-profile-aware
 
@@ -2773,6 +2842,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - Created `packages/infra/shadow/` module with:
   - `scale.ts`: Shadow scale (none, sm, md, lg, xl, 2xl, inner) with CSS values and Tailwind classes; `SHADOW_INTENSITY_MAP` for SiteConfig.theme.shadows; `getShadow`, `shadowIntensityToKey`, `getShadowClass`
   - `utils.ts`: `getShadowCssVars`, `coloredShadow`, `elevationToShadow` (0–5 elevation levels), `combineShadows`, `shadowVar`
@@ -2791,6 +2861,7 @@ export default function HomePage() {
 **Status**: COMPLETED (2026-02-19)
 
 **What changed**:
+
 - Created `packages/infra/border/` module with:
   - `radius.ts`: Border radius scale (none, sm, md, lg, xl, 2xl, 3xl, full) with CSS/rem/px/tailwindClass; `RADIUS_INTENSITY_MAP` for SiteConfig.theme.borderRadius; `getRadius`, `radiusIntensityToKey`, `getRadiusClass`
   - `width.ts`: Border width scale (0, default/1px, 2, 4, 8) with CSS/px/tailwindClass; `getBorderWidth`, `getBorderWidthClass`
@@ -2806,10 +2877,12 @@ export default function HomePage() {
 ### Bonus Fixes (marketing-components, resolved in this session)
 
 **What changed**:
+
 - `packages/marketing-components/src/hero/HeroCarousel.tsx`: Fixed `<HeroCTAButton cta={slide.cta} />` → `<HeroCTAButton {...slide.cta} />` (spread instead of nested prop)
 - `packages/marketing-components/src/services/ServiceGrid.tsx`: Removed `import Image from 'next/image'` (next is not a dep of marketing-components), replaced with `<img>` + absolute CSS; replaced `asChild` Button with styled `<a>` tag; removed unused `Button` import
 
 **Follow-up**:
+
 - Consider making `marketing-components` peer-depend on `next` to allow Next.js Image optimization
 - Add comprehensive unit tests for remaining marketing-component variants
 
@@ -2830,6 +2903,7 @@ export default function HomePage() {
 **Status:** [x] COMPLETED | **Completed:** 2026-02-19
 
 **What changed:**
+
 - `docs/migration/template-to-client.md` — Replaced 1-line TODO stub with full 490-line guide covering: overview of CaCA architecture, step-by-step setup (copy template, package.json, env vars), complete site.config.ts annotation, industry field reference, feature flags table with per-industry recommendations, theme configuration with HSL color format explanation, all 4 integration types, all 4 conversion flow types, post-migration verification checklist, component reusability rubric, common pitfalls table, and cross-references to related docs.
 
 **Why:** The stub was referenced as the authoritative guide for creating new client sites. Without it, every new client required re-discovery of the CaCA setup process. The guide is now the single source of truth for onboarding.
@@ -2837,6 +2911,7 @@ export default function HomePage() {
 **How verified:** File parses as valid Markdown. All referenced file paths verified to exist (packages/types/src/site-config.ts, clients/starter-template/site.config.ts, docs/configuration/site-config-reference.md).
 
 **Follow-up tasks created:**
+
 - Add automated "validate migration guide links" to CI as quality-audit step
 
 ---
@@ -2846,6 +2921,7 @@ export default function HomePage() {
 **Status:** [x] COMPLETED | **Completed:** 2026-02-19
 
 **What changed:**
+
 - `docs/configuration/site-config-reference.md` — Replaced 19-line stub with 456-line field-by-field reference. Covers all SiteConfig top-level fields, IndustryType enum, features section (layout variants + boolean + optional industry fields), all 5 integration types, navLinks/socialLinks/footer/contact with exact type shapes, SEO defaults with schema.org type table by industry, theme colors (HSL format), fonts, borderRadius/shadows tokens, all 4 conversionFlow discriminated union variants with use-case guidance, Zod validation example.
 
 **Why:** `site.config.ts` is the central API for the entire CaCA system. Without a field-by-field reference, developers had to read the TypeScript types directly — a poor DX that slowed client onboarding.
@@ -2861,6 +2937,7 @@ export default function HomePage() {
 **Status:** [x] COMPLETED | **Completed:** 2026-02-19
 
 **What changed:**
+
 - `docs/features/gallery.md` — Replaced TODO stub. Covers: GalleryItem/GalleryGridProps interfaces, responsive grid layout table, accessibility requirements, static data pattern, planned variants table.
 - `docs/features/team.md` — Replaced TODO stub. Covers: TeamMember type (with deprecation note for `social` field), all 3 variants (Grid/Carousel/Detailed), usage example, department filtering pattern, industry recommendations.
 - `docs/features/testimonials.md` — Replaced TODO stub. Covers: Testimonial type (quote/content alias), all 3 variants (Carousel/Grid/Marquee), rating display, industry recommendations, data source options, accessibility notes.
@@ -2877,8 +2954,9 @@ export default function HomePage() {
 **Status:** [x] COMPLETED | **Completed:** 2026-02-19
 
 **What changed:**
+
 - `docs/adr/0006-configuration-as-code-architecture.md` — New ADR documenting the CaCA pattern: why a single site.config.ts drives all site behavior, key design decisions (discriminated union for conversionFlow, feature flags as layout variant strings, HSL colors without wrapper, industry enum, starter template as golden path), consequences, and alternatives considered (fork-per-client, CMS-driven).
-- `docs/adr/0007-next-intl-i18n-starter-template.md` — New ADR documenting why next-intl was chosen for i18n in starter-template, implementation details (app/[locale]/ routing, middleware, messages/*.json), trade-offs (flat vs. [locale] routing divergence), and alternatives rejected.
+- `docs/adr/0007-next-intl-i18n-starter-template.md` — New ADR documenting why next-intl was chosen for i18n in starter-template, implementation details (app/[locale]/ routing, middleware, messages/\*.json), trade-offs (flat vs. [locale] routing divergence), and alternatives rejected.
 - `docs/adr/0008-client-isolation-cross-import-ban.md` — New ADR documenting the rule forbidding cross-client imports, enforcement mechanisms (ESLint, madge), the correct path for sharing code (package extraction), and consequences.
 
 **Why:** The ADR series was incomplete. ADRs 6-8 address the three most important architectural decisions for the CaCA monorepo that hadn't been documented.
@@ -2892,6 +2970,7 @@ export default function HomePage() {
 **Status:** [x] COMPLETED | **Completed:** 2026-02-19
 
 **What changed:**
+
 - `scripts/health-check.ts` — Replaced 6-line stub. Full implementation with 5 check categories: workspace files (required + optional), client directories (package.json name convention, site.config.ts, next.config, tsconfig), shared packages (existence + src/index.ts), root package.json scripts, and key documentation stubs. Color-coded PASS/FAIL/WARN output. Summary with counts. Exits 1 on failures, 0 on pass.
 - `package.json` — Added `"health": "npx tsx scripts/health-check.ts"` script.
 
@@ -2906,6 +2985,7 @@ export default function HomePage() {
 **Status:** [x] COMPLETED | **Completed:** 2026-02-19
 
 **What changed:**
+
 - `scripts/validate-client.ts` — Replaced 6-line stub. Full implementation: validates a specific client directory against CaCA contract. Checks: package.json (@clients/ name, dev/build/type-check scripts), site.config.ts (SiteConfig import, required fields, export default), next.config existence, tsconfig.json with `extends`, app/ directory with layout.tsx and page.tsx (handles both flat and [locale] routing), cross-client import detection via grep. Color-coded output.
 - `package.json` — Added `"validate-client": "npx tsx scripts/validate-client.ts"` script.
 
@@ -2920,10 +3000,12 @@ export default function HomePage() {
 **Status:** [x] COMPLETED | **Completed:** 2026-02-19
 
 **What changed:**
+
 - `scripts/operations/program-wave.js` — New script. Scans tasks/ (open) and tasks/archive/ (completed) for tasks matching each wave's file prefix pattern. Reports open tasks with titles, archived tasks with titles, total progress percentage. Wave definitions: 0 (infra, prefix 0-), 1 (components, prefixes 1-/2-/f-/3-), 2 (integrations, prefix 4-), 3 (clients+docs, prefixes 5-/6-).
 - `package.json` — Added `program:wave0`, `program:wave1`, `program:wave2`, `program:wave3` scripts.
 
 **How verified:**
+
 - `node scripts/operations/program-wave.js --wave 0` → Wave 0 COMPLETE (3/3 archived, 100%)
 - `node scripts/operations/program-wave.js --wave 3` → Wave 3 IN PROGRESS (0/19, 0% — reflects open tasks)
 
@@ -2936,6 +3018,7 @@ export default function HomePage() {
 **Status:** [x] COMPLETED (pre-existing) | **Completed:** ~2026-02-18
 
 **What changed:**
+
 - `clients/README.md` was already comprehensive (238 lines) when this session started — covered: purpose, structure, step-by-step client creation, environment variables, project structure, development workflow, deployment (Vercel, Docker), customization guidelines, best practices, and troubleshooting.
 - No changes needed; task is verified done.
 

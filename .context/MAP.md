@@ -25,7 +25,7 @@ This semantic index maps concepts to files for AI discoverability in the marketi
 **Evolution Roadmap (Strangler Fig)**
 
 - Concept: 26-week organic evolution toward capability-driven platform
-- Files: `NEW.md`, `docs/architecture/evolution-roadmap.md`, `THEPLAN.md`
+- Files: `NEW.md`, `docs/architecture/evolution-roadmap.md`. `THEPLAN.md` archived (executed 2026-02-20).
 - Phases: Foundation (1-4) → Data Contracts (5-10) → Capability Core (11-16) → Universal Renderer (17-22) → Platform Convergence (23-26)
 
 **Capability Registry**
