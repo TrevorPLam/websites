@@ -10,10 +10,14 @@ This file provides context for AI assistants (Claude Code and others) working in
 
 **marketing-websites** is a **pnpm monorepo** for building multi-industry marketing websites. It uses a configuration-as-code (CaCA) architecture where a single `site.config.ts` drives all client-site behavior — theming, page composition, feature flags, SEO schema, and integrations.
 
-- **Current phase:** Wave 0 complete → Wave 1 in progress
+- **Current phase:** Phase 1 (Foundation) in progress; Phase 2–5 planned per [NEW.md](NEW.md) and [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md)
 - **Starter template:** `clients/starter-template` (package `@clients/starter-template`, port 3101)
 - **Package manager:** pnpm 10.29.2 (strictly enforced via `packageManager` field)
 - **Node.js:** >=22.0.0 (enforced via `engines`)
+
+### Evolution Path
+
+The platform evolves via a **26-week organic evolution** ("Strangler Fig") documented in [NEW.md](NEW.md) and [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md). Five phases: Foundation (Weeks 1–4) → Data Contracts (5–10) → Capability Core (11–16) → Universal Renderer (17–22) → Platform Convergence (23–26). Each change delivers immediate value. Read evolution-roadmap.md for phase/week sequencing before major feature work.
 
 ---
 

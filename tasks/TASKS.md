@@ -17,6 +17,21 @@
 
 **Advanced Code Patterns (2026-02-19):** See [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) for pattern inventory and tiered recommendations. Execution waves and sequencing are in [TODO.md](../TODO.md). Individual tasks (inf-1, inf-2, inf-4, inf-8, inf-10, inf-12, c-5, f-21) include an "Advanced Code Pattern Expectations" section with updated research and acceptance criteria.
 
+**Organic Evolution (2026-02-19):** Primary sequencing per [NEW.md](../NEW.md) and [docs/architecture/evolution-roadmap.md](../docs/architecture/evolution-roadmap.md). 26-week Strangler Fig path. evol-\* tasks define phase deliverables. Security/Phase 0 runs in parallel.
+
+| Phase     | Weeks | Tasks                  | Checkpoint                  |
+| --------- | ----- | ---------------------- | --------------------------- |
+| Pre-Phase | 0     | 0-1, 0-3, 0-2          | CI green, BookingRepository |
+| Phase 1   | 1-4   | evol-1, evol-2, evol-3 | Foundation locked           |
+| Phase 2   | 5-10  | evol-4, evol-5, evol-6 | Data contracts seeded       |
+| Phase 3   | 11-16 | evol-7, evol-8         | Capability core active      |
+| Phase 4   | 17-22 | evol-9, evol-10        | Universal renderer proven   |
+| Phase 5   | 23-26 | evol-11, evol-12       | Platform converged          |
+
+**evol-\* task files:** [evol-1](evol-1-architecture-police.md) · [evol-2](evol-2-cva-token-completion.md) · [evol-3](evol-3-registry-capability-metadata.md) · [evol-4](evol-4-canonical-types.md) · [evol-5](evol-5-booking-canonical-migration.md) · [evol-6](evol-6-integration-adapter-registry.md) · [evol-7](evol-7-define-feature.md) · [evol-8](evol-8-site-config-capability-activation.md) · [evol-9](evol-9-universal-renderer.md) · [evol-10](evol-10-edge-database-opt-in.md) · [evol-11](evol-11-legacy-bridge.md) · [evol-12](evol-12-full-platform-convergence.md)
+
+---
+
 ### Pre-Phase: Critical Blockers (Must Complete First - Unblocks All Work)
 
 **Tasks:** `0-1`, `0-3`, `0-2`
@@ -438,8 +453,9 @@
 | Batch H (CI/Gov) | c-1, c-7, c-13, d-1, d-6, d-8, c-12, c-14 | 8 | Medium (CI templates) | 40% |
 | Batch I (Integration) | api-_, integration-_, scripts-_ | 3 | Low (wiring) | 20% |
 | Phase 8 (Remaining) | inf-7, inf-9, inf-14 | 3 | Low (dependencies) | 0% |
+| Organic Evolution (evol-\*) | evol-1..evol-12 | 12 | Medium | Phase-gated |
 
-**Total Active Tasks:** ~122  
+**Total Active Tasks:** ~134 (includes 12 evol-\*)  
 **Completed Tasks:** 9 (0-4, 0-5, 0-6, 0-7, 6-8b, 6-8c, 6-8d, 6-8e, 6-9b)  
 **High Automation Potential:** ~70 tasks (57%)  
 **Estimated Overall Time Savings:** 40-50% with script investment
@@ -576,6 +592,25 @@ This plan prioritizes **speed through automation** while maintaining **quality t
 | docs-c3-turbo-remote-cache        | Add turbo-remote-cache.md               | P2       | [docs-c3-turbo-remote-cache.md](docs-c3-turbo-remote-cache.md)               |
 | docs-c18-edge-personalization     | Add edge-personalization.md             | P2       | [docs-c18-edge-personalization.md](docs-c18-edge-personalization.md)         |
 | docs-readme-architecture-diagram  | Update README with Architecture Diagram | P2       | [docs-readme-architecture-diagram.md](docs-readme-architecture-diagram.md)   |
+
+---
+
+## Organic Evolution (evol-\*)
+
+| Task ID                                  | Title                                           | Phase      | Priority | Link                                                                                       |
+| ---------------------------------------- | ----------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------ |
+| evol-1-architecture-police               | Architecture Police (ESLint Rules)              | 1 (W1)     | P1       | [evol-1-architecture-police.md](evol-1-architecture-police.md)                             |
+| evol-2-cva-token-completion              | CVA Completion + Token System                   | 1 (W2)     | P1       | [evol-2-cva-token-completion.md](evol-2-cva-token-completion.md)                           |
+| evol-3-registry-capability-metadata      | Registry Hardening with Capability Metadata     | 1 (W3-4)   | P1       | [evol-3-registry-capability-metadata.md](evol-3-registry-capability-metadata.md)           |
+| evol-4-canonical-types                   | Canonical Types (Lead, Booking)                 | 2 (W5-6)   | P1       | [evol-4-canonical-types.md](evol-4-canonical-types.md)                                     |
+| evol-5-booking-canonical-migration       | Migrate Booking to Canonical Types + Repository | 2 (W7-8)   | P1       | [evol-5-booking-canonical-migration.md](evol-5-booking-canonical-migration.md)             |
+| evol-6-integration-adapter-registry      | Integration Adapter Registry (Formal)           | 2 (W9-10)  | P1       | [evol-6-integration-adapter-registry.md](evol-6-integration-adapter-registry.md)           |
+| evol-7-define-feature                    | Feature → Capability Refactoring                | 3 (W11-13) | P1       | [evol-7-define-feature.md](evol-7-define-feature.md)                                       |
+| evol-8-site-config-capability-activation | Site Config → Capability Activation             | 3 (W14-16) | P1       | [evol-8-site-config-capability-activation.md](evol-8-site-config-capability-activation.md) |
+| evol-9-universal-renderer                | Universal Renderer (New Clients Only)           | 4 (W17-19) | P2       | [evol-9-universal-renderer.md](evol-9-universal-renderer.md)                               |
+| evol-10-edge-database-opt-in             | Edge Database Opt-In                            | 4 (W20-22) | P2       | [evol-10-edge-database-opt-in.md](evol-10-edge-database-opt-in.md)                         |
+| evol-11-legacy-bridge                    | Legacy Bridge (Classic Config → Capability)     | 5 (W23-24) | P2       | [evol-11-legacy-bridge.md](evol-11-legacy-bridge.md)                                       |
+| evol-12-full-platform-convergence        | Full Platform Convergence                       | 5 (W25-26) | P2       | [evol-12-full-platform-convergence.md](evol-12-full-platform-convergence.md)               |
 
 ---
 

@@ -55,6 +55,8 @@ _Purpose:_ Complete topic map and task→topic mapping for Task Research Audit. 
 | R-VERSIONING              | Changesets, versioning strategy, release channels                                     | 0.12, C.4                                             |
 | R-PARITY                  | Parity testing, refactor validation                                                   | 2.22                                                  |
 | R-CONFIG-VALIDATION       | Config schema validation, Zod runtime checks                                          | 6.10a, 5.1                                            |
+| R-CANONICAL               | Canonical types, Zod schemas, adapter pattern, integration-swappable types            | evol-4, evol-5, ADR-012                               |
+| R-CAPABILITY              | defineFeature, capability registry, capability activation, provides/dataContracts     | evol-7, evol-8, evol-9, inf-14                        |
 | R-MIGRATION               | Template-to-client migration, cutover runbooks                                        | 6.1, 6.2                                              |
 | R-CLEANUP                 | Dead code removal, dependency pruning                                                 | 6.9                                                   |
 | R-SECURITY-SERVER-ACTIONS | Server action security, IDOR mitigation, secureAction wrapper                         | security-1, 0-5                                       |
@@ -262,6 +264,14 @@ F.8, docs/operations.
 ### R-CONFIG-VALIDATION (Config schema validation, Zod)
 
 6.10a, 5.1, tooling/validation, packages/types/site-config.schema.ts.
+
+### R-CANONICAL (Canonical types, adapters, Zod)
+
+evol-4, evol-5, ADR-012. packages/types/src/canonical/; LeadAdapter, HubSpotLeadAdapter; no integration types leaking into features.
+
+### R-CAPABILITY (defineFeature, capability registry, activation)
+
+evol-7, evol-8, evol-9, inf-14. defineFeature; provides (sections, integrations, dataContracts); capability activation in site.config.
 
 ### R-MIGRATION (Template-to-client migration, cutover)
 

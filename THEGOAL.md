@@ -1,7 +1,6 @@
 # Marketing Website Monorepo — The Goal Architecture
 
-**What the repository looks like when all 136 tasks are complete.**
-Each line is annotated with the task ID that creates or modifies it.
+**What the repository looks like when the evolution is complete.** Each line is annotated with the task ID that creates or modifies it. The end state is achieved via **evolutionary phases** (26-week Strangler Fig path) — see [NEW.md](NEW.md) and [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md).
 
 ---
 

@@ -6,7 +6,7 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: TBD
-- **Related Epics / ADRs**: THEGOAL [C.5], design system
+- **Related Epics / ADRs**: THEGOAL [C.5], design system, NEW.md Phase 1 (Week 2), evol-2
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Theming, INF-4

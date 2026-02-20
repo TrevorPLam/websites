@@ -22,7 +22,7 @@
 
 ## Task non-negotiables
 
-Before any task: read THEGOAL.md. Full checklist in .context/RULES.md. Key: research (02/2026), examples, 3-pass QA, testing required, documentation required, commit & push.
+Before any task: read THEGOAL.md and NEW.md/evolution-roadmap.md for phase sequencing. Full checklist in .context/RULES.md. Key: research (02/2026), examples, 3-pass QA, testing required, documentation required, commit & push.
 
 ---
 

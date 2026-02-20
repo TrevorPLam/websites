@@ -3,6 +3,8 @@
 _Last updated:_ February 18, 2026  
 _Purpose:_ single-source research summary for the marketing-websites monorepo. Task specs live under `tasks/*.md`; only keep cross-cutting research here.
 
+**Evolution path:** Platform evolves via 26-week organic evolution per [NEW.md](NEW.md) and [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md). evol-\* tasks define phase deliverables.
+
 **Relationship to RESEARCH-INVENTORY:** This file (RESEARCH.md) is the **content digest** — narrative sections and §-index for task references. Use [tasks/RESEARCH-INVENTORY.md](tasks/RESEARCH-INVENTORY.md) for the **topic index** (R-UI, R-A11Y, etc.) and task→topic mapping. Tasks reference RESEARCH-INVENTORY by topic ID; use this file for §-section references.
 
 ---

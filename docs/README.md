@@ -561,7 +561,7 @@ docs/
     └── server-action-test-template.ts
 ```
 
-> **Note:** Task specifications were previously in `docs/task-specs/`. They are now consolidated in root [TASKS.md](../TASKS.md).
+> **Note:** Task specifications were previously in `docs/task-specs/`. They are now consolidated in [tasks/TASKS.md](../tasks/TASKS.md).
 
 ### Documentation Types
 

@@ -6,7 +6,7 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: TBD
-- **Related Epics / ADRs**: Infinite Extensibility (Tier 12)
+- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), NEW.md Phase 1, evol-3
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: INF-5, INF-7

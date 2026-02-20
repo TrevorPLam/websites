@@ -68,6 +68,8 @@ primary_language: typescript
 
 Thank you for your interest in contributing to the Multi-Industry Marketing Website Template System! This document provides guidelines for contributing to this project with verified workflows and tooling.
 
+**Evolution alignment:** Before proposing major feature work, check [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md) for the current phase and ensure changes fit within the 26-week evolution plan.
+
 ## Setup
 
 ### Prerequisites
@@ -168,11 +170,13 @@ L3 - Experience Layer:         @repo/page-templates, clients/*
 ### Dependency Rules
 
 **Allowed:**
+
 - Clients → `@repo/*` packages (via public exports)
 - `@repo/features` → `@repo/ui`, `@repo/utils`, `@repo/types`, `@repo/infra`
 - `@repo/ui` → `@repo/utils`, `@repo/types`
 
 **Forbidden:**
+
 - Packages → Clients (never)
 - Client A → Client B (never - cross-client isolation)
 - Deep imports like `@repo/infra/src/internal` (use public exports only)
@@ -182,6 +186,7 @@ L3 - Experience Layer:         @repo/page-templates, clients/*
 ESLint enforces module boundaries via `no-restricted-imports` rules. See [docs/architecture/module-boundaries.md](docs/architecture/module-boundaries.md) for details.
 
 **Validation:**
+
 - `pnpm validate:circular` - Check for circular dependencies
 - `pnpm validate-exports` - Verify package exports resolve correctly
 - `pnpm madge:circular` - Alternative circular dependency check
@@ -260,11 +265,13 @@ This repository uses [Changesets](https://github.com/changesets/changesets) for 
 ### When to Create a Changeset
 
 **Required for:**
+
 - Any non-patch changes (features, bug fixes that affect behavior)
 - Breaking changes (API changes, configuration changes)
 - New features or significant enhancements
 
 **Not required for:**
+
 - Documentation-only changes
 - Internal refactoring that doesn't change public APIs
 - Dependency updates (handled separately)
@@ -276,6 +283,7 @@ pnpm changeset
 ```
 
 Follow the interactive prompts to:
+
 1. Select packages affected
 2. Choose change type (patch, minor, major)
 3. Write a description
@@ -283,6 +291,7 @@ Follow the interactive prompts to:
 ### Breaking Changes Policy
 
 Breaking changes require:
+
 1. **Discussion first** - Open an issue or discuss in PR comments before implementing
 2. **Changeset with major version bump** - Use `pnpm changeset` and select "major"
 3. **Migration guide** - Document migration path in PR description or linked issue

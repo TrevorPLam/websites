@@ -22,6 +22,12 @@ This file defines guardrails and conventions for AI assistants working in this r
 - **Forbidden:** `clients/A` → `clients/B` (cross-client isolation)
 - **Forbidden:** Deep imports like `@repo/infra/src/internal` (use public exports only)
 
+### Evolution Alignment
+
+- **Rule:** Major changes must fit within NEW.md phase boundaries
+- **Action:** Read [docs/architecture/evolution-roadmap.md](../docs/architecture/evolution-roadmap.md) for current phase before proposing major feature work
+- **Constraint:** No speculative Phase 5 work during Phase 1
+
 ### Version Management
 
 - **Rule:** Use `pnpm-workspace.yaml` catalog versions when available

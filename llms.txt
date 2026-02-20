@@ -179,7 +179,8 @@ cp .env.example clients/starter-template/.env.local
 
 ### Decision Records
 - **Location:** `docs/adr/` (adaptation from standard root ADRs/)
-- **Format:** Numbered ADRs (0001-0009) documenting architectural decisions
+- **Format:** Numbered ADRs (0001-0012) documenting architectural decisions
+- **Evolution:** [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md), [docs/adr/0012-canonical-types-data-contracts.md](docs/adr/0012-canonical-types-data-contracts.md)
 
 ## Common Workflows
 

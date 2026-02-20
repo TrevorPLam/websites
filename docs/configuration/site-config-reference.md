@@ -29,6 +29,8 @@
 
 **Last Updated:** 2026-02-19
 **Source of Truth:** [`packages/types/src/site-config.ts`](../../packages/types/src/site-config.ts)
+
+**Evolution (Phase 3):** Future fields `capabilities`, `pages`, `renderer`, `storage` will extend SiteConfig per [evolution-roadmap.md](../architecture/evolution-roadmap.md). Schema will be updated when capability activation is implemented (evol-8).
 **Zod Schema:** `siteConfigSchema` (exported from `@repo/types`)
 
 ---
@@ -47,31 +49,31 @@ export default siteConfig;
 
 ## Top-Level Identity Fields
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | `string` | Yes | Machine-readable slug. Kebab-case, unique across all clients. |
-| `name` | `string` | Yes | Display name shown in nav, footer, and meta tags. |
-| `tagline` | `string` | Yes | One-liner tagline (used under logos, in hero text). |
-| `description` | `string` | Yes | Longer description for SEO and about pages. |
-| `url` | `string` | Yes | Canonical production URL, no trailing slash. Should read from `NEXT_PUBLIC_SITE_URL` env var. |
-| `industry` | `IndustryType` | Yes | Industry classification — activates schema.org markup. See Industry Types below. |
+| Field         | Type           | Required | Description                                                                                   |
+| ------------- | -------------- | -------- | --------------------------------------------------------------------------------------------- |
+| `id`          | `string`       | Yes      | Machine-readable slug. Kebab-case, unique across all clients.                                 |
+| `name`        | `string`       | Yes      | Display name shown in nav, footer, and meta tags.                                             |
+| `tagline`     | `string`       | Yes      | One-liner tagline (used under logos, in hero text).                                           |
+| `description` | `string`       | Yes      | Longer description for SEO and about pages.                                                   |
+| `url`         | `string`       | Yes      | Canonical production URL, no trailing slash. Should read from `NEXT_PUBLIC_SITE_URL` env var. |
+| `industry`    | `IndustryType` | Yes      | Industry classification — activates schema.org markup. See Industry Types below.              |
 
 ### Industry Types
 
 ```typescript
 type IndustryType =
-  | 'salon'        // Hair/beauty salons
-  | 'restaurant'   // Food and beverage
-  | 'law-firm'     // Legal services
-  | 'dental'       // Dental practices
-  | 'medical'      // Healthcare / clinics
-  | 'fitness'      // Gyms, studios
-  | 'retail'       // Retail / e-commerce
-  | 'consulting'   // Consulting / advisory
-  | 'realestate'   // Real estate agencies
+  | 'salon' // Hair/beauty salons
+  | 'restaurant' // Food and beverage
+  | 'law-firm' // Legal services
+  | 'dental' // Dental practices
+  | 'medical' // Healthcare / clinics
+  | 'fitness' // Gyms, studios
+  | 'retail' // Retail / e-commerce
+  | 'consulting' // Consulting / advisory
+  | 'realestate' // Real estate agencies
   | 'construction' // Construction / trades
-  | 'automotive'   // Auto services / dealerships
-  | 'general'      // Catch-all for other industries
+  | 'automotive' // Auto services / dealerships
+  | 'general'; // Catch-all for other industries
 ```
 
 ---
@@ -82,43 +84,43 @@ Controls which sections render and which layout variant they use. Set a variant 
 
 ### Layout Variant Fields
 
-| Field | Type | Variants | Description |
-|-------|------|----------|-------------|
-| `hero` | `string \| null` | `centered`, `split`, `video`, `carousel` | Hero section layout |
-| `services` | `string \| null` | `grid`, `list`, `tabs`, `accordion` | Services section layout |
-| `team` | `string \| null` | `grid`, `carousel`, `detailed` | Team section layout |
-| `testimonials` | `string \| null` | `carousel`, `grid`, `marquee` | Testimonials layout |
-| `pricing` | `string \| null` | `table`, `cards`, `calculator` | Pricing section layout |
-| `contact` | `string \| null` | `simple`, `multi-step`, `with-booking` | Contact form style |
-| `gallery` | `string \| null` | `grid`, `carousel`, `lightbox` | Gallery layout |
+| Field          | Type             | Variants                                 | Description             |
+| -------------- | ---------------- | ---------------------------------------- | ----------------------- |
+| `hero`         | `string \| null` | `centered`, `split`, `video`, `carousel` | Hero section layout     |
+| `services`     | `string \| null` | `grid`, `list`, `tabs`, `accordion`      | Services section layout |
+| `team`         | `string \| null` | `grid`, `carousel`, `detailed`           | Team section layout     |
+| `testimonials` | `string \| null` | `carousel`, `grid`, `marquee`            | Testimonials layout     |
+| `pricing`      | `string \| null` | `table`, `cards`, `calculator`           | Pricing section layout  |
+| `contact`      | `string \| null` | `simple`, `multi-step`, `with-booking`   | Contact form style      |
+| `gallery`      | `string \| null` | `grid`, `carousel`, `lightbox`           | Gallery layout          |
 
 ### Boolean Section Fields
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `blog` | `boolean` | — | Enable blog listing and detail pages |
-| `booking` | `boolean` | — | Enable booking page and flow |
-| `faq` | `boolean` | — | Enable FAQ section |
+| Field     | Type      | Default | Description                          |
+| --------- | --------- | ------- | ------------------------------------ |
+| `blog`    | `boolean` | —       | Enable blog listing and detail pages |
+| `booking` | `boolean` | —       | Enable booking page and flow         |
+| `faq`     | `boolean` | —       | Enable FAQ section                   |
 
 ### Optional Industry Feature Fields
 
-| Field | Type | Industry Use |
-|-------|------|-------------|
-| `location` | `boolean?` | Restaurant, retail — Google Maps embed |
-| `menu` | `boolean?` | Restaurant — menu section |
-| `portfolio` | `boolean?` | Law firm, design — portfolio/case studies |
-| `caseStudy` | `boolean?` | Consulting — detailed case study pages |
-| `jobListing` | `boolean?` | Any — careers page |
-| `course` | `boolean?` | Education, fitness — course listings |
-| `resource` | `boolean?` | Consulting, law — downloadable resources |
-| `comparison` | `boolean?` | SaaS, retail — feature comparison table |
-| `filter` | `boolean?` | Retail, services — filterable listings |
-| `search` | `boolean?` | Any — site search |
-| `socialProof` | `boolean?` | Any — social proof widget |
-| `video` | `boolean?` | Any — video section |
-| `audio` | `boolean?` | Any — audio/podcast section |
-| `interactive` | `boolean?` | Any — interactive calculator or tool |
-| `widget` | `boolean?` | Any — embedded third-party widget |
+| Field         | Type       | Industry Use                              |
+| ------------- | ---------- | ----------------------------------------- |
+| `location`    | `boolean?` | Restaurant, retail — Google Maps embed    |
+| `menu`        | `boolean?` | Restaurant — menu section                 |
+| `portfolio`   | `boolean?` | Law firm, design — portfolio/case studies |
+| `caseStudy`   | `boolean?` | Consulting — detailed case study pages    |
+| `jobListing`  | `boolean?` | Any — careers page                        |
+| `course`      | `boolean?` | Education, fitness — course listings      |
+| `resource`    | `boolean?` | Consulting, law — downloadable resources  |
+| `comparison`  | `boolean?` | SaaS, retail — feature comparison table   |
+| `filter`      | `boolean?` | Retail, services — filterable listings    |
+| `search`      | `boolean?` | Any — site search                         |
+| `socialProof` | `boolean?` | Any — social proof widget                 |
+| `video`       | `boolean?` | Any — video section                       |
+| `audio`       | `boolean?` | Any — audio/podcast section               |
+| `interactive` | `boolean?` | Any — interactive calculator or tool      |
+| `widget`      | `boolean?` | Any — embedded third-party widget         |
 
 ---
 
@@ -230,9 +232,9 @@ Array of link objects rendered in the site header:
 
 ```typescript
 navLinks: Array<{
-  href: string;   // Absolute path ('/services') or external URL
-  label: string;  // Display text
-}>
+  href: string; // Absolute path ('/services') or external URL
+  label: string; // Display text
+}>;
 ```
 
 ---
@@ -242,8 +244,8 @@ navLinks: Array<{
 ```typescript
 socialLinks: Array<{
   platform: 'facebook' | 'twitter' | 'linkedin' | 'instagram' | 'youtube' | 'tiktok';
-  url: string;  // Full URL (validated as URL by Zod)
-}>
+  url: string; // Full URL (validated as URL by Zod)
+}>;
 ```
 
 ---
@@ -253,18 +255,19 @@ socialLinks: Array<{
 ```typescript
 footer: {
   columns: Array<{
-    heading: string;               // Column heading text
+    heading: string; // Column heading text
     links: Array<{
       href: string;
       label: string;
     }>;
   }>;
-  legalLinks: Array<{             // Privacy, Terms links in footer bar
+  legalLinks: Array<{
+    // Privacy, Terms links in footer bar
     href: string;
     label: string;
   }>;
-  copyrightTemplate: string;      // '{year}' is replaced at render time
-                                  // e.g. '© {year} Acme Inc.'
+  copyrightTemplate: string; // '{year}' is replaced at render time
+  // e.g. '© {year} Acme Inc.'
 }
 ```
 
@@ -312,20 +315,20 @@ seo: {
 
 Common `schemaType` values by industry:
 
-| Industry | schemaType |
-|----------|-----------|
-| salon | `HairSalon` |
-| restaurant | `Restaurant` |
-| law-firm | `LegalService` |
-| dental | `Dentist` |
-| medical | `MedicalClinic` |
-| fitness | `HealthClub` |
-| retail | `Store` |
-| consulting | `ProfessionalService` |
-| realestate | `RealEstateAgent` |
+| Industry     | schemaType                    |
+| ------------ | ----------------------------- |
+| salon        | `HairSalon`                   |
+| restaurant   | `Restaurant`                  |
+| law-firm     | `LegalService`                |
+| dental       | `Dentist`                     |
+| medical      | `MedicalClinic`               |
+| fitness      | `HealthClub`                  |
+| retail       | `Store`                       |
+| consulting   | `ProfessionalService`         |
+| realestate   | `RealEstateAgent`             |
 | construction | `HomeAndConstructionBusiness` |
-| automotive | `AutoRepair` |
-| general | `LocalBusiness` |
+| automotive   | `AutoRepair`                  |
+| general      | `LocalBusiness`               |
 
 ---
 

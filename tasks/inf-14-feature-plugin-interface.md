@@ -6,7 +6,7 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: TBD
-- **Related Epics / ADRs**: Infinite Extensibility (Tier 12)
+- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), NEW.md Phase 3 (Week 11-13), evol-7
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 2.x (features)
 - **Downstream Tasks**: Custom features

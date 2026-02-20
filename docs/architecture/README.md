@@ -54,7 +54,7 @@
 
 **Last Updated:** 2026-02-18  
 **Status:** Active Documentation  
-**Related:** [Module Boundaries](module-boundaries.md), [TASKS.md](../../TASKS.md)
+**Related:** [Module Boundaries](module-boundaries.md), [Evolution Roadmap](evolution-roadmap.md), [tasks/TASKS.md](../../tasks/TASKS.md)
 
 ---
 
@@ -65,6 +65,19 @@ The marketing-websites platform is a **multi-industry template system** built on
 ### Vision: Configuration-as-Code Architecture (CaCA)
 
 Every aspect of a client website — theming, page composition, feature selection, SEO schema — is driven by a single validated `site.config.ts`. No code changes required to launch a new client. **Config is the product. Code is the escape hatch.**
+
+### Evolution Model (Strangler Fig)
+
+The platform evolves via a **26-week organic evolution** documented in [NEW.md](../../NEW.md) and [evolution-roadmap.md](evolution-roadmap.md). Five phases with checkpoints:
+
+| Week | Phase              | Checkpoint                   |
+| ---- | ------------------ | ---------------------------- |
+| 0    | Pre-Phase          | CI green, BookingRepository  |
+| 4    | Foundation         | Registries hardened          |
+| 10   | Data Contracts     | Booking uses canonical types |
+| 16   | Capability Core    | Features self-declare        |
+| 22   | Universal Renderer | New client on universal      |
+| 26   | Platform Converged | Legacy + modern coexist      |
 
 ---
 

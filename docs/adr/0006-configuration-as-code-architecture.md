@@ -74,6 +74,10 @@ Would allow arbitrary customization but creates N repositories to maintain, N up
 
 Using a headless CMS for all configuration adds infrastructure complexity, latency, and a dependency on external services for something that rarely changes (business identity, theme colors). Rejected — `site.config.ts` provides all the flexibility needed at zero runtime cost.
 
+## Evolution
+
+**Capability activation** (per [NEW.md](../../NEW.md) Phase 3) extends CaCA: `capabilities` array and `pages` with `capability` references. Same principle — config drives behavior; capabilities add structured activation of features.
+
 ## References
 
 - `packages/types/src/site-config.ts` — TypeScript interface and Zod schema

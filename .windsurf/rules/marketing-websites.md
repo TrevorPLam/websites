@@ -4,7 +4,7 @@ Plain markdown rules for Windsurf Cascade. See [AGENTS.md](../../AGENTS.md) and 
 
 ## Task Execution Non-Negotiables
 
-Before any task: read [THEGOAL.md](../../THEGOAL.md). Full checklist: [.context/RULES.md](../../.context/RULES.md).
+Before any task: read [THEGOAL.md](../../THEGOAL.md) and [NEW.md](../../NEW.md) / [evolution-roadmap.md](../../docs/architecture/evolution-roadmap.md) for phase sequencing. Full checklist: [.context/RULES.md](../../.context/RULES.md).
 
 1. THEGOAL alignment | 2. Research (02/2026) | 3. Examples from research + code | 4. Refactor tasks if research contradicts | 5. QA: isolation → related → full codebase | 6. Testing required | 7. Documentation required | 8. New tasks if needed | 9. Lessons learned | 10. Commit & push
 

@@ -10,3 +10,4 @@ alwaysApply: true
 - **Dependencies:** clients → @repo/* only; never packages → clients; never clients → clients
 - **Imports:** Use public package exports only; no deep paths like @repo/infra/src/internal
 - **Validation:** Run `pnpm validate-client [path]` for client changes; `pnpm validate-exports` for package exports
+- **Evolution:** CaCA extends via capability activation (NEW.md Phase 3); see docs/architecture/evolution-roadmap.md

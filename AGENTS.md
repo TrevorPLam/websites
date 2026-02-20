@@ -8,7 +8,7 @@
 
 Full checklist: [.context/RULES.md](.context/RULES.md#task-execution-non-negotiables). Before any task: read [THEGOAL.md](THEGOAL.md).
 
-1. THEGOAL alignment 2. Research (02/2026 basics, best practices) 3. Code/examples from research + implementation 4. Refactor tasks if research contradicts current patterns 5. QA: isolation → related files → full codebase 6. Testing/validation (required) 7. Documentation (required) 8. New tasks if needed 9. Lessons learned → tasks/docs 10. Commit & push
+1. THEGOAL alignment 2. **Evolution alignment:** Read [NEW.md](NEW.md) and [evolution-roadmap](docs/architecture/evolution-roadmap.md) for phase/week sequencing before major feature work 3. Research (02/2026 basics, best practices) 4. Code/examples from research + implementation 5. Refactor tasks if research contradicts current patterns 6. QA: isolation → related files → full codebase 7. Testing/validation (required) 8. Documentation (required) 9. New tasks if needed 10. Lessons learned → tasks/docs 11. Commit & push
 
 ---
 
