@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/features/src/services/components/ServicesOverview.tsx  [TRACE:FILE=packages.features.services.overview]
 // Purpose: Services overview component displaying service categories in a responsive grid.
 //          Configurable for cross-industry use (salon, restaurant, law-firm, etc.).

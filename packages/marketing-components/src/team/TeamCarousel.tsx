@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/team/TeamCarousel.tsx
  * @role component

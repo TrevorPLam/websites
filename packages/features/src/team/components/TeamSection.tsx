@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/features/src/team/components/TeamSection.tsx
  * Purpose: Team section that uses marketing-components display variants

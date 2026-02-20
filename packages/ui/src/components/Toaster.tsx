@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/Toaster.tsx  [TRACE:FILE=packages.ui.components.Toaster]
 // Purpose: App-root toast container that renders the Sonner toast stack. Mount once inside
 //          the root layout (e.g. app/layout.tsx) to enable toast notifications site-wide.
@@ -56,7 +58,8 @@ export const Toaster = ({
             'font-sans text-sm rounded-lg border shadow-lg bg-background text-foreground border-border',
           title: 'font-semibold',
           description: 'text-muted-foreground',
-          actionButton: 'bg-primary text-primary-foreground rounded-md px-3 py-1 text-xs font-medium',
+          actionButton:
+            'bg-primary text-primary-foreground rounded-md px-3 py-1 text-xs font-medium',
           cancelButton: 'bg-muted text-muted-foreground rounded-md px-3 py-1 text-xs font-medium',
           closeButton: 'text-muted-foreground hover:text-foreground',
         },

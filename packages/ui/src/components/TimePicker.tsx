@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/TimePicker.tsx  [TRACE:FILE=packages.ui.components.TimePicker]
 // Purpose: Time picker with hour/minute/second selection.
 //          Provides accessible time selection with 12h/24h format support.

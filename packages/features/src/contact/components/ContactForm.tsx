@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/features/src/contact/components/ContactForm.tsx  [TRACE:FILE=packages.features.contact.components.ContactForm]
 // Purpose: Contact form component providing customer inquiry submission with real-time validation,
 //          error handling, and analytics tracking. Supports configurable fields, multi-step
@@ -25,8 +27,6 @@
 // - [FEAT:CONFIGURATION] Configurable fields and multi-step support
 // - [FEAT:ACCESSIBILITY] Full keyboard navigation and screen reader support
 
-'use client';
-
 import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -39,7 +39,11 @@ import {
   createContactFormDefaults,
   type ContactFormData,
 } from '../lib/contact-schema';
-import { submitContactForm, type ContactSubmissionResult, type ContactSubmissionHandler } from '../lib/contact-actions';
+import {
+  submitContactForm,
+  type ContactSubmissionResult,
+  type ContactSubmissionHandler,
+} from '../lib/contact-actions';
 import type { ContactFeatureConfig } from '../lib/contact-config';
 
 /**
@@ -51,8 +55,12 @@ import type { ContactFeatureConfig } from '../lib/contact-config';
 export interface ContactFormProps {
   /** Contact feature configuration (fields, steps, messages) */
   config: ContactFeatureConfig;
-  /** Submission handler function (saves to database, sends email, syncs CRM, etc.) */
-  onSubmit: ContactSubmissionHandler;
+  /**
+   * Submission handler function (saves to database, sends email, syncs CRM, etc.).
+   * Optional — defaults to a no-op success response suitable for preview/prototype usage.
+   * Provide a Server Action for production integrations.
+   */
+  onSubmit?: ContactSubmissionHandler;
   /** Optional CSS class name */
   className?: string;
   /** Success callback */
@@ -69,9 +77,14 @@ export interface ContactFormProps {
 // [TRACE:FUNC=packages.features.contact.ContactForm]
 // [FEAT:CONTACT] [FEAT:VALIDATION] [FEAT:UX] [FEAT:ACCESSIBILITY] [FEAT:CONFIGURATION]
 // NOTE: Main contact form component - orchestrates form state, validation, multi-step navigation, and submission with user feedback.
+const defaultSubmitHandler: ContactSubmissionHandler = async () => ({
+  success: true,
+  message: 'Thank you for your message!',
+});
+
 export default function ContactForm({
   config,
-  onSubmit,
+  onSubmit = defaultSubmitHandler,
   className,
   onSuccess,
   onError,
@@ -147,14 +160,10 @@ export default function ContactForm({
       const result = await withSentrySpan(
         { name: 'contact_form.submit', op: 'ui.action', attributes: { route: '/contact' } },
         () =>
-          submitContactForm(
-            data,
-            onSubmit,
-            {
-              successMessage: config.successMessage,
-              errorMessage: config.errorMessage,
-            }
-          )
+          submitContactForm(data, onSubmit, {
+            successMessage: config.successMessage,
+            errorMessage: config.errorMessage,
+          })
       );
 
       if (result.success) {
@@ -193,11 +202,12 @@ export default function ContactForm({
   };
 
   // Render field based on type
-  const renderField = (field: typeof config.fields[0]) => {
+  const renderField = (field: (typeof config.fields)[0]) => {
     const fieldError = errors[field.id as keyof ContactFormData];
-    const errorMessage = typeof fieldError === 'object' && fieldError !== null && 'message' in fieldError
-      ? String(fieldError.message)
-      : undefined;
+    const errorMessage =
+      typeof fieldError === 'object' && fieldError !== null && 'message' in fieldError
+        ? String(fieldError.message)
+        : undefined;
     const isTouched = touchedFields[field.id as keyof ContactFormData];
     const isValid = isTouched && !fieldError;
 
@@ -247,12 +257,22 @@ export default function ContactForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className={`space-y-6 ${className || ''}`} aria-label="Contact form">
+    <form
+      onSubmit={handleSubmit(onFormSubmit)}
+      className={`space-y-6 ${className || ''}`}
+      aria-label="Contact form"
+    >
       {/* Honeypot field */}
       {config.enableHoneypot && (
         <div className="sr-only" aria-hidden="true">
           <label htmlFor="website">Website</label>
-          <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register('website' as keyof ContactFormData)} />
+          <input
+            id="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            {...register('website' as keyof ContactFormData)}
+          />
         </div>
       )}
 
@@ -270,7 +290,9 @@ export default function ContactForm({
             <span className="text-sm font-medium text-muted-foreground">
               Step {currentStep + 1} of {totalSteps}
             </span>
-            <span className="text-sm text-muted-foreground">{Math.round(((currentStep + 1) / totalSteps) * 100)}%</span>
+            <span className="text-sm text-muted-foreground">
+              {Math.round(((currentStep + 1) / totalSteps) * 100)}%
+            </span>
           </div>
           <div className="w-full bg-muted rounded-full h-2">
             <div
@@ -292,9 +314,7 @@ export default function ContactForm({
       )}
 
       {/* Form fields */}
-      <div className="space-y-6">
-        {fieldsToRender.map((field) => renderField(field))}
-      </div>
+      <div className="space-y-6">{fieldsToRender.map((field) => renderField(field))}</div>
 
       {/* Consent text */}
       {config.consentText && (

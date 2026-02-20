@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/stats/StatsCounter.tsx
  * @role component

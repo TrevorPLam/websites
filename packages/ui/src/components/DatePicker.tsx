@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/DatePicker.tsx  [TRACE:FILE=packages.ui.components.DatePicker]
 // Purpose: Date picker combining Calendar and Popover for date selection.
 //          Combines Calendar component with Popover for accessible date selection.
@@ -87,11 +89,7 @@ export function DatePicker({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          value={selectedDate}
-          onValueChange={handleDateSelect}
-          locale={locale}
-        />
+        <Calendar value={selectedDate} onValueChange={handleDateSelect} locale={locale} />
       </PopoverContent>
     </Popover>
   );

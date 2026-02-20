@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/Tabs.tsx  [TRACE:FILE=packages.ui.components.Tabs]
 // Purpose: Accessible tabbed-content primitive with multiple visual variants, sizes,
 //          and orientations. Built on Radix UI Tabs for correct keyboard navigation and

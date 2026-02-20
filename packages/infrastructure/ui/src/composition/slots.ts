@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/composition/slots.ts
  * Tasks: [f-1] Component Composition System, [f-31] Slot System
@@ -100,11 +102,7 @@ export function SlotProvider({ children }: SlotProviderProps): React.ReactElemen
     return map;
   }, [children]);
 
-  return React.createElement(
-    SlotContext.Provider,
-    { value: { slots } },
-    children
-  );
+  return React.createElement(SlotContext.Provider, { value: { slots } }, children);
 }
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────

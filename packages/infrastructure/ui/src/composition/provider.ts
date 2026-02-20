@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/composition/provider.ts
  * Tasks: [f-1] Component Composition System, [f-35] Provider System

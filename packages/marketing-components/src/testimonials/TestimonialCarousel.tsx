@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/testimonials/TestimonialCarousel.tsx
  * @role component
@@ -45,11 +47,15 @@ export function TestimonialCarousel({
             {testimonials.map((t) => (
               <CarouselItem key={t.id}>
                 <Card variant="testimonial">
-                  {t.rating != null && <Rating value={t.rating} readOnly size="sm" className="mb-4" />}
+                  {t.rating != null && (
+                    <Rating value={t.rating} readOnly size="sm" className="mb-4" />
+                  )}
                   <blockquote className="text-lg">"{getContent(t)}"</blockquote>
                   <footer className="mt-4">
                     <cite className="font-semibold not-italic">{t.author.name}</cite>
-                    {t.author.role && <span className="text-muted-foreground"> — {t.author.role}</span>}
+                    {t.author.role && (
+                      <span className="text-muted-foreground"> — {t.author.role}</span>
+                    )}
                   </footer>
                 </Card>
               </CarouselItem>

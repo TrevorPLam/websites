@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/event/EventGrid.tsx
  * @role component
@@ -16,13 +18,7 @@ export interface EventGridProps {
   className?: string;
 }
 
-export function EventGrid({
-  events,
-  title,
-  eventHref,
-  onRegister,
-  className,
-}: EventGridProps) {
+export function EventGrid({ events, title, eventHref, onRegister, className }: EventGridProps) {
   return (
     <Section className={className}>
       <Container>

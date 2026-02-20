@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/testimonials/TestimonialMarquee.tsx
  * @role component
@@ -27,7 +29,11 @@ export function TestimonialMarquee({
   className,
 }: TestimonialMarqueeProps) {
   const speedClass =
-    speed === 'slow' ? 'animate-[marquee_30s_linear_infinite]' : speed === 'fast' ? 'animate-[marquee_15s_linear_infinite]' : 'animate-[marquee_20s_linear_infinite]';
+    speed === 'slow'
+      ? 'animate-[marquee_30s_linear_infinite]'
+      : speed === 'fast'
+        ? 'animate-[marquee_15s_linear_infinite]'
+        : 'animate-[marquee_20s_linear_infinite]';
 
   return (
     <Section className={cn('overflow-hidden', className)}>

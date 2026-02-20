@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/comparison/ComparisonTable.tsx
  * @role component
@@ -30,9 +32,7 @@ export function ComparisonTable({ title, columns, rows, className }: ComparisonT
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th className="border border-border bg-muted p-3 text-left font-medium">
-                  Feature
-                </th>
+                <th className="border border-border bg-muted p-3 text-left font-medium">Feature</th>
                 {columns.map((col) => (
                   <th
                     key={col.id}

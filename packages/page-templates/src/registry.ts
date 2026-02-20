@@ -7,9 +7,21 @@
  * Each section is wrapped in Suspense with Skeleton fallback for dynamic loading.
  */
 import * as React from 'react';
-import { Skeleton } from '@repo/ui';
 import type { SiteConfig } from '@repo/types';
 import type { SectionDefinition, SectionProps, TemplateConfig } from './types';
+
+/**
+ * Lightweight server-safe Suspense fallback — avoids importing from the @repo/ui barrel
+ * (which contains 'use client' modules) in this server-side registry module.
+ * Matches Skeleton's visual output: animated pulse placeholder.
+ */
+const SectionFallback = (): React.ReactElement =>
+  React.createElement('div', {
+    role: 'status',
+    'aria-busy': 'true',
+    'aria-label': 'Loading…',
+    className: 'h-32 w-full motion-safe:animate-pulse rounded-md bg-muted',
+  });
 
 export const sectionRegistry = new Map<string, SectionDefinition>();
 
@@ -113,7 +125,7 @@ export function composePage(
         React.Suspense,
         {
           key: id,
-          fallback: React.createElement(Skeleton, { className: 'h-32' }),
+          fallback: React.createElement(SectionFallback, null),
         },
         sectionElement
       );

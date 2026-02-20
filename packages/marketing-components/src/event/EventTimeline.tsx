@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/event/EventTimeline.tsx
  * @role component
@@ -34,11 +36,7 @@ export function EventTimeline({
                 {i + 1}
               </div>
               <div className="flex-1">
-                <EventCard
-                  event={event}
-                  href={eventHref?.(event)}
-                  onRegister={onRegister}
-                />
+                <EventCard event={event} href={eventHref?.(event)} onRegister={onRegister} />
               </div>
             </div>
           ))}

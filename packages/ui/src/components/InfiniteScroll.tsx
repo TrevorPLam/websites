@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/InfiniteScroll.tsx  [TRACE:FILE=packages.ui.components.InfiniteScroll]
 // Purpose: Infinite scroll trigger with loading states.
 //          Provides intersection observer-based infinite scroll functionality.
@@ -85,10 +87,15 @@ export const InfiniteScroll = React.forwardRef<HTMLDivElement, InfiniteScrollPro
         {children}
         {hasMore ? (
           <div ref={observerTarget} className="flex justify-center py-4">
-            {isLoading && (loader || <div className="text-sm text-muted-foreground">Loading...</div>)}
+            {isLoading &&
+              (loader || <div className="text-sm text-muted-foreground">Loading...</div>)}
           </div>
         ) : (
-          endMessage && <div className="flex justify-center py-4 text-sm text-muted-foreground">{endMessage}</div>
+          endMessage && (
+            <div className="flex justify-center py-4 text-sm text-muted-foreground">
+              {endMessage}
+            </div>
+          )
         )}
       </div>
     );

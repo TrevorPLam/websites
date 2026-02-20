@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/cta/CTASection.tsx
  * @role component

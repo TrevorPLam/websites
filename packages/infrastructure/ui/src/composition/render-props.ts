@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/composition/render-props.ts
  * Tasks: [f-1] Component Composition System, [f-32] Render Prop System
@@ -41,10 +43,7 @@ export type RenderPropArg<T> = T extends RenderProp<infer A> ? A : never;
  * // Render function with args
  * callRenderProp((isOpen) => isOpen ? <Open /> : <Closed />, isOpen);
  */
-export function callRenderProp<T>(
-  renderProp: RenderProp<T> | undefined,
-  arg: T
-): React.ReactNode {
+export function callRenderProp<T>(renderProp: RenderProp<T> | undefined, arg: T): React.ReactNode {
   if (renderProp === undefined || renderProp === null) return null;
   if (typeof renderProp === 'function') {
     return (renderProp as (arg: T) => React.ReactNode)(arg);

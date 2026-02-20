@@ -9,7 +9,8 @@
     ".": "./src/index.ts",
     "./composition": "./src/composition/index.ts",
     "./customization": "./src/customization/index.ts",
-    "./theme": "./src/theme/index.ts"
+    "./theme": "./src/theme/index.ts",
+    "./theme/server": "./src/theme/init-script.ts"
   },
   "scripts": {
     "lint": "eslint src",

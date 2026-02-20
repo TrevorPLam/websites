@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/features/src/search/components/SearchDialog.tsx  [TRACE:FILE=packages.features.search.SearchDialog]
 // Purpose: Search dialog overlay providing site-wide search via Cmd/Ctrl+K shortcut.
 //          Uses @repo/ui Dialog for accessibility (focus trap, ARIA, Escape). Renders
@@ -22,13 +24,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Search, X } from 'lucide-react';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogHeader,
-} from '@repo/ui';
+import { Button, Dialog, DialogContent, DialogTitle, DialogHeader } from '@repo/ui';
 import { filterSearchItems } from '../lib/filter-items';
 import type { SearchItem } from '../types';
 
@@ -112,16 +108,11 @@ export default function SearchDialog({
       </button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent
-          className="max-w-2xl p-0 gap-0 overflow-hidden"
-          showCloseButton={false}
-        >
+        <DialogContent className="max-w-2xl p-0 gap-0 overflow-hidden" showCloseButton={false}>
           <DialogHeader className="flex flex-row items-center justify-between border-b border-gray-200 px-6 py-4">
             <div className="flex items-center gap-3 text-gray-700">
               <Search className="h-5 w-5" aria-hidden="true" />
-              <DialogTitle className="font-semibold text-base m-0">
-                Search the site
-              </DialogTitle>
+              <DialogTitle className="font-semibold text-base m-0">Search the site</DialogTitle>
             </div>
             <Button
               variant="text"
@@ -147,9 +138,7 @@ export default function SearchDialog({
 
           <div className="px-6 pb-6">
             {filteredItems.length === 0 ? (
-              <p className="text-sm text-gray-500">
-                No results found. Try a different keyword.
-              </p>
+              <p className="text-sm text-gray-500">No results found. Try a different keyword.</p>
             ) : (
               <ul className="space-y-3">
                 {filteredItems.map((item) => (
@@ -160,16 +149,12 @@ export default function SearchDialog({
                       onClick={() => setIsOpen(false)}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-gray-900">
-                          {item.title}
-                        </span>
+                        <span className="font-semibold text-gray-900">{item.title}</span>
                         <span className="text-xs uppercase tracking-wide text-primary">
                           {item.type}
                         </span>
                       </div>
-                      <p className="mt-1 text-sm text-gray-600">
-                        {item.description}
-                      </p>
+                      <p className="mt-1 text-sm text-gray-600">{item.description}</p>
                     </Link>
                   </li>
                 ))}

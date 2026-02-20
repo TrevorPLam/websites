@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/ui/src/components/Accordion.tsx
  * [TRACE:FILE=packages.ui.components.Accordion]

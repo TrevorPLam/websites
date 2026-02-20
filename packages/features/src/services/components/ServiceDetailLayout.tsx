@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/features/src/services/components/ServiceDetailLayout.tsx  [TRACE:FILE=packages.features.services.detail]
 // Purpose: Service detail page layout with hero, included, process, pricing, FAQs.
 //          Renders Schema.org Service and FAQPage JSON-LD from props.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/blog/BlogPostCard.tsx
  * @role component
@@ -36,11 +38,7 @@ export function BlogPostCard({ post, href, variant = 'card', className }: BlogPo
               isList ? 'aspect-square w-40 shrink-0' : 'aspect-video w-full'
             )}
           >
-            <img
-              src={post.featuredImage}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            <img src={post.featuredImage} alt="" className="h-full w-full object-cover" />
           </div>
         )}
         <div className={cn('p-4', isList && 'flex flex-1 flex-col')}>

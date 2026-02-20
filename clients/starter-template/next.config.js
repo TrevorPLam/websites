@@ -35,9 +35,22 @@ const nextConfig = {
   // Task 4.1: Enable `use cache` directive (Next.js 16 cache directives).
   // cacheComponents: cache React Server Component render output between requests.
   // dynamicIO: enforce explicit caching — `use cache` or `noStore()` per data fetch.
+  //   NOTE: dynamicIO disabled — requires all data access in <Suspense>/<use cache>;
+  //   re-enable once pages explicitly opt-in to caching strategy (Task 4.1).
   experimental: {
-    cacheComponents: true,
-    dynamicIO: true,
+    // cacheComponents and dynamicIO require pages to be cache-annotated with 'use cache'
+    // or data fetching wrapped in <Suspense>. Disabled until Task 4.1 annotations are done.
+    // cacheComponents: true,
+    // dynamicIO: true,
+    // Optimize barrel file imports — rewrites named imports to direct file paths.
+    // Fixes server/client boundary issues with @repo/* barrel files.
+    optimizePackageImports: [
+      '@repo/ui',
+      '@repo/features',
+      '@repo/page-templates',
+      '@repo/marketing-components',
+      '@repo/infrastructure-ui',
+    ],
   },
 };
 

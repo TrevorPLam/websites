@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/event/EventCard.tsx
  * @role component
@@ -29,13 +31,9 @@ export function EventCard({ event, href, onRegister, className }: EventCardProps
         <div className="p-4">
           <h3 className="font-semibold text-foreground">{event.title}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{event.startDate}</p>
-          {event.location && (
-            <p className="mt-1 text-sm text-muted-foreground">{event.location}</p>
-          )}
+          {event.location && <p className="mt-1 text-sm text-muted-foreground">{event.location}</p>}
           {event.description && (
-            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-              {event.description}
-            </p>
+            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{event.description}</p>
           )}
         </div>
       </a>

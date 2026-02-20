@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/theme/hooks.ts
  * Task: [f-37] Theme System — useTheme hook and ThemeProvider

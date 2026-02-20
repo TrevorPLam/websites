@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/social-proof/SocialProofStack.tsx
  * @role component

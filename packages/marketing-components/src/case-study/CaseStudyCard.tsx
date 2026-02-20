@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/case-study/CaseStudyCard.tsx
  * @role component
@@ -31,9 +33,7 @@ export function CaseStudyCard({ caseStudy, href, className }: CaseStudyCardProps
             <p className="mt-1 text-sm text-muted-foreground">{caseStudy.client}</p>
           )}
           {caseStudy.summary && (
-            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-              {caseStudy.summary}
-            </p>
+            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{caseStudy.summary}</p>
           )}
         </div>
       </a>

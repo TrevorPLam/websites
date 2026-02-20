@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroCarousel.tsx
  * @role component
@@ -96,12 +98,8 @@ export function HeroCarousel({
                 )}
                 <Container className="relative z-10 text-center">
                   <h1 className="text-4xl font-bold">{slide.title}</h1>
-                  {slide.subtitle && (
-                    <p className="mt-2 text-xl">{slide.subtitle}</p>
-                  )}
-                  {slide.description && (
-                    <p className="mt-4 text-base">{slide.description}</p>
-                  )}
+                  {slide.subtitle && <p className="mt-2 text-xl">{slide.subtitle}</p>}
+                  {slide.description && <p className="mt-4 text-base">{slide.description}</p>}
                   {slide.cta && (
                     <div className="mt-6">
                       <HeroCTAButton {...slide.cta} />

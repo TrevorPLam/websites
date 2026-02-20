@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/footer/FooterWithNewsletter.tsx
  * @role component
@@ -70,10 +72,7 @@ export function FooterWithNewsletter({
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider">
                 {newsletterTitle}
               </h3>
-              <form
-                onSubmit={(e) => handleSubmit(e, onNewsletterSubmit)}
-                className="flex gap-2"
-              >
+              <form onSubmit={(e) => handleSubmit(e, onNewsletterSubmit)} className="flex gap-2">
                 <Input
                   type="email"
                   placeholder={newsletterPlaceholder}

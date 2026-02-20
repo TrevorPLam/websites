@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/job-listing/JobListingCard.tsx
  * @role component
@@ -27,9 +29,7 @@ export function JobListingCard({ job, href, className }: JobListingCardProps) {
           {job.type && <span>• {job.type}</span>}
         </div>
         {job.description && (
-          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-            {job.description}
-          </p>
+          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{job.description}</p>
         )}
       </a>
     </Card>

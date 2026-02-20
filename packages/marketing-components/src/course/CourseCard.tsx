@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/course/CourseCard.tsx
  * @role component
@@ -49,9 +51,7 @@ export function CourseCard({ course, href, onEnroll, className }: CourseCardProp
             </div>
           )}
           {course.description && (
-            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-              {course.description}
-            </p>
+            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{course.description}</p>
           )}
           {course.price != null && (
             <p className="mt-2 font-semibold">{formatPrice(course.price)}</p>

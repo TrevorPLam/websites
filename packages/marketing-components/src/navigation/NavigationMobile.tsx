@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/navigation/NavigationMobile.tsx
  * @role component
@@ -39,9 +41,7 @@ export function NavigationMobile({
         </button>
       </SheetTrigger>
       <SheetContent side="left" size="full" className={className}>
-        <SheetHeader>
-          {logo && <SheetTitle>{logo}</SheetTitle>}
-        </SheetHeader>
+        <SheetHeader>{logo && <SheetTitle>{logo}</SheetTitle>}</SheetHeader>
         <nav className="mt-8 flex flex-col gap-2">
           {items.map((item, i) => (
             <div key={item.href ?? item.id ?? i}>

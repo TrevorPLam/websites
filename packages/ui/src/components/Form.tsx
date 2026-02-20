@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/Form.tsx  [TRACE:FILE=packages.ui.components.Form]
 // Purpose: Form wrapper with React Hook Form and Zod validation integration.
 //          Provides form validation, error handling, and accessible error display.
@@ -35,7 +37,10 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface FormProps<T extends FieldValues> extends Omit<React.HTMLAttributes<HTMLFormElement>, 'onSubmit'> {
+export interface FormProps<T extends FieldValues> extends Omit<
+  React.HTMLAttributes<HTMLFormElement>,
+  'onSubmit'
+> {
   /** Form schema (Zod schema) */
   schema?: z.ZodSchema<T>;
   /** Default form values */
@@ -87,7 +92,9 @@ export function Form<T extends FieldValues>({
   ...props
 }: FormProps<T>) {
   const internalForm = useForm<T>({
-    resolver: schema ? zodResolver(schema as unknown as Parameters<typeof zodResolver>[0]) : undefined,
+    resolver: schema
+      ? zodResolver(schema as unknown as Parameters<typeof zodResolver>[0])
+      : undefined,
     defaultValues: defaultValues as DefaultValues<T> | undefined,
   });
 
@@ -138,7 +145,10 @@ export const FormLabel = React.forwardRef<HTMLLabelElement, FormLabelProps>(
   ({ className, ...props }, ref) => (
     <label
       ref={ref}
-      className={cn('text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70', className)}
+      className={cn(
+        'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+        className
+      )}
       {...props}
     />
   )
@@ -146,9 +156,7 @@ export const FormLabel = React.forwardRef<HTMLLabelElement, FormLabelProps>(
 FormLabel.displayName = 'FormLabel';
 
 export const FormControl = React.forwardRef<HTMLDivElement, FormControlProps>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('', className)} {...props} />
-  )
+  ({ className, ...props }, ref) => <div ref={ref} className={cn('', className)} {...props} />
 );
 FormControl.displayName = 'FormControl';
 

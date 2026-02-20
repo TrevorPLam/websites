@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/ui/src/hooks/useConsent.ts
  * @summary Consent state hook for GDPR/CCPA compliance

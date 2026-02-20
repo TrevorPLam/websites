@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroSplit.tsx
  * @role component
@@ -61,18 +63,12 @@ export function HeroSplit({
   const textContent = (
     <div className="flex flex-col justify-center">
       {slots?.header}
-      <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-        {title}
-      </h1>
+      <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">{title}</h1>
       {subtitle && (
-        <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">
-          {subtitle}
-        </p>
+        <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">{subtitle}</p>
       )}
       {description && (
-        <p className="mt-4 text-base leading-7 text-muted-foreground">
-          {description}
-        </p>
+        <p className="mt-4 text-base leading-7 text-muted-foreground">{description}</p>
       )}
       {slots?.content}
       <div className="mt-10 flex flex-col gap-4 sm:flex-row">
@@ -92,11 +88,7 @@ export function HeroSplit({
             />
           </>
         ) : cta ? (
-          <HeroCTAButton
-            {...cta}
-            variant={cta.variant || 'primary'}
-            size={cta.size || 'large'}
-          />
+          <HeroCTAButton {...cta} variant={cta.variant || 'primary'} size={cta.size || 'large'} />
         ) : null}
       </div>
       {slots?.footer}
@@ -107,9 +99,7 @@ export function HeroSplit({
   return (
     <Section className={cn('relative', className)}>
       {slots?.background}
-      {slots?.overlay && (
-        <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
-      )}
+      {slots?.overlay && <div className="absolute inset-0 bg-black/50" aria-hidden="true" />}
       <Container className="relative z-10">
         <div
           className={cn(

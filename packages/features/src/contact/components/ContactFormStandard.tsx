@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/features/src/contact/components/ContactFormStandard.tsx
  * Purpose: Standard contact form section with title/description layout

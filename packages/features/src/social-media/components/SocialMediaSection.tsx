@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/features/src/social-media/components/SocialMediaSection.tsx
  * Purpose: Social media follow links section

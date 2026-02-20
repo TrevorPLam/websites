@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/pricing/PricingTable.tsx
  * @role component
@@ -17,9 +19,7 @@ export interface PricingTableProps {
 }
 
 export function PricingTable({ title, plans, className }: PricingTableProps) {
-  const allFeatures = Array.from(
-    new Set(plans.flatMap((p) => p.features.map((f) => f.name)))
-  );
+  const allFeatures = Array.from(new Set(plans.flatMap((p) => p.features.map((f) => f.name))));
 
   return (
     <Section className={className}>

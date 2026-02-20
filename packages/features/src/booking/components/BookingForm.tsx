@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/features/src/booking/components/BookingForm.tsx  [TRACE:FILE=packages.features.booking.components.BookingForm]
 // Purpose: Booking form component providing comprehensive appointment scheduling with real-time validation,
 //          service selection, and submission handling. Now configurable via BookingFeatureConfig.

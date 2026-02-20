@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/product/ProductDetail.tsx
  * @role component
@@ -31,11 +33,7 @@ export function ProductDetail({ product, onAddToCart, className }: ProductDetail
           {images.length > 0 && (
             <div className="space-y-4">
               <div className="aspect-square overflow-hidden rounded-lg bg-muted">
-                <img
-                  src={images[0]}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
+                <img src={images[0]} alt="" className="h-full w-full object-cover" />
               </div>
               {images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">

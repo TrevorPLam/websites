@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/composition/context.ts
  * Tasks: [f-1] Component Composition System, [f-34] Context System
@@ -39,9 +41,7 @@ import * as React from 'react';
  *   const theme = useTheme(); // throws if not inside <ThemeProvider>
  * }
  */
-export function createStrictContext<T>(
-  displayName: string
-): [React.Context<T | null>, () => T] {
+export function createStrictContext<T>(displayName: string): [React.Context<T | null>, () => T] {
   const Ctx = React.createContext<T | null>(null);
   Ctx.displayName = displayName;
 
@@ -119,10 +119,7 @@ export function createContextWithDefault<T>(
  * const [ThemeCtx, useTheme] = createStrictContext<Theme>('ThemeContext');
  * const useThemeColor = createContextSelector(useTheme, (theme) => theme.colors.primary);
  */
-export function createContextSelector<T, S>(
-  useCtx: () => T,
-  selector: (value: T) => S
-): () => S {
+export function createContextSelector<T, S>(useCtx: () => T, selector: (value: T) => S): () => S {
   return function useContextSelector(): S {
     const value = useCtx();
     return React.useMemo(() => selector(value), [value]);

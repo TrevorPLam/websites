@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/portfolio/PortfolioGrid.tsx
  * @role component
@@ -16,12 +18,7 @@ export interface PortfolioGridProps {
   className?: string;
 }
 
-export function PortfolioGrid({
-  title,
-  items,
-  columns = 3,
-  className,
-}: PortfolioGridProps) {
+export function PortfolioGrid({ title, items, columns = 3, className }: PortfolioGridProps) {
   const gridClasses = cn(
     'grid gap-4',
     columns === 2 && 'grid-cols-1 sm:grid-cols-2',

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/blog/BlogWithSidebar.tsx
  * @role component
@@ -36,11 +38,7 @@ export function BlogWithSidebar({
           <div>
             <div className="grid gap-6 sm:grid-cols-2">
               {posts.map((post) => (
-                <BlogPostCard
-                  key={post.slug}
-                  post={post}
-                  href={postHref?.(post)}
-                />
+                <BlogPostCard key={post.slug} post={post} href={postHref?.(post)} />
               ))}
             </div>
             {pagination && pagination.totalPages > 1 && (
@@ -50,9 +48,7 @@ export function BlogWithSidebar({
             )}
           </div>
           {sidebar && (
-            <aside className={cn('space-y-6 lg:sticky lg:top-8 lg:self-start')}>
-              {sidebar}
-            </aside>
+            <aside className={cn('space-y-6 lg:sticky lg:top-8 lg:self-start')}>{sidebar}</aside>
           )}
         </div>
       </Container>

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/gallery/GalleryGrid.tsx
  * @role component

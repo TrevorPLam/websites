@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroCentered.tsx
  * @role component
@@ -53,9 +55,7 @@ export function HeroCentered({
         </p>
       )}
       {description && (
-        <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">
-          {description}
-        </p>
+        <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">{description}</p>
       )}
       {slots?.content}
       <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
@@ -75,11 +75,7 @@ export function HeroCentered({
             />
           </>
         ) : cta ? (
-          <HeroCTAButton
-            {...cta}
-            variant={cta.variant || 'primary'}
-            size={cta.size || 'large'}
-          />
+          <HeroCTAButton {...cta} variant={cta.variant || 'primary'} size={cta.size || 'large'} />
         ) : null}
       </div>
       {slots?.footer}
@@ -91,9 +87,7 @@ export function HeroCentered({
     return (
       <Section className={cn('relative', className)}>
         {slots?.background}
-        {slots?.overlay && (
-          <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
-        )}
+        {slots?.overlay && <div className="absolute inset-0 bg-black/50" aria-hidden="true" />}
         <div className="relative z-10">{content}</div>
       </Section>
     );
@@ -102,9 +96,7 @@ export function HeroCentered({
   return (
     <Section className={cn('relative', className)}>
       {slots?.background}
-      {slots?.overlay && (
-        <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
-      )}
+      {slots?.overlay && <div className="absolute inset-0 bg-black/50" aria-hidden="true" />}
       <Container className="relative z-10">{content}</Container>
     </Section>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 // Marketing components barrel export
 
 // Types (TeamMember, Testimonial, GalleryItem, PricingPlan)

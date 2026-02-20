@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/interactive/AccordionContent.tsx
  * @role component
@@ -22,10 +24,6 @@ export interface AccordionContentProps {
 export function AccordionContent({ items, multiple = false, className }: AccordionContentProps) {
   const accordionItems = items.map(({ title, content }) => ({ question: title, answer: content }));
   return (
-    <Accordion
-      items={accordionItems}
-      multiple={multiple}
-      className={cn('w-full', className)}
-    />
+    <Accordion items={accordionItems} multiple={multiple} className={cn('w-full', className)} />
   );
 }

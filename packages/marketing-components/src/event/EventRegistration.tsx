@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/event/EventRegistration.tsx
  * @role component
@@ -16,11 +18,7 @@ export interface EventRegistrationProps {
   className?: string;
 }
 
-export function EventRegistration({
-  event,
-  onSubmit,
-  className,
-}: EventRegistrationProps) {
+export function EventRegistration({ event, onSubmit, className }: EventRegistrationProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -37,29 +35,15 @@ export function EventRegistration({
         <div className="max-w-md">
           <h2 className="text-2xl font-bold">Register for {event.title}</h2>
           <p className="mt-2 text-muted-foreground">{event.startDate}</p>
-          {event.location && (
-            <p className="mt-1 text-muted-foreground">{event.location}</p>
-          )}
+          {event.location && <p className="mt-1 text-muted-foreground">{event.location}</p>}
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
               <Label htmlFor="reg-name">Name</Label>
-              <Input
-                id="reg-name"
-                name="name"
-                type="text"
-                required
-                className="mt-1"
-              />
+              <Input id="reg-name" name="name" type="text" required className="mt-1" />
             </div>
             <div>
               <Label htmlFor="reg-email">Email</Label>
-              <Input
-                id="reg-email"
-                name="email"
-                type="email"
-                required
-                className="mt-1"
-              />
+              <Input id="reg-email" name="email" type="email" required className="mt-1" />
             </div>
             <button
               type="submit"

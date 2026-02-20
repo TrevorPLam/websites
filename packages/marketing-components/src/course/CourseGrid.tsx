@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/course/CourseGrid.tsx
  * @role component
@@ -17,13 +19,7 @@ export interface CourseGridProps {
   className?: string;
 }
 
-export function CourseGrid({
-  title,
-  courses,
-  columns = 3,
-  onEnroll,
-  className,
-}: CourseGridProps) {
+export function CourseGrid({ title, courses, columns = 3, onEnroll, className }: CourseGridProps) {
   const gridClasses = cn(
     'grid gap-4',
     columns === 2 && 'grid-cols-1 sm:grid-cols-2',

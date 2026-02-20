@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/team/TeamGrid.tsx
  * @role component
@@ -48,13 +50,7 @@ function getInitials(name: string): string {
  * @param props - TeamGridProps
  * @returns Team grid component
  */
-export function TeamGrid({
-  title,
-  description,
-  members,
-  columns = 3,
-  className,
-}: TeamGridProps) {
+export function TeamGrid({ title, description, members, columns = 3, className }: TeamGridProps) {
   const gridClasses = cn(
     'grid gap-6',
     columns === 2 && 'grid-cols-1 sm:grid-cols-2',

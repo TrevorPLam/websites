@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/Carousel.tsx  [TRACE:FILE=packages.ui.components.Carousel]
 // Purpose: Carousel component with navigation, autoplay, and indicators.
 //          Built on embla-carousel-react for accessible carousel functionality.
@@ -49,7 +51,18 @@ export interface CarouselNextProps extends React.ComponentPropsWithoutRef<typeof
 // ─── Components ──────────────────────────────────────────────────────────────
 
 export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
-  ({ className, children, autoplay, loop = false, showArrows = true, showIndicators = true, ...props }, ref) => {
+  (
+    {
+      className,
+      children,
+      autoplay,
+      loop = false,
+      showArrows = true,
+      showIndicators = true,
+      ...props
+    },
+    ref
+  ) => {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop, align: 'start' });
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [canScrollPrev, setCanScrollPrev] = React.useState(false);
@@ -63,9 +76,12 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
       if (emblaApi) emblaApi.scrollNext();
     }, [emblaApi]);
 
-    const scrollTo = React.useCallback((index: number) => {
-      if (emblaApi) emblaApi.scrollTo(index);
-    }, [emblaApi]);
+    const scrollTo = React.useCallback(
+      (index: number) => {
+        if (emblaApi) emblaApi.scrollTo(index);
+      },
+      [emblaApi]
+    );
 
     const onSelect = React.useCallback(() => {
       if (!emblaApi) return;
@@ -136,9 +152,7 @@ export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
 Carousel.displayName = 'Carousel';
 
 export const CarouselContent = React.forwardRef<HTMLDivElement, CarouselContentProps>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex', className)} {...props} />
-  )
+  ({ className, ...props }, ref) => <div ref={ref} className={cn('flex', className)} {...props} />
 );
 CarouselContent.displayName = 'CarouselContent';
 
