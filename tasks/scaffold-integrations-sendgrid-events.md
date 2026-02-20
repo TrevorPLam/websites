@@ -1,7 +1,7 @@
-# scaffold-integrations-sendgrid-events Implement SendGrid event sending scaffold
+# scaffold-integrations-sendgrid Implement SendGrid integration package scaffold
 
 ## Metadata
-- **Task ID**: scaffold-integrations-sendgrid-events
+- **Task ID**: scaffold-integrations-sendgrid
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: TBD
