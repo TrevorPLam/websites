@@ -2,7 +2,14 @@
 
 **Source:** [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md)  
 **Last Updated:** 2026-02-19  
-**Status:** Implementation roadmap with research-backed refinements and corrected task dependencies.
+**Status:** Wave 1–2 complete. Wave 3 in progress (3.1–3.3 done). Wave 4 pending.
+
+| Wave             | Status                        |
+| ---------------- | ----------------------------- |
+| Wave 1 (1.1–1.3) | Complete                      |
+| Wave 2 (2.1–2.4) | Complete                      |
+| Wave 3 (3.1–3.5) | 3.1–3.3 done; 3.4–3.5 pending |
+| Wave 4 (4.1–4.3) | Pending                       |
 
 ---
 
@@ -21,7 +28,7 @@
 
 ## Wave 1: Quick Wins (1–2 days each)
 
-### [ ] 1.1 Implement withErrorBoundary HOC
+### [x] 1.1 Implement withErrorBoundary HOC
 
 - **Target:** `packages/infra/composition/hocs.ts`
 - Create inner class component `ErrorBoundary` with `getDerivedStateFromError` and `componentDidCatch`.
@@ -30,7 +37,7 @@
 - Add `__tests__/withErrorBoundary.test.tsx`; export from composition/index.ts.
 - **Verify:** `pnpm --filter @repo/infra test`
 
-### [ ] 1.2 Provider Composition in Layout
+### [x] 1.2 Provider Composition in Layout
 
 - **Target:** `clients/starter-template/app/[locale]/layout.tsx`
 - **Scope:** [locale] layout only; root layout unchanged.
@@ -39,7 +46,7 @@
 - Use `ProviderComposer` when multiple providers exist (e.g. TooltipProvider); with one provider, minimal change establishes pattern.
 - **Verify:** `pnpm --filter @clients/starter-template dev`
 
-### [ ] 1.3 CVA Migration for Button
+### [x] 1.3 CVA Migration for Button
 
 - **Target:** `packages/ui/src/components/Button.tsx`
 - **Dependency:** Add `@repo/infra` to `packages/ui/package.json`.
@@ -51,14 +58,14 @@
 
 ## Wave 2: Short-Term (1–2 weeks)
 
-### [ ] 2.1 Section Registry Typed Schema
+### [x] 2.1 Section Registry Typed Schema
 
 - **Targets:** `packages/page-templates/src/registry.ts`, `packages/page-templates/src/types.ts`
 - **Aligns with:** tasks/inf-1-dynamic-section-registry.md
 - Define `SectionType` union; add `SectionDefinition<Cfg>` with optional `configSchema`.
 - Extend `registerSection`; in `composePage` validate when schema present; `console.warn` for unknown IDs.
 
-### [ ] 2.2 Section Adapter File Split
+### [x] 2.2 Section Adapter File Split
 
 - **Targets:** `packages/page-templates/src/sections/`
 - **Purpose:** Prerequisite for per-section code-splitting.
@@ -67,13 +74,13 @@
 - Apply similarly to services.tsx, blog.tsx, about.tsx, contact.tsx, booking.tsx, industry.tsx, features.tsx.
 - **Effort:** ~1–2 days.
 
-### [ ] 2.3 CVA Batch Migration
+### [x] 2.3 CVA Batch Migration
 
 - **Targets:** `packages/ui/src/components/`
 - **Order:** Badge, Toggle, Tabs, Switch, Skeleton, Sheet, Rating, Progress, RadioGroup, Checkbox, Card, Container, Alert, Avatar
 - Use Button as reference; replace Record maps with `cva()`; run tests after each.
 
-### [ ] 2.4 Dynamic Section Loading
+### [x] 2.4 Dynamic Section Loading
 
 - **Targets:** `packages/page-templates/src/registry.ts`, composePage
 - **Prerequisite:** 2.1, 2.2.
@@ -85,20 +92,20 @@
 
 ## Wave 3: Medium-Term (1–2 months)
 
-### [ ] 3.1 Design Tokens (C-5)
+### [x] 3.1 Design Tokens (C-5)
 
 - **Targets:** New `packages/config/tokens/` (option-tokens.css, decision-tokens.css, component-tokens.css)
 - **Aligns with:** tasks/c-5-design-tokens.md
 - Per C-5 and DTCG 2025.10; wire tokens into tailwind-theme.css.
 
-### [ ] 3.2 Token Overrides (inf-4)
+### [x] 3.2 Token Overrides (inf-4)
 
 - **Targets:** `packages/types/src/site-config.ts`, `packages/ui/src/components/ThemeInjector.tsx`
 - **Prerequisite:** 3.1 (C-5).
 - **Aligns with:** tasks/inf-4-design-token-overrides.md
 - site.config.theme partial overrides; merge with base in ThemeInjector.
 
-### [ ] 3.3 Theme Presets (inf-12)
+### [x] 3.3 Theme Presets (inf-12)
 
 - **Targets:** `packages/config/tokens/presets/`, ThemeInjector, site.config.ts
 - **Prerequisite:** 3.1, 3.2.
@@ -187,6 +194,19 @@
 - **Month 3+:** 4.1 use cache, 4.2 React Compiler, 4.3 Light/dark theme
 
 ---
+
+## Implementation Notes (2026-02-19)
+
+- **1.1** `withErrorBoundary` in `packages/infra/composition/hocs.ts`; tests in `__tests__/withErrorBoundary.test.tsx`.
+- **1.2** `LocaleProviders` client component in `[locale]/LocaleProviders.tsx`; uses `ProviderComposer` with NextIntlClientProvider and ThemeInjector.
+- **1.3** Button uses `cva()` from `@repo/infra/variants`.
+- **2.1** `SectionDefinition` with optional `configSchema`; `composePage` warns on unknown IDs.
+- **2.2** Sections split into `sections/<page>/` with per-section files and `index.ts`; old monolithic files removed.
+- **2.3** CVA applied to Badge, Toggle, Card, Skeleton, Container, Alert (Button reference). Optional follow-up: Tabs, Switch, Sheet, Rating, Progress, RadioGroup, Checkbox, Avatar.
+- **2.4** Sections wrapped in `Suspense` with `Skeleton` fallback.
+- **3.1** Three token files in `packages/config/tokens/`; imported by `tailwind-theme.css`; docs in `docs/design/design-token-architecture.md`.
+- **3.2** `DEFAULT_THEME_COLORS` in `@repo/types`; ThemeInjector merges partial `theme.colors` with base.
+- **3.3** Presets in `packages/types/src/theme-presets.ts`; `theme.preset`, `resolveThemeColors()`; layout uses resolved theme.
 
 ## Task References
 
