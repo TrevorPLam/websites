@@ -210,7 +210,7 @@ marketing-websites/
 │   ├── ui/                      # @repo/ui - UI primitives (Button, Input, Dialog, Toast, etc.)
 │   ├── features/                 # @repo/features - Feature modules (booking, contact, blog)
 │   ├── marketing-components/    # @repo/marketing-components - Hero, services, testimonials
-│   ├── page-templates/          # @repo/page-templates - Page layouts (scaffolded placeholders)
+│   ├── page-templates/          # @repo/page-templates - 7 templates wired via section registry
 │   ├── types/                   # @repo/types - Shared TypeScript types
 │   ├── utils/                   # @repo/utils - Utility functions (cn, etc.)
 │   ├── infra/                   # @repo/infra - Security, middleware, logging, env schemas

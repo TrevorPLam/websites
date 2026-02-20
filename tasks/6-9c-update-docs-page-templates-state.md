@@ -38,16 +38,16 @@ Update README, docs/architecture/README.md, and any docs that claim "all page te
 
 ## Acceptance Criteria
 
-- [ ] README accurately describes page-templates (registry + sections)
-- [ ] docs/architecture/README.md layer table updated
-- [ ] No false claims about NotImplementedPlaceholder for page-templates
-- [ ] validate-docs passes
+- [x] README accurately describes page-templates (registry + sections)
+- [x] docs/architecture/README.md layer table updated
+- [x] No false claims about NotImplementedPlaceholder for page-templates
+- [x] validate-docs passes
 
 ## Implementation Plan
 
-- [ ] Grep for NotImplementedPlaceholder, "scaffolded", page-templates claims
-- [ ] Update each reference to reflect current state
-- [ ] Run validate-docs
+- [x] Grep for NotImplementedPlaceholder, "scaffolded", page-templates claims
+- [x] Update each reference to reflect current state
+- [x] Run validate-docs
 
 ## Sample code / examples
 
@@ -65,6 +65,6 @@ Update README, docs/architecture/README.md, and any docs that claim "all page te
 
 ## Definition of Done
 
-- [ ] Code reviewed and approved
-- [ ] Documentation updated
-- [ ] validate-docs passes
+- [x] Code reviewed and approved
+- [x] Documentation updated
+- [x] validate-docs passes
