@@ -1,4 +1,4 @@
-# EVOL-7 Feature → Capability Refactoring (defineFeature)
+# EVOL-7 Feature → Capability Refactoring (defineFeature) (Umbrella)
 
 ## Metadata
 
@@ -6,14 +6,15 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 3 (Weeks 11-13)
-- **Related Epics / ADRs**: NEW.md Phase 3, inf-14
+- **Related Epics / ADRs**: ROADMAP Phase 3, inf-14
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: evol-3, evol-5, evol-6, inf-14
 - **Downstream Tasks**: evol-8, evol-9
+- **Sub-tasks**: [evol-7a](evol-7a-define-feature-infra.md) (defineFeature + featureRegistry), [evol-7b](evol-7b-booking-feature-registration.md) (BookingFeature registration)
 
 ## Context
 
-Create defineFeature and featureRegistry in @repo/infra/features. Features declare provides (sections, integrations, dataContracts), configSchema, onActivate. Per NEW.md Weeks 11-13. Evolves inf-14 (feature plugin) into capability pattern.
+Umbrella for capability refactoring. **Execute in order:** evol-7a (defineFeature, featureRegistry in @repo/infra/features) then evol-7b (BookingFeature declaration and registration). Features declare provides (sections, integrations, dataContracts), configSchema, onActivate. Per ROADMAP Phase 3 Weeks 11-13. Evolves inf-14 (feature plugin) into capability pattern.
 
 ## Dependencies
 
@@ -24,7 +25,7 @@ Create defineFeature and featureRegistry in @repo/infra/features. Features decla
 
 - **Primary topics**: [R-CAPABILITY](RESEARCH-INVENTORY.md#r-capability) (to add), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **[2026-02]** defineFeature evolves from registry patterns; self-declaring features.
-- **References**: NEW.md Weeks 11-13, inf-14.
+- **References**: ROADMAP Phase 3 Weeks 11-13, inf-14.
 
 ## Related Files
 
@@ -32,15 +33,11 @@ Create defineFeature and featureRegistry in @repo/infra/features. Features decla
 - `packages/features/src/booking/capability.ts` – create (BookingFeature)
 - `packages/features/src/booking/index.ts` – register BookingFeature
 
-## Acceptance Criteria
+## Acceptance Criteria (covered by sub-tasks)
 
-- [ ] defineFeature({ id, version, provides, configSchema, onActivate })
-- [ ] featureRegistry.register(Feature)
-- [ ] BookingFeature declares provides: { sections, integrations, dataContracts }
-- [ ] configSchema for validation
-- [ ] onActivate lifecycle
-- [ ] Registration at build time
-- [ ] Document how to add new capability
+- [ ] evol-7a: defineFeature, featureRegistry, document how to add capability
+- [ ] evol-7b: BookingFeature declares provides, configSchema, onActivate; registered at build time
+- [ ] Update inf-14 to reference evol-7
 
 ## Technical Constraints
 
@@ -49,14 +46,9 @@ Create defineFeature and featureRegistry in @repo/infra/features. Features decla
 
 ## Implementation Plan
 
-- [ ] Create @repo/infra/features package or module
-- [ ] Implement defineFeature
-- [ ] Implement featureRegistry
-- [ ] Create BookingFeature in booking/capability.ts
-- [ ] Register BookingFeature
+- [ ] Complete [evol-7a](evol-7a-define-feature-infra.md)
+- [ ] Complete [evol-7b](evol-7b-booking-feature-registration.md)
 - [ ] Update inf-14 to reference evol-7
-- [ ] Add tests
-- [ ] Document
 
 ## Sample code / examples
 

@@ -5,8 +5,8 @@
 - **Task ID**: inf-2-component-variant-schema
 - **Owner**: AGENT
 - **Priority / Severity**: P2
-- **Target Release**: TBD
-- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), NEW.md Phase 1, evol-3
+- **Target Release**: Phase 1, ROADMAP; aligns evol-3
+- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), ROADMAP Phase 1, evol-3
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: INF-5, INF-7

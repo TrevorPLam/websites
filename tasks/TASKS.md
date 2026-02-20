@@ -17,18 +17,18 @@
 
 **Advanced Code Patterns (2026-02-19):** See [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) for pattern inventory and tiered recommendations. Execution waves and sequencing are in [TODO.md](../TODO.md). Individual tasks (inf-1, inf-2, inf-4, inf-8, inf-10, inf-12, c-5, f-21) include an "Advanced Code Pattern Expectations" section with updated research and acceptance criteria.
 
-**Organic Evolution (2026-02-19):** Primary sequencing per [ROADMAP.md](../ROADMAP.md). 26-week Strangler Fig path. evol-\* tasks define phase deliverables. Security/Phase 0 runs in parallel.
+**Organic Evolution (2026-02-19):** Primary sequencing per [ROADMAP.md](../ROADMAP.md). 26-week Strangler Fig path. evol-\* tasks define phase deliverables. **Where evol-\* and batch execution overlap, evol-\* sequencing wins.** Security/Phase 0 runs in parallel. Legacy mappings: evol-2 extends c-5, inf-4; evol-3 extends inf-1; evol-6 merges with inf-10; evol-7 evolves inf-14.
 
-| Phase     | Weeks | Tasks                  | Checkpoint                  |
-| --------- | ----- | ---------------------- | --------------------------- |
-| Pre-Phase | 0     | 0-1, 0-3, 0-2          | CI green, BookingRepository |
-| Phase 1   | 1-4   | evol-1, evol-2, evol-3 | Foundation locked           |
-| Phase 2   | 5-10  | evol-4, evol-5, evol-6 | Data contracts seeded       |
-| Phase 3   | 11-16 | evol-7, evol-8         | Capability core active      |
-| Phase 4   | 17-22 | evol-9, evol-10        | Universal renderer proven   |
-| Phase 5   | 23-26 | evol-11, evol-12       | Platform converged          |
+| Phase     | Weeks | Tasks                            | Checkpoint                  |
+| --------- | ----- | -------------------------------- | --------------------------- |
+| Pre-Phase | 0     | 0-1, 0-3, 0-2                    | CI green, BookingRepository |
+| Phase 1   | 1-4   | evol-1, evol-2, evol-3           | Foundation locked           |
+| Phase 2   | 5-10  | evol-4, evol-5a, evol-5b, evol-6 | Data contracts seeded       |
+| Phase 3   | 11-16 | evol-7a, evol-7b, evol-8         | Capability core active      |
+| Phase 4   | 17-22 | evol-9a, evol-9b, evol-10        | Universal renderer proven   |
+| Phase 5   | 23-26 | evol-11, evol-12                 | Platform converged          |
 
-**evol-\* task files:** [evol-1](evol-1-architecture-police.md) · [evol-2](evol-2-cva-token-completion.md) · [evol-3](evol-3-registry-capability-metadata.md) · [evol-4](evol-4-canonical-types.md) · [evol-5](evol-5-booking-canonical-migration.md) · [evol-6](evol-6-integration-adapter-registry.md) · [evol-7](evol-7-define-feature.md) · [evol-8](evol-8-site-config-capability-activation.md) · [evol-9](evol-9-universal-renderer.md) · [evol-10](evol-10-edge-database-opt-in.md) · [evol-11](evol-11-legacy-bridge.md) · [evol-12](evol-12-full-platform-convergence.md)
+**evol-\* task files:** [evol-1](evol-1-architecture-police.md) · [evol-2](evol-2-cva-token-completion.md) · [evol-3](evol-3-registry-capability-metadata.md) · [evol-4](evol-4-canonical-types.md) · [evol-5](evol-5-booking-canonical-migration.md) ([5a](evol-5a-booking-canonical-types.md) · [5b](evol-5b-booking-repository-migration.md)) · [evol-6](evol-6-integration-adapter-registry.md) · [evol-7](evol-7-define-feature.md) ([7a](evol-7a-define-feature-infra.md) · [7b](evol-7b-booking-feature-registration.md)) · [evol-8](evol-8-site-config-capability-activation.md) · [evol-9](evol-9-universal-renderer.md) ([9a](evol-9a-activate-capabilities.md) · [9b](evol-9b-universal-page.md)) · [evol-10](evol-10-edge-database-opt-in.md) · [evol-11](evol-11-legacy-bridge.md) · [evol-12](evol-12-full-platform-convergence.md)
 
 **Pre-Phase task files:** [0-1](0-1-fix-critical-ci-failures.md) · [0-2](0-2-replace-internal-bookings-persistent-storage.md) · [0-3](0-3-fix-tenant-context-security.md)
 

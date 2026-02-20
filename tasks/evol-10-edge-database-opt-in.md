@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: Phase 4 (Weeks 20-22)
-- **Related Epics / ADRs**: NEW.md Phase 4, evol-5
+- **Related Epics / ADRs**: ROADMAP Phase 4, evol-5
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: evol-5 (BookingRepository)
 - **Downstream Tasks**: evol-12
 
 ## Context
 
-Implement SmartRepository that chooses storage based on tenant config. storage.edgeCache: true → edge reads (e.g. Turso); writes to Supabase + async cache invalidation. Per NEW.md Weeks 20-22. Distinct from c-18 (edge middleware).
+Implement SmartRepository that chooses storage based on tenant config. storage.edgeCache: true → edge reads (e.g. Turso); writes to Supabase + async cache invalidation. Per ROADMAP Phase 4 Weeks 20-22. Distinct from c-18 (edge middleware).
 
 ## Dependencies
 
@@ -24,7 +24,7 @@ Implement SmartRepository that chooses storage based on tenant config. storage.e
 
 - **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **[2026-02]** Turso or similar for sub-10ms reads; Supabase source of truth for writes.
-- **References**: NEW.md Weeks 20-22.
+- **References**: ROADMAP Phase 4 Weeks 20-22.
 
 ## Related Files
 

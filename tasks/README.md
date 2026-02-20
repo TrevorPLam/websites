@@ -63,7 +63,7 @@ Test dependent packages after fixes. |
 | **Scripts/Wiring** | scripts-wire-\* | Audit scripts in `scripts/`; add package.json entries; document. |
 | **Ops** | e-7 | Infra ops, queues, governance. |
 | **Feature systems** | f-\* | Align with R-INFRA, THEGOAL; CVA, tokens, providers. |
-| **Organic Evolution** | evol-\* | Tasks tagged with NEW.md phase (e.g. Phase 2, Week 5-6) must follow phase sequencing in [evolution-roadmap.md](../docs/architecture/evolution-roadmap.md). |
+| **Organic Evolution** | evol-\* | Tasks tagged with ROADMAP phase (e.g. Phase 2, Week 5-6) must follow phase sequencing in [ROADMAP.md](../ROADMAP.md) § Organic Evolution. |
 
 ---
 

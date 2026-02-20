@@ -6,7 +6,7 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P0
 - **Target Release**: Pre-Phase (Week 0); prerequisite for Phase 2 evol-5 (Weeks 7-8)
-- **Related Epics / ADRs**: NEW.md Pre-Phase, evolution-roadmap, evol-5
+- **Related Epics / ADRs**: ROADMAP Pre-Phase, evol-5
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 0-1 (CI green), 0-3 (tenant context)
 - **Downstream Tasks**: evol-5 (Booking Canonical migration), security-1 (Server Action Hardening)

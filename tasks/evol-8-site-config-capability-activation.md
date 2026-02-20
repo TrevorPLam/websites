@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 3 (Weeks 14-16)
-- **Related Epics / ADRs**: NEW.md Phase 3, ADR-0006 (CaCA)
+- **Related Epics / ADRs**: ROADMAP Phase 3, ADR-0006 (CaCA)
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: evol-7
 - **Downstream Tasks**: evol-9, evol-11
 
 ## Context
 
-Extend site.config.ts with capabilities array and pages.home sections referencing capability. Per NEW.md Weeks 14-16. Extends CaCA (ADR-0006); defineSiteConfig and Zod schema updated.
+Extend site.config.ts with capabilities array and pages.home sections referencing capability. Per ROADMAP Phase 3 Weeks 14-16. Extends CaCA (ADR-0006); defineSiteConfig and Zod schema updated.
 
 ## Dependencies
 
@@ -23,7 +23,7 @@ Extend site.config.ts with capabilities array and pages.home sections referencin
 
 - **Primary topics**: [R-CAPABILITY](RESEARCH-INVENTORY.md#r-capability), [R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation-config-schema-validation-zod).
 - **[2026-02]** capabilities: [{ id, enabled, config }]; pages.home: [{ section, capability?, config }].
-- **References**: NEW.md Weeks 14-16, [packages/types/src/site-config.ts](../packages/types/src/site-config.ts).
+- **References**: ROADMAP Phase 3 Weeks 14-16, [packages/types/src/site-config.ts](../packages/types/src/site-config.ts).
 
 ## Related Files
 

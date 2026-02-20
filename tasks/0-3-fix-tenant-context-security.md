@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P0
 - **Target Release**: Pre-Phase (Week 0); prerequisite for 0-2 tenant-scoped repository
-- **Related Epics / ADRs**: NEW.md Pre-Phase, evolution-roadmap, security-1
+- **Related Epics / ADRs**: ROADMAP Pre-Phase, security-1
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 0-1 (CI green)
 - **Downstream Tasks**: 0-2 (tenant-scoped BookingRepository), security-1 (RLS/tenant isolation)
 
 ## Context
 
-Tenant context must be correctly implemented so repository queries (0-2) and RLS policies (security-2) can scope data by tenant. Fixes security foundation for multi-tenant data isolation. Per [evolution-roadmap](../docs/architecture/evolution-roadmap.md) Pre-Phase — required before 0-2 can implement tenant-scoped repository queries.
+Tenant context must be correctly implemented so repository queries (0-2) and RLS policies (security-2) can scope data by tenant. Fixes security foundation for multi-tenant data isolation. Per [ROADMAP](../ROADMAP.md) § Organic Evolution Pre-Phase — required before 0-2 can implement tenant-scoped repository queries.
 
 ## Dependencies
 
@@ -21,7 +21,7 @@ Tenant context must be correctly implemented so repository queries (0-2) and RLS
 
 ## Research
 
-- **2026-02** — Multi-tenant RLS, JWT claims, request context. Tenant resolution via header, subdomain, or JWT. References: [evolution-roadmap](../docs/architecture/evolution-roadmap.md), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), security-2 (RLS).
+- **2026-02** — Multi-tenant RLS, JWT claims, request context. Tenant resolution via header, subdomain, or JWT. References: [ROADMAP](../ROADMAP.md), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), security-2 (RLS).
 
 ## Related Files
 

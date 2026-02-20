@@ -1,4 +1,4 @@
-# EVOL-9 Universal Renderer (New Clients Only)
+# EVOL-9 Universal Renderer (New Clients Only) (Umbrella)
 
 ## Metadata
 
@@ -6,14 +6,15 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: Phase 4 (Weeks 17-19)
-- **Related Epics / ADRs**: NEW.md Phase 4, evol-8
+- **Related Epics / ADRs**: ROADMAP Phase 4, evol-8
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: evol-7, evol-8
 - **Downstream Tasks**: evol-11, evol-12
+- **Sub-tasks**: [evol-9a](evol-9a-activate-capabilities.md) (activateCapabilities + CapabilityProvider), [evol-9b](evol-9b-universal-page.md) (UniversalPage + wiring)
 
 ## Context
 
-Create UniversalPage for clients that opt-in via site.config.renderer: 'universal'. Resolves tenant → activateCapabilities → composes sections from capabilities → renders with CapabilityProvider. Per NEW.md Weeks 17-19.
+Umbrella for universal renderer. **Execute in order:** evol-9a (activateCapabilities, CapabilityProvider) then evol-9b (UniversalPage, renderer wiring, test client). Clients opt-in via site.config.renderer: 'universal'. Resolves tenant → activateCapabilities → composes sections → CapabilityProvider. Per ROADMAP Phase 4 Weeks 17-19.
 
 ## Dependencies
 
@@ -23,7 +24,7 @@ Create UniversalPage for clients that opt-in via site.config.renderer: 'universa
 
 - **Primary topics**: [R-CAPABILITY](RESEARCH-INVENTORY.md#r-capability), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **[2026-02]** Opt-in; new clients default; classic unchanged. PPR for streaming.
-- **References**: NEW.md Weeks 17-19, [packages/page-templates/](../packages/page-templates/).
+- **References**: ROADMAP Phase 4 Weeks 17-19, [packages/page-templates/](../packages/page-templates/).
 
 ## Related Files
 
@@ -32,16 +33,11 @@ Create UniversalPage for clients that opt-in via site.config.renderer: 'universa
 - `packages/page-templates/src/CapabilityProvider.tsx` – create
 - `packages/types/src/site-config.ts` – add renderer?: 'classic' | 'universal'
 
-## Acceptance Criteria
+## Acceptance Criteria (covered by sub-tasks)
 
-- [ ] UniversalPage({ tenantId, slug }) component
-- [ ] activateCapabilities(siteConfig.capabilities) function
-- [ ] CapabilityProvider context
-- [ ] Composes sections from capability provides
-- [ ] Renders with Suspense/PPR
-- [ ] renderer: 'universal' in site.config opt-in
-- [ ] New client can launch on universal
-- [ ] Classic clients unchanged
+- [ ] evol-9a: activateCapabilities, CapabilityProvider, renderer in SiteConfig
+- [ ] evol-9b: UniversalPage, composes sections, Suspense/PPR, wire route, test client
+- [ ] New client can launch on universal; classic clients unchanged
 
 ## Technical Constraints
 
@@ -50,13 +46,8 @@ Create UniversalPage for clients that opt-in via site.config.renderer: 'universa
 
 ## Implementation Plan
 
-- [ ] Add renderer to SiteConfig
-- [ ] Create activateCapabilities
-- [ ] Create CapabilityProvider
-- [ ] Create UniversalPage
-- [ ] Wire to page route for universal clients
-- [ ] Create test client with renderer: 'universal'
-- [ ] Add tests
+- [ ] Complete [evol-9a](evol-9a-activate-capabilities.md)
+- [ ] Complete [evol-9b](evol-9b-universal-page.md)
 - [ ] Document
 
 ## Sample code / examples

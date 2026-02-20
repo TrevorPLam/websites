@@ -5,8 +5,8 @@
 - **Task ID**: inf-1-dynamic-section-registry
 - **Owner**: AGENT
 - **Priority / Severity**: P2
-- **Target Release**: TBD
-- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), NEW.md Phase 1 (Week 3-4), evol-3
+- **Target Release**: Phase 1 (Week 3-4), ROADMAP; extends evol-3
+- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), ROADMAP Phase 1 (Week 3-4), evol-3
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 3.1, 3.2
 - **Downstream Tasks**: INF-2, INF-5, INF-8

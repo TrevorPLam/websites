@@ -5,8 +5,8 @@
 - **Task ID**: c-5-design-tokens
 - **Owner**: AGENT
 - **Priority / Severity**: P2
-- **Target Release**: TBD
-- **Related Epics / ADRs**: THEGOAL [C.5], design system, NEW.md Phase 1 (Week 2), evol-2
+- **Target Release**: Phase 1 (Week 2), ROADMAP; extended by evol-2
+- **Related Epics / ADRs**: THEGOAL [C.5], design system, ROADMAP Phase 1 (Week 2), evol-2
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: Theming, INF-4

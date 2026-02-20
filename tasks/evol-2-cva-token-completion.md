@@ -6,7 +6,7 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 1 (Week 2)
-- **Related Epics / ADRs**: NEW.md Phase 1, TODO.md Wave 2.3
+- **Related Epics / ADRs**: ROADMAP Phase 1, TODO.md Wave 2.3
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: evol-3 (capability-ready theming)
@@ -24,7 +24,7 @@ Complete CVA migration for remaining components (TODO.md 2.3: ~49 components). E
 
 - **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), [R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens-three-layer-token-architecture).
 - **[2026-02]** CVA from `@repo/infra/variants`; use CSS vars for capability system readiness.
-- **References**: [packages/ui/src/components/Button.tsx](../packages/ui/src/components/Button.tsx), NEW.md Week 2.
+- **References**: [packages/ui/src/components/Button.tsx](../packages/ui/src/components/Button.tsx), ROADMAP Phase 1 Week 2.
 
 ## Related Files
 

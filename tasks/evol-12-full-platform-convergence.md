@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: Phase 5 (Weeks 25-26)
-- **Related Epics / ADRs**: NEW.md Phase 5, THEGOAL.md
+- **Related Epics / ADRs**: ROADMAP Phase 5, THEGOAL.md
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: evol-9, evol-10, evol-11
 - **Downstream Tasks**: None (final phase task)
 
 ## Context
 
-Document final architecture; validate legacy + universal coexist; migration path clear. Per NEW.md Weeks 25-26. Primarily documentation and validation task.
+Document final architecture; validate legacy + universal coexist; migration path clear. Per ROADMAP Phase 5 Weeks 25-26. Primarily documentation and validation task.
 
 ## Dependencies
 
@@ -23,11 +23,11 @@ Document final architecture; validate legacy + universal coexist; migration path
 
 - **Primary topics**: [R-CAPABILITY](RESEARCH-INVENTORY.md#r-capability), THEGOAL.md.
 - **[2026-02]** Final architecture: Capability Registry, Data Contracts, Universal Renderer, Edge Storage.
-- **References**: NEW.md Weeks 25-26, THEGOAL.md.
+- **References**: ROADMAP Phase 5 Weeks 25-26, THEGOAL.md.
 
 ## Related Files
 
-- `docs/architecture/evolution-roadmap.md` – update final state
+- `ROADMAP.md` – update final state (Organic Evolution §)
 - `THEGOAL.md` – align with achieved architecture
 - `docs/architecture/README.md` – update
 - `tasks/updates/` – checkpoint status
@@ -47,7 +47,7 @@ Document final architecture; validate legacy + universal coexist; migration path
 
 ## Implementation Plan
 
-- [ ] Update evolution-roadmap.md with final state
+- [ ] Update ROADMAP.md with final state
 - [ ] Update THEGOAL.md to reflect achieved architecture
 - [ ] Document migration path (classic → universal)
 - [ ] Run full validation suite
@@ -56,7 +56,7 @@ Document final architecture; validate legacy + universal coexist; migration path
 
 ## Sample code / examples
 
-Architecture summary per NEW.md:
+Architecture summary per ROADMAP:
 
 ```
 ┌─────────────────────────────────────────┐

@@ -5,8 +5,8 @@
 - **Task ID**: inf-10-integration-adapter-registry
 - **Owner**: AGENT
 - **Priority / Severity**: P2
-- **Target Release**: TBD
-- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), NEW.md Phase 2 (Week 9-10), evol-6
+- **Target Release**: Phase 2 (Week 9-10), ROADMAP; satisfies evol-6
+- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), ROADMAP Phase 2 (Week 9-10), evol-6
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 4-1 through 4-5
 - **Downstream Tasks**: Custom integrations

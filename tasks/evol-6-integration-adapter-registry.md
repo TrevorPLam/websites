@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 2 (Weeks 9-10)
-- **Related Epics / ADRs**: NEW.md Phase 2, inf-10
+- **Related Epics / ADRs**: ROADMAP Phase 2, inf-10
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: evol-4, inf-10 (align)
 - **Downstream Tasks**: evol-7
 
 ## Context
 
-Formalize IntegrationAdapter interface and IntegrationRegistry in packages/integrations-core. Enables capability-based resolution. Per NEW.md Weeks 9-10. Merge intent with inf-10; inf-10 implementation satisfies this spec.
+Formalize IntegrationAdapter interface and IntegrationRegistry in packages/integrations-core. Enables capability-based resolution. Per ROADMAP Phase 2 Weeks 9-10. Merge intent with inf-10; inf-10 implementation satisfies this spec.
 
 ## Dependencies
 
@@ -24,7 +24,7 @@ Formalize IntegrationAdapter interface and IntegrationRegistry in packages/integ
 
 - **Primary topics**: [R-INTEGRATION](RESEARCH-INVENTORY.md#r-integration-scheduling-oauth-tcf), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **[2026-02]** Pattern from booking-providers.ts; capability resolution.
-- **References**: NEW.md Weeks 9-10, [packages/features/src/booking/lib/booking-providers.ts](../packages/features/src/booking/lib/booking-providers.ts), inf-10.
+- **References**: ROADMAP Phase 2 Weeks 9-10, [packages/features/src/booking/lib/booking-providers.ts](../packages/features/src/booking/lib/booking-providers.ts), inf-10.
 
 ## Related Files
 

@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 1 (Week 1)
-- **Related Epics / ADRs**: NEW.md Phase 1, ADR-012 (integration types)
+- **Related Epics / ADRs**: ROADMAP Phase 1, ADR-012 (integration types)
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: evol-3, evol-4
 
 ## Context
 
-Enforce architectural invariants via ESLint to catch drift and prepare for data contracts. Per NEW.md Week 1: no deep imports, no cross-client imports, warn when integration types (e.g. HubSpotContact) leak into features.
+Enforce architectural invariants via ESLint to catch drift and prepare for data contracts. Per ROADMAP Phase 1 Week 1: no deep imports, no cross-client imports, warn when integration types (e.g. HubSpotContact) leak into features.
 
 ## Dependencies
 
@@ -23,7 +23,7 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 
 - **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **[2026-02]** Repo uses ESLint 9 flat config (`eslint.config.mjs`), not `.eslintrc.*`. Implement as additional flat config extending `@repo/eslint-config`.
-- **References**: NEW.md, [docs/architecture/evolution-roadmap.md](../docs/architecture/evolution-roadmap.md).
+- **References**: [ROADMAP](../ROADMAP.md) § Organic Evolution.
 
 ## Related Files
 
@@ -51,7 +51,7 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 - [ ] Wire into root or eslint-config package
 - [ ] Add no-restricted-imports for deep paths and cross-client
 - [ ] Add warn for integration types in features
-- [ ] Document in evolution-roadmap
+- [ ] Document in ROADMAP (if needed)
 - [ ] Run `pnpm lint` to verify
 
 ## Sample code / examples

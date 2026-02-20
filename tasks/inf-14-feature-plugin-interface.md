@@ -5,8 +5,8 @@
 - **Task ID**: inf-14-feature-plugin-interface
 - **Owner**: AGENT
 - **Priority / Severity**: P2
-- **Target Release**: TBD
-- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), NEW.md Phase 3 (Week 11-13), evol-7
+- **Target Release**: Phase 3 (Week 11-13), ROADMAP; evolved by evol-7
+- **Related Epics / ADRs**: Infinite Extensibility (Tier 12), ROADMAP Phase 3 (Week 11-13), evol-7
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 2.x (features)
 - **Downstream Tasks**: Custom features

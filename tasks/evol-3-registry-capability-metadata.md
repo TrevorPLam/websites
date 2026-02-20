@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 1 (Weeks 3-4)
-- **Related Epics / ADRs**: NEW.md Phase 1, inf-1
+- **Related Epics / ADRs**: ROADMAP Phase 1, inf-1
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: inf-1, evol-1
 - **Downstream Tasks**: evol-7, evol-8
 
 ## Context
 
-Extend SectionDefinition in page-templates registry with capability-like metadata. Enables feature-aware section composition and prepares for capability registry (Phase 3). Per NEW.md Weeks 3-4.
+Extend SectionDefinition in page-templates registry with capability-like metadata. Enables feature-aware section composition and prepares for capability registry (Phase 3). Per ROADMAP Phase 1 Weeks 3-4.
 
 ## Dependencies
 
@@ -24,7 +24,7 @@ Extend SectionDefinition in page-templates registry with capability-like metadat
 
 - **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **[2026-02]** Optional metadata; no breaking changes. isFeatureEnabled derives from site.config.features or explicit feature check.
-- **References**: [packages/page-templates/src/registry.ts](../packages/page-templates/src/registry.ts), NEW.md Week 3-4.
+- **References**: [packages/page-templates/src/registry.ts](../packages/page-templates/src/registry.ts), ROADMAP Phase 1 Weeks 3-4.
 
 ## Related Files
 

@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 2 (Weeks 5-6)
-- **Related Epics / ADRs**: NEW.md Phase 2, ADR-012
+- **Related Epics / ADRs**: ROADMAP Phase 2, ADR-012
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: ADR-012 (create first)
 - **Downstream Tasks**: evol-5, evol-6
 
 ## Context
 
-Introduce canonical types alongside existing integration-specific types. Enables integration swappability and type safety. Per NEW.md Weeks 5-6: CanonicalLead, LeadAdapter, HubSpotLeadAdapter; getContact returns CanonicalLead.
+Introduce canonical types alongside existing integration-specific types. Enables integration swappability and type safety. Per ROADMAP Phase 2 Weeks 5-6: CanonicalLead, LeadAdapter, HubSpotLeadAdapter; getContact returns CanonicalLead.
 
 ## Dependencies
 
@@ -23,7 +23,7 @@ Introduce canonical types alongside existing integration-specific types. Enables
 
 - **Primary topics**: [R-CANONICAL](RESEARCH-INVENTORY.md#r-canonical) (to add), [R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation-config-schema-validation-zod).
 - **[2026-02]** Zod schema + z.infer; adapter pattern from HubSpot to canonical.
-- **References**: NEW.md Weeks 5-6, [docs/adr/0012-canonical-types-data-contracts.md](../docs/adr/0012-canonical-types-data-contracts.md).
+- **References**: ROADMAP Phase 2 Weeks 5-6, [docs/adr/0012-canonical-types-data-contracts.md](../docs/adr/0012-canonical-types-data-contracts.md).
 
 ## Related Files
 

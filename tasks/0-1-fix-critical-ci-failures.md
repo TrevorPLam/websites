@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P0
 - **Target Release**: Pre-Phase (Week 0) — must complete before all other work
-- **Related Epics / ADRs**: NEW.md Pre-Phase, evolution-roadmap
+- **Related Epics / ADRs**: ROADMAP Pre-Phase
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: 0-2, 0-3, evol-1, all Phase 1+ work
 
 ## Context
 
-CI must be green before any substantial work can be merged. This task fixes blocking TypeScript errors, build failures, and test failures that prevent the evolution from proceeding. Per [evolution-roadmap](../docs/architecture/evolution-roadmap.md) Pre-Phase — unblocks all merges.
+CI must be green before any substantial work can be merged. This task fixes blocking TypeScript errors, build failures, and test failures that prevent the evolution from proceeding. Per [ROADMAP](../ROADMAP.md) § Organic Evolution Pre-Phase — unblocks all merges.
 
 ## Dependencies
 
@@ -21,7 +21,7 @@ CI must be green before any substantial work can be merged. This task fixes bloc
 
 ## Research
 
-- **2026-02** — CI must pass before merge; standard monorepo practice. Turbo affected builds; pnpm workspace resolution. References: [evolution-roadmap](../docs/architecture/evolution-roadmap.md) Pre-Phase, [TASKS.md](TASKS.md).
+- **2026-02** — CI must pass before merge; standard monorepo practice. Turbo affected builds; pnpm workspace resolution. References: [ROADMAP](../ROADMAP.md) Pre-Phase, [TASKS.md](TASKS.md).
 
 ## Related Files
 

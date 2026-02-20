@@ -6,14 +6,14 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P2
 - **Target Release**: Phase 5 (Weeks 23-24)
-- **Related Epics / ADRs**: NEW.md Phase 5, evol-8, evol-9
+- **Related Epics / ADRs**: ROADMAP Phase 5, evol-8, evol-9
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: evol-7, evol-8, evol-9
 - **Downstream Tasks**: evol-12
 
 ## Context
 
-Create migrateLegacyConfig and ClassicPage so existing clients use capability orchestration internally but render with classic components. No rewrites required. Per NEW.md Weeks 23-24.
+Create migrateLegacyConfig and ClassicPage so existing clients use capability orchestration internally but render with classic components. No rewrites required. Per ROADMAP Phase 5 Weeks 23-24.
 
 ## Dependencies
 
@@ -24,7 +24,7 @@ Create migrateLegacyConfig and ClassicPage so existing clients use capability or
 
 - **Primary topics**: [R-CAPABILITY](RESEARCH-INVENTORY.md#r-capability).
 - **[2026-02]** Auto-convert features → capabilities; ClassicPage uses useCapabilities().resolveSections().
-- **References**: NEW.md Weeks 23-24.
+- **References**: ROADMAP Phase 5 Weeks 23-24.
 
 ## Related Files
 
