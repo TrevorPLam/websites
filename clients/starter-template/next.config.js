@@ -29,8 +29,16 @@ const nextConfig = {
     '@repo/features',
     '@repo/page-templates',
     '@repo/marketing-components',
+    '@repo/infrastructure-ui',
   ],
   typescript: { ignoreBuildErrors: false },
+  // Task 4.1: Enable `use cache` directive (Next.js 16 cache directives).
+  // cacheComponents: cache React Server Component render output between requests.
+  // dynamicIO: enforce explicit caching — `use cache` or `noStore()` per data fetch.
+  experimental: {
+    cacheComponents: true,
+    dynamicIO: true,
+  },
 };
 
 module.exports = withBundleAnalyzer(withNextIntl(nextConfig));

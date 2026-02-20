@@ -1,9 +1,10 @@
 /**
  * @file packages/page-templates/src/templates/ContactPageTemplate.tsx
- * Task: [3.5] Form + business info + optional map
+ * Task: [3.5] Form + business info + optional map + slot-based content injection
  *
  * Purpose: Renders contact page via composePage. Sections: contact-form,
  * contact-info (optional map). Registration via import side-effect.
+ * Slots allow injecting nav/banner/footer without modifying the section registry.
  */
 
 import * as React from 'react';
@@ -14,10 +15,16 @@ import '../sections/contact/index'; // side-effect: register contact sections
 export function ContactPageTemplate({
   config,
   searchParams,
-}: PageTemplateProps): React.ReactElement | null {
-  const result = composePage({ page: 'contact', searchParams }, config);
-  if (result === null) {
-    return React.createElement('div', { 'data-template': 'ContactPageTemplate' }, null);
-  }
-  return result;
+  slots,
+}: PageTemplateProps): React.ReactElement {
+  const content = composePage({ page: 'contact', searchParams }, config);
+
+  return (
+    <>
+      {slots?.header}
+      {slots?.aboveFold}
+      {content ?? <div data-template="ContactPageTemplate" />}
+      {slots?.footer}
+    </>
+  );
 }
