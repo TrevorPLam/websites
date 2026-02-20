@@ -3,7 +3,7 @@
 //          and orientations. Built on Radix UI Tabs for correct keyboard navigation and
 //          ARIA roles (tablist / tab / tabpanel).
 //
-// Relationship: Depends on radix-ui, @repo/utils (cn).
+// Relationship: Depends on radix-ui, @repo/infra/variants (cva), @repo/utils (cn).
 // System role: Disclosure primitive (Layer L2 @repo/ui).
 // Assumptions: Consumers control active tab via value/onValueChange or use defaultValue
 //              for uncontrolled usage.
@@ -14,6 +14,7 @@
 // Invariants:
 // - Radix manages roving focus and ARIA; only style overrides live here
 // - variant and size apply only to TabsList / TabsTrigger, not TabsContent
+// - CVA resolves all variant/size combinations at call-site with full type safety
 //
 // Status: @public
 // Features:
@@ -24,6 +25,7 @@
 
 import * as React from 'react';
 import { Tabs as TabsPrimitive } from 'radix-ui';
+import { cva } from '@repo/infra/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -41,77 +43,78 @@ export interface TabsListProps extends React.ComponentPropsWithoutRef<typeof Tab
   size?: TabsSize;
 }
 
-export interface TabsTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
+export interface TabsTriggerProps extends React.ComponentPropsWithoutRef<
+  typeof TabsPrimitive.Trigger
+> {
   variant?: TabsVariant;
   size?: TabsSize;
 }
 
 export type TabsContentProps = React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>;
 
-// ─── Style Maps ──────────────────────────────────────────────────────────────
+// ─── CVA Variant Definitions ──────────────────────────────────────────────────
 
-// [TRACE:CONST=packages.ui.components.Tabs.listVariantStyles]
-const listVariantStyles: Record<TabsVariant, string> = {
-  default: 'inline-flex items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
-  underline: 'inline-flex items-center justify-start border-b border-border gap-0 bg-transparent',
-  pills: 'inline-flex items-center justify-start gap-1 bg-transparent',
-  enclosed:
-    'inline-flex items-center justify-start rounded-t-lg border border-b-0 border-border bg-muted/40 px-1 pt-1 gap-0',
-  soft: 'inline-flex items-center justify-start gap-1 bg-muted/30 rounded-lg p-1',
-};
+// [TRACE:CONST=packages.ui.components.Tabs.tabsListVariants]
+const tabsListVariants = cva({
+  base: 'inline-flex items-center',
+  variants: {
+    variant: {
+      default: 'justify-center rounded-lg bg-muted p-1 text-muted-foreground',
+      underline: 'justify-start border-b border-border gap-0 bg-transparent',
+      pills: 'justify-start gap-1 bg-transparent',
+      enclosed:
+        'justify-start rounded-t-lg border border-b-0 border-border bg-muted/40 px-1 pt-1 gap-0',
+      soft: 'justify-start gap-1 bg-muted/30 rounded-lg p-1',
+    },
+  },
+  defaultVariants: { variant: 'default' },
+});
 
-// [TRACE:CONST=packages.ui.components.Tabs.triggerVariantStyles]
-const triggerVariantStyles: Record<TabsVariant, string> = {
-  default: [
-    'inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium',
-    'ring-offset-background transition-all',
+// [TRACE:CONST=packages.ui.components.Tabs.tabsTriggerVariants]
+// Combined variant + size resolver for TabsTrigger.
+const tabsTriggerVariants = cva({
+  base: [
+    'inline-flex items-center justify-center whitespace-nowrap font-medium transition-all',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
-    'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
   ].join(' '),
-  underline: [
-    'inline-flex items-center justify-center whitespace-nowrap font-medium',
-    'border-b-2 border-transparent transition-all -mb-px',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'data-[state=active]:border-primary data-[state=active]:text-foreground',
-    'hover:text-foreground text-muted-foreground',
-  ].join(' '),
-  pills: [
-    'inline-flex items-center justify-center whitespace-nowrap rounded-full font-medium',
-    'transition-all',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'data-[state=active]:bg-primary data-[state=active]:text-primary-foreground',
-    'hover:bg-muted text-muted-foreground',
-  ].join(' '),
-  enclosed: [
-    'inline-flex items-center justify-center whitespace-nowrap rounded-t-md',
-    'border border-b-0 font-medium transition-all',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:border-border',
-    'data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground',
-    'hover:text-foreground',
-  ].join(' '),
-  soft: [
-    'inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium',
-    'transition-all',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
-    'hover:bg-muted/60 text-muted-foreground',
-  ].join(' '),
-};
-
-// [TRACE:CONST=packages.ui.components.Tabs.triggerSizeStyles]
-const triggerSizeStyles: Record<TabsSize, string> = {
-  sm: 'h-7 px-2.5 text-xs',
-  md: 'h-9 px-3 text-sm',
-  lg: 'h-10 px-4 text-sm',
-  xl: 'h-11 px-5 text-base',
-};
+  variants: {
+    variant: {
+      default: [
+        'rounded-md ring-offset-background',
+        'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+      ].join(' '),
+      underline: [
+        'border-b-2 border-transparent -mb-px',
+        'data-[state=active]:border-primary data-[state=active]:text-foreground',
+        'hover:text-foreground text-muted-foreground',
+      ].join(' '),
+      pills: [
+        'rounded-full',
+        'data-[state=active]:bg-primary data-[state=active]:text-primary-foreground',
+        'hover:bg-muted text-muted-foreground',
+      ].join(' '),
+      enclosed: [
+        'rounded-t-md border border-b-0',
+        'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:border-border',
+        'data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground',
+        'hover:text-foreground',
+      ].join(' '),
+      soft: [
+        'rounded-md',
+        'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+        'hover:bg-muted/60 text-muted-foreground',
+      ].join(' '),
+    },
+    size: {
+      sm: 'h-7 px-2.5 text-xs',
+      md: 'h-9 px-3 text-sm',
+      lg: 'h-10 px-4 text-sm',
+      xl: 'h-11 px-5 text-base',
+    },
+  },
+  defaultVariants: { variant: 'default', size: 'md' },
+});
 
 // ─── Context ─────────────────────────────────────────────────────────────────
 
@@ -148,7 +151,7 @@ export const TabsList = React.forwardRef<
     <TabsContext.Provider value={{ variant, size }}>
       <TabsPrimitive.List
         ref={ref}
-        className={cn(listVariantStyles[variant], className)}
+        className={cn(tabsListVariants({ variant }), className)}
         {...props}
       />
     </TabsContext.Provider>
@@ -168,7 +171,7 @@ export const TabsTrigger = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={cn(triggerVariantStyles[variant], triggerSizeStyles[size], className)}
+      className={cn(tabsTriggerVariants({ variant, size }), className)}
       {...props}
     />
   );

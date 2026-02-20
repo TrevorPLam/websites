@@ -1,13 +1,16 @@
 // File: packages/features/src/booking/lib/booking-providers.ts  [TRACE:FILE=packages.features.booking.bookingProviders]
 // Purpose: External booking provider integration system supporting multiple appointment scheduling platforms.
 //          Refactored to use adapter pattern, eliminating ~300 lines of duplicated code across providers.
+//          Includes open provider registry (inf-10) for third-party provider self-registration.
 //
 // Relationship: Uses booking-schema, booking-provider-adapter. Depends on @repo/infra/env (validateEnv).
 // System role: Factory of Mindbody/Vagaro/Square adapters; getBookingProviders is lazy to avoid build-time env.
+//              Provider registry (BOOKING_PROVIDER_REGISTRY) allows third-party providers to self-register.
 // Assumptions: Env vars like MINDBODY_ENABLED, MINDBODY_API_KEY; Calendly not yet implemented as adapter.
 //
-// Exports / Entry: BookingProvider types, ProviderConfig interface, provider classes, getBookingProviders function
-// Used by: Booking actions, booking forms, and appointment management features
+// Exports / Entry: BookingProvider types, ProviderConfig interface, provider classes, getBookingProviders,
+//                  registerBookingProvider, getBookingProviderRegistry
+// Used by: Booking actions, booking forms, appointment management features, third-party integrations
 //
 // Invariants:
 // - All providers must implement BookingProviderAdapter interface
@@ -15,6 +18,7 @@
 // - API failures must be logged but not block booking flow
 // - Provider URLs must be properly validated and sanitized
 // - Booking IDs must be traceable across provider systems
+// - registerBookingProvider invalidates the cached BookingProviders instance for hot-loading
 //
 // Status: @internal
 // Features:
@@ -24,6 +28,7 @@
 // - [FEAT:RELIABILITY] Error handling and fallback mechanisms
 // - [FEAT:MONITORING] Provider performance tracking
 // - [FEAT:ARCHITECTURE] Adapter pattern for code reuse
+// - [FEAT:EXTENSIBILITY] Open provider registry — registerBookingProvider() for third-party providers (inf-10)
 
 import type { BookingFormData } from './booking-schema';
 import {
@@ -67,7 +72,8 @@ class MindbodyProvider extends BaseBookingProviderAdapter {
   }
 
   buildRequestBody(data: BookingFormData): Record<string, unknown> {
-    const startDateTime = new Date(data.preferredDate).toISOString().split('T')[0] + this.mapTimeSlot(data.timeSlot);
+    const startDateTime =
+      new Date(data.preferredDate).toISOString().split('T')[0] + this.mapTimeSlot(data.timeSlot);
     const endDateTime = this.calculateEndTime(startDateTime);
 
     return {
@@ -199,7 +205,8 @@ class SquareProvider extends BaseBookingProviderAdapter {
   }
 
   buildRequestBody(data: BookingFormData): Record<string, unknown> {
-    const startAt = new Date(data.preferredDate).toISOString().split('T')[0] + this.mapTimeSlot(data.timeSlot);
+    const startAt =
+      new Date(data.preferredDate).toISOString().split('T')[0] + this.mapTimeSlot(data.timeSlot);
 
     return {
       idempotency_key: `${Date.now()}-${data.email}`,
@@ -237,6 +244,8 @@ class SquareProvider extends BaseBookingProviderAdapter {
 // NOTE: Provider factory - manages multiple provider instances and coordinates booking creation.
 export class BookingProviders {
   private providers: Map<BookingProvider, BookingProviderAdapter>;
+  /** Adapters from BOOKING_PROVIDER_REGISTRY (external/third-party providers). */
+  private registeredAdapters: Map<string, BookingProviderAdapter>;
   private readonly env = validateEnv();
 
   constructor() {
@@ -244,9 +253,16 @@ export class BookingProviders {
     this.providers.set('mindbody', new MindbodyProvider(this.getProviderConfig('mindbody')));
     this.providers.set('vagaro', new VagaroProvider(this.getProviderConfig('vagaro')));
     this.providers.set('square', new SquareProvider(this.getProviderConfig('square')));
+
+    // Load externally registered providers (inf-10 open registry).
+    // Registry is populated via registerBookingProvider() side-effect imports.
+    this.registeredAdapters = new Map();
+    for (const [id, factory] of BOOKING_PROVIDER_REGISTRY.entries()) {
+      this.registeredAdapters.set(id, factory(this.getProviderConfig(id)));
+    }
   }
 
-  private getProviderConfig(provider: BookingProvider): ProviderConfig {
+  private getProviderConfig(provider: BookingProvider | string): ProviderConfig {
     const prefix = provider.toUpperCase();
 
     return {
@@ -294,22 +310,37 @@ export class BookingProviders {
   }
 
   /**
-   * Create booking with all enabled providers
+   * Create booking with all enabled providers (built-in + registered external providers).
    */
   async createBookingWithAllProviders(data: BookingFormData): Promise<BookingProviderResponse[]> {
-    const enabledProviders = Array.from(this.providers.entries())
+    // Collect enabled built-in providers
+    const enabledBuiltIn = Array.from(this.providers.entries())
       .filter(([, adapter]) => adapter.config.enabled)
       .map(([provider]) => provider);
 
-    const results = await Promise.allSettled(
-      enabledProviders.map((provider) => this.createBookingWithProvider(provider, data))
+    // Collect enabled registered (external) providers
+    const enabledRegistered = Array.from(this.registeredAdapters.entries())
+      .filter(([, adapter]) => adapter.config.enabled)
+      .map(([id]) => id);
+
+    const builtInResults = await Promise.allSettled(
+      enabledBuiltIn.map((provider) => this.createBookingWithProvider(provider, data))
+    );
+    const registeredResults = await Promise.allSettled(
+      enabledRegistered.map((id) => {
+        const adapter = this.registeredAdapters.get(id);
+        return adapter
+          ? adapter.createBooking(data)
+          : Promise.resolve({ success: false, error: `Registered provider '${id}' not found` });
+      })
     );
 
-    return results.map((result, index) => {
+    const allIds = [...enabledBuiltIn, ...enabledRegistered];
+    return [...builtInResults, ...registeredResults].map((result, index) => {
       if (result.status === 'fulfilled') {
         return result.value;
       }
-      return { success: false, error: `Provider ${enabledProviders[index]} failed` };
+      return { success: false, error: `Provider ${allIds[index]} failed` };
     });
   }
 }
@@ -331,4 +362,70 @@ export function getBookingProviders(): BookingProviders {
     _bookingProviders = new BookingProviders();
   }
   return _bookingProviders;
+}
+
+// ─── Provider Registry (Task inf-10) ─────────────────────────────────────────
+//
+// Open registration system for third-party booking providers. Follows the same
+// self-registration pattern used by the section registry in @repo/page-templates.
+//
+// Usage:
+//   import { registerBookingProvider } from '@repo/features/booking';
+//   registerBookingProvider('acuity', (config) => new AcuityAdapter(config));
+//
+// The registration invalidates the cached BookingProviders instance so the next
+// getBookingProviders() call picks up the new provider automatically.
+
+/**
+ * Factory function that constructs a BookingProviderAdapter from a ProviderConfig.
+ * Implement this to add a custom or third-party booking provider.
+ */
+export type BookingProviderFactory = (config: ProviderConfig) => BookingProviderAdapter;
+
+/**
+ * Module-level open registry for external booking provider factories.
+ * Built-in providers (Mindbody, Vagaro, Square) are wired directly in BookingProviders constructor.
+ * Third-party providers register here via side-effect import of their module.
+ */
+const BOOKING_PROVIDER_REGISTRY = new Map<string, BookingProviderFactory>();
+
+/**
+ * Register a booking provider factory under a unique string ID.
+ *
+ * Call this in your provider module at import time (side-effect import pattern).
+ * Invalidates the cached BookingProviders singleton so the next getBookingProviders()
+ * call constructs a fresh instance including the newly registered provider.
+ *
+ * @param id      - Unique provider identifier (e.g. 'acuity', 'calendly-v2', 'mindbody-v7')
+ * @param factory - Function that creates a BookingProviderAdapter from a ProviderConfig
+ *
+ * @example
+ * // In your provider module (e.g. packages/integrations/acuity/src/index.ts):
+ * import { registerBookingProvider } from '@repo/features/booking';
+ * registerBookingProvider('acuity', (config) => new AcuityAdapter(config));
+ */
+// [TRACE:FUNC=packages.features.booking.registerBookingProvider]
+// [FEAT:EXTENSIBILITY] [FEAT:BOOKING]
+// NOTE: inf-10 Provider Registry — enables open extension without modifying built-in providers.
+export function registerBookingProvider(id: string, factory: BookingProviderFactory): void {
+  if (BOOKING_PROVIDER_REGISTRY.has(id)) {
+    console.warn(
+      `[booking-registry] Provider '${id}' is already registered — overwriting with new factory.`
+    );
+  }
+  BOOKING_PROVIDER_REGISTRY.set(id, factory);
+  // Invalidate cached instance so next call picks up the registered provider.
+  _bookingProviders = null;
+}
+
+/**
+ * Returns a read-only snapshot of the current provider registry.
+ * Useful for debugging, tooling, and integration tests.
+ *
+ * @returns ReadonlyMap of provider IDs to their factory functions
+ */
+// [TRACE:FUNC=packages.features.booking.getBookingProviderRegistry]
+// [FEAT:EXTENSIBILITY]
+export function getBookingProviderRegistry(): ReadonlyMap<string, BookingProviderFactory> {
+  return BOOKING_PROVIDER_REGISTRY;
 }

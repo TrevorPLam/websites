@@ -75,8 +75,12 @@ export interface ThemeConfigForResolution {
 /**
  * Resolves theme colors for ThemeInjector: base + preset + theme.colors.
  * Use in layout before passing to LocaleProviders/ThemeInjector.
+ *
+ * Resolution order: DEFAULT_THEME_COLORS (full) → preset overrides → theme.colors overrides.
+ * Always returns a full ThemeColors because DEFAULT_THEME_COLORS provides all required keys.
  */
-export function resolveThemeColors(theme: ThemeConfigForResolution): Partial<ThemeColors> {
+export function resolveThemeColors(theme: ThemeConfigForResolution): ThemeColors {
   const presetOverrides = theme.preset ? (getThemePreset(theme.preset) ?? {}) : {};
-  return { ...DEFAULT_THEME_COLORS, ...presetOverrides, ...theme.colors };
+  // DEFAULT_THEME_COLORS is ThemeColors (all required keys); spread always yields ThemeColors.
+  return { ...DEFAULT_THEME_COLORS, ...presetOverrides, ...theme.colors } as ThemeColors;
 }

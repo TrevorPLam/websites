@@ -385,6 +385,15 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.15
         version: 0.5.19(tailwindcss@4.1.18)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.11
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.0.2
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.0.2(@types/react@19.0.2)
       eslint:
         specifier: 'catalog:'
         version: 9.18.0(jiti@2.6.1)
