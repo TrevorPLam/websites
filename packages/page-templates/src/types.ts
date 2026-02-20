@@ -1,9 +1,11 @@
 /**
  * @file packages/page-templates/src/types.ts
  * Task: [3.1] SectionProps, TemplateConfig, PageTemplateProps, SectionType, SectionDefinition
+ * Task: [3.4] PageTemplateSlots — named slot overrides for header/footer/aboveFold injection
  *
  * Purpose: Types for section registry and page composition. SectionType union and
  * SectionDefinition with optional configSchema support validation in composePage.
+ * PageTemplateSlots enables per-template slot injection without modifying registry logic.
  */
 
 import type React from 'react';
@@ -80,9 +82,54 @@ export interface TemplateConfig {
   [key: string]: unknown;
 }
 
+/**
+ * Named content slots for page templates (Task 3.4).
+ *
+ * Slots inject arbitrary React content into specific positions in any template
+ * without modifying the section registry or composePage logic. Each slot is optional
+ * and renders only when provided.
+ *
+ * Pattern: Slot content is ReactNode — no asChild/Slot primitive needed. The Slot
+ * primitive from @repo/infra/composition/slots is for asChild prop composition;
+ * these named slots are content-injection points.
+ *
+ * @example
+ * // Inject a sticky nav above the fold and a custom footer:
+ * <HomePageTemplate
+ *   config={siteConfig}
+ *   slots={{
+ *     header: <StickyNav />,
+ *     aboveFold: <AnnouncementBanner />,
+ *     footer: <SiteFooter />,
+ *   }}
+ * />
+ */
+export interface PageTemplateSlots {
+  /**
+   * Rendered at the very top of the page, before all sections.
+   * Use for persistent site navigation or promotional banners.
+   */
+  header?: React.ReactNode;
+  /**
+   * Rendered between the header and the first section (before the fold).
+   * Use for announcements, breadcrumbs, or hero-level overrides.
+   */
+  aboveFold?: React.ReactNode;
+  /**
+   * Rendered at the very bottom of the page, after all sections.
+   * Use for footers, legal disclaimers, or persistent CTAs.
+   */
+  footer?: React.ReactNode;
+}
+
 /** Props passed to page template components. */
 export interface PageTemplateProps {
   config: SiteConfig;
   /** Optional URL search params (e.g. for services filters). */
   searchParams?: Record<string, string | string[] | undefined>;
+  /**
+   * Optional named content slots for injecting custom content at header, aboveFold,
+   * or footer positions without modifying the section registry. See PageTemplateSlots.
+   */
+  slots?: PageTemplateSlots;
 }

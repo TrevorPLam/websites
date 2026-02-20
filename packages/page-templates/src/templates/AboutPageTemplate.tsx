@@ -1,9 +1,10 @@
 /**
  * @file packages/page-templates/src/templates/AboutPageTemplate.tsx
- * Task: [3.4] Story, Team, Mission, Values, Timeline
+ * Task: [3.4] Story, Team, Mission, Values, Timeline + slot-based content injection
  *
  * Purpose: Renders about page via composePage. Sections derived from
  * siteConfig (story, team, testimonials, cta). Registration via import side-effect.
+ * Slots allow injecting nav/banner/footer without modifying the section registry.
  */
 
 import * as React from 'react';
@@ -14,10 +15,16 @@ import '../sections/about/index'; // side-effect: register about sections
 export function AboutPageTemplate({
   config,
   searchParams,
-}: PageTemplateProps): React.ReactElement | null {
-  const result = composePage({ page: 'about', searchParams }, config);
-  if (result === null) {
-    return React.createElement('div', { 'data-template': 'AboutPageTemplate' }, null);
-  }
-  return result;
+  slots,
+}: PageTemplateProps): React.ReactElement {
+  const content = composePage({ page: 'about', searchParams }, config);
+
+  return (
+    <>
+      {slots?.header}
+      {slots?.aboveFold}
+      {content ?? <div data-template="AboutPageTemplate" />}
+      {slots?.footer}
+    </>
+  );
 }

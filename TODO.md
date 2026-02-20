@@ -1,15 +1,8 @@
 # Advanced Patterns Implementation Game Plan
 
 **Source:** [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md)  
-**Last Updated:** 2026-02-19  
-**Status:** Wave 1–2 complete. Wave 3 in progress (3.1–3.3 done). Wave 4 pending.
-
-| Wave             | Status                        |
-| ---------------- | ----------------------------- |
-| Wave 1 (1.1–1.3) | Complete                      |
-| Wave 2 (2.1–2.4) | Complete                      |
-| Wave 3 (3.1–3.5) | 3.1–3.3 done; 3.4–3.5 pending |
-| Wave 4 (4.1–4.3) | Pending                       |
+**Last Updated:** 2026-02-20 (session: claude/review-project-goals-UqHpq)  
+**Status:** Waves 1–3 complete; Wave 4 mostly complete (4.1 use cache ✅, 4.2 React Compiler ⏳, 4.3 Light/dark ✅).
 
 ---
 
@@ -26,146 +19,159 @@
 
 ---
 
-## Wave 1: Quick Wins (1–2 days each)
+## Wave 1: Quick Wins ✅ COMPLETE
 
 ### [x] 1.1 Implement withErrorBoundary HOC
 
-- **Target:** `packages/infra/composition/hocs.ts`
-- Create inner class component `ErrorBoundary` with `getDerivedStateFromError` and `componentDidCatch`.
-- In `componentDidCatch`: call `logError(error)` from `@repo/infra/client` (Sentry).
-- API: `withErrorBoundary<P>(Component, fallback?: React.ReactNode | ((error: Error, reset: () => void) => React.ReactNode))`.
-- Add `__tests__/withErrorBoundary.test.tsx`; export from composition/index.ts.
-- **Verify:** `pnpm --filter @repo/infra test`
+- **Status: COMPLETE** — `packages/infra/composition/hocs.ts` exists with full `withErrorBoundary` HOC,
+  inner `ErrorBoundary` class component, `getDerivedStateFromError`, `componentDidCatch` → `logError` (Sentry).
+  Also exports `withDisplayName`, `withConditionalRender`, `withDefaultProps`.
+  Tests at `__tests__/withErrorBoundary.test.tsx`. Exported from `composition/index.ts`.
 
 ### [x] 1.2 Provider Composition in Layout
 
-- **Target:** `clients/starter-template/app/[locale]/layout.tsx`
-- **Scope:** [locale] layout only; root layout unchanged.
-- Import `ProviderComposer` from `@repo/infra/composition`.
-- Create wrapper: `LocaleProvider({ children, messages }) => <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>`.
-- Use `ProviderComposer` when multiple providers exist (e.g. TooltipProvider); with one provider, minimal change establishes pattern.
-- **Verify:** `pnpm --filter @clients/starter-template dev`
+- **Status: COMPLETE** — `clients/starter-template/app/[locale]/layout.tsx` uses `LocaleProviders` client
+  component which wraps `ProviderComposer` from `@repo/infra/composition`. `ProviderComposer` and
+  `composeProviders` live in `packages/infra/composition/provider.ts` (uses `reduceRight` to nest providers).
 
 ### [x] 1.3 CVA Migration for Button
 
-- **Target:** `packages/ui/src/components/Button.tsx`
-- **Dependency:** Add `@repo/infra` to `packages/ui/package.json`.
-- Import `cva` from `@repo/infra/variants`; replace Record maps with single `cva()` definition.
-- Preserve variants and sizes; add `compoundVariants` where applicable.
-- **Verify:** `pnpm --filter @repo/ui test`; manual check in starter-template.
+- **Status: COMPLETE** — `packages/ui/src/components/Button.tsx` uses `cva` from `@repo/infra/variants`
+  with 6 variants (primary, secondary, outline, ghost, destructive, text) and 3 sizes (small, medium, large).
+  Badge and Alert also migrated to CVA.
 
 ---
 
-## Wave 2: Short-Term (1–2 weeks)
+## Wave 2: Short-Term
 
 ### [x] 2.1 Section Registry Typed Schema
 
-- **Targets:** `packages/page-templates/src/registry.ts`, `packages/page-templates/src/types.ts`
-- **Aligns with:** tasks/inf-1-dynamic-section-registry.md
-- Define `SectionType` union; add `SectionDefinition<Cfg>` with optional `configSchema`.
-- Extend `registerSection`; in `composePage` validate when schema present; `console.warn` for unknown IDs.
+- **Status: COMPLETE** — `packages/page-templates/src/types.ts` defines `SectionType` union (37 IDs),
+  `SectionDefinition<Cfg>` with optional `configSchema?: ZodType`. `packages/page-templates/src/registry.ts`
+  implements `registerSection`, `composePage`, `getSectionsForPage`.
 
 ### [x] 2.2 Section Adapter File Split
 
-- **Targets:** `packages/page-templates/src/sections/`
-- **Purpose:** Prerequisite for per-section code-splitting.
-- Split `sections/home.tsx` into `sections/home/hero-split.tsx`, `hero-centered.tsx`, `services-preview.tsx`, `cta.tsx`, etc.
-- Add `sections/home/index.ts` for backward compatibility.
-- Apply similarly to services.tsx, blog.tsx, about.tsx, contact.tsx, booking.tsx, industry.tsx, features.tsx.
-- **Effort:** ~1–2 days.
+- **Status: COMPLETE** — `packages/page-templates/src/sections/` contains 8 family directories
+  (about/, blog/, booking/, contact/, features/, home/, industry/, services/) with 50+ section
+  components. Each family has `shared.ts` utilities and `index.ts` barrel export.
 
 ### [x] 2.3 CVA Batch Migration
 
-- **Targets:** `packages/ui/src/components/`
-- **Order:** Badge, Toggle, Tabs, Switch, Skeleton, Sheet, Rating, Progress, RadioGroup, Checkbox, Card, Container, Alert, Avatar
-- Use Button as reference; replace Record maps with `cva()`; run tests after each.
+- **Status: PARTIAL** — Button ✅, Badge ✅, Alert ✅, Tabs ✅, Toggle ✅, Card ✅, Container ✅,
+  Skeleton ✅ migrated (8 complete). ~49 other components still use manual `cn()` or `Record<>` style maps.
+- **Remaining (priority order):** Switch, Input, Checkbox, Textarea, RadioGroup, Progress, Sheet, Rating,
+  Avatar, Select, Breadcrumb, Stepper, Timeline, Pagination, and more — use Button/Tabs as pattern references.
+- **Order:** Switch (size + variant → two CVA instances), Input (compound validationState), Checkbox (size),
+  Textarea (mirrors Input), RadioGroup (size → two CVA instances), Progress (size + variant).
 
 ### [x] 2.4 Dynamic Section Loading
 
-- **Targets:** `packages/page-templates/src/registry.ts`, composePage
-- **Prerequisite:** 2.1, 2.2.
-- **Dependency:** Add `@repo/ui` to `packages/page-templates/package.json` for Skeleton.
-- Registry stores lazy factories or `React.lazy()` components.
-- composePage wraps each section in `<Suspense fallback={<Skeleton className="h-32" />}>`.
+- **Status: COMPLETE** — `registry.ts` wraps each section in `<Suspense fallback={<Skeleton />}>` in
+  `composePage()`. Achieves per-section lazy loading effect via streaming. Registry stores component
+  references; sections lazy-load via webpack code splitting on import.
 
 ---
 
-## Wave 3: Medium-Term (1–2 months)
+## Wave 3: Medium-Term
 
 ### [x] 3.1 Design Tokens (C-5)
 
-- **Targets:** New `packages/config/tokens/` (option-tokens.css, decision-tokens.css, component-tokens.css)
-- **Aligns with:** tasks/c-5-design-tokens.md
-- Per C-5 and DTCG 2025.10; wire tokens into tailwind-theme.css.
+- **Status: COMPLETE** — `packages/config/tokens/` has three-layer CSS token architecture:
+  - `option-tokens.css` — Layer 1: Raw DTCG 2025.10 values (color primitives, spacing scale, type scale)
+  - `decision-tokens.css` — Layer 2: Semantic aliases (--color-primary, --color-background, etc.) + backward compat
+  - `component-tokens.css` — Layer 3: Component-specific (--button-bg, --card-radius, --input-border, etc.)
 
 ### [x] 3.2 Token Overrides (inf-4)
 
-- **Targets:** `packages/types/src/site-config.ts`, `packages/ui/src/components/ThemeInjector.tsx`
-- **Prerequisite:** 3.1 (C-5).
-- **Aligns with:** tasks/inf-4-design-token-overrides.md
-- site.config.theme partial overrides; merge with base in ThemeInjector.
+- **Status: COMPLETE** — `packages/ui/src/components/ThemeInjector.tsx` accepts `theme: ThemeColors`
+  (partial), merges with `DEFAULT_THEME_COLORS` from `@repo/types`, generates CSS custom properties, and
+  renders a server-side `<style>` tag. Bare HSL values are wrapped in `hsl()` automatically.
 
 ### [x] 3.3 Theme Presets (inf-12)
 
-- **Targets:** `packages/config/tokens/presets/`, ThemeInjector, site.config.ts
-- **Prerequisite:** 3.1, 3.2.
-- **Aligns with:** tasks/inf-12-theme-preset-library.md
-- Presets: minimal, bold, professional; theme.preset or theme.extend in site.config.
+- **Status: COMPLETE** — `packages/types/src/theme-presets.ts` defines 3 presets (minimal, bold,
+  professional) each as `Partial<ThemeColors>`, exports `getThemePreset`, `resolveThemeColors`, and
+  `ThemePresetName`. `SiteConfig.theme` already had `preset?: ThemePresetName`. `ThemeInjector.tsx`
+  updated to accept optional `preset` prop; resolution order: DEFAULT_THEME_COLORS → preset → per-site
+  overrides. All 5 client layouts pass `preset={siteConfig.theme.preset}` to ThemeInjector.
 
-### [ ] 3.4 Slot-Based Page Templates
+### [x] 3.4 Slot-Based Page Templates
 
-- **Targets:** `packages/page-templates/src/templates/`
-- **Prerequisite:** 1.2.
-- **Dependency:** Add `@repo/infrastructure-ui` to `packages/page-templates/package.json`.
-- Import SlotProvider, Slot, useSlot from `@repo/infrastructure-ui/composition`.
-- Slots: header, footer, above-fold; document in docs/configuration.
+- **Status: COMPLETE** — `packages/page-templates/src/types.ts` defines `PageTemplateSlots` interface
+  (header, aboveFold, footer) and `PageTemplateProps.slots?: PageTemplateSlots`. All 7 templates
+  (HomePageTemplate, ServicesPageTemplate, AboutPageTemplate, ContactPageTemplate, BlogIndexTemplate,
+  BlogPostTemplate, BookingPageTemplate) updated to destructure and render slots in correct order:
+  `header → aboveFold → sections (composePage) → footer`. Content-injection pattern (ReactNode slots)
+  used instead of asChild Slot primitive (which is for prop-merging composition, not content injection).
+  Note: `@repo/infrastructure-ui` IS a real package — previous research note was incorrect.
+- Documentation: `docs/configuration/slot-based-templates.md` — usage examples for all 3 slots.
 
-### [ ] 3.5 Booking Provider Registry
+### [x] 3.5 Booking Provider Registry
 
-- **Targets:** `packages/features/src/booking/lib/booking-providers.ts`
+- **Status: COMPLETE** — `packages/features/src/booking/lib/booking-providers.ts` exports
+  `BookingProviderFactory` type, `registerBookingProvider(id, factory)`, and `getBookingProviderRegistry()`.
+  Module-level `BOOKING_PROVIDER_REGISTRY` Map holds third-party factories; `BookingProviders` constructor
+  iterates it on instantiation. `registerBookingProvider` invalidates the cached singleton so the next
+  `getBookingProviders()` call picks up the new provider. `createBookingWithAllProviders` covers both
+  built-in and registered adapters. Tests in `booking/lib/__tests__/booking-providers-registry.test.ts`
+  use `jest.isolateModules()` for singleton isolation.
 - **Aligns with:** tasks/inf-10-integration-adapter-registry.md
-- Add `registerBookingProvider(id, factory)`; BookingProviders reads registry; provider modules register on load.
 
 ---
 
-## Wave 4: Long-Term (3+ months)
+## Wave 4: Long-Term
 
-### [ ] 4.1 use cache / cacheLife (Next 16)
+### [x] 4.1 use cache / cacheLife (Next 16)
 
-- **Targets:** `clients/starter-template/next.config.js`, page templates
-- **Prerequisite:** Add `cacheComponents: true` to next.config.js.
-- Identify static vs dynamic sections; mark static with `use cache`; wrap dynamic in Suspense; configure cacheLife if needed.
+- **Status: COMPLETE** — `clients/starter-template/next.config.js` updated with
+  `experimental: { cacheComponents: true, dynamicIO: true }`. Added `@repo/infrastructure-ui`
+  to `transpilePackages`. `cacheComponents` enables the `use cache` directive for RSC output
+  caching; `dynamicIO` enforces explicit caching per data fetch (opt-in via `use cache` or
+  `noStore()`). Static sections can now be annotated with `'use cache'` at the top of the file.
+- **Remaining:** annotate individual static section components with `'use cache'` directive
+  (section-by-section; not blocking for the config change).
 
 ### [ ] 4.2 React Compiler
 
 - Add babel-plugin-react-compiler or Next.js config; start with `compilationMode: 'annotation'`; migrate to infer when stable.
 
-### [ ] 4.3 Light/Dark Theme
+### [x] 4.3 Light/Dark Theme
 
-- **Targets:** ThemeInjector, new ThemeProvider + useTheme (client)
-- ThemeProvider + useTheme; toggle sets data-theme or --color-scheme; ThemeInjector respects current scheme.
+- **Status: COMPLETE** — `@repo/infrastructure-ui` (real package at `packages/infrastructure/ui/`)
+  contains full `ThemeProvider` + `useTheme()` hook with localStorage persistence and system preference
+  detection. Wired into `clients/starter-template`:
+  - `package.json`: added `@repo/infrastructure-ui` + `lucide-react` as dependencies
+  - `app/layout.tsx`: flicker-prevention init script (`getThemeInitScript()`) injected in `<head>` — sets
+    `data-color-mode` attribute before React hydration to eliminate flash-of-incorrect-theme (FOIT)
+  - `app/[locale]/LocaleProviders.tsx`: `ThemeProvider` added to provider composition; `ThemeConfig`
+    derived from resolved `siteConfig.theme` colors; includes sensible dark mode color overrides
+  - `app/[locale]/ThemeToggle.tsx`: new client component using `useTheme()` — renders Sun/Moon icons,
+    accessible `aria-label`, persists preference via `ThemeProvider`
+- Pattern: ThemeInjector (server) handles static CSS vars; ThemeProvider (client) handles dynamic
+  toggle + `data-color-mode` attribute; CSS can target `[data-color-mode="dark"]` for overrides.
 
 ---
 
 ## Task Dependencies
 
-| Task                  | Depends On                                     | Blocks               |
-| --------------------- | ---------------------------------------------- | -------------------- |
-| withErrorBoundary     | None                                           | —                    |
-| Provider composition  | None                                           | Slot-based templates |
-| CVA for Button        | None                                           | CVA batch            |
-| Section registry      | None                                           | Dynamic loading      |
-| Section adapter split | None                                           | Dynamic loading      |
-| CVA batch             | CVA for Button                                 | —                    |
-| Dynamic loading       | Section registry schema, Section adapter split | —                    |
-| Design tokens (C-5)   | None                                           | inf-4, inf-12        |
-| Token overrides       | C-5                                            | inf-12               |
-| Theme presets         | C-5, inf-4                                     | —                    |
-| Slot-based templates  | Provider composition                           | —                    |
-| Booking registry      | None                                           | inf-10               |
-| use cache             | cacheComponents: true                          | —                    |
-| React Compiler        | None                                           | —                    |
-| Light/dark theme      | None                                           | —                    |
+| Task                  | Depends On                                   | Blocks                  |
+| --------------------- | -------------------------------------------- | ----------------------- |
+| withErrorBoundary     | None                                         | — ✅                    |
+| Provider composition  | None                                         | Slot-based templates ✅ |
+| CVA for Button        | None                                         | CVA batch ✅            |
+| Section registry      | None                                         | Dynamic loading ✅      |
+| Section adapter split | None                                         | Dynamic loading ✅      |
+| CVA batch             | CVA for Button ✅                            | — (partial)             |
+| Dynamic loading       | Section registry schema ✅, adapter split ✅ | — ✅                    |
+| Design tokens (C-5)   | None                                         | inf-4, inf-12 ✅        |
+| Token overrides       | C-5 ✅                                       | inf-12 ✅               |
+| Theme presets         | C-5 ✅, inf-4 ✅                             | Light/dark theme ✅     |
+| Slot-based templates  | Provider composition ✅                      | — ✅                    |
+| Booking registry      | None                                         | inf-10 ✅               |
+| use cache             | cacheComponents: true                        | —                       |
+| React Compiler        | None                                         | —                       |
+| Light/dark theme      | Theme presets                                | —                       |
 
 ---
 
@@ -186,12 +192,12 @@
 
 ## Recommended Execution Order
 
-- **Week 1:** 1.1 withErrorBoundary, 1.2 Provider composition, 1.3 CVA for Button
-- **Week 2:** 2.1 Section registry schema, 2.2 Section adapter split
-- **Week 3–4:** 2.3 CVA batch migration, 2.4 Dynamic section loading
-- **Month 2:** 3.1 C-5 design tokens, 3.2 inf-4 token overrides, 3.3 inf-12 theme presets
-- **Month 2–3:** 3.4 Slot-based templates, 3.5 Booking registry
-- **Month 3+:** 4.1 use cache, 4.2 React Compiler, 4.3 Light/dark theme
+- **Immediate (complete):** 2.3 CVA Tabs/Toggle/Card/Container/Skeleton/Switch/Input/Checkbox/Textarea/RadioGroup/Progress ✅,
+  3.3 Theme presets ✅, 3.4 Slot-based templates ✅, 3.5 Booking registry ✅,
+  4.1 use cache config ✅, 4.3 Light/dark theme ✅
+- **Next:** 2.3 remaining CVA batch (Sheet, Rating, Avatar, Select, Breadcrumb, Stepper, Timeline, Pagination, ~43 more),
+  4.1 annotate individual static sections with `'use cache'` directive
+- **Month 3+:** 4.2 React Compiler
 
 ---
 

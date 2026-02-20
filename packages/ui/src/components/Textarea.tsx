@@ -3,15 +3,28 @@
  * [TRACE:FILE=packages.ui.components.Textarea]
  *
  * Purpose: Multiline text input with optional label and validation feedback (error/success).
- *          Mirrors Input behavior for consistency in forms.
+ *          Mirrors Input behavior for consistency in forms. Uses CVA for validation state.
  *
- * Relationship: Used by @repo/features contact/booking forms. Depends on @repo/utils (cn).
+ * Relationship: Used by @repo/features contact/booking forms. Depends on
+ *               @repo/infra/variants (cva), @repo/utils (cn).
  * System role: Form primitive; aria-invalid and aria-describedby for error.
  * Assumptions: Same id/label/error pattern as Input; isValid shows primary border.
+ *              Public API unchanged: error/isValid booleans derived into CVA validationState.
+ *
+ * Exports / Entry: Textarea, TextareaProps
+ * Features:
+ * - [FEAT:VALIDATION] Visual feedback for validation states (CVA)
+ * - [FEAT:VARIANTS] CVA for type-safe validation state resolution
  */
 
 import * as React from 'react';
+import { cva } from '@repo/infra/variants';
 import { cn } from '@repo/utils';
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+/** Internal validation state derived from error/isValid booleans. */
+type TextareaValidationState = 'default' | 'error' | 'success';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   /** Label text displayed above the textarea */
@@ -22,6 +35,30 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
   isValid?: boolean;
 }
 
+// ─── CVA Variant Definitions ─────────────────────────────────────────────────
+
+// [TRACE:CONST=packages.ui.components.Textarea.textareaVariants]
+// Resolves border and focus-ring color by validation state (mirrors inputVariants in Input.tsx).
+const textareaVariants = cva({
+  base: [
+    'flex min-h-[80px] w-full rounded-md border bg-background px-3 py-2',
+    'text-sm text-foreground transition-colors',
+    'placeholder:text-muted-foreground',
+    'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+    'disabled:cursor-not-allowed disabled:opacity-50',
+  ].join(' '),
+  variants: {
+    validationState: {
+      default: 'border-input',
+      error: 'border-destructive focus-visible:ring-destructive',
+      success: 'border-primary focus-visible:ring-primary',
+    },
+  },
+  defaultVariants: { validationState: 'default' },
+});
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
 /**
  * Renders a labeled textarea with error/success styling. Min height 80px; id from label if omitted.
  *
@@ -31,6 +68,13 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, error, isValid, id, ...props }, ref) => {
     const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-');
+
+    // Derive single CVA-compatible state from two booleans (error wins over isValid)
+    const validationState: TextareaValidationState = error
+      ? 'error'
+      : isValid
+        ? 'success'
+        : 'default';
 
     return (
       <div className="w-full">
@@ -43,18 +87,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           ref={ref}
           id={textareaId}
-          className={cn(
-            'flex min-h-[80px] w-full rounded-md border bg-background px-3 py-2 text-sm text-foreground transition-colors',
-            'placeholder:text-muted-foreground',
-            'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            error
-              ? 'border-destructive focus-visible:ring-destructive'
-              : isValid
-                ? 'border-primary focus-visible:ring-primary'
-                : 'border-input',
-            className
-          )}
+          className={cn(textareaVariants({ validationState }), className)}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${textareaId}-error` : undefined}
           {...props}

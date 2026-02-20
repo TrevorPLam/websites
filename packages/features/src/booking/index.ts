@@ -40,7 +40,11 @@ export type { BookingFormData } from './lib/booking-schema';
 export * from './lib/booking-actions';
 export type { BookingSubmissionResult } from './lib/booking-actions';
 
-// Provider exports
+// Provider exports — includes registerBookingProvider / getBookingProviderRegistry (inf-10)
 export * from './lib/booking-providers';
-export type { BookingProvider, BookingProviderResponse, ProviderConfig } from './lib/booking-provider-adapter';
+export type {
+  BookingProvider,
+  BookingProviderResponse,
+  ProviderConfig,
+} from './lib/booking-provider-adapter';
 export type { BookingProviderAdapter } from './lib/booking-provider-adapter';
