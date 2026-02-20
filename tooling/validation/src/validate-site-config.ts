@@ -248,7 +248,7 @@ function runCli(): void {
 // Export a named function so tests can import it without side-effects.
 export { runCli };
 
-const isCliInvocation = process.argv[1]?.includes('validate-site-config');
+const isCliInvocation = process.argv[1] && path.basename(process.argv[1]) === 'validate-site-config.ts';
 if (isCliInvocation) {
   runCli();
 }
