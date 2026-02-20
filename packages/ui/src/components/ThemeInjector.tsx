@@ -3,8 +3,9 @@
 //          enabling config-driven theming. Injects a <style> tag into <head> that overrides
 //          globals.css defaults with values from the site configuration.
 //
-// Relationship: Depends on @repo/types (ThemeColors). Used by template app/layout.tsx.
-// System role: Bridges site.config.theme.colors to :root CSS variables; server-only.
+// Relationship: Depends on @repo/types (ThemeColors, ThemePresetName, getThemePreset).
+//              Used by template app/layout.tsx.
+// System role: Bridges site.config.theme → CSS variables (preset → colors → :root); server-only.
 // Assumptions: Theme values are HSL strings or full CSS colors; globals.css defines --* fallbacks.
 //
 // Exports / Entry: ThemeInjector component
@@ -16,10 +17,12 @@
 // - HSL values from config are wrapped in hsl() for valid CSS
 // - globals.css values serve as fallback when no config override exists
 // - Must not cause hydration mismatch (server-rendered only)
+// - Resolution order: DEFAULT_THEME_COLORS → preset → theme (per-key overrides win)
 //
 // Status: @public
 // Features:
 // - [FEAT:THEMING] Config-driven CSS custom property generation
+// - [FEAT:THEMING] Theme preset support (minimal, bold, professional) — Task inf-12
 // - [FEAT:PERFORMANCE] Zero client-side JS — server-rendered <style> tag
 // - [Task 0.14] Bridges the gap between site.config.ts theme and visual output
 // - ThemeColors from @repo/types (single source of truth); docs in docs/theming/theme-injector.md
@@ -30,8 +33,8 @@
 // - hsl() color format provides broad browser support (all modern browsers)
 // - Specificity: :root style from ThemeInjector overrides globals.css :root defaults
 
-import type { ThemeColors as ThemeColorsFromTypes } from '@repo/types';
-import { DEFAULT_THEME_COLORS } from '@repo/types';
+import type { ThemeColors as ThemeColorsFromTypes, ThemePresetName } from '@repo/types';
+import { DEFAULT_THEME_COLORS, getThemePreset } from '@repo/types';
 
 /**
  * Theme color map matching the CSS custom property names in globals.css and tailwind-preset.js.
@@ -44,8 +47,14 @@ import { DEFAULT_THEME_COLORS } from '@repo/types';
 export type ThemeColors = Partial<ThemeColorsFromTypes>;
 
 export interface ThemeInjectorProps {
-  /** Theme color values from site.config.ts */
+  /** Theme color values from site.config.ts — partial overrides applied last */
   theme: ThemeColors;
+  /**
+   * Optional named preset to apply as a base layer before theme.colors overrides.
+   * Resolution order: DEFAULT_THEME_COLORS → preset → theme (per-key overrides win).
+   * Corresponds to site.config.theme.preset (Task inf-12).
+   */
+  preset?: ThemePresetName;
   /** Optional CSS selector to scope theme (default: ':root') */
   selector?: string;
 }
@@ -99,9 +108,10 @@ function toCssColor(value: string): string {
  * }
  * ```
  */
-export function ThemeInjector({ theme, selector = ':root' }: ThemeInjectorProps) {
-  // Merge partial overrides with base tokens (inf-4)
-  const merged = { ...DEFAULT_THEME_COLORS, ...theme };
+export function ThemeInjector({ theme, preset, selector = ':root' }: ThemeInjectorProps) {
+  // Resolution order: DEFAULT_THEME_COLORS → preset overrides → theme.colors overrides (inf-4, inf-12)
+  const presetOverrides = preset ? (getThemePreset(preset) ?? {}) : {};
+  const merged = { ...DEFAULT_THEME_COLORS, ...presetOverrides, ...theme };
   // Filter out undefined values and convert to CSS custom properties
   const cssProperties = Object.entries(merged)
     .filter((entry): entry is [string, string] => entry[1] !== undefined)
