@@ -20,6 +20,13 @@ Replace the in-memory `internalBookings` Map in `packages/features/src/booking/l
 - 0-1 — CI must be green before merge
 - 0-3 — Tenant context must be fixed for tenant-scoped repository queries
 
+## Research
+
+### Deep research (online)
+
+- **Repository pattern (TypeScript/Node):** Define an interface (e.g. `BookingRepository`) with create, getById, getByConfirmation, update. Implementations live in infrastructure; actions depend on the interface. Enables testing with mocks and swapping storage. Use domain types (evol-5a will provide CanonicalBooking) in the interface so 0-2 and evol-5 stay aligned. (Clean Architecture, repository pattern 2024.)
+- **Interface design:** Include tenant-scoped parameters where applicable (`tenantId?: string`). Return full record from create/update. Design for idempotency and clear error semantics (e.g. not found vs forbidden).
+
 ## Related Files
 
 - `packages/features/src/booking/lib/booking-actions.ts` — uses internalBookings; replace with repository

@@ -24,6 +24,12 @@ Create defineFeature and featureRegistry in @repo/infra/features. Provides the c
 - **Primary topics**: [R-CAPABILITY](RESEARCH-INVENTORY.md#r-capability), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **References**: ROADMAP Phase 3, inf-14.
 
+### Deep research (online)
+
+- **Plugin/capability registry pattern:** Central registry with `register()`, `get(id)`, `getAll()` (or `list()`). Use a generic registry that enforces a common interface (e.g. `Feature` with id, version, provides, configSchema, onActivate). TypeScript type registry patterns allow extensible registration across modules with compile-time safety. (Function/plugin registry pattern, designing plugin systems in TypeScript 2024.)
+- **Lifecycle:** Common hooks include before/after register and before/after unregister; for capabilities, `onActivate(config, context)` runs when a capability is enabled for a site. Keep lifecycle sync unless async init is required (then support Promise in onActivate). (Registry lifecycle management patterns.)
+- **Best practices:** Isolated modules that implement the interface; no core code changes to add capabilities; support dynamic feature loading and clear contracts (provides: sections, integrations, dataContracts).
+
 ## Related Files
 
 - `packages/infra/features/` or `packages/infra/src/features/` – create
@@ -45,6 +51,69 @@ Create defineFeature and featureRegistry in @repo/infra/features. Provides the c
 - [ ] Export from @repo/infra
 - [ ] Add tests
 - [ ] Document
+
+## Sample code / examples
+
+```typescript
+// packages/infra/src/features/registry.ts (conceptual)
+export interface FeatureDefinition {
+  id: string;
+  version: string;
+  provides: { sections?: string[]; integrations?: string[]; dataContracts?: string[] };
+  configSchema?: ZodType;
+  onActivate?(config: unknown, context: ActivationContext): void | Promise<void>;
+}
+
+const registry = new Map<string, FeatureDefinition>();
+
+export function defineFeature(def: FeatureDefinition): FeatureDefinition {
+  return def;
+}
+
+export function featureRegistry() {
+  return {
+    register(feature: FeatureDefinition) {
+      registry.set(feature.id, feature);
+    },
+    get(id: string) {
+      return registry.get(id);
+    },
+    list() {
+      return Array.from(registry.values());
+    },
+  };
+}
+```
+
+## Sample code / examples
+
+```typescript
+// packages/infra/src/features/registry.ts (conceptual)
+export interface FeatureDefinition {
+  id: string;
+  version: string;
+  provides: { sections?: string[]; integrations?: string[]; dataContracts?: string[] };
+  configSchema?: ZodType;
+  onActivate?(config: unknown, context: ActivationContext): void | Promise<void>;
+}
+const registry = new Map<string, FeatureDefinition>();
+export function defineFeature(def: FeatureDefinition): FeatureDefinition {
+  return def;
+}
+export function featureRegistry() {
+  return {
+    register(feature: FeatureDefinition) {
+      registry.set(feature.id, feature);
+    },
+    get(id: string) {
+      return registry.get(id);
+    },
+    list() {
+      return Array.from(registry.values());
+    },
+  };
+}
+```
 
 ## Definition of Done
 

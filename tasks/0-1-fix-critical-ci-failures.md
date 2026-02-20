@@ -23,6 +23,12 @@ CI must be green before any substantial work can be merged. This task fixes bloc
 
 - **2026-02** — CI must pass before merge; standard monorepo practice. Turbo affected builds; pnpm workspace resolution. References: [ROADMAP](../ROADMAP.md) Pre-Phase, [TASKS.md](TASKS.md).
 
+### Deep research (online)
+
+- **Monorepo CI (Turbo + pnpm):** Run only affected tasks: `turbo run build --filter='...[origin/main]'` (or `...[origin/main...HEAD]` for PRs). Use `fetch-depth: 0` in GitHub Actions so Turbo can compute the dependency graph. Biggest lever: run less (affected-only), not just faster. (Turborepo CI docs, GitHub Actions monorepo guides 2024.)
+- **Quality gates order:** Lint → type-check → validate-exports → build → test. Fix root causes; avoid `// @ts-ignore` or skipping tests without a tracked exemption. Pin base SHA in CI to avoid race conditions on merge.
+- **Remote caching:** Optional; set TURBO_TOKEN/TURBO_TEAM for shared cache across runs. Standardize pipeline in turbo.json for build, test, lint with consistent caching.
+
 ## Related Files
 
 - `.github/workflows/ci.yml` — CI pipeline

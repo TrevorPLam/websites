@@ -267,11 +267,11 @@ F.8, docs/operations.
 
 ### R-CANONICAL (Canonical types, adapters, Zod)
 
-evol-4, evol-5, ADR-012. packages/types/src/canonical/; LeadAdapter, HubSpotLeadAdapter; no integration types leaking into features.
+evol-4, evol-5, evol-5a, evol-5b, ADR-012. packages/types/src/canonical/; LeadAdapter, HubSpotLeadAdapter; no integration types leaking into features. **Deep research (online):** evol-5a (Zod parse/safeParse, z.infer, validation at boundaries), evol-5b (repository interface, thin server actions).
 
 ### R-CAPABILITY (defineFeature, capability registry, activation)
 
-evol-7, evol-8, evol-9, inf-14. defineFeature; provides (sections, integrations, dataContracts); capability activation in site.config.
+evol-7, evol-7a, evol-7b, evol-8, evol-9, evol-9a, evol-9b, inf-14. defineFeature; provides (sections, integrations, dataContracts); capability activation in site.config. **Deep research (online):** evol-7a (plugin registry, lifecycle), evol-9a (RSC + context, Suspense, payload minimization).
 
 ### R-MIGRATION (Template-to-client migration, cutover)
 
@@ -449,6 +449,7 @@ evol-7, evol-8, evol-9, inf-14. defineFeature; provides (sections, integrations,
 
 - **[2026-02-18] Patterns**: CVA for variants; design tokens (packages/config/tailwind-theme.css); Slot/Provider/Context; RESEARCH.md §13 infrastructure systems.
 - **[2026-02-18] Layer**: config → utils → ui/types/infra → features → marketing-components → page-templates → clients; no packages → clients.
+- **[2026-02] Deep research (online), evol-1**: ESLint 9 flat config default; monorepo package-level configs; no-restricted-imports with paths and patterns (group + message). See evol-1-architecture-police.md.
 
 ### R-CMS (Content adapters, MDX, pagination)
 

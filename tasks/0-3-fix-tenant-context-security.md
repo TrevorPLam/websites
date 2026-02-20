@@ -23,6 +23,11 @@ Tenant context must be correctly implemented so repository queries (0-2) and RLS
 
 - **2026-02** — Multi-tenant RLS, JWT claims, request context. Tenant resolution via header, subdomain, or JWT. References: [ROADMAP](../ROADMAP.md), [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva), security-2 (RLS).
 
+### Deep research (online)
+
+- **Tenant context — highest standards (OWASP, JWT BCP):** **Never trust client-supplied tenant IDs.** Extract tenant only from **verified JWT claims** after authentication, not from request headers or query params. Validate tenant exists and is active; set tenant context in middleware before downstream processing; use request-scoped context (e.g. AsyncLocalStorage in Node) so all code in the request sees the same tenant. (OWASP Multi-Tenant Security Cheat Sheet, JWT BCP, multi-tenant auth 2024.)
+- **Implementation:** Verify JWT signature first; read tenant from a standard or custom claim; bind context to the authenticated session. For single-tenant or dev fallback, derive from config when no JWT. Same error for invalid tenant as “not found” to avoid enumeration.
+
 ## Related Files
 
 - `packages/infra/context/` — request/tenant context

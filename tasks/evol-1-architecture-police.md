@@ -23,7 +23,13 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 
 - **Primary topics**: [R-INFRA](RESEARCH-INVENTORY.md#r-infra-slot-provider-context-theme-cva).
 - **[2026-02]** Repo uses ESLint 9 flat config (`eslint.config.mjs`), not `.eslintrc.*`. Implement as additional flat config extending `@repo/eslint-config`.
-- **References**: [ROADMAP](../ROADMAP.md) § Organic Evolution.
+
+### Deep research (online)
+
+- **ESLint 9 flat config (default since v9):** Single `eslint.config.js` with array of config objects; explicit imports; better performance. Each element can target `files`; later configs override earlier. Use shareable configs for complex rule sets; package-level configs allow per-package rules without centralizing everything at root. (ESLint v9 release, monorepo migration guides 2024–2025.)
+- **Monorepo strategy:** Root config as default fallback; each package can have its own `eslint.config.mjs` for package-specific rules (e.g. features package warning on integration imports). Keeps dependencies with their configs.
+- **no-restricted-imports:** Supports `paths` (specific modules) and `patterns` (gitignore-style globs). Use `patterns` with `group` + `message` for clear violations: `{ group: ['@repo/*/src/**'], message: '...' }`. Can combine `paths` and `patterns`; `allowTypeImports` permits type-only imports where needed. (ESLint no-restricted-imports docs.)
+- **References**: [ROADMAP](../ROADMAP.md) § Organic Evolution, [boundaries.js](../packages/config/eslint-config/boundaries.js).
 
 ## Related Files
 
@@ -57,25 +63,49 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 ## Sample code / examples
 
 ```javascript
-// eslint.config.architecture.mjs (flat config)
-import eslint from '@eslint/js';
+// Option A: Extend in packages/features/eslint.config.mjs (features-only warn for integration types)
 import config from '@repo/eslint-config';
 export default [
   ...config,
   {
+    files: ['**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
-        'error',
+        'warn',
         {
+          paths: [
+            {
+              name: '@repo/integrations-hubspot',
+              message: 'Use @repo/types canonical types (e.g. CanonicalLead). See ADR-012.',
+            },
+          ],
           patterns: [
-            { group: ['@repo/*/src/**'], message: 'Use package exports only' },
-            { group: ['@repo/clients-*'], message: 'No cross-client imports' },
+            {
+              group: ['@repo/integrations-*'],
+              message: 'Use @repo/types canonical types. See ADR-012.',
+            },
           ],
         },
       ],
     },
   },
 ];
+```
+
+```javascript
+// Option B: Root or eslint-config architecture layer (all packages: deep path + cross-client)
+// Align with boundaries.js patterns; can be merged into @repo/eslint-config/boundaries.js
+export const architectureRules = {
+  'no-restricted-imports': [
+    'error',
+    {
+      patterns: [
+        { group: ['@repo/*/src/**'], message: 'Use package exports only' },
+        { group: ['@repo/clients-*', '**/clients/*'], message: 'No cross-client imports' },
+      ],
+    },
+  ],
+};
 ```
 
 ## Testing Requirements

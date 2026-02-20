@@ -19,6 +19,13 @@ Create UniversalPage component that composes sections from activated capabilitie
 
 - evol-9a — activateCapabilities, CapabilityProvider available
 
+## Research
+
+### Deep research (online)
+
+- **RSC and Suspense:** Wrap async Server Components in Suspense so multiple data sources can load in parallel; show fallback UI while loading. Next.js 16 PPR supports streaming. Pass server components as children to minimize client payload. (React Server Components, Next.js fetching, RSC payload optimization.)
+- **Composition:** UniversalPage should await activateCapabilities in the server component, then render CapabilityProvider with resolved capabilities and map sections to components inside Suspense boundaries for progressive rendering.
+
 ## Related Files
 
 - `packages/page-templates/src/universal-renderer.tsx` or `UniversalPage.tsx` – create

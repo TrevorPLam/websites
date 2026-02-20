@@ -19,6 +19,13 @@ Declare BookingFeature via defineFeature and register it with featureRegistry. C
 
 - evol-7a — defineFeature, featureRegistry available
 
+## Research
+
+### Deep research (online)
+
+- **Capability declaration:** Align with registry pattern: each capability implements the same interface (id, version, provides, configSchema, onActivate). Register at load/build time so site.config can resolve by id. (Plugin registry, capability systems.)
+- **Provides shape:** Explicit arrays (sections, integrations, dataContracts) enable discovery and composition without core changes. Map to existing booking sections and providers in [booking-providers.ts](../packages/features/src/booking/lib/booking-providers.ts).
+
 ## Related Files
 
 - `packages/features/src/booking/capability.ts` – create
@@ -39,6 +46,58 @@ Declare BookingFeature via defineFeature and register it with featureRegistry. C
 - [ ] Register in booking index or app bootstrap
 - [ ] Add tests
 - [ ] Document
+
+## Sample code / examples
+
+```typescript
+// packages/features/src/booking/capability.ts
+import { defineFeature, featureRegistry } from '@repo/infra/features';
+import { z } from 'zod';
+
+export const BookingFeature = defineFeature({
+  id: 'booking',
+  version: '2.0.0',
+  provides: {
+    sections: ['booking-calendar', 'service-list'],
+    integrations: ['calendly', 'acuity', 'native'],
+    dataContracts: ['booking', 'service', 'availability'],
+  },
+  configSchema: z.object({
+    provider: z.enum(['calendly', 'acuity', 'native']),
+    services: z.array(z.object({ id: z.string(), label: z.string() })),
+  }),
+  async onActivate(config, context) {
+    // validate provider; register sections with page-templates if needed
+  },
+});
+
+featureRegistry().register(BookingFeature);
+```
+
+## Sample code / examples
+
+```typescript
+// packages/features/src/booking/capability.ts
+import { defineFeature, featureRegistry } from '@repo/infra/features';
+import { z } from 'zod';
+export const BookingFeature = defineFeature({
+  id: 'booking',
+  version: '2.0.0',
+  provides: {
+    sections: ['booking-calendar', 'service-list'],
+    integrations: ['calendly', 'acuity', 'native'],
+    dataContracts: ['booking', 'service', 'availability'],
+  },
+  configSchema: z.object({
+    provider: z.enum(['calendly', 'acuity', 'native']),
+    services: z.array(z.object({ id: z.string(), label: z.string() })),
+  }),
+  async onActivate(config, context) {
+    /* validate provider; register sections */
+  },
+});
+featureRegistry().register(BookingFeature);
+```
 
 ## Definition of Done
 

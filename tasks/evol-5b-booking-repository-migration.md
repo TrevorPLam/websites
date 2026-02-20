@@ -20,6 +20,14 @@ Refactor booking actions to use validateBooking and BookingRepository; remove di
 - 0-2 — BookingRepository interface exists; ensure it accepts CanonicalBooking
 - evol-5a — validateBooking, CanonicalBooking in @repo/types
 
+## Research
+
+### Deep research (online)
+
+- **Repository pattern:** Decouples data access from business logic; use interfaces (e.g. `BookingRepository`) not concrete implementations. Enables mocking in tests and swapping storage. Define entity shape and repository methods (create, getById, list, update) in the domain layer; implementations in infrastructure. (Clean Architecture, Repository pattern in Node/TypeScript 2024.)
+- **Interface design:** Repository interface should accept domain types (CanonicalBooking); return same or DTOs. Include tenant-scoped overloads where applicable (e.g. `getById(id, tenantId?)`). (Generic repository + TypeScript guides.)
+- **Server actions:** Keep actions thin: validate input (validateBooking), call repository, return result. No direct DB/ORM in the action; inject or resolve repository from context/factory.
+
 ## Related Files
 
 - `packages/features/src/booking/lib/actions.ts` – modify
@@ -40,6 +48,38 @@ Refactor booking actions to use validateBooking and BookingRepository; remove di
 - [ ] Remove direct Supabase from actions
 - [ ] Update tests
 - [ ] Document
+
+## Sample code / examples
+
+```typescript
+// packages/features/src/booking/lib/booking-actions.ts (simplified)
+'use server';
+import { validateBooking, type CanonicalBooking } from '@repo/types';
+import { getBookingRepository } from './repository'; // from 0-2
+
+export async function createBooking(data: unknown) {
+  const canonical = validateBooking(data); // throws ZodError if invalid
+  const repo = getBookingRepository();
+  const record = await repo.create(canonical);
+  return { success: true, bookingId: record.id, confirmationNumber: record.confirmationNumber };
+}
+```
+
+## Sample code / examples
+
+```typescript
+// packages/features/src/booking/lib/booking-actions.ts (simplified)
+'use server';
+import { validateBooking } from '@repo/types';
+import { getBookingRepository } from './repository';
+
+export async function createBooking(data: unknown) {
+  const canonical = validateBooking(data);
+  const repo = getBookingRepository();
+  const record = await repo.create(canonical);
+  return { success: true, bookingId: record.id, confirmationNumber: record.confirmationNumber };
+}
+```
 
 ## Definition of Done
 
