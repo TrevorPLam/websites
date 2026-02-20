@@ -1,0 +1,45 @@
+/**
+ * @file packages/config/tokens/decision-tokens.css
+ * Purpose: Layer 2 — Semantic design tokens. Aliases option tokens to named roles.
+ *          --color-primary, --space-page, etc. ThemeInjector may override these.
+ * Task: C-5 Design Token Architecture
+ */
+
+:root {
+  /* Semantic colors (alias option layer or runtime overrides) */
+  --color-primary: var(--color-raw-primary);
+  --color-background: var(--color-raw-50);
+  --color-foreground: var(--color-raw-900);
+  --color-muted: var(--color-raw-100);
+  --color-muted-foreground: var(--color-raw-500);
+  --color-accent: var(--color-raw-200);
+  --color-accent-foreground: var(--color-raw-900);
+  --color-border: var(--color-raw-200);
+  --color-ring: var(--color-raw-400);
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 0 0% 98%;
+  --color-card: var(--color-raw-50);
+  --color-card-foreground: var(--color-raw-900);
+  --color-secondary: var(--color-raw-100);
+  --color-secondary-foreground: var(--color-raw-900);
+  --color-input: var(--color-raw-200);
+
+  /* Backward compat: ThemeInjector overrides these */
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-raw-50);
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --muted: var(--color-muted);
+  --muted-foreground: var(--color-muted-foreground);
+  --accent: var(--color-accent);
+  --accent-foreground: var(--color-accent-foreground);
+  --border: var(--color-border);
+  --input: var(--color-input);
+  --ring: var(--color-ring);
+  --destructive: var(--color-destructive);
+  --destructive-foreground: var(--color-destructive-foreground);
+  --card: var(--color-card);
+  --card-foreground: var(--color-card-foreground);
+  --secondary: var(--color-secondary);
+  --secondary-foreground: var(--color-secondary-foreground);
+}

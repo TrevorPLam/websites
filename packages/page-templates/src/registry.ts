@@ -4,8 +4,10 @@
  *
  * Purpose: Registry-based page composition with typed SectionType and optional
  * configSchema per section. Unknown section IDs log a console.warn in composePage.
+ * Each section is wrapped in Suspense with Skeleton fallback for dynamic loading.
  */
 import * as React from 'react';
+import { Skeleton } from '@repo/ui';
 import type { SiteConfig } from '@repo/types';
 import type { SectionDefinition, SectionProps, TemplateConfig } from './types';
 
@@ -106,7 +108,15 @@ export function composePage(
           } as SectionProps;
         }
       }
-      return React.createElement(Section, sectionProps as SectionProps);
+      const sectionElement = React.createElement(Section, sectionProps as SectionProps);
+      return React.createElement(
+        React.Suspense,
+        {
+          key: id,
+          fallback: React.createElement(Skeleton, { className: 'h-32' }),
+        },
+        sectionElement
+      );
     })
     .filter((n) => n !== null) as React.ReactElement[];
 

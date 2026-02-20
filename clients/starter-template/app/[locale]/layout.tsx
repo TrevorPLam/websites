@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { getTranslations } from 'next-intl/server';
 import { LocaleProviders } from './LocaleProviders';
+import { resolveThemeColors } from '@repo/types';
 import siteConfig from '@/site.config';
 import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
@@ -36,7 +37,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <LocaleProviders messages={messages} theme={siteConfig.theme.colors}>
+    <LocaleProviders messages={messages} theme={resolveThemeColors(siteConfig.theme)}>
       <a
         href="#main-content"
         className="sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:block focus:w-auto focus:h-auto focus:p-4 focus:m-0 focus:overflow-visible focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"

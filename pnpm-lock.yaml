@@ -1210,6 +1210,9 @@ importers:
       '@repo/types':
         specifier: workspace:*
         version: link:../types
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../ui
       react:
         specifier: 'catalog:'
         version: 19.0.0

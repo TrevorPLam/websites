@@ -11,6 +11,7 @@
  */
 
 import * as React from 'react';
+import { cva } from '@repo/infra/variants';
 import { cn } from '@repo/utils';
 
 export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -18,12 +19,17 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'default' | 'narrow' | 'wide';
 }
 
-/** Max-width Tailwind classes per size; centered with responsive padding. */
-const sizeStyles: Record<string, string> = {
-  default: 'max-w-7xl',
-  narrow: 'max-w-4xl',
-  wide: 'max-w-screen-2xl',
-};
+const containerVariants = cva({
+  base: 'mx-auto w-full px-4 sm:px-6 lg:px-8',
+  variants: {
+    size: {
+      default: 'max-w-7xl',
+      narrow: 'max-w-4xl',
+      wide: 'max-w-screen-2xl',
+    },
+  },
+  defaultVariants: { size: 'default' },
+});
 
 /**
  * Renders a centered, width-constrained div. Forwards ref and spreads HTML div attributes.
@@ -33,13 +39,7 @@ const sizeStyles: Record<string, string> = {
  */
 export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   ({ className, size = 'default', ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn('mx-auto w-full px-4 sm:px-6 lg:px-8', sizeStyles[size], className)}
-        {...props}
-      />
-    );
+    return <div ref={ref} className={cn(containerVariants({ size, className }))} {...props} />;
   }
 );
 Container.displayName = 'Container';

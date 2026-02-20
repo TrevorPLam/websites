@@ -36,7 +36,9 @@ export type {
   ThemeFonts,
 } from './site-config';
 
-export { siteConfigSchema } from './site-config';
+export { siteConfigSchema, DEFAULT_THEME_COLORS } from './site-config';
+export type { ThemePresetName, ThemeConfigForResolution } from './theme-presets';
+export { getThemePreset, resolveThemeColors } from './theme-presets';
 
 // Re-export industry type and config lookup
 export type { Industry, IndustryConfig } from './industry';

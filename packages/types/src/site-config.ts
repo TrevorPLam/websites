@@ -141,6 +141,31 @@ export interface ThemeColors {
   ring: string;
 }
 
+/**
+ * Default theme color values (Layer 2 semantic tokens). Used by ThemeInjector to merge with
+ * partial site.config.theme.colors overrides. Aligns with packages/config/tokens (C-5).
+ * Task: inf-4 Token Overrides
+ */
+export const DEFAULT_THEME_COLORS: ThemeColors = {
+  primary: '174 100% 26%',
+  'primary-foreground': '0 0% 98%',
+  secondary: '0 0% 96%',
+  'secondary-foreground': '0 0% 9%',
+  accent: '0 0% 90%',
+  'accent-foreground': '0 0% 9%',
+  background: '0 0% 98%',
+  foreground: '0 0% 9%',
+  muted: '0 0% 96%',
+  'muted-foreground': '0 0% 45%',
+  card: '0 0% 98%',
+  'card-foreground': '0 0% 9%',
+  destructive: '0 84% 60%',
+  'destructive-foreground': '0 0% 98%',
+  border: '0 0% 90%',
+  input: '0 0% 90%',
+  ring: '0 0% 64%',
+};
+
 /** Font families used by the theme. */
 export interface ThemeFonts {
   /** Primary heading font family, e.g., "Inter, sans-serif" */
@@ -265,8 +290,10 @@ export interface SiteConfig {
   seo: SeoDefaults;
   /** Theme configuration */
   theme: {
-    /** Theme colors (HSL strings) */
-    colors: ThemeColors;
+    /** Optional preset name (minimal, bold, professional). Merged before theme.colors. Task: inf-12 */
+    preset?: 'minimal' | 'bold' | 'professional';
+    /** Theme colors (HSL strings). Partial overrides; merged with preset and DEFAULT_THEME_COLORS. */
+    colors: Partial<ThemeColors>;
     /** Theme font families */
     fonts?: ThemeFonts;
     /** Border radius scale for components */
@@ -341,25 +368,27 @@ const seoDefaultsSchema = z.object({
   schemaType: z.string().optional(),
 });
 
-const themeColorsSchema = z.object({
-  primary: z.string(),
-  'primary-foreground': z.string(),
-  secondary: z.string(),
-  'secondary-foreground': z.string(),
-  accent: z.string(),
-  'accent-foreground': z.string(),
-  background: z.string(),
-  foreground: z.string(),
-  muted: z.string(),
-  'muted-foreground': z.string(),
-  card: z.string(),
-  'card-foreground': z.string(),
-  destructive: z.string(),
-  'destructive-foreground': z.string(),
-  border: z.string(),
-  input: z.string(),
-  ring: z.string(),
-});
+const themeColorsSchema = z
+  .object({
+    primary: z.string(),
+    'primary-foreground': z.string(),
+    secondary: z.string(),
+    'secondary-foreground': z.string(),
+    accent: z.string(),
+    'accent-foreground': z.string(),
+    background: z.string(),
+    foreground: z.string(),
+    muted: z.string(),
+    'muted-foreground': z.string(),
+    card: z.string(),
+    'card-foreground': z.string(),
+    destructive: z.string(),
+    'destructive-foreground': z.string(),
+    border: z.string(),
+    input: z.string(),
+    ring: z.string(),
+  })
+  .partial();
 
 const themeFontsSchema = z.object({
   heading: z.string().min(1),
@@ -442,10 +471,12 @@ export const siteConfigSchema = z.object({
       .object({
         provider: z.enum(['google', 'plausible', 'none']),
         trackingId: z.string().optional(),
-        config: z.object({
-          eventTracking: z.boolean().optional(),
-          anonymizeIp: z.boolean().optional(),
-        }).optional(),
+        config: z
+          .object({
+            eventTracking: z.boolean().optional(),
+            anonymizeIp: z.boolean().optional(),
+          })
+          .optional(),
       })
       .optional(),
     crm: z
@@ -469,10 +500,12 @@ export const siteConfigSchema = z.object({
     chat: z
       .object({
         provider: z.enum(['intercom', 'crisp', 'tidio', 'none']),
-        config: z.object({
-          websiteId: z.string().optional(),
-          theme: z.string().optional(),
-        }).optional(),
+        config: z
+          .object({
+            websiteId: z.string().optional(),
+            theme: z.string().optional(),
+          })
+          .optional(),
       })
       .optional(),
     reviews: z
@@ -506,6 +539,7 @@ export const siteConfigSchema = z.object({
   contact: contactInfoSchema,
   seo: seoDefaultsSchema,
   theme: z.object({
+    preset: z.enum(['minimal', 'bold', 'professional']).optional(),
     colors: themeColorsSchema,
     fonts: themeFontsSchema.optional(),
     borderRadius: z.enum(['none', 'small', 'medium', 'large', 'full']).optional(),

@@ -22,6 +22,7 @@
 // - [FEAT:ANIMATION] CSS shimmer; disabled when prefers-reduced-motion is set
 
 import * as React from 'react';
+import { cva } from '@repo/infra/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -38,14 +39,17 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   animate?: boolean;
 }
 
-// ─── Style Maps ──────────────────────────────────────────────────────────────
-
-// [TRACE:CONST=packages.ui.components.Skeleton.variantStyles]
-const variantStyles: Record<SkeletonVariant, string> = {
-  text: 'rounded-md h-4',
-  circular: 'rounded-full',
-  rectangular: 'rounded-none',
-};
+const skeletonVariants = cva({
+  base: 'bg-muted',
+  variants: {
+    variant: {
+      text: 'rounded-md h-4',
+      circular: 'rounded-full',
+      rectangular: 'rounded-none',
+    },
+  },
+  defaultVariants: { variant: 'text' },
+});
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -80,11 +84,8 @@ export const Skeleton = ({
       aria-label="Loading…"
       style={inlineStyle}
       className={cn(
-        'bg-muted',
-        variantStyles[variant],
-        // Shimmer animation — suppressed when prefers-reduced-motion is active
-        animate && 'motion-safe:animate-pulse',
-        className
+        skeletonVariants({ variant, className }),
+        animate && 'motion-safe:animate-pulse'
       )}
       {...props}
     />

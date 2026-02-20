@@ -1,10 +1,14 @@
 /* File: packages/config/tailwind-theme.css  [TRACE:FILE=packages.config.tailwindTheme]
  * Purpose: Tailwind v4 @theme block replacing tailwind-preset.js. Maps semantic design
- *          tokens to CSS custom properties. ThemeInjector/site.config.ts override the
- *          underlying vars (--primary, --background, etc.) at runtime.
- * Task: 0.4 Tailwind v4 migration
+ *          tokens to CSS custom properties. Imports three-layer tokens (C-5).
+ *          ThemeInjector/site.config.ts override the underlying vars at runtime.
+ * Task: 0.4 Tailwind v4 migration; C-5 Design Token Architecture
  * Features: [FEAT:DESIGN] [FEAT:THEMING] [FEAT:CONFIGURATION]
  */
+
+@import "./tokens/option-tokens.css";
+@import "./tokens/decision-tokens.css";
+@import "./tokens/component-tokens.css";
 
 @theme {
   /* Semantic colors — reference :root vars (ThemeInjector overrides these) */

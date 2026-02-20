@@ -31,6 +31,7 @@
 // - Specificity: :root style from ThemeInjector overrides globals.css :root defaults
 
 import type { ThemeColors as ThemeColorsFromTypes } from '@repo/types';
+import { DEFAULT_THEME_COLORS } from '@repo/types';
 
 /**
  * Theme color map matching the CSS custom property names in globals.css and tailwind-preset.js.
@@ -99,8 +100,10 @@ function toCssColor(value: string): string {
  * ```
  */
 export function ThemeInjector({ theme, selector = ':root' }: ThemeInjectorProps) {
+  // Merge partial overrides with base tokens (inf-4)
+  const merged = { ...DEFAULT_THEME_COLORS, ...theme };
   // Filter out undefined values and convert to CSS custom properties
-  const cssProperties = Object.entries(theme)
+  const cssProperties = Object.entries(merged)
     .filter((entry): entry is [string, string] => entry[1] !== undefined)
     .map(([key, value]) => `  --${key}: ${toCssColor(value)};`)
     .join('\n');

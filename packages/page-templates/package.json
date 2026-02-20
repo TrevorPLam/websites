@@ -22,6 +22,7 @@
     "@repo/features": "workspace:*",
     "@repo/marketing-components": "workspace:*",
     "@repo/types": "workspace:*",
+    "@repo/ui": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

@@ -20,6 +20,7 @@
 
 import * as React from 'react';
 import { AlertCircle, CheckCircle2, Info, XCircle } from 'lucide-react';
+import { cva } from '@repo/infra/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -34,14 +35,21 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
 export interface AlertTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
-// ─── Style Maps ──────────────────────────────────────────────────────────────
-
-const variantStyles: Record<AlertVariant, string> = {
-  default: 'bg-background text-foreground border-border',
-  destructive: 'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
-  success: 'border-green-500/50 text-green-600 dark:text-green-400 [&>svg]:text-green-600 dark:[&>svg]:text-green-400',
-  warning: 'border-yellow-500/50 text-yellow-600 dark:text-yellow-400 [&>svg]:text-yellow-600 dark:[&>svg]:text-yellow-400',
-};
+const alertVariants = cva({
+  base: 'relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
+  variants: {
+    variant: {
+      default: 'bg-background text-foreground border-border',
+      destructive:
+        'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
+      success:
+        'border-green-500/50 text-green-600 dark:text-green-400 [&>svg]:text-green-600 dark:[&>svg]:text-green-400',
+      warning:
+        'border-yellow-500/50 text-yellow-600 dark:text-yellow-400 [&>svg]:text-yellow-600 dark:[&>svg]:text-yellow-400',
+    },
+  },
+  defaultVariants: { variant: 'default' },
+});
 
 const iconMap: Record<AlertVariant, React.ComponentType<{ className?: string }>> = {
   default: Info,
@@ -56,16 +64,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, variant = 'default', ...props }, ref) => {
     const Icon = iconMap[variant];
     return (
-      <div
-        ref={ref}
-        role="alert"
-        className={cn(
-          'relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
-          variantStyles[variant],
-          className
-        )}
-        {...props}
-      >
+      <div ref={ref} role="alert" className={cn(alertVariants({ variant, className }))} {...props}>
         <Icon className="h-4 w-4" />
         {props.children}
       </div>
