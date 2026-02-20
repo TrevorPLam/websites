@@ -1,14 +1,96 @@
 # Marketing Website Monorepo — The Goal Architecture
 
-**What the repository looks like when the evolution is complete.** Each line is annotated with the task ID that creates or modifies it. The end state is achieved via **evolutionary phases** (26-week Strangler Fig path) — see [NEW.md](NEW.md) and [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md).
+**What the repository looks like when the evolution is complete.** Fully aligned with [NEW.md](NEW.md) — the single organic evolution track. See [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md) and [tasks/TASKS.md](tasks/TASKS.md).
 
 ---
+
+## Organic Evolution Philosophy
+
+Every change must:
+
+1. **Improve the current system immediately** — No speculative work
+2. **Create a migration path** — No dead ends
+3. **Build toward the target architecture** — No throwaway work
+
+**Timeline:** 26 weeks (6 months) | **Risk:** Low-to-medium (evolutionary, not revolutionary) | **Outcome:** Full capability-driven, multi-tenant platform
+
+---
+
+## The Strangler Fig Path
+
+Like the strangler fig that grows around a host tree until it becomes the new structure:
+
+| Phase        | Weeks | Focus                                         |
+| ------------ | ----- | --------------------------------------------- |
+| **Seed**     | 0–4   | Foundation invariants                         |
+| **Roots**    | 5–10  | Data contracts alongside existing types       |
+| **Trunk**    | 11–16 | Capability core absorbing existing registries |
+| **Branches** | 17–22 | Universal renderer for new clients only       |
+| **Canopy**   | 23–26 | Full platform; legacy becomes wrapper         |
+
+At each stage, the new system serves the old, then gradually replaces it.
+
+---
+
+## Phase Summary
+
+| Phase         | Weeks | Tasks                  | Checkpoint                                        |
+| ------------- | ----- | ---------------------- | ------------------------------------------------- |
+| **Pre-Phase** | 0     | 0-1, 0-3, 0-2          | CI green, tenant context fixed, BookingRepository |
+| **Phase 1**   | 1–4   | evol-1, evol-2, evol-3 | Foundation locked                                 |
+| **Phase 2**   | 5–10  | evol-4, evol-5, evol-6 | Data contracts seeded                             |
+| **Phase 3**   | 11–16 | evol-7, evol-8         | Capability core active                            |
+| **Phase 4**   | 17–22 | evol-9, evol-10        | Universal renderer proven                         |
+| **Phase 5**   | 23–26 | evol-11, evol-12       | Platform converged                                |
+
+**evol-\* task specs:** [tasks/evol-1](tasks/evol-1-architecture-police.md) through [tasks/evol-12](tasks/evol-12-full-platform-convergence.md)
+
+---
+
+## Final Checkpoints
+
+| Week | Checkpoint                | Success Criteria                              |
+| ---- | ------------------------- | --------------------------------------------- |
+| 4    | Foundation locked         | Zero lint errors; registries hardened         |
+| 10   | Data contracts seeded     | Booking uses canonical types                  |
+| 16   | Capability core active    | Features self-declare capabilities            |
+| 22   | Universal renderer proven | New client launched on universal              |
+| 26   | Platform converged        | Legacy + modern coexist; migration path clear |
+
+---
+
+## Target Architecture (End State)
+
+Per NEW.md, the platform converges to:
+
+```
+┌─────────────────────────────────────────────────┐
+│  CAPABILITY REGISTRY                             │
+│  (Evolved from section + integration registries) │
+│  defineFeature, featureRegistry, onActivate     │
+├─────────────────────────────────────────────────┤
+│  DATA CONTRACTS                                  │
+│  Canonical types, adapters, validation           │
+│  packages/types/src/canonical/                   │
+├─────────────────────────────────────────────────┤
+│  UNIVERSAL RENDERER                              │
+│  New clients default; legacy opt-in via bridge  │
+│  activateCapabilities, CapabilityProvider        │
+├─────────────────────────────────────────────────┤
+│  EDGE STORAGE (opt-in)                           │
+│  SmartRepository; storage.edgeCache in config   │
+└─────────────────────────────────────────────────┘
+```
+
+---
+
+## End-State Repository Structure
 
 ```
 marketing-websites/                          # Root — pnpm monorepo
 │
 │  ╔══════════════════════════════════════════════════════════════════════╗
-│  ║  ROOT CONFIG (Wave 0 cleaned)                                      ║
+│  ║  ROOT CONFIG (Pre-Phase cleaned)                                   ║
 │  ╚══════════════════════════════════════════════════════════════════════╝
 │
 ├── .changeset/                              # [0.12] Changesets versioning
@@ -136,15 +218,19 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │
 │   │  ── TYPES LAYER (was @repo/shared) ───────────────────────────────
 │   │
-│   ├── types/                               # [0.8] Shared types package — SiteConfig, industry, integration contracts
+│   ├── types/                               # [0.8] Shared types — SiteConfig, industry, integration contracts
 │   │   ├── src/
 │   │   │   ├── index.ts                     #   Barrel export for all types
-│   │   │   ├── site-config.ts               # [1.8] EXTENDED: +industry, +features, +integrations, +theme
-│   │   │   ├── site-config.schema.ts        # [1.8] NEW — Zod runtime validator companion
-│   │   │   ├── industry.ts                  # [1.9] Industry union type + IndustryConfig interface
-│   │   │   ├── industry-configs.ts          # [1.9] Defaults for all 12 industries
+│   │   │   ├── site-config.ts               # [1.8] +industry, +features, +integrations, +theme, +capabilities
+│   │   │   ├── site-config.schema.ts        # [1.8] Zod runtime validator companion
+│   │   │   ├── industry.ts                  # [1.9] Industry union + IndustryConfig
+│   │   │   ├── industry-configs.ts          # [1.9] Defaults for 12 industries
+│   │   │   ├── canonical/                   # [evol-4] Canonical types (Phase 2)
+│   │   │   │   ├── lead.ts                  #   CanonicalLead, LeadAdapter, validateLead
+│   │   │   │   ├── booking.ts               #   CanonicalBooking, validateBooking
+│   │   │   │   └── index.ts
 │   │   │   └── compliance-packs.ts          # [C.17] Industry compliance overlays
-│   │   ├── package.json                     #   @repo/types (renamed from @repo/shared)
+│   │   ├── package.json                     #   @repo/types
 │   │   └── tsconfig.json
 │   │
 │   │  ── UI PRIMITIVES LAYER ──────────────────────────────────────────
@@ -225,7 +311,12 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │   │   └── __tests__/
 │   │   │       └── guardrails.test.ts
 │   │   │
-│   │   ├── edge/                            # [C.18] NEW — Edge middleware primitives
+│   │   ├── features/                        # [evol-7] Capability layer (Phase 3)
+│   │   │   ├── define-feature.ts            #   defineFeature, featureRegistry
+│   │   │   ├── legacy-bridge.ts             # [evol-11] migrateLegacyConfig
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── edge/                            # [C.18] Edge middleware primitives
 │   │   │   └── tenant-experiment-context.ts #   Edge variant selection + cache-safe keys
 │   │   │
 │   │   ├── ops/                             # [E.7] NEW — Operational governance
@@ -312,13 +403,14 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │   ├── src/
 │   │   │   ├── index.ts                     #   Barrel: all 9 features
 │   │   │   │
-│   │   │   ├── booking/                     # [2.12] EXTRACTED from clients/starter-template/
+│   │   │   ├── booking/                     # [2.12] EXTRACTED; [evol-5][0-2] canonical + repository
 │   │   │   │   ├── components/
 │   │   │   │   │   └── BookingForm.tsx      #   Services/slots from props, not hardcoded
 │   │   │   │   ├── lib/
 │   │   │   │   │   ├── schema.ts            #   Zod schema — enums from SiteConfig
-│   │   │   │   │   ├── actions.ts           #   Server actions — provider-agnostic
-│   │   │   │   │   └── providers.ts         #   Strategy pattern (was 4 dup classes → 1 adapter)
+│   │   │   │   │   ├── actions.ts           #   validateBooking + BookingRepository.create
+│   │   │   │   │   ├── repository.ts        # [0-2] BookingRepository interface + Supabase impl
+│   │   │   │   │   └── providers.ts         #   Adapter pattern (Calendly, Acuity, native)
 │   │   │   │   ├── __tests__/
 │   │   │   │   │   └── parity/              # [2.22] Parity tests vs original template
 │   │   │   │   └── index.ts
@@ -409,11 +501,11 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │
 │   │  ── PAGE TEMPLATES LAYER ─────────────────────────────────────────
 │   │
-│   ├── page-templates/                      # [3.1] NEW — Composable page shells
+│   ├── page-templates/                      # [3.1] Composable shells; [evol-9] universal renderer
 │   │   ├── src/
-│   │   │   ├── index.ts                     #   Barrel: all templates + registry
-│   │   │   ├── registry.ts                  # [3.1] Section registry Map<string, Component>
-│   │   │   │                                #   Composable assembly — no switch statements
+│   │   │   ├── index.ts                     #   Barrel: templates + registry + universal-renderer
+│   │   │   ├── registry.ts                  # [3.1][evol-3] Section registry + requiredFeatures, resolveForSite
+│   │   │   ├── universal-renderer.tsx       # [evol-9] activateCapabilities, CapabilityProvider
 │   │   │   └── templates/
 │   │   │       ├── HomePageTemplate.tsx      # [3.2] Config-driven section composition
 │   │   │       ├── ServicesPageTemplate.tsx  # [3.3] Grid/list/tabs + URL-synced filters
@@ -427,6 +519,12 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │   └── tsconfig.json
 │   │
 │   │  ── INTEGRATIONS LAYER ───────────────────────────────────────────
+│   │
+│   ├── integrations-core/                   # [evol-6] IntegrationAdapter, IntegrationRegistry
+│   │   └── src/
+│   │       ├── adapter-registry.ts          #   resolve(capability), register(adapter)
+│   │       ├── client.ts                    #   Retry, circuit-breaker (existing)
+│   │       └── ...
 │   │
 │   ├── integrations/
 │   │   ├── analytics/                       #   Pre-existing
@@ -590,7 +688,7 @@ marketing-websites/                          # Root — pnpm monorepo
 │
 ├── clients/
 │   │
-│   ├── starter-template/                    # [5.1] GOLDEN PATH — clone for every new client
+│   ├── starter-template/                    # [5.1] GOLDEN PATH; [evol-9] renderer: 'classic'|'universal'
 │   │   ├── app/
 │   │   │   ├── layout.tsx                   #   Root layout + ThemeInjector + providers
 │   │   │   ├── page.tsx                     #   ← HomePageTemplate({ config: siteConfig })
@@ -610,6 +708,7 @@ marketing-websites/                          # Root — pnpm monorepo
 │   │   │       └── [...routes]/             #   Health, OG (reads from siteConfig)
 │   │   │
 │   │   ├── site.config.ts                   #   ★ THE ONLY FILE A CLIENT CHANGES ★
+│   │   │                                     #   [evol-8] capabilities: [...]; [evol-9] renderer: 'universal'
 │   │   ├── middleware.ts                    #   Edge: experiments, personalization
 │   │   ├── next.config.js                   #   Build-time config validation via Zod
 │   │   ├── tailwind.config.js
@@ -844,19 +943,21 @@ marketing-websites/                          # Root — pnpm monorepo
 
 ## Key Architectural Shifts
 
-| Dimension            | Before (1 template)                      | After (config-driven platform)                      |
-| -------------------- | ---------------------------------------- | --------------------------------------------------- |
-| **Business logic**   | Hardcoded in `clients/starter-template/` | Extracted to `packages/features/` (9 modules)       |
-| **UI components**    | 8 primitives in `@repo/ui`               | 14 primitives + 10 marketing families (30+)         |
-| **Page composition** | Direct JSX in template routes            | Config-driven via section registry + templates      |
-| **Theming**          | Broken — config has no effect            | CSS vars generated from `site.config.ts` at runtime |
-| **Client creation**  | Copy entire template, edit everything    | `turbo gen new-client` → edit only `site.config.ts` |
-| **Industries**       | Hair salon only                          | 12 typed industries with defaults + schema.org      |
-| **Content source**   | MDX files in template                    | Adapter pattern: MDX / Sanity / Storyblok           |
-| **Integrations**     | 3 (analytics, hubspot, supabase)         | 15+ (email, scheduling, chat, reviews, maps)        |
-| **Testing**          | 13 scattered test files                  | Pyramid + parity suite + visual regression          |
-| **CI/CD**            | Basic                                    | Affected builds + remote cache + gates + changesets |
-| **templates/**       | Exists (source of truth)                 | **Deleted** — all code in packages/ + clients/      |
+| Dimension            | Before (1 template)                      | After (config-driven platform)                              |
+| -------------------- | ---------------------------------------- | ----------------------------------------------------------- |
+| **Business logic**   | Hardcoded in `clients/starter-template/` | Extracted to `packages/features/` (9 modules)               |
+| **UI components**    | 8 primitives in `@repo/ui`               | 14 primitives + 10 marketing families (30+)                 |
+| **Page composition** | Direct JSX in template routes            | Section registry → capability-driven (universal)            |
+| **Theming**          | Broken — config has no effect            | CSS vars from `site.config.ts`; capability-ready            |
+| **Client creation**  | Copy entire template, edit everything    | `turbo gen new-client` → edit only `site.config.ts`         |
+| **Industries**       | Hair salon only                          | 12 typed industries with defaults + schema.org              |
+| **Content source**   | MDX files in template                    | Adapter pattern: MDX / Sanity / Storyblok                   |
+| **Integrations**     | 3 (analytics, hubspot, supabase)         | 15+ via IntegrationRegistry (evol-6); canonical types       |
+| **Data contracts**   | Ad-hoc, integration types leak           | Canonical types + adapters; validate before persist         |
+| **Feature model**    | Feature flags in config                  | Capabilities with defineFeature; pages reference capability |
+| **Renderers**        | Single classic renderer                  | Classic + universal (opt-in); legacy bridge                 |
+| **Storage**          | Direct Supabase / in-memory              | BookingRepository; SmartRepository for edge opt-in          |
+| **templates/**       | Exists (source of truth)                 | **Deleted** — all code in packages/ + clients/              |
 
 ---
 
@@ -885,3 +986,28 @@ site.config.ts (client intent)
 
 No drag-and-drop. No WYSIWYG. Just config.
 Config is the fast path. Code is the escape hatch.
+
+---
+
+## How We Get There (NEW.md Synthesis)
+
+| Original Vision    | Evolutionary Path                                  | Weeks |
+| ------------------ | -------------------------------------------------- | ----- |
+| Capability Core    | Registry hardening → defineFeature                 | 1–16  |
+| Data Contracts     | Canonical types alongside existing → migration     | 5–10  |
+| Universal Renderer | Classic refactored → opt-in universal              | 17–22 |
+| Edge Database      | Repository pattern → SmartRepository → edge opt-in | 14–22 |
+| Multi-tenancy      | Tenant context abstraction → dynamic resolution    | 11–26 |
+
+Every step delivers immediate value. No speculative work. No parallel tracks. No big-bang rewrites.
+
+---
+
+## Risk Mitigation (from NEW.md)
+
+| Risk                      | Mitigation                                             |
+| ------------------------- | ------------------------------------------------------ |
+| Evolution takes too long  | Each phase has independent value; can stop anytime     |
+| Team resists change       | Each change improves current workflow, not just future |
+| Architecture drifts       | Pre-Phase invariants (0-1, evol-1) prevent drift       |
+| Migration never completes | Legacy bridge (evol-11) means "complete" is optional   |
