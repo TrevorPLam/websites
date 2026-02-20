@@ -2,7 +2,7 @@
 
 **Archived:** 2026-02-20  
 **Status:** Execution complete. All plan items extracted and implemented.  
-**Authoritative source now:** [evolution-roadmap.md](../architecture/evolution-roadmap.md), [THEGOAL.md](../../THEGOAL.md), [tasks/TASKS.md](../../tasks/TASKS.md)  
+**Authoritative source now:** [ROADMAP.md](../../ROADMAP.md), [THEGOAL.md](../../THEGOAL.md), [tasks/TASKS.md](../../tasks/TASKS.md)  
 **Extraction index:** [NEW-THEPLAN-EXTRACTION-INDEX.md](NEW-THEPLAN-EXTRACTION-INDEX.md)
 
 ---
@@ -42,4 +42,4 @@ _[Sections 2–8 and Appendix preserved as in original — see git history for f
 
 ---
 
-**End of archived THEPLAN. Use [evolution-roadmap.md](../architecture/evolution-roadmap.md) for current phase and checkpoint information.**
+**End of archived THEPLAN. Use [ROADMAP.md](../../ROADMAP.md) for current phase and checkpoint information.**

@@ -25,14 +25,14 @@ This semantic index maps concepts to files for AI discoverability in the marketi
 **Evolution Roadmap (Strangler Fig)**
 
 - Concept: 26-week organic evolution toward capability-driven platform
-- Files: `NEW.md`, `docs/architecture/evolution-roadmap.md`. `THEPLAN.md` archived (executed 2026-02-20).
+- Files: `ROADMAP.md` (evolution §). NEW, THEPLAN, evolution-roadmap archived.
 - Phases: Foundation (1-4) → Data Contracts (5-10) → Capability Core (11-16) → Universal Renderer (17-22) → Platform Convergence (23-26)
 
 **Capability Registry**
 
 - Concept: Self-declaring features; provides sections, integrations, dataContracts
 - Files: `packages/infra/features` (Phase 3), `defineFeature`
-- Docs: NEW.md Phase 3
+- Docs: ROADMAP.md, Phase 3
 
 **Canonical Types**
 
@@ -44,13 +44,13 @@ This semantic index maps concepts to files for AI discoverability in the marketi
 
 - Concept: Opt-in renderer for new clients; capability-based composition
 - Files: `packages/page-templates/src/universal-renderer.tsx`
-- Docs: NEW.md Phase 4
+- Docs: ROADMAP.md, Phase 4
 
 **Legacy Bridge**
 
 - Concept: Classic config → capability system; migrateLegacyConfig, ClassicPage
 - Files: `packages/infra/features/src/legacy-bridge.ts`
-- Docs: NEW.md Phase 5
+- Docs: ROADMAP.md, Phase 5
 
 ## Package System
 

@@ -17,7 +17,7 @@
 
 **Advanced Code Patterns (2026-02-19):** See [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) for pattern inventory and tiered recommendations. Execution waves and sequencing are in [TODO.md](../TODO.md). Individual tasks (inf-1, inf-2, inf-4, inf-8, inf-10, inf-12, c-5, f-21) include an "Advanced Code Pattern Expectations" section with updated research and acceptance criteria.
 
-**Organic Evolution (2026-02-19):** Primary sequencing per [NEW.md](../NEW.md) and [docs/architecture/evolution-roadmap.md](../docs/architecture/evolution-roadmap.md). 26-week Strangler Fig path. evol-\* tasks define phase deliverables. Security/Phase 0 runs in parallel.
+**Organic Evolution (2026-02-19):** Primary sequencing per [ROADMAP.md](../ROADMAP.md). 26-week Strangler Fig path. evol-\* tasks define phase deliverables. Security/Phase 0 runs in parallel.
 
 | Phase     | Weeks | Tasks                  | Checkpoint                  |
 | --------- | ----- | ---------------------- | --------------------------- |

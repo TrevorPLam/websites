@@ -16,11 +16,10 @@
 
 **What changed:**
 
-- All information from NEW.md and THEPLAN.md extracted into authoritative docs: evolution-roadmap.md, THEGOAL.md, tasks/TASKS.md, evol-\* tasks, ADR-012, and 25+ doc updates.
-- Created [docs/archive/NEW-THEPLAN-EXTRACTION-INDEX.md](../docs/archive/NEW-THEPLAN-EXTRACTION-INDEX.md) — verification index mapping every NEW.md and THEPLAN.md item to its extracted location.
-- Archived THEPLAN to [docs/archive/THEPLAN-2026-02-19-executed.md](../docs/archive/THEPLAN-2026-02-19-executed.md). Root THEPLAN.md now redirects to evolution-roadmap.
+- All information from NEW.md and THEPLAN.md extracted into ROADMAP.md, THEGOAL.md, tasks/TASKS.md, evol-\* tasks, ADR-012.
+- Archived THEPLAN, NEW, evolution-roadmap to docs/archive/. Root stubs redirect to ROADMAP.md.
 
-**Why:** Plan execution was complete; authoritative sources are evolution-roadmap, THEGOAL, TASKS.md. Archival preserves history and confirms no information was lost.
+**Why:** Plan execution complete; authoritative source is ROADMAP.md.
 
 **How verified:** Extraction index documents 100% coverage. All 15 implementation steps from THEPLAN Section 6 marked done.
 

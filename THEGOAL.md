@@ -1,6 +1,6 @@
 # Marketing Website Monorepo — The Goal Architecture
 
-**What the repository looks like when the evolution is complete.** Fully aligned with [NEW.md](NEW.md) — the single organic evolution track. See [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md) and [tasks/TASKS.md](tasks/TASKS.md).
+**What the repository looks like when the evolution is complete.** Fully aligned with the organic evolution track. See [ROADMAP.md](ROADMAP.md) and [tasks/TASKS.md](tasks/TASKS.md).
 
 ---
 
