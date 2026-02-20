@@ -8,7 +8,7 @@
  * Status: @complete | See docs/tooling/knip.md for usage
  *
  * Invariants:
- * - Workspaces auto-detected from pnpm-workspace.yaml
+ * - Root + scoped workspace coverage for packages/clients/tooling
  * - ignoreDependencies: tooling used by config loaders (eslint, jest)
  * - ignoreExportsUsedInFile: interfaces/types used only in-file
  *
@@ -16,12 +16,32 @@
  * @see https://knip.dev/features/monorepos-and-workspaces
  */
 export default {
-  // Workspaces: Auto-detected from pnpm-workspace.yaml
-  // Root workspace: Scripts and config files
+  // Workspaces: Explicit roots reduce false positives in large monorepos
   workspaces: {
     '.': {
-      entry: ['scripts/**/*.{ts,js}', '*.config.{ts,js}'],
-      project: ['**/*.{ts,tsx,js,jsx,mjs}', '!node_modules/**'],
+      entry: [
+        'scripts/**/*.{ts,js}',
+        'tooling/**/src/**/*.{ts,tsx,js,jsx,mjs}',
+        '*.config.{ts,js,mjs}',
+        'eslint.config.mjs',
+      ],
+      project: ['**/*.{ts,tsx,js,jsx,mjs}', '!**/node_modules/**'],
+    },
+    'packages/*': {
+      entry: ['src/index.ts', 'src/index.tsx', 'eslint.config.mjs'],
+      project: ['src/**/*.{ts,tsx,js,jsx,mjs}'],
+    },
+    'packages/**': {
+      entry: ['src/index.ts', 'src/index.tsx', 'eslint.config.mjs'],
+      project: ['src/**/*.{ts,tsx,js,jsx,mjs}'],
+    },
+    'clients/*': {
+      entry: ['app/**/*.{ts,tsx}', 'site.config.ts', 'next.config.{js,mjs,ts}'],
+      project: ['**/*.{ts,tsx,js,jsx,mjs}'],
+    },
+    'tooling/*': {
+      entry: ['src/**/*.{ts,tsx,js,jsx,mjs}'],
+      project: ['src/**/*.{ts,tsx,js,jsx,mjs}'],
     },
   },
 
@@ -55,10 +75,9 @@ export default {
   },
 
   ignoreFiles: [
-    // Config files not part of app bundle
+    // Config files and documentation templates not part of app bundle
     '**/tailwind-preset.js',
-    '**/.eslintrc*',
-    '**/jest.setup.*',
+    'docs/templates/**',
   ],
 
   // Public API exports — intentionally exported for consumers

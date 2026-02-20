@@ -28,9 +28,7 @@ Scans workspace roots per `pnpm-workspace.yaml`:
 - `packages/*`
 - `packages/config/*`
 - `packages/integrations/*`
-- `templates/*`
 - `clients/*`
-- `apps/*`
 
 Packages without an `exports` field are skipped.
 

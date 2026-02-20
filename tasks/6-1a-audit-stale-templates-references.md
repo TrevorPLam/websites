@@ -37,9 +37,9 @@ Task 6-1 referenced templates/hair-salon; templates/ directory no longer exists.
 
 ## Acceptance Criteria
 
-- [ ] Grep for `templates/hair-salon`, `templates/shared`, `templates/` returns 0 unintended references (or all updated)
-- [ ] File reference guides, RESEARCH.md, task prompts updated to cite clients/ or packages/ instead
-- [ ] No broken documentation links to deleted paths
+- [x] Grep for `templates/hair-salon`, `templates/shared`, `templates/` returns 0 unintended references (or all updated)
+- [x] File reference guides, RESEARCH.md, task prompts updated to cite clients/ or packages/ instead
+- [x] No broken documentation links to deleted paths
 
 ## Technical Constraints
 
@@ -48,9 +48,9 @@ Task 6-1 referenced templates/hair-salon; templates/ directory no longer exists.
 
 ## Implementation Plan
 
-- [ ] Run grep for templates/hair-salon, templates/shared
-- [ ] Update or remove each reference
-- [ ] Validate docs
+- [x] Run grep for templates/hair-salon, templates/shared
+- [x] Update or remove each reference
+- [x] Validate docs
 
 ## Sample code / examples
 

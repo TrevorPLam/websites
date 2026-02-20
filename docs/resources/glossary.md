@@ -284,7 +284,7 @@ A utility-first CSS framework used for styling components.
 
 ### Template
 
-A pre-built website structure for a specific industry (e.g., hair salon, restaurant). Lives in `templates/` directory.
+A pre-built website structure for a specific industry (e.g., hair salon, restaurant). Implemented via page templates in `packages/page-templates` and composed into client apps under `clients/`.
 
 ### TypeScript
 

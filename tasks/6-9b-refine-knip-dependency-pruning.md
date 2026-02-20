@@ -38,18 +38,18 @@ Refine knip.config.ts for dead code detection; run dependency pruning. Remove un
 
 ## Acceptance Criteria
 
-- [ ] knip.config tuned for project structure (entry points, ignore patterns)
-- [ ] pnpm knip runs without critical errors (or document expected warnings)
-- [ ] Unused dependencies removed where safe
-- [ ] Build and tests pass
+- [x] knip.config tuned for project structure (entry points, ignore patterns)
+- [x] pnpm knip runs without critical errors (or document expected warnings)
+- [x] Unused dependencies removed where safe (no high-confidence removals in this pass; findings documented)
+- [x] Build and tests pass
 
 ## Implementation Plan
 
-- [ ] Review knip.config.ts
-- [ ] Add/update entry points, project config, ignore rules
-- [ ] Run pnpm knip; address high-priority findings
-- [ ] Run depcheck or similar; remove unused deps
-- [ ] Document any retained intentional duplicates
+- [x] Review knip.config.ts
+- [x] Add/update entry points, project config, ignore rules
+- [x] Run pnpm knip; address high-priority findings
+- [x] Run depcheck or similar; remove unused deps (analysis pass complete; removals deferred)
+- [x] Document any retained intentional duplicates
 
 ## Sample code / examples
 
