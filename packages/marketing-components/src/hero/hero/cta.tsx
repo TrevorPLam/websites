@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/hero/cta.tsx
  * @role component
@@ -46,8 +48,7 @@ export function HeroCTAButton({
       className={cn(
         'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold transition-all',
         'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-        variant === 'primary' &&
-          'bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs',
+        variant === 'primary' && 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs',
         variant === 'secondary' &&
           'bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-xs',
         variant === 'outline' &&

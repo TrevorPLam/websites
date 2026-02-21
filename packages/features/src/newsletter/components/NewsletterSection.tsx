@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/features/src/newsletter/components/NewsletterSection.tsx
  * Purpose: Newsletter signup section with configurable submit handler
@@ -68,12 +70,8 @@ export function NewsletterSection({
               {isSubmitting ? '...' : buttonText}
             </button>
           </form>
-          {status === 'success' && (
-            <p className="mt-2 text-sm text-green-600">{successMessage}</p>
-          )}
-          {status === 'error' && (
-            <p className="mt-2 text-sm text-destructive">{errorMessage}</p>
-          )}
+          {status === 'success' && <p className="mt-2 text-sm text-green-600">{successMessage}</p>}
+          {status === 'error' && <p className="mt-2 text-sm text-destructive">{errorMessage}</p>}
         </div>
       </Container>
     </Section>

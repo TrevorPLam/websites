@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/ui/src/contexts/ConsentContext.tsx
  * @summary Consent management context for GDPR/CCPA compliance
@@ -127,9 +129,7 @@ export function ConsentProvider({
   const [consent, setConsent] = React.useState<ConsentState>(() => {
     // Use initialConsent if provided, otherwise read from storage
     const stored = readConsentFromStorage();
-    return initialConsent
-      ? { ...DEFAULT_CONSENT, ...initialConsent, functional: true }
-      : stored;
+    return initialConsent ? { ...DEFAULT_CONSENT, ...initialConsent, functional: true } : stored;
   });
 
   // Listen for CMP consent changes (for Termly, CookieScript, etc.)
@@ -143,10 +143,7 @@ export function ConsentProvider({
       const updated = readConsentFromStorage();
       setConsent((prev) => {
         // Only update if changed
-        if (
-          prev.analytics !== updated.analytics ||
-          prev.marketing !== updated.marketing
-        ) {
+        if (prev.analytics !== updated.analytics || prev.marketing !== updated.marketing) {
           return updated;
         }
         return prev;

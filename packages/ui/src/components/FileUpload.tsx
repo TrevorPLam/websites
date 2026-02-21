@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/FileUpload.tsx  [TRACE:FILE=packages.ui.components.FileUpload]
 // Purpose: File upload with drag-and-drop and preview.
 //          Provides accessible file selection with drag-and-drop support.
@@ -76,7 +78,8 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
         return true;
       });
 
-      const updatedFiles = maxFiles === 1 ? validFiles.slice(0, 1) : [...files, ...validFiles].slice(0, maxFiles);
+      const updatedFiles =
+        maxFiles === 1 ? validFiles.slice(0, 1) : [...files, ...validFiles].slice(0, maxFiles);
       setFiles(updatedFiles);
       onFilesChange?.(updatedFiles);
     };

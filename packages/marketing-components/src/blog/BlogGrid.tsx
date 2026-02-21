@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/blog/BlogGrid.tsx
  * @role component
@@ -17,24 +19,14 @@ export interface BlogGridProps {
   className?: string;
 }
 
-export function BlogGrid({
-  posts,
-  title,
-  postHref,
-  pagination,
-  className,
-}: BlogGridProps) {
+export function BlogGrid({ posts, title, postHref, pagination, className }: BlogGridProps) {
   return (
     <Section className={className}>
       <Container>
         {title && <h2 className="mb-8 text-3xl font-bold">{title}</h2>}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <BlogPostCard
-              key={post.slug}
-              post={post}
-              href={postHref?.(post)}
-            />
+            <BlogPostCard key={post.slug} post={post} href={postHref?.(post)} />
           ))}
         </div>
         {pagination && pagination.totalPages > 1 && (

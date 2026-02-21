@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/services/ServiceGrid.tsx
  * @role component
@@ -62,16 +64,18 @@ export function ServiceGrid({
               </h2>
             )}
             {description && (
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                {description}
-              </p>
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">{description}</p>
             )}
           </div>
         )}
 
         <div className={gridClasses}>
           {services.map((service) => (
-            <Card key={service.id} variant="service" className="flex h-full flex-col overflow-hidden">
+            <Card
+              key={service.id}
+              variant="service"
+              className="flex h-full flex-col overflow-hidden"
+            >
               {service.image && (
                 <div className="relative aspect-video w-full overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -83,24 +87,16 @@ export function ServiceGrid({
                 </div>
               )}
               <div className="flex flex-1 flex-col p-6">
-                {service.icon && (
-                  <div className="mb-4 text-primary">
-                    {service.icon}
-                  </div>
-                )}
+                {service.icon && <div className="mb-4 text-primary">{service.icon}</div>}
                 <h3 className="text-xl font-semibold leading-none tracking-tight">
                   {service.name}
                 </h3>
                 {service.description && (
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    {service.description}
-                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">{service.description}</p>
                 )}
                 <div className="mt-auto pt-6">
                   {service.price && (
-                    <p className="mb-4 text-lg font-bold text-primary">
-                      {service.price}
-                    </p>
+                    <p className="mb-4 text-lg font-bold text-primary">{service.price}</p>
                   )}
                   {service.cta && (
                     <a

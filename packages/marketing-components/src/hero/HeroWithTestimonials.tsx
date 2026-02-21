@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroWithTestimonials.tsx
  * @role component
@@ -84,11 +86,23 @@ export function HeroWithTestimonials({
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
             {dualCta ? (
               <>
-                <HeroCTAButton {...dualCta.primary} variant={dualCta.primary.variant || 'primary'} size={dualCta.primary.size || 'large'} />
-                <HeroCTAButton {...dualCta.secondary} variant={dualCta.secondary.variant || 'outline'} size={dualCta.secondary.size || 'large'} />
+                <HeroCTAButton
+                  {...dualCta.primary}
+                  variant={dualCta.primary.variant || 'primary'}
+                  size={dualCta.primary.size || 'large'}
+                />
+                <HeroCTAButton
+                  {...dualCta.secondary}
+                  variant={dualCta.secondary.variant || 'outline'}
+                  size={dualCta.secondary.size || 'large'}
+                />
               </>
             ) : cta ? (
-              <HeroCTAButton {...cta} variant={cta.variant || 'primary'} size={cta.size || 'large'} />
+              <HeroCTAButton
+                {...cta}
+                variant={cta.variant || 'primary'}
+                size={cta.size || 'large'}
+              />
             ) : null}
           </div>
           {children}

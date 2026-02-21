@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/Rating.tsx  [TRACE:FILE=packages.ui.components.Rating]
 // Purpose: Star rating component with read-only and interactive modes.
 //          Provides accessible star rating with half-star support.
@@ -51,7 +53,19 @@ const sizeStyles: Record<'sm' | 'md' | 'lg', string> = {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
-  ({ className, value = 0, onValueChange, max = 5, readOnly = false, allowHalf = false, size = 'md', ...props }, ref) => {
+  (
+    {
+      className,
+      value = 0,
+      onValueChange,
+      max = 5,
+      readOnly = false,
+      allowHalf = false,
+      size = 'md',
+      ...props
+    },
+    ref
+  ) => {
     const [hoverValue, setHoverValue] = React.useState<number | null>(null);
     const [isHovering, setIsHovering] = React.useState(false);
 
@@ -89,7 +103,8 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
         {Array.from({ length: max }, (_, i) => {
           const starValue = i + 1;
           const isFilled = displayValue >= starValue;
-          const isHalfFilled = allowHalf && displayValue >= starValue - 0.5 && displayValue < starValue;
+          const isHalfFilled =
+            allowHalf && displayValue >= starValue - 0.5 && displayValue < starValue;
 
           return (
             <button

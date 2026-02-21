@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/TreeView.tsx  [TRACE:FILE=packages.ui.components.TreeView]
 // Purpose: Hierarchical tree view with expand/collapse and selection.
 //          Provides accessible tree navigation with keyboard support.
@@ -65,7 +67,14 @@ export interface TreeNodeProps {
 
 // ─── Components ──────────────────────────────────────────────────────────────
 
-const TreeNodeComponent = ({ node, level = 0, isSelected, isExpanded, onSelect, onToggle }: TreeNodeProps) => {
+const TreeNodeComponent = ({
+  node,
+  level = 0,
+  isSelected,
+  isExpanded,
+  onSelect,
+  onToggle,
+}: TreeNodeProps) => {
   const hasChildren = node.children && node.children.length > 0;
 
   return (
@@ -101,7 +110,16 @@ const TreeNodeComponent = ({ node, level = 0, isSelected, isExpanded, onSelect, 
         ) : (
           <span className="w-4" />
         )}
-        {node.icon || (hasChildren ? (isExpanded ? <FolderOpen className="h-4 w-4" /> : <Folder className="h-4 w-4" />) : <File className="h-4 w-4" />)}
+        {node.icon ||
+          (hasChildren ? (
+            isExpanded ? (
+              <FolderOpen className="h-4 w-4" />
+            ) : (
+              <Folder className="h-4 w-4" />
+            )
+          ) : (
+            <File className="h-4 w-4" />
+          ))}
         <span>{node.label}</span>
       </div>
       {hasChildren && isExpanded && (
@@ -167,12 +185,7 @@ export const TreeView = React.forwardRef<HTMLDivElement, TreeViewProps>(
     };
 
     return (
-      <div
-        ref={ref}
-        role="tree"
-        className={cn('rounded-md border p-2', className)}
-        {...props}
-      >
+      <div ref={ref} role="tree" className={cn('rounded-md border p-2', className)} {...props}>
         {data.map((node) => (
           <TreeNodeComponent
             key={node.id}

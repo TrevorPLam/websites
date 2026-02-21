@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/blog/RelatedPosts.tsx
  * @role component
@@ -29,11 +31,7 @@ export function RelatedPosts({
         <h2 className="mb-6 text-2xl font-bold">{title}</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <BlogPostCard
-              key={post.slug}
-              post={post}
-              href={postHref?.(post)}
-            />
+            <BlogPostCard key={post.slug} post={post} href={postHref?.(post)} />
           ))}
         </div>
       </Container>

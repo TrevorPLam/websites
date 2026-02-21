@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/blog/BlogList.tsx
  * @role component
@@ -18,25 +20,14 @@ export interface BlogListProps {
   className?: string;
 }
 
-export function BlogList({
-  posts,
-  title,
-  postHref,
-  pagination,
-  className,
-}: BlogListProps) {
+export function BlogList({ posts, title, postHref, pagination, className }: BlogListProps) {
   return (
     <Section className={className}>
       <Container>
         {title && <h2 className="mb-8 text-3xl font-bold">{title}</h2>}
         <div className={cn('flex flex-col gap-6')}>
           {posts.map((post) => (
-            <BlogPostCard
-              key={post.slug}
-              post={post}
-              href={postHref?.(post)}
-              variant="list"
-            />
+            <BlogPostCard key={post.slug} post={post} href={postHref?.(post)} variant="list" />
           ))}
         </div>
         {pagination && pagination.totalPages > 1 && (

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroBold.tsx
  * @role component
@@ -40,24 +42,28 @@ export function HeroBold({
           <h1 className="text-5xl font-black tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
             {title}
           </h1>
-          {subtitle && (
-            <p className="mt-8 text-xl leading-9 sm:text-2xl md:text-3xl">
-              {subtitle}
-            </p>
-          )}
-          {description && (
-            <p className="mt-6 text-lg leading-8 sm:text-xl">
-              {description}
-            </p>
-          )}
+          {subtitle && <p className="mt-8 text-xl leading-9 sm:text-2xl md:text-3xl">{subtitle}</p>}
+          {description && <p className="mt-6 text-lg leading-8 sm:text-xl">{description}</p>}
           <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
             {dualCta ? (
               <>
-                <HeroCTAButton {...dualCta.primary} variant={dualCta.primary.variant || 'secondary'} size={dualCta.primary.size || 'large'} />
-                <HeroCTAButton {...dualCta.secondary} variant={dualCta.secondary.variant || 'outline'} size={dualCta.secondary.size || 'large'} />
+                <HeroCTAButton
+                  {...dualCta.primary}
+                  variant={dualCta.primary.variant || 'secondary'}
+                  size={dualCta.primary.size || 'large'}
+                />
+                <HeroCTAButton
+                  {...dualCta.secondary}
+                  variant={dualCta.secondary.variant || 'outline'}
+                  size={dualCta.secondary.size || 'large'}
+                />
               </>
             ) : cta ? (
-              <HeroCTAButton {...cta} variant={cta.variant || 'secondary'} size={cta.size || 'large'} />
+              <HeroCTAButton
+                {...cta}
+                variant={cta.variant || 'secondary'}
+                size={cta.size || 'large'}
+              />
             ) : null}
           </div>
           {children}

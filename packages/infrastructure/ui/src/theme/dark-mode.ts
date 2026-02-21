@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/theme/dark-mode.ts
  * Task: [f-37] Theme System — dark mode detection and control

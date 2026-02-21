@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/footer/FooterStandard.tsx
  * @role component

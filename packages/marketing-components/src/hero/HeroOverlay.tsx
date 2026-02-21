@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroOverlay.tsx
  * @role component
@@ -52,14 +54,10 @@ export function HeroOverlay({
         {title}
       </h1>
       {subtitle && (
-        <p className="mt-6 text-lg leading-8 text-white/90 sm:text-xl md:text-2xl">
-          {subtitle}
-        </p>
+        <p className="mt-6 text-lg leading-8 text-white/90 sm:text-xl md:text-2xl">{subtitle}</p>
       )}
       {description && (
-        <p className="mt-4 text-base leading-7 text-white/80 sm:text-lg">
-          {description}
-        </p>
+        <p className="mt-4 text-base leading-7 text-white/80 sm:text-lg">{description}</p>
       )}
       {slots?.content}
       <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
@@ -67,8 +65,16 @@ export function HeroOverlay({
           slots.ctaArea
         ) : dualCta ? (
           <>
-            <HeroCTAButton {...dualCta.primary} variant={dualCta.primary.variant || 'primary'} size={dualCta.primary.size || 'large'} />
-            <HeroCTAButton {...dualCta.secondary} variant={dualCta.secondary.variant || 'outline'} size={dualCta.secondary.size || 'large'} />
+            <HeroCTAButton
+              {...dualCta.primary}
+              variant={dualCta.primary.variant || 'primary'}
+              size={dualCta.primary.size || 'large'}
+            />
+            <HeroCTAButton
+              {...dualCta.secondary}
+              variant={dualCta.secondary.variant || 'outline'}
+              size={dualCta.secondary.size || 'large'}
+            />
           </>
         ) : cta ? (
           <HeroCTAButton {...cta} variant={cta.variant || 'primary'} size={cta.size || 'large'} />

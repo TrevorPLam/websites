@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/index.ts  [TRACE:FILE=packages.ui.index]
 // Purpose: Shared UI component library entry point for the monorepo. Provides themeable
 //          React components driven by CSS custom properties, enabling consistent design
@@ -72,11 +74,7 @@ export type { RadioGroupProps, RadioGroupItemProps } from './components/RadioGro
 // Disclosure
 export { Accordion } from './components/Accordion';
 export type { AccordionItem, AccordionProps } from './components/Accordion';
-export {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from './components/Collapsible';
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from './components/Collapsible';
 export type { CollapsibleProps, CollapsibleTriggerProps } from './components/Collapsible';
 
 // Overlay
@@ -132,12 +130,7 @@ export { toast, useToast } from './components/Toast';
 export type { ToastOptions, ToastVariant } from './components/Toast';
 
 // Navigation / Tabs
-export {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from './components/Tabs';
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/Tabs';
 export type {
   TabsProps,
   TabsListProps,
@@ -194,11 +187,7 @@ export { Badge } from './components/Badge';
 export type { BadgeProps, BadgeVariant, BadgeSize } from './components/Badge';
 
 // Identity
-export {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-} from './components/Avatar';
+export { Avatar, AvatarImage, AvatarFallback } from './components/Avatar';
 export type {
   AvatarProps,
   AvatarImageProps,
@@ -240,11 +229,7 @@ export type {
 } from './components/Breadcrumb';
 export { ScrollArea, ScrollBar } from './components/ScrollArea';
 export type { ScrollAreaProps, ScrollBarProps } from './components/ScrollArea';
-export {
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-} from './components/Resizable';
+export { ResizablePanelGroup, ResizablePanel, ResizableHandle } from './components/Resizable';
 export type {
   ResizablePanelGroupProps,
   ResizablePanelProps,
@@ -286,7 +271,11 @@ export type {
   ContextMenuSubTriggerProps,
 } from './components/ContextMenu';
 export { HoverCard, HoverCardTrigger, HoverCardContent } from './components/HoverCard';
-export type { HoverCardProps, HoverCardTriggerProps, HoverCardContentProps } from './components/HoverCard';
+export type {
+  HoverCardProps,
+  HoverCardTriggerProps,
+  HoverCardContentProps,
+} from './components/HoverCard';
 export {
   Menubar,
   MenubarMenu,
@@ -364,7 +353,12 @@ export type { CalendarProps } from './components/Calendar';
 export { DatePicker } from './components/DatePicker';
 export type { DatePickerProps } from './components/DatePicker';
 export { Alert, AlertTitle, AlertDescription } from './components/Alert';
-export type { AlertProps, AlertTitleProps, AlertDescriptionProps, AlertVariant } from './components/Alert';
+export type {
+  AlertProps,
+  AlertTitleProps,
+  AlertDescriptionProps,
+  AlertVariant,
+} from './components/Alert';
 export { Rating } from './components/Rating';
 export type { RatingProps } from './components/Rating';
 export {

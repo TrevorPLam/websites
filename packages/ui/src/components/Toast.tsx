@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/Toast.tsx  [TRACE:FILE=packages.ui.components.Toast]
 // Purpose: Re-export and extend Sonner's toast API for use across the monorepo.
 //          Provides typed helper functions (toast.success, toast.error, toast.warning,

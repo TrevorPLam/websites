@@ -8,8 +8,8 @@
 import { headers } from 'next/headers';
 import { getLocaleDir } from '@repo/features/localization';
 import { generateOrganizationJsonLd } from '@repo/industry-schemas';
-import { ConsentProvider } from '@repo/ui';
-import { getThemeInitScript } from '@repo/infrastructure-ui/theme';
+import { getThemeInitScript } from '@repo/infrastructure-ui/theme/server';
+import { Providers } from './providers';
 import siteConfig from '../site.config';
 
 type Props = {
@@ -35,9 +35,7 @@ export default async function RootLayout({ children }: Props) {
         <script dangerouslySetInnerHTML={{ __html: getThemeInitScript() }} />
       </head>
       <body>
-        <ConsentProvider cmpProvider={siteConfig.consent?.cmpProvider ?? 'custom'}>
-          {children}
-        </ConsentProvider>
+        <Providers cmpProvider={siteConfig.consent?.cmpProvider ?? 'custom'}>{children}</Providers>
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/infra/composition/provider.ts  [TRACE:FILE=packages.infra.composition.provider]
 // Purpose: Provider composition utilities for wrapping multiple React context providers.
 //          Eliminates deeply-nested "provider pyramids" by composing providers into one.

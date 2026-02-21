@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroWithForm.tsx
  * @role component
@@ -53,18 +55,12 @@ export function HeroWithForm({
       <Container className="py-24 md:py-32">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="flex flex-col justify-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              {title}
-            </h1>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">{title}</h1>
             {subtitle && (
-              <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">
-                {subtitle}
-              </p>
+              <p className="mt-6 text-lg leading-8 text-muted-foreground sm:text-xl">{subtitle}</p>
             )}
             {description && (
-              <p className="mt-4 text-base leading-7 text-muted-foreground">
-                {description}
-              </p>
+              <p className="mt-4 text-base leading-7 text-muted-foreground">{description}</p>
             )}
             {children}
           </div>

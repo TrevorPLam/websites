@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/marketing-components/src/services/ServiceTabs.tsx
 // Purpose: Services grouped by category using Tabs
 // Task: 2.2
@@ -21,9 +23,7 @@ export function ServiceTabs({ categories, className }: ServiceTabsProps) {
   // TODO: Implement tabs-based service grouping
   return (
     <div className={className}>
-      <Tabs defaultValue={categories[0]?.id}>
-        {/* TODO: Implement tabs UI */}
-      </Tabs>
+      <Tabs defaultValue={categories[0]?.id}>{/* TODO: Implement tabs UI */}</Tabs>
     </div>
   );
 }

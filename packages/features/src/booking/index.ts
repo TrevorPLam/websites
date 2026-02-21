@@ -36,6 +36,10 @@ export type { BookingFeatureConfig } from './lib/booking-config';
 export * from './lib/booking-schema';
 export type { BookingFormData } from './lib/booking-schema';
 
+// Repository exports (task 0-2)
+export { InMemoryBookingRepository } from './lib/booking-repository';
+export type { BookingRecord, BookingRepository } from './lib/booking-repository';
+
 // Action exports
 export * from './lib/booking-actions';
 export type { BookingSubmissionResult } from './lib/booking-actions';

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/portfolio/PortfolioCard.tsx
  * @role component
@@ -27,13 +29,9 @@ export function PortfolioCard({ item, href, className }: PortfolioCardProps) {
         )}
         <div className="p-4">
           <h3 className="font-semibold text-foreground">{item.title}</h3>
-          {item.category && (
-            <p className="mt-1 text-xs text-muted-foreground">{item.category}</p>
-          )}
+          {item.category && <p className="mt-1 text-xs text-muted-foreground">{item.category}</p>}
           {item.description && (
-            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-              {item.description}
-            </p>
+            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{item.description}</p>
           )}
         </div>
       </a>

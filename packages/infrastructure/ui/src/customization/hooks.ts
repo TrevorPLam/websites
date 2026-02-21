@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/customization/hooks.ts
  * Task: [f-3] Customization Hook System
@@ -41,9 +43,7 @@ export interface ComponentCustomization<P = Record<string, unknown>> {
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
-const CustomizationContext = React.createContext<
-  Map<string, ComponentCustomization>
->(new Map());
+const CustomizationContext = React.createContext<Map<string, ComponentCustomization>>(new Map());
 CustomizationContext.displayName = 'CustomizationContext';
 
 export interface CustomizationProviderProps {
@@ -68,10 +68,7 @@ export function CustomizationProvider({
   customizations,
   children,
 }: CustomizationProviderProps): React.ReactElement {
-  const map = React.useMemo(
-    () => new Map(Object.entries(customizations)),
-    [customizations]
-  );
+  const map = React.useMemo(() => new Map(Object.entries(customizations)), [customizations]);
   return React.createElement(CustomizationContext.Provider, { value: map }, children);
 }
 
@@ -109,11 +106,7 @@ export function useCustomization<P = Record<string, unknown>>(
  * const rootClass = useStyleOverride('Button', 'root', 'btn btn-primary');
  * // Returns "btn btn-primary" + consumer's override if any
  */
-export function useStyleOverride(
-  componentName: string,
-  slot: string,
-  baseClass?: string
-): string {
+export function useStyleOverride(componentName: string, slot: string, baseClass?: string): string {
   const { classNames } = useCustomization(componentName);
   const override = classNames?.[slot];
   if (!override) return baseClass ?? '';

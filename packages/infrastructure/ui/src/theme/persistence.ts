@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/infrastructure/ui/src/theme/persistence.ts
  * Task: [f-37] Theme System — theme persistence

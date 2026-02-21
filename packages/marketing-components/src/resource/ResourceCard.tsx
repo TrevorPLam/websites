@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/resource/ResourceCard.tsx
  * @role component
@@ -28,13 +30,9 @@ export function ResourceCard({ resource, href, onDownload, className }: Resource
         )}
         <div className="p-4">
           <h3 className="font-semibold text-foreground">{resource.title}</h3>
-          {resource.type && (
-            <p className="mt-1 text-xs text-muted-foreground">{resource.type}</p>
-          )}
+          {resource.type && <p className="mt-1 text-xs text-muted-foreground">{resource.type}</p>}
           {resource.downloadCount != null && (
-            <p className="mt-1 text-xs text-muted-foreground">
-              {resource.downloadCount} downloads
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{resource.downloadCount} downloads</p>
           )}
           {resource.description && (
             <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">

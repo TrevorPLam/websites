@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/infra/composition/context.ts  [TRACE:FILE=packages.infra.composition.context]
 // Purpose: Typed React context factory with required-context safety.
 //          Provides createSafeContext() which throws a descriptive error when
@@ -24,10 +26,7 @@ import * as React from 'react';
 /**
  * Return type of createSafeContext — a tuple of [Provider, useContext hook].
  */
-export type SafeContextReturn<T> = [
-  React.Provider<T | null>,
-  () => T,
-];
+export type SafeContextReturn<T> = [React.Provider<T | null>, () => T];
 
 /**
  * Create a typed React context where consuming the hook outside the provider
@@ -45,18 +44,14 @@ export type SafeContextReturn<T> = [
  * // Consumer (throws if outside ThemeProvider)
  * const theme = useTheme();
  */
-export function createSafeContext<T>(
-  displayName: string
-): SafeContextReturn<T> {
+export function createSafeContext<T>(displayName: string): SafeContextReturn<T> {
   const Context = React.createContext<T | null>(null);
   Context.displayName = displayName;
 
   function useSafeContext(): T {
     const value = React.useContext(Context);
     if (value === null) {
-      throw new Error(
-        `use${displayName} must be used within a <${displayName}Provider>.`
-      );
+      throw new Error(`use${displayName} must be used within a <${displayName}Provider>.`);
     }
     return value;
   }
@@ -89,10 +84,7 @@ export function createOptionalContext<T>(
  * @example
  * const isOpen = useContextSelector(MenuContext, (ctx) => ctx?.isOpen);
  */
-export function useContextSelector<T, S>(
-  context: React.Context<T>,
-  selector: (value: T) => S
-): S {
+export function useContextSelector<T, S>(context: React.Context<T>, selector: (value: T) => S): S {
   const value = React.useContext(context);
   return selector(value);
 }

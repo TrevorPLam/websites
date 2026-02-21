@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/ui/src/components/ScriptManager.tsx
  * @summary Consent-gated script loader for GDPR/CCPA compliance

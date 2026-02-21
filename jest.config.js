@@ -77,6 +77,8 @@ const sharedConfig = {
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
+    // Mock server-only so tests can import server-only modules in Node/Jest environment
+    '^server-only$': '<rootDir>/__mocks__/server-only.js',
     '^@repo/ui$': '<rootDir>/packages/ui/src/index.ts',
     '^@repo/utils$': '<rootDir>/packages/utils/src/index.ts',
     '^@repo/infra$': '<rootDir>/packages/infra/index.ts',

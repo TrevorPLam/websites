@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/features/src/services/types.ts  [TRACE:FILE=packages.features.services.types]
 // Purpose: Shared type definitions for the services feature. Enables cross-industry
 //          configurability and structured data generation for service pages.

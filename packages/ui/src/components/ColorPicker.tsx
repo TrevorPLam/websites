@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/ColorPicker.tsx  [TRACE:FILE=packages.ui.components.ColorPicker]
 // Purpose: Color picker with multiple input methods.
 //          Provides accessible color selection with hex/rgb/hsl formats and presets.
@@ -55,8 +57,16 @@ export function ColorPicker({
   format: _format = 'hex',
   showAlpha: _showAlpha = false,
   presets = [
-    '#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF',
-    '#FFFF00', '#FF00FF', '#00FFFF', '#808080', '#FFA500',
+    '#000000',
+    '#FFFFFF',
+    '#FF0000',
+    '#00FF00',
+    '#0000FF',
+    '#FFFF00',
+    '#FF00FF',
+    '#00FFFF',
+    '#808080',
+    '#FFA500',
   ],
   placeholder = 'Select color',
   disabled,
@@ -78,7 +88,10 @@ export function ColorPicker({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={cn('w-[280px] justify-start text-left font-normal gap-2', disabled && 'opacity-50')}
+          className={cn(
+            'w-[280px] justify-start text-left font-normal gap-2',
+            disabled && 'opacity-50'
+          )}
           disabled={disabled}
         >
           <div

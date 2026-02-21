@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/location/LocationList.tsx
  * @role component

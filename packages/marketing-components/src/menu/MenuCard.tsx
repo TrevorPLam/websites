@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/menu/MenuCard.tsx
  * @role component
@@ -30,7 +32,10 @@ export function MenuCard({ category, className }: MenuCardProps) {
         )}
         <ul className="mt-4 space-y-3">
           {category.items.map((item) => (
-            <li key={item.id} className="flex justify-between gap-4 border-b border-border pb-3 last:border-0">
+            <li
+              key={item.id}
+              className="flex justify-between gap-4 border-b border-border pb-3 last:border-0"
+            >
               <div>
                 <span className="font-medium">{item.name}</span>
                 {item.description && (

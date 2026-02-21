@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/infra/composition/render-props.ts  [TRACE:FILE=packages.infra.composition.render-props]
 // Purpose: Render prop utilities for flexible component composition.
 //          Provides helpers for implementing the render prop pattern where a
@@ -57,10 +59,7 @@ export function renderProp<T>(
  *   []
  * );
  */
-export function useRenderProp<T>(
-  fn: RenderPropFn<T>,
-  deps: React.DependencyList
-): RenderPropFn<T> {
+export function useRenderProp<T>(fn: RenderPropFn<T>, deps: React.DependencyList): RenderPropFn<T> {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return React.useCallback(fn, deps);
 }

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/product/ProductCard.tsx
  * @role component
@@ -37,23 +39,15 @@ export function ProductCard({
       <a href={link} className="block">
         {product.image && (
           <div className="aspect-square w-full overflow-hidden bg-muted">
-            <img
-              src={product.image}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            <img src={product.image} alt="" className="h-full w-full object-cover" />
           </div>
         )}
         <div className="p-4">
           <h3 className="font-semibold text-foreground">{product.name}</h3>
           <div className="mt-2 flex items-center gap-2">
-            {product.rating != null && (
-              <Rating value={product.rating} readOnly size="sm" />
-            )}
+            {product.rating != null && <Rating value={product.rating} readOnly size="sm" />}
             {product.reviewCount != null && product.reviewCount > 0 && (
-              <span className="text-xs text-muted-foreground">
-                ({product.reviewCount})
-              </span>
+              <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
             )}
           </div>
           <div className="mt-2 flex items-baseline gap-2">

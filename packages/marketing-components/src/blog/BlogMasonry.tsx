@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/blog/BlogMasonry.tsx
  * @role component
@@ -33,11 +35,7 @@ export function BlogMasonry({
         {title && <h2 className="mb-8 text-3xl font-bold">{title}</h2>}
         <Masonry columns={columns} gap={24}>
           {posts.map((post) => (
-            <BlogPostCard
-              key={post.slug}
-              post={post}
-              href={postHref?.(post)}
-            />
+            <BlogPostCard key={post.slug} post={post} href={postHref?.(post)} />
           ))}
         </Masonry>
         {pagination && pagination.totalPages > 1 && (

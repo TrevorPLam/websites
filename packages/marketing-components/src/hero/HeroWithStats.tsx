@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/hero/HeroWithStats.tsx
  * @role component
@@ -58,13 +60,9 @@ export function HeroWithStats({
               {stats.map((stat, index) => (
                 <div key={index} className="flex flex-col">
                   <div className="text-4xl font-bold sm:text-5xl">{stat.value}</div>
-                  <div className="mt-2 text-sm font-medium text-muted-foreground">
-                    {stat.label}
-                  </div>
+                  <div className="mt-2 text-sm font-medium text-muted-foreground">{stat.label}</div>
                   {stat.description && (
-                    <div className="mt-1 text-xs text-muted-foreground">
-                      {stat.description}
-                    </div>
+                    <div className="mt-1 text-xs text-muted-foreground">{stat.description}</div>
                   )}
                 </div>
               ))}
@@ -73,11 +71,23 @@ export function HeroWithStats({
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
             {dualCta ? (
               <>
-                <HeroCTAButton {...dualCta.primary} variant={dualCta.primary.variant || 'primary'} size={dualCta.primary.size || 'large'} />
-                <HeroCTAButton {...dualCta.secondary} variant={dualCta.secondary.variant || 'outline'} size={dualCta.secondary.size || 'large'} />
+                <HeroCTAButton
+                  {...dualCta.primary}
+                  variant={dualCta.primary.variant || 'primary'}
+                  size={dualCta.primary.size || 'large'}
+                />
+                <HeroCTAButton
+                  {...dualCta.secondary}
+                  variant={dualCta.secondary.variant || 'outline'}
+                  size={dualCta.secondary.size || 'large'}
+                />
               </>
             ) : cta ? (
-              <HeroCTAButton {...cta} variant={cta.variant || 'primary'} size={cta.size || 'large'} />
+              <HeroCTAButton
+                {...cta}
+                variant={cta.variant || 'primary'}
+                size={cta.size || 'large'}
+              />
             ) : null}
           </div>
           {children}

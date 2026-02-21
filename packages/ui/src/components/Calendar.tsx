@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/ui/src/components/Calendar.tsx  [TRACE:FILE=packages.ui.components.Calendar]
 // Purpose: Calendar view with date selection.
 //          Built on Radix UI Calendar which provides accessible calendar
@@ -79,8 +81,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
     };
 
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      const monthNames = Array.from({ length: 12 }, (_, index) =>
+        new Date(2000, index, 1).toLocaleString(locale || undefined, { month: 'long' })
+      );
     ];
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 

@@ -1,3 +1,5 @@
+'use client';
+
 // File: packages/marketing-components/src/services/ServiceAccordion.tsx
 // Purpose: Expandable service sections using Accordion
 // Task: 2.2

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/blog/BlogPagination.tsx
  * @role component
@@ -9,10 +11,6 @@ import type { PaginationConfig } from './types';
 
 export function BlogPagination({ currentPage, totalPages, onPageChange }: PaginationConfig) {
   return (
-    <Pagination
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={onPageChange}
-    />
+    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
   );
 }

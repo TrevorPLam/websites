@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file packages/marketing-components/src/pricing/PricingCards.tsx
  * @role component
@@ -20,12 +22,7 @@ export interface PricingCardsProps {
   className?: string;
 }
 
-export function PricingCards({
-  title,
-  description,
-  plans,
-  className,
-}: PricingCardsProps) {
+export function PricingCards({ title, description, plans, className }: PricingCardsProps) {
   return (
     <Section className={className}>
       <Container>
@@ -40,20 +37,21 @@ export function PricingCards({
             <Card
               key={plan.id}
               variant={plan.popular ? 'service' : 'default'}
-              className={cn(
-                'flex flex-col p-6',
-                plan.popular && 'ring-2 ring-primary'
-              )}
+              className={cn('flex flex-col p-6', plan.popular && 'ring-2 ring-primary')}
             >
               {plan.popular && (
-                <span className="mb-4 inline-block text-sm font-medium text-primary">Most Popular</span>
+                <span className="mb-4 inline-block text-sm font-medium text-primary">
+                  Most Popular
+                </span>
               )}
               <h3 className="text-xl font-bold">{plan.name}</h3>
               <div className="mt-2 flex items-baseline gap-1">
                 <span className="text-3xl font-bold">{plan.price}</span>
                 {plan.period && <span className="text-muted-foreground">/{plan.period}</span>}
               </div>
-              {plan.description && <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>}
+              {plan.description && (
+                <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>
+              )}
               <ul className="mt-4 flex-1 space-y-2 text-sm">
                 {plan.features.map((f, i) => (
                   <li key={i}>
