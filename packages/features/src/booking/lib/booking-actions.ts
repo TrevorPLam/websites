@@ -47,6 +47,7 @@ import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import { validateEnv } from '@repo/infra/env';
 import type { BookingFeatureConfig } from './booking-config';
 import { InMemoryBookingRepository } from './booking-repository';
+import { resolveTenantId } from '@repo/infra/auth/tenant-context';
 
 // validateEnv() with default options returns CompleteEnv directly (throwOnError=true)
 const validatedEnv = validateEnv() as { NODE_ENV: 'development' | 'production' | 'test' };
