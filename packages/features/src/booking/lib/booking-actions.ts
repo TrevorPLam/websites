@@ -256,7 +256,7 @@ export async function confirmBooking(
   verification: BookingVerification
 ): Promise<BookingSubmissionResult> {
   try {
-    const booking = await bookingRepository.getById(bookingId);
+    const booking = await bookingRepository.getById(bookingId, resolveTenantId());
 
     if (!booking) {
       return { success: false, error: 'Booking not found' };
