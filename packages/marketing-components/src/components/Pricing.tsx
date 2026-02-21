@@ -1,5 +1,6 @@
 // Pricing components - placeholder implementations
 import React from 'react';
+import { cn } from '@repo/utils';
 import type { PricingPlan } from '../types';
 
 interface PricingTableProps {
@@ -72,7 +73,15 @@ export const PricingCards: React.FC<PricingCardsProps> = ({
   description,
 }) => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-6`}>
+    <div
+      className={cn(
+        'grid grid-cols-1',
+        columns === 2 && 'md:grid-cols-2',
+        columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        columns === 4 && 'md:grid-cols-2 lg:grid-cols-4',
+        'gap-6'
+      )}
+    >
       {title && <h2 className="text-2xl font-semibold col-span-full">{title}</h2>}
       {description && <p className="text-gray-600 col-span-full">{description}</p>}
       {plans.map((plan) => (
@@ -91,7 +100,7 @@ export const PricingCards: React.FC<PricingCardsProps> = ({
           <p className="text-3xl font-bold mb-4">{plan.price}</p>
           <p className="text-gray-600 mb-6">{plan.description}</p>
           <ul className="space-y-2 mb-6">
-            {plan.features.map((feature, idx) => (
+            {(plan.features || []).map((feature, idx) => (
               <li key={idx} className="flex items-center">
                 <span className="text-green-500 mr-2">✓</span>
                 {feature}

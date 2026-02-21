@@ -18,6 +18,7 @@ const defaultFormSchema = z.object({
   email: z.string().email('Invalid email address'),
   name: z.string().min(1, 'Name is required'),
   message: z.string().optional(),
+  phone: z.string().optional(),
 });
 
 export interface HeroWithFormProps extends BaseHeroProps {
@@ -66,10 +67,10 @@ export function HeroWithForm({
           </div>
           <div>
             <Form schema={formSchema} onSubmit={onSubmit}>
-              {fields.name && <Input label="Name" name="name" required />}
-              {fields.email && <Input label="Email" type="email" name="email" required />}
-              {fields.phone && <Input label="Phone" type="tel" name="phone" />}
-              {fields.message && <Textarea label="Message" name="message" />}
+              {fields.name && <Input name="name" label="Name" required />}
+              {fields.email && <Input name="email" type="email" label="Email" required />}
+              {fields.phone && <Input name="phone" type="tel" label="Phone" />}
+              {fields.message && <Textarea name="message" label="Message" />}
               <Button type="submit" size="large" className="w-full">
                 Submit
               </Button>

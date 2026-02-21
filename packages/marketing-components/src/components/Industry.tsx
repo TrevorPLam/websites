@@ -1,5 +1,6 @@
-// Industry-specific components - placeholder implementations
+// Industry components - placeholder implementations
 import React from 'react';
+import { cn } from '@repo/utils';
 
 // Location components
 interface LocationListProps {
@@ -76,7 +77,15 @@ interface PortfolioGridProps {
 
 export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ items, columns = 3 }) => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-6`}>
+    <div
+      className={cn(
+        'grid grid-cols-1',
+        columns === 2 && 'md:grid-cols-2',
+        columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        columns === 4 && 'md:grid-cols-2 lg:grid-cols-4',
+        'gap-6'
+      )}
+    >
       {items.map((item) => (
         <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
           <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
@@ -226,15 +235,51 @@ export const SocialProofStack: React.FC<{ items: any[] }> = ({ items }) => (
   </div>
 );
 
+// Sanitize URL to prevent XSS
+function sanitizeUrl(url: string): string {
+  if (!url || typeof url !== 'string') return '';
+
+  try {
+    const parsed = new URL(url);
+
+    // Allow only safe protocols
+    const allowedProtocols = ['http:', 'https:'];
+    if (!allowedProtocols.includes(parsed.protocol)) {
+      return '';
+    }
+
+    // Allow only safe domains for embeds
+    const allowedDomains = [
+      'www.youtube.com',
+      'player.vimeo.com',
+      'vimeo.com',
+      'www.youtube-nocookie.com',
+    ];
+
+    if (allowedDomains.some((domain) => parsed.hostname.includes(domain))) {
+      return parsed.toString();
+    }
+
+    return '';
+  } catch {
+    return '';
+  }
+}
+
 export const VideoEmbed: React.FC<{ url: string; title?: string }> = ({ url, title }) => (
   <div className="aspect-w-16 aspect-h-9">
-    <iframe src={url} title={title} className="w-full h-full rounded" allowFullScreen />
+    <iframe
+      src={sanitizeUrl(url)}
+      title={title}
+      className="w-full h-full rounded"
+      allowFullScreen
+    />
   </div>
 );
 
 export const AudioPlayer: React.FC<{ url: string; title?: string }> = ({ url, title }) => (
   <audio controls className="w-full" title={title}>
-    <source src={url} type="audio/mpeg" />
+    <source src={sanitizeUrl(url)} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 );

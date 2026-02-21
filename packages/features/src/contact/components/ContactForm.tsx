@@ -113,7 +113,7 @@ export default function ContactForm({
     reset,
     trigger,
   } = useForm<ContactFormData>({
-    resolver: zodResolver(schema as unknown as Parameters<typeof zodResolver>[0]),
+    resolver: zodResolver(schema),
     defaultValues: defaults,
     mode: 'onBlur',
     reValidateMode: 'onChange',

@@ -7,6 +7,7 @@
  */
 
 import { Card } from '@repo/ui';
+import Image from 'next/image';
 import { cn } from '@repo/utils';
 import type { BlogPostDisplay } from './types';
 
@@ -34,11 +35,18 @@ export function BlogPostCard({ post, href, variant = 'card', className }: BlogPo
         {post.featuredImage && (
           <div
             className={cn(
-              'overflow-hidden bg-muted',
+              'relative overflow-hidden bg-muted',
               isList ? 'aspect-square w-40 shrink-0' : 'aspect-video w-full'
             )}
           >
-            <img src={post.featuredImage} alt="" className="h-full w-full object-cover" />
+            <Image
+              src={post.featuredImage}
+              alt=""
+              className="h-full w-full object-cover"
+              fill
+              sizes={isList ? '160px' : '(max-width: 768px) 100vw, 50vw'}
+              quality={85}
+            />
           </div>
         )}
         <div className={cn('p-4', isList && 'flex flex-1 flex-col')}>

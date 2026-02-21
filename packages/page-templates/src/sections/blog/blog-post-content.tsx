@@ -10,7 +10,8 @@ import { getSiteConfig } from '../contact/shared';
 
 function BlogPostContentAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
-  const slug = props.searchParams?.slug as string;
+  const searchParams = (props.searchParams || {}) as Record<string, string>;
+  const slug = searchParams.slug;
 
   // For now, create sample content. In a real implementation, this would:
   // 1. Read slug from searchParams

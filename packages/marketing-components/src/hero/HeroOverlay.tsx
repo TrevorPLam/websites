@@ -9,6 +9,7 @@
  */
 
 import { Container, Section } from '@repo/ui';
+import Image from 'next/image';
 import { cn } from '@repo/utils';
 import type { BaseHeroProps, HeroCTA, HeroDualCTA, HeroImage, HeroSlots } from './types';
 import { HeroCTAButton } from './hero/cta';
@@ -89,14 +90,14 @@ export function HeroOverlay({
     <Section className={cn('relative overflow-hidden', className)}>
       {backgroundImage && (
         <div className="absolute inset-0 -z-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={backgroundImage.src}
             alt={backgroundImage.alt}
             className="h-full w-full object-cover"
-            width={backgroundImage.width}
-            height={backgroundImage.height}
-            loading={backgroundImage.priority ? 'eager' : 'lazy'}
+            fill
+            sizes="100vw"
+            priority={backgroundImage.priority}
+            quality={85}
           />
         </div>
       )}

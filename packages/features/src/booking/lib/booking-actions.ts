@@ -52,10 +52,13 @@ import { getBookingProviders } from './booking-providers';
 import type { BookingProviderResponse } from './booking-provider-adapter';
 import { checkRateLimit, hashIp } from '@repo/infra';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
-import { validateEnv } from '@repo/infra/env';
 import type { BookingFeatureConfig } from './booking-config';
-import { InMemoryBookingRepository, type BookingRepository } from './booking-repository';
+import {
+  getBookingRepository as getBookingRepositoryFactory,
+  type BookingRepository,
+} from './booking-repository';
 import { resolveTenantId } from '@repo/infra/auth/tenant-context';
+import { validateEnv } from '@repo/infra/env';
 
 // validateEnv() with default options returns CompleteEnv directly (throwOnError=true)
 const validatedEnv = validateEnv() as { NODE_ENV: 'development' | 'production' | 'test' };
@@ -80,32 +83,11 @@ const getBookingDetailsSchema = z.object({
 });
 
 /**
- * Module-level BookingRepository instance.
- * InMemoryBookingRepository is the default; swap for SupabaseBookingRepository
- * when SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars are present (task 0-2).
- */
-// [TRACE:CONST=packages.features.booking.bookingRepository]
-// [FEAT:BOOKING] [FEAT:PERSISTENCE]
-// NOTE: Repository instance - replaces internalBookings Map with typed abstraction (task 0-2).
-const bookingRepository = new InMemoryBookingRepository();
-
-/**
  * Get booking repository based on environment configuration
  * Returns SupabaseBookingRepository if env vars are present, otherwise InMemoryBookingRepository
  */
 export function getBookingRepository(): BookingRepository {
-  const validatedEnv = validateEnv();
-
-  // Check if Supabase environment variables are available
-  const env = validatedEnv as any;
-  if (env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY) {
-    // TODO: Import and return SupabaseBookingRepository when implemented
-    // For now, still return InMemoryBookingRepository
-    console.log('Supabase environment detected, but SupabaseBookingRepository not yet implemented');
-    return bookingRepository;
-  }
-
-  return bookingRepository;
+  return getBookingRepositoryFactory();
 }
 
 /**
@@ -241,7 +223,7 @@ export async function submitBookingRequest(
 
     // Generate confirmation number and persist via repository (task 0-2)
     const confirmationNumber = generateConfirmationNumber();
-    const record = await bookingRepository.create({
+    const record = await getBookingRepository().create({
       data: validatedData,
       status: 'pending',
       confirmationNumber,
@@ -304,7 +286,7 @@ export async function confirmBooking(input: unknown): Promise<Result<BookingSubm
     async (ctx, { bookingId, confirmationNumber, email }) => {
       const booking = await getBookingForTenant(
         { bookingId, tenantId: ctx.tenantId },
-        bookingRepository
+        getBookingRepository()
       );
 
       if (!booking) {
@@ -321,7 +303,7 @@ export async function confirmBooking(input: unknown): Promise<Result<BookingSubm
 
       const updated = await updateBookingStatus(
         { bookingId, tenantId: ctx.tenantId, status: 'confirmed' },
-        bookingRepository
+        getBookingRepository()
       );
 
       revalidatePath('/booking-confirmation');
@@ -351,7 +333,7 @@ export async function cancelBooking(input: unknown): Promise<Result<BookingSubmi
     async (ctx, { bookingId, confirmationNumber, email }) => {
       const booking = await getBookingForTenant(
         { bookingId, tenantId: ctx.tenantId },
-        bookingRepository
+        getBookingRepository()
       );
 
       if (!booking) {
@@ -368,7 +350,7 @@ export async function cancelBooking(input: unknown): Promise<Result<BookingSubmi
 
       const updated = await updateBookingStatus(
         { bookingId, tenantId: ctx.tenantId, status: 'cancelled' },
-        bookingRepository
+        getBookingRepository()
       );
 
       revalidatePath('/booking-confirmation');
@@ -420,7 +402,7 @@ async function getBookingDetailsHandler(
 ) {
   const booking = await getBookingByConfirmationForTenant(
     { confirmationNumber, email, tenantId },
-    bookingRepository
+    getBookingRepository()
   );
 
   if (!booking) {

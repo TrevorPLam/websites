@@ -11,6 +11,10 @@ export { BlogMasonry } from './BlogMasonry';
 export { BlogWithSidebar } from './BlogWithSidebar';
 export { BlogPagination } from './BlogPagination';
 export { RelatedPosts } from './RelatedPosts';
+
+// Loading skeletons
+export { BlogPostCardSkeleton } from './BlogPostCardSkeleton';
+export type { BlogPostCardSkeletonProps } from './BlogPostCardSkeleton';
 export type {
   BlogPostDisplay,
   BlogAuthor,

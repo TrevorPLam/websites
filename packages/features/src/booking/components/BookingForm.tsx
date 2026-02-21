@@ -1,30 +1,5 @@
 'use client';
 
-// File: packages/features/src/booking/components/BookingForm.tsx  [TRACE:FILE=packages.features.booking.components.BookingForm]
-// Purpose: Booking form component providing comprehensive appointment scheduling with real-time validation,
-//          service selection, and submission handling. Now configurable via BookingFeatureConfig.
-//
-// Exports / Entry: BookingForm component (default export)
-// Used by: Booking page (/book), service pages, and any appointment scheduling features
-//
-// Invariants:
-// - Form must validate all inputs against booking schema before submission
-// - Service types and time slots must match provided configuration
-// - Form state must be preserved during submission to prevent data loss
-// - Error messages must be user-friendly and actionable
-// - Submission must be idempotent to prevent duplicate bookings
-//
-// Status: @public
-// Features:
-// - [FEAT:BOOKING] Comprehensive appointment scheduling form
-// - [FEAT:VALIDATION] Real-time form validation with Zod schema
-// - [FEAT:UX] User-friendly error handling and feedback
-// - [FEAT:ACCESSIBILITY] Accessible form controls and ARIA labels
-// - [FEAT:PERFORMANCE] Optimized form state management
-// - [FEAT:CONFIGURATION] Configurable service types and time slots
-
-'use client';
-
 import { useState, useTransition, useMemo } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -80,7 +55,7 @@ export default function BookingForm({
     formState: { errors, isValid, isDirty },
     setValue,
   } = useForm<BookingFormData>({
-    resolver: zodResolver(schema as unknown as Parameters<typeof zodResolver>[0]),
+    resolver: zodResolver(schema),
     defaultValues: {
       ...defaults,
       serviceType: prefilledService ?? defaults.serviceType ?? '',

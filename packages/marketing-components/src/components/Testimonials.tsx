@@ -1,5 +1,6 @@
 // Testimonials components - placeholder implementations
 import React from 'react';
+import { cn } from '@repo/utils';
 import type { Testimonial } from '../types';
 
 interface TestimonialGridProps {
@@ -14,7 +15,15 @@ export const TestimonialGrid: React.FC<TestimonialGridProps> = ({
   title,
 }) => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-6`}>
+    <div
+      className={cn(
+        'grid grid-cols-1',
+        columns === 2 && 'md:grid-cols-2',
+        columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        columns === 4 && 'md:grid-cols-2 lg:grid-cols-4',
+        'gap-6'
+      )}
+    >
       {title && <h2 className="text-2xl font-semibold col-span-full">{title}</h2>}
       {testimonials.map((testimonial) => (
         <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-sm">

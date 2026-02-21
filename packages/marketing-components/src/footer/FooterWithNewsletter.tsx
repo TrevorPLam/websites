@@ -1,13 +1,5 @@
 'use client';
 
-/**
- * @file packages/marketing-components/src/footer/FooterWithNewsletter.tsx
- * @role component
- * @summary Footer with newsletter signup block
- */
-
-'use client';
-
 import { Container } from '@repo/ui';
 import { Input } from '@repo/ui';
 import { cn } from '@repo/utils';

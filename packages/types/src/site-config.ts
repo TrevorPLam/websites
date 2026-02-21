@@ -248,11 +248,11 @@ export interface SiteConfig {
     };
     booking?: {
       provider: 'internal' | 'calendly' | 'acuity' | 'none';
-      config?: Record<string, any>;
+      config?: Record<string, unknown>;
     };
     email?: {
       provider: 'mailchimp' | 'sendgrid' | 'none';
-      config?: Record<string, any>;
+      config?: Record<string, unknown>;
     };
     chat?: {
       provider: 'intercom' | 'crisp' | 'tidio' | 'none';
@@ -275,7 +275,7 @@ export interface SiteConfig {
     };
     abTesting?: {
       provider: 'none';
-      config?: Record<string, any>;
+      config?: Record<string, unknown>;
     };
   };
   /** Primary navigation links */
@@ -494,13 +494,13 @@ export const siteConfigSchema = z.object({
     booking: z
       .object({
         provider: z.enum(['internal', 'calendly', 'acuity', 'none']),
-        config: z.record(z.any()).optional(),
+        config: z.record(z.unknown()).optional(),
       })
       .optional(),
     email: z
       .object({
         provider: z.enum(['mailchimp', 'sendgrid', 'none']),
-        config: z.record(z.any()).optional(),
+        config: z.record(z.unknown()).optional(),
       })
       .optional(),
     chat: z
@@ -535,7 +535,7 @@ export const siteConfigSchema = z.object({
     abTesting: z
       .object({
         provider: z.enum(['none']),
-        config: z.record(z.any()).optional(),
+        config: z.record(z.unknown()).optional(),
       })
       .optional(),
   }),

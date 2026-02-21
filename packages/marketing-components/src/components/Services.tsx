@@ -1,5 +1,6 @@
 // Services components - placeholder implementations
 import React from 'react';
+import { cn } from '@repo/utils';
 
 interface Service {
   id: string;
@@ -23,7 +24,15 @@ export const ServiceGrid: React.FC<ServiceGridProps> = ({
   description,
 }) => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-6`}>
+    <div
+      className={cn(
+        'grid grid-cols-1',
+        columns === 2 && 'md:grid-cols-2',
+        columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        columns === 4 && 'md:grid-cols-2 lg:grid-cols-4',
+        'gap-6'
+      )}
+    >
       {title && <h2 className="text-2xl font-semibold col-span-full">{title}</h2>}
       {description && <p className="text-gray-600 col-span-full">{description}</p>}
       {services.map((service) => (

@@ -7,3 +7,7 @@ export { ServiceGrid } from './ServiceGrid';
 export { ServiceList } from './ServiceList';
 export { ServiceTabs } from './ServiceTabs';
 export { ServiceAccordion } from './ServiceAccordion';
+
+// Loading skeletons
+export { ServiceGridSkeleton } from './ServiceGridSkeleton';
+export type { ServiceGridSkeletonProps } from './ServiceGridSkeleton';

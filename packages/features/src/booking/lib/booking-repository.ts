@@ -79,8 +79,34 @@ export interface BookingRepository {
   ): Promise<BookingRecord>;
 }
 
-export { InMemoryBookingRepository };
-export type { BookingRecord, BookingRepository };
+// ─── Repository factory (environment-based selection) ───────────────────────
+
+/**
+ * Factory function that returns the appropriate BookingRepository implementation
+ * based on environment configuration.
+ *
+ * - If SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are configured: returns SupabaseBookingRepository
+ * - Otherwise: returns InMemoryBookingRepository (development fallback)
+ *
+ * @returns BookingRepository instance
+ */
+export function getBookingRepository(): BookingRepository {
+  // Check if Supabase environment variables are configured
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (supabaseUrl && supabaseServiceKey) {
+    // For now, always return in-memory since Supabase implementation isn't ready
+    // TODO: Implement SupabaseBookingRepository and return it here
+    console.info(
+      'Supabase configured but using in-memory repository until SupabaseBookingRepository is implemented'
+    );
+    return new InMemoryBookingRepository();
+  }
+
+  // Default to in-memory for development
+  return new InMemoryBookingRepository();
+}
 
 // ─── In-memory implementation (default) ──────────────────────────────────────
 

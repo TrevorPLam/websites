@@ -24,6 +24,25 @@ import { z } from 'zod';
 import { auditLogger } from './audit-logger';
 import { resolveTenantId } from '../src/auth/tenant-context';
 
+// Sanitize error messages for user consumption
+function sanitizeError(error: unknown): string {
+  if (error instanceof Error) {
+    // Remove file paths and stack traces
+    const message = error.message
+      .replace(/\/[^\s]+/g, '[path]') // Replace file paths
+      .replace(/\n\s+at\s+.*/g, '') // Remove stack traces
+      .substring(0, 200); // Limit length
+
+    return message || 'An unexpected error occurred';
+  }
+
+  if (typeof error === 'string') {
+    return error.substring(0, 200);
+  }
+
+  return 'An unexpected error occurred';
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 /** Context injected into every secure action handler. */
@@ -40,10 +59,9 @@ export interface ActionContext {
 
 /** Discriminated error union returned by secureAction. */
 export type ActionError =
-  | { code: 'VALIDATION_ERROR'; issues: z.ZodIssue[] }
+  | { code: 'VALIDATION_ERROR'; message?: string; issues: z.ZodIssue[] }
   | { code: 'UNAUTHORIZED'; message?: string }
   | { code: 'FORBIDDEN'; message?: string }
-  | { code: 'RATE_LIMIT_EXCEEDED'; retryAfter?: number }
   | { code: 'NOT_FOUND'; message?: string }
   | { code: 'INTERNAL_ERROR'; message: string };
 
@@ -104,7 +122,17 @@ export async function secureAction<TInput, TOutput>(
       status: 'validation_error',
       metadata: { issueCount: parsed.error.issues.length },
     });
-    return { success: false, error: { code: 'VALIDATION_ERROR', issues: parsed.error.issues } };
+    return {
+      success: false,
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: 'Validation failed',
+        issues: parsed.error.issues.map((issue) => ({
+          ...issue,
+          message: issue.message.substring(0, 100),
+        })),
+      },
+    };
   }
 
   // ── 2. Resolve tenant context ──────────────────────────────────────────────
@@ -167,6 +195,6 @@ export async function secureAction<TInput, TOutput>(
       metadata: { error: message },
     });
 
-    return { success: false, error: { code: 'INTERNAL_ERROR', message } };
+    return { success: false, error: { code: 'INTERNAL_ERROR', message: sanitizeError(err) } };
   }
 }

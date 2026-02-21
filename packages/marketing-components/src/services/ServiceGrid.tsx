@@ -9,6 +9,7 @@
  */
 
 import { Card, Container, Section } from '@repo/ui';
+import Image from 'next/image';
 import { cn } from '@repo/utils';
 import type { Service } from './types';
 
@@ -78,11 +79,13 @@ export function ServiceGrid({
             >
               {service.image && (
                 <div className="relative aspect-video w-full overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={service.image.src}
                     alt={service.image.alt}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    quality={85}
                   />
                 </div>
               )}

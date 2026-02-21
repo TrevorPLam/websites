@@ -11,6 +11,7 @@
 
 import { Container, Section } from '@repo/ui';
 import { Carousel, CarouselContent, CarouselItem } from '@repo/ui';
+import Image from 'next/image';
 import { HeroCTAButton } from './hero/cta';
 import { cn } from '@repo/utils';
 import type { BaseHeroProps, HeroCTA, HeroImage } from './types';
@@ -88,11 +89,14 @@ export function HeroCarousel({
               <div className="relative flex min-h-[500px] flex-col items-center justify-center">
                 {slide.image && (
                   <div className="absolute inset-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={slide.image.src}
                       alt={slide.image.alt}
                       className="h-full w-full object-cover"
+                      fill
+                      sizes="100vw"
+                      priority={index === 0}
+                      quality={85}
                     />
                   </div>
                 )}

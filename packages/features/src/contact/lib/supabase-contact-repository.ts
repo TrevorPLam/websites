@@ -269,10 +269,11 @@ export class SupabaseContactRepository {
 
           // Apply pagination
           if (options?.limit) {
-            query = query.limit(options.limit);
-          }
-          if (options?.offset) {
-            query = query.offset(options.offset);
+            if (options?.offset) {
+              query = query.range(options.offset, options.offset + options.limit - 1);
+            } else {
+              query = query.limit(options.limit);
+            }
           }
 
           // Order by creation date (newest first)
@@ -284,7 +285,7 @@ export class SupabaseContactRepository {
             this.handleSupabaseError(error, 'getByTenant');
           }
 
-          return (data || []).map((row) => this.rowToRecord(row));
+          return (data || []).map((row: any) => this.rowToRecord(row));
         } catch (error) {
           if (error instanceof Error && error.message.includes('Database operation failed')) {
             throw error;

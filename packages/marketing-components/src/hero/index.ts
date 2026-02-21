@@ -58,6 +58,10 @@ export type { HeroFullscreenProps } from './HeroFullscreen';
 export { HeroContained } from './HeroContained';
 export type { HeroContainedProps } from './HeroContained';
 
+// Loading skeletons
+export { HeroSkeleton } from './HeroSkeleton';
+export type { HeroSkeletonProps } from './HeroSkeleton';
+
 // Types
 export type {
   BaseHeroProps,

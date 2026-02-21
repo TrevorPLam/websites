@@ -1,5 +1,6 @@
 // Team components - placeholder implementations
 import React from 'react';
+import { cn } from '@repo/utils';
 import type { TeamMember } from '../types';
 
 interface TeamGridProps {
@@ -9,7 +10,15 @@ interface TeamGridProps {
 
 export const TeamGrid: React.FC<TeamGridProps> = ({ members, columns = 3 }) => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-6`}>
+    <div
+      className={cn(
+        'grid grid-cols-1',
+        columns === 2 && 'md:grid-cols-2',
+        columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        columns === 4 && 'md:grid-cols-2 lg:grid-cols-4',
+        'gap-6'
+      )}
+    >
       {members.map((member) => (
         <div key={member.id} className="bg-white p-6 rounded-lg shadow-sm">
           <h3 className="font-semibold">{member.name}</h3>

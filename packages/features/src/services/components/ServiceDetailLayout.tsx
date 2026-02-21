@@ -27,6 +27,28 @@ import type { ServiceDetailProps } from '../types';
 
 // [TRACE:FUNC=packages.features.services.ServiceDetailLayout]
 // [FEAT:SERVICES] [FEAT:SEO] [FEAT:UX]
+// Sanitize JSON-LD data to prevent XSS breakout
+function sanitizeJSONLD(data: any): any {
+  if (typeof data === 'string') {
+    // Escape </script> tags to prevent breakout
+    return data.replace(/<\/?script[^>]*>/gi, '');
+  }
+
+  if (Array.isArray(data)) {
+    return data.map(sanitizeJSONLD);
+  }
+
+  if (data && typeof data === 'object') {
+    const sanitized: any = {};
+    for (const [key, value] of Object.entries(data)) {
+      sanitized[key] = sanitizeJSONLD(value);
+    }
+    return sanitized;
+  }
+
+  return data;
+}
+
 export default function ServiceDetailLayout({
   icon: Icon,
   title,
@@ -85,11 +107,11 @@ export default function ServiceDetailLayout({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceStructuredData) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(sanitizeJSONLD(serviceStructuredData)) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(sanitizeJSONLD(faqStructuredData)) }}
       />
 
       <Section className="bg-gradient-to-b from-secondary to-secondary/95 text-white">

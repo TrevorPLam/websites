@@ -10,6 +10,7 @@
  */
 
 import { Container, Section } from '@repo/ui';
+import Image from 'next/image';
 import { cn } from '@repo/utils';
 import type { BaseHeroProps, HeroCTA, HeroDualCTA, HeroImage, HeroSlots } from './types';
 import { HeroCTAButton } from './hero/cta';
@@ -47,15 +48,15 @@ export function HeroSplit({
   children,
 }: HeroSplitProps) {
   const imageContent = image && (
-    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+    <div className="relative aspect-16/9 w-full overflow-hidden rounded-lg">
+      <Image
         src={image.src}
         alt={image.alt}
         className="h-full w-full object-cover"
-        width={image.width}
-        height={image.height}
-        loading={image.priority ? 'eager' : 'lazy'}
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        priority={image.priority}
+        quality={85}
       />
     </div>
   );

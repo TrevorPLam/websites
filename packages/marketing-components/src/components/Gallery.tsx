@@ -1,5 +1,6 @@
 // Gallery components - placeholder implementations
 import React from 'react';
+import { cn } from '@repo/utils';
 import type { GalleryItem } from '../types';
 
 interface ImageGridProps {
@@ -9,7 +10,15 @@ interface ImageGridProps {
 
 export const ImageGrid: React.FC<ImageGridProps> = ({ items, columns = 3 }) => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-${columns} gap-4`}>
+    <div
+      className={cn(
+        'grid grid-cols-1',
+        columns === 2 && 'md:grid-cols-2',
+        columns === 3 && 'md:grid-cols-2 lg:grid-cols-3',
+        columns === 4 && 'md:grid-cols-2 lg:grid-cols-4',
+        'gap-4'
+      )}
+    >
       {items.map((item) => (
         <div key={item.id} className="relative group overflow-hidden rounded-lg">
           <img

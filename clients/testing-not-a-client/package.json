@@ -11,10 +11,7 @@
   },
   "dependencies": {
     "@repo/infra": "workspace:*",
-    "@repo/infra/integrations": "workspace:*",
-    "@repo/infra/layout": "workspace:*",
-    "@repo/infra/security": "workspace:*",
-    "@repo/infra/ui": "workspace:*",
+    "@repo/integrations-core": "workspace:*",
     "@repo/marketing-components": "workspace:*",
     "@repo/page-templates": "workspace:*",
     "@repo/types": "workspace:*",
@@ -25,7 +22,6 @@
     "typescript": "^5.6.3"
   },
   "devDependencies": {
-    "@next/eslint-config-next": "^15.0.3",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "eslint": "^9.14.0",

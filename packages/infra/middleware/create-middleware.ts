@@ -19,19 +19,31 @@ const X_MIDDLEWARE_SUBREQUEST = 'x-middleware-subrequest';
  * Builds allowedOrigins from NEXT_PUBLIC_SITE_URL for CSRF defense.
  * In development, also allows common localhost origins.
  */
-export function getAllowedOriginsFromEnv(): string[] | undefined {
+export function getAllowedOriginsFromEnv(): string[] {
   const url = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!url || typeof url !== 'string') return undefined;
-  try {
-    const origin = new URL(url).origin;
-    const origins: string[] = [origin];
-    if (process.env.NODE_ENV === 'development') {
-      origins.push('http://localhost:3000', 'http://localhost:3101', 'http://localhost:3102');
-    }
-    return origins;
-  } catch {
-    return undefined;
+  const origins: string[] = [];
+
+  // Always include localhost origins for development
+  if (process.env.NODE_ENV === 'development') {
+    origins.push('http://localhost:3000', 'http://localhost:3101', 'http://localhost:3102');
   }
+
+  // Add configured site URL if available
+  if (url && typeof url === 'string') {
+    try {
+      const origin = new URL(url).origin;
+      origins.push(origin);
+    } catch {
+      // Invalid URL, skip it but don't fail completely
+    }
+  }
+
+  // If no origins were added, provide safe defaults
+  if (origins.length === 0) {
+    return ['http://localhost:3000', 'https://localhost:3000'];
+  }
+
+  return origins;
 }
 
 export interface CreateMiddlewareOptions {
