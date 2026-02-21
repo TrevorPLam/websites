@@ -2,9 +2,11 @@
 // Purpose: Booking action handlers providing appointment submission, validation, and provider
 //          integration. Now accepts BookingFeatureConfig for configurable validation.
 //
-// Relationship: Uses booking-schema, booking-config, booking-providers. Depends on @repo/infra (rate limit, IP).
-// System role: Server actions; in-memory demo storage; rate limit and fraud detection then provider sync.
-// Assumptions: internalBookings is process-local; revalidatePath('/book') exists in app.
+// Relationship: Uses booking-schema, booking-config, booking-providers, booking-repository.
+//              Depends on @repo/infra (rate limit, IP).
+// System role: Server actions; BookingRepository-backed storage (task 0-2); rate limit and
+//              fraud detection then provider sync. Tenant-scoped via resolveTenantId (task 0-3).
+// Assumptions: revalidatePath('/book') exists in app.
 //
 // Exports / Entry: submitBookingRequest function, BookingSubmissionResult interface
 // Used by: BookingForm component, booking API endpoints, and appointment management features
@@ -16,6 +18,7 @@
 // - Provider integration must be best-effort (failures logged but not blocking)
 // - Suspicious activity must be detected and flagged for review
 // - Schema must be created from provided configuration
+// - Bookings are persisted via BookingRepository (replaces in-memory Map, task 0-2)
 //
 // Status: @internal
 // Features:
@@ -25,6 +28,7 @@
 // - [FEAT:VALIDATION] Security validation and pattern detection
 // - [FEAT:MONITORING] Booking activity logging and tracking
 // - [FEAT:CONFIGURATION] Configurable validation schema
+// - [FEAT:PERSISTENCE] BookingRepository abstraction (task 0-2)
 
 'use server';
 
@@ -42,10 +46,21 @@ import { checkRateLimit, hashIp } from '@repo/infra';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import { validateEnv } from '@repo/infra/env';
 import type { BookingFeatureConfig } from './booking-config';
+import { InMemoryBookingRepository } from './booking-repository';
 
 // validateEnv() with default options returns CompleteEnv directly (throwOnError=true)
 const validatedEnv = validateEnv() as { NODE_ENV: 'development' | 'production' | 'test' };
 const nodeEnv = validatedEnv.NODE_ENV ?? 'development';
+
+/**
+ * Module-level BookingRepository instance.
+ * InMemoryBookingRepository is the default; swap for SupabaseBookingRepository
+ * when SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars are present (task 0-2).
+ */
+// [TRACE:CONST=packages.features.booking.bookingRepository]
+// [FEAT:BOOKING] [FEAT:PERSISTENCE]
+// NOTE: Repository instance - replaces internalBookings Map with typed abstraction (task 0-2).
+const bookingRepository = new InMemoryBookingRepository();
 
 /**
  * Booking submission result interface
@@ -70,24 +85,6 @@ export interface BookingVerification {
   confirmationNumber: string;
   email: string;
 }
-
-/**
- * Internal booking storage (in production, this would be a database)
- * For demo purposes, we'll store bookings in memory
- */
-// [TRACE:CONST=packages.features.booking.internalBookings]
-// [FEAT:BOOKING] [FEAT:DEMO]
-// NOTE: Demo storage - in-memory booking storage for demonstration purposes only.
-const internalBookings = new Map<
-  string,
-  {
-    id: string;
-    data: BookingFormData;
-    timestamp: Date;
-    status: 'pending' | 'confirmed' | 'cancelled';
-    confirmationNumber: string;
-  }
->();
 
 /**
  * Generate unique confirmation number
@@ -142,12 +139,12 @@ function detectSuspiciousActivity(data: BookingFormData, ip: string): boolean {
 }
 
 /**
- * Submit booking request with comprehensive security and validation
- * Now accepts BookingFeatureConfig for configurable schema validation
+ * Submit booking request with comprehensive security and validation.
+ * Now persists via BookingRepository (task 0-2, replaces internalBookings Map).
  */
 // [TRACE:FUNC=packages.features.booking.submitBookingRequest]
-// [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:VALIDATION] [FEAT:CONFIGURATION]
-// NOTE: Booking submission - validates, stores, and syncs booking with external providers using configurable schema.
+// [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:VALIDATION] [FEAT:CONFIGURATION] [FEAT:PERSISTENCE]
+// NOTE: Booking submission - validates, stores via repository, and syncs with external providers.
 export async function submitBookingRequest(
   formData: FormData,
   config: BookingFeatureConfig
@@ -196,15 +193,10 @@ export async function submitBookingRequest(
       console.warn('Suspicious activity flagged for review.');
     }
 
-    // Generate unique booking ID and confirmation number
-    const bookingId = crypto.randomUUID();
+    // Generate confirmation number and persist via repository (task 0-2)
     const confirmationNumber = generateConfirmationNumber();
-
-    // Store booking internally
-    internalBookings.set(bookingId, {
-      id: bookingId,
+    const record = await bookingRepository.create({
       data: validatedData,
-      timestamp: new Date(),
       status: 'pending',
       confirmationNumber,
     });
@@ -218,7 +210,7 @@ export async function submitBookingRequest(
 
     // Log booking attempt for audit
     console.info('Booking submitted:', {
-      bookingId,
+      bookingId: record.id,
       confirmationNumber,
       service: serviceLabels[validatedData.serviceType] ?? validatedData.serviceType,
       email: validatedData.email,
@@ -233,7 +225,7 @@ export async function submitBookingRequest(
 
     return {
       success: true,
-      bookingId,
+      bookingId: record.id,
       confirmationNumber,
       providerResults,
       requiresConfirmation: true,
@@ -252,18 +244,18 @@ export async function submitBookingRequest(
 }
 
 /**
- * Confirm booking (typically after email verification)
+ * Confirm booking (typically after email verification).
  * Requires verification params for IDOR prevention.
  */
 // [TRACE:FUNC=packages.features.booking.confirmBooking]
-// [FEAT:BOOKING] [FEAT:SECURITY]
-// NOTE: Booking confirmation - updates booking status to confirmed after verification.
+// [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
+// NOTE: Booking confirmation - retrieves via repository, verifies, then updates status.
 export async function confirmBooking(
   bookingId: string,
   verification: BookingVerification
 ): Promise<BookingSubmissionResult> {
   try {
-    const booking = internalBookings.get(bookingId);
+    const booking = await bookingRepository.getById(bookingId);
 
     if (!booking) {
       return { success: false, error: 'Booking not found' };
@@ -280,14 +272,13 @@ export async function confirmBooking(
       return { success: false, error: 'Booking already processed' };
     }
 
-    // Update booking status
-    booking.status = 'confirmed';
-    internalBookings.set(bookingId, booking);
+    // Update booking status via repository
+    const updated = await bookingRepository.update(bookingId, { status: 'confirmed' });
 
     // Log confirmation for audit
     console.info('Booking confirmed:', {
       bookingId,
-      confirmationNumber: booking.confirmationNumber,
+      confirmationNumber: updated.confirmationNumber,
       timestamp: new Date().toISOString(),
     });
 
@@ -298,7 +289,7 @@ export async function confirmBooking(
     return {
       success: true,
       bookingId,
-      confirmationNumber: booking.confirmationNumber,
+      confirmationNumber: updated.confirmationNumber,
     };
   } catch (error: unknown) {
     console.error('Booking confirmation error:', {
@@ -311,18 +302,18 @@ export async function confirmBooking(
 }
 
 /**
- * Cancel booking
+ * Cancel booking.
  * Requires verification params for IDOR prevention.
  */
 // [TRACE:FUNC=packages.features.booking.cancelBooking]
-// [FEAT:BOOKING] [FEAT:SECURITY]
-// NOTE: Booking cancellation - updates booking status to cancelled after verification.
+// [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
+// NOTE: Booking cancellation - retrieves via repository, verifies, then updates status.
 export async function cancelBooking(
   bookingId: string,
   verification: BookingVerification
 ): Promise<BookingSubmissionResult> {
   try {
-    const booking = internalBookings.get(bookingId);
+    const booking = await bookingRepository.getById(bookingId);
 
     if (!booking) {
       return { success: false, error: 'Booking not found' };
@@ -339,14 +330,13 @@ export async function cancelBooking(
       return { success: false, error: 'Booking already cancelled' };
     }
 
-    // Update booking status
-    booking.status = 'cancelled';
-    internalBookings.set(bookingId, booking);
+    // Update booking status via repository
+    const updated = await bookingRepository.update(bookingId, { status: 'cancelled' });
 
     // Log cancellation for audit
     console.info('Booking cancelled:', {
       bookingId,
-      confirmationNumber: booking.confirmationNumber,
+      confirmationNumber: updated.confirmationNumber,
       timestamp: new Date().toISOString(),
     });
 
@@ -357,7 +347,7 @@ export async function cancelBooking(
     return {
       success: true,
       bookingId,
-      confirmationNumber: booking.confirmationNumber,
+      confirmationNumber: updated.confirmationNumber,
     };
   } catch (error: unknown) {
     console.error('Booking cancellation error:', {
@@ -370,18 +360,18 @@ export async function cancelBooking(
 }
 
 /**
- * Get booking details for confirmation page
+ * Get booking details for confirmation page.
  * Requires verification params for IDOR prevention.
  */
 // [TRACE:FUNC=packages.features.booking.getBookingDetails]
-// [FEAT:BOOKING] [FEAT:SECURITY]
-// NOTE: Booking retrieval - fetches booking details for confirmation page display after verification.
+// [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
+// NOTE: Booking retrieval - fetches via repository, verifies, returns enriched details.
 export async function getBookingDetails(
   bookingId: string,
   config: BookingFeatureConfig,
   verification: BookingVerification
 ) {
-  const booking = internalBookings.get(bookingId);
+  const booking = await bookingRepository.getById(bookingId);
 
   if (!booking) {
     return null;
