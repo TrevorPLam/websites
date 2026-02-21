@@ -9,7 +9,7 @@
 // Invariants:
 // - Must block @repo/*/src/* (deep internal paths)                    [ERROR]
 // - Must block relative imports that escape package boundaries         [ERROR]
-// - Must block cross-client imports (@clients/* from any client)       [ERROR]
+// - Must block cross-client imports (@clients/* and @repo/clients-*)   [ERROR]
 // - Must warn when @repo/integrations-* types leak into @repo/features [WARN]
 // - Aligned with docs/architecture/module-boundaries.md
 //
@@ -47,7 +47,7 @@ export const boundaryRules = {
         },
         // Rule 3: No cross-client imports — each client is an isolated deployment unit
         {
-          group: ['@clients/*'],
+          group: ['@clients/*', '@repo/clients-*'],
           message:
             'Cross-client imports are forbidden. Each client must be isolated. If you need shared code, move it to an @repo/* package. See docs/architecture/module-boundaries.md.',
         },
