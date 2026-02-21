@@ -57,7 +57,7 @@ Primary execution plan: Strangler Fig — new system grows around existing. **So
 
 **Tasks:** [tasks/TASKS.md](tasks/TASKS.md) · **Target architecture:** [THEGOAL.md](THEGOAL.md)
 
-**Current state:** Phase 1 partially complete (TODO.md Waves 2–3: CVA, tokens, booking registry done). evol-1 (Architecture Police) net-new; evol-2 extends CVA; evol-3 extends registry.
+**Current state:** Phase 1 partially complete (Waves 2–3: CVA, tokens, booking registry done per [tasks/TASKS.md](tasks/TASKS.md)). evol-1 (Architecture Police) net-new; evol-2 extends CVA; evol-3 extends registry.
 
 **Security (parallel):** security-1..7, infrastructure-1..6, compliance-1..2 — does not block Phase 1–2.
 
@@ -366,7 +366,7 @@ gantt
 - **[THEGOAL.md](THEGOAL.md)** — Target architecture
 - **[tasks/TASKS.md](tasks/TASKS.md)** — Task index and evol-\* specs
 - **[docs/architecture/README.md](docs/architecture/README.md)** — Architecture overview
-- **[TODO.md](TODO.md)** — Wave implementation status
+- **[tasks/TASKS.md](tasks/TASKS.md)** — Task index and evolution specs
 
 ---
 

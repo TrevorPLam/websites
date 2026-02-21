@@ -142,7 +142,7 @@ This semantic index maps concepts to files for AI discoverability in the marketi
 **2026 Documentation Standard**
 
 - Concept: Extended tier compliance
-- Files: `repo-config.yml`, `TODO.md`
+- Files: `repo-config.yml`, `tasks/TASKS.md`
 - Docs: `docs/archive/docs-standard-v2.md` (archived spec)
 
 **Diátaxis Framework**

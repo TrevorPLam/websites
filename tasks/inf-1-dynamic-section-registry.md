@@ -5,7 +5,7 @@
 - **Task ID**: inf-1-dynamic-section-registry
 - **Owner**: AGENT
 - **Priority / Severity**: P2
-- **Target Release**: Phase 1 (Week 3-4), ROADMAP; extends evol-3
+- **Target Release**: Phase 1 (Week 3-4), ROADMAP; prerequisite for evol-3
 - **Related Epics / ADRs**: Infinite Extensibility (Tier 12), ROADMAP Phase 1 (Week 3-4), evol-3
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: 3.1, 3.2
@@ -32,7 +32,7 @@ Allow site.config to register custom section IDs that resolve to components at r
 
 ## Advanced Code Pattern Expectations (2026-02-19)
 
-From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TASKS.md](TASKS.md):
 
 - **Typed SectionType**: Define `SectionType` union from known section IDs (e.g. `'hero-split' | 'hero-centered' | 'services-preview' | 'cta' | ...`).
 - **SectionDefinition with configSchema**: Introduce `SectionDefinition<Cfg>` interface with optional `configSchema: z.ZodType<Cfg>`; extend `registerSection` to accept schema.

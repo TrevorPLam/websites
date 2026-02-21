@@ -42,7 +42,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 
 ## Advanced Code Pattern Expectations (2026-02-19)
 
-From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TASKS.md](TASKS.md):
 
 - **Wave 1 withErrorBoundary**: Add `withErrorBoundary(Component, fallback?)` HOC wrapping class-based Error Boundary; fallback optional.
 - **Error Boundary**: Use class component (required by React API); call `logError` from `@repo/infra/client` in `componentDidCatch` for Sentry integration.

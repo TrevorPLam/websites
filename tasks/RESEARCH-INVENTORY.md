@@ -127,7 +127,7 @@ f-1 through f-40.
 
 inf-1, inf-2, inf-4, inf-8, inf-10, inf-12, c-5, f-21.
 
-**Reference:** [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md), [TODO.md](../TODO.md) (game plan waves). Each listed task has an "Advanced Code Pattern Expectations" section with updated research and acceptance criteria.
+**Reference:** [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md), [TASKS.md](TASKS.md) (evolution phases). Each listed task has an "Advanced Code Pattern Expectations" section with updated research and acceptance criteria.
 
 ### R-CMS (Content adapters, MDX, pagination)
 

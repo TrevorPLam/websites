@@ -43,7 +43,7 @@ At each stage, the new system serves the old, then gradually replaces it.
 | **Phase 4**   | 17–22 | evol-9, evol-10        | Universal renderer proven                         |
 | **Phase 5**   | 23–26 | evol-11, evol-12       | Platform converged                                |
 
-**evol-\* task specs:** [tasks/evol-1](tasks/evol-1-architecture-police.md) through [tasks/evol-12](tasks/evol-12-full-platform-convergence.md)
+**evol-\* task specs:** [tasks/TASKS.md](tasks/TASKS.md) (full index with links to evol-1 through evol-12)
 
 ---
 
@@ -139,7 +139,8 @@ marketing-websites/                          # Root — pnpm monorepo
 │
 ├── turbo.json                               # [0.3][0.29] Upgraded config + globalEnv added
 │
-├── TASKS.md                                 # Execution tracking (consolidated tasks, specs, research)
+├── tasks/
+│   └── TASKS.md                             # Execution tracking (consolidated tasks, specs, research)
 ├── THEGOAL.md                               # This file — target architecture reference
 ├── README.md                                # [6.3] Updated with final architecture diagram
 ├── CONTRIBUTING.md                          # [0.32] Updated with Docker section

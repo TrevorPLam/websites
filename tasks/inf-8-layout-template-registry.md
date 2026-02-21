@@ -32,7 +32,7 @@ Beyond 7 fixed templates: register custom page layouts by ID. Page route maps to
 
 ## Advanced Code Pattern Expectations (2026-02-19)
 
-From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TASKS.md](TASKS.md):
 
 - **SlotProvider**: Use `@repo/infrastructure-ui` SlotProvider for slot-based composition; page-templates should add this dependency.
 - **Root vs [locale] layout**: Root layout has ConsentProvider; [locale] layout has NextIntlClientProvider; provider composition applies to [locale] only.

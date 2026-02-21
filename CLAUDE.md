@@ -400,7 +400,7 @@ Key docs:
 - `docs/architecture/module-boundaries.md` — Allowed dependency directions
 - `docs/getting-started/onboarding.md` — Developer setup guide
 - `docs/archive/ISSUES.md` — Archived codebase analysis (historical)
-- `TODO.md` — Research update tasks
+- `tasks/TASKS.md` — Task index and evolution specs
 - `TASKS.md` — Implementation backlog (if present)
 - `THEGOAL.md` — Vision and roadmap
 - `CONTRIBUTING.md` — Contribution workflow

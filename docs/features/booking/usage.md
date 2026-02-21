@@ -264,7 +264,7 @@ See `packages/features/src/booking/lib/__tests__/` for test examples.
 
 ## Evolution: Canonical Types and Repository
 
-Per [NEW.md](../../NEW.md) and [ADR-012](../../adr/0012-canonical-types-data-contracts.md) (Phase 2):
+Per [ROADMAP.md](../../ROADMAP.md) Phase 2 and [ADR-012](../../adr/0012-canonical-types-data-contracts.md):
 
 - **Canonical types** — Booking will move to canonical types in `@repo/types/src/canonical/` (e.g. `CanonicalBookingRequest`, `CanonicalBookingResult`). Integration adapters translate provider-specific types to/from canonical.
 - **Repository pattern** — Internal booking storage may use a `BookingRepository` interface; external providers remain adapter-based.

@@ -32,7 +32,7 @@ Allow site.config to provide partial token overrides (colors, spacing, radius) t
 
 ## Advanced Code Pattern Expectations (2026-02-19)
 
-From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TASKS.md](TASKS.md):
 
 - **Prerequisite**: Must follow C-5 (design tokens). Execution order: C-5 → inf-4 → inf-12.
 - **Merge strategy**: Config overrides base; base fills gaps. Shallow or deep merge per override key.

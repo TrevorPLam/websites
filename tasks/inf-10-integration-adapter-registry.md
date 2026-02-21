@@ -32,7 +32,7 @@ Discovery of integrations by provider ID. Custom adapters register via package o
 
 ## Advanced Code Pattern Expectations (2026-02-19)
 
-From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TASKS.md](TASKS.md):
 
 - **Reference implementation**: Booking provider registry in `packages/features/src/booking/lib/booking-providers.ts` — add `registerBookingProvider(id, factory)`; BookingProviders reads from registry instead of hardcoding; provider modules register on load.
 - **Pattern**: `registerX(id: string, factory: (config) => Adapter)`; enables Calendly, Acuity, Cal.com without editing central BookingProviders.

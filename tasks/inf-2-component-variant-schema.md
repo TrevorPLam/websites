@@ -32,7 +32,7 @@ Extend SiteConfig so features accept arbitrary variant strings (not just 'center
 
 ## Advanced Code Pattern Expectations (2026-02-19)
 
-From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TASKS.md](TASKS.md):
 
 - **Wave 1 (CVA for Button)**: Migrate `@repo/ui` Button from manual variants to CVA (`cva()`, `variant`, `compoundVariants`); keeps API backward compatible.
 - **Batch migration**: Hero, Card, Section components follow in Wave 2; avoid big-bang migration.

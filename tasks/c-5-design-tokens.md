@@ -33,7 +33,7 @@ Add three-layer design token architecture per THEGOAL: packages/config/tokens/ w
 
 ## Advanced Code Pattern Expectations (2026-02-19)
 
-From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TODO.md](../TODO.md):
+From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md) and [TASKS.md](TASKS.md):
 
 - **DTCG 2025.10**: W3C Design Tokens Community Group spec; use standard token types (color, dimension, fontFamily, etc.).
 - **Tailwind v4**: Already migrated (ADR 0005); wire tokens into tailwind-theme.css; ThemeInjector overrides at runtime via site.config.

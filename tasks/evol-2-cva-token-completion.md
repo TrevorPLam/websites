@@ -6,19 +6,19 @@
 - **Owner**: AGENT
 - **Priority / Severity**: P1
 - **Target Release**: Phase 1 (Week 2)
-- **Related Epics / ADRs**: ROADMAP Phase 1, TODO.md Wave 2.3
+- **Related Epics / ADRs**: ROADMAP Phase 1, TASKS.md Phase 1 Wave 2
 - **Reviewers / Stakeholders**: @agent
 - **Upstream Tasks**: None
 - **Downstream Tasks**: evol-3 (capability-ready theming)
 
 ## Context
 
-Complete CVA migration for remaining components (TODO.md 2.3: ~49 components). Ensure Button and key variants use CSS variables (`hsl(var(--color-primary))`) for capability-ready runtime theme injection.
+Complete CVA migration for remaining components (~49 total; 8 done: Button, Badge, Alert, Tabs, Toggle, Card, Container, Skeleton). Ensure Button and key variants use CSS variables (`hsl(var(--color-primary))`) for capability-ready runtime theme injection.
 
 ## Dependencies
 
-- TODO.md 2.3 — 8 components done (Button, Badge, Alert, Tabs, Toggle, Card, Container, Skeleton)
-- c-5 design tokens (complete per TODO.md 3.1)
+- 8 components done (Button, Badge, Alert, Tabs, Toggle, Card, Container, Skeleton)
+- c-5 design tokens (complete)
 
 ## Research
 
@@ -46,7 +46,7 @@ Complete CVA migration for remaining components (TODO.md 2.3: ~49 components). E
 
 ## Implementation Plan
 
-- [ ] Migrate Switch, Input, Checkbox, Textarea, RadioGroup, Progress to CVA (priority order from TODO.md)
+- [ ] Migrate Switch, Input, Checkbox, Textarea, RadioGroup, Progress to CVA
 - [ ] Audit Button for CSS var usage
 - [ ] Add tests for variant rendering
 - [ ] Document in design-token-architecture.md
