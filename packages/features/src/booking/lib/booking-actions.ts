@@ -47,7 +47,7 @@ import {
   getBookingForTenant,
   updateBookingStatus,
   getBookingByConfirmationForTenant,
-} from '@repo/database';
+} from '@repo/infra';
 import { getBookingProviders } from './booking-providers';
 import type { BookingProviderResponse } from './booking-provider-adapter';
 import { checkRateLimit, hashIp } from '@repo/infra';
@@ -375,15 +375,17 @@ export async function cancelBooking(input: unknown): Promise<Result<BookingSubmi
 export async function getBookingDetails(
   input: unknown,
   config: BookingFeatureConfig
-): Promise<Result<ReturnType<typeof getBookingDetailsHandler>>> {
+): Promise<Result<Awaited<ReturnType<typeof getBookingDetailsHandler>>>> {
   return secureAction(
     input,
     getBookingDetailsSchema,
-    async (ctx, { bookingId, confirmationNumber, email }) =>
-      getBookingDetailsHandler(
+    async (ctx, { bookingId, confirmationNumber, email }) => {
+      const result = getBookingDetailsHandler(
         { bookingId, confirmationNumber, email, tenantId: ctx.tenantId },
         config
-      ),
+      );
+      return result;
+    },
     { actionName: 'getBookingDetails' }
   );
 }

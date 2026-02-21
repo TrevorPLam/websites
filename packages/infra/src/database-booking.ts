@@ -1,5 +1,5 @@
 /**
- * @file packages/database/src/booking.ts
+ * @file packages/infra/src/database-booking.ts
  * Task: security-1-server-action-hardening
  *
  * Purpose: Tenant-scoped query helpers for booking operations.
@@ -17,7 +17,41 @@
  * Status: @public
  */
 
-import type { BookingRecord, BookingRepository } from '@repo/features/booking';
+// Define types locally to avoid circular dependency
+export interface BookingFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  serviceType: string;
+  preferredDate: string;
+  timeSlot: string;
+  notes?: string;
+}
+
+export interface BookingRecord {
+  id: string;
+  data: BookingFormData;
+  timestamp: Date;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  confirmationNumber: string;
+  tenantId?: string;
+}
+
+export interface BookingRepository {
+  create(record: Omit<BookingRecord, 'id' | 'timestamp'>): Promise<BookingRecord>;
+  getById(id: string, tenantId?: string): Promise<BookingRecord | null>;
+  getByConfirmation(
+    confirmationNumber: string,
+    email: string,
+    tenantId?: string
+  ): Promise<BookingRecord | null>;
+  update(
+    id: string,
+    updates: Partial<Pick<BookingRecord, 'status'>>,
+    tenantId?: string
+  ): Promise<BookingRecord>;
+}
 
 // ─── Tenant-scoped query helpers ────────────────────────────────────────────────
 

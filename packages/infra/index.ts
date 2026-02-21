@@ -40,12 +40,16 @@ export * from './security/sanitize';
 // Rate Limit Module (Task 1.1.5 - COMPLETED)
 export * from './security/rate-limit';
 export * from './security/secure-action';
+export type { Result, ActionError } from './security/secure-action';
 
 // Request Validation Module (Task 1.1.6 - COMPLETED)
 export * from './security/request-validation';
 
 // Tenant Context Module (Task security-2 - COMPLETED)
 export * from './src/auth/tenant-context';
+
+// Database Booking Helpers (Task security-1 - COMPLETED)
+export * from './src/database-booking';
 
 // [TRACE:BLOCK=packages.infra.exports.middleware]
 // [FEAT:MIDDLEWARE]
