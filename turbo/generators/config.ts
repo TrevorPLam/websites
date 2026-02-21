@@ -98,12 +98,7 @@ export default function registerGenerators(plop: PlopLike): void {
         templateFiles: 'clients/starter-template/**',
         globOptions: {
           dot: true,
-          ignore: [
-            '**/node_modules/**',
-            '**/.next/**',
-            '**/.turbo/**',
-            '**/dist/**',
-          ],
+          ignore: ['**/node_modules/**', '**/.next/**', '**/.turbo/**', '**/dist/**'],
         },
         abortOnFail: true,
       },

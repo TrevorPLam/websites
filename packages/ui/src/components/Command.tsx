@@ -27,8 +27,7 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface CommandProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive> {
+export interface CommandProps extends React.ComponentPropsWithoutRef<typeof CommandPrimitive> {
   className?: string;
 }
 export interface CommandDialogProps {
@@ -36,55 +35,58 @@ export interface CommandDialogProps {
   onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
 }
-export interface CommandInputProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> {
+export interface CommandInputProps extends React.ComponentPropsWithoutRef<
+  typeof CommandPrimitive.Input
+> {
   className?: string;
 }
-export interface CommandListProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.List> {
+export interface CommandListProps extends React.ComponentPropsWithoutRef<
+  typeof CommandPrimitive.List
+> {
   className?: string;
 }
-export interface CommandEmptyProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty> {
+export interface CommandEmptyProps extends React.ComponentPropsWithoutRef<
+  typeof CommandPrimitive.Empty
+> {
   className?: string;
 }
-export interface CommandGroupProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group> {
+export interface CommandGroupProps extends React.ComponentPropsWithoutRef<
+  typeof CommandPrimitive.Group
+> {
   className?: string;
 }
-export interface CommandItemProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> {
+export interface CommandItemProps extends React.ComponentPropsWithoutRef<
+  typeof CommandPrimitive.Item
+> {
   className?: string;
 }
 export interface CommandShortcutProps extends React.HTMLAttributes<HTMLSpanElement> {}
-export interface CommandSeparatorProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator> {
+export interface CommandSeparatorProps extends React.ComponentPropsWithoutRef<
+  typeof CommandPrimitive.Separator
+> {
   className?: string;
 }
 
 // ─── Components ──────────────────────────────────────────────────────────────
 
-export const Command = React.forwardRef<
-  React.ComponentRef<typeof CommandPrimitive>,
-  CommandProps
->(({ className, ...props }, ref) => (
-  <CommandPrimitive
-    ref={ref}
-    className={cn(
-      'flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground',
-      className
-    )}
-    {...props}
-  />
-));
+export const Command = React.forwardRef<React.ComponentRef<typeof CommandPrimitive>, CommandProps>(
+  ({ className, ...props }, ref) => (
+    <CommandPrimitive
+      ref={ref}
+      className={cn(
+        'flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground',
+        className
+      )}
+      {...props}
+    />
+  )
+);
 Command.displayName = 'Command';
 
 export const CommandDialog = ({ children, open, onOpenChange }: CommandDialogProps) => {
   return (
     <CommandPrimitive.Dialog open={open} onOpenChange={onOpenChange}>
-      <div className="overflow-hidden p-0">
-        {children}
-      </div>
+      <div className="overflow-hidden p-0">{children}</div>
     </CommandPrimitive.Dialog>
   );
 };

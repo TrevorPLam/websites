@@ -45,11 +45,11 @@ This style guide defines conventions for API design across the marketing-website
 
 ### Examples
 
-| Good | Bad |
-|------|-----|
-| `GET /api/v1/services` | `GET /api/v1/service` |
+| Good                                | Bad                                |
+| ----------------------------------- | ---------------------------------- |
+| `GET /api/v1/services`              | `GET /api/v1/service`              |
 | `GET /api/v1/booking-requests/{id}` | `GET /api/v1/bookingRequests/{id}` |
-| `POST /api/v1/contacts` | `POST /api/v1/contact/submit` |
+| `POST /api/v1/contacts`             | `POST /api/v1/contact/submit`      |
 
 ## Versioning
 
@@ -59,30 +59,30 @@ This style guide defines conventions for API design across the marketing-website
 
 ## HTTP Methods
 
-| Method | Usage | Idempotent |
-|--------|-------|-------------|
-| `GET` | Retrieve resource(s). Safe, no side effects. | Yes |
-| `POST` | Create resource. Non-idempotent. | No |
-| `PUT` | Full replace. Idempotent. | Yes |
-| `PATCH` | Partial update. Idempotent for same input. | Yes |
-| `DELETE` | Delete resource. Idempotent. | Yes |
+| Method   | Usage                                        | Idempotent |
+| -------- | -------------------------------------------- | ---------- |
+| `GET`    | Retrieve resource(s). Safe, no side effects. | Yes        |
+| `POST`   | Create resource. Non-idempotent.             | No         |
+| `PUT`    | Full replace. Idempotent.                    | Yes        |
+| `PATCH`  | Partial update. Idempotent for same input.   | Yes        |
+| `DELETE` | Delete resource. Idempotent.                 | Yes        |
 
 ## Status Codes
 
 Use semantic HTTP status codes consistently:
 
-| Code | Usage |
-|------|-------|
-| `200 OK` | Successful GET, PUT, PATCH |
-| `201 Created` | Successful POST creating a resource. Include `Location` header. |
-| `204 No Content` | Successful DELETE or update with no response body |
-| `400 Bad Request` | Malformed request syntax |
-| `401 Unauthorized` | Missing or invalid authentication |
-| `403 Forbidden` | Authenticated but not authorized |
-| `404 Not Found` | Resource does not exist |
-| `409 Conflict` | Duplicate resource, version conflict |
-| `422 Unprocessable Entity` | Validation errors (field-level) |
-| `500 Internal Server Error` | Unexpected server error |
+| Code                        | Usage                                                           |
+| --------------------------- | --------------------------------------------------------------- |
+| `200 OK`                    | Successful GET, PUT, PATCH                                      |
+| `201 Created`               | Successful POST creating a resource. Include `Location` header. |
+| `204 No Content`            | Successful DELETE or update with no response body               |
+| `400 Bad Request`           | Malformed request syntax                                        |
+| `401 Unauthorized`          | Missing or invalid authentication                               |
+| `403 Forbidden`             | Authenticated but not authorized                                |
+| `404 Not Found`             | Resource does not exist                                         |
+| `409 Conflict`              | Duplicate resource, version conflict                            |
+| `422 Unprocessable Entity`  | Validation errors (field-level)                                 |
+| `500 Internal Server Error` | Unexpected server error                                         |
 
 ## Request/Response Formats
 
@@ -113,18 +113,16 @@ Use a consistent error structure for all error responses:
   "error": {
     "code": "VALIDATION_ERROR",
     "message": "Human-readable message",
-    "details": [
-      { "path": ["email"], "message": "Invalid email format" }
-    ]
+    "details": [{ "path": ["email"], "message": "Invalid email format" }]
   }
 }
 ```
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `error.code` | Yes | Machine-readable code (e.g. `VALIDATION_ERROR`, `NOT_FOUND`, `RATE_LIMITED`) |
-| `error.message` | Yes | Human-readable summary |
-| `error.details` | No | Field-level validation errors or additional context |
+| Field           | Required | Description                                                                  |
+| --------------- | -------- | ---------------------------------------------------------------------------- |
+| `error.code`    | Yes      | Machine-readable code (e.g. `VALIDATION_ERROR`, `NOT_FOUND`, `RATE_LIMITED`) |
+| `error.message` | Yes      | Human-readable summary                                                       |
+| `error.details` | No       | Field-level validation errors or additional context                          |
 
 ### Pagination
 

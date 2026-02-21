@@ -26,7 +26,8 @@ const referenceMaterial = refMaterialStart >= 0 ? lines.slice(refMaterialStart).
 
 // Split content: preamble (1-154), task section (155 to refMaterialStart-1), reference
 const preamble = lines.slice(0, preambleEnd).join('\n');
-const taskSection = refMaterialStart >= 0 ? lines.slice(preambleEnd, refMaterialStart) : lines.slice(preambleEnd);
+const taskSection =
+  refMaterialStart >= 0 ? lines.slice(preambleEnd, refMaterialStart) : lines.slice(preambleEnd);
 
 // Parse task blocks - each block starts with #### and goes until next #### or ## or ---
 function parseTaskBlocks(sectionLines) {
@@ -48,7 +49,15 @@ function parseTaskBlocks(sectionLines) {
       const isCompleted = /\*\*Status:\*\* \[x\] COMPLETED/.test(blockText);
       const taskIdMatch = line.match(/^#### ([\d.]+\s|[A-Z]\.[\d]+\s|[D-F]\.[\d]+\s)/);
       const taskId = taskIdMatch ? taskIdMatch[1].trim() : null;
-      blocks.push({ start: start, end: end, lines: blockLines, text: blockText, completed: isCompleted, taskId, rawFirstLine: line });
+      blocks.push({
+        start: start,
+        end: end,
+        lines: blockLines,
+        text: blockText,
+        completed: isCompleted,
+        taskId,
+        rawFirstLine: line,
+      });
       i = end;
     } else {
       i++;
@@ -71,8 +80,13 @@ function getStructuralContent(sectionLines, excludeRanges) {
       continue;
     }
     const line = sectionLines[i];
-    if (line.match(/^## |^### |^---$|^> |^>\s*$/) || line.trim() === '' ||
-        (line.startsWith('All tasks in') || line.startsWith('These tasks') || line.startsWith('These are'))) {
+    if (
+      line.match(/^## |^### |^---$|^> |^>\s*$/) ||
+      line.trim() === '' ||
+      line.startsWith('All tasks in') ||
+      line.startsWith('These tasks') ||
+      line.startsWith('These are')
+    ) {
       result.push(line);
       i++;
     } else {
@@ -135,12 +149,20 @@ const openBlockStarts = new Set(openBlocks.map((b) => b.start));
 while (pos < taskSection.length) {
   const line = taskSection[pos];
   const isTaskBlockStart = line.match(/^#### (\d|[A-Z]|[D-F])/);
-  const isStruct = line.match(/^# |^---$|^> |^>\s*$/) || (line.trim() !== '' && !isTaskBlockStart && pos < (taskSection.findIndex((l, i) => l.match(/^#### /) && i > pos) ?? taskSection.length));
+  const isStruct =
+    line.match(/^# |^---$|^> |^>\s*$/) ||
+    (line.trim() !== '' &&
+      !isTaskBlockStart &&
+      pos < (taskSection.findIndex((l, i) => l.match(/^#### /) && i > pos) ?? taskSection.length));
 
   if (isTaskBlockStart) {
     const blockStart = pos;
     let blockEnd = pos + 1;
-    while (blockEnd < taskSection.length && !taskSection[blockEnd].match(/^#### |^## [^#]|^# [A-Z]/)) blockEnd++;
+    while (
+      blockEnd < taskSection.length &&
+      !taskSection[blockEnd].match(/^#### |^## [^#]|^# [A-Z]/)
+    )
+      blockEnd++;
     const blockText = taskSection.slice(blockStart, blockEnd).join('\n');
     const isCompleted = /\*\*Status:\*\* \[x\] COMPLETED/.test(blockText);
     if (!isCompleted) {
@@ -150,13 +172,23 @@ while (pos < taskSection.length) {
     continue;
   }
 
-  if (line.match(/^## |^### /) || line.match(/^---$/) || (line.trim() === '' && pos > 0 && newTaskSectionLines.length > 0)) {
+  if (
+    line.match(/^## |^### /) ||
+    line.match(/^---$/) ||
+    (line.trim() === '' && pos > 0 && newTaskSectionLines.length > 0)
+  ) {
     newTaskSectionLines.push(line);
     pos++;
     continue;
   }
 
-  if (line.match(/^> /) || line.startsWith('All tasks in') || line.startsWith('These tasks') || line.startsWith('These are') || (line.trim() === '' && pos < taskSection.length)) {
+  if (
+    line.match(/^> /) ||
+    line.startsWith('All tasks in') ||
+    line.startsWith('These tasks') ||
+    line.startsWith('These are') ||
+    (line.trim() === '' && pos < taskSection.length)
+  ) {
     newTaskSectionLines.push(line);
     pos++;
     continue;
@@ -168,7 +200,9 @@ while (pos < taskSection.length) {
 // Remove trailing structural content that leads to empty sections
 // For Wave 0 and Wave 1 - all tasks completed - replace with a note
 const wave0Start = newTaskSectionLines.findIndex((l) => l.includes('Wave 0: Repo Integrity'));
-const wave1Start = newTaskSectionLines.findIndex((l) => l.includes('Wave 1: Config + Feature Spine'));
+const wave1Start = newTaskSectionLines.findIndex((l) =>
+  l.includes('Wave 1: Config + Feature Spine')
+);
 
 // Simpler: rebuild from scratch based on what we need
 // New approach: take the task section, remove completed blocks, collapse empty sections
@@ -182,13 +216,20 @@ pos = 0;
 while (pos < taskSection.length) {
   const line = taskSection[pos];
   if (line.includes('Wave 0: Repo Integrity')) inWave0 = true;
-  if (line.includes('Wave 1: Config + Feature Spine')) { inWave0 = false; inWave1 = true; }
+  if (line.includes('Wave 1: Config + Feature Spine')) {
+    inWave0 = false;
+    inWave1 = true;
+  }
   if (line.includes('UI Primitives Completion')) inWave1 = false;
 
   const isTaskBlockStart = line.match(/^#### (\d|[A-Z]|[D-F])/);
   if (isTaskBlockStart) {
     let blockEnd = pos + 1;
-    while (blockEnd < taskSection.length && !taskSection[blockEnd].match(/^#### |^## [^#]|^# [A-Z]/)) blockEnd++;
+    while (
+      blockEnd < taskSection.length &&
+      !taskSection[blockEnd].match(/^#### |^## [^#]|^# [A-Z]/)
+    )
+      blockEnd++;
     const blockText = taskSection.slice(pos, blockEnd).join('\n');
     const isCompleted = /\*\*Status:\*\* \[x\] COMPLETED/.test(blockText);
     if (!isCompleted) {
@@ -213,7 +254,9 @@ while (pos < rebuiltTaskSection.length) {
   if (line.match(/^## Wave 0:/)) {
     finalTaskSection.push('## Wave 0: Repo Integrity (Day 0-2) — COMPLETED');
     finalTaskSection.push('');
-    finalTaskSection.push('> All Wave 0 tasks completed. See [ARCHIVE.md](ARCHIVE.md) for full records.');
+    finalTaskSection.push(
+      '> All Wave 0 tasks completed. See [ARCHIVE.md](ARCHIVE.md) for full records.'
+    );
     finalTaskSection.push('');
     finalTaskSection.push('---');
     finalTaskSection.push('');
@@ -224,7 +267,9 @@ while (pos < rebuiltTaskSection.length) {
   if (line.match(/^## Wave 1:/)) {
     finalTaskSection.push('## Wave 1: Config + Feature Spine (Day 2-6) — COMPLETED');
     finalTaskSection.push('');
-    finalTaskSection.push('> All Wave 1 tasks completed. See [ARCHIVE.md](ARCHIVE.md) for full records.');
+    finalTaskSection.push(
+      '> All Wave 1 tasks completed. See [ARCHIVE.md](ARCHIVE.md) for full records.'
+    );
     finalTaskSection.push('');
     finalTaskSection.push('---');
     finalTaskSection.push('');
@@ -245,7 +290,8 @@ while (pos < rebuiltTaskSection.length) {
 }
 
 // Remove duplicate empty lines and excessive ---
-const cleanedTaskSection = finalTaskSection.join('\n')
+const cleanedTaskSection = finalTaskSection
+  .join('\n')
   .replace(/\n{4,}/g, '\n\n\n')
   .replace(/(---\n){3,}/g, '---\n\n');
 

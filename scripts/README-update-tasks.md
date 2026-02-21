@@ -5,11 +5,13 @@ Automated script to update task files with research findings and code snippets f
 ## Usage
 
 ### Update a single task
+
 ```bash
 pnpm update-tasks-research 1-12
 ```
 
 ### Update all tasks in a category
+
 ```bash
 pnpm update-tasks-research --category 1-xx
 pnpm update-tasks-research --category 2-xx
@@ -17,6 +19,7 @@ pnpm update-tasks-research --category f-xx
 ```
 
 ### Update all tasks
+
 ```bash
 pnpm update-tasks-research:all
 ```
@@ -42,6 +45,7 @@ pnpm update-tasks-research:all
 ## Output
 
 The script will:
+
 - Show progress for each task updated
 - List which research topics were applied
 - Skip tasks with no matching research topics
@@ -56,7 +60,7 @@ pnpm update-tasks-research 1-12
 # Update all 1.xx UI component tasks
 pnpm update-tasks-research --category 1-xx
 
-# Update all 2.xx marketing component tasks  
+# Update all 2.xx marketing component tasks
 pnpm update-tasks-research --category 2-xx
 
 # Update all infrastructure tasks

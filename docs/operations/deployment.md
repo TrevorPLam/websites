@@ -96,12 +96,14 @@ This document describes the deployment process for marketing-websites monorepo c
 **Trigger:** Push to `develop` branch
 
 **Process:**
+
 1. CI runs quality gates
 2. Vercel auto-deploys to staging
 3. Smoke tests run automatically
 4. Performance audit runs (Lighthouse CI)
 
 **Verification:**
+
 ```bash
 # Check staging deployment
 # Verify all features work
@@ -113,11 +115,13 @@ This document describes the deployment process for marketing-websites monorepo c
 **Trigger:** Merge `develop` → `main` (or direct push to `main`)
 
 **Process:**
+
 1. CI runs full quality gates
 2. Vercel auto-deploys to production
 3. Post-deployment checks run
 
 **Manual Promotion (if needed):**
+
 ```bash
 # Vercel CLI
 vercel --prod --yes
@@ -130,6 +134,7 @@ vercel --prod --yes
 **Trigger:** Direct push to `main` (emergency fixes only)
 
 **Process:**
+
 1. Create hotfix branch from `main`
 2. Apply fix and test locally
 3. Merge to `main` (bypass staging if urgent)
@@ -140,12 +145,14 @@ vercel --prod --yes
 ### Automatic Deployment
 
 Vercel automatically deploys:
+
 - **Staging:** Every push to `develop`
 - **Production:** Every push to `main`
 
 ### Configuration
 
 Each client has its own Vercel project:
+
 - **Root Directory:** `clients/[client-name]`
 - **Framework:** Next.js
 - **Build Command:** `pnpm build` (from root)
@@ -154,6 +161,7 @@ Each client has its own Vercel project:
 ### Environment Variables
 
 Set in Vercel dashboard:
+
 - `NEXT_PUBLIC_*` - Public variables
 - `SUPABASE_*` - Database credentials
 - `HUBSPOT_*` - CRM integration
@@ -191,6 +199,7 @@ docker run -d \
 ### Immediate Checks
 
 1. **Site Accessibility**
+
    ```bash
    curl https://[client-domain].com
    # Should return 200 OK
@@ -218,6 +227,7 @@ docker run -d \
 ### Rollback Plan
 
 If issues detected:
+
 1. Identify last known good deployment
 2. Rollback via Vercel dashboard or CLI
 3. Document incident
@@ -228,6 +238,7 @@ If issues detected:
 ### Pre-Deployment
 
 1. **Test Migration Locally**
+
    ```bash
    supabase migration up
    ```
@@ -240,6 +251,7 @@ If issues detected:
 ### Deployment
 
 1. **Staging First**
+
    ```bash
    supabase db push --db-url [staging-url]
    ```
@@ -275,6 +287,7 @@ supabase migration down
 ### Alerts
 
 Configure alerts for:
+
 - High error rates (>1%)
 - Slow response times (>2s)
 - Deployment failures
@@ -285,6 +298,7 @@ Configure alerts for:
 ### Deployment Failures
 
 1. **Check Build Logs**
+
    ```bash
    # Vercel dashboard → Deployments → Logs
    ```

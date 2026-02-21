@@ -134,8 +134,7 @@ export function useScreenReader() {
     []
   );
   const announceAssertive = React.useCallback(
-    (message: string, clearAfter?: number) =>
-      announce(message, 'assertive', clearAfter),
+    (message: string, clearAfter?: number) => announce(message, 'assertive', clearAfter),
     []
   );
   return { announcePolite, announceAssertive };
@@ -198,7 +197,10 @@ export interface UseRovingTabIndexReturn {
   activeIndex: number;
   setActiveIndex: (index: number) => void;
   /** Call on arrow key events inside the composite widget */
-  handleArrowKey: (event: KeyboardEvent, opts: Omit<ArrowKeyOptions, 'elements' | 'currentIndex'>) => void;
+  handleArrowKey: (
+    event: KeyboardEvent,
+    opts: Omit<ArrowKeyOptions, 'elements' | 'currentIndex'>
+  ) => void;
   /** Ref callback — attach to the container to gather child elements */
   containerRef: React.RefCallback<HTMLElement>;
 }
@@ -225,9 +227,7 @@ export function useRovingTabIndex(
   const containerRef = React.useCallback(
     (container: HTMLElement | null) => {
       if (!container) return;
-      const items = Array.from(
-        container.querySelectorAll<HTMLElement>(itemSelector)
-      );
+      const items = Array.from(container.querySelectorAll<HTMLElement>(itemSelector));
       elementsRef.current = items;
       setIndexFnRef.current = createRovingTabIndex(items, activeIndex);
     },

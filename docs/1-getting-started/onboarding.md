@@ -90,11 +90,11 @@ Before starting, ensure you have:
 
 #### Required Software
 
-| Software | Minimum Version | Recommended | Purpose |
-|----------|-----------------|-------------|---------|
-| **Node.js** | >=22.0.0 | Required | Runtime environment |
-| **pnpm** | 10.29.2 | Latest | Package manager |
-| **Git** | 2.30.0 | Latest | Version control |
+| Software    | Minimum Version | Recommended | Purpose             |
+| ----------- | --------------- | ----------- | ------------------- |
+| **Node.js** | >=22.0.0        | Required    | Runtime environment |
+| **pnpm**    | 10.29.2         | Latest      | Package manager     |
+| **Git**     | 2.30.0          | Latest      | Version control     |
 
 #### Version Verification
 
@@ -335,10 +335,10 @@ pnpm dev --port 3001
 ```typescript
 // clients/my-client/site.config.ts
 export const siteConfig = {
-  siteName: "My Client Website",
-  description: "Professional hair salon services",
+  siteName: 'My Client Website',
+  description: 'Professional hair salon services',
   theme: {
-    primaryColor: "#8B5CF6",
+    primaryColor: '#8B5CF6',
     // ... other theme settings
   },
   features: {
@@ -654,20 +654,24 @@ docs(readme): update installation instructions
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests pass
 - [ ] Manual testing completed
 
 ## Checklist
+
 - [ ] Code follows project standards
 - [ ] Self-review completed
 - [ ] Documentation updated

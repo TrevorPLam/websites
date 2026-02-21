@@ -10,6 +10,8 @@ export interface PaymentFeatureConfig {
   enabled?: boolean;
 }
 
-export function createPaymentConfig(overrides: Partial<PaymentFeatureConfig> = {}): PaymentFeatureConfig {
+export function createPaymentConfig(
+  overrides: Partial<PaymentFeatureConfig> = {}
+): PaymentFeatureConfig {
   return { provider: 'none', enabled: false, ...overrides };
 }

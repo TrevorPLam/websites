@@ -30,6 +30,7 @@ Progress indicator with determinate/indeterminate states needed for loading feed
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 - **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
@@ -39,6 +40,7 @@ Progress indicator with determinate/indeterminate states needed for loading feed
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
@@ -52,6 +54,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-UI — React 19 + ComponentRef
+
 ```typescript
 import * as ProgressPrimitive from '@radix-ui/react-progress';
 import { cn } from '@repo/utils';
@@ -66,14 +69,17 @@ export function Progress({ ref, className, value, ...props }: ProgressProps) {
 ```
 
 ### R-RADIX — Type
+
 ```typescript
 type ProgressRef = React.ComponentRef<typeof ProgressPrimitive.Root>;
 ```
 
 ### R-A11Y
+
 - Ensure progress has `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax` (Radix provides these).
 
 ### Related Patterns
+
 - See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
 - See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples

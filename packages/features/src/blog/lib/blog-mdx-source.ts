@@ -27,7 +27,11 @@ import matter from 'gray-matter';
 import readingTime from 'reading-time';
 import { cache } from 'react';
 import { z } from 'zod';
-import type { BlogContentSource, BlogContentSourceConfig, MdxSourceOptions } from './blog-content-source';
+import type {
+  BlogContentSource,
+  BlogContentSourceConfig,
+  MdxSourceOptions,
+} from './blog-content-source';
 import type { BlogPost } from './blog-types';
 import { createCanonicalSlug, normalizeSlug } from './blog-content-source';
 

@@ -69,27 +69,44 @@ function readJson(relPath: string): Record<string, unknown> | null {
 function checkWorkspaceFiles(): void {
   section('Workspace files');
   for (const f of ['package.json', 'pnpm-workspace.yaml', 'turbo.json', 'tsconfig.base.json']) {
-    if (fileExists(f)) { pass(f); } else { fail(f, 'not found'); }
+    if (fileExists(f)) {
+      pass(f);
+    } else {
+      fail(f, 'not found');
+    }
   }
   for (const f of ['jest.config.js', 'jest.setup.js', 'knip.config.ts']) {
-    if (fileExists(f)) { pass(f); } else { warn(f, 'not found (optional)'); }
+    if (fileExists(f)) {
+      pass(f);
+    } else {
+      warn(f, 'not found (optional)');
+    }
   }
 }
 
 function checkClients(): void {
   section('Client directories');
   const clientsDir = path.join(ROOT, 'clients');
-  if (!fs.existsSync(clientsDir)) { fail('clients/', 'directory not found'); return; }
+  if (!fs.existsSync(clientsDir)) {
+    fail('clients/', 'directory not found');
+    return;
+  }
 
-  const clients = fs.readdirSync(clientsDir).filter(
-    (n) => fs.statSync(path.join(clientsDir, n)).isDirectory()
-  );
-  if (clients.length === 0) { warn('clients/', 'no client directories found'); return; }
+  const clients = fs
+    .readdirSync(clientsDir)
+    .filter((n) => fs.statSync(path.join(clientsDir, n)).isDirectory());
+  if (clients.length === 0) {
+    warn('clients/', 'no client directories found');
+    return;
+  }
 
   for (const client of clients) {
     const cp = `clients/${client}`;
     const pkg = readJson(`${cp}/package.json`);
-    if (!pkg) { fail(`${cp}/package.json`, 'missing'); continue; }
+    if (!pkg) {
+      fail(`${cp}/package.json`, 'missing');
+      continue;
+    }
 
     const name = pkg['name'] as string | undefined;
     if (!name?.startsWith('@clients/')) {
@@ -97,18 +114,33 @@ function checkClients(): void {
     } else {
       pass(`${cp} (${name})`);
     }
-    if (!fileExists(`${cp}/site.config.ts`)) fail(`${cp}/site.config.ts`, 'missing — CaCA requires this file');
-    if (!fileExists(`${cp}/next.config.js`) && !fileExists(`${cp}/next.config.ts`)) fail(`${cp}/next.config`, 'missing');
+    if (!fileExists(`${cp}/site.config.ts`))
+      fail(`${cp}/site.config.ts`, 'missing — CaCA requires this file');
+    if (!fileExists(`${cp}/next.config.js`) && !fileExists(`${cp}/next.config.ts`))
+      fail(`${cp}/next.config`, 'missing');
     if (!fileExists(`${cp}/tsconfig.json`)) fail(`${cp}/tsconfig.json`, 'missing');
   }
 }
 
 function checkPackages(): void {
   section('Shared packages');
-  const pkgs = ['packages/ui', 'packages/utils', 'packages/types', 'packages/infra', 'packages/features', 'packages/marketing-components'];
+  const pkgs = [
+    'packages/ui',
+    'packages/utils',
+    'packages/types',
+    'packages/infra',
+    'packages/features',
+    'packages/marketing-components',
+  ];
   for (const pkg of pkgs) {
-    if (!fileExists(pkg)) { fail(pkg, 'directory not found'); continue; }
-    if (!readJson(`${pkg}/package.json`)) { fail(`${pkg}/package.json`, 'invalid'); continue; }
+    if (!fileExists(pkg)) {
+      fail(pkg, 'directory not found');
+      continue;
+    }
+    if (!readJson(`${pkg}/package.json`)) {
+      fail(`${pkg}/package.json`, 'invalid');
+      continue;
+    }
     if (fileExists(`${pkg}/src/index.ts`) || fileExists(`${pkg}/src/index.tsx`)) {
       pass(pkg);
     } else {
@@ -120,21 +152,34 @@ function checkPackages(): void {
 function checkRootScripts(): void {
   section('Root package.json scripts');
   const pkg = readJson('package.json');
-  if (!pkg) { fail('package.json', 'not found'); return; }
+  if (!pkg) {
+    fail('package.json', 'not found');
+    return;
+  }
   const scripts = (pkg['scripts'] as Record<string, string> | undefined) ?? {};
   for (const s of ['build', 'lint', 'type-check', 'test', 'format', 'validate-exports']) {
-    if (scripts[s]) { pass(`scripts.${s}`); } else { fail(`scripts.${s}`, 'not defined'); }
+    if (scripts[s]) {
+      pass(`scripts.${s}`);
+    } else {
+      fail(`scripts.${s}`, 'not defined');
+    }
   }
 }
 
 function checkDocumentation(): void {
   section('Key documentation');
   const docs = [
-    'CLAUDE.md', 'README.md', 'docs/architecture/README.md',
-    'docs/configuration/site-config-reference.md', 'docs/migration/template-to-client.md',
+    'CLAUDE.md',
+    'README.md',
+    'docs/architecture/README.md',
+    'docs/configuration/site-config-reference.md',
+    'docs/migration/template-to-client.md',
   ];
   for (const doc of docs) {
-    if (!fileExists(doc)) { fail(doc, 'not found'); continue; }
+    if (!fileExists(doc)) {
+      fail(doc, 'not found');
+      continue;
+    }
     const content = fs.readFileSync(path.join(ROOT, doc), 'utf-8');
     if (content.includes('# TODO:') && content.length < 100) {
       warn(doc, 'appears to be a stub');

@@ -40,7 +40,7 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 }
 \`\`\``,
 
-  'ComponentRef': `### ComponentRef type for type-safe ref forwarding
+  ComponentRef: `### ComponentRef type for type-safe ref forwarding
 \`\`\`typescript
 type ComponentRef = React.ComponentRef<typeof Primitive.Root>;
 \`\`\``,
@@ -203,7 +203,7 @@ interface PerformanceMetrics {
 export function usePerformanceTracking() {
   // Performance monitoring implementation
 }
-\`\`\``
+\`\`\``,
 };
 
 // Task-specific research topic mappings
@@ -276,7 +276,7 @@ const TASK_RESEARCH_TOPICS = {
   '2-59': ['R-MARKETING', 'R-UI', 'R-A11Y', 'R-PERF'],
   '2-60': ['R-MARKETING', 'R-UI', 'R-A11Y', 'R-PERF'],
   '2-61': ['R-MARKETING', 'R-UI', 'R-A11Y', 'R-PERF'],
-  '2-62': ['R-MARKETING', 'R-UI', 'R-A11Y', 'R-PERF']
+  '2-62': ['R-MARKETING', 'R-UI', 'R-A11Y', 'R-PERF'],
 };
 
 function extractTaskId(filename) {
@@ -286,21 +286,21 @@ function extractTaskId(filename) {
 
 function generateCodeSnippets(taskId) {
   const topics = TASK_RESEARCH_TOPICS[taskId] || ['R-MARKETING', 'R-UI', 'R-A11Y', 'R-PERF'];
-  
+
   let snippets = '';
-  topics.forEach(topic => {
+  topics.forEach((topic) => {
     if (CODE_SNIPPETS[topic]) {
       snippets += CODE_SNIPPETS[topic] + '\n\n';
     }
   });
-  
+
   return snippets.trim();
 }
 
 function updateTaskFile(filePath) {
   const filename = path.basename(filePath);
   const taskId = extractTaskId(filename);
-  
+
   if (!taskId) {
     console.log(`Skipping ${filename} - no task ID found`);
     return;
@@ -315,10 +315,9 @@ function updateTaskFile(filePath) {
 
   try {
     const content = fs.readFileSync(filePath, 'utf8');
-    
+
     // Check if already has code snippets
-    if (content.includes('## Code Snippets / Examples') && 
-        content.includes('R-MARKETING —')) {
+    if (content.includes('## Code Snippets / Examples') && content.includes('R-MARKETING —')) {
       console.log(`Skipping ${filename} - already has code snippets`);
       return;
     }
@@ -326,7 +325,7 @@ function updateTaskFile(filePath) {
     // Find the Code Snippets section
     const codeSnippetsStart = content.indexOf('## Code Snippets / Examples');
     const relatedPatternsStart = content.indexOf('### Related Patterns');
-    
+
     if (codeSnippetsStart === -1) {
       console.log(`No Code Snippets section found in ${filename}`);
       return;
@@ -334,25 +333,25 @@ function updateTaskFile(filePath) {
 
     // Generate new code snippets
     const newSnippets = generateCodeSnippets(taskId);
-    
+
     // Replace the old content
     let newContent;
     if (relatedPatternsStart !== -1) {
       // Replace from Code Snippets to Related Patterns
-      newContent = content.substring(0, codeSnippetsStart) + 
-                  '## Code Snippets / Examples\n\n' +
-                  newSnippets + '\n\n' +
-                  content.substring(relatedPatternsStart);
+      newContent =
+        content.substring(0, codeSnippetsStart) +
+        '## Code Snippets / Examples\n\n' +
+        newSnippets +
+        '\n\n' +
+        content.substring(relatedPatternsStart);
     } else {
       // Replace from Code Snippets to end
-      newContent = content.substring(0, codeSnippetsStart) + 
-                  '## Code Snippets / Examples\n\n' +
-                  newSnippets;
+      newContent =
+        content.substring(0, codeSnippetsStart) + '## Code Snippets / Examples\n\n' + newSnippets;
     }
 
     fs.writeFileSync(filePath, newContent, 'utf8');
     console.log(`Updated ${filename} with code snippets`);
-    
   } catch (error) {
     console.error(`Error updating ${filename}:`, error.message);
   }
@@ -360,17 +359,18 @@ function updateTaskFile(filePath) {
 
 function main() {
   const tasksDir = path.join(__dirname, '..', 'tasks');
-  
+
   // Find all 2- task files
-  const taskFiles = fs.readdirSync(tasksDir)
-    .filter(file => file.startsWith('2-') && file.endsWith('.md'))
-    .map(file => path.join(tasksDir, file))
+  const taskFiles = fs
+    .readdirSync(tasksDir)
+    .filter((file) => file.startsWith('2-') && file.endsWith('.md'))
+    .map((file) => path.join(tasksDir, file))
     .sort();
 
   console.log(`Found ${taskFiles.length} task files to process`);
-  
+
   taskFiles.forEach(updateTaskFile);
-  
+
   console.log('Task update complete!');
 }
 

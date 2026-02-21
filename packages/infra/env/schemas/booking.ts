@@ -45,8 +45,7 @@ export const bookingEnvSchema = z.object({
    * @see {@link https://developers.mindbodyonline.com/ Mindbody Developer Portal}
    * @security This key grants booking system access - keep secret
    */
-  MINDBODY_API_KEY: z
-    .coerce
+  MINDBODY_API_KEY: z.coerce
     .string()
     .min(1, 'Mindbody API key cannot be empty when provided')
     .trim()
@@ -62,8 +61,7 @@ export const bookingEnvSchema = z.object({
    * @example '-99887'
    * @see {@link https://developers.mindbodyonline.com/ Mindbody Developer Portal}
    */
-  MINDBODY_BUSINESS_ID: z
-    .coerce
+  MINDBODY_BUSINESS_ID: z.coerce
     .string()
     .min(1, 'Mindbody business ID cannot be empty when provided')
     .trim()
@@ -80,8 +78,7 @@ export const bookingEnvSchema = z.object({
    * @see {@link https://developer.vagaro.com/ Vagaro Developer Portal}
    * @security This key grants booking system access - keep secret
    */
-  VAGARO_API_KEY: z
-    .coerce
+  VAGARO_API_KEY: z.coerce
     .string()
     .min(1, 'Vagaro API key cannot be empty when provided')
     .trim()
@@ -97,8 +94,7 @@ export const bookingEnvSchema = z.object({
    * @example '123456'
    * @see {@link https://developer.vagaro.com/ Vagaro Developer Portal}
    */
-  VAGARO_BUSINESS_ID: z
-    .coerce
+  VAGARO_BUSINESS_ID: z.coerce
     .string()
     .min(1, 'Vagaro business ID cannot be empty when provided')
     .trim()
@@ -115,8 +111,7 @@ export const bookingEnvSchema = z.object({
    * @see {@link https://developer.squareup.com/ Square Developer Portal}
    * @security This key grants booking system access - keep secret
    */
-  SQUARE_API_KEY: z
-    .coerce
+  SQUARE_API_KEY: z.coerce
     .string()
     .min(1, 'Square API key cannot be empty when provided')
     .trim()
@@ -132,8 +127,7 @@ export const bookingEnvSchema = z.object({
    * @example 'ABC123DEF456'
    * @see {@link https://developer.squareup.com/ Square Developer Portal}
    */
-  SQUARE_BUSINESS_ID: z
-    .coerce
+  SQUARE_BUSINESS_ID: z.coerce
     .string()
     .min(1, 'Square business ID cannot be empty when provided')
     .trim()
@@ -189,28 +183,28 @@ export type BookingEnv = z.infer<typeof bookingEnvSchema>;
  */
 export const validateBookingEnv = (env: Record<string, unknown> = process.env): BookingEnv => {
   const result = bookingEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     const fieldErrors = result.error.flatten().fieldErrors;
     const errorMessages = Object.entries(fieldErrors)
       .map(([field, errors]) => `${field}: ${errors?.join(', ')}`)
       .join('; ');
-    
+
     throw new Error(
       `❌ Invalid booking environment variables: ${errorMessages}\n\n` +
-      `Provider configuration requirements:\n` +
-      `- Mindbody: Both MINDBODY_API_KEY and MINDBODY_BUSINESS_ID required\n` +
-      `- Vagaro: Both VAGARO_API_KEY and VAGARO_BUSINESS_ID required\n` +
-      `- Square: Both SQUARE_API_KEY and SQUARE_BUSINESS_ID required\n\n` +
-      `Setup instructions:\n` +
-      `1. Choose booking provider(s) for your business\n` +
-      `2. Create developer account(s) and obtain API credentials\n` +
-      `3. Set environment variables for each provider\n` +
-      `4. Configure provider selection in your booking system\n\n` +
-      `⚠️  Security: Keep API keys secret and use minimal permissions`
+        `Provider configuration requirements:\n` +
+        `- Mindbody: Both MINDBODY_API_KEY and MINDBODY_BUSINESS_ID required\n` +
+        `- Vagaro: Both VAGARO_API_KEY and VAGARO_BUSINESS_ID required\n` +
+        `- Square: Both SQUARE_API_KEY and SQUARE_BUSINESS_ID required\n\n` +
+        `Setup instructions:\n` +
+        `1. Choose booking provider(s) for your business\n` +
+        `2. Create developer account(s) and obtain API credentials\n` +
+        `3. Set environment variables for each provider\n` +
+        `4. Configure provider selection in your booking system\n\n` +
+        `⚠️  Security: Keep API keys secret and use minimal permissions`
     );
   }
-  
+
   // Custom validation: each provider must have both API key and business ID
   const {
     MINDBODY_API_KEY,
@@ -220,40 +214,46 @@ export const validateBookingEnv = (env: Record<string, unknown> = process.env): 
     SQUARE_API_KEY,
     SQUARE_BUSINESS_ID,
   } = result.data;
-  
+
   const errors: string[] = [];
-  
+
   // Check Mindbody configuration
   const hasMindbodyKey = !!MINDBODY_API_KEY;
   const hasMindbodyId = !!MINDBODY_BUSINESS_ID;
   if (hasMindbodyKey !== hasMindbodyId) {
-    errors.push('Mindbody: Both MINDBODY_API_KEY and MINDBODY_BUSINESS_ID must be provided together or neither');
+    errors.push(
+      'Mindbody: Both MINDBODY_API_KEY and MINDBODY_BUSINESS_ID must be provided together or neither'
+    );
   }
-  
+
   // Check Vagaro configuration
   const hasVagaroKey = !!VAGARO_API_KEY;
   const hasVagaroId = !!VAGARO_BUSINESS_ID;
   if (hasVagaroKey !== hasVagaroId) {
-    errors.push('Vagaro: Both VAGARO_API_KEY and VAGARO_BUSINESS_ID must be provided together or neither');
+    errors.push(
+      'Vagaro: Both VAGARO_API_KEY and VAGARO_BUSINESS_ID must be provided together or neither'
+    );
   }
-  
+
   // Check Square configuration
   const hasSquareKey = !!SQUARE_API_KEY;
   const hasSquareId = !!SQUARE_BUSINESS_ID;
   if (hasSquareKey !== hasSquareId) {
-    errors.push('Square: Both SQUARE_API_KEY and SQUARE_BUSINESS_ID must be provided together or neither');
+    errors.push(
+      'Square: Both SQUARE_API_KEY and SQUARE_BUSINESS_ID must be provided together or neither'
+    );
   }
-  
+
   if (errors.length > 0) {
     throw new Error(
       `❌ Booking provider configuration error:\n${errors.join('\n')}\n\n` +
-      `Solutions:\n` +
-      `- Provide complete credentials for each enabled provider\n` +
-      `- Provide no credentials for unused providers\n` +
-      `- At least one provider must be configured for booking functionality`
+        `Solutions:\n` +
+        `- Provide complete credentials for each enabled provider\n` +
+        `- Provide no credentials for unused providers\n` +
+        `- At least one provider must be configured for booking functionality`
     );
   }
-  
+
   return result.data;
 };
 
@@ -277,13 +277,15 @@ export const validateBookingEnv = (env: Record<string, unknown> = process.env): 
  * }
  * ```
  */
-export const safeValidateBookingEnv = (env: Record<string, unknown> = process.env): BookingEnv | null => {
+export const safeValidateBookingEnv = (
+  env: Record<string, unknown> = process.env
+): BookingEnv | null => {
   const result = bookingEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     return null;
   }
-  
+
   // Check custom validation rules
   const {
     MINDBODY_API_KEY,
@@ -293,7 +295,7 @@ export const safeValidateBookingEnv = (env: Record<string, unknown> = process.en
     SQUARE_API_KEY,
     SQUARE_BUSINESS_ID,
   } = result.data;
-  
+
   // Check each provider configuration
   const hasMindbodyKey = !!MINDBODY_API_KEY;
   const hasMindbodyId = !!MINDBODY_BUSINESS_ID;
@@ -301,14 +303,16 @@ export const safeValidateBookingEnv = (env: Record<string, unknown> = process.en
   const hasVagaroId = !!VAGARO_BUSINESS_ID;
   const hasSquareKey = !!SQUARE_API_KEY;
   const hasSquareId = !!SQUARE_BUSINESS_ID;
-  
+
   // Return null if any provider configuration is invalid
-  if (hasMindbodyKey !== hasMindbodyId || 
-      hasVagaroKey !== hasVagaroId || 
-      hasSquareKey !== hasSquareId) {
+  if (
+    hasMindbodyKey !== hasMindbodyId ||
+    hasVagaroKey !== hasVagaroId ||
+    hasSquareKey !== hasSquareId
+  ) {
     return null;
   }
-  
+
   return result.data;
 };
 
@@ -327,24 +331,26 @@ export const safeValidateBookingEnv = (env: Record<string, unknown> = process.en
  * console.log('Enabled providers:', providers); // ['mindbody', 'square']
  * ```
  */
-export const getEnabledBookingProviders = (env: Record<string, unknown> = process.env): string[] => {
+export const getEnabledBookingProviders = (
+  env: Record<string, unknown> = process.env
+): string[] => {
   const bookingEnv = safeValidateBookingEnv(env);
   if (!bookingEnv) return [];
-  
+
   const providers: string[] = [];
-  
+
   if (bookingEnv.MINDBODY_API_KEY && bookingEnv.MINDBODY_BUSINESS_ID) {
     providers.push('mindbody');
   }
-  
+
   if (bookingEnv.VAGARO_API_KEY && bookingEnv.VAGARO_BUSINESS_ID) {
     providers.push('vagaro');
   }
-  
+
   if (bookingEnv.SQUARE_API_KEY && bookingEnv.SQUARE_BUSINESS_ID) {
     providers.push('square');
   }
-  
+
   return providers;
 };
 

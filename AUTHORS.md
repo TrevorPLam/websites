@@ -16,7 +16,8 @@ This document lists the contributors and funding sources for the marketing-websi
 ## Project Lead
 
 **Trevor Lam**  
-*Project Creator and Maintainer*  
+_Project Creator and Maintainer_
+
 - Architecture design and implementation
 - Core package development
 - Documentation and standards
@@ -29,7 +30,7 @@ This project exists thanks to all the people who contribute.
 ### Core Contributors
 
 - **Trevor Lam** - Project architecture, core packages, documentation
-- *[Your Name Here]* - Add your contribution below
+- _[Your Name Here]_ - Add your contribution below
 
 ### How to Add Yourself
 
@@ -41,6 +42,7 @@ To add yourself as a contributor:
 4. Submit a pull request
 
 **Contributor Format:**
+
 ```markdown
 - **Your Name** - Your contributions and areas of focus
 ```
@@ -73,11 +75,13 @@ This project draws inspiration from and builds upon:
 This project is built on the shoulders of giants. Key dependencies include:
 
 #### Core Framework
+
 - **Next.js** - React framework
 - **React** - UI library
 - **TypeScript** - Type safety
 
 #### Development Tools
+
 - **pnpm** - Package manager
 - **Turbo** - Build system
 - **ESLint** - Code linting
@@ -85,12 +89,14 @@ This project is built on the shoulders of giants. Key dependencies include:
 - **Jest** - Testing framework
 
 #### UI and Styling
+
 - **Tailwind CSS** - CSS framework
 - **Radix UI** - Component primitives
 - **Lucide React** - Icon library
 - **clsx & tailwind-merge** - Utility functions
 
 #### Infrastructure
+
 - **Supabase** - Database and auth
 - **Sentry** - Error tracking
 - **HubSpot** - CRM integration
@@ -245,4 +251,4 @@ When updating this file:
 
 ---
 
-*Thank you to everyone who has contributed to making this project better!*
+_Thank you to everyone who has contributed to making this project better!_

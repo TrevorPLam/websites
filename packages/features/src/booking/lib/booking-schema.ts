@@ -83,25 +83,22 @@ export function createBookingFormSchema(config: BookingFeatureConfig) {
     preferredDate: z
       .string()
       .min(1, 'Please select a preferred date')
-      .refine(
-        (dateStr: string) => {
-          try {
-            const date = new Date(dateStr);
-            const today = startOfDay(new Date());
-            const maxDate = addDays(today, config.maxAdvanceDays);
+      .refine((dateStr: string) => {
+        try {
+          const date = new Date(dateStr);
+          const today = startOfDay(new Date());
+          const maxDate = addDays(today, config.maxAdvanceDays);
 
-            return (
-              date instanceof Date &&
-              !isNaN(date.getTime()) &&
-              isAfter(date, today) &&
-              isBefore(date, maxDate)
-            );
-          } catch {
-            return false;
-          }
-        },
-        `Date must be within the allowed booking window (up to ${config.maxAdvanceDays} days in advance)`
-      ),
+          return (
+            date instanceof Date &&
+            !isNaN(date.getTime()) &&
+            isAfter(date, today) &&
+            isBefore(date, maxDate)
+          );
+        } catch {
+          return false;
+        }
+      }, `Date must be within the allowed booking window (up to ${config.maxAdvanceDays} days in advance)`),
 
     timeSlot: z.enum(timeSlotValues, {
       errorMap: () => ({ message: 'Please select a preferred time slot' }),
@@ -144,9 +141,7 @@ export type BookingFormData = {
 // [TRACE:FUNC=packages.features.booking.createBookingFormDefaults]
 // [FEAT:BOOKING] [FEAT:UX]
 // NOTE: Defaults factory - provides sensible defaults based on configuration.
-export function createBookingFormDefaults(
-  config: BookingFeatureConfig
-): Partial<BookingFormData> {
+export function createBookingFormDefaults(config: BookingFeatureConfig): Partial<BookingFormData> {
   return {
     serviceType: config.services[0]?.id ?? '',
     timeSlot: config.timeSlots[0]?.value ?? '',
@@ -162,9 +157,7 @@ export function createBookingFormDefaults(
 // [TRACE:FUNC=packages.features.booking.createServiceLabels]
 // [FEAT:BOOKING] [FEAT:UX]
 // NOTE: Labels factory - creates label mapping for UI display.
-export function createServiceLabels(
-  config: BookingFeatureConfig
-): Record<string, string> {
+export function createServiceLabels(config: BookingFeatureConfig): Record<string, string> {
   return Object.fromEntries(config.services.map((s) => [s.id, s.label]));
 }
 
@@ -174,9 +167,7 @@ export function createServiceLabels(
 // [TRACE:FUNC=packages.features.booking.createTimeSlotLabels]
 // [FEAT:BOOKING] [FEAT:UX]
 // NOTE: Labels factory - creates time slot label mapping for UI display.
-export function createTimeSlotLabels(
-  config: BookingFeatureConfig
-): Record<string, string> {
+export function createTimeSlotLabels(config: BookingFeatureConfig): Record<string, string> {
   return Object.fromEntries(config.timeSlots.map((t) => [t.value, t.label]));
 }
 

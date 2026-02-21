@@ -83,7 +83,8 @@ function readFile(filePath) {
 /** Get all task files in a directory matching wave prefixes */
 function getTaskFiles(dir, prefixes) {
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir)
+  return fs
+    .readdirSync(dir)
     .filter((name) => name.endsWith('.md') && prefixes.some((p) => name.startsWith(p)))
     .map((name) => ({
       name,
@@ -146,7 +147,9 @@ if (openTasks.length === 0) {
     const title = extractTitle(content);
     const complete = isComplete(content);
     if (complete) {
-      console.log(`  ${GREEN}✓${RESET} ${task.id}: ${title} ${DIM}(done, not yet archived)${RESET}`);
+      console.log(
+        `  ${GREEN}✓${RESET} ${task.id}: ${title} ${DIM}(done, not yet archived)${RESET}`
+      );
     } else {
       console.log(`  ${YELLOW}○${RESET} ${task.id}: ${title}`);
     }
@@ -176,14 +179,20 @@ const total = openTasks.length + archivedTasks.length;
 const completePct = total > 0 ? Math.round((archivedTasks.length / total) * 100) : 0;
 
 console.log(`\n${'─'.repeat(50)}`);
-console.log(`${BOLD}Wave ${waveNum} progress:${RESET} ${archivedTasks.length}/${total} tasks archived (${completePct}%)`);
+console.log(
+  `${BOLD}Wave ${waveNum} progress:${RESET} ${archivedTasks.length}/${total} tasks archived (${completePct}%)`
+);
 
 if (openTasks.length === 0 && archivedTasks.length > 0) {
   console.log(`${GREEN}Wave ${waveNum} COMPLETE${RESET}`);
 } else if (openTasks.length > 0) {
-  console.log(`${YELLOW}Wave ${waveNum} IN PROGRESS${RESET} — ${openTasks.length} task(s) remaining`);
+  console.log(
+    `${YELLOW}Wave ${waveNum} IN PROGRESS${RESET} — ${openTasks.length} task(s) remaining`
+  );
 } else {
-  console.log(`${DIM}Wave ${waveNum} — no tasks found matching prefixes: ${prefixes.join(', ')}${RESET}`);
+  console.log(
+    `${DIM}Wave ${waveNum} — no tasks found matching prefixes: ${prefixes.join(', ')}${RESET}`
+  );
 }
 
 console.log();

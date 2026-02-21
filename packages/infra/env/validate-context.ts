@@ -16,9 +16,7 @@ import { isAnalyticsEnabled } from './schemas/public';
  * Gets environment validation context.
  * Provides information about the current validation environment.
  */
-export const getEnvContext = (
-  env: Record<string, unknown> = process.env
-): EnvValidationContext => {
+export const getEnvContext = (env: Record<string, unknown> = process.env): EnvValidationContext => {
   const nodeEnv = (env.NODE_ENV as string) || 'development';
 
   return {
@@ -35,9 +33,7 @@ export const getEnvContext = (
  * Gets feature flags from environment configuration.
  * Returns boolean flags for enabled features and integrations.
  */
-export const getFeatureFlags = (
-  env: Record<string, unknown> = process.env
-): EnvFeatureFlags => ({
+export const getFeatureFlags = (env: Record<string, unknown> = process.env): EnvFeatureFlags => ({
   distributedRateLimiting: isDistributedRateLimitingEnabled(env),
   supabaseEnabled: isSupabaseEnabled(env),
   hubspotEnabled: isHubspotEnabled(env),

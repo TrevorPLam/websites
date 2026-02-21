@@ -17,14 +17,14 @@ This document defines the review cadence and ownership for all documentation in 
 
 ### Standard Review Intervals
 
-| Document Type | Review Interval | Owner | Priority |
-|---------------|----------------|-------|----------|
-| **Core Documentation** | 90 days | Maintainer | High |
-| **API Documentation** | 60 days | Package Maintainer | High |
-| **Architecture Docs** | 180 days | Architecture Team | Medium |
-| **Tutorials** | 120 days | Documentation Team | Medium |
-| **Reference Docs** | 180 days | Domain Experts | Low |
-| **CHANGELOG.md** | 7 days | Release Manager | High |
+| Document Type          | Review Interval | Owner              | Priority |
+| ---------------------- | --------------- | ------------------ | -------- |
+| **Core Documentation** | 90 days         | Maintainer         | High     |
+| **API Documentation**  | 60 days         | Package Maintainer | High     |
+| **Architecture Docs**  | 180 days        | Architecture Team  | Medium   |
+| **Tutorials**          | 120 days        | Documentation Team | Medium   |
+| **Reference Docs**     | 180 days        | Domain Experts     | Low      |
+| **CHANGELOG.md**       | 7 days          | Release Manager    | High     |
 
 ### Trigger-Based Reviews
 
@@ -40,39 +40,39 @@ Reviews are also triggered by:
 
 ### Core Documentation
 
-| Document | Owner | Review Interval | Last Reviewed | Next Review |
-|----------|-------|----------------|---------------|-------------|
-| **README.md** | Trevor Lam | 90 days | 2026-02-19 | 2026-05-19 |
-| **ARCHITECTURE.md** | Trevor Lam | 180 days | 2026-02-19 | 2026-08-19 |
-| **DEVELOPMENT.md** | Trevor Lam | 120 days | 2026-02-19 | 2026-06-19 |
-| **TESTING.md** | Trevor Lam | 120 days | 2026-02-19 | 2026-06-19 |
-| **SUPPORT.md** | Trevor Lam | 90 days | 2026-02-19 | 2026-05-19 |
-| **AUTHORS.md** | Trevor Lam | 180 days | 2026-02-19 | 2026-08-19 |
-| **SECURITY.md** | Trevor Lam | 30 days | 2026-02-19 | 2026-03-19 |
-| **CONTRIBUTING.md** | Trevor Lam | 90 days | 2026-02-19 | 2026-05-19 |
-| **CHANGELOG.md** | Trevor Lam | 7 days | 2026-02-19 | 2026-02-26 |
-| **ROADMAP.md** | Trevor Lam | 90 days | 2026-02-19 | 2026-05-19 |
+| Document            | Owner      | Review Interval | Last Reviewed | Next Review |
+| ------------------- | ---------- | --------------- | ------------- | ----------- |
+| **README.md**       | Trevor Lam | 90 days         | 2026-02-19    | 2026-05-19  |
+| **ARCHITECTURE.md** | Trevor Lam | 180 days        | 2026-02-19    | 2026-08-19  |
+| **DEVELOPMENT.md**  | Trevor Lam | 120 days        | 2026-02-19    | 2026-06-19  |
+| **TESTING.md**      | Trevor Lam | 120 days        | 2026-02-19    | 2026-06-19  |
+| **SUPPORT.md**      | Trevor Lam | 90 days         | 2026-02-19    | 2026-05-19  |
+| **AUTHORS.md**      | Trevor Lam | 180 days        | 2026-02-19    | 2026-08-19  |
+| **SECURITY.md**     | Trevor Lam | 30 days         | 2026-02-19    | 2026-03-19  |
+| **CONTRIBUTING.md** | Trevor Lam | 90 days         | 2026-02-19    | 2026-05-19  |
+| **CHANGELOG.md**    | Trevor Lam | 7 days          | 2026-02-19    | 2026-02-26  |
+| **ROADMAP.md**      | Trevor Lam | 90 days         | 2026-02-19    | 2026-05-19  |
 
 ### Package Documentation
 
-| Package | Owner | Review Interval | Status |
-|---------|-------|----------------|--------|
-| **@repo/ui** | UI Team | 60 days | Active |
-| **@repo/features** | Features Team | 60 days | Active |
-| **@repo/types** | Platform Team | 180 days | Active |
-| **@repo/infra** | Platform Team | 90 days | Active |
-| **@repo/utils** | Platform Team | 180 days | Active |
+| Package            | Owner         | Review Interval | Status |
+| ------------------ | ------------- | --------------- | ------ |
+| **@repo/ui**       | UI Team       | 60 days         | Active |
+| **@repo/features** | Features Team | 60 days         | Active |
+| **@repo/types**    | Platform Team | 180 days        | Active |
+| **@repo/infra**    | Platform Team | 90 days         | Active |
+| **@repo/utils**    | Platform Team | 180 days        | Active |
 
 ### Client Documentation
 
-| Client | Owner | Review Interval | Status |
-|--------|-------|----------------|--------|
-| **starter-template** | Documentation Team | 120 days | Active |
-| **luxe-salon** | Client Success | 180 days | Active |
-| **bistro-central** | Client Success | 180 days | Active |
-| **chen-law** | Client Success | 180 days | Active |
-| **sunrise-dental** | Client Success | 180 days | Active |
-| **urban-outfitters** | Client Success | 180 days | Active |
+| Client               | Owner              | Review Interval | Status |
+| -------------------- | ------------------ | --------------- | ------ |
+| **starter-template** | Documentation Team | 120 days        | Active |
+| **luxe-salon**       | Client Success     | 180 days        | Active |
+| **bistro-central**   | Client Success     | 180 days        | Active |
+| **chen-law**         | Client Success     | 180 days        | Active |
+| **sunrise-dental**   | Client Success     | 180 days        | Active |
+| **urban-outfitters** | Client Success     | 180 days        | Active |
 
 ## Review Process
 
@@ -89,6 +89,7 @@ The CI pipeline automatically checks:
 ### Manual Review Checklist
 
 #### Content Review
+
 - [ ] **Accuracy** - All technical information is correct
 - [ ] **Completeness** - No missing critical information
 - [ ] **Clarity** - Language is clear and understandable
@@ -96,6 +97,7 @@ The CI pipeline automatically checks:
 - [ ] **Relevance** - Content is still relevant and useful
 
 #### Technical Review
+
 - [ ] **Code Examples** - All code examples work and are up-to-date
 - [ ] **API References** - API documentation matches current implementation
 - [ ] **Configuration** - Configuration examples are valid
@@ -103,6 +105,7 @@ The CI pipeline automatically checks:
 - [ ] **Security** - No sensitive information is exposed
 
 #### Accessibility Review
+
 - [ ] **Headings** - Proper heading structure (H1-H6)
 - [ ] **Links** - Descriptive link text
 - [ ] **Images** - Alt text for all images
@@ -110,6 +113,7 @@ The CI pipeline automatically checks:
 - [ ] **Code** - Language specified for all code blocks
 
 #### Style Review
+
 - [ ] **Tone** - Consistent with project voice and style
 - [ ] **Grammar** - Proper grammar and spelling
 - [ ] **Formatting** - Consistent markdown formatting
@@ -155,7 +159,7 @@ The `.github/workflows/docs-validation.yml` workflow includes:
   run: |
     # Check for overdue reviews
     node scripts/check-review-schedule.js
-    
+
     # Generate review status report
     node scripts/generate-review-report.js
 ```
@@ -170,23 +174,23 @@ const path = require('path');
 function checkReviewSchedule() {
   const docsDir = path.join(__dirname, '..');
   const today = new Date();
-  
+
   // Find all markdown files
   const markdownFiles = findMarkdownFiles(docsDir);
-  
+
   const overdue = [];
   const dueSoon = [];
-  
-  markdownFiles.forEach(file => {
+
+  markdownFiles.forEach((file) => {
     const content = fs.readFileSync(file, 'utf8');
     const frontmatter = extractFrontmatter(content);
-    
+
     if (frontmatter.last_reviewed && frontmatter.review_interval_days) {
       const lastReviewed = new Date(frontmatter.last_reviewed);
       const interval = parseInt(frontmatter.review_interval_days);
       const nextReview = new Date(lastReviewed);
       nextReview.setDate(nextReviewed.getDate() + interval);
-      
+
       if (nextReview < today) {
         overdue.push({ file, nextReview });
       } else if (nextReview - today < 7 * 24 * 60 * 60 * 1000) {
@@ -194,10 +198,10 @@ function checkReviewSchedule() {
       }
     }
   });
-  
+
   console.log(`Found ${overdue.length} overdue reviews`);
   console.log(`Found ${dueSoon.length} reviews due soon`);
-  
+
   if (overdue.length > 0) {
     console.error('Overdue reviews:');
     overdue.forEach(({ file, nextReview }) => {
@@ -269,4 +273,4 @@ All reviews must ensure compliance with:
 
 ---
 
-*This review schedule ensures documentation remains accurate, relevant, and valuable to users. Last updated: 2026-02-19*
+_This review schedule ensures documentation remains accurate, relevant, and valuable to users. Last updated: 2026-02-19_

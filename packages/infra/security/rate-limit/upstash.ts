@@ -29,9 +29,7 @@ export class UpstashRateLimiter implements RateLimiter {
         limit: this.config.maxRequests,
         remaining: result.remaining || 0,
         resetTime: result.reset || Date.now() + this.config.windowMs,
-        resetTimeIso: new Date(
-          result.reset || Date.now() + this.config.windowMs
-        ).toISOString(),
+        resetTimeIso: new Date(result.reset || Date.now() + this.config.windowMs).toISOString(),
         identifier,
       };
     } catch (error) {

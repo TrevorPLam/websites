@@ -41,8 +41,7 @@ export const publicEnvSchema = z.object({
    * @example 'https://hairsalon.example.com'
    * @safe This variable is safe for client-side exposure
    */
-  NEXT_PUBLIC_SITE_URL: z
-    .coerce
+  NEXT_PUBLIC_SITE_URL: z.coerce
     .string()
     .url('Must be a valid URL')
     .transform((url) => url.replace(/\/$/, '')) // Remove trailing slash
@@ -59,8 +58,7 @@ export const publicEnvSchema = z.object({
    * @example 'Elegant Hair Studio'
    * @safe This variable is safe for client-side exposure
    */
-  NEXT_PUBLIC_SITE_NAME: z
-    .coerce
+  NEXT_PUBLIC_SITE_NAME: z.coerce
     .string()
     .min(1, 'Site name cannot be empty')
     .max(100, 'Site name must be 100 characters or less')
@@ -77,8 +75,7 @@ export const publicEnvSchema = z.object({
    * @example 'vercel-analytics' (Vercel Analytics)
    * @safe This variable is safe for client-side exposure
    */
-  NEXT_PUBLIC_ANALYTICS_ID: z
-    .coerce
+  NEXT_PUBLIC_ANALYTICS_ID: z.coerce
     .string()
     .min(1, 'Analytics ID cannot be empty when provided')
     .optional(),
@@ -133,27 +130,27 @@ export type PublicEnv = z.infer<typeof publicEnvSchema>;
  */
 export const validatePublicEnv = (env: Record<string, unknown> = process.env): PublicEnv => {
   const result = publicEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     const fieldErrors = result.error.flatten().fieldErrors;
     const errorMessages = Object.entries(fieldErrors)
       .map(([field, errors]) => `${field}: ${errors?.join(', ')}`)
       .join('; ');
-    
+
     throw new Error(
       `❌ Invalid public environment variables: ${errorMessages}\n\n` +
-      `Public variables (exposed to browser):\n` +
-      `- NEXT_PUBLIC_SITE_URL: Valid URL (required)\n` +
-      `- NEXT_PUBLIC_SITE_NAME: Non-empty string (required, max 100 chars)\n` +
-      `- NEXT_PUBLIC_ANALYTICS_ID: Analytics tracking ID (optional)\n\n` +
-      `Setup instructions:\n` +
-      `1. Set NEXT_PUBLIC_SITE_URL to your production URL\n` +
-      `2. Set NEXT_PUBLIC_SITE_NAME to your business name\n` +
-      `3. Optionally set NEXT_PUBLIC_ANALYTICS_ID for analytics\n\n` +
-      `⚠️  Security: Only NEXT_PUBLIC_* variables are exposed to client-side code`
+        `Public variables (exposed to browser):\n` +
+        `- NEXT_PUBLIC_SITE_URL: Valid URL (required)\n` +
+        `- NEXT_PUBLIC_SITE_NAME: Non-empty string (required, max 100 chars)\n` +
+        `- NEXT_PUBLIC_ANALYTICS_ID: Analytics tracking ID (optional)\n\n` +
+        `Setup instructions:\n` +
+        `1. Set NEXT_PUBLIC_SITE_URL to your production URL\n` +
+        `2. Set NEXT_PUBLIC_SITE_NAME to your business name\n` +
+        `3. Optionally set NEXT_PUBLIC_ANALYTICS_ID for analytics\n\n` +
+        `⚠️  Security: Only NEXT_PUBLIC_* variables are exposed to client-side code`
     );
   }
-  
+
   return result.data;
 };
 
@@ -177,7 +174,9 @@ export const validatePublicEnv = (env: Record<string, unknown> = process.env): P
  * }
  * ```
  */
-export const safeValidatePublicEnv = (env: Record<string, unknown> = process.env): PublicEnv | null => {
+export const safeValidatePublicEnv = (
+  env: Record<string, unknown> = process.env
+): PublicEnv | null => {
   const result = publicEnvSchema.safeParse(env);
   return result.success ? result.data : null;
 };

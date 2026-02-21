@@ -13,7 +13,7 @@
 
 ## Context
 
-Ensure security-sast.yml and secret-scan.yml are effective. Add infra/__tests__/security-regression/ for SSRF/XSS/injection scenarios. THEGOAL [C.13].
+Ensure security-sast.yml and secret-scan.yml are effective. Add infra/**tests**/security-regression/ for SSRF/XSS/injection scenarios. THEGOAL [C.13].
 
 ## Dependencies
 

@@ -27,8 +27,16 @@ import {
 describe('DEFAULT_TOKENS', () => {
   it('has all required color keys', () => {
     const keys: (keyof typeof DEFAULT_TOKENS.colors)[] = [
-      'primary', 'secondary', 'background', 'foreground',
-      'accent', 'muted', 'card', 'border', 'ring', 'destructive',
+      'primary',
+      'secondary',
+      'background',
+      'foreground',
+      'accent',
+      'muted',
+      'card',
+      'border',
+      'ring',
+      'destructive',
     ];
     for (const key of keys) {
       expect(DEFAULT_TOKENS.colors[key]).toBeDefined();

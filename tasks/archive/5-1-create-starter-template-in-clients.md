@@ -32,6 +32,7 @@ Thin Next.js shell. Routes: home, about, services, contact, blog, book. site.con
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-INDUSTRY**: JSON-LD, industry patterns — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-industry) for full research findings.
 - **[2026-02-18] R-NEXT**: App Router, RSC, Server Actions — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-next) for full research findings.
 - **[2026-02-18] R-CONFIG-VALIDATION**: Config schema validation, Zod — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-config-validation) for full research findings.
@@ -41,6 +42,7 @@ Thin Next.js shell. Routes: home, about, services, contact, blog, book. site.con
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry) — Full research findings
 - [RESEARCH-INVENTORY.md - R-NEXT](RESEARCH-INVENTORY.md#r-next) — Full research findings
 - [RESEARCH-INVENTORY.md - R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation) — Full research findings
@@ -58,6 +60,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-INDUSTRY — JSON-LD schema integration
+
 ```typescript
 interface StructuredData {
   '@context': 'https://schema.org';
@@ -76,6 +79,7 @@ export function generateStructuredData(data: StructuredData) {
 ```
 
 ### R-NEXT — App Router and Server Components
+
 ```typescript
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
@@ -83,11 +87,11 @@ import { notFound } from 'next/navigation';
 // Server Component by default
 export default async function Page({ params }: { params: { slug: string } }) {
   const data = await fetchData(params.slug);
-  
+
   if (!data) {
     notFound();
   }
-  
+
   return React.createElement(
     Suspense,
     { fallback: React.createElement('div', {}, 'Loading...') },
@@ -96,16 +100,17 @@ export default async function Page({ params }: { params: { slug: string } }) {
 }
 
 // Client Component for interactivity
-'use client';
+('use client');
 
 export function InteractiveComponent() {
   const [state, setState] = React.useState(null);
-  
+
   return React.createElement('div', {}, 'interactive content');
 }
 ```
 
 ### R-CONFIG-VALIDATION — Zod runtime validation
+
 ```typescript
 import { z } from 'zod';
 
@@ -114,11 +119,13 @@ const siteConfigSchema = z.object({
   siteUrl: z.string().url(),
   description: z.string().optional(),
   logo: z.string().optional(),
-  social: z.object({
-    twitter: z.string().optional(),
-    facebook: z.string().optional(),
-    linkedin: z.string().optional(),
-  }).optional(),
+  social: z
+    .object({
+      twitter: z.string().optional(),
+      facebook: z.string().optional(),
+      linkedin: z.string().optional(),
+    })
+    .optional(),
 });
 
 type SiteConfig = z.infer<typeof siteConfigSchema>;
@@ -129,6 +136,7 @@ export function validateSiteConfig(config: unknown): SiteConfig {
 ```
 
 ### R-MIGRATION — Template-to-client migration
+
 ```typescript
 interface MigrationPlan {
   sourceTemplate: string;
@@ -150,6 +158,7 @@ export function executeMigration(plan: MigrationPlan) {
 ```
 
 ### Related Patterns
+
 - See [R-INDUSTRY - Research Findings](RESEARCH-INVENTORY.md#r-industry) for additional examples
 - See [R-NEXT - Research Findings](RESEARCH-INVENTORY.md#r-next) for additional examples
 - See [R-CONFIG-VALIDATION - Research Findings](RESEARCH-INVENTORY.md#r-config-validation) for additional examples
@@ -197,4 +206,3 @@ export function executeMigration(plan: MigrationPlan) {
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

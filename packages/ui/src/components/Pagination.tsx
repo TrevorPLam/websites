@@ -110,10 +110,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
               {page === 'ellipsis' ? (
                 <PaginationEllipsis />
               ) : (
-                <PaginationLink
-                  onClick={() => onPageChange(page)}
-                  isActive={currentPage === page}
-                >
+                <PaginationLink onClick={() => onPageChange(page)} isActive={currentPage === page}>
                   {page}
                 </PaginationLink>
               )}

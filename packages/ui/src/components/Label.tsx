@@ -37,21 +37,20 @@ export interface LabelProps extends React.ComponentPropsWithoutRef<typeof LabelP
 
 // [TRACE:FUNC=packages.ui.components.Label]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
-export const Label = React.forwardRef<
-  React.ComponentRef<typeof LabelPrimitive.Root>,
-  LabelProps
->(({ className, required, error, children, ...props }, ref) => (
-  <LabelPrimitive.Root
-    ref={ref}
-    className={cn(
-      'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-      error && 'text-destructive',
-      className
-    )}
-    {...props}
-  >
-    {children}
-    {required && <span className="ml-0.5 text-destructive">*</span>}
-  </LabelPrimitive.Root>
-));
+export const Label = React.forwardRef<React.ComponentRef<typeof LabelPrimitive.Root>, LabelProps>(
+  ({ className, required, error, children, ...props }, ref) => (
+    <LabelPrimitive.Root
+      ref={ref}
+      className={cn(
+        'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+        error && 'text-destructive',
+        className
+      )}
+      {...props}
+    >
+      {children}
+      {required && <span className="ml-0.5 text-destructive">*</span>}
+    </LabelPrimitive.Root>
+  )
+);
 Label.displayName = 'Label';

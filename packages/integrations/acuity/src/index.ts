@@ -3,11 +3,7 @@
  * Task: [4.2] Acuity scheduling integration
  */
 
-import {
-  SchedulingAdapter,
-  SchedulingEvent,
-  EmbedConfig,
-} from '../../scheduling/contract';
+import { SchedulingAdapter, SchedulingEvent, EmbedConfig } from '../../scheduling/contract';
 
 /**
  * Acuity Scheduling adapter implementation.

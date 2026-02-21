@@ -3,11 +3,7 @@
  * Task: [4.2] Cal.com scheduling integration
  */
 
-import {
-  SchedulingAdapter,
-  SchedulingEvent,
-  EmbedConfig
-} from '../../scheduling/contract';
+import { SchedulingAdapter, SchedulingEvent, EmbedConfig } from '../../scheduling/contract';
 
 /**
  * Cal.com (formerly Calendso) adapter implementation.
@@ -38,7 +34,7 @@ export class CalComAdapter implements SchedulingAdapter {
    */
   getEmbedConfig(eventTypeId?: string): EmbedConfig {
     return {
-      url: this.getBookingUrl(eventTypeId)
+      url: this.getBookingUrl(eventTypeId),
     };
   }
 
@@ -54,7 +50,7 @@ export class CalComAdapter implements SchedulingAdapter {
       provider: {
         '@type': 'Organization',
         name: this.name,
-        url: 'https://cal.com'
+        url: 'https://cal.com',
       },
       potentialAction: {
         '@type': 'ReserveAction',

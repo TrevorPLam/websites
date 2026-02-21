@@ -32,6 +32,7 @@ E-commerce feature with 5+ implementation patterns and headless commerce support
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 - **[2026-02-18] R-PERF**: LCP, INP, CLS, bundle budgets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-perf) for full research findings.
 - **[2026-02-18] R-MARKETING**: Hero, menu, pricing, testimonials, FAQ, sections — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-marketing) for full research findings.
@@ -42,6 +43,7 @@ E-commerce feature with 5+ implementation patterns and headless commerce support
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH-INVENTORY.md - R-PERF](RESEARCH-INVENTORY.md#r-perf) — Full research findings
 - [RESEARCH-INVENTORY.md - R-MARKETING](RESEARCH-INVENTORY.md#r-marketing) — Full research findings
@@ -67,6 +69,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-E-COMMERCE — Product catalog integration
+
 ```typescript
 interface Product {
   id: string;
@@ -84,6 +87,7 @@ interface CartItem extends Product {
 ```
 
 ### R-UI — React 19 component with ref forwarding
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
@@ -100,6 +104,7 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### R-A11Y — Touch targets and reduced motion
+
 ```css
 .component-button {
   min-width: 24px;
@@ -108,16 +113,19 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### Reduced motion detection
+
 ```typescript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### R-PERF — LCP optimization
+
 - Page shell < 250 KB gzipped; component-level budgets (e.g. section < 40 KB)
 - LCP < 2.5s, INP ≤ 200 ms, CLS < 0.1
 - Track via Lighthouse CI / next.config performanceBudgets
 
 ### R-RADIX — Primitive wrapper pattern
+
 ```typescript
 import * as Primitive from '@radix-ui/react-primitive';
 import { cn } from '@repo/utils';
@@ -131,6 +139,7 @@ const ComponentRoot = React.forwardRef<
 ```
 
 ### Related Patterns
+
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
 - See [R-PERF - Research Findings](RESEARCH-INVENTORY.md#r-perf) for additional examples
 - See [R-MARKETING - Research Findings](RESEARCH-INVENTORY.md#r-marketing) for additional examples
@@ -179,4 +188,3 @@ const ComponentRoot = React.forwardRef<
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

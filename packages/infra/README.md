@@ -25,7 +25,9 @@ export const middleware = createMiddleware({
 });
 
 export const config = {
-  matcher: [/* your matcher */],
+  matcher: [
+    /* your matcher */
+  ],
 };
 ```
 

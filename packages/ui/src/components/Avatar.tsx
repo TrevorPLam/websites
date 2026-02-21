@@ -32,8 +32,7 @@ export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarShape = 'circle' | 'square';
 export type AvatarStatus = 'online' | 'offline' | 'away' | 'busy';
 
-export interface AvatarProps
-  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> {
+export interface AvatarProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> {
   size?: AvatarSize;
   shape?: AvatarShape;
   status?: AvatarStatus;
@@ -78,33 +77,32 @@ const statusSizeStyles: Record<AvatarSize, string> = {
 
 // [TRACE:FUNC=packages.ui.components.Avatar]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
-export const Avatar = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Root>,
-  AvatarProps
->(({ className, size = 'md', shape = 'circle', status, ...props }, ref) => (
-  <span className="relative inline-flex">
-    <AvatarPrimitive.Root
-      ref={ref}
-      className={cn(
-        'relative flex shrink-0 overflow-hidden',
-        sizeStyles[size],
-        shapeStyles[shape],
-        className
-      )}
-      {...props}
-    />
-    {status && (
-      <span
-        aria-hidden="true"
+export const Avatar = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, AvatarProps>(
+  ({ className, size = 'md', shape = 'circle', status, ...props }, ref) => (
+    <span className="relative inline-flex">
+      <AvatarPrimitive.Root
+        ref={ref}
         className={cn(
-          'absolute bottom-0 right-0 block rounded-full ring-2 ring-background',
-          statusStyles[status],
-          statusSizeStyles[size]
+          'relative flex shrink-0 overflow-hidden',
+          sizeStyles[size],
+          shapeStyles[shape],
+          className
         )}
+        {...props}
       />
-    )}
-  </span>
-));
+      {status && (
+        <span
+          aria-hidden="true"
+          className={cn(
+            'absolute bottom-0 right-0 block rounded-full ring-2 ring-background',
+            statusStyles[status],
+            statusSizeStyles[size]
+          )}
+        />
+      )}
+    </span>
+  )
+);
 Avatar.displayName = 'Avatar';
 
 // [TRACE:FUNC=packages.ui.components.AvatarImage]

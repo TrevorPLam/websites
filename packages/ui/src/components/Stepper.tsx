@@ -66,12 +66,9 @@ export const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
                     onClick={() => isClickable && onStepClick(index)}
                     className={cn(
                       'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                      status === 'completed' &&
-                        'border-primary bg-primary text-primary-foreground',
-                      status === 'current' &&
-                        'border-primary bg-background text-primary',
-                      status === 'upcoming' &&
-                        'border-muted bg-background text-muted-foreground',
+                      status === 'completed' && 'border-primary bg-primary text-primary-foreground',
+                      status === 'current' && 'border-primary bg-background text-primary',
+                      status === 'upcoming' && 'border-muted bg-background text-muted-foreground',
                       isClickable && 'cursor-pointer hover:border-primary/80',
                       !isClickable && 'cursor-default'
                     )}
@@ -127,12 +124,9 @@ export const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
                   onClick={() => isClickable && onStepClick(index)}
                   className={cn(
                     'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                    status === 'completed' &&
-                      'border-primary bg-primary text-primary-foreground',
-                    status === 'current' &&
-                      'border-primary bg-background text-primary',
-                    status === 'upcoming' &&
-                      'border-muted bg-background text-muted-foreground',
+                    status === 'completed' && 'border-primary bg-primary text-primary-foreground',
+                    status === 'current' && 'border-primary bg-background text-primary',
+                    status === 'upcoming' && 'border-muted bg-background text-muted-foreground',
                     isClickable && 'cursor-pointer hover:border-primary/80',
                     !isClickable && 'cursor-default'
                   )}

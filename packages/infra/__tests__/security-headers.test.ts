@@ -28,7 +28,7 @@ describe('Security Headers Module', () => {
         'Critical-CH',
       ];
 
-      baseHeaders.forEach(header => {
+      baseHeaders.forEach((header) => {
         expect(prodHeaders).toHaveProperty(header);
         expect(devHeaders).toHaveProperty(header);
       });
@@ -83,7 +83,7 @@ describe('Security Headers Module', () => {
       const headers = getSecurityHeaders({ environment: 'production' });
 
       expect(headers).toHaveProperty('Permissions-Policy');
-      
+
       const policy = headers['Permissions-Policy'];
       const restrictedFeatures = [
         'camera=()',
@@ -94,7 +94,7 @@ describe('Security Headers Module', () => {
         'bluetooth=()',
       ];
 
-      restrictedFeatures.forEach(feature => {
+      restrictedFeatures.forEach((feature) => {
         expect(policy).toContain(feature);
       });
     });
@@ -166,7 +166,9 @@ describe('Security Headers Module', () => {
 
       expect(result.isValid).toBe(false);
       expect(result.warnings.length).toBeGreaterThan(0);
-      expect(result.warnings).toContain('Missing essential security header: X-Content-Type-Options');
+      expect(result.warnings).toContain(
+        'Missing essential security header: X-Content-Type-Options'
+      );
     });
 
     it('recommends HSTS improvements', () => {
@@ -179,8 +181,12 @@ describe('Security Headers Module', () => {
 
       const result = validateSecurityHeaders(headers);
 
-      expect(result.recommendations).toContain('Consider adding includeSubDomains to HSTS for broader protection');
-      expect(result.recommendations).toContain('Consider adding preload to HSTS for browser preloading');
+      expect(result.recommendations).toContain(
+        'Consider adding includeSubDomains to HSTS for broader protection'
+      );
+      expect(result.recommendations).toContain(
+        'Consider adding preload to HSTS for browser preloading'
+      );
     });
 
     it('warns about permissive Permissions-Policy', () => {
@@ -193,7 +199,9 @@ describe('Security Headers Module', () => {
 
       const result = validateSecurityHeaders(headers);
 
-      expect(result.warnings).toContain('Permissions-Policy allows unrestricted camera/microphone access');
+      expect(result.warnings).toContain(
+        'Permissions-Policy allows unrestricted camera/microphone access'
+      );
     });
 
     it('recommends COEP/COOP pairing', () => {
@@ -206,7 +214,9 @@ describe('Security Headers Module', () => {
       };
 
       const resultCOEP = validateSecurityHeaders(headersWithCOEP);
-      expect(resultCOEP.recommendations).toContain('Consider adding Cross-Origin-Opener-Policy when using COEP');
+      expect(resultCOEP.recommendations).toContain(
+        'Consider adding Cross-Origin-Opener-Policy when using COEP'
+      );
 
       const headersWithCOOP = {
         'X-Frame-Options': 'DENY',
@@ -217,7 +227,9 @@ describe('Security Headers Module', () => {
       };
 
       const resultCOOP = validateSecurityHeaders(headersWithCOOP);
-      expect(resultCOOP.recommendations).toContain('Consider adding Cross-Origin-Embedder-Policy when using COOP');
+      expect(resultCOOP.recommendations).toContain(
+        'Consider adding Cross-Origin-Embedder-Policy when using COOP'
+      );
     });
   });
 

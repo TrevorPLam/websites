@@ -2,7 +2,7 @@
 
 **Purpose:** Single source of truth for evolution task sequencing and specs. Aligned with [THEGOAL.md](../THEGOAL.md) and [ROADMAP.md](../ROADMAP.md).
 
-**Last Updated:** 2026-02-20
+**Last Updated:** 2026-02-20 (task gap alignment: C/D/docs index, ui-complete-remaining-primitives)
 
 ---
 
@@ -11,7 +11,7 @@
 - **Next task:** Use table "What to Work On Next" below; then open the spec from the row (e.g. `tasks/evol-1-architecture-police.md`).
 - **Resolve spec from task ID:** Spec file is `tasks/<task-id-slug>.md` (e.g. `evol-1` → `evol-1-architecture-police.md`, `inf-2` → `inf-2-component-variant-schema.md`). Links in tables are canonical.
 - **Context before coding:** Read [.context/RULES.md](../.context/RULES.md) (task execution non-negotiables) and [THEGOAL.md](../THEGOAL.md); for concepts→files use [.context/MAP.md](../.context/MAP.md).
-- **All open task IDs (flat):** evol-1, evol-2, evol-3, evol-4, evol-5, evol-5a, evol-5b, evol-6, evol-7, evol-7a, evol-7b, evol-8, evol-9, evol-9a, evol-9b, evol-10, evol-11, evol-12 | inf-1..15, c-5 | security-2, security-3, security-4, security-6, security-7 | infrastructure-1..6 | compliance-1, compliance-2 | f-6, f-7, f-8, f-9, f-15..18, f-19, f-20, f-21, f-22, f-24..30, f-36, f-38, f-39, f-40 | integration-wiring-client-pages, scripts-wire-package-json
+- **All open task IDs (flat):** evol-1, evol-2, evol-3, evol-4, evol-5, evol-5a, evol-5b, evol-6, evol-7, evol-7a, evol-7b, evol-8, evol-9, evol-9a, evol-9b, evol-10, evol-11, evol-12 | inf-1..15, c-5 | c-1, c-7, c-8, c-9, c-10, c-12, c-13, c-14, c-17, c-18 | d-1, d-6 | docs-c2, docs-c3, docs-c18, docs-readme-architecture-diagram, docs-6-1 | ui-complete-remaining-primitives | security-2, security-3, security-4, security-6, security-7 | infrastructure-1..6 | compliance-1, compliance-2 | f-6, f-7, f-8, f-9, f-15..18, f-19, f-20, f-21, f-22, f-24..30, f-36, f-38, f-39, f-40 | integration-wiring-client-pages, scripts-wire-package-json
 
 ---
 
@@ -38,13 +38,13 @@ flowchart TD
 
 ### What to Work On Next
 
-| Priority | Task(s)                                       | Condition                          |
-| -------- | --------------------------------------------- | ---------------------------------- |
-| P0 (now) | evol-1                                        | Starting Phase 1                   |
-| P0       | inf-1                                         | Before evol-3                      |
-| P1       | evol-2                                        | After evol-1                       |
-| P2       | evol-3                                        | After evol-2 + inf-1               |
-| Parallel | security-\*, infrastructure-\*, compliance-\* | Non-blocking; schedule by capacity |
+| Priority | Task(s)                                                      | Condition                          |
+| -------- | ------------------------------------------------------------ | ---------------------------------- |
+| P0 (now) | evol-1                                                       | Starting Phase 1                   |
+| P0       | inf-1                                                        | Before evol-3                      |
+| P1       | evol-2, ui-complete-remaining-primitives                     | After evol-1 (can run in parallel) |
+| P2       | evol-3                                                       | After evol-2 + inf-1               |
+| Parallel | security-\*, infrastructure-\*, compliance-\*, c-\*, docs-\* | Non-blocking; schedule by capacity |
 
 ### Infra Task Ordering (inf-\*)
 
@@ -71,13 +71,14 @@ flowchart TD
 
 ### 2.1 Phase 1 (Weeks 1–4) — Foundation Locked
 
-| Task   | Description                                 | Spec                                                                             |
-| ------ | ------------------------------------------- | -------------------------------------------------------------------------------- |
-| evol-1 | Architecture Police (ESLint rules)          | [evol-1-architecture-police.md](evol-1-architecture-police.md)                   |
-| evol-2 | CVA completion + token system               | [evol-2-cva-token-completion.md](evol-2-cva-token-completion.md)                 |
-| evol-3 | Registry hardening with capability metadata | [evol-3-registry-capability-metadata.md](evol-3-registry-capability-metadata.md) |
+| Task                             | Description                                          | Spec                                                                             |
+| -------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------- |
+| evol-1                           | Architecture Police (ESLint rules)                   | [evol-1-architecture-police.md](evol-1-architecture-police.md)                   |
+| evol-2                           | CVA completion + token system                        | [evol-2-cva-token-completion.md](evol-2-cva-token-completion.md)                 |
+| evol-3                           | Registry hardening with capability metadata          | [evol-3-registry-capability-metadata.md](evol-3-registry-capability-metadata.md) |
+| ui-complete-remaining-primitives | Complete remaining 5 UI primitives (ROADMAP Phase 1) | [ui-complete-remaining-primitives.md](ui-complete-remaining-primitives.md)       |
 
-**Execution order:** evol-1 → evol-2 → evol-3. inf-1 (dynamic section registry) is prerequisite for evol-3.
+**Execution order:** evol-1 → evol-2 → evol-3. inf-1 (dynamic section registry) is prerequisite for evol-3. ui-complete-remaining-primitives can run in parallel with evol-2.
 
 **Checkpoint:** Zero lint errors; registries hardened.
 
@@ -169,6 +170,33 @@ These do not block Phase 1–2 evolution sequencing. Schedule by capacity.
 | ------------ | ----------------------------------------------------- | ---------------------------------------------------------------------- |
 | compliance-1 | CCPA 2026 updates — lookback, DROP, minors            | [compliance-1-ccpa-2026-updates.md](compliance-1-ccpa-2026-updates.md) |
 | compliance-2 | EU AI Act — governance, human review, compliance docs | [compliance-2-eu-ai-act.md](compliance-2-eu-ai-act.md)                 |
+
+### Platform / Docs Tasks (C.\*, D.\*)
+
+| Task | Description                                                           | Spec                                                                                     |
+| ---- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| c-1  | Architecture check-dependency-graph — circular deps, layer violations | [c-1-architecture-check-dependency-graph.md](c-1-architecture-check-dependency-graph.md) |
+| c-7  | Storybook visual regression                                           | [c-7-storybook-visual-regression.md](c-7-storybook-visual-regression.md)                 |
+| c-8  | Infra experiments (A/B, feature flags)                                | [c-8-infra-experiments.md](c-8-infra-experiments.md)                                     |
+| c-9  | Features personalization                                              | [c-9-features-personalization.md](c-9-features-personalization.md)                       |
+| c-10 | Features content (CMS abstraction)                                    | [c-10-features-content.md](c-10-features-content.md)                                     |
+| c-12 | Analytics event taxonomy                                              | [c-12-analytics-event-taxonomy.md](c-12-analytics-event-taxonomy.md)                     |
+| c-13 | Security SAST regression                                              | [c-13-security-sast-regression.md](c-13-security-sast-regression.md)                     |
+| c-14 | SLOs / performance budgets                                            | [c-14-slos-performance-budgets.md](c-14-slos-performance-budgets.md)                     |
+| c-17 | Features compliance (renderers, compliance-packs)                     | [c-17-features-compliance.md](c-17-features-compliance.md)                               |
+| c-18 | Infra edge (tenant context)                                           | [c-18-infra-edge.md](c-18-infra-edge.md)                                                 |
+| d-1  | Schema versioning policy                                              | [d-1-schema-versioning-policy.md](d-1-schema-versioning-policy.md)                       |
+| d-6  | A11y release gate                                                     | [d-6-a11y-release-gate.md](d-6-a11y-release-gate.md)                                     |
+
+### Documentation Tasks
+
+| Task                             | Description                      | Spec                                                                         |
+| -------------------------------- | -------------------------------- | ---------------------------------------------------------------------------- |
+| docs-c2                          | Package management policy        | [docs-c2-package-management-policy.md](docs-c2-package-management-policy.md) |
+| docs-c3                          | Turbo remote cache               | [docs-c3-turbo-remote-cache.md](docs-c3-turbo-remote-cache.md)               |
+| docs-c18                         | Edge personalization             | [docs-c18-edge-personalization.md](docs-c18-edge-personalization.md)         |
+| docs-readme-architecture-diagram | Docs README architecture diagram | [docs-readme-architecture-diagram.md](docs-readme-architecture-diagram.md)   |
+| docs-6-1                         | Reusability rubric               | [docs-6-1-reusability-rubric.md](docs-6-1-reusability-rubric.md)             |
 
 ---
 

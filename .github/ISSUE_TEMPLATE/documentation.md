@@ -9,6 +9,7 @@ assignees: ''
 ## Documentation Issue Type
 
 <!-- Check all that apply -->
+
 - [ ] Missing documentation
 - [ ] Outdated documentation
 - [ ] Incorrect information
@@ -24,6 +25,7 @@ assignees: ''
 ## Affected Documentation
 
 <!-- List the specific files or sections affected -->
+
 - File: `docs/...`
 - Section: `...`
 
@@ -50,6 +52,7 @@ assignees: ''
 ---
 
 **Checklist:**
+
 - [ ] I've searched existing issues to avoid duplicates
 - [ ] I've read the [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md)
 - [ ] I've checked the [FAQ](docs/resources/faq.md) for similar questions

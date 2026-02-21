@@ -27,7 +27,7 @@ describe('Rate Limit Environment Schema', () => {
     it('should validate with empty object (optional variables)', () => {
       const result = rateLimitEnvSchema.safeParse({});
       expect(result.success).toBe(true);
-      
+
       if (result.success) {
         expect(result.data.UPSTASH_REDIS_REST_URL).toBeUndefined();
         expect(result.data.UPSTASH_REDIS_REST_TOKEN).toBeUndefined();
@@ -42,7 +42,7 @@ describe('Rate Limit Environment Schema', () => {
 
       const result = rateLimitEnvSchema.safeParse(env);
       expect(result.success).toBe(true);
-      
+
       if (result.success) {
         expect(result.data.UPSTASH_REDIS_REST_URL).toBe('https://awesome-george-123.upstash.io');
         expect(result.data.UPSTASH_REDIS_REST_TOKEN).toBe('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
@@ -57,7 +57,7 @@ describe('Rate Limit Environment Schema', () => {
 
       const result = rateLimitEnvSchema.safeParse(env);
       expect(result.success).toBe(true);
-      
+
       if (result.success) {
         expect(result.data.UPSTASH_REDIS_REST_URL).toBe('https://example.com');
         expect(result.data.UPSTASH_REDIS_REST_TOKEN).toBe('token123');
@@ -85,11 +85,7 @@ describe('Rate Limit Environment Schema', () => {
     });
 
     it('should validate UPSTASH_REDIS_REST_TOKEN constraints', () => {
-      const validTokens = [
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-        'simple-token',
-        '12345',
-      ];
+      const validTokens = ['eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9', 'simple-token', '12345'];
 
       validTokens.forEach((token) => {
         const result = rateLimitEnvSchema.safeParse({ UPSTASH_REDIS_REST_TOKEN: token });

@@ -9,11 +9,7 @@
  */
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import {
-  buildContentSecurityPolicy,
-  CSP_NONCE_HEADER,
-  createCspNonce,
-} from '../security/csp';
+import { buildContentSecurityPolicy, CSP_NONCE_HEADER, createCspNonce } from '../security/csp';
 import { getSecurityHeaders } from '../security/security-headers';
 
 /** Header that must be stripped to mitigate CVE-2025-29927 (middleware bypass). */
@@ -70,11 +66,7 @@ function normalizeOrigin(value: string): string | null {
 export function createMiddleware(
   options: CreateMiddlewareOptions = {}
 ): (request: NextRequest) => NextResponse {
-  const {
-    cspReportEndpoint,
-    allowedOrigins,
-    enableStrictDynamic,
-  } = options;
+  const { cspReportEndpoint, allowedOrigins, enableStrictDynamic } = options;
 
   return function middleware(request: NextRequest): NextResponse {
     // CVE-2025-29927: Strip x-middleware-subrequest so clients cannot bypass middleware
@@ -90,10 +82,7 @@ export function createMiddleware(
           allowedOrigins.map((o) => normalizeOrigin(o)).filter((o): o is string => o !== null)
         );
         if (normalized === null || !allowedSet.has(normalized)) {
-          return NextResponse.json(
-            { error: 'Forbidden' },
-            { status: 403 }
-          );
+          return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
       }
     }

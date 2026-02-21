@@ -5,6 +5,7 @@
 ### Type of Change
 
 <!-- Check all that apply -->
+
 - [ ] New documentation
 - [ ] Updated documentation
 - [ ] Fixed broken links
@@ -20,16 +21,19 @@
 ### Files Changed
 
 <!-- List the files you've modified -->
+
 - `docs/...`
 
 ### Related Issues
 
 <!-- Link to related issues -->
+
 Closes #
 
 ### Checklist
 
 <!-- Check all that apply -->
+
 - [ ] Documentation follows [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md)
 - [ ] Metaheaders are complete and accurate
 - [ ] Links are valid and working
@@ -51,6 +55,7 @@ Closes #
 ---
 
 **Reviewers:** Please verify:
+
 - [ ] Documentation standards compliance
 - [ ] Technical accuracy
 - [ ] Clarity and completeness

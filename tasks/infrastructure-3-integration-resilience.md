@@ -14,6 +14,7 @@
 ## Context
 
 Integration packages (`packages/integrations/*`) currently lack:
+
 1. Standardized retry logic with exponential backoff
 2. Circuit breaker pattern for failing integrations
 3. Dead Letter Queue (DLQ) for failed requests
@@ -40,7 +41,7 @@ This addresses **Research Topic #22: Integration Package Error Handling & Retry 
   - Circuit breaker + DLQ where needed
   - Webhook-specific idempotency (complements retry logic)
 - **Threat Model**: External outages or rate limits can cascade into app instability
-- **References**: 
+- **References**:
   - [docs/research/perplexity-security-2026.md](../docs/research/perplexity-security-2026.md) (Topic #22)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
 
@@ -89,6 +90,7 @@ This addresses **Research Topic #22: Integration Package Error Handling & Retry 
 ## Implementation Plan
 
 ### Phase 1: Core Resilience Utilities
+
 - [ ] Create `packages/integrations-core/src/retry.ts`:
   ```typescript
   export async function withRetry<T>(
@@ -104,12 +106,13 @@ This addresses **Research Topic #22: Integration Package Error Handling & Retry 
   }
   ```
 - [ ] Create `packages/integrations-core/src/circuit-breaker.ts`:
+
   ```typescript
   export class CircuitBreaker {
     private state: 'closed' | 'open' | 'half-open';
     private failureCount: number;
     private lastFailureTime: number;
-    
+
     async execute<T>(fn: () => Promise<T>): Promise<T> {
       // Circuit breaker logic
     }
@@ -117,6 +120,7 @@ This addresses **Research Topic #22: Integration Package Error Handling & Retry 
   ```
 
 ### Phase 2: HTTP Client Wrapper
+
 - [ ] Create `packages/integrations-core/src/client.ts`:
   ```typescript
   export class ResilientHttpClient {
@@ -127,12 +131,14 @@ This addresses **Research Topic #22: Integration Package Error Handling & Retry 
   ```
 
 ### Phase 3: Dead Letter Queue
+
 - [ ] Create `packages/integrations-core/src/dlq.ts`:
   - Store failed requests in DLQ
   - DLQ entries include: request, error, timestamp, retry count
   - DLQ processing utilities
 
 ### Phase 4: Integration Updates
+
 - [ ] Update HubSpot client:
   - Use `ResilientHttpClient`
   - Configure retry/circuit breaker for HubSpot API
@@ -144,6 +150,7 @@ This addresses **Research Topic #22: Integration Package Error Handling & Retry 
   - Configure retry/circuit breaker
 
 ### Phase 5: Testing & Documentation
+
 - [ ] Unit tests:
   - Retry logic (exponential backoff, max attempts)
   - Circuit breaker (state transitions, failure threshold)
@@ -157,6 +164,7 @@ This addresses **Research Topic #22: Integration Package Error Handling & Retry 
 ## Sample code / examples
 
 ### Retry Logic
+
 ```typescript
 // packages/integrations-core/src/retry.ts
 export interface RetryOptions {
@@ -167,10 +175,7 @@ export interface RetryOptions {
   isRetryableError: (error: Error) => boolean;
 }
 
-export async function withRetry<T>(
-  fn: () => Promise<T>,
-  options: RetryOptions
-): Promise<T> {
+export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions): Promise<T> {
   let attempt = 0;
   let backoffMs = options.initialBackoffMs;
 
@@ -190,10 +195,7 @@ export async function withRetry<T>(
 
       // Exponential backoff
       await sleep(backoffMs);
-      backoffMs = Math.min(
-        backoffMs * options.backoffMultiplier,
-        options.maxBackoffMs
-      );
+      backoffMs = Math.min(backoffMs * options.backoffMultiplier, options.maxBackoffMs);
     }
   }
 
@@ -201,7 +203,7 @@ export async function withRetry<T>(
 }
 
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function isRetryableError(error: Error): boolean {
@@ -214,6 +216,7 @@ export function isRetryableError(error: Error): boolean {
 ```
 
 ### Circuit Breaker
+
 ```typescript
 // packages/integrations-core/src/circuit-breaker.ts
 export interface CircuitBreakerOptions {
@@ -242,7 +245,7 @@ export class CircuitBreaker {
 
     try {
       const result = await fn();
-      
+
       if (this.state === 'half-open') {
         this.halfOpenAttempts++;
         if (this.halfOpenAttempts >= this.options.halfOpenMaxAttempts) {
@@ -278,6 +281,7 @@ export class CircuitBreakerOpenError extends Error {
 ```
 
 ### Resilient HTTP Client
+
 ```typescript
 // packages/integrations-core/src/client.ts
 import { withRetry, isRetryableError } from './retry';
@@ -302,21 +306,21 @@ export class ResilientHttpClient {
         withRetry(
           async () => {
             const response = await fetch(url, init);
-            
+
             if (!response.ok) {
               const error = new IntegrationError(
                 `HTTP ${response.status}: ${response.statusText}`,
                 response.status
               );
-              
+
               if (response.status === 429) {
                 throw new RateLimitError(error.message);
               }
-              
+
               if (response.status >= 500) {
                 throw error; // Retryable
               }
-              
+
               throw error; // Not retryable
             }
 
@@ -350,6 +354,7 @@ export class ResilientHttpClient {
 ```
 
 ### Integration Usage
+
 ```typescript
 // packages/integrations/hubspot/src/client.ts
 import { ResilientHttpClient } from '@repo/integrations-core/client';
@@ -373,7 +378,7 @@ export async function createContact(data: ContactData) {
   const response = await client.request('https://api.hubapi.com/contacts/v1/contact', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
@@ -397,14 +402,14 @@ export async function createContact(data: ContactData) {
 
 ## Execution notes
 
-- **Related files — current state:** 
+- **Related files — current state:**
   - Integration packages exist but lack resilience patterns
   - No retry/circuit breaker logic
-- **Potential issues / considerations:** 
+- **Potential issues / considerations:**
   - Circuit breaker state sharing (Redis vs Postgres)
   - DLQ storage (Redis, Postgres, message queue)
   - Idempotency (ensure retries are safe)
-- **Verification:** 
+- **Verification:**
   - Unit tests pass
   - Integration tests verify retry/circuit breaker behavior
   - DLQ entries created after failures

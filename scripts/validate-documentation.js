@@ -2,13 +2,13 @@
 
 /**
  * Documentation Validation Script
- * 
+ *
  * Validates documentation files against established standards:
  * - Metaheader completeness and format
  * - Link validity
  * - Markdown formatting
  * - Accessibility compliance
- * 
+ *
  * Usage: node scripts/validate-documentation.js [options]
  */
 
@@ -24,7 +24,7 @@ class DocumentationValidator {
       docsPath: options.docsPath || 'docs',
       strict: options.strict || false,
       fix: options.fix || false,
-      ...options
+      ...options,
     };
     this.errors = [];
     this.warnings = [];
@@ -33,7 +33,7 @@ class DocumentationValidator {
       filesPassed: 0,
       filesFailed: 0,
       linksChecked: 0,
-      linksBroken: 0
+      linksBroken: 0,
     };
   }
 
@@ -44,7 +44,7 @@ class DocumentationValidator {
     console.log('🔍 Starting documentation validation...\n');
 
     const docFiles = this.findDocumentationFiles();
-    
+
     if (docFiles.length === 0) {
       console.log('⚠️  No documentation files found');
       return false;
@@ -71,7 +71,7 @@ class DocumentationValidator {
   findDocumentationFiles() {
     const pattern = path.join(this.options.docsPath, '**/*.md');
     const files = glob.sync(pattern, {
-      ignore: ['**/node_modules/**', '**/dist/**']
+      ignore: ['**/node_modules/**', '**/dist/**'],
     });
     return files;
   }
@@ -85,7 +85,7 @@ class DocumentationValidator {
     for (const file of files) {
       const content = fs.readFileSync(file, 'utf8');
       const metaheader = this.extractMetaheader(content);
-      
+
       if (!metaheader) {
         this.addError(file, 'Missing metaheader', 'Add required metaheader comment block');
         continue;
@@ -93,20 +93,40 @@ class DocumentationValidator {
 
       // Validate required fields
       const requiredFields = [
-        '@file', '@role', '@summary', '@entrypoints', '@exports',
-        '@depends_on', '@used_by', '@runtime', '@data_flow', '@invariants',
-        '@gotchas', '@issues', '@opportunities', '@verification', '@status'
+        '@file',
+        '@role',
+        '@summary',
+        '@entrypoints',
+        '@exports',
+        '@depends_on',
+        '@used_by',
+        '@runtime',
+        '@data_flow',
+        '@invariants',
+        '@gotchas',
+        '@issues',
+        '@opportunities',
+        '@verification',
+        '@status',
       ];
 
       for (const field of requiredFields) {
         if (!metaheader.includes(field)) {
-          this.addError(file, `Missing required metaheader field: ${field}`, `Add ${field} to metaheader`);
+          this.addError(
+            file,
+            `Missing required metaheader field: ${field}`,
+            `Add ${field} to metaheader`
+          );
         }
       }
 
       // Validate format
       if (!content.startsWith('<!--')) {
-        this.addError(file, 'Metaheader must start with <!-- comment block', 'Use proper metaheader format');
+        this.addError(
+          file,
+          'Metaheader must start with <!-- comment block',
+          'Use proper metaheader format'
+        );
       }
 
       this.stats.filesChecked++;
@@ -131,18 +151,22 @@ class DocumentationValidator {
 
     for (const file of files) {
       const content = fs.readFileSync(file, 'utf8');
-      
+
       try {
         const result = markdownlint.sync({
           strings: {
-            [file]: content
+            [file]: content,
           },
-          config: markdownlintConfig
+          config: markdownlintConfig,
         });
 
         if (result[file]) {
-          result[file].forEach(error => {
-            this.addError(file, `Markdown lint error: ${error.ruleDescription}`, error.ruleInformation);
+          result[file].forEach((error) => {
+            this.addError(
+              file,
+              `Markdown lint error: ${error.ruleDescription}`,
+              error.ruleInformation
+            );
           });
         }
       } catch (error) {
@@ -161,9 +185,9 @@ class DocumentationValidator {
 
     const allFiles = new Set();
     const fileMap = new Map();
-    
+
     // Collect all files for internal link validation
-    files.forEach(file => {
+    files.forEach((file) => {
       const absPath = path.resolve(file);
       allFiles.add(absPath);
       const relPath = path.relative(process.cwd(), file);
@@ -175,10 +199,10 @@ class DocumentationValidator {
       const content = fs.readFileSync(file, 'utf8');
       const links = this.extractLinks(content);
       const fileDir = path.dirname(file);
-      
+
       for (const link of links) {
         this.stats.linksChecked++;
-        
+
         if (link.url.startsWith('http') || link.url.startsWith('https')) {
           // External link - validate format only
           if (!this.isValidUrl(link.url)) {
@@ -194,7 +218,7 @@ class DocumentationValidator {
         } else {
           // Internal link - validate file exists
           let targetPath = path.resolve(fileDir, link.url);
-          
+
           // Handle markdown file extensions
           if (!path.extname(targetPath)) {
             const mdPath = targetPath + '.md';
@@ -202,7 +226,7 @@ class DocumentationValidator {
               targetPath = mdPath;
             }
           }
-          
+
           if (!fs.existsSync(targetPath) && !allFiles.has(targetPath)) {
             const relPath = path.relative(process.cwd(), targetPath);
             if (!fileMap.has(relPath) && !fileMap.has(relPath.replace(/\\/g, '/'))) {
@@ -236,14 +260,14 @@ class DocumentationValidator {
     const linkRegex = /\[([^\]]*)\]\(([^)]+)\)/g;
     const links = [];
     let match;
-    
+
     while ((match = linkRegex.exec(content)) !== null) {
       links.push({
         text: match[1],
-        url: match[2]
+        url: match[2],
       });
     }
-    
+
     return links;
   }
 
@@ -268,30 +292,42 @@ class DocumentationValidator {
 
     for (const file of files) {
       const content = fs.readFileSync(file, 'utf8');
-      
+
       // Check for alt text in images
       const images = content.match(/!\[([^\]]*)\]\([^)]+\)/g) || [];
-      images.forEach(img => {
+      images.forEach((img) => {
         const altMatch = img.match(/!\[([^\]]*)\]/);
         if (!altMatch || !altMatch[1] || altMatch[1].trim() === '') {
-          this.addWarning(file, 'Image missing alt text', 'Add descriptive alt text for accessibility (WCAG 2.2 AA)');
+          this.addWarning(
+            file,
+            'Image missing alt text',
+            'Add descriptive alt text for accessibility (WCAG 2.2 AA)'
+          );
         }
       });
 
       // Check for proper heading structure
       const headings = content.match(/^#{1,6}\s+.+$/gm) || [];
-      const levels = headings.map(h => (h.match(/^#+/) || [''])[0].length);
-      
+      const levels = headings.map((h) => (h.match(/^#+/) || [''])[0].length);
+
       // Check for H1 (should only be one per file, and it's usually the title)
-      const h1Count = levels.filter(l => l === 1).length;
+      const h1Count = levels.filter((l) => l === 1).length;
       if (h1Count > 1) {
-        this.addWarning(file, 'Multiple H1 headings detected', 'Use only one H1 per document (the title)');
+        this.addWarning(
+          file,
+          'Multiple H1 headings detected',
+          'Use only one H1 per document (the title)'
+        );
       }
-      
+
       // Check for heading level skips
       for (let i = 1; i < levels.length; i++) {
-        if (levels[i] - levels[i-1] > 1) {
-          this.addWarning(file, 'Heading level skip detected', 'Use sequential heading levels (WCAG 2.2 AA)');
+        if (levels[i] - levels[i - 1] > 1) {
+          this.addWarning(
+            file,
+            'Heading level skip detected',
+            'Use sequential heading levels (WCAG 2.2 AA)'
+          );
           break;
         }
       }
@@ -301,7 +337,11 @@ class DocumentationValidator {
       let match;
       while ((match = codeBlockRegex.exec(content)) !== null) {
         if (!match[1] || match[1].trim() === '') {
-          this.addWarning(file, 'Code block missing language specification', 'Add language for syntax highlighting and accessibility');
+          this.addWarning(
+            file,
+            'Code block missing language specification',
+            'Add language for syntax highlighting and accessibility'
+          );
         }
       }
 
@@ -309,8 +349,16 @@ class DocumentationValidator {
       const linkRegex = /\[([^\]]+)\]\([^)]+\)/g;
       while ((match = linkRegex.exec(content)) !== null) {
         const linkText = match[1].trim();
-        if (linkText === '' || linkText.toLowerCase() === 'click here' || linkText.toLowerCase() === 'here') {
-          this.addWarning(file, 'Non-descriptive link text', 'Use descriptive link text instead of "click here" or "here"');
+        if (
+          linkText === '' ||
+          linkText.toLowerCase() === 'click here' ||
+          linkText.toLowerCase() === 'here'
+        ) {
+          this.addWarning(
+            file,
+            'Non-descriptive link text',
+            'Use descriptive link text instead of "click here" or "here"'
+          );
         }
       }
     }
@@ -326,30 +374,34 @@ class DocumentationValidator {
 
     for (const file of files) {
       const content = fs.readFileSync(file, 'utf8');
-      
+
       // Extract code blocks
       const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
       let match;
-      
+
       while ((match = codeBlockRegex.exec(content)) !== null) {
         const language = match[1] || '';
         const code = match[2];
-        
+
         // Basic validation for common languages
         if (language === 'bash' || language === 'sh') {
           // Check for common shell errors
           if (code.includes('sudo ') && !code.includes('# Requires sudo')) {
-            this.addWarning(file, 'Shell command uses sudo without warning', 'Add comment about sudo requirement');
+            this.addWarning(
+              file,
+              'Shell command uses sudo without warning',
+              'Add comment about sudo requirement'
+            );
           }
         }
-        
+
         if (language === 'typescript' || language === 'ts' || language === 'tsx') {
           // Check for common TypeScript issues
           if (code.includes('any') && !code.includes('// eslint-disable')) {
             this.addWarning(file, 'Code example uses "any" type', 'Consider using proper types');
           }
         }
-        
+
         // Check for placeholder values that should be replaced
         if (code.includes('example.com') || code.includes('your-') || code.includes('YOUR_')) {
           // This is okay in documentation, but we can note it
@@ -369,7 +421,7 @@ class DocumentationValidator {
       file,
       message,
       suggestion,
-      severity: 'error'
+      severity: 'error',
     });
   }
 
@@ -381,7 +433,7 @@ class DocumentationValidator {
       file,
       message,
       suggestion,
-      severity: 'warning'
+      severity: 'warning',
     });
   }
 
@@ -397,7 +449,7 @@ class DocumentationValidator {
 
     if (this.errors.length > 0) {
       console.log('\n❌ Errors:');
-      this.errors.forEach(error => {
+      this.errors.forEach((error) => {
         console.log(`\n📁 ${error.file}`);
         console.log(`   ${error.message}`);
         if (error.suggestion) {
@@ -408,7 +460,7 @@ class DocumentationValidator {
 
     if (this.warnings.length > 0) {
       console.log('\n⚠️  Warnings:');
-      this.warnings.forEach(warning => {
+      this.warnings.forEach((warning) => {
         console.log(`\n📁 ${warning.file}`);
         console.log(`   ${warning.message}`);
         if (warning.suggestion) {
@@ -469,12 +521,15 @@ Examples:
 
   // Run validation
   const validator = new DocumentationValidator(options);
-  validator.validate().then(success => {
-    process.exit(success ? 0 : 1);
-  }).catch(error => {
-    console.error('Validation failed:', error);
-    process.exit(1);
-  });
+  validator
+    .validate()
+    .then((success) => {
+      process.exit(success ? 0 : 1);
+    })
+    .catch((error) => {
+      console.error('Validation failed:', error);
+      process.exit(1);
+    });
 }
 
 module.exports = DocumentationValidator;

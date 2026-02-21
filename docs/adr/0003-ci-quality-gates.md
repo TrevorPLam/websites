@@ -25,6 +25,7 @@ The monorepo CI workflow ran a single job with mixed blocking and non-blocking s
 ## Consequences
 
 ### Positive
+
 - Clear pass/fail: only `quality-gates` blocks merge.
 - Faster PR feedback via affected-package runs when changes are localized.
 - Nightly catches transitive and config-level drift.
@@ -32,9 +33,11 @@ The monorepo CI workflow ran a single job with mixed blocking and non-blocking s
 - Single source of truth for required checks.
 
 ### Neutral
+
 - `turbo run test` not used; root `pnpm test` (Jest) runs full suite. Turbo's test task exists for packages that add per-package test scripts later.
 
 ### Risks
+
 - Fork PRs: `origin/main` may resolve differently; affected filter might behave unexpectedly. Mitigation: document same-repo assumption; full run on push to main.
 - Audit job runs even when quality-gates fails; acceptable for visibility.
 

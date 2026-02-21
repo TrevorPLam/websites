@@ -52,16 +52,16 @@ Set to `null` to hide the testimonials section.
 ```typescript
 interface Testimonial {
   id: string;
-  quote?: string;    // Review text (use quote or content, not both)
-  content?: string;  // Alias for quote
+  quote?: string; // Review text (use quote or content, not both)
+  content?: string; // Alias for quote
   author: {
     name: string;
-    role?: string;    // Job title or descriptor ('Happy Customer')
+    role?: string; // Job title or descriptor ('Happy Customer')
     company?: string;
     photo?: { src: string; alt: string };
-    avatar?: string;  // Alternative to photo.src (URL string)
+    avatar?: string; // Alternative to photo.src (URL string)
   };
-  rating?: number;   // 1-5 star rating (optional)
+  rating?: number; // 1-5 star rating (optional)
 }
 ```
 
@@ -167,12 +167,12 @@ When `rating` is provided (1–5), components render star indicators. Omit the f
 
 ## Industry Recommendations
 
-| Industry | Recommended Variant |
-|----------|-------------------|
-| Salon / Beauty | `carousel` |
-| Restaurant | `grid` |
-| Law firm | `grid` (text-heavy, credibility focus) |
-| SaaS / Retail | `marquee` (high volume) |
+| Industry         | Recommended Variant                      |
+| ---------------- | ---------------------------------------- |
+| Salon / Beauty   | `carousel`                               |
+| Restaurant       | `grid`                                   |
+| Law firm         | `grid` (text-heavy, credibility focus)   |
+| SaaS / Retail    | `marquee` (high volume)                  |
 | Medical / Dental | `carousel` (controlled, curated reviews) |
 
 ---

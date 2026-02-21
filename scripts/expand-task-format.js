@@ -121,8 +121,16 @@ function parseCompressed(content) {
     }
 
     // Enhanced Requirements block (bullets under **Enhanced Requirements:**)
-    if (currentBlock === 'enhanced' || (line.match(/^-\s+\*\*/) && blockLines.length === 0 && result.enhancedRequirements.length === 0)) {
-      if (line.match(/^-\s+\*\*/) || (currentBlock === 'enhanced' && (line.startsWith('- ') || line.startsWith('  ')))) {
+    if (
+      currentBlock === 'enhanced' ||
+      (line.match(/^-\s+\*\*/) &&
+        blockLines.length === 0 &&
+        result.enhancedRequirements.length === 0)
+    ) {
+      if (
+        line.match(/^-\s+\*\*/) ||
+        (currentBlock === 'enhanced' && (line.startsWith('- ') || line.startsWith('  ')))
+      ) {
         if (!currentBlock) currentBlock = 'enhanced';
         blockLines.push(line);
         i++;
@@ -131,7 +139,10 @@ function parseCompressed(content) {
     }
 
     // Checklist block (indented or bullet lines after Checklist:)
-    if (currentBlock === 'checklist' && (line.startsWith('- ') || line.startsWith('  ') || line.match(/^\d+\./))) {
+    if (
+      currentBlock === 'checklist' &&
+      (line.startsWith('- ') || line.startsWith('  ') || line.match(/^\d+\./))
+    ) {
       blockLines.push(line);
       i++;
       continue;
@@ -139,7 +150,10 @@ function parseCompressed(content) {
 
     currentBlock = null;
     if (blockLines.length > 0 && currentBlock !== 'checklist') {
-      if (result.enhancedRequirements.length === 0 && blockLines.some((l) => l.match(/^-\s+\*\*/))) {
+      if (
+        result.enhancedRequirements.length === 0 &&
+        blockLines.some((l) => l.match(/^-\s+\*\*/))
+      ) {
         result.enhancedRequirements = blockLines;
       }
       blockLines = [];
@@ -158,9 +172,15 @@ function parseCompressed(content) {
   }
 
   if (blockLines.length > 0 && currentBlock === 'checklist') {
-    result.checklist = result.checklist ? result.checklist + '\n' + blockLines.join('\n') : blockLines.join('\n').trim();
+    result.checklist = result.checklist
+      ? result.checklist + '\n' + blockLines.join('\n')
+      : blockLines.join('\n').trim();
   }
-  if (blockLines.length > 0 && result.enhancedRequirements.length === 0 && blockLines.some((l) => l.match(/^-\s+\*\*/))) {
+  if (
+    blockLines.length > 0 &&
+    result.enhancedRequirements.length === 0 &&
+    blockLines.some((l) => l.match(/^-\s+\*\*/))
+  ) {
     result.enhancedRequirements = blockLines;
   }
 
@@ -181,7 +201,10 @@ function formatRelatedFiles(filesStr) {
   const dirListMatch = filesStr.match(/([^(]+)\s*\(([^)]+)\)/);
   if (dirListMatch) {
     const base = dirListMatch[1].trim().replace(/`/g, '').replace(/\/$/, '');
-    const items = dirListMatch[2].split(/,\s*/).map((s) => s.trim()).filter(Boolean);
+    const items = dirListMatch[2]
+      .split(/,\s*/)
+      .map((s) => s.trim())
+      .filter(Boolean);
     for (const item of items) {
       const full = item.includes('/') ? `${base}/${item}` : `${base}/${item}`;
       entries.push(`- \`${full}\` – create – (see task objective)`);
@@ -193,7 +216,13 @@ function formatRelatedFiles(filesStr) {
     for (const p of parts) {
       const backtickMatch = p.match(/`([^`]+)`/);
       const path = backtickMatch ? backtickMatch[1] : p;
-      if (path && (path.includes('/') || path.includes('.ts') || path.includes('.tsx') || path.includes('.js'))) {
+      if (
+        path &&
+        (path.includes('/') ||
+          path.includes('.ts') ||
+          path.includes('.tsx') ||
+          path.includes('.js'))
+      ) {
         paths.push(path);
       }
     }
@@ -209,7 +238,10 @@ function formatRelatedFiles(filesStr) {
 function buildDependencies(deps, filesStr) {
   const items = [];
   if (deps && deps !== 'None') {
-    const depTasks = deps.split(/[,;]\s*/).map((d) => d.trim()).filter(Boolean);
+    const depTasks = deps
+      .split(/[,;]\s*/)
+      .map((d) => d.trim())
+      .filter(Boolean);
     for (const d of depTasks) {
       items.push(`- **Upstream Task**: ${d} – required – prerequisite`);
     }
@@ -227,13 +259,19 @@ function buildDependencies(deps, filesStr) {
 }
 
 function expandTask(parsed, taskId) {
-  const upstream = parsed.deps && parsed.deps !== 'None'
-    ? parsed.deps.split(/[,;]\s*/).map((d) => d.trim()).join(', ')
-    : 'None';
+  const upstream =
+    parsed.deps && parsed.deps !== 'None'
+      ? parsed.deps
+          .split(/[,;]\s*/)
+          .map((d) => d.trim())
+          .join(', ')
+      : 'None';
 
   const contextParts = [parsed.objective || '(Add context)'];
   if (parsed.enhancedRequirements.length > 0) {
-    contextParts.push('\n\n**Enhanced Requirements:**\n\n' + parsed.enhancedRequirements.join('\n'));
+    contextParts.push(
+      '\n\n**Enhanced Requirements:**\n\n' + parsed.enhancedRequirements.join('\n')
+    );
   }
   if (parsed.implementationPatterns) {
     contextParts.push(`\n\n**Implementation Patterns:** ${parsed.implementationPatterns}`);
@@ -409,7 +447,11 @@ function main() {
     }
 
     // Must look like compressed format (has Status: and Objective: or similar)
-    if (!content.match(/\*\*Status:\*\*/) && !content.match(/\*\*Objective:\*\*/) && !content.match(/\*\*Summary:\*\*/)) {
+    if (
+      !content.match(/\*\*Status:\*\*/) &&
+      !content.match(/\*\*Objective:\*\*/) &&
+      !content.match(/\*\*Summary:\*\*/)
+    ) {
       skipped++;
       continue;
     }

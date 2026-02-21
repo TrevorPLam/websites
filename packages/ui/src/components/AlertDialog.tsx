@@ -38,17 +38,20 @@ export interface AlertDialogProps {
   children: React.ReactNode;
 }
 
-export interface AlertDialogContentProps
-  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> {
+export interface AlertDialogContentProps extends React.ComponentPropsWithoutRef<
+  typeof AlertDialogPrimitive.Content
+> {
   className?: string;
 }
 
 export interface AlertDialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 export interface AlertDialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface AlertDialogTitleProps
-  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title> {}
-export interface AlertDialogDescriptionProps
-  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description> {}
+export interface AlertDialogTitleProps extends React.ComponentPropsWithoutRef<
+  typeof AlertDialogPrimitive.Title
+> {}
+export interface AlertDialogDescriptionProps extends React.ComponentPropsWithoutRef<
+  typeof AlertDialogPrimitive.Description
+> {}
 
 // ─── Components ──────────────────────────────────────────────────────────────
 

@@ -222,4 +222,4 @@ For comprehensive development guidance, including:
 
 ---
 
-*This is a quick development reference. See [docs/getting-started/onboarding.md](docs/getting-started/onboarding.md) for the complete development guide.*
+_This is a quick development reference. See [docs/getting-started/onboarding.md](docs/getting-started/onboarding.md) for the complete development guide._

@@ -70,8 +70,8 @@ export function validateSiteConfig(filePath: string): ValidationResult {
 
   // ── Structural text checks (fast, no eval) ──────────────────────────────
   const requiredFields: [RegExp, string, string][] = [
-    [/\bid:\s*['"`]/, 'id', 'Site id is required (e.g. id: \'my-site\')'],
-    [/\bname:\s*['"`]/, 'name', 'Site name is required (e.g. name: \'My Site\')'],
+    [/\bid:\s*['"`]/, 'id', "Site id is required (e.g. id: 'my-site')"],
+    [/\bname:\s*['"`]/, 'name', "Site name is required (e.g. name: 'My Site')"],
     [/\bindustry:\s*['"`]/, 'industry', 'Industry is required'],
     [/\btheme:\s*\{/, 'theme', 'theme section is required'],
     [/\bfeatures:\s*\{/, 'features', 'features section is required'],
@@ -90,9 +90,20 @@ export function validateSiteConfig(filePath: string): ValidationResult {
 
   // ── Industry value check ────────────────────────────────────────────────
   const VALID_INDUSTRIES = [
-    'salon', 'restaurant', 'law-firm', 'dental', 'medical', 'fitness',
-    'retail', 'consulting', 'realestate', 'construction', 'automotive',
-    'education', 'nonprofit', 'general',
+    'salon',
+    'restaurant',
+    'law-firm',
+    'dental',
+    'medical',
+    'fitness',
+    'retail',
+    'consulting',
+    'realestate',
+    'construction',
+    'automotive',
+    'education',
+    'nonprofit',
+    'general',
   ];
   const industryMatch = /industry:\s*['"`]([^'"`]+)['"`]/.exec(content);
   if (industryMatch?.[1] && !VALID_INDUSTRIES.includes(industryMatch[1])) {
@@ -248,7 +259,8 @@ function runCli(): void {
 // Export a named function so tests can import it without side-effects.
 export { runCli };
 
-const isCliInvocation = process.argv[1] && path.basename(process.argv[1]) === 'validate-site-config.ts';
+const isCliInvocation =
+  process.argv[1] && path.basename(process.argv[1]) === 'validate-site-config.ts';
 if (isCliInvocation) {
   runCli();
 }

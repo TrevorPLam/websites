@@ -46,7 +46,10 @@ export function getRadiusCssVars(): Record<string, string> {
  */
 export function getBorderCssVars(): Record<string, string> {
   const vars: Record<string, string> = {};
-  const entries = Object.entries(BORDER_WIDTH_SCALE) as [BorderWidthKey, (typeof BORDER_WIDTH_SCALE)[BorderWidthKey]][];
+  const entries = Object.entries(BORDER_WIDTH_SCALE) as [
+    BorderWidthKey,
+    (typeof BORDER_WIDTH_SCALE)[BorderWidthKey],
+  ][];
   for (const [key, value] of entries) {
     vars[`--border-width-${key}`] = value.css;
   }

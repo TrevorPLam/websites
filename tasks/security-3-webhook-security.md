@@ -14,6 +14,7 @@
 ## Context
 
 Webhook handlers for integrations (HubSpot, scheduling providers, etc.) currently lack:
+
 1. Unified webhook verification framework (HMAC signature validation)
 2. Timestamp-based replay protection
 3. Global idempotency tracking (prevent duplicate processing)
@@ -40,7 +41,7 @@ This addresses **Research Topic #7: Webhook Security & Signature Verification** 
   - Timestamp windows + idempotency keys to prevent replay
   - At-least-once delivery handling with idempotent consumers
 - **Threat Model**: Forged or replayed webhook events can cause fraud, data corruption, or arbitrary automation
-- **References**: 
+- **References**:
   - [docs/research/perplexity-security-2026.md](../docs/research/perplexity-security-2026.md) (Topic #7)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
   - OWASP API Security guidance
@@ -83,7 +84,9 @@ This addresses **Research Topic #7: Webhook Security & Signature Verification** 
 ## Implementation Plan
 
 ### Phase 1: Core Security Utilities
+
 - [ ] Create `packages/integrations-core/src/webhook-security.ts`:
+
   ```typescript
   export function verifySignature({
     rawBody,
@@ -99,13 +102,11 @@ This addresses **Research Topic #7: Webhook Security & Signature Verification** 
     // HMAC verification with constant-time comparison
   }
 
-  export function assertFreshTimestamp(
-    header: string | null,
-    skewSeconds = 300
-  ): void {
+  export function assertFreshTimestamp(header: string | null, skewSeconds = 300): void {
     // Validate timestamp within window
   }
   ```
+
 - [ ] Create `packages/integrations-core/src/webhook-idempotency.ts`:
   ```typescript
   export async function assertIdempotent({
@@ -121,6 +122,7 @@ This addresses **Research Topic #7: Webhook Security & Signature Verification** 
   ```
 
 ### Phase 2: Integration Updates
+
 - [ ] Update HubSpot webhook handler:
   - Use `verifySignature` with HubSpot-specific algorithm
   - Use `assertIdempotent` with HubSpot event ID
@@ -132,6 +134,7 @@ This addresses **Research Topic #7: Webhook Security & Signature Verification** 
   - Idempotency tracking
 
 ### Phase 3: Secret Management
+
 - [ ] Create secret resolution utility:
   - `getWebhookSecret(tenantId, integrationName)` — fetches from secure store
   - Environment variables or secret manager integration
@@ -140,6 +143,7 @@ This addresses **Research Topic #7: Webhook Security & Signature Verification** 
   - Document secret storage location
 
 ### Phase 4: Testing & Documentation
+
 - [ ] Unit tests:
   - Signature verification (valid/invalid)
   - Timestamp validation (fresh/stale)
@@ -151,6 +155,7 @@ This addresses **Research Topic #7: Webhook Security & Signature Verification** 
 ## Sample code / examples
 
 ### Webhook Security Utilities
+
 ```typescript
 // packages/integrations-core/src/webhook-security.ts
 import crypto from 'crypto';
@@ -177,16 +182,10 @@ export function verifySignature({
   const expectedSignature = hmac.digest('hex');
 
   // Constant-time comparison to prevent timing attacks
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expectedSignature)
-  );
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 }
 
-export function assertFreshTimestamp(
-  header: string | null,
-  skewSeconds = 300
-): void {
+export function assertFreshTimestamp(header: string | null, skewSeconds = 300): void {
   if (!header) {
     throw new Error('Timestamp header missing');
   }
@@ -202,6 +201,7 @@ export function assertFreshTimestamp(
 ```
 
 ### Idempotency Tracking
+
 ```typescript
 // packages/integrations-core/src/webhook-idempotency.ts
 import { redis } from '@repo/infra/redis'; // or Postgres client
@@ -214,7 +214,7 @@ export async function assertIdempotent({
   ttlSeconds?: number;
 }): Promise<void> {
   const key = `webhook:event:${eventId}`;
-  
+
   // Check if already processed
   const existing = await redis.get(key);
   if (existing) {
@@ -227,6 +227,7 @@ export async function assertIdempotent({
 ```
 
 ### Webhook Handler Example
+
 ```typescript
 // packages/integrations/hubspot/src/webhook-handler.ts
 import { verifySignature, assertFreshTimestamp } from '@repo/integrations-core/webhook-security';
@@ -293,15 +294,15 @@ export async function POST(request: Request) {
 
 ## Execution notes
 
-- **Related files — current state:** 
+- **Related files — current state:**
   - `packages/integrations/*/src/webhook-handler.ts` — may exist but verification inconsistent
   - `packages/integrations-core/` — may not exist yet
-- **Potential issues / considerations:** 
+- **Potential issues / considerations:**
   - Provider-specific signature algorithms (HubSpot vs Stripe vs Calendly)
   - Raw body access in Next.js (may need route config)
   - Idempotency backend (Redis vs Postgres)
   - Secret storage (env vars vs secret manager)
-- **Verification:** 
+- **Verification:**
   - Unit tests pass
   - Integration tests verify security checks
   - Manual test: invalid signature rejected

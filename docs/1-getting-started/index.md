@@ -53,11 +53,11 @@ Before you begin, ensure you have:
 
 ### Required Software
 
-| Software | Minimum Version | Recommended | Purpose |
-|----------|-----------------|-------------|---------|
-| **Node.js** | >=22.0.0 | Latest | Runtime environment |
-| **pnpm** | 10.29.2 | Latest | Package manager |
-| **Git** | 2.30.0 | Latest | Version control |
+| Software    | Minimum Version | Recommended | Purpose             |
+| ----------- | --------------- | ----------- | ------------------- |
+| **Node.js** | >=22.0.0        | Latest      | Runtime environment |
+| **pnpm**    | 10.29.2         | Latest      | Package manager     |
+| **Git**     | 2.30.0          | Latest      | Version control     |
 
 ### Verification
 
@@ -85,6 +85,7 @@ git --version  # Should be 2.30.0 or higher
 ### Step 1: Install Node.js
 
 **Using nvm (Recommended):**
+
 ```bash
 # Install Node.js 24 (latest LTS)
 nvm install 24
@@ -93,6 +94,7 @@ nvm alias default 24
 ```
 
 **Direct Download:**
+
 - Visit [nodejs.org](https://nodejs.org/)
 - Download the LTS version for your operating system
 - Run the installer and follow the prompts
@@ -110,16 +112,19 @@ pnpm --version
 ### Step 3: Install Git
 
 **Windows:**
+
 - Download from [git-scm.com](https://git-scm.com/)
 - Run the installer with default options
 
 **macOS:**
+
 ```bash
 # Using Homebrew
 brew install git
 ```
 
 **Linux:**
+
 ```bash
 # Ubuntu/Debian
 sudo apt-get update
@@ -208,35 +213,35 @@ Edit `site.config.ts` to customize your site:
 
 ```typescript
 export const siteConfig = {
-  siteName: "My First Website",
-  description: "A professional website built with marketing-websites",
+  siteName: 'My First Website',
+  description: 'A professional website built with marketing-websites',
   theme: {
-    primaryColor: "174 100% 26%", // Blue
-    secondaryColor: "210 100% 23%", // Purple
-    accentColor: "346 100% 50%",  // Green
+    primaryColor: '174 100% 26%', // Blue
+    secondaryColor: '210 100% 23%', // Purple
+    accentColor: '346 100% 50%', // Green
   },
   features: {
     hero: true,
     services: true,
     contact: true,
     booking: false, // Disable for now
-    blog: false,     // Disable for now
+    blog: false, // Disable for now
   },
   navLinks: [
-    { label: "Home", href: "/" },
-    { label: "Services", href: "/services" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
+    { label: 'Home', href: '/' },
+    { label: 'Services', href: '/services' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' },
   ],
   contact: {
-    email: "contact@example.com",
-    phone: "+1 (555) 123-4567",
-    address: "123 Main St, City, State 12345",
+    email: 'contact@example.com',
+    phone: '+1 (555) 123-4567',
+    address: '123 Main St, City, State 12345',
   },
   seo: {
-    title: "My First Website | Professional Services",
-    description: "Professional services website built with modern web technologies",
-    siteUrl: "https://my-first-site.com",
+    title: 'My First Website | Professional Services',
+    description: 'Professional services website built with modern web technologies',
+    siteUrl: 'https://my-first-site.com',
   },
 };
 ```
@@ -334,6 +339,7 @@ pnpm build
 ### Common Issues and Solutions
 
 **Installation Problems:**
+
 ```bash
 # Clear pnpm cache and reinstall
 pnpm store prune
@@ -342,6 +348,7 @@ pnpm install
 ```
 
 **Build Errors:**
+
 ```bash
 # Clear build cache
 pnpm clean
@@ -349,6 +356,7 @@ pnpm build
 ```
 
 **TypeScript Errors:**
+
 ```bash
 # Clear TypeScript cache
 pnpm type-check --clearCache
@@ -359,16 +367,19 @@ pnpm type-check --clearCache
 Now that you're set up, explore these resources:
 
 ### Learn the Platform
+
 - [**Architecture Overview**](../4-explanation/architecture/) - Understand the system design
 - [**Configuration Guide**](../3-reference/configuration/) - Master site.config.ts
 - [**Component Library**](../3-reference/components/) - Use UI components
 
 ### Build Your Skills
+
 - [**Component Development**](../2-guides/component-development/) - Create reusable components
 - [**Feature Integration**](../2-guides/feature-integration/) - Add business features
 - [**Custom Templates**](../5-tutorials/custom-templates/) - Build industry-specific templates
 
 ### Join the Community
+
 - [**GitHub Discussions**](https://github.com/your-org/marketing-websites/discussions) - Ask questions
 - [**Contributing Guide**](../../CONTRIBUTING.md) - Contribute to the platform
 - [**Support Documentation**](../../SUPPORT.md) - Get help from the team
@@ -376,22 +387,25 @@ Now that you're set up, explore these resources:
 ## 🆘 Getting Help
 
 ### Quick Questions
+
 - **FAQ** - [Common questions and answers](../2-guides/faq/)
 - **Troubleshooting** - [Solve common problems](../2-guides/troubleshooting/)
 - **Glossary** - [Understand terminology](../3-reference/glossary/)
 
 ### Community Support
+
 - **GitHub Issues** - Report bugs and request features
 - **GitHub Discussions** - Ask questions and share ideas
 - **Slack/Discord** - Real-time community chat (if available)
 
 ### Professional Support
+
 - **Email Support** - Contact the team directly
 - **Consulting** - Get expert help with your project
 - **Training** - Schedule team training sessions
 
 ---
 
-*Ready to build amazing marketing websites? Let's get started!* 🚀
+_Ready to build amazing marketing websites? Let's get started!_ 🚀
 
-*Last updated: 2026-02-19 | Review interval: 90 days*
+_Last updated: 2026-02-19 | Review interval: 90 days_

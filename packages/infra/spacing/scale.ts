@@ -122,11 +122,11 @@ export const SPACING_SCALE: Readonly<Record<SpacingKey, SpacingValue>> = {
 export const SEMANTIC_SPACING: Readonly<Record<SemanticSpacingKey, SpacingKey>> = {
   none: '0',
   px: 'px',
-  xs: '1',   // 4px
-  sm: '2',   // 8px
-  md: '4',   // 16px
-  lg: '6',   // 24px
-  xl: '8',   // 32px
+  xs: '1', // 4px
+  sm: '2', // 8px
+  md: '4', // 16px
+  lg: '6', // 24px
+  xl: '8', // 32px
   '2xl': '12', // 48px
   '3xl': '16', // 64px
   '4xl': '24', // 96px

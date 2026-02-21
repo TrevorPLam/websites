@@ -33,11 +33,11 @@ docker run -p 3101:3101 \
 
 See `.env.production.local.example` (or `.env.example`) for required variables. Key production vars:
 
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `NEXT_PUBLIC_SITE_URL` | Yes | Canonical site URL for metadata, sitemap |
-| `NEXT_PUBLIC_SENTRY_DSN` | No | Error tracking (Sentry) |
-| `NODE_ENV` | Set by Dockerfile | Always `production` in runtime stage |
+| Variable                 | Required          | Purpose                                  |
+| ------------------------ | ----------------- | ---------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`   | Yes               | Canonical site URL for metadata, sitemap |
+| `NEXT_PUBLIC_SENTRY_DSN` | No                | Error tracking (Sentry)                  |
+| `NODE_ENV`               | Set by Dockerfile | Always `production` in runtime stage     |
 
 ## Health Check
 
@@ -50,10 +50,10 @@ curl -s http://localhost:3101/api/health
 
 ## Architecture
 
-| Stage | Purpose |
-|-------|---------|
-| **deps** | Install pnpm workspace dependencies |
-| **builder** | Build Next.js with `output: 'standalone'` |
+| Stage       | Purpose                                     |
+| ----------- | ------------------------------------------- |
+| **deps**    | Install pnpm workspace dependencies         |
+| **builder** | Build Next.js with `output: 'standalone'`   |
 | **runtime** | Minimal Alpine image with standalone server |
 
 The build uses `pnpm run build --filter=@clients/starter-template` (package name matches).

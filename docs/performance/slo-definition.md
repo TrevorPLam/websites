@@ -123,7 +123,7 @@ Performance budgets can be integrated into CI workflows:
 # .github/workflows/ci.yml
 - name: Validate performance budgets
   run: pnpm validate:budgets --client=starter-template
-  continue-on-error: true  # Non-blocking initially
+  continue-on-error: true # Non-blocking initially
 ```
 
 ## Measurement Setup
@@ -133,11 +133,13 @@ Performance budgets can be integrated into CI workflows:
 To enable automatic performance measurement:
 
 1. Install `@lhci/cli`:
+
    ```bash
    pnpm add -D -w @lhci/cli
    ```
 
 2. Configure `.lighthouserc.js`:
+
    ```js
    module.exports = {
      ci: {
@@ -149,7 +151,7 @@ To enable automatic performance measurement:
          assertions: {
            'categories:performance': ['error', { minScore: 0.9 }],
            'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
-           'interactive': ['error', { maxNumericValue: 200 }],
+           interactive: ['error', { maxNumericValue: 200 }],
            'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
          },
        },
@@ -183,6 +185,7 @@ This generates bundle analysis reports in `.next/analyze/`.
 ### Alerting
 
 Set up alerts for:
+
 - LCP > 2.5s (p75)
 - INP > 200ms (p75)
 - CLS > 0.1 (p75)

@@ -89,12 +89,15 @@ clients/starter-template/
 ## Alternatives Considered
 
 ### next-i18next (Pages Router)
+
 Incompatible with App Router. Rejected.
 
 ### React-intl / i18next
+
 Viable, but next-intl has first-party Next.js integration, official support for Server Components, and the cleanest DX for App Router. next-intl is the recommended choice in the Next.js ecosystem as of 2026.
 
 ### Manual locale parameter
+
 Passing locale as a prop/context without a routing library avoids the `[locale]` segment but loses automatic locale detection, clean URLs, and type safety. Rejected.
 
 ## References

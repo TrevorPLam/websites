@@ -82,7 +82,7 @@ graph TD
     %% Infrastructure Layer (L0)
     Infra["@repo/infra"]
     Integrations["@repo/integrations-*"]
-    
+
     %% Component Layer (L2)
     Types["@repo/types"]
     Utils["@repo/utils"]
@@ -90,35 +90,35 @@ graph TD
     Features["@repo/features"]
     Marketing["@repo/marketing-components"]
     PageTemplates["@repo/page-templates"]
-    
+
     %% Experience Layer (L3)
     Clients["clients/*"]
-    
+
     %% Dependencies
     Infra --> Types
     Infra --> Utils
-    
+
     Types --> UI
     Types --> Features
     Types --> Marketing
     Types --> PageTemplates
-    
+
     Utils --> UI
     Utils --> Features
     Utils --> Marketing
-    
+
     UI --> Features
     UI --> Marketing
     UI --> PageTemplates
-    
+
     Features --> Marketing
     Features --> PageTemplates
-    
+
     Marketing --> PageTemplates
-    
+
     Integrations --> Features
     Integrations --> Marketing
-    
+
     Clients --> UI
     Clients --> Utils
     Clients --> Features
@@ -127,7 +127,7 @@ graph TD
     Clients --> Marketing
     Clients --> Infra
     Clients --> Types
-    
+
     %% Styling
     classDef infra fill:#e1f5fe
     classDef types fill:#f3e5f5
@@ -137,7 +137,7 @@ graph TD
     classDef marketing fill:#f1f8e9
     classDef templates fill:#e0f2f1
     classDef clients fill:#fff8e1
-    
+
     class Infra,Integrations infra
     class Types types
     class Utils utils
@@ -154,37 +154,37 @@ graph TD
 graph LR
     %% Core Infrastructure
     Infra["@repo/infra"] --> |"Security, logging, env"| Packages
-    
+
     %% Shared Libraries
     Types["@repo/types"] --> |"Type definitions"| UI["@repo/ui"]
     Types --> |"Config schemas"| Features["@repo/features"]
     Types --> |"Site config"| Clients["clients/*"]
-    
+
     Utils["@repo/utils"] --> |"Helper functions"| UI
     Utils --> |"Utilities"| Features
-    
+
     %% Component Libraries
     UI --> |"UI primitives"| Features
     UI --> |"Components"| Clients
-    
+
     Features --> |"Business logic"| Marketing["@repo/marketing-components"]
     Features --> |"Feature components"| Clients
-    
+
     Marketing --> |"Marketing components"| PageTemplates["@repo/page-templates"]
-    
+
     %% Clients consume page-templates
     PageTemplates --> |"Page templates"| Clients
-    
+
     %% Integrations
     Integrations["@repo/integrations-*"] --> |"Third-party services"| Features
     Integrations --> |"API adapters"| Marketing
-    
+
     %% Package groups
     classDef infra fill:#e1f5fe,stroke:#0277bd
     classDef shared fill:#f3e5f5,stroke:#7b1fa2
     classDef components fill:#fff3e0,stroke:#ef6c00
     classDef experience fill:#e0f2f1,stroke:#00695c
-    
+
     class Infra infra
     class Types,Utils shared
     class UI,Features,Marketing,PageTemplates components
@@ -200,36 +200,36 @@ graph LR
 ```mermaid
 graph TD
     Client["Client (e.g., starter-template)"]
-    
+
     %% Core Client Files
     Client --> App["app/"]
     Client --> Components["components/"]
     Client --> Config["site.config.ts"]
     Client --> Env[".env.local"]
     Client --> I18n["i18n/"]
-    
+
     %% App Structure
     App --> Layout["layout.tsx"]
     App --> Locale["[locale]/"]
     App --> Globals["globals.css"]
-    
+
     Locale --> Page["page.tsx"]
     Locale --> AboutPage["about/page.tsx"]
     Locale --> ServicesPage["services/page.tsx"]
     Locale --> ContactPage["contact/page.tsx"]
     Locale --> BookPage["book/page.tsx"]
     Locale --> BlogPage["blog/"]
-    
+
     %% Dependencies
     Components -.-> |"imports"| UI["@repo/ui"]
     Page -.-> |"imports"| PageTemplates["@repo/page-templates"]
     Config --> |"validates"| Types["@repo/types"]
-    
+
     %% Styling
     classDef client fill:#e8f5e8,stroke:#2e7d32
     classDef file fill:#fff3e0,stroke:#ef6c00
     classDef package fill:#e3f2fd,stroke:#1565c0
-    
+
     class Client client
     class App,Components,Config,Env,I18n,Locale,Page,AboutPage,ServicesPage,ContactPage,BookPage,BlogPage,Globals file
     class UI,PageTemplates,Types package
@@ -241,7 +241,7 @@ graph TD
 graph TB
     %% Client
     Client["starter-template"]
-    
+
     %% Shared Packages
     UI["@repo/ui"]
     Features["@repo/features"]
@@ -250,7 +250,7 @@ graph TB
     Utils["@repo/utils"]
     Types["@repo/types"]
     Infra["@repo/infra"]
-    
+
     %% Integration Points
     Client --> |"uses"| UI
     Client --> |"uses"| Features
@@ -259,17 +259,17 @@ graph TB
     Client --> |"uses"| Utils
     Client --> |"validates"| Types
     Client --> |"configures"| Infra
-    
+
     %% Package Dependencies
     PageTemplates --> |"depends on"| Types
     Marketing --> |"depends on"| UI
     Features --> |"depends on"| UI
     Features --> |"depends on"| Infra
-    
+
     %% Styling
     classDef client fill:#e8f5e8,stroke:#2e7d32
     classDef package fill:#e3f2fd,stroke:#1565c0
-    
+
     class Client client
     class UI,Features,PageTemplates,Marketing,Utils,Types,Infra package
 ```
@@ -283,33 +283,33 @@ graph TB
 ```mermaid
 flowchart TD
     Start["Start: New Client"]
-    
+
     %% Selection Phase
     Start --> CopyTemplate["Copy clients/starter-template to clients/[name]"]
-    
+
     %% Configuration Phase
     CopyTemplate --> ConfigureEnv["Configure .env.local"]
     ConfigureEnv --> ConfigureSite["Configure site.config.ts"]
     ConfigureSite --> CustomizeContent["Customize Content"]
-    
+
     %% Setup Phase
     CustomizeContent --> InstallDeps["Install Dependencies"]
     InstallDeps --> TestBuild["Test Build"]
     TestBuild --> Deploy["Deploy Client"]
-    
+
     %% Completion
     Deploy --> Success["Client Live"]
-    
+
     %% Error handling
     TestBuild --> |"fails"| FixIssues["Fix Issues"]
     FixIssues --> TestBuild
-    
+
     %% Styling
     classDef start fill:#e8f5e8,stroke:#2e7d32
     classDef process fill:#fff3e0,stroke:#ef6c00
     classDef decision fill:#fce4ec,stroke:#c2185b
     classDef success fill:#e3f2fd,stroke:#1565c0
-    
+
     class Start start
     class CopyTemplate,ConfigureEnv,ConfigureSite,CustomizeContent,InstallDeps,Deploy process
     class TestBuild decision
@@ -323,38 +323,38 @@ flowchart TD
 graph TD
     %% Client Instance
     Client["Client Website"]
-    
+
     %% Shared Dependencies
     UI["@repo/ui"]
     Features["@repo/features"]
     Utils["@repo/utils"]
     Infra["@repo/infra"]
-    
+
     Client --> |"uses"| UI
     Client --> |"uses"| Features
     Client --> |"uses"| Utils
     Client --> |"uses"| Infra
-    
+
     %% External Services
     Database[(Database)]
     Analytics[Analytics Service]
     CDN[CDN]
-    
+
     Client --> |"stores data in"| Database
     Client --> |"sends events to"| Analytics
     Client --> |"served from"| CDN
-    
+
     %% Infrastructure
     Infra --> |"manages"| Database
     Infra --> |"configures"| Analytics
     Infra --> |"optimizes"| CDN
-    
+
     %% Styling
     classDef client fill:#fff8e1,stroke:#f57f17
     classDef template fill:#e8f5e8,stroke:#2e7d32
     classDef package fill:#e3f2fd,stroke:#1565c0
     classDef external fill:#fce4ec,stroke:#c2185b
-    
+
     class Client client
     class UI,Features,Utils,Infra package
     class Database,Analytics,CDN external
@@ -377,17 +377,17 @@ sequenceDiagram
     participant Infra
     participant DB as Database
     participant API as External APIs
-    
+
     User->>CDN: Request
     CDN->>Edge: Forward request
     Edge->>Edge: Security checks
     Edge->>App: Forward to app
-    
+
     App->>Template: Render page
     Template->>Features: Load features
     Features->>Infra: Get configuration
     Infra->>DB: Query data
-    
+
     Features->>API: Fetch external data
     API-->>Features: Return data
     DB-->>Infra: Return data
@@ -407,41 +407,41 @@ flowchart LR
     EnvVars["Environment Variables"]
     SiteConfig["site.config.ts"]
     PackageConfig["Package Configs"]
-    
+
     %% Validation
     Types["@repo/types"]
     Infra["@repo/infra"]
-    
+
     %% Processing
     ConfigProcessor["Configuration Processor"]
-    
+
     %% Outputs
     Theme["Theme Variables"]
     FeatureFlags["Feature Flags"]
     APIConfig["API Configuration"]
     SecurityConfig["Security Settings"]
-    
+
     %% Flow
     EnvVars --> ConfigProcessor
     SiteConfig --> ConfigProcessor
     PackageConfig --> ConfigProcessor
-    
+
     ConfigProcessor --> Types
     Types --> |"validates"| ConfigProcessor
-    
+
     ConfigProcessor --> Infra
     Infra --> |"applies security"| ConfigProcessor
-    
+
     ConfigProcessor --> Theme
     ConfigProcessor --> FeatureFlags
     ConfigProcessor --> APIConfig
     ConfigProcessor --> SecurityConfig
-    
+
     %% Styling
     classDef input fill:#e8f5e8,stroke:#2e7d32
     classDef process fill:#fff3e0,stroke:#ef6c00
     classDef output fill:#e3f2fd,stroke:#1565c0
-    
+
     class EnvVars,SiteConfig,PackageConfig input
     class ConfigProcessor process
     class Types,Infra process
@@ -459,31 +459,31 @@ graph TD
     %% Root Components
     ThemeProvider["ThemeProvider"]
     Layout["Layout"]
-    
+
     %% Layout Components
     Layout --> Header["Header"]
     Layout --> Main["Main"]
     Layout --> Footer["Footer"]
-    
+
     %% Header Components
     Header --> Navigation["Navigation"]
     Header --> Logo["Logo"]
     Header --> CTA["CTA Button"]
-    
+
     %% Main Components
     Main --> Hero["Hero Section"]
     Main --> Features["Features Section"]
     Main --> Testimonials["Testimonials"]
     Main --> Contact["Contact Section"]
-    
+
     %% Feature Components
     Features --> FeatureCard["Feature Card"]
     Features --> ServiceList["Service List"]
-    
+
     %% Contact Components
     Contact --> ContactForm["Contact Form"]
     Contact --> Map["Map Component"]
-    
+
     %% UI Primitives
     Button["Button"]
     Input["Input"]
@@ -492,14 +492,14 @@ graph TD
     Dialog["Dialog"]
     Tabs["Tabs"]
     Dropdown["Dropdown"]
-    
+
     %% Relationships
     Navigation --> Button
     CTA --> Button
     FeatureCard --> Card
     ContactForm --> Input
     ContactForm --> Button
-    
+
     %% Package Sources
     UI["@repo/ui"] --> Button
     UI --> Input
@@ -508,19 +508,19 @@ graph TD
     UI --> Dialog
     UI --> Tabs
     UI --> Dropdown
-    
+
     Features["@repo/features"] --> Navigation
     Features --> Hero
     Features --> FeatureCard
     Features --> ContactForm
     Features --> Map
-    
+
     %% Styling
     classDef layout fill:#e8f5e8,stroke:#2e7d32
     classDef section fill:#fff3e0,stroke:#ef6c00
     classDef primitive fill:#e3f2fd,stroke:#1565c0
     classDef package fill:#fce4ec,stroke:#c2185b
-    
+
     class Layout,Header,Main,Footer layout
     class Hero,Features,Testimonials,Contact,Navigation,Logo,CTA,FeatureCard,ServiceList,ContactForm,Map section
     class Button,Input,Card,Modal,Dialog,Tabs,Dropdown primitive
@@ -537,55 +537,55 @@ graph TB
     Blog["Blog Feature"]
     Services["Services Feature"]
     Search["Search Feature"]
-    
+
     %% Shared Components
     Form["Form Components"]
     Validation["Validation Utils"]
     API["API Client"]
-    
+
     %% UI Primitives
     Button["Button"]
     Input["Input"]
     Modal["Modal"]
     Card["Card"]
-    
+
     %% Feature Dependencies
     Booking --> Form
     Booking --> Validation
     Booking --> API
     Booking --> Modal
-    
+
     Contact --> Form
     Contact --> Validation
     Contact --> API
-    
+
     Blog --> API
     Blog --> Card
-    
+
     Services --> Card
     Services --> Button
-    
+
     Search --> Input
     Search --> API
-    
+
     %% Shared Dependencies
     Form --> Button
     Form --> Input
     Validation --> Utils["@repo/utils"]
     API --> Infra["@repo/infra"]
-    
+
     %% UI Dependencies
     Button --> UI["@repo/ui"]
     Input --> UI
     Modal --> UI
     Card --> UI
-    
+
     %% Styling
     classDef feature fill:#e8f5e8,stroke:#2e7d32
     classDef shared fill:#fff3e0,stroke:#ef6c00
     classDef primitive fill:#e3f2fd,stroke:#1565c0
     classDef package fill:#fce4ec,stroke:#c2185b
-    
+
     class Booking,Contact,Blog,Services,Search feature
     class Form,Validation,API shared
     class Button,Input,Modal,Card primitive
@@ -602,60 +602,60 @@ graph TB
 graph TD
     %% Core Integration Package
     Integrations["@repo/integrations"]
-    
+
     %% Specific Integrations
     HubSpot["HubSpot Integration"]
     Google["Google Analytics"]
     Supabase["Supabase"]
     Sentry["Sentry"]
-    
+
     %% Integration Adapters
     HubSpotAdapter["HubSpot Adapter"]
     GoogleAdapter["Google Adapter"]
     SupabaseAdapter["Supabase Adapter"]
     SentryAdapter["Sentry Adapter"]
-    
+
     %% External Services
     HubSpotAPI["HubSpot API"]
     GoogleAPI["Google Analytics API"]
     SupabaseAPI["Supabase API"]
     SentryAPI["Sentry API"]
-    
+
     %% Usage in Features
     Features["@repo/features"]
     Templates["templates/*"]
-    
+
     %% Connections
     Integrations --> HubSpot
     Integrations --> Google
     Integrations --> Supabase
     Integrations --> Sentry
-    
+
     HubSpot --> HubSpotAdapter
     Google --> GoogleAdapter
     Supabase --> SupabaseAdapter
     Sentry --> SentryAdapter
-    
+
     HubSpotAdapter --> HubSpotAPI
     GoogleAdapter --> GoogleAPI
     SupabaseAdapter --> SupabaseAPI
     SentryAdapter --> SentryAPI
-    
+
     Features --> |"uses"| HubSpot
     Features --> |"uses"| Google
     Features --> |"uses"| Supabase
     Features --> |"uses"| Sentry
-    
+
     %% Note: No client currently imports integrations directly; they are scaffolded
     Clients["clients/*"] -.-> |"future"| HubSpot
     Clients -.-> |"future"| Google
-    
+
     %% Styling
     classDef integration fill:#e8f5e8,stroke:#2e7d32
     classDef adapter fill:#fff3e0,stroke:#ef6c00
     classDef external fill:#e3f2fd,stroke:#1565c0
     classDef consumer fill:#fce4ec,stroke:#c2185b
-    
+
     class Integrations,HubSpot,Google,Supabase,Sentry integration
     class HubSpotAdapter,GoogleAdapter,SupabaseAdapter,SentryAdapter adapter
     class HubSpotAPI,GoogleAPI,SupabaseAPI,SentryAPI external
@@ -672,48 +672,48 @@ graph TD
 graph TD
     %% Source Code
     Source["Source Code"]
-    
+
     %% Build Process
     Build["Next.js Build"]
-    
+
     %% Optimization Steps
     CodeSplitting["Code Splitting"]
     TreeShaking["Tree Shaking"]
     Minification["Minification"]
     Compression["Compression"]
-    
+
     %% Output Bundles
     MainBundle["Main Bundle"]
     RouteBundles["Route Bundles"]
     ComponentBundles["Component Bundles"]
     VendorBundles["Vendor Bundles"]
-    
+
     %% Deployment
     CDN["CDN Distribution"]
-    
+
     %% Flow
     Source --> Build
     Build --> CodeSplitting
     CodeSplitting --> TreeShaking
     TreeShaking --> Minification
     Minification --> Compression
-    
+
     Compression --> MainBundle
     Compression --> RouteBundles
     Compression --> ComponentBundles
     Compression --> VendorBundles
-    
+
     MainBundle --> CDN
     RouteBundles --> CDN
     ComponentBundles --> CDN
     VendorBundles --> CDN
-    
+
     %% Styling
     classDef source fill:#e8f5e8,stroke:#2e7d32
     classDef process fill:#fff3e0,stroke:#ef6c00
     classDef bundle fill:#e3f2fd,stroke:#1565c0
     classDef deployment fill:#fce4ec,stroke:#c2185b
-    
+
     class Source source
     class Build,CodeSplitting,TreeShaking,Minification,Compression process
     class MainBundle,RouteBundles,ComponentBundles,VendorBundles bundle
@@ -726,22 +726,22 @@ graph TD
 graph LR
     %% Browser
     Browser["Browser"]
-    
+
     %% CDN Caching
     CDN["CDN Cache"]
-    
+
     %% Edge Caching
     Edge["Edge Cache"]
-    
+
     %% Application Caching
     AppCache["App Cache"]
-    
+
     %% Data Caching
     DataCache["Data Cache"]
-    
+
     %% Database
     Database[(Database)]
-    
+
     %% Cache Flow
     Browser --> |"1. Check"| Browser
     Browser --> |"2. Miss"| CDN
@@ -753,18 +753,18 @@ graph LR
     AppCache --> |"8. Miss"| DataCache
     DataCache --> |"9. Check"| DataCache
     DataCache --> |"10. Miss"| Database
-    
+
     %% Return Flow
     Database --> |"10. Store"| DataCache
     DataCache --> |"9. Store"| AppCache
     AppCache --> |"8. Store"| Edge
     Edge --> |"7. Store"| CDN
     CDN --> |"6. Store"| Browser
-    
+
     %% Styling
     classDef cache fill:#e8f5e8,stroke:#2e7d32
     classDef storage fill:#e3f2fd,stroke:#1565c0
-    
+
     class Browser,CDN,Edge,AppCache,DataCache cache
     class Database storage
 ```
@@ -779,53 +779,53 @@ graph LR
 graph TD
     %% External Layer
     Internet["Internet"]
-    
+
     %% Edge Security
     Edge["Edge Security"]
     DDoS["DDoS Protection"]
     WAF["Web Application Firewall"]
-    
+
     %% Application Security
     Auth["Authentication"]
     AuthZ["Authorization"]
     Validation["Input Validation"]
     CSRF["CSRF Protection"]
-    
+
     %% Infrastructure Security
     EnvVars["Environment Variables"]
     Secrets["Secret Management"]
     Logging["Security Logging"]
-    
+
     %% Data Security
     Encryption["Encryption at Rest"]
     TLS["TLS in Transit"]
     RLS["Row Level Security"]
-    
+
     %% Connections
     Internet --> Edge
     Edge --> DDoS
     Edge --> WAF
-    
+
     WAF --> Auth
     Auth --> AuthZ
     AuthZ --> Validation
     Validation --> CSRF
-    
+
     CSRF --> EnvVars
     EnvVars --> Secrets
     Secrets --> Logging
-    
+
     Logging --> Encryption
     Encryption --> TLS
     TLS --> RLS
-    
+
     %% Styling
     classDef external fill:#fce4ec,stroke:#c2185b
     classDef edge fill:#fff3e0,stroke:#ef6c00
     classDef app fill:#e8f5e8,stroke:#2e7d32
     classDef infra fill:#e3f2fd,stroke:#1565c0
     classDef data fill:#f3e5f5,stroke:#7b1fa2
-    
+
     class Internet external
     class Edge,DDoS,WAF edge
     class Auth,AuthZ,Validation,CSRF app

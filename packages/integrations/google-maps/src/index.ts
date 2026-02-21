@@ -3,11 +3,7 @@
  * Task: [4.5] Google Maps integration (static + interactive)
  */
 
-import type {
-  MapsAdapter,
-  StaticMapOptions,
-  MapsEmbedConfig,
-} from '../../maps/contract';
+import type { MapsAdapter, StaticMapOptions, MapsEmbedConfig } from '../../maps/contract';
 
 /**
  * Google Maps adapter. Static map via image URL; interactive via JS (load only when hasMapsConsent()).

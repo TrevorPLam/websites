@@ -155,7 +155,8 @@ export async function submitContactForm(
         try {
           // Get validated client IP
           const clientIp = getValidatedClientIp(requestHeaders, {
-            environment: (process.env.NODE_ENV as 'development' | 'production' | 'test') || 'development',
+            environment:
+              (process.env.NODE_ENV as 'development' | 'production' | 'test') || 'development',
           });
 
           // Security validation
@@ -200,12 +201,18 @@ export async function submitContactForm(
           if (handlerResult.success) {
             return {
               success: true,
-              message: handlerResult.message || options?.successMessage || "Thank you for your message! We'll be in touch soon.",
+              message:
+                handlerResult.message ||
+                options?.successMessage ||
+                "Thank you for your message! We'll be in touch soon.",
             };
           } else {
             return {
               success: false,
-              message: handlerResult.message || options?.errorMessage || 'Something went wrong. Please try again.',
+              message:
+                handlerResult.message ||
+                options?.errorMessage ||
+                'Something went wrong. Please try again.',
             };
           }
         } catch (error) {
@@ -213,7 +220,9 @@ export async function submitContactForm(
 
           return {
             success: false,
-            message: options?.errorMessage || 'Something went wrong. Please try again or contact us directly.',
+            message:
+              options?.errorMessage ||
+              'Something went wrong. Please try again or contact us directly.',
           };
         }
       }

@@ -89,7 +89,9 @@ export function validateClient(
   root: string = ROOT,
   opts: { silent?: boolean } = {}
 ): ValidationResult {
-  const clientPath = path.isAbsolute(clientPathArg) ? clientPathArg : path.join(root, clientPathArg);
+  const clientPath = path.isAbsolute(clientPathArg)
+    ? clientPathArg
+    : path.join(root, clientPathArg);
   const clientName = path.basename(clientPath);
   let passed = 0;
   let failed = 0;

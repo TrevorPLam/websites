@@ -60,8 +60,9 @@ export interface ToggleGroupProps {
   loop?: boolean;
 }
 
-export interface ToggleGroupItemProps
-  extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> {
+export interface ToggleGroupItemProps extends React.ComponentPropsWithoutRef<
+  typeof ToggleGroupPrimitive.Item
+> {
   /** Visual variant */
   variant?: ToggleVariant;
   /** Size variant */
@@ -75,35 +76,60 @@ export interface ToggleGroupItemProps
 export const ToggleGroup = React.forwardRef<
   React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
   ToggleGroupProps
->(({ className, variant = 'default', size = 'md', type = 'single', value, defaultValue, onValueChange, valueMultiple, defaultValueMultiple, onValueChangeMultiple, disabled, orientation, loop, children, ...props }, ref) => {
-  const rootProps = type === 'single' 
-    ? { value, defaultValue, onValueChange, disabled, orientation, loop }
-    : { value: valueMultiple, defaultValue: defaultValueMultiple, onValueChange: onValueChangeMultiple, disabled, orientation, loop };
-  
-  return (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Radix discriminated union
-    <ToggleGroupPrimitive.Root
-      ref={ref}
-      type={type}
-      className={cn('flex items-center justify-center gap-1', className)}
-      {...(rootProps as any)}
-      {...props}
-    >
-      {children}
-    </ToggleGroupPrimitive.Root>
-  );
-});
+>(
+  (
+    {
+      className,
+      variant = 'default',
+      size = 'md',
+      type = 'single',
+      value,
+      defaultValue,
+      onValueChange,
+      valueMultiple,
+      defaultValueMultiple,
+      onValueChangeMultiple,
+      disabled,
+      orientation,
+      loop,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const rootProps =
+      type === 'single'
+        ? { value, defaultValue, onValueChange, disabled, orientation, loop }
+        : {
+            value: valueMultiple,
+            defaultValue: defaultValueMultiple,
+            onValueChange: onValueChangeMultiple,
+            disabled,
+            orientation,
+            loop,
+          };
+
+    return (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Radix discriminated union
+      <ToggleGroupPrimitive.Root
+        ref={ref}
+        type={type}
+        className={cn('flex items-center justify-center gap-1', className)}
+        {...(rootProps as any)}
+        {...props}
+      >
+        {children}
+      </ToggleGroupPrimitive.Root>
+    );
+  }
+);
 ToggleGroup.displayName = 'ToggleGroup';
 
 export const ToggleGroupItem = React.forwardRef<
   React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
   ToggleGroupItemProps
 >(({ className, variant = 'default', size = 'md', ...props }, ref) => (
-  <ToggleGroupPrimitive.Item
-    ref={ref}
-    asChild
-    {...props}
-  >
+  <ToggleGroupPrimitive.Item ref={ref} asChild {...props}>
     <Toggle variant={variant} size={size} className={className} />
   </ToggleGroupPrimitive.Item>
 ));

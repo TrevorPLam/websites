@@ -38,6 +38,7 @@
 **Problem:** When package A (features/marketing-components) imports from package B (ui), tsc compiles B's source. If B uses a module without types (e.g. react-window), A's type-check fails.
 
 **Solution:** Add B's declaration shims to A's tsconfig `include`:
+
 ```json
 "include": ["src/**/*", "../ui/src/shims/**/*.d.ts"]
 ```
@@ -84,21 +85,21 @@ Run type-check after adding components; remove unused `cn` and other imports to 
 
 ## Remaining Phase 4 Priorities
 
-| Task   | Status | Notes                                      |
-|--------|--------|--------------------------------------------|
-| 2-16   | Done   | TestimonialsSection                        |
-| 2-17   | Done   | TeamSection                                |
-| 2-18   | Done   | GallerySection                             |
-| 2-19   | Done   | PricingSection                             |
-| 2-20   | Exists | Search has SearchPage, SearchDialog        |
-| 2-21   | Done   | NewsletterSection                          |
-| 2-22   | Done   | SocialMediaSection                         |
-| 2-23   | TODO   | Analytics (config, track helpers)           |
-| 2-24   | TODO   | A/B testing (stub)                         |
-| 2-25   | Exists | Personalization has rules-engine, segments |
-| 2-26   | TODO   | Chat (config, widget hook)                 |
-| 2-27   | Done   | ReviewsSection                             |
-| 2-28   | Exists | Booking - enhance existing                 |
+| Task | Status | Notes                                      |
+| ---- | ------ | ------------------------------------------ |
+| 2-16 | Done   | TestimonialsSection                        |
+| 2-17 | Done   | TeamSection                                |
+| 2-18 | Done   | GallerySection                             |
+| 2-19 | Done   | PricingSection                             |
+| 2-20 | Exists | Search has SearchPage, SearchDialog        |
+| 2-21 | Done   | NewsletterSection                          |
+| 2-22 | Done   | SocialMediaSection                         |
+| 2-23 | TODO   | Analytics (config, track helpers)          |
+| 2-24 | TODO   | A/B testing (stub)                         |
+| 2-25 | Exists | Personalization has rules-engine, segments |
+| 2-26 | TODO   | Chat (config, widget hook)                 |
+| 2-27 | Done   | ReviewsSection                             |
+| 2-28 | Exists | Booking - enhance existing                 |
 
 ---
 

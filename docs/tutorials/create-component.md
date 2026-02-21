@@ -98,6 +98,7 @@ packages/ui/
 ```
 
 **Key patterns:**
+
 - Each component has its own directory
 - Component file: `ComponentName.tsx`
 - Test file: `ComponentName.test.tsx`
@@ -109,11 +110,13 @@ packages/ui/
 For this tutorial, we'll create an `Alert` component.
 
 **Naming conventions:**
+
 - Use PascalCase: `Alert`, `Card`, `Button`
 - Be descriptive: `Alert` not `Msg`
 - Follow existing patterns
 
 **Location:**
+
 ```bash
 packages/ui/src/components/Alert/
 ```
@@ -181,6 +184,7 @@ export { Alert }
 ```
 
 **Key points:**
+
 - Uses `forwardRef` for ref forwarding
 - Extends HTML attributes for flexibility
 - Uses `cn` utility for className merging
@@ -193,7 +197,7 @@ export { Alert }
 Create `index.ts`:
 
 ```typescript
-export { Alert, type AlertProps } from './Alert'
+export { Alert, type AlertProps } from './Alert';
 ```
 
 This allows importing: `import { Alert } from '@repo/ui'`
@@ -242,6 +246,7 @@ describe('Alert', () => {
 ```
 
 **Test coverage:**
+
 - ✅ Renders content
 - ✅ Optional props work
 - ✅ Variants apply correctly
@@ -254,7 +259,7 @@ Add to `packages/ui/src/index.ts`:
 
 ```typescript
 // ... existing exports
-export { Alert, type AlertProps } from './components/Alert'
+export { Alert, type AlertProps } from './components/Alert';
 ```
 
 ## Step 8: Build and Verify (5 minutes)

@@ -66,17 +66,21 @@ This guide explains how to set up analytics and feedback mechanisms for the docu
 **Best for:** Comprehensive analytics
 
 **Setup:**
+
 1. Create GA4 property
 2. Get Measurement ID
 3. Add to documentation site
 
 **Implementation:**
+
 ```html
 <!-- In documentation site HTML -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() {
+    dataLayer.push(arguments);
+  }
   gtag('js', new Date());
   gtag('config', 'G-XXXXXXXXXX');
 </script>
@@ -89,11 +93,13 @@ This guide explains how to set up analytics and feedback mechanisms for the docu
 **Best for:** Privacy-focused analytics
 
 **Setup:**
+
 1. Sign up at https://plausible.io
 2. Add domain
 3. Add script tag
 
 **Implementation:**
+
 ```html
 <script defer data-domain="your-docs-domain.com" src="https://plausible.io/js/script.js"></script>
 ```
@@ -105,6 +111,7 @@ This guide explains how to set up analytics and feedback mechanisms for the docu
 **Best for:** Open source projects
 
 **Setup:**
+
 - GitHub provides basic analytics for repositories
 - View in repository Insights tab
 - No additional setup needed
@@ -116,12 +123,13 @@ This guide explains how to set up analytics and feedback mechanisms for the docu
 ### 1. "Was this helpful?" Buttons
 
 **Implementation:**
+
 ```tsx
 import { useState } from 'react';
 
 export function FeedbackButtons({ page }: { page: string }) {
   const [feedback, setFeedback] = useState<'helpful' | 'not-helpful' | null>(null);
-  
+
   const submitFeedback = async (value: 'helpful' | 'not-helpful') => {
     setFeedback(value);
     // Send to analytics or API
@@ -130,7 +138,7 @@ export function FeedbackButtons({ page }: { page: string }) {
       body: JSON.stringify({ page, feedback: value }),
     });
   };
-  
+
   return (
     <div>
       <p>Was this helpful?</p>
@@ -145,32 +153,32 @@ export function FeedbackButtons({ page }: { page: string }) {
 ### 2. Issue Creation from Docs
 
 **Implementation:**
+
 ```tsx
 export function ReportIssue({ page }: { page: string }) {
   const createIssue = () => {
-    const url = `https://github.com/your-org/marketing-websites/issues/new?` +
+    const url =
+      `https://github.com/your-org/marketing-websites/issues/new?` +
       `title=Documentation Issue: ${page}&` +
       `body=Page: ${page}%0A%0AIssue: `;
     window.open(url, '_blank');
   };
-  
-  return (
-    <button onClick={createIssue}>
-      Report an issue with this page
-    </button>
-  );
+
+  return <button onClick={createIssue}>Report an issue with this page</button>;
 }
 ```
 
 ### 3. Search Analytics
 
 **Track search queries:**
+
 - What users search for
 - Search success rate
 - Popular queries
 - Failed searches
 
 **Implementation:**
+
 ```typescript
 // Track search events
 function trackSearch(query: string, results: number) {
@@ -225,7 +233,7 @@ interface Metrics {
 export function calculateMetrics(): Metrics {
   const docsPath = path.join(process.cwd(), 'docs');
   const files = getAllMarkdownFiles(docsPath);
-  
+
   return {
     coverage: calculateCoverage(files),
     linkValidity: validateLinks(files),
@@ -240,35 +248,37 @@ export function calculateMetrics(): Metrics {
 ### Consent Management
 
 **Required for:**
+
 - Google Analytics
 - Any tracking that uses cookies
 - Personal data collection
 
 **Implementation:**
+
 ```tsx
 import { useState, useEffect } from 'react';
 
 export function ConsentBanner() {
   const [consent, setConsent] = useState<boolean | null>(null);
-  
+
   useEffect(() => {
     const stored = localStorage.getItem('analytics-consent');
     setConsent(stored === 'true');
   }, []);
-  
+
   const accept = () => {
     localStorage.setItem('analytics-consent', 'true');
     setConsent(true);
     // Initialize analytics
   };
-  
+
   const reject = () => {
     localStorage.setItem('analytics-consent', 'false');
     setConsent(false);
   };
-  
+
   if (consent !== null) return null;
-  
+
   return (
     <div className="consent-banner">
       <p>We use analytics to improve our documentation.</p>

@@ -22,10 +22,7 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Grid, GridItem } from '../grid';
 import { Flex, Stack, Spacer } from '../flexbox';
-import {
-  BREAKPOINTS,
-  resolveResponsiveValue,
-} from '../responsive';
+import { BREAKPOINTS, resolveResponsiveValue } from '../responsive';
 import { gapClass, alignClass, justifyClass, colsClass, rowsClass } from '../utils';
 
 // ─── utility functions ────────────────────────────────────────────────────────
@@ -116,18 +113,30 @@ describe('BREAKPOINTS', () => {
 
 describe('Grid', () => {
   it('renders a div with grid class', () => {
-    render(<Grid data-testid="grid"><span>child</span></Grid>);
+    render(
+      <Grid data-testid="grid">
+        <span>child</span>
+      </Grid>
+    );
     const el = screen.getByTestId('grid');
     expect(el.classList.contains('grid')).toBe(true);
   });
 
   it('applies gap class', () => {
-    render(<Grid gap="md" data-testid="grid"><span /></Grid>);
+    render(
+      <Grid gap="md" data-testid="grid">
+        <span />
+      </Grid>
+    );
     expect(screen.getByTestId('grid').classList.contains('gap-4')).toBe(true);
   });
 
   it('renders as a custom element', () => {
-    render(<Grid as="section" data-testid="grid"><span /></Grid>);
+    render(
+      <Grid as="section" data-testid="grid">
+        <span />
+      </Grid>
+    );
     expect(screen.getByTestId('grid').tagName.toLowerCase()).toBe('section');
   });
 });
@@ -141,12 +150,20 @@ describe('GridItem', () => {
   });
 
   it('applies col-span class', () => {
-    render(<GridItem colSpan={2} data-testid="item"><span /></GridItem>);
+    render(
+      <GridItem colSpan={2} data-testid="item">
+        <span />
+      </GridItem>
+    );
     expect(screen.getByTestId('item').classList.contains('col-span-2')).toBe(true);
   });
 
   it('applies col-span-full for "full"', () => {
-    render(<GridItem colSpan="full" data-testid="item"><span /></GridItem>);
+    render(
+      <GridItem colSpan="full" data-testid="item">
+        <span />
+      </GridItem>
+    );
     expect(screen.getByTestId('item').classList.contains('col-span-full')).toBe(true);
   });
 });
@@ -155,22 +172,38 @@ describe('GridItem', () => {
 
 describe('Flex', () => {
   it('renders with flex class', () => {
-    render(<Flex data-testid="flex"><span /></Flex>);
+    render(
+      <Flex data-testid="flex">
+        <span />
+      </Flex>
+    );
     expect(screen.getByTestId('flex').classList.contains('flex')).toBe(true);
   });
 
   it('defaults to flex-row', () => {
-    render(<Flex data-testid="flex"><span /></Flex>);
+    render(
+      <Flex data-testid="flex">
+        <span />
+      </Flex>
+    );
     expect(screen.getByTestId('flex').classList.contains('flex-row')).toBe(true);
   });
 
   it('applies flex-col when direction is col', () => {
-    render(<Flex direction="col" data-testid="flex"><span /></Flex>);
+    render(
+      <Flex direction="col" data-testid="flex">
+        <span />
+      </Flex>
+    );
     expect(screen.getByTestId('flex').classList.contains('flex-col')).toBe(true);
   });
 
   it('applies justify and align classes', () => {
-    render(<Flex justify="between" align="center" data-testid="flex"><span /></Flex>);
+    render(
+      <Flex justify="between" align="center" data-testid="flex">
+        <span />
+      </Flex>
+    );
     const classList = screen.getByTestId('flex').classList;
     expect(classList.contains('justify-between')).toBe(true);
     expect(classList.contains('items-center')).toBe(true);
@@ -181,12 +214,20 @@ describe('Flex', () => {
 
 describe('Stack', () => {
   it('defaults to flex-col', () => {
-    render(<Stack data-testid="stack"><span /></Stack>);
+    render(
+      <Stack data-testid="stack">
+        <span />
+      </Stack>
+    );
     expect(screen.getByTestId('stack').classList.contains('flex-col')).toBe(true);
   });
 
   it('renders row direction', () => {
-    render(<Stack direction="row" data-testid="stack"><span /></Stack>);
+    render(
+      <Stack direction="row" data-testid="stack">
+        <span />
+      </Stack>
+    );
     expect(screen.getByTestId('stack').classList.contains('flex-row')).toBe(true);
   });
 });

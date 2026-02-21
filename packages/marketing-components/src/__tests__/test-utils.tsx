@@ -23,10 +23,7 @@ export function renderWithProviders(
 /**
  * Test accessibility violations using jest-axe
  */
-export async function testA11y(
-  container: HTMLElement,
-  options?: JestAxeOptions
-) {
+export async function testA11y(container: HTMLElement, options?: JestAxeOptions) {
   const results = await axe(container, options);
   expect(results).toHaveNoViolations();
 }

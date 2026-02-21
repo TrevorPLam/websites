@@ -133,11 +133,7 @@ export function GridItem({
   return (
     <As
       className={cn(
-        colSpan === 'full'
-          ? 'col-span-full'
-          : colSpan
-            ? `col-span-${colSpan}`
-            : '',
+        colSpan === 'full' ? 'col-span-full' : colSpan ? `col-span-${colSpan}` : '',
         rowSpan ? `row-span-${rowSpan}` : '',
         colStart ? `col-start-${colStart}` : '',
         rowStart ? `row-start-${rowStart}` : '',

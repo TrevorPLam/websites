@@ -30,6 +30,7 @@ pnpm create-client, validate-config, generate-component; knip/depcheck; validate
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-DOCS**: ADRs, config reference, migration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-docs) for full research findings.
 - **[2026-02-18] R-CONFIG-VALIDATION**: Config schema validation, Zod — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-config-validation) for full research findings.
 
@@ -38,6 +39,7 @@ pnpm create-client, validate-config, generate-component; knip/depcheck; validate
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-DOCS](RESEARCH-INVENTORY.md#r-docs) — Full research findings
 - [RESEARCH-INVENTORY.md - R-CONFIG-VALIDATION](RESEARCH-INVENTORY.md#r-config-validation) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
@@ -49,19 +51,22 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-UI — React 19 component with ref forwarding
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
 export function Component({ ref, className, ...props }: ComponentProps) {
-  return React.createElement(
-    Primitive.Root,
-    { ref, className: cn('component', className), ...props }
-  );
+  return React.createElement(Primitive.Root, {
+    ref,
+    className: cn('component', className),
+    ...props,
+  });
 }
 ```
 
 ### R-A11Y — Touch targets and reduced motion
+
 ```css
 .component-button {
   min-width: 24px;
@@ -70,11 +75,13 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### Reduced motion detection
+
 ```typescript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### R-PERF — Core Web Vitals optimization
+
 ```typescript
 // Performance monitoring
 export function reportWebVitals(metric: any) {
@@ -97,12 +104,13 @@ export function OptimizedImage({ src, alt, priority }: ImageProps) {
     src,
     alt,
     priority,
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
   });
 }
 ```
 
 ### Related Patterns
+
 - See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
 - See [R-CONFIG-VALIDATION - Research Findings](RESEARCH-INVENTORY.md#r-config-validation) for additional examples
 
@@ -144,4 +152,3 @@ export function OptimizedImage({ src, alt, priority }: ImageProps) {
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

@@ -65,18 +65,14 @@ export function ariaExpanded(expanded: boolean): { 'aria-expanded': boolean } {
  * Build an `aria-selected` attribute object.
  * Used in tablist/listbox widgets.
  */
-export function ariaSelected(
-  selected: boolean
-): { 'aria-selected': boolean } {
+export function ariaSelected(selected: boolean): { 'aria-selected': boolean } {
   return { 'aria-selected': selected };
 }
 
 /**
  * Build an `aria-pressed` attribute object for toggle buttons.
  */
-export function ariaPressed(
-  pressed: boolean | 'mixed'
-): { 'aria-pressed': boolean | 'mixed' } {
+export function ariaPressed(pressed: boolean | 'mixed'): { 'aria-pressed': boolean | 'mixed' } {
   return { 'aria-pressed': pressed };
 }
 
@@ -84,9 +80,7 @@ export function ariaPressed(
  * Build an `aria-checked` attribute object.
  * Accepts `true`, `false`, or `'mixed'` for tri-state checkboxes.
  */
-export function ariaChecked(
-  checked: boolean | 'mixed'
-): { 'aria-checked': boolean | 'mixed' } {
+export function ariaChecked(checked: boolean | 'mixed'): { 'aria-checked': boolean | 'mixed' } {
   return { 'aria-checked': checked };
 }
 

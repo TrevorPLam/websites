@@ -69,14 +69,14 @@ packages/infrastructure/ui/src/
 
 ### Key design choices
 
-| Concern | Decision | Rationale |
-|---------|----------|-----------|
-| Slot system | `SlotProvider` + `useSlot()` | Simpler than RSC `children` cloning; avoids React.Children.map pitfalls |
-| Context | `createStrictContext` throws on missing provider | Fail-fast is better than silent undefined behavior |
-| Theme | CSS custom properties; `data-color-mode` attribute | Works with SSR; no class-based dark mode |
-| Dark mode | `window.matchMedia` with `addEventListener` | Modern API; graceful fallback for legacy Safari |
-| Persistence | `localStorage` with SSR guard | Simple; no external dependency |
-| Customization | React Context + `useCustomization()` hook | Avoids prop drilling; works at any depth |
+| Concern       | Decision                                           | Rationale                                                               |
+| ------------- | -------------------------------------------------- | ----------------------------------------------------------------------- |
+| Slot system   | `SlotProvider` + `useSlot()`                       | Simpler than RSC `children` cloning; avoids React.Children.map pitfalls |
+| Context       | `createStrictContext` throws on missing provider   | Fail-fast is better than silent undefined behavior                      |
+| Theme         | CSS custom properties; `data-color-mode` attribute | Works with SSR; no class-based dark mode                                |
+| Dark mode     | `window.matchMedia` with `addEventListener`        | Modern API; graceful fallback for legacy Safari                         |
+| Persistence   | `localStorage` with SSR guard                      | Simple; no external dependency                                          |
+| Customization | React Context + `useCustomization()` hook          | Avoids prop drilling; works at any depth                                |
 
 ---
 
@@ -180,9 +180,9 @@ export { useAuth };
 
 ## Alternatives Considered
 
-| Alternative | Rejected because |
-|-------------|-----------------|
-| Add patterns to `@repo/ui` | Mixes infrastructure concerns with UI components; harder to tree-shake |
-| Radix UI compound components | Already used for primitives; slots needed for higher-level patterns |
-| Jotai / Zustand for state | Overkill for composition patterns; adds external dependency |
-| CSS class-based dark mode | Conflicts with Tailwind v4 CSS variable approach; fragile |
+| Alternative                  | Rejected because                                                       |
+| ---------------------------- | ---------------------------------------------------------------------- |
+| Add patterns to `@repo/ui`   | Mixes infrastructure concerns with UI components; harder to tree-shake |
+| Radix UI compound components | Already used for primitives; slots needed for higher-level patterns    |
+| Jotai / Zustand for state    | Overkill for composition patterns; adds external dependency            |
+| CSS class-based dark mode    | Conflicts with Tailwind v4 CSS variable approach; fragile              |

@@ -85,9 +85,7 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <ConsentProvider cmpProvider="termly">
-          {children}
-        </ConsentProvider>
+        <ConsentProvider cmpProvider="termly">{children}</ConsentProvider>
       </body>
     </html>
   );

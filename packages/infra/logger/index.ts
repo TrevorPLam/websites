@@ -200,9 +200,10 @@ function serializeError(error?: Error | unknown): unknown {
       message: error.message,
       // [Task 1.5.8] In production, redact internal file paths from stack traces
       // to prevent information disclosure about server directory structure
-      stack: isDevelopment() || isTest()
-        ? error.stack
-        : error.stack?.replace(/\(?\/([\w./-]+)\)?/g, '[redacted path]'),
+      stack:
+        isDevelopment() || isTest()
+          ? error.stack
+          : error.stack?.replace(/\(?\/([\w./-]+)\)?/g, '[redacted path]'),
     };
   }
 

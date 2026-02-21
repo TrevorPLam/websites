@@ -100,6 +100,7 @@ ls clients/
 ```
 
 You should see:
+
 - `starter-template/` - Golden-path template (port 3101, next-intl, Docker — clone for new projects)
 - `luxe-salon/` - Salon industry example (port 3102)
 - `bistro-central/` - Restaurant example
@@ -170,7 +171,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
 Edit `site.config.ts` to customize your client:
 
 ```typescript
-import { defineConfig } from '@repo/types'
+import { defineConfig } from '@repo/types';
 
 export default defineConfig({
   site: {
@@ -194,7 +195,7 @@ export default defineConfig({
     },
   },
   // ... more configuration
-})
+});
 ```
 
 **Tip:** Start with the default configuration and customize gradually.
@@ -278,7 +279,7 @@ services: [
     price: '$99',
   },
   // Add more services
-]
+];
 ```
 
 ## Step 9: Start Development Server (2 minutes)
@@ -309,16 +310,19 @@ Check the following:
 ### Common Issues
 
 **Port already in use:**
+
 ```bash
 # Use a different port
 pnpm dev --port 3002
 ```
 
 **Styles not loading:**
+
 - Check that Tailwind config includes your files
 - Restart dev server
 
 **Build errors:**
+
 - Run `pnpm type-check` to see TypeScript errors
 - Run `pnpm lint` to see lint errors
 
@@ -343,6 +347,7 @@ Verify the production build works correctly.
 ### Choose Deployment Platform
 
 Options:
+
 - **Vercel** (recommended for Next.js)
 - **Netlify**
 - **Docker** (self-hosted)

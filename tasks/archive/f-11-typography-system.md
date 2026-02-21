@@ -28,6 +28,7 @@ Typography system with font scales, line heights, and text utilities.
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-INFRA**: Slot, Provider, Context, Theme, CVA — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-infra) for full research findings.
 - **[2026-02-18] R-DESIGN-TOKENS**: Three-layer token architecture — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-design-tokens) for full research findings.
 
@@ -36,6 +37,7 @@ Typography system with font scales, line heights, and text utilities.
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-INFRA](RESEARCH-INVENTORY.md#r-infra) — Full research findings
 - [RESEARCH-INVENTORY.md - R-DESIGN-TOKENS](RESEARCH-INVENTORY.md#r-design-tokens) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
@@ -51,6 +53,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### Related Patterns
+
 - See [R-INFRA - Research Findings](RESEARCH-INVENTORY.md#r-infra) for additional examples
 - See [R-DESIGN-TOKENS - Research Findings](RESEARCH-INVENTORY.md#r-design-tokens) for additional examples
 
@@ -97,4 +100,3 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

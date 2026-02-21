@@ -2,7 +2,7 @@
 /**
  * @file scripts/update-tasks-with-research.ts
  * Purpose: Automate updating task files with research findings and code snippets from RESEARCH-INVENTORY.md
- * 
+ *
  * Usage:
  *   pnpm tsx scripts/update-tasks-with-research.ts [task-id]
  *   pnpm tsx scripts/update-tasks-with-research.ts --all
@@ -76,7 +76,10 @@ function parseResearchInventory(): Map<string, ResearchTopic> {
 
     // Extract task IDs from mapping section
     const taskMappingMatch = taskMappingSection.match(
-      new RegExp(`### ${topicId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?\\n([\\s\\S]*?)(?=\\n###|$)`, 'i')
+      new RegExp(
+        `### ${topicId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?\\n([\\s\\S]*?)(?=\\n###|$)`,
+        'i'
+      )
     );
     const taskIdsText = taskMappingMatch?.[1] || '';
     const taskIds = extractTaskIds(taskIdsText);
@@ -86,7 +89,8 @@ function parseResearchInventory(): Map<string, ResearchTopic> {
     const bestPractices = extractSection(currentTopicContent, '#### Best Practices');
     const highestStandards = extractSection(currentTopicContent, '#### Highest Standards');
     const novelTechniques = extractSection(currentTopicContent, '#### Novel Techniques');
-    const repoSpecificContext = extractSection(currentTopicContent, '#### Repo-Specific Context')[0] || '';
+    const repoSpecificContext =
+      extractSection(currentTopicContent, '#### Repo-Specific Context')[0] || '';
 
     // Extract code snippets from Repo-Specific Context
     const codeSnippets = extractCodeSnippets(repoSpecificContext);
@@ -162,7 +166,10 @@ function extractTaskIds(text: string): string[] {
  * Extract content from a specific section
  */
 function extractSection(content: string, sectionHeader: string): string[] {
-  const regex = new RegExp(`${sectionHeader.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([\\s\\S]*?)(?=\\n####|$)`, 'i');
+  const regex = new RegExp(
+    `${sectionHeader.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([\\s\\S]*?)(?=\\n####|$)`,
+    'i'
+  );
   const match = content.match(regex);
   if (!match) return [];
 

@@ -140,9 +140,7 @@ export function useBreakpoint(): BreakpointState {
  * @example
  * const cols: ResponsiveValue<number> = { base: 1, md: 2, lg: 3 };
  */
-export type ResponsiveValue<T> =
-  | T
-  | Partial<Record<Breakpoint, T>> & { base: T };
+export type ResponsiveValue<T> = T | (Partial<Record<Breakpoint, T>> & { base: T });
 
 /**
  * Resolves a `ResponsiveValue<T>` to a concrete value given the active breakpoints.
@@ -152,10 +150,7 @@ export type ResponsiveValue<T> =
  * resolveResponsiveValue({ base: 1, md: 2, lg: 3 }, new Set(['sm', 'md']))
  * // → 2  (md is active, lg is not)
  */
-export function resolveResponsiveValue<T>(
-  value: ResponsiveValue<T>,
-  active: Set<Breakpoint>
-): T {
+export function resolveResponsiveValue<T>(value: ResponsiveValue<T>, active: Set<Breakpoint>): T {
   if (typeof value !== 'object' || value === null || !('base' in value)) {
     return value as T;
   }

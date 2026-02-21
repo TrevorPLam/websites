@@ -78,13 +78,15 @@ export function createContactFormSchema(config: ContactFeatureConfig) {
         if (field.validation?.minLength) {
           textareaSchema = textareaSchema.min(
             field.validation.minLength,
-            field.validation.customMessage || `Message must be at least ${field.validation.minLength} characters`
+            field.validation.customMessage ||
+              `Message must be at least ${field.validation.minLength} characters`
           );
         }
         if (field.validation?.maxLength) {
           textareaSchema = textareaSchema.max(
             field.validation.maxLength,
-            field.validation.customMessage || `Message must be less than ${field.validation.maxLength} characters`
+            field.validation.customMessage ||
+              `Message must be less than ${field.validation.maxLength} characters`
           );
         }
         fieldSchema = textareaSchema;
@@ -93,7 +95,10 @@ export function createContactFormSchema(config: ContactFeatureConfig) {
 
       case 'select':
         if (field.options && field.options.length > 0) {
-          const values = field.options.map((opt) => opt.value).filter((v) => v !== '') as [string, ...string[]];
+          const values = field.options.map((opt) => opt.value).filter((v) => v !== '') as [
+            string,
+            ...string[],
+          ];
           if (values.length > 0) {
             fieldSchema = z.enum(values, {
               errorMap: () => ({ message: `Please select ${field.label.toLowerCase()}` }),
@@ -112,13 +117,15 @@ export function createContactFormSchema(config: ContactFeatureConfig) {
         if (field.validation?.minLength) {
           textSchema = textSchema.min(
             field.validation.minLength,
-            field.validation.customMessage || `${field.label} must be at least ${field.validation.minLength} characters`
+            field.validation.customMessage ||
+              `${field.label} must be at least ${field.validation.minLength} characters`
           );
         }
         if (field.validation?.maxLength) {
           textSchema = textSchema.max(
             field.validation.maxLength,
-            field.validation.customMessage || `${field.label} must be less than ${field.validation.maxLength} characters`
+            field.validation.customMessage ||
+              `${field.label} must be less than ${field.validation.maxLength} characters`
           );
         }
         if (field.validation?.pattern) {
@@ -165,7 +172,8 @@ export function createContactFormDefaults(config: ContactFeatureConfig): Partial
   for (const field of config.fields) {
     if (field.type === 'select' && field.options && field.options.length > 0) {
       // Default to first option (usually empty placeholder)
-      defaults[field.id as keyof ContactFormData] = (field.options[0]?.value ?? '') as ContactFormData[keyof ContactFormData];
+      defaults[field.id as keyof ContactFormData] = (field.options[0]?.value ??
+        '') as ContactFormData[keyof ContactFormData];
     } else {
       defaults[field.id as keyof ContactFormData] = '' as ContactFormData[keyof ContactFormData];
     }

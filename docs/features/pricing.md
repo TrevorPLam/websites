@@ -52,13 +52,13 @@ Set to `null` to hide the pricing section. Use `null` for businesses where prici
 ```typescript
 interface PricingFeature {
   name: string;
-  included: boolean | string;  // true/false, or a string override like 'Unlimited', '5GB'
+  included: boolean | string; // true/false, or a string override like 'Unlimited', '5GB'
 }
 
 interface PricingPlan {
   id: string;
   name: string;
-  price: string;             // Display string: '$99', 'From $200', 'Custom'
+  price: string; // Display string: '$99', 'From $200', 'Custom'
   period?: 'month' | 'year'; // Billing period label
   description?: string;
   features: PricingFeature[];
@@ -66,7 +66,7 @@ interface PricingPlan {
     label: string;
     href: string;
   };
-  popular?: boolean;         // Highlights this plan (shows "Most Popular" badge)
+  popular?: boolean; // Highlights this plan (shows "Most Popular" badge)
 }
 ```
 
@@ -168,29 +168,35 @@ When a plan has `popular: true`, components render a visual highlight (badge, bo
 ## Pricing Display Strategies
 
 ### Fixed Pricing
+
 ```typescript
 price: '$99',
 period: 'month',  // "$99 / month"
 ```
 
 ### Starting Price
+
 ```typescript
 price: 'From $200',  // No period field needed
 ```
 
 ### Custom / Quote-Based
+
 ```typescript
 price: 'Custom',
 cta: { label: 'Get a Quote', href: '/contact' },
 ```
 
 ### Free Tier
+
 ```typescript
 price: 'Free',
 ```
 
 ### String Feature Values
+
 Use a string `included` value to show custom quantities instead of a checkmark/X:
+
 ```typescript
 { name: 'Team members', included: 'Unlimited' },
 { name: 'Storage', included: '100GB' },
@@ -201,14 +207,14 @@ Use a string `included` value to show custom quantities instead of a checkmark/X
 
 ## Industry Recommendations
 
-| Industry | Recommended Variant | Notes |
-|----------|-------------------|-------|
-| Salon / Beauty | `cards` | Per-service pricing |
-| SaaS | `table` | Feature comparison important |
-| Fitness | `cards` | Membership tiers |
-| Consulting | `null` | Use quote flow instead |
-| Law firm | `null` | Hourly rates via contact |
-| Dental | `cards` | Treatment package pricing |
+| Industry       | Recommended Variant | Notes                        |
+| -------------- | ------------------- | ---------------------------- |
+| Salon / Beauty | `cards`             | Per-service pricing          |
+| SaaS           | `table`             | Feature comparison important |
+| Fitness        | `cards`             | Membership tiers             |
+| Consulting     | `null`              | Use quote flow instead       |
+| Law firm       | `null`              | Hourly rates via contact     |
+| Dental         | `cards`             | Treatment package pricing    |
 
 ---
 

@@ -73,8 +73,9 @@ const form = useForm<FormData>({
 const sectionStart = '## Code Snippets / Examples\n\n';
 const relatedOnly = '### Related Patterns\n';
 
-const files = fs.readdirSync(TASKS_DIR)
-  .filter(f => f.startsWith('1-') && f.endsWith('.md'))
+const files = fs
+  .readdirSync(TASKS_DIR)
+  .filter((f) => f.startsWith('1-') && f.endsWith('.md'))
   .sort((a, b) => {
     const na = a.match(/^1-(\d+)-/);
     const nb = b.match(/^1-(\d+)-/);
@@ -90,7 +91,8 @@ for (const file of files) {
   const afterSection = content.slice(idx + sectionStart.length);
   if (!afterSection.startsWith(relatedOnly)) continue;
   const snippets = file === '1-23-create-form-component.md' ? FORM_SNIPPETS : STANDARD_SNIPPETS;
-  const newSection = sectionStart + snippets.trim() + '\n\n' + relatedOnly + afterSection.slice(relatedOnly.length);
+  const newSection =
+    sectionStart + snippets.trim() + '\n\n' + relatedOnly + afterSection.slice(relatedOnly.length);
   content = content.slice(0, idx) + newSection;
   fs.writeFileSync(filePath, content, 'utf-8');
   updated++;

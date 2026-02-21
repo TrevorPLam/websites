@@ -34,7 +34,10 @@ export function getTypographyCssVars(): Record<string, string> {
   for (const [key, value] of entries) {
     vars[`--font-size-${key}`] = `${value.rem}rem`;
   }
-  const lhEntries = Object.entries(LINE_HEIGHT_SCALE) as [LineHeightKey, (typeof LINE_HEIGHT_SCALE)[LineHeightKey]][];
+  const lhEntries = Object.entries(LINE_HEIGHT_SCALE) as [
+    LineHeightKey,
+    (typeof LINE_HEIGHT_SCALE)[LineHeightKey],
+  ][];
   for (const [key, value] of lhEntries) {
     vars[`--line-height-${key}`] = value.value;
   }
@@ -77,11 +80,7 @@ export function truncateText(text: string, maxLength = 100, ellipsis = '…'): s
  * @param fontSizePx - Font size in pixels
  * @param charWidthRatio - Average char width as fraction of font size (default: 0.6)
  */
-export function estimateTextWidth(
-  text: string,
-  fontSizePx: number,
-  charWidthRatio = 0.6
-): number {
+export function estimateTextWidth(text: string, fontSizePx: number, charWidthRatio = 0.6): number {
   return text.length * fontSizePx * charWidthRatio;
 }
 
@@ -89,7 +88,9 @@ export function estimateTextWidth(
  * Convert a number to a font weight string.
  * @param weight - Numeric font weight (100–900)
  */
-export function fontWeightToString(weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900): string {
+export function fontWeightToString(
+  weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
+): string {
   const names: Record<number, string> = {
     100: 'Thin',
     200: 'Extra Light',

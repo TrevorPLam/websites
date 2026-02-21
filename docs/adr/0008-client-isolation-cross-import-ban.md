@@ -58,7 +58,7 @@ This extraction process is intentional — it forces evaluation of whether the c
 
 ### Exception: configuration patterns
 
-Clients may share a *pattern* (copy the `site.config.ts` structure) without importing from each other. Each client owns its own copy of its configuration.
+Clients may share a _pattern_ (copy the `site.config.ts` structure) without importing from each other. Each client owns its own copy of its configuration.
 
 ## Consequences
 

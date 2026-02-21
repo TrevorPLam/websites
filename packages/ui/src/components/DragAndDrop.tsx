@@ -68,7 +68,9 @@ export interface SortableItemProps {
 // ─── Components ──────────────────────────────────────────────────────────────
 
 const SortableItem = ({ id, children, showHandle = true }: SortableItemProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),

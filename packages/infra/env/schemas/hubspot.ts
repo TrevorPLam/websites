@@ -41,8 +41,7 @@ export const hubspotEnvSchema = z.object({
    * @see {@link https://developers.hubspot.com/docs/api/private-apps HubSpot Private Apps}
    * @security This token grants CRM access - keep secret and use minimal scopes
    */
-  HUBSPOT_PRIVATE_APP_TOKEN: z
-    .coerce
+  HUBSPOT_PRIVATE_APP_TOKEN: z.coerce
     .string()
     .min(1, 'HubSpot token cannot be empty when provided')
     .trim()
@@ -93,28 +92,28 @@ export type HubspotEnv = z.infer<typeof hubspotEnvSchema>;
  */
 export const validateHubspotEnv = (env: Record<string, unknown> = process.env): HubspotEnv => {
   const result = hubspotEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     const fieldErrors = result.error.flatten().fieldErrors;
     const errorMessages = Object.entries(fieldErrors)
       .map(([field, errors]) => `${field}: ${errors?.join(', ')}`)
       .join('; ');
-    
+
     throw new Error(
       `❌ Invalid HubSpot environment variables: ${errorMessages}\n\n` +
-      `Configuration options:\n` +
-      `- Production: HUBSPOT_PRIVATE_APP_TOKEN required for CRM sync\n` +
-      `- Development: Optional, can use mock CRM data\n` +
-      `- Testing: Optional, uses test CRM endpoints\n\n` +
-      `Setup instructions:\n` +
-      `1. Go to HubSpot developer portal: https://developers.hubspot.com\n` +
-      `2. Create private app with appropriate scopes\n` +
-      `3. Generate private app access token\n` +
-      `4. Set as HUBSPOT_PRIVATE_APP_TOKEN environment variable\n\n` +
-      `⚠️  Security: Use principle of least privilege for token scopes`
+        `Configuration options:\n` +
+        `- Production: HUBSPOT_PRIVATE_APP_TOKEN required for CRM sync\n` +
+        `- Development: Optional, can use mock CRM data\n` +
+        `- Testing: Optional, uses test CRM endpoints\n\n` +
+        `Setup instructions:\n` +
+        `1. Go to HubSpot developer portal: https://developers.hubspot.com\n` +
+        `2. Create private app with appropriate scopes\n` +
+        `3. Generate private app access token\n` +
+        `4. Set as HUBSPOT_PRIVATE_APP_TOKEN environment variable\n\n` +
+        `⚠️  Security: Use principle of least privilege for token scopes`
     );
   }
-  
+
   return result.data;
 };
 
@@ -137,7 +136,9 @@ export const validateHubspotEnv = (env: Record<string, unknown> = process.env): 
  * }
  * ```
  */
-export const safeValidateHubspotEnv = (env: Record<string, unknown> = process.env): HubspotEnv | null => {
+export const safeValidateHubspotEnv = (
+  env: Record<string, unknown> = process.env
+): HubspotEnv | null => {
   const result = hubspotEnvSchema.safeParse(env);
   return result.success ? result.data : null;
 };

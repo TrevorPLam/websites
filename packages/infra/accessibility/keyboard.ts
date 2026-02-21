@@ -97,10 +97,7 @@ export interface ArrowKeyOptions {
  * Caller is responsible for calling `event.preventDefault()` and applying the
  * new index via roving tabindex or state.
  */
-export function getArrowKeyIndex(
-  event: KeyboardEvent,
-  opts: ArrowKeyOptions
-): number | null {
+export function getArrowKeyIndex(event: KeyboardEvent, opts: ArrowKeyOptions): number | null {
   const { elements, currentIndex, orientation = 'vertical', wrap = true } = opts;
   const count = elements.length;
   if (count === 0) return null;
@@ -144,10 +141,7 @@ export interface MenuKeyHandlerOptions {
  *
  * @returns true if the event was handled (caller should preventDefault)
  */
-export function handleMenuKeys(
-  event: KeyboardEvent,
-  opts: MenuKeyHandlerOptions
-): boolean {
+export function handleMenuKeys(event: KeyboardEvent, opts: MenuKeyHandlerOptions): boolean {
   const { onClose, onActivate, elements, currentIndex, setIndex } = opts;
   const count = elements.length;
   if (count === 0) {

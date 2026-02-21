@@ -103,7 +103,10 @@ export function HeroCTAArea({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn('mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center', className)} {...props}>
+    <div
+      className={cn('mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center', className)}
+      {...props}
+    >
       {children}
     </div>
   );

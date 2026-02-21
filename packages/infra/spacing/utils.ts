@@ -92,11 +92,7 @@ export function getSpacingCssVars(): Record<string, string> {
  * @param minKey - Minimum scale key
  * @param maxKey - Maximum scale key
  */
-export function clampSpacing(
-  value: number,
-  minKey: SpacingKey,
-  maxKey: SpacingKey
-): number {
+export function clampSpacing(value: number, minKey: SpacingKey, maxKey: SpacingKey): number {
   const min = SPACING_SCALE[minKey]?.px ?? 0;
   const max = SPACING_SCALE[maxKey]?.px ?? Infinity;
   return Math.min(Math.max(value, min), max);

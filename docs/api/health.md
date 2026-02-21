@@ -36,12 +36,12 @@ All client applications in the marketing-websites monorepo expose a health check
 
 ## Endpoint
 
-| Property | Value |
-|----------|-------|
-| **Path** | `/api/health` |
-| **Method** | `GET` |
-| **Authentication** | None (public) |
-| **Content-Type** | `application/json` |
+| Property           | Value              |
+| ------------------ | ------------------ |
+| **Path**           | `/api/health`      |
+| **Method**         | `GET`              |
+| **Authentication** | None (public)      |
+| **Content-Type**   | `application/json` |
 
 ## Response
 
@@ -53,8 +53,8 @@ All client applications in the marketing-websites monorepo expose a health check
 }
 ```
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field    | Type     | Description                                   |
+| -------- | -------- | --------------------------------------------- |
 | `status` | `string` | Always `"ok"` when the application is healthy |
 
 ## Use Cases
@@ -62,6 +62,7 @@ All client applications in the marketing-websites monorepo expose a health check
 1. **Docker HEALTHCHECK** — The Dockerfile uses this endpoint for container health checks. See [docs/deployment/docker.md](../deployment/docker.md).
 
 2. **Kubernetes Probes** — Configure liveness and readiness probes:
+
    ```yaml
    livenessProbe:
      httpGet:
@@ -80,11 +81,11 @@ All client applications in the marketing-websites monorepo expose a health check
 
 ## Client-Specific Ports
 
-| Client | Default Port |
-|--------|--------------|
-| starter-template | 3101 |
-| luxe-salon | 3102 |
-| Other clients | Check `package.json` scripts |
+| Client           | Default Port                 |
+| ---------------- | ---------------------------- |
+| starter-template | 3101                         |
+| luxe-salon       | 3102                         |
+| Other clients    | Check `package.json` scripts |
 
 ## Related Documentation
 

@@ -104,6 +104,7 @@ ls packages/integrations/
 Or check `packages/integrations/` directory in your editor.
 
 Each integration has:
+
 - Package: `@repo/integrations-[name]`
 - Configuration: In `site.config.ts`
 - Environment variables: In `.env.local`
@@ -136,6 +137,7 @@ STRIPE_PUBLISHABLE_KEY=pk_test_...
 ```
 
 **Security:**
+
 - ✅ Never commit `.env.local`
 - ✅ Use different keys for dev/prod
 - ✅ Rotate keys regularly
@@ -147,11 +149,11 @@ Add integration configuration:
 
 ```typescript
 // site.config.ts
-import { defineConfig } from '@repo/types'
+import { defineConfig } from '@repo/types';
 
 export default defineConfig({
   // ... other config
-  
+
   integrations: {
     analytics: {
       provider: 'google-analytics',
@@ -164,10 +166,11 @@ export default defineConfig({
     },
     // Add more integrations
   },
-})
+});
 ```
 
 **Configuration patterns:**
+
 - Use environment variables
 - Validate configuration
 - Provide sensible defaults
@@ -179,16 +182,16 @@ export default defineConfig({
 
 ```typescript
 // app/layout.tsx or component
-'use client'
+'use client';
 
-import { useAnalytics } from '@repo/integrations/google-analytics'
+import { useAnalytics } from '@repo/integrations/google-analytics';
 
 export function AnalyticsProvider() {
   useAnalytics({
     measurementId: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!,
-  })
-  
-  return null
+  });
+
+  return null;
 }
 ```
 
@@ -196,18 +199,18 @@ export function AnalyticsProvider() {
 
 ```typescript
 // app/api/contact/route.ts
-import { createHubSpotClient } from '@repo/integrations/hubspot'
+import { createHubSpotClient } from '@repo/integrations/hubspot';
 
 export async function POST(request: Request) {
   const hubspot = createHubSpotClient({
     apiKey: process.env.HUBSPOT_API_KEY!,
-  })
-  
-  const data = await request.json()
-  
-  await hubspot.contacts.create(data)
-  
-  return Response.json({ success: true })
+  });
+
+  const data = await request.json();
+
+  await hubspot.contacts.create(data);
+
+  return Response.json({ success: true });
 }
 ```
 
@@ -228,9 +231,9 @@ export async function POST(request: Request) {
 const response = await fetch('/api/test-integration', {
   method: 'POST',
   body: JSON.stringify({ test: true }),
-})
+});
 
-console.log(await response.json())
+console.log(await response.json());
 ```
 
 ## Step 7: Handle Errors (10 minutes)
@@ -238,13 +241,13 @@ console.log(await response.json())
 Add error handling:
 
 ```typescript
-import { createIntegrationClient } from '@repo/integrations/[name]'
+import { createIntegrationClient } from '@repo/integrations/[name]';
 
 try {
-  const client = createIntegrationClient(config)
-  await client.send(data)
+  const client = createIntegrationClient(config);
+  await client.send(data);
 } catch (error) {
-  console.error('Integration error:', error)
+  console.error('Integration error:', error);
   // Fallback behavior
   // Log to error tracking (Sentry)
 }
@@ -255,51 +258,57 @@ try {
 ### Google Analytics
 
 **Setup:**
+
 1. Create GA4 property
 2. Get Measurement ID
 3. Add to environment variables
 4. Configure in `site.config.ts`
 
 **Usage:**
-```typescript
-import { trackEvent } from '@repo/integrations/google-analytics'
 
-trackEvent('button_click', { button_name: 'contact' })
+```typescript
+import { trackEvent } from '@repo/integrations/google-analytics';
+
+trackEvent('button_click', { button_name: 'contact' });
 ```
 
 ### HubSpot CRM
 
 **Setup:**
+
 1. Create HubSpot account
 2. Generate API key
 3. Get Portal ID
 4. Configure credentials
 
 **Usage:**
-```typescript
-import { createHubSpotClient } from '@repo/integrations/hubspot'
 
-const client = createHubSpotClient(config)
-await client.contacts.create({ email, name })
+```typescript
+import { createHubSpotClient } from '@repo/integrations/hubspot';
+
+const client = createHubSpotClient(config);
+await client.contacts.create({ email, name });
 ```
 
 ### Stripe Payments
 
 **Setup:**
+
 1. Create Stripe account
 2. Get API keys (test/live)
 3. Configure webhooks
 4. Set up payment intents
 
 **Usage:**
-```typescript
-import { createStripeClient } from '@repo/integrations/stripe'
 
-const stripe = createStripeClient(config)
+```typescript
+import { createStripeClient } from '@repo/integrations/stripe';
+
+const stripe = createStripeClient(config);
 const paymentIntent = await stripe.paymentIntents.create({
   amount: 1000,
   currency: 'usd',
-})
+});
 ```
 
 ## Integration Patterns
@@ -310,9 +319,9 @@ Integrations use adapter pattern for consistency:
 
 ```typescript
 interface IntegrationAdapter {
-  initialize(config: IntegrationConfig): void
-  send(data: unknown): Promise<void>
-  validate(): boolean
+  initialize(config: IntegrationConfig): void;
+  send(data: unknown): Promise<void>;
+  validate(): boolean;
 }
 ```
 
@@ -325,7 +334,7 @@ class IntegrationError extends Error {
     public code: string,
     public integration: string
   ) {
-    super(message)
+    super(message);
   }
 }
 ```
@@ -333,15 +342,15 @@ class IntegrationError extends Error {
 ### Configuration Validation
 
 ```typescript
-import { z } from 'zod'
+import { z } from 'zod';
 
 const integrationConfigSchema = z.object({
   apiKey: z.string().min(1),
   // ... more fields
-})
+});
 
 export function validateConfig(config: unknown) {
-  return integrationConfigSchema.parse(config)
+  return integrationConfigSchema.parse(config);
 }
 ```
 
@@ -374,6 +383,7 @@ export function validateConfig(config: unknown) {
 ### Integration Not Working
 
 1. **Check credentials:**
+
    ```bash
    # Verify environment variables are set
    echo $NEXT_PUBLIC_GA_MEASUREMENT_ID
@@ -397,16 +407,19 @@ export function validateConfig(config: unknown) {
 ### Common Issues
 
 **Environment variables not loading:**
+
 - Restart dev server
 - Check `.env.local` file
 - Verify variable names
 
 **API errors:**
+
 - Check API key validity
 - Verify API permissions
 - Check rate limits
 
 **CORS errors:**
+
 - Configure CORS on API side
 - Use server-side proxy if needed
 

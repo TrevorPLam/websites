@@ -93,7 +93,7 @@ graph LR
     D --> E[Customize Content]
     E --> F[Deploy Site]
     F --> G[Maintain Site]
-    
+
     style A fill:#e1f5ff
     style G fill:#c8e6c9
 ```
@@ -108,6 +108,7 @@ graph LR
 - [ ] Choose a template for your use case
 
 **Resources:**
+
 - [README.md](../../README.md) - Project overview
 - [Client Directory README](../clients/README.md) - Available clients
 
@@ -119,6 +120,7 @@ graph LR
 - [ ] Explore example client implementations
 
 **Resources:**
+
 - [Build First Client](../tutorials/build-first-client.md)
 - [Architecture Overview](../architecture/README.md)
 - [Client Setup Guide](../clients/README.md)
@@ -132,6 +134,7 @@ graph LR
 - [ ] Enable/disable features
 
 **Resources:**
+
 - [Configuration Guide](../CONFIG.md)
 - [Site Configuration Reference](../guides/configuration.md)
 
@@ -144,6 +147,7 @@ graph LR
 - [ ] Upload images and assets
 
 **Resources:**
+
 - [Content Management Guide](../guides/content-management.md) (if available)
 - Template-specific documentation
 
@@ -156,6 +160,7 @@ graph LR
 - [ ] Set up custom domain
 
 **Resources:**
+
 - [Deployment Guide](../deployment/)
 - [Client Setup Guide](../clients/README.md#deployment)
 
@@ -167,6 +172,7 @@ graph LR
 - [ ] Handle common issues
 
 **Resources:**
+
 - [Troubleshooting Guide](getting-started/troubleshooting.md)
 - [FAQ](faq.md)
 
@@ -203,7 +209,7 @@ graph TD
     D --> E[Add Features]
     E --> F[Contribute Code]
     F --> G[Advanced Topics]
-    
+
     style A fill:#e1f5ff
     style G fill:#c8e6c9
 ```
@@ -219,6 +225,7 @@ graph TD
 - [ ] Verify setup
 
 **Resources:**
+
 - [Developer Onboarding](getting-started/onboarding.md)
 - [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
@@ -231,6 +238,7 @@ graph TD
 - [ ] Review package structure
 
 **Resources:**
+
 - [Architecture Overview](architecture/README.md)
 - [Module Boundaries](architecture/module-boundaries.md)
 - [Visual Guide](architecture/visual-guide.md)
@@ -244,6 +252,7 @@ graph TD
 - [ ] Study package exports
 
 **Resources:**
+
 - [UI Library Documentation](components/ui-library.md)
 - [Feature Documentation](../features/)
 - Package-specific README files
@@ -257,6 +266,7 @@ graph TD
 - [ ] Use in template
 
 **Resources:**
+
 - [UI Library Documentation](components/ui-library.md)
 - [Component Patterns](../components/)
 - [Testing Strategy](../testing-strategy.md)
@@ -270,6 +280,7 @@ graph TD
 - [ ] Document usage
 
 **Resources:**
+
 - [Feature Documentation](../features/)
 - [Template Development Guide](../guides/template-development.md)
 
@@ -282,6 +293,7 @@ graph TD
 - [ ] Submit first contribution
 
 **Resources:**
+
 - [CONTRIBUTING.md](../../CONTRIBUTING.md)
 - [Code of Conduct](../../CODE_OF_CONDUCT.md)
 - [Documentation Standards](DOCUMENTATION_STANDARDS.md)
@@ -295,6 +307,7 @@ graph TD
 - [ ] Architecture decisions
 
 **Resources:**
+
 - [Performance Guide](../performance-baseline.md)
 - [Security Practices](../operations/security.md)
 - [Architecture Decision Records](../adr/)
@@ -332,7 +345,7 @@ graph LR
     C --> D[Security Hardening]
     D --> E[Performance Tuning]
     E --> F[Maintenance]
-    
+
     style A fill:#e1f5ff
     style F fill:#c8e6c9
 ```
@@ -348,6 +361,7 @@ graph LR
 - [ ] Deploy first client
 
 **Resources:**
+
 - [Deployment Guide](../deployment/)
 - [Docker Documentation](../deployment/docker.md)
 - Platform-specific guides
@@ -361,6 +375,7 @@ graph LR
 - [ ] Test CI/CD workflow
 
 **Resources:**
+
 - [CI/CD Documentation](../ci/)
 - [GitHub Actions Workflows](../../.github/workflows/)
 
@@ -373,6 +388,7 @@ graph LR
 - [ ] Create dashboards
 
 **Resources:**
+
 - [Monitoring Guide](../operations/monitoring.md)
 - [Performance Baseline](../performance-baseline.md)
 
@@ -385,6 +401,7 @@ graph LR
 - [ ] Implement backup strategy
 
 **Resources:**
+
 - [Security Practices](../operations/security.md)
 - [SECURITY.md](../../SECURITY.md)
 
@@ -397,6 +414,7 @@ graph LR
 - [ ] Monitor Core Web Vitals
 
 **Resources:**
+
 - [Performance Guide](../performance-baseline.md)
 - [Architecture Performance](architecture/README.md#performance-architecture)
 
@@ -409,6 +427,7 @@ graph LR
 - [ ] Train team members
 
 **Resources:**
+
 - [Maintenance Guide](../operations/maintenance.md)
 - [Version Policy](../VERSION_POLICY.md)
 
@@ -445,7 +464,7 @@ graph TD
     C --> D[Decision Making]
     D --> E[Future Planning]
     E --> F[Leadership]
-    
+
     style A fill:#e1f5ff
     style F fill:#c8e6c9
 ```
@@ -461,6 +480,7 @@ graph TD
 - [ ] Understand constraints and requirements
 
 **Resources:**
+
 - [Architecture Overview](architecture/README.md)
 - [THEGOAL.md](../../THEGOAL.md)
 - [TASKS.md](../../TASKS.md) - Roadmap and task specifications
@@ -474,6 +494,7 @@ graph TD
 - [ ] Study security architecture
 
 **Resources:**
+
 - [Module Boundaries](architecture/module-boundaries.md)
 - [Dependency Graph](architecture/dependency-graph.md)
 - [Visual Guide](architecture/visual-guide.md)
@@ -487,6 +508,7 @@ graph TD
 - [ ] Understand deployment patterns
 
 **Resources:**
+
 - [Architecture Overview](architecture/README.md#design-principles)
 - [TASKS.md](../../TASKS.md)
 - Code examples in packages
@@ -500,6 +522,7 @@ graph TD
 - [ ] Practice evaluating trade-offs
 
 **Resources:**
+
 - [Architecture Decision Records](../adr/)
 - ADR template and examples
 
@@ -512,6 +535,7 @@ graph TD
 - [ ] Plan for scale
 
 **Resources:**
+
 - [TASKS.md](../../TASKS.md)
 - [Architecture Evolution](architecture/README.md#evolution-roadmap)
 - [Innovation Specs](TASKS.md) (Part 4, Innovation & Future)
@@ -525,6 +549,7 @@ graph TD
 - [ ] Evolve architecture over time
 
 **Resources:**
+
 - [CONTRIBUTING.md](../../CONTRIBUTING.md)
 - [Code of Conduct](../../CODE_OF_CONDUCT.md)
 - Team communication channels

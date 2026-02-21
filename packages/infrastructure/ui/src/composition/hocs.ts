@@ -29,9 +29,11 @@ export type HOC<TIn extends object, TOut extends object = TIn> = (
 
 /** Get a component's display name for debugging */
 export function getDisplayName<P = unknown>(Component: React.ComponentType<P>): string {
-  return (Component as { displayName?: string; name?: string }).displayName ?? 
-         (Component as { displayName?: string; name?: string }).name ?? 
-         'Component';
+  return (
+    (Component as { displayName?: string; name?: string }).displayName ??
+    (Component as { displayName?: string; name?: string }).name ??
+    'Component'
+  );
 }
 
 /** Set a display name on a HOC-wrapped component */
@@ -123,8 +125,7 @@ export function withCondition<P extends object>(
 export function composeHOCs<P extends object>(
   ...hocs: Array<(c: React.ComponentType<P>) => React.ComponentType<P>>
 ): (Component: React.ComponentType<P>) => React.ComponentType<P> {
-  return (Component) =>
-    hocs.reduceRight((acc, hoc) => hoc(acc), Component);
+  return (Component) => hocs.reduceRight((acc, hoc) => hoc(acc), Component);
 }
 
 // ─── Ref forwarding HOC ───────────────────────────────────────────────────────

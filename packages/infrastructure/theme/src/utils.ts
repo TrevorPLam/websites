@@ -31,9 +31,7 @@ export interface HSLColor {
  * parseHSL('174 85% 33%') // → { h: 174, s: 85, l: 33 }
  */
 export function parseHSL(value: string): HSLColor | null {
-  const match = /^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/.exec(
-    value.trim()
-  );
+  const match = /^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/.exec(value.trim());
   if (!match) return null;
 
   const h = parseFloat(match[1] ?? '0');
@@ -90,16 +88,10 @@ export function adjustSaturation(hslToken: string, delta: number): string {
  * tokenVar('colors', 'primary') // → 'var(--dt-colors-primary)'
  * tokenVar('colors', 'primary', '174 85% 33%') // → 'var(--dt-colors-primary, 174 85% 33%)'
  */
-export function tokenVar(
-  category: string,
-  key: string,
-  fallback?: string
-): string {
+export function tokenVar(category: string, key: string, fallback?: string): string {
   const camelToKebab = (s: string) => s.replace(/([A-Z])/g, (m) => `-${m.toLowerCase()}`);
   const varName = `--dt-${camelToKebab(category)}-${camelToKebab(key)}`;
-  return fallback !== undefined
-    ? `var(${varName}, ${fallback})`
-    : `var(${varName})`;
+  return fallback !== undefined ? `var(${varName}, ${fallback})` : `var(${varName})`;
 }
 
 // ─── Contrast utilities ───────────────────────────────────────────────────────
@@ -123,10 +115,7 @@ function hslLuminance({ l }: HSLColor): number {
  * @example
  * contrastRatio('0 0% 100%', '0 0% 0%') // → 21
  */
-export function contrastRatio(
-  foreground: string,
-  background: string
-): number | null {
+export function contrastRatio(foreground: string, background: string): number | null {
   const fg = parseHSL(foreground);
   const bg = parseHSL(background);
   if (!fg || !bg) return null;

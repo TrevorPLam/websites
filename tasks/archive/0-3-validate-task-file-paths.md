@@ -20,7 +20,7 @@ Tasks list "Related Files" with paths; some may be incomplete or reference non-e
 
 ## Related Files
 
-- `scripts/validate-task-paths.js` – create – parse tasks/*.md, extract Related Files, check existence or create/modify intent
+- `scripts/validate-task-paths.js` – create – parse tasks/\*.md, extract Related Files, check existence or create/modify intent
 
 ## Acceptance Criteria
 

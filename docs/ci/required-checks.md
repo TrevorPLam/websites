@@ -14,11 +14,12 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 
 ## Required Check Names
 
-| Check Name     | Workflow | Job            | Purpose                                |
-|---------------|----------|----------------|----------------------------------------|
-| **quality-gates** | CI       | quality-gates  | Blocking: lint, type-check, build, test |
+| Check Name        | Workflow | Job           | Purpose                                 |
+| ----------------- | -------- | ------------- | --------------------------------------- |
+| **quality-gates** | CI       | quality-gates | Blocking: lint, type-check, build, test |
 
 **Branch protection configuration:**
+
 - Require status checks to pass before merging
 - Require branches to be up to date before merging
 - Status checks to require: **quality-gates**
@@ -27,25 +28,25 @@ This document defines the CI quality gates and their mapping to GitHub branch pr
 
 ### Blocking (must pass)
 
-| Step             | Command                     | Notes                                              |
-|------------------|-----------------------------|----------------------------------------------------|
-| Validate workspaces | `pnpm validate:workspaces` | Ensures package.json and pnpm-workspace.yaml sync |
-| Lint             | `pnpm turbo run lint`       | Module boundaries, ESLint (all packages have config) |
-| Type check       | `pnpm turbo run type-check` | TypeScript strict (all packages pass) |
-| Validate exports | `pnpm validate-exports`     | Package.json exports resolve to files              |
-| Validate marketing exports | `pnpm validate-marketing-exports` | @repo/marketing-components index.ts → families |
-| Madge circular   | `pnpm madge:circular`       | Circular dependency detection                      |
-| Syncpack         | `pnpm syncpack:check`       | Dependency version consistency                     |
-| Build            | `pnpm turbo run build`      | All packages build successfully |
-| Test             | `pnpm test:coverage`        | Root Jest (all tests pass)           |
+| Step                       | Command                           | Notes                                                |
+| -------------------------- | --------------------------------- | ---------------------------------------------------- |
+| Validate workspaces        | `pnpm validate:workspaces`        | Ensures package.json and pnpm-workspace.yaml sync    |
+| Lint                       | `pnpm turbo run lint`             | Module boundaries, ESLint (all packages have config) |
+| Type check                 | `pnpm turbo run type-check`       | TypeScript strict (all packages pass)                |
+| Validate exports           | `pnpm validate-exports`           | Package.json exports resolve to files                |
+| Validate marketing exports | `pnpm validate-marketing-exports` | @repo/marketing-components index.ts → families       |
+| Madge circular             | `pnpm madge:circular`             | Circular dependency detection                        |
+| Syncpack                   | `pnpm syncpack:check`             | Dependency version consistency                       |
+| Build                      | `pnpm turbo run build`            | All packages build successfully                      |
+| Test                       | `pnpm test:coverage`              | Root Jest (all tests pass)                           |
 
 ### Non-blocking (informative)
 
-| Step      | Command    | Notes                               |
-|-----------|------------|-------------------------------------|
-| Knip      | `pnpm knip`| Dead code, unused exports           |
-| SBOM      | anchore/sbom-action | Supply chain visibility      |
-| pnpm audit| Dependency scan | Vulnerability detection      |
+| Step       | Command             | Notes                     |
+| ---------- | ------------------- | ------------------------- |
+| Knip       | `pnpm knip`         | Dead code, unused exports |
+| SBOM       | anchore/sbom-action | Supply chain visibility   |
+| pnpm audit | Dependency scan     | Vulnerability detection   |
 
 ## Affected Package Optimization
 

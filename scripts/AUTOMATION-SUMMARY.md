@@ -8,15 +8,18 @@
 ## What Was Created
 
 ### 1. Main Automation Script
+
 **File:** `scripts/update-tasks-with-research.js`
 
 A Node.js script that:
+
 - Parses `RESEARCH-INVENTORY.md` to extract research topics and code snippets
 - Maps tasks to relevant research topics using flexible pattern matching
 - Generates updated "Research & Evidence" and "Code Snippets / Examples" sections
 - Updates task files while preserving all other content
 
 **Key Features:**
+
 - ✅ Handles multiple task ID formats (full filename, base ID, dotted format)
 - ✅ Supports category patterns (1-xx, 2-xx, f-xx)
 - ✅ Handles special patterns ("Same as R-UI", "1.xx (all)")
@@ -25,16 +28,20 @@ A Node.js script that:
 - ✅ Preserves all other task file content
 
 ### 2. Package.json Scripts
+
 **File:** `package.json`
 
 Added npm scripts for easy execution:
+
 ```json
 "update-tasks-research": "node scripts/update-tasks-with-research.js",
 "update-tasks-research:all": "node scripts/update-tasks-with-research.js --all"
 ```
 
 ### 3. Documentation
+
 **Files:**
+
 - `scripts/README-update-tasks.md` - Quick reference guide
 - `scripts/AUTOMATION-GUIDE.md` - Comprehensive usage guide
 
@@ -43,18 +50,21 @@ Added npm scripts for easy execution:
 ## Usage Examples
 
 ### Single Task
+
 ```bash
 pnpm update-tasks-research 1-12-create-slider-component
 # Output: ✓ Updated 1-12-create-slider-component with 3 research topics: R-UI, R-A11Y, R-RADIX
 ```
 
 ### Category Update
+
 ```bash
 pnpm update-tasks-research --category 1-xx
 # Output: ✓ Updated 39 task files in category 1-xx
 ```
 
 ### All Tasks
+
 ```bash
 pnpm update-tasks-research:all
 # Output: ✓ Updated 185 task files
@@ -90,7 +100,7 @@ The script successfully handles:
 1. **Exact Task IDs**: `1-12`, `2-10`, `f-1`
 2. **Category Patterns**: `1-xx` → matches all `1-12`, `1-13`, etc.
 3. **Range Patterns**: `2.1–2.62` → matches `2-1` through `2-62`
-4. **Special Patterns**: 
+4. **Special Patterns**:
    - `"Same as R-UI"` → inherits R-UI's mappings
    - `"1.xx (all)"` → matches all tasks in category 1
 5. **Multiple Formats**: Handles both `1-12` and `1.12` formats
@@ -100,12 +110,14 @@ The script successfully handles:
 ## Output Quality
 
 ### Research & Evidence Section
+
 - ✅ Lists all relevant research topics with links
 - ✅ Includes key findings (prioritizes Highest Standards and Best Practices)
 - ✅ Adds cross-references to RESEARCH-INVENTORY.md
 - ✅ Maintains date-stamped format
 
 ### Code Snippets Section
+
 - ✅ Extracts code snippets from Repo-Specific Context
 - ✅ Groups by research topic
 - ✅ Includes usage examples
@@ -125,11 +137,13 @@ The script successfully handles:
 ## Next Steps
 
 ### Immediate Use
+
 1. ✅ Script is ready for production use
 2. ✅ Tested on multiple categories
 3. ✅ Documentation complete
 
 ### Recommended Workflow
+
 1. **Test on single task**: Verify output quality
 2. **Update by category**: Process categories incrementally
 3. **Review changes**: Use `git diff` to review updates
@@ -137,6 +151,7 @@ The script successfully handles:
 5. **Commit incrementally**: Commit by category for easier review
 
 ### Future Enhancements (Optional)
+
 - [ ] Dry-run mode to preview changes
 - [ ] Interactive mode to select topics
 - [ ] Validation mode to check links

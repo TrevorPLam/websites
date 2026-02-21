@@ -11,7 +11,13 @@ export { BlogMasonry } from './BlogMasonry';
 export { BlogWithSidebar } from './BlogWithSidebar';
 export { BlogPagination } from './BlogPagination';
 export { RelatedPosts } from './RelatedPosts';
-export type { BlogPostDisplay, BlogAuthor, BlogCategory, BlogFilters, PaginationConfig } from './types';
+export type {
+  BlogPostDisplay,
+  BlogAuthor,
+  BlogCategory,
+  BlogFilters,
+  PaginationConfig,
+} from './types';
 export type { BlogPostCardProps } from './BlogPostCard';
 export type { BlogGridProps } from './BlogGrid';
 export type { BlogListProps } from './BlogList';

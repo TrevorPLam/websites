@@ -47,12 +47,18 @@ function main() {
   }
 
   if (missing.length > 0) {
-    console.error('validate-ui-exports: ERROR — index.ts exports reference missing component files:\n');
+    console.error(
+      'validate-ui-exports: ERROR — index.ts exports reference missing component files:\n'
+    );
     missing.forEach((f) => console.error('  -', f));
     process.exit(1);
   }
 
-  console.log('validate-ui-exports: OK — all', checked.size, 'component export(s) resolve to existing files.');
+  console.log(
+    'validate-ui-exports: OK — all',
+    checked.size,
+    'component export(s) resolve to existing files.'
+  );
   process.exit(0);
 }
 

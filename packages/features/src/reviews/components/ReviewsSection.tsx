@@ -3,10 +3,7 @@
  * Purpose: Reviews section using marketing-components TestimonialGrid/Carousel
  */
 
-import {
-  TestimonialGrid,
-  TestimonialCarousel,
-} from '@repo/marketing-components';
+import { TestimonialGrid, TestimonialCarousel } from '@repo/marketing-components';
 import type { Testimonial } from '@repo/marketing-components';
 import type { ReviewsFeatureConfig } from '../lib/reviews-config';
 

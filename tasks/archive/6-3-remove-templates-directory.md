@@ -29,6 +29,7 @@ Delete templates/ after migration matrix sign-off. grep for refs = 0.
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-DOCS**: ADRs, config reference, migration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-docs) for full research findings.
 
 ### Key Findings
@@ -36,6 +37,7 @@ Delete templates/ after migration matrix sign-off. grep for refs = 0.
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-DOCS](RESEARCH-INVENTORY.md#r-docs) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
 
@@ -46,6 +48,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-CLEANUP — Dead code removal
+
 ```typescript
 // Knip configuration for dead code detection
 export const knipConfig = {
@@ -53,9 +56,9 @@ export const knipConfig = {
   project: ['tsconfig.json'],
   ignore: ['**/*.test.ts', '**/*.stories.tsx'],
   rules: {
-    'imports': 'error',
-    'exports': 'error',
-    'types': 'error',
+    imports: 'error',
+    exports: 'error',
+    types: 'error',
   },
 };
 
@@ -66,6 +69,7 @@ export function analyzeDependencies() {
 ```
 
 ### R-PERF — Core Web Vitals optimization
+
 ```typescript
 // Performance monitoring
 export function reportWebVitals(metric: any) {
@@ -88,25 +92,28 @@ export function OptimizedImage({ src, alt, priority }: ImageProps) {
     src,
     alt,
     priority,
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
   });
 }
 ```
 
 ### R-UI — React 19 component with ref forwarding
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
 export function Component({ ref, className, ...props }: ComponentProps) {
-  return React.createElement(
-    Primitive.Root,
-    { ref, className: cn('component', className), ...props }
-  );
+  return React.createElement(Primitive.Root, {
+    ref,
+    className: cn('component', className),
+    ...props,
+  });
 }
 ```
 
 ### R-A11Y — Touch targets and reduced motion
+
 ```css
 .component-button {
   min-width: 24px;
@@ -115,11 +122,13 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### Reduced motion detection
+
 ```typescript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### Related Patterns
+
 - See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
 
 ## Acceptance Criteria
@@ -161,4 +170,3 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

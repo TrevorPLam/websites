@@ -28,6 +28,7 @@ Accessibility system with ARIA utilities, keyboard navigation, and screen reader
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 - **[2026-02-18] R-INFRA**: Slot, Provider, Context, Theme, CVA — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-infra) for full research findings.
 
@@ -36,6 +37,7 @@ Accessibility system with ARIA utilities, keyboard navigation, and screen reader
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH-INVENTORY.md - R-INFRA](RESEARCH-INVENTORY.md#r-infra) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
@@ -51,6 +53,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### Related Patterns
+
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
 - See [R-INFRA - Research Findings](RESEARCH-INVENTORY.md#r-infra) for additional examples
 
@@ -97,4 +100,3 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

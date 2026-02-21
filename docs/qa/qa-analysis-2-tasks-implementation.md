@@ -14,33 +14,37 @@
 
 ## Summary
 
-| Phase | Scope | Status | Risk |
-|-------|-------|--------|------|
-| Phase 4 remainder | Analytics, A/B Testing, Chat | Complete | Low |
-| Phase 5 | E-commerce, Auth, Payment, CMS, Notification stubs | Complete | Low |
-| Phase 6 | Location, Menu, Portfolio, Case Study, Job Listing, Course, Resource, Comparison, Filter, Search, Social Proof, Video, Audio, Interactive, Widget | Complete | Low |
+| Phase             | Scope                                                                                                                                             | Status   | Risk |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---- |
+| Phase 4 remainder | Analytics, A/B Testing, Chat                                                                                                                      | Complete | Low  |
+| Phase 5           | E-commerce, Auth, Payment, CMS, Notification stubs                                                                                                | Complete | Low  |
+| Phase 6           | Location, Menu, Portfolio, Case Study, Job Listing, Course, Resource, Comparison, Filter, Search, Social Proof, Video, Audio, Interactive, Widget | Complete | Low  |
 
 ---
 
 ## Quality Checklist
 
 ### Type Safety
+
 - [x] `@repo/features` type-check passes
 - [x] `@repo/marketing-components` type-check passes
 - [x] No `any` types in new code
 - [x] Proper interface exports
 
 ### Architecture
+
 - [x] Features do not depend on marketing-components (only reverse)
 - [x] Config-based adapters where applicable
 - [x] Barrel exports in package.json for new features
 
 ### Consistency
+
 - [x] Follows existing patterns (Card, Section, Container, cn)
 - [x] Button variant/size uses @repo/ui API (primary, outline, small)
 - [x] Types in types.ts per component family
 
 ### Accessibility
+
 - [ ] Components need a11y tests (jest-axe)
 - [ ] FilterBar uses aria-pressed for active state
 - [ ] SearchBar uses aria-label
@@ -48,6 +52,7 @@
 - [ ] AudioPlayer provides title
 
 ### Known Gaps
+
 1. **Tests:** New components lack unit tests; HeroCentered.test.tsx and booking-schema.test.ts have pre-existing Jest/Babel issues
 2. **Export validation:** No script yet to validate marketing-components index.ts exports
 3. **Integration:** Components not yet wired into starter-template or site.config
@@ -57,13 +62,13 @@
 
 ## Validation Methods
 
-| Method | Script / Command | Purpose |
-|--------|------------------|---------|
-| Type-check | `pnpm --filter @repo/features type-check` | TypeScript validation |
-| Type-check | `pnpm --filter @repo/marketing-components type-check` | TypeScript validation |
-| Export map | `pnpm validate-exports` | Package.json exports resolve |
-| UI exports | `pnpm validate-ui-exports` | UI index.ts → component files |
-| Marketing exports | `pnpm validate-marketing-exports` | Marketing index.ts → component families |
+| Method            | Script / Command                                      | Purpose                                 |
+| ----------------- | ----------------------------------------------------- | --------------------------------------- |
+| Type-check        | `pnpm --filter @repo/features type-check`             | TypeScript validation                   |
+| Type-check        | `pnpm --filter @repo/marketing-components type-check` | TypeScript validation                   |
+| Export map        | `pnpm validate-exports`                               | Package.json exports resolve            |
+| UI exports        | `pnpm validate-ui-exports`                            | UI index.ts → component files           |
+| Marketing exports | `pnpm validate-marketing-exports`                     | Marketing index.ts → component families |
 
 ---
 

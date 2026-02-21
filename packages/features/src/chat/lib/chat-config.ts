@@ -14,9 +14,7 @@ export interface ChatFeatureConfig {
   position?: 'bottom-right' | 'bottom-left';
 }
 
-export function createChatConfig(
-  overrides: Partial<ChatFeatureConfig> = {}
-): ChatFeatureConfig {
+export function createChatConfig(overrides: Partial<ChatFeatureConfig> = {}): ChatFeatureConfig {
   return {
     provider: 'none',
     enabled: false,

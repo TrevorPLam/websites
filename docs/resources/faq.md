@@ -62,6 +62,7 @@ Quick answers to common questions about the marketing-websites platform. For det
 ### Q: What are the system requirements?
 
 **A:** You need:
+
 - Node.js >=22.0.0
 - pnpm 10.29.2 (exactly)
 - Git 2.30.0+
@@ -70,7 +71,8 @@ See [Developer Onboarding](getting-started/onboarding.md) for complete setup ins
 
 ### Q: How do I create a new client website?
 
-**A:** 
+**A:**
+
 1. Choose a starter from `clients/` (or copy `clients/starter-template`)
 2. Copy it to `clients/[client-name]`
 3. Configure `site.config.ts`
@@ -88,6 +90,7 @@ See [Client Setup Guide](../clients/README.md) for details.
 ### Q: How do I add a new component to the UI library?
 
 **A:**
+
 1. Create component in `packages/ui/src/components/`
 2. Follow existing component patterns
 3. Add tests in `__tests__/`
@@ -99,6 +102,7 @@ See [UI Library Documentation](components/ui-library.md).
 ### Q: How do I add a new feature?
 
 **A:**
+
 1. Create feature in `packages/features/src/`
 2. Follow feature extraction patterns
 3. Add to appropriate template/client
@@ -109,6 +113,7 @@ See [Feature Documentation](../features/) for examples.
 ### Q: Why is my build failing?
 
 **A:** Common causes:
+
 - Missing dependencies: Run `pnpm install`
 - Type errors: Run `pnpm type-check`
 - Lint errors: Run `pnpm lint`
@@ -121,6 +126,7 @@ See [Troubleshooting Guide](getting-started/troubleshooting.md) for more solutio
 ### Q: What is the difference between templates and clients?
 
 **A:**
+
 - **Templates**: Reusable starting points for specific industries (e.g., hair salon template)
 - **Clients**: Production websites created from templates, customized for specific businesses
 
@@ -133,6 +139,7 @@ Website implementations live in `clients/`; shared building blocks live in `pack
 ### Q: How do packages depend on each other?
 
 **A:** Follow the layer model:
+
 - Lower layers can't depend on higher layers
 - Packages declare dependencies in `package.json`
 - Use `workspace:*` for internal package references
@@ -143,7 +150,8 @@ See [Module Boundaries](architecture/module-boundaries.md) for rules.
 
 ### Q: Where do I configure environment variables?
 
-**A:** 
+**A:**
+
 - Development: `.env.local` in the project root
 - Production: Set in your deployment platform (Vercel, Netlify, etc.)
 - Template: `.env.example` shows required variables
@@ -153,6 +161,7 @@ Never commit `.env.local` or secrets to Git.
 ### Q: How do I customize branding?
 
 **A:** Edit `site.config.ts` in your client directory:
+
 - Colors: `theme.colors`
 - Fonts: `theme.fonts`
 - Logo: `branding.logo`
@@ -164,6 +173,7 @@ Changes reflect immediately in development.
 ### Q: How do I deploy a client website?
 
 **A:** Options:
+
 - **Vercel**: Connect GitHub repo, select client directory
 - **Netlify**: Similar to Vercel
 - **Docker**: Use provided Dockerfile
@@ -174,6 +184,7 @@ See [Deployment Guide](../deployment/) for details.
 ### Q: Can I deploy multiple clients from one repository?
 
 **A:** Yes! Each client deploys independently. Configure your deployment platform to:
+
 - Build from the specific client directory
 - Use client-specific environment variables
 - Deploy to separate domains
@@ -182,7 +193,8 @@ See [Deployment Guide](../deployment/) for details.
 
 ### Q: Port already in use error
 
-**A:** 
+**A:**
+
 - Use a different port: `pnpm dev --port 3001`
 - Kill the process using the port
 - Check for other dev servers running
@@ -190,6 +202,7 @@ See [Deployment Guide](../deployment/) for details.
 ### Q: Module not found errors
 
 **A:**
+
 - Run `pnpm install` to ensure dependencies are installed
 - Check that package is in `pnpm-workspace.yaml`
 - Verify import paths are correct
@@ -198,6 +211,7 @@ See [Deployment Guide](../deployment/) for details.
 ### Q: TypeScript errors
 
 **A:**
+
 - Run `pnpm type-check` to see all errors
 - Ensure types package (`@repo/types`) is up to date
 - Check that imports use correct types
@@ -206,6 +220,7 @@ See [Deployment Guide](../deployment/) for details.
 ### Q: Build succeeds locally but fails in CI
 
 **A:** Common causes:
+
 - Node.js version mismatch (CI may use different version)
 - Missing environment variables
 - Cache issues: Clear CI cache and rebuild
@@ -216,6 +231,7 @@ See [Deployment Guide](../deployment/) for details.
 ### Q: How do I contribute?
 
 **A:**
+
 1. Read [CONTRIBUTING.md](../../CONTRIBUTING.md)
 2. Review [Code of Conduct](../../CODE_OF_CONDUCT.md)
 3. Fork the repository
@@ -226,6 +242,7 @@ See [Deployment Guide](../deployment/) for details.
 ### Q: What should I document in my PR?
 
 **A:** Include:
+
 - What changed and why
 - How to test the changes
 - Screenshots for UI changes
@@ -235,6 +252,7 @@ See [Deployment Guide](../deployment/) for details.
 ### Q: How do I report a bug?
 
 **A:**
+
 1. Check existing issues to avoid duplicates
 2. Use the bug report template
 3. Include:
@@ -254,6 +272,7 @@ See [SECURITY.md](../../SECURITY.md) for details.
 ### Q: Are dependencies scanned for vulnerabilities?
 
 **A:** Yes. The CI pipeline includes:
+
 - Automated dependency scanning
 - Secret scanning
 - SBOM generation
@@ -264,6 +283,7 @@ See [SECURITY.md](../../SECURITY.md) for details.
 ### Q: How do I optimize bundle size?
 
 **A:**
+
 - Use dynamic imports for large components
 - Enable tree shaking (automatic with proper imports)
 - Review bundle analyzer output
@@ -272,6 +292,7 @@ See [SECURITY.md](../../SECURITY.md) for details.
 ### Q: How do I improve page load performance?
 
 **A:**
+
 - Use Next.js Image component for images
 - Enable static generation where possible
 - Optimize fonts and assets
@@ -283,6 +304,7 @@ See [SECURITY.md](../../SECURITY.md) for details.
 ### Q: How do I add a new integration?
 
 **A:**
+
 1. Create integration in `packages/integrations/src/`
 2. Add configuration to `site.config.ts`
 3. Implement adapter pattern
@@ -293,7 +315,8 @@ See [Integration Documentation](../integrations/) for examples.
 
 ### Q: How do I configure analytics?
 
-**A:** 
+**A:**
+
 - Set up in `site.config.ts` under `integrations.analytics`
 - Configure consent management
 - Add tracking code (if needed)
@@ -306,6 +329,7 @@ See [Analytics & Consent Flow](../ANALYTICS_CONSENT_FLOW.md).
 ### Q: How do I update documentation?
 
 **A:**
+
 1. Edit the relevant `.md` file
 2. Follow [Documentation Standards](DOCUMENTATION_STANDARDS.md)
 3. Include proper metaheaders
@@ -315,6 +339,7 @@ See [Analytics & Consent Flow](../ANALYTICS_CONSENT_FLOW.md).
 ### Q: Where do I find documentation for a specific feature?
 
 **A:**
+
 - Check [Documentation Hub](README.md) for navigation
 - Use search (if available)
 - Check feature-specific docs in `docs/features/`

@@ -104,9 +104,7 @@ export const DEFAULT_THEME: ThemeConfig = {
  */
 export function themeToCSS(theme: ThemeConfig, mode: 'light' | 'dark' = 'light'): string {
   const colors =
-    mode === 'dark' && theme.darkColors
-      ? { ...theme.colors, ...theme.darkColors }
-      : theme.colors;
+    mode === 'dark' && theme.darkColors ? { ...theme.colors, ...theme.darkColors } : theme.colors;
 
   const vars = Object.entries(colors)
     .map(([key, value]) => `  --color-${key}: ${value};`)
@@ -141,9 +139,7 @@ export function applyTheme(theme: ThemeConfig, mode: 'light' | 'dark' = 'light')
 
   const root = document.documentElement;
   const colors =
-    mode === 'dark' && theme.darkColors
-      ? { ...theme.colors, ...theme.darkColors }
-      : theme.colors;
+    mode === 'dark' && theme.darkColors ? { ...theme.colors, ...theme.darkColors } : theme.colors;
 
   for (const [key, value] of Object.entries(colors)) {
     root.style.setProperty(`--color-${key}`, value);
@@ -151,7 +147,11 @@ export function applyTheme(theme: ThemeConfig, mode: 'light' | 'dark' = 'light')
 
   if (theme.borderRadius) {
     const radiusMap: Record<string, string> = {
-      none: '0px', small: '4px', medium: '8px', large: '12px', full: '9999px',
+      none: '0px',
+      small: '4px',
+      medium: '8px',
+      large: '12px',
+      full: '9999px',
     };
     root.style.setProperty('--radius', radiusMap[theme.borderRadius] ?? '8px');
   }

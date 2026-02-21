@@ -67,11 +67,13 @@ This guide describes the processes and automation for maintaining documentation 
 Documentation is automatically validated on every PR and push:
 
 **Triggered when:**
+
 - Files in `docs/` change
 - Any `.md` file changes
 - Manual workflow dispatch
 
 **Checks performed:**
+
 - Metaheader validation
 - Markdown formatting
 - Link validation
@@ -95,12 +97,14 @@ pnpm validate-docs || exit 1
 ### Weekly Tasks
 
 **Link Validation**
+
 ```bash
 # Check for broken links
 pnpm validate-docs
 ```
 
 **Review Recent Changes**
+
 - Check PRs for documentation updates
 - Verify new documentation follows standards
 - Ensure links are valid
@@ -108,17 +112,20 @@ pnpm validate-docs
 ### Monthly Tasks
 
 **Content Freshness Check**
+
 - Review "Last Updated" dates
 - Identify outdated sections
 - Update examples and code snippets
 - Check version numbers
 
 **Coverage Review**
+
 - Identify undocumented features
 - Check for missing tutorials
 - Verify all packages have documentation
 
 **Quality Metrics**
+
 - Review validation results
 - Check accessibility compliance
 - Verify search functionality
@@ -126,6 +133,7 @@ pnpm validate-docs
 ### Quarterly Tasks
 
 **Comprehensive Review**
+
 - Full documentation audit
 - Update all "Last Updated" dates
 - Review and update standards
@@ -133,6 +141,7 @@ pnpm validate-docs
 - Update roadmap and plans
 
 **Community Feedback**
+
 - Review documentation issues
 - Analyze search queries
 - Check FAQ for new questions
@@ -145,12 +154,14 @@ pnpm validate-docs
 When code changes, documentation should be updated:
 
 **Automatic Triggers:**
+
 - API changes → Update API docs
 - Component changes → Update component docs
 - Configuration changes → Update config docs
 - Feature additions → Add feature docs
 
 **Manual Review Needed:**
+
 - Architecture changes → Update architecture docs
 - Process changes → Update guides
 - Breaking changes → Update migration guides
@@ -203,6 +214,7 @@ pnpm validate-docs:strict
 ```
 
 **Features:**
+
 - Metaheader validation
 - Link checking
 - Accessibility checks
@@ -222,6 +234,7 @@ pnpm validate-docs
 ### Freshness Check
 
 Manual process:
+
 1. Search for "Last Updated" dates older than 6 months
 2. Review content for accuracy
 3. Update dates and content as needed
@@ -239,6 +252,7 @@ Manual process:
 ### Monitoring
 
 Track metrics through:
+
 - CI/CD validation results
 - GitHub issue labels
 - Community feedback
@@ -270,12 +284,14 @@ Track metrics through:
 ### Validation Failures
 
 **Common issues:**
+
 - Missing metaheaders → Add complete metaheader
 - Broken links → Fix or remove links
 - Formatting errors → Run `pnpm format`
 - Accessibility issues → Fix per WCAG guidelines
 
 **Solutions:**
+
 ```bash
 # Check specific file
 node scripts/validate-documentation.js --docs-path docs/specific-file.md
@@ -290,12 +306,14 @@ pnpm validate-docs
 ### Link Issues
 
 **Broken internal links:**
+
 - Check file paths
 - Verify file exists
 - Check for typos
 - Update relative paths
 
 **Broken external links:**
+
 - Verify URL is correct
 - Check if site is down
 - Find alternative source

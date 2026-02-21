@@ -29,6 +29,7 @@ Move reusable hair-salon components to @repo/marketing-components. Define reusab
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-DOCS**: ADRs, config reference, migration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-docs) for full research findings.
 - **[2026-02-18] R-MIGRATION**: Template-to-client migration, cutover — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-migration) for full research findings.
 
@@ -37,6 +38,7 @@ Move reusable hair-salon components to @repo/marketing-components. Define reusab
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-DOCS](RESEARCH-INVENTORY.md#r-docs) — Full research findings
 - [RESEARCH-INVENTORY.md - R-MIGRATION](RESEARCH-INVENTORY.md#r-migration) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
@@ -48,6 +50,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-MIGRATION — Template-to-client migration
+
 ```typescript
 interface MigrationPlan {
   sourceTemplate: string;
@@ -69,35 +72,42 @@ export function executeMigration(plan: MigrationPlan) {
 ```
 
 ### R-DOCS — Architecture Decision Records
+
 ```markdown
 # ADR-001: Use App Router for Page Templates
 
 ## Context
+
 We need to decide between Pages Router and App Router for our page templates.
 
 ## Decision
+
 Use App Router with Server Components by default, Client Components only for interactivity.
 
 ## Consequences
+
 - Better performance with RSC
 - Learning curve for team
 - Migration path from existing templates
 ```
 
 ### R-UI — React 19 component with ref forwarding
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
 export function Component({ ref, className, ...props }: ComponentProps) {
-  return React.createElement(
-    Primitive.Root,
-    { ref, className: cn('component', className), ...props }
-  );
+  return React.createElement(Primitive.Root, {
+    ref,
+    className: cn('component', className),
+    ...props,
+  });
 }
 ```
 
 ### R-A11Y — Touch targets and reduced motion
+
 ```css
 .component-button {
   min-width: 24px;
@@ -106,11 +116,13 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### Reduced motion detection
+
 ```typescript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### Related Patterns
+
 - See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
 - See [R-MIGRATION - Research Findings](RESEARCH-INVENTORY.md#r-migration) for additional examples
 
@@ -152,4 +164,3 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

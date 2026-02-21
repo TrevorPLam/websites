@@ -438,3 +438,4 @@ Before marking a task as complete, verify that:
 By following these guidelines, you'll create tasks that are clear, executable, and ready for both human and AI collaboration. This consistency will pay dividends in reduced friction, fewer bugs, and faster delivery across your entire monorepo.
 
 Would you like me to tailor this further for a specific type of task (e.g., adding a new UI component, setting up a client, or integrating a third‑party service)?
+```

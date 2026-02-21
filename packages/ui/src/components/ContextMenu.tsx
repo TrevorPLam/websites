@@ -32,31 +32,41 @@ export interface ContextMenuProps {
   children: React.ReactNode;
 }
 
-export interface ContextMenuTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Trigger> {}
-export interface ContextMenuContentProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Content> {}
-export interface ContextMenuItemProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Item> {
+export interface ContextMenuTriggerProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.Trigger
+> {}
+export interface ContextMenuContentProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.Content
+> {}
+export interface ContextMenuItemProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.Item
+> {
   inset?: boolean;
 }
-export interface ContextMenuCheckboxItemProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.CheckboxItem> {}
-export interface ContextMenuRadioItemProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem> {}
-export interface ContextMenuLabelProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Label> {
+export interface ContextMenuCheckboxItemProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.CheckboxItem
+> {}
+export interface ContextMenuRadioItemProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.RadioItem
+> {}
+export interface ContextMenuLabelProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.Label
+> {
   inset?: boolean;
 }
-export interface ContextMenuSeparatorProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Separator> {}
+export interface ContextMenuSeparatorProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.Separator
+> {}
 export interface ContextMenuShortcutProps extends React.HTMLAttributes<HTMLSpanElement> {}
-export interface ContextMenuSubProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Sub> {}
-export interface ContextMenuSubContentProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubContent> {}
-export interface ContextMenuSubTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubTrigger> {
+export interface ContextMenuSubProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.Sub
+> {}
+export interface ContextMenuSubContentProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.SubContent
+> {}
+export interface ContextMenuSubTriggerProps extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.SubTrigger
+> {
   inset?: boolean;
 }
 
@@ -69,8 +79,9 @@ export const ContextMenuPortal = ContextMenuPrimitive.Portal;
 export const ContextMenuSub = ContextMenuPrimitive.Sub;
 export const ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup;
 
-export interface ContextMenuSubTriggerPropsWithInset
-  extends React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubTrigger> {
+export interface ContextMenuSubTriggerPropsWithInset extends React.ComponentPropsWithoutRef<
+  typeof ContextMenuPrimitive.SubTrigger
+> {
   inset?: boolean;
 }
 

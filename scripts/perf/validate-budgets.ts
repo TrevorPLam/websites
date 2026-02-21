@@ -122,14 +122,20 @@ function main() {
     console.log(JSON.stringify(result, null, 2));
   } else {
     if (Object.keys(metrics).length === 0) {
-      console.warn('⚠️  No performance metrics available. Install Lighthouse CI or run Lighthouse locally.');
-      console.warn('   Budget validation skipped. See docs/performance/slo-definition.md for setup.');
+      console.warn(
+        '⚠️  No performance metrics available. Install Lighthouse CI or run Lighthouse locally.'
+      );
+      console.warn(
+        '   Budget validation skipped. See docs/performance/slo-definition.md for setup.'
+      );
       process.exit(0); // Don't fail if metrics unavailable
     }
 
     console.log('\nPerformance Metrics:');
-    if (metrics.lcp !== undefined) console.log(`  LCP: ${metrics.lcp}ms (budget: ${BUDGETS.lcp}ms)`);
-    if (metrics.inp !== undefined) console.log(`  INP: ${metrics.inp}ms (budget: ${BUDGETS.inp}ms)`);
+    if (metrics.lcp !== undefined)
+      console.log(`  LCP: ${metrics.lcp}ms (budget: ${BUDGETS.lcp}ms)`);
+    if (metrics.inp !== undefined)
+      console.log(`  INP: ${metrics.inp}ms (budget: ${BUDGETS.inp}ms)`);
     if (metrics.cls !== undefined) console.log(`  CLS: ${metrics.cls} (budget: ${BUDGETS.cls})`);
 
     if (result.passed) {

@@ -7,7 +7,14 @@ const fs = require('fs');
 const path = require('path');
 
 const TASKS_DIR = path.join(__dirname, '..', 'tasks');
-const SKIP = new Set(['prompt.md', 'c-1-c-18-d-1-d-8.md', '6-10b-health-check.md', '6-10c-program-wave.md', 'RESEARCH-INVENTORY.md', '0-1-populate-component-a11y-rubric.md']);
+const SKIP = new Set([
+  'prompt.md',
+  'c-1-c-18-d-1-d-8.md',
+  '6-10b-health-check.md',
+  '6-10c-program-wave.md',
+  'RESEARCH-INVENTORY.md',
+  '0-1-populate-component-a11y-rubric.md',
+]);
 
 const REPLACEMENT = `- **[2026-02-18] RESEARCH.md**: Section Reference Index — § codes resolve to sections; see RESEARCH.md.
 - **[2026-02-18] tasks/RESEARCH-INVENTORY.md**: Topic-specific research (R-UI, R-A11Y, R-MARKETING, R-PERF, etc.) directs implementation; see inventory for this task's topics.`;

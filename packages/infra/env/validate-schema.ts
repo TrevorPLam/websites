@@ -58,9 +58,7 @@ export const completeEnvSchema = createEnvSchema({
  * Creates environment-specific schema.
  * Returns schema optimized for development, production, or test.
  */
-export const createEnvSchemaForEnvironment = (
-  targetEnv: 'development' | 'production' | 'test'
-) => {
+export const createEnvSchemaForEnvironment = (targetEnv: 'development' | 'production' | 'test') => {
   const baseComposition: EnvSchemaComposition = {
     base: baseEnvSchema,
     optional: { public: publicEnvSchema },

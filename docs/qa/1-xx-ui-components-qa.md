@@ -5,35 +5,39 @@
 
 ## Summary
 
-| Criterion | Status | Notes |
-|-----------|--------|-------|
-| **Export consistency** | ✅ | All components exported from `packages/ui/src/index.ts` |
-| **displayName** | ✅ | All forwardRef components set `displayName` (verified via grep) |
-| **TypeScript** | ✅ | `pnpm --filter @repo/ui type-check` passes |
-| **Pattern consistency** | ✅ | Radix wrappers use `ComponentRef<typeof Primitive.Root>`, `cn()`, style maps |
-| **Accessibility** | ⚠️ | Radix primitives provide base a11y; custom components use role/aria where applicable |
-| **Testing** | ⚠️ | Only Button, Dialog, Input had tests; new tests added for Label, Slider, Alert, Checkbox |
+| Criterion               | Status | Notes                                                                                    |
+| ----------------------- | ------ | ---------------------------------------------------------------------------------------- |
+| **Export consistency**  | ✅     | All components exported from `packages/ui/src/index.ts`                                  |
+| **displayName**         | ✅     | All forwardRef components set `displayName` (verified via grep)                          |
+| **TypeScript**          | ✅     | `pnpm --filter @repo/ui type-check` passes                                               |
+| **Pattern consistency** | ✅     | Radix wrappers use `ComponentRef<typeof Primitive.Root>`, `cn()`, style maps             |
+| **Accessibility**       | ⚠️     | Radix primitives provide base a11y; custom components use role/aria where applicable     |
+| **Testing**             | ⚠️     | Only Button, Dialog, Input had tests; new tests added for Label, Slider, Alert, Checkbox |
 
 ## Quality Criteria Applied
 
 ### 1. Component structure
+
 - **File header:** All new components include TRACE header with Purpose, Relationship, Exports, Invariants, Status.
 - **Ref forwarding:** Radix wrappers use `React.forwardRef` with `React.ComponentRef<typeof Primitive.Root>` (React 19).
 - **Class merging:** All use `cn()` from `@repo/utils` for conditional classes.
 - **displayName:** Set on every exported component for debugging and DevTools.
 
 ### 2. Type safety
+
 - No `any` types; interfaces extend Radix props or `React.HTMLAttributes`/`ComponentPropsWithoutRef`.
 - Exported types: `*Props` (and variant/size types where applicable) exported from index.
 
 ### 3. Accessibility
-- **Radix-based components:** Rely on Radix for role, aria-*, keyboard nav; our layer adds focus rings and sizing (e.g. min 24px touch targets where specified).
+
+- **Radix-based components:** Rely on Radix for role, aria-\*, keyboard nav; our layer adds focus rings and sizing (e.g. min 24px touch targets where specified).
 - **Custom components:** Alert uses `role="alert"`; Stepper/Timeline/Pagination use semantic markup and aria where appropriate; Rating uses `role="radiogroup"` / `role="img"` for read-only.
 - **Recommendation:** Run axe in browser or add jest-axe tests per component for ongoing regression checks.
 
 ### 4. Dependencies
+
 - **Radix:** Single `radix-ui` catalog dependency; no per-primitive packages.
-- **Custom:** react-hook-form, zod, @hookform/resolvers (Form); embla-carousel-react (Carousel); react-window + @types/react-window (VirtualList); @dnd-kit/* (DragAndDrop); cmdk (Command).
+- **Custom:** react-hook-form, zod, @hookform/resolvers (Form); embla-carousel-react (Carousel); react-window + @types/react-window (VirtualList); @dnd-kit/\* (DragAndDrop); cmdk (Command).
 
 ## Gaps and follow-ups
 

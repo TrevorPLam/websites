@@ -19,6 +19,7 @@ The `update-tasks-with-research.js` script automates updating task files with re
 ## Quick Start
 
 ### Update a single task
+
 ```bash
 pnpm update-tasks-research 1-12-create-slider-component
 # or
@@ -26,6 +27,7 @@ pnpm update-tasks-research 1-12
 ```
 
 ### Update all tasks in a category
+
 ```bash
 # Update all 1.xx UI component tasks
 pnpm update-tasks-research --category 1-xx
@@ -38,6 +40,7 @@ pnpm update-tasks-research --category f-xx
 ```
 
 ### Update all tasks
+
 ```bash
 pnpm update-tasks-research:all
 ```
@@ -49,6 +52,7 @@ pnpm update-tasks-research:all
 ### 1. Parsing RESEARCH-INVENTORY.md
 
 The script extracts:
+
 - **Research Topics** (R-UI, R-A11Y, R-MARKETING, etc.)
 - **Task Mappings** from "Task IDs by Topic" section
 - **Research Findings** (Fundamentals, Best Practices, Highest Standards, Novel Techniques)
@@ -57,6 +61,7 @@ The script extracts:
 ### 2. Task-to-Topic Mapping
 
 Tasks are matched to topics using:
+
 - **Explicit task IDs** (e.g., "2.10" → R-FORM)
 - **Category patterns** (e.g., "1.xx" → matches all 1-12, 1-13, etc.)
 - **Range patterns** (e.g., "2.1–2.62" → matches 2-1 through 2-62)
@@ -65,11 +70,13 @@ Tasks are matched to topics using:
 ### 3. Section Generation
 
 #### Research & Evidence Section
+
 - Lists all relevant research topics with links
 - Includes key findings (prioritizes Highest Standards and Best Practices)
 - Adds cross-references to RESEARCH-INVENTORY.md
 
 #### Code Snippets Section
+
 - Extracts code snippets from Repo-Specific Context
 - Groups by research topic
 - Includes usage examples and related patterns
@@ -85,6 +92,7 @@ Tasks are matched to topics using:
 ## Examples
 
 ### Example 1: Update Single Task
+
 ```bash
 $ pnpm update-tasks-research 1-12-create-slider-component
 
@@ -95,6 +103,7 @@ Found 46 research topics
 ```
 
 ### Example 2: Update Category
+
 ```bash
 $ pnpm update-tasks-research --category 1-xx
 
@@ -110,6 +119,7 @@ Updating tasks in category: 1-xx
 ```
 
 ### Example 3: Update All Tasks
+
 ```bash
 $ pnpm update-tasks-research:all
 
@@ -169,20 +179,24 @@ The script handles various task ID formats:
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 
 ### Key Findings
 
 #### R-UI Highest Standards
+
 - **[2026-02-18] Server Component Safety**: All UI components...
 - **[2026-02-18] Component Architecture**: All 1.xx components...
 
 #### R-A11Y Best Practices
+
 - **[2026-02-18] Focus Management**: Success Criterion 2.4.11...
 - **[2026-02-18] ARIA Patterns**: Use ARIA live regions...
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
@@ -190,12 +204,13 @@ The script handles various task ID formats:
 
 ### Code Snippets Section
 
-```markdown
+````markdown
 ## Code Snippets / Examples
 
 ### R-UI Implementation Patterns
 
 #### Current Implementation
+
 ```typescript
 // packages/ui/src/components/Button.tsx
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -210,11 +225,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 ```
+````
 
 ### Related Patterns
+
 - See [R-UI - Repo-Specific Context](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Repo-Specific Context](RESEARCH-INVENTORY.md#r-a11y) for accessibility patterns
-```
+
+````
 
 ---
 
@@ -224,7 +242,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 **Cause**: Task ID doesn't match any patterns in RESEARCH-INVENTORY.md
 
-**Solution**: 
+**Solution**:
 - Check if task ID format is correct
 - Verify task is listed in RESEARCH-INVENTORY.md "Task IDs by Topic" section
 - Try using full filename instead of base ID
@@ -254,19 +272,22 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 1. **Test on Single Task First**: Always test on one task before running on all
    ```bash
    pnpm update-tasks-research 1-12-create-slider-component
-   ```
+````
 
 2. **Review Output**: Check updated files to ensure content is correct
+
    ```bash
    git diff tasks/1-12-create-slider-component.md
    ```
 
 3. **Format After Updates**: Run Prettier to ensure consistent formatting
+
    ```bash
    pnpm format
    ```
 
 4. **Commit Incrementally**: Commit updates by category for easier review
+
    ```bash
    pnpm update-tasks-research --category 1-xx
    git add tasks/1-*.md
@@ -282,6 +303,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 **Important**: The script preserves existing code snippets in task files. If a task file already has code snippets in the "Code Snippets / Examples" section, they will be preserved and only the "Related Patterns" section will be added (if missing).
 
 ### Behavior:
+
 - ✅ **Existing code snippets**: Preserved as-is
 - ✅ **Related Patterns**: Added if missing
 - ✅ **No existing code**: Full section generated from RESEARCH-INVENTORY.md

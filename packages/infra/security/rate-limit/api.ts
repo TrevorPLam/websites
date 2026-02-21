@@ -6,11 +6,7 @@
 
 import { hashIp, getClientIp } from './helpers';
 import { RateLimiterFactory } from './factory';
-import type {
-  RateLimitConfig,
-  RateLimitPreset,
-  RateLimitResult,
-} from './types';
+import type { RateLimitConfig, RateLimitPreset, RateLimitResult } from './types';
 
 export async function limitByIp(
   headers: Record<string, string>,
@@ -62,21 +58,11 @@ export async function checkMultipleLimits(
 ): Promise<{ success: boolean; results: RateLimitResult[] }> {
   const results: RateLimitResult[] = [];
   type CheckItem = (typeof checks)[number];
-  const limitHandlers: Record<
-    CheckItem['type'],
-    (c: CheckItem) => Promise<RateLimitResult>
-  > = {
+  const limitHandlers: Record<CheckItem['type'], (c: CheckItem) => Promise<RateLimitResult>> = {
     ip: (c) =>
-      limitByIp(
-        { 'x-forwarded-for': c.value },
-        c.preset ?? 'general',
-        c.customConfig,
-        env
-      ),
-    userId: (c) =>
-      limitByUserId(c.value, c.preset ?? 'general', c.customConfig, env),
-    email: (c) =>
-      limitByEmail(c.value, c.preset ?? 'contact', c.customConfig, env),
+      limitByIp({ 'x-forwarded-for': c.value }, c.preset ?? 'general', c.customConfig, env),
+    userId: (c) => limitByUserId(c.value, c.preset ?? 'general', c.customConfig, env),
+    email: (c) => limitByEmail(c.value, c.preset ?? 'contact', c.customConfig, env),
   };
 
   for (const check of checks) {
@@ -93,9 +79,7 @@ export async function checkMultipleLimits(
   return { success: true, results };
 }
 
-export function generateRateLimitHeaders(
-  result: RateLimitResult
-): Record<string, string> {
+export function generateRateLimitHeaders(result: RateLimitResult): Record<string, string> {
   return {
     'X-RateLimit-Limit': result.limit.toString(),
     'X-RateLimit-Remaining': result.remaining.toString(),

@@ -38,43 +38,43 @@ Run through all questions. A single **No** disqualifies the component from `@rep
 
 ### 1. Config-Driven API
 
-| Check | Question | Pass |
-|-------|----------|------|
-| 1a | Does the component accept its content/data via props (not fetch its own industry data)? | ☐ |
-| 1b | Are layout variations controlled by a prop (`variant`, `layout`, `size`)? | ☐ |
-| 1c | Are theme values (colors, fonts, radius) consumed from CSS variables — not hard-coded? | ☐ |
-| 1d | Are CTA labels, headings, and body copy passed as props — never hardcoded? | ☐ |
+| Check | Question                                                                                | Pass |
+| ----- | --------------------------------------------------------------------------------------- | ---- |
+| 1a    | Does the component accept its content/data via props (not fetch its own industry data)? | ☐    |
+| 1b    | Are layout variations controlled by a prop (`variant`, `layout`, `size`)?               | ☐    |
+| 1c    | Are theme values (colors, fonts, radius) consumed from CSS variables — not hard-coded?  | ☐    |
+| 1d    | Are CTA labels, headings, and body copy passed as props — never hardcoded?              | ☐    |
 
 ### 2. Industry Neutrality
 
-| Check | Question | Pass |
-|-------|----------|------|
-| 2a | Does the component contain zero `if (industry === '...')` or industry-name strings? | ☐ |
-| 2b | Does it work correctly when rendered for at least 3 different industry types (salon, dental, legal)? | ☐ |
-| 2c | Are industry-specific icons/images injected via props — not imported directly? | ☐ |
+| Check | Question                                                                                             | Pass |
+| ----- | ---------------------------------------------------------------------------------------------------- | ---- |
+| 2a    | Does the component contain zero `if (industry === '...')` or industry-name strings?                  | ☐    |
+| 2b    | Does it work correctly when rendered for at least 3 different industry types (salon, dental, legal)? | ☐    |
+| 2c    | Are industry-specific icons/images injected via props — not imported directly?                       | ☐    |
 
 ### 3. Stable Public API
 
-| Check | Question | Pass |
-|-------|----------|------|
-| 3a | Does the component export a TypeScript interface for all props? | ☐ |
-| 3b | Are optional props safe to omit without breaking the render? | ☐ |
-| 3c | Has the API been stable (or intentionally versioned) for at least one full client iteration? | ☐ |
+| Check | Question                                                                                     | Pass |
+| ----- | -------------------------------------------------------------------------------------------- | ---- |
+| 3a    | Does the component export a TypeScript interface for all props?                              | ☐    |
+| 3b    | Are optional props safe to omit without breaking the render?                                 | ☐    |
+| 3c    | Has the API been stable (or intentionally versioned) for at least one full client iteration? | ☐    |
 
 ### 4. Accessibility & Performance
 
-| Check | Question | Pass |
-|-------|----------|------|
-| 4a | Does the component meet WCAG 2.1 AA? (See `docs/accessibility/component-a11y-rubric.md`) | ☐ |
-| 4b | Is the bundle contribution < 10 kB gzipped (excluding peer deps)? | ☐ |
-| 4c | Does it use `next/image` for any images (never raw `<img>`)? | ☐ |
+| Check | Question                                                                                 | Pass |
+| ----- | ---------------------------------------------------------------------------------------- | ---- |
+| 4a    | Does the component meet WCAG 2.1 AA? (See `docs/accessibility/component-a11y-rubric.md`) | ☐    |
+| 4b    | Is the bundle contribution < 10 kB gzipped (excluding peer deps)?                        | ☐    |
+| 4c    | Does it use `next/image` for any images (never raw `<img>`)?                             | ☐    |
 
 ### 5. Test Coverage
 
-| Check | Question | Pass |
-|-------|----------|------|
-| 5a | Does the component have a unit test covering each variant? | ☐ |
-| 5b | Does it have an accessibility test via `jest-axe`? | ☐ |
+| Check | Question                                                   | Pass |
+| ----- | ---------------------------------------------------------- | ---- |
+| 5a    | Does the component have a unit test covering each variant? | ☐    |
+| 5b    | Does it have an accessibility test via `jest-axe`?         | ☐    |
 
 ---
 

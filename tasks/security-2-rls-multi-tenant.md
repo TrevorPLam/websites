@@ -14,6 +14,7 @@
 ## Context
 
 Multi-tenant data isolation requires Row-Level Security (RLS) policies in Supabase to enforce tenant boundaries at the database level. Current state:
+
 - Shared DB instance across clients
 - RLS may exist for user-level but not systematically for tenant-level
 - Incomplete `tenant_id` coverage across tables
@@ -41,7 +42,7 @@ This addresses **Research Topic #3: Multi-Tenant Data Isolation (Supabase RLS)**
   - Policies match `tenant_id` from JWT or secure session setting
   - Membership table pattern for multi-org users
 - **Threat Model**: Any RLS misconfig leads directly to cross-tenant data exposure
-- **References**: 
+- **References**:
   - [docs/research/perplexity-security-2026.md](../docs/research/perplexity-security-2026.md) (Topic #3)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
   - Supabase RLS documentation
@@ -89,6 +90,7 @@ This addresses **Research Topic #3: Multi-Tenant Data Isolation (Supabase RLS)**
 ## Implementation Plan
 
 ### Phase 1: Schema Updates
+
 - [ ] Create migration to add `tenant_id` to all tenant-scoped tables:
   ```sql
   ALTER TABLE bookings ADD COLUMN IF NOT EXISTS tenant_id UUID;
@@ -102,6 +104,7 @@ This addresses **Research Topic #3: Multi-Tenant Data Isolation (Supabase RLS)**
   ```
 
 ### Phase 2: RLS Helper Function
+
 - [ ] Create `auth.tenant_id()` function:
   ```sql
   CREATE OR REPLACE FUNCTION auth.tenant_id() RETURNS uuid AS $$
@@ -112,6 +115,7 @@ This addresses **Research Topic #3: Multi-Tenant Data Isolation (Supabase RLS)**
   ```
 
 ### Phase 3: RLS Policies
+
 - [ ] Enable RLS on all tenant-scoped tables:
   ```sql
   ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
@@ -134,6 +138,7 @@ This addresses **Research Topic #3: Multi-Tenant Data Isolation (Supabase RLS)**
   ```
 
 ### Phase 4: Application Layer Updates
+
 - [ ] Update `packages/database/src/booking.ts`:
   - Ensure all queries use tenant-scoped client
   - Remove any service role access for tenant data
@@ -141,6 +146,7 @@ This addresses **Research Topic #3: Multi-Tenant Data Isolation (Supabase RLS)**
   - Utilities for extracting tenant context from session/JWT
 
 ### Phase 5: Testing & Documentation
+
 - [ ] Migration tests:
   - Verify RLS policies prevent cross-tenant access
   - Verify service role can bypass RLS (for migrations)
@@ -152,6 +158,7 @@ This addresses **Research Topic #3: Multi-Tenant Data Isolation (Supabase RLS)**
 ## Sample code / examples
 
 ### Migration: Add tenant_id and RLS
+
 ```sql
 -- supabase/migrations/20260219000000_add_tenant_rls.sql
 
@@ -160,7 +167,7 @@ ALTER TABLE bookings ADD COLUMN IF NOT EXISTS tenant_id UUID;
 CREATE INDEX IF NOT EXISTS idx_bookings_tenant_id ON bookings(tenant_id);
 
 -- 2. Backfill tenant_id (example: from sites table)
-UPDATE bookings 
+UPDATE bookings
 SET tenant_id = (SELECT tenant_id FROM sites WHERE sites.id = bookings.site_id)
 WHERE tenant_id IS NULL;
 
@@ -201,6 +208,7 @@ USING (tenant_id = auth.tenant_id());
 ```
 
 ### Database Access Layer
+
 ```typescript
 // packages/database/src/booking.ts
 import { createClient } from '@supabase/supabase-js';
@@ -226,11 +234,7 @@ export async function getBookingForTenant({
     }
   );
 
-  const { data, error } = await supabase
-    .from('bookings')
-    .select('*')
-    .eq('id', bookingId)
-    .single();
+  const { data, error } = await supabase.from('bookings').select('*').eq('id', bookingId).single();
 
   if (error) throw error;
   return data;
@@ -251,14 +255,14 @@ export async function getBookingForTenant({
 
 ## Execution notes
 
-- **Related files — current state:** 
+- **Related files — current state:**
   - Supabase migrations may exist but RLS not systematically applied
   - `packages/database/src/booking.ts` — may use service role client
-- **Potential issues / considerations:** 
+- **Potential issues / considerations:**
   - Existing data backfill (ensure tenant_id populated)
   - JWT claims configuration (ensure tenant_id in app_metadata)
   - Service role usage (must bypass RLS for migrations only)
-- **Verification:** 
+- **Verification:**
   - Migration runs successfully
   - RLS policies prevent cross-tenant access
   - Same-tenant access works

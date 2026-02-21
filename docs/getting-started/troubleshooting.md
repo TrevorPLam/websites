@@ -90,10 +90,12 @@ pnpm build
 ### Issue: pnpm version mismatch
 
 **Symptoms:**
+
 - Error: "This project requires pnpm 10.29.2"
 - Installation fails
 
 **Solutions:**
+
 ```bash
 # Install correct pnpm version
 npm install -g pnpm@10.29.2
@@ -103,6 +105,7 @@ pnpm --version
 ```
 
 **Prevention:** Use `corepack` to manage pnpm version:
+
 ```bash
 corepack enable
 corepack prepare pnpm@10.29.2 --activate
@@ -111,10 +114,12 @@ corepack prepare pnpm@10.29.2 --activate
 ### Issue: Node.js version too old
 
 **Symptoms:**
+
 - Error: "Engine 'node' is incompatible"
 - Build fails with syntax errors
 
 **Solutions:**
+
 1. Upgrade Node.js to >=22.0.0
 2. Use `nvm` (Node Version Manager) if available:
    ```bash
@@ -125,10 +130,12 @@ corepack prepare pnpm@10.29.2 --activate
 ### Issue: Dependency installation fails
 
 **Symptoms:**
+
 - `pnpm install` fails
 - Missing dependencies errors
 
 **Solutions:**
+
 ```bash
 # Clear cache and reinstall
 pnpm store prune
@@ -147,16 +154,20 @@ pnpm install
 ### Issue: Build fails with TypeScript errors
 
 **Symptoms:**
+
 - Type errors during build
 - "Cannot find module" errors
 
 **Solutions:**
+
 1. Run type check to see all errors:
+
    ```bash
    pnpm type-check
    ```
 
 2. Ensure types package is installed:
+
    ```bash
    pnpm --filter @repo/types build
    ```
@@ -175,6 +186,7 @@ pnpm install
 ### Issue: Build succeeds locally but fails in CI
 
 **Symptoms:**
+
 - Local build works
 - CI/CD pipeline fails
 
@@ -199,11 +211,14 @@ pnpm install
 ### Issue: Module not found errors
 
 **Symptoms:**
+
 - "Cannot find module '@repo/...'"
 - Import errors
 
 **Solutions:**
+
 1. Verify package exists in workspace:
+
    ```bash
    pnpm -r list --depth -1
    ```
@@ -211,6 +226,7 @@ pnpm install
 2. Check `pnpm-workspace.yaml` includes the package
 
 3. Rebuild the package:
+
    ```bash
    pnpm --filter @repo/[package-name] build
    ```
@@ -229,10 +245,12 @@ pnpm install
 ### Issue: Port already in use
 
 **Symptoms:**
+
 - Error: "Port 3000 is already in use"
 - Server won't start
 
 **Solutions:**
+
 ```bash
 # Use a different port
 pnpm dev --port 3001
@@ -248,17 +266,21 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Hot reload not working
 
 **Symptoms:**
+
 - Changes don't reflect in browser
 - Manual refresh required
 
 **Solutions:**
+
 1. Check file watcher limits (Linux):
+
    ```bash
    echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
    sudo sysctl -p
    ```
 
 2. Clear Next.js cache:
+
    ```bash
    rm -rf .next
    pnpm dev
@@ -271,10 +293,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: "Cannot find module" in development
 
 **Symptoms:**
+
 - Module resolves in build but not in dev
 - Import errors
 
 **Solutions:**
+
 1. Check TypeScript path mappings in `tsconfig.json`
 2. Verify package exports include development entry points
 3. Restart TypeScript server in your IDE
@@ -285,10 +309,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Environment variables not loading
 
 **Symptoms:**
+
 - `process.env.VARIABLE` is undefined
 - Configuration not working
 
 **Solutions:**
+
 1. Check file naming:
    - Development: `.env.local`
    - Production: Set in deployment platform
@@ -304,10 +330,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: API routes returning 404
 
 **Symptoms:**
+
 - API endpoints not found
 - 404 errors
 
 **Solutions:**
+
 1. Verify route file location:
    - Should be in `app/api/[route]/route.ts` (App Router)
 
@@ -321,21 +349,22 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Styling not applying
 
 **Symptoms:**
+
 - Tailwind classes not working
 - Styles missing
 
 **Solutions:**
+
 1. Verify Tailwind config includes correct paths:
+
    ```js
-   content: [
-     './app/**/*.{js,ts,jsx,tsx}',
-     './components/**/*.{js,ts,jsx,tsx}',
-   ]
+   content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'];
    ```
 
 2. Check for CSS import in root layout:
+
    ```tsx
-   import './globals.css'
+   import './globals.css';
    ```
 
 3. Restart dev server after config changes
@@ -350,11 +379,14 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: @repo/ui components not rendering
 
 **Symptoms:**
+
 - Components import but don't render
 - Type errors
 
 **Solutions:**
+
 1. Verify React version compatibility:
+
    ```bash
    pnpm list react
    # Should match across all packages
@@ -372,10 +404,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Feature components not working
 
 **Symptoms:**
+
 - Features don't load
 - Integration errors
 
 **Solutions:**
+
 1. Check feature configuration in `site.config.ts`
 2. Verify feature package is built:
    ```bash
@@ -389,17 +423,21 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Slow build times
 
 **Symptoms:**
+
 - Builds take too long
 - Development is slow
 
 **Solutions:**
+
 1. Enable Turbo caching:
+
    ```bash
    # Verify Turbo is configured
    cat turbo.json
    ```
 
 2. Use remote cache if available:
+
    ```bash
    pnpm build --force
    ```
@@ -410,18 +448,22 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Large bundle size
 
 **Symptoms:**
+
 - Slow page loads
 - Large JavaScript bundles
 
 **Solutions:**
+
 1. Analyze bundle:
+
    ```bash
    ANALYZE=true pnpm build
    ```
 
 2. Use dynamic imports for large components:
+
    ```tsx
-   const HeavyComponent = dynamic(() => import('./HeavyComponent'))
+   const HeavyComponent = dynamic(() => import('./HeavyComponent'));
    ```
 
 3. Enable tree shaking (verify proper ES module imports)
@@ -432,10 +474,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Third-party API not working
 
 **Symptoms:**
+
 - Integration fails
 - API errors
 
 **Solutions:**
+
 1. Check API keys in environment variables
 2. Verify API endpoint URLs
 3. Check network requests in browser DevTools
@@ -445,10 +489,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Database connection errors
 
 **Symptoms:**
+
 - Supabase connection fails
 - Database queries error
 
 **Solutions:**
+
 1. Verify Supabase credentials:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
@@ -462,10 +508,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Build fails on Vercel/Netlify
 
 **Symptoms:**
+
 - Deployment fails
 - Build errors in logs
 
 **Solutions:**
+
 1. Check build command:
    - Should be: `pnpm build`
    - Verify in deployment settings
@@ -481,10 +529,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Environment variables not available
 
 **Symptoms:**
+
 - Variables work locally but not in production
 - Configuration errors
 
 **Solutions:**
+
 1. Add variables in deployment platform settings
 2. Verify variable names match exactly
 3. Check for `NEXT_PUBLIC_` prefix for client-side
@@ -495,14 +545,17 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Type errors that shouldn't exist
 
 **Symptoms:**
+
 - False positive type errors
 - Types not resolving
 
 **Solutions:**
+
 1. Restart TypeScript server:
    - VS Code: Cmd/Ctrl + Shift + P → "TypeScript: Restart TS Server"
 
 2. Clear TypeScript cache:
+
    ```bash
    rm -rf node_modules/.cache
    ```
@@ -513,11 +566,14 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Module resolution errors
 
 **Symptoms:**
+
 - "Cannot find module" in TypeScript
 - Import paths not resolving
 
 **Solutions:**
+
 1. Check `tsconfig.json` paths:
+
    ```json
    {
      "compilerOptions": {
@@ -537,11 +593,14 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Merge conflicts in pnpm-lock.yaml
 
 **Symptoms:**
+
 - Merge conflicts
 - Lock file issues
 
 **Solutions:**
+
 1. Resolve conflicts by regenerating lock file:
+
    ```bash
    git checkout --theirs pnpm-lock.yaml
    pnpm install
@@ -556,10 +615,12 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Proc
 ### Issue: Large file commits
 
 **Symptoms:**
+
 - Git operations slow
 - Repository size issues
 
 **Solutions:**
+
 1. Use `.gitignore` properly
 2. Don't commit:
    - `node_modules/`

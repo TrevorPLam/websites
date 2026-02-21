@@ -23,12 +23,14 @@ export function logError(message: string, error?: Error | unknown, context?: Log
   }
   console.error('[ERROR]', message, error ?? '', context ?? '');
   if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-    import('@sentry/nextjs').then((Sentry) => {
-      if (error instanceof Error) {
-        Sentry.captureException(error, { extra: { message, ...context } });
-      } else {
-        Sentry.captureMessage(message, { level: 'error', extra: context });
-      }
-    }).catch(() => {});
+    import('@sentry/nextjs')
+      .then((Sentry) => {
+        if (error instanceof Error) {
+          Sentry.captureException(error, { extra: { message, ...context } });
+        } else {
+          Sentry.captureMessage(message, { level: 'error', extra: context });
+        }
+      })
+      .catch(() => {});
   }
 }

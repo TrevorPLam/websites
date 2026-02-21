@@ -10,6 +10,8 @@ export interface ContentManagementFeatureConfig {
   enabled?: boolean;
 }
 
-export function createCMSConfig(overrides: Partial<ContentManagementFeatureConfig> = {}): ContentManagementFeatureConfig {
+export function createCMSConfig(
+  overrides: Partial<ContentManagementFeatureConfig> = {}
+): ContentManagementFeatureConfig {
   return { provider: 'none', enabled: false, ...overrides };
 }

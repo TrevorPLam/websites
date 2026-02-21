@@ -27,8 +27,9 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface AspectRatioProps
-  extends React.ComponentPropsWithoutRef<typeof AspectRatioPrimitive.Root> {
+export interface AspectRatioProps extends React.ComponentPropsWithoutRef<
+  typeof AspectRatioPrimitive.Root
+> {
   /** Aspect ratio (width / height), e.g., 16/9, 4/3, 1/1 */
   ratio?: number;
 }

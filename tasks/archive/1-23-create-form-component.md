@@ -31,6 +31,7 @@ Form wrapper with validation and error handling needed for robust form experienc
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-UI**: Radix UI primitives, React 19, ComponentRef — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-ui) for full research findings.
 - **[2026-02-18] R-A11Y**: WCAG 2.2 AA, ARIA, touch targets, keyboard — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-a11y) for full research findings.
 - **[2026-02-18] R-RADIX**: Radix component APIs — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-radix) for full research findings.
@@ -41,6 +42,7 @@ Form wrapper with validation and error handling needed for robust form experienc
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-UI](RESEARCH-INVENTORY.md#r-ui) — Full research findings
 - [RESEARCH-INVENTORY.md - R-A11Y](RESEARCH-INVENTORY.md#r-a11y) — Full research findings
 - [RESEARCH-INVENTORY.md - R-RADIX](RESEARCH-INVENTORY.md#r-radix) — Full research findings
@@ -55,6 +57,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-UI — React 19 component with ref (from RESEARCH-INVENTORY)
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
@@ -65,11 +68,15 @@ export function MyPrimitive({ ref, className, ...props }: MyPrimitiveProps) {
   );
 }
 ```
+
 ### R-RADIX — ComponentRef type
+
 ```typescript
 type MyPrimitiveRef = React.ComponentRef<typeof Primitive.Root>;
 ```
+
 ### R-FORM — Form with Zod resolver (from RESEARCH-INVENTORY)
+
 ```typescript
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -83,12 +90,18 @@ const form = useForm<FormData>({
   defaultValues: { name: '', email: '' },
 });
 ```
+
 ### R-A11Y — Touch target (2.5.8)
+
 ```css
-.touch-target { min-width: 24px; min-height: 24px; }
+.touch-target {
+  min-width: 24px;
+  min-height: 24px;
+}
 ```
 
 ### Related Patterns
+
 - See [R-UI - Research Findings](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Research Findings](RESEARCH-INVENTORY.md#r-a11y) for additional examples
 - See [R-RADIX - Research Findings](RESEARCH-INVENTORY.md#r-radix) for additional examples

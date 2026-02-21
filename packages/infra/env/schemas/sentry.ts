@@ -43,11 +43,7 @@ export const sentryEnvSchema = z.object({
    */
   // [Task 1.3.3] Renamed from SENTRY_DSN to NEXT_PUBLIC_SENTRY_DSN
   // Client-side access requires the NEXT_PUBLIC_ prefix in Next.js
-  NEXT_PUBLIC_SENTRY_DSN: z
-    .coerce
-    .string()
-    .url('Must be a valid URL')
-    .optional(),
+  NEXT_PUBLIC_SENTRY_DSN: z.coerce.string().url('Must be a valid URL').optional(),
 
   /**
    * Sentry error sampling rate.
@@ -61,8 +57,7 @@ export const sentryEnvSchema = z.object({
    * @example 1.0 // Send all errors
    * @default 1.0
    */
-  SENTRY_SAMPLE_RATE: z
-    .coerce
+  SENTRY_SAMPLE_RATE: z.coerce
     .number()
     .min(0, 'Sample rate must be between 0 and 1')
     .max(1, 'Sample rate must be between 0 and 1')
@@ -116,32 +111,32 @@ export type SentryEnv = z.infer<typeof sentryEnvSchema>;
  */
 export const validateSentryEnv = (env: Record<string, unknown> = process.env): SentryEnv => {
   const result = sentryEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     const fieldErrors = result.error.flatten().fieldErrors;
     const errorMessages = Object.entries(fieldErrors)
       .map(([field, errors]) => `${field}: ${errors?.join(', ')}`)
       .join('; ');
-    
+
     throw new Error(
       `❌ Invalid Sentry environment variables: ${errorMessages}\n\n` +
-      `Configuration options:\n` +
-      `- Production: NEXT_PUBLIC_SENTRY_DSN required for error tracking\n` +
-      `- Development: Optional, can use local error logging\n` +
-      `- Testing: Optional, uses test error reporting\n\n` +
-      `Setup instructions:\n` +
-      `1. Create Sentry project at https://sentry.io\n` +
-      `2. Copy DSN from Settings > Client Keys (DSN)\n` +
-      `3. Set NEXT_PUBLIC_SENTRY_DSN environment variable\n` +
-      `4. Optionally set SENTRY_SAMPLE_RATE (0.0-1.0)\n\n` +
-      `Sample rate recommendations:\n` +
-      `- Production: 0.1-1.0 (10%-100%)\n` +
-      `- High traffic: 0.01-0.1 (1%-10%)\n` +
-      `- Development: 1.0 (100% for debugging)\n\n` +
-      `⚠️  Security: Keep DSN secret and use appropriate sample rates`
+        `Configuration options:\n` +
+        `- Production: NEXT_PUBLIC_SENTRY_DSN required for error tracking\n` +
+        `- Development: Optional, can use local error logging\n` +
+        `- Testing: Optional, uses test error reporting\n\n` +
+        `Setup instructions:\n` +
+        `1. Create Sentry project at https://sentry.io\n` +
+        `2. Copy DSN from Settings > Client Keys (DSN)\n` +
+        `3. Set NEXT_PUBLIC_SENTRY_DSN environment variable\n` +
+        `4. Optionally set SENTRY_SAMPLE_RATE (0.0-1.0)\n\n` +
+        `Sample rate recommendations:\n` +
+        `- Production: 0.1-1.0 (10%-100%)\n` +
+        `- High traffic: 0.01-0.1 (1%-10%)\n` +
+        `- Development: 1.0 (100% for debugging)\n\n` +
+        `⚠️  Security: Keep DSN secret and use appropriate sample rates`
     );
   }
-  
+
   return result.data;
 };
 
@@ -165,7 +160,9 @@ export const validateSentryEnv = (env: Record<string, unknown> = process.env): S
  * }
  * ```
  */
-export const safeValidateSentryEnv = (env: Record<string, unknown> = process.env): SentryEnv | null => {
+export const safeValidateSentryEnv = (
+  env: Record<string, unknown> = process.env
+): SentryEnv | null => {
   const result = sentryEnvSchema.safeParse(env);
   return result.success ? result.data : null;
 };

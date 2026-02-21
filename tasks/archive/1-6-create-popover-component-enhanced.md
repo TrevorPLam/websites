@@ -74,14 +74,14 @@ import { Popover, PopoverTrigger, PopoverContent } from '@repo/ui';
 </Popover>
 
 // Advanced composition with header and footer
-import { 
-  Popover, 
-  PopoverTrigger, 
-  PopoverContent, 
-  PopoverHeader, 
-  PopoverBody, 
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
   PopoverFooter,
-  PopoverClose 
+  PopoverClose
 } from '@repo/ui';
 
 <Popover>
@@ -111,9 +111,9 @@ import {
 </Popover>
 
 // Positioning and alignment
-<PopoverContent 
-  side="bottom" 
-  align="end" 
+<PopoverContent
+  side="bottom"
+  align="end"
   sideOffset={8}
   className="w-96"
 >

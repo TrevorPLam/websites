@@ -5,6 +5,7 @@
 ### Type of Change
 
 <!-- Check all that apply -->
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
@@ -21,19 +22,22 @@
 ### Related Issues
 
 <!-- Link to related issues -->
+
 Closes #
 Related to #
 
 ### Changes Made
 
 <!-- List the key changes in this PR -->
-- 
-- 
-- 
+
+-
+-
+-
 
 ### Testing
 
 <!-- Describe how you tested these changes -->
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] Manual testing performed
@@ -42,6 +46,7 @@ Related to #
 ### Checklist
 
 <!-- Check all that apply before submitting -->
+
 - [ ] Code follows project style guidelines
 - [ ] Self-review completed
 - [ ] Comments added for complex logic
@@ -53,6 +58,7 @@ Related to #
 ### Quality Gates
 
 <!-- Verify these pass before requesting review -->
+
 - [ ] `pnpm lint` passes
 - [ ] `pnpm type-check` passes
 - [ ] `pnpm build` succeeds
@@ -64,6 +70,7 @@ Related to #
 ### Breaking Changes
 
 <!-- If this is a breaking change, describe the impact and migration path -->
+
 - [ ] This is a breaking change
 - [ ] Migration guide added (if applicable)
 - [ ] Changeset added (use `pnpm changeset`)
@@ -79,6 +86,7 @@ Related to #
 ---
 
 **Reviewers:** Please verify:
+
 - [ ] Code quality and style
 - [ ] Test coverage
 - [ ] Documentation completeness

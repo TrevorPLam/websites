@@ -27,18 +27,24 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface NavigationMenuProps
-  extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root> {}
-export interface NavigationMenuListProps
-  extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> {}
-export interface NavigationMenuItemProps
-  extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item> {}
-export interface NavigationMenuTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger> {}
-export interface NavigationMenuContentProps
-  extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content> {}
-export interface NavigationMenuLinkProps
-  extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Link> {}
+export interface NavigationMenuProps extends React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Root
+> {}
+export interface NavigationMenuListProps extends React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.List
+> {}
+export interface NavigationMenuItemProps extends React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Item
+> {}
+export interface NavigationMenuTriggerProps extends React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Trigger
+> {}
+export interface NavigationMenuContentProps extends React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Content
+> {}
+export interface NavigationMenuLinkProps extends React.ComponentPropsWithoutRef<
+  typeof NavigationMenuPrimitive.Link
+> {}
 
 // ─── Components ──────────────────────────────────────────────────────────────
 
@@ -46,7 +52,11 @@ export const NavigationMenu = React.forwardRef<
   React.ComponentRef<typeof NavigationMenuPrimitive.Root>,
   NavigationMenuProps
 >(({ className, children, ...props }, ref) => (
-  <NavigationMenuPrimitive.Root ref={ref} className={cn('relative z-10 flex max-w-max flex-1 items-center justify-center', className)} {...props}>
+  <NavigationMenuPrimitive.Root
+    ref={ref}
+    className={cn('relative z-10 flex max-w-max flex-1 items-center justify-center', className)}
+    {...props}
+  >
     {children}
     <NavigationMenuViewport />
   </NavigationMenuPrimitive.Root>
@@ -80,7 +90,10 @@ export const NavigationMenuTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" aria-hidden="true" />
+    <ChevronDown
+      className="ml-1 h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180"
+      aria-hidden="true"
+    />
   </NavigationMenuPrimitive.Trigger>
 ));
 NavigationMenuTrigger.displayName = 'NavigationMenuTrigger';

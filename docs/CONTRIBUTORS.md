@@ -63,6 +63,7 @@ We're grateful to all contributors who help improve the marketing-websites platf
 ### 2026
 
 **Documentation Excellence Initiative**
+
 - Comprehensive documentation improvements
 - New tutorials and guides
 - Enhanced visual documentation
@@ -75,6 +76,7 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines on contributing to docu
 ## Recognition Criteria
 
 Contributors are recognized for:
+
 - Significant documentation improvements
 - New documentation sections
 - Major updates or rewrites
@@ -85,6 +87,7 @@ Contributors are recognized for:
 ## Adding Contributors
 
 To add a contributor:
+
 1. Get their consent
 2. Add their name/GitHub username
 3. Describe their contribution

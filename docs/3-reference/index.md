@@ -16,16 +16,19 @@ Complete technical reference documentation for the marketing-websites platform.
 ## 🔍 Quick Reference
 
 ### Configuration
+
 - **[Site Configuration](configuration/)** - Complete `site.config.ts` reference
 - **[Environment Variables](environment/)** - All environment variables
 - **[Package Configuration](packages/)** - Package-specific settings
 
 ### Components
+
 - **[UI Components](components/)** - Complete component library
 - **[Feature Components](features/)** - Business logic components
 - **[Marketing Components](marketing-components/)** - Industry-specific components
 
 ### APIs
+
 - **[Client API](api/client/)** - Client-side API reference
 - **[Server API](api/server/)** - Server-side API reference
 - **[Integration APIs](api/integrations/)** - Third-party service integrations
@@ -35,9 +38,11 @@ Complete technical reference documentation for the marketing-websites platform.
 ### Configuration Reference
 
 #### [Site Configuration](configuration/)
+
 Complete reference for `site.config.ts` and all configuration options.
 
 **Key Sections:**
+
 - [Basic Settings](configuration/basic/) - Site name, description, metadata
 - [Theme Configuration](configuration/theme/) - Colors, typography, styling
 - [Feature Toggles](configuration/features/) - Enable/disable features
@@ -46,18 +51,22 @@ Complete reference for `site.config.ts` and all configuration options.
 - [Contact Information](configuration/contact/) - Contact details and forms
 
 #### [Environment Variables](environment/)
+
 All environment variables used by the platform.
 
 **Categories:**
+
 - [Development](environment/development/) - Local development variables
 - [Production](environment/production/) - Production deployment variables
 - [Integrations](environment/integrations/) - Third-party service credentials
 - [Analytics](environment/analytics/) - Tracking and analytics variables
 
 #### [Package Configuration](packages/)
+
 Configuration for individual packages in the monorepo.
 
 **Packages:**
+
 - [@repo/ui](packages/ui/) - UI component library configuration
 - [@repo/features](packages/features/) - Feature module configuration
 - [@repo/infra](packages/infra/) - Infrastructure and security configuration
@@ -66,9 +75,11 @@ Configuration for individual packages in the monorepo.
 ### Component Reference
 
 #### [UI Components](components/)
+
 Complete reference for the UI component library.
 
 **Categories:**
+
 - [Forms](components/forms/) - Input, Button, Select, etc.
 - [Layout](components/layout/) - Container, Grid, Stack, etc.
 - [Navigation](components/navigation/) - Header, Footer, Breadcrumb, etc.
@@ -76,9 +87,11 @@ Complete reference for the UI component library.
 - [Media](components/media/) - Image, Video, Icon, etc.
 
 #### [Feature Components](features/)
+
 Business logic components and features.
 
 **Features:**
+
 - [Booking](features/booking/) - Appointment booking system
 - [Contact](features/contact/) - Contact forms and management
 - [Blog](features/blog/) - Blog and content management
@@ -86,9 +99,11 @@ Business logic components and features.
 - [Search](features/search/) - Search functionality
 
 #### [Marketing Components](marketing-components/)
+
 Industry-specific marketing components.
 
 **Industries:**
+
 - [Salon & Spa](marketing-components/salon/) - Beauty industry components
 - [Restaurant](marketing-components/restaurant/) - Food service components
 - [Professional Services](marketing-components/professional/) - B2B service components
@@ -98,27 +113,33 @@ Industry-specific marketing components.
 ### API Reference
 
 #### [Client API](api/client/)
+
 Client-side API reference for browser usage.
 
 **Endpoints:**
+
 - [Configuration API](api/client/config/) - Site configuration access
 - [Content API](api/client/content/) - Content management
 - [Analytics API](api/client/analytics/) - Tracking and events
 - [Form API](api/client/forms/) - Form submission and validation
 
 #### [Server API](api/server/)
+
 Server-side API reference for backend integration.
 
 **Endpoints:**
+
 - [Authentication](api/server/auth/) - User authentication
 - [Data Management](api/server/data/) - CRUD operations
 - [File Upload](api/server/upload/) - File handling
 - [Webhooks](api/server/webhooks/) - Event handling
 
 #### [Integration APIs](api/integrations/)
+
 Third-party service integration APIs.
 
 **Services:**
+
 - [HubSpot](api/integrations/hubspot/) - CRM integration
 - [Supabase](api/integrations/supabase/) - Database and auth
 - [Analytics](api/integrations/analytics/) - Analytics platforms
@@ -128,27 +149,33 @@ Third-party service integration APIs.
 ### Development Reference
 
 #### [TypeScript Reference](typescript/)
+
 TypeScript patterns and type definitions.
 
 **Topics:**
+
 - [Type Definitions](typescript/types/) - Common type definitions
 - [Utility Types](typescript/utilities/) - Helper types and functions
 - [Patterns](typescript/patterns/) - Common TypeScript patterns
 - [Best Practices](typescript/best-practices/) - TypeScript guidelines
 
 #### [Styling Reference](styling/)
+
 Complete styling and theming reference.
 
 **Topics:**
+
 - [Tailwind CSS](styling/tailwind/) - Tailwind configuration
 - [Theme System](styling/themes/) - Theme customization
 - [Responsive Design](styling/responsive/) - Breakpoint system
 - [Animation](styling/animations/) - Animation utilities
 
 #### [Testing Reference](testing/)
+
 Testing patterns and utilities.
 
 **Topics:**
+
 - [Test Utilities](testing/utilities/) - Testing helper functions
 - [Test Patterns](testing/patterns/) - Common testing patterns
 - [Mock Data](testing/mocks/) - Mock data generation
@@ -157,27 +184,33 @@ Testing patterns and utilities.
 ### Operations Reference
 
 #### [Deployment Reference](deployment/)
+
 Complete deployment and operations reference.
 
 **Topics:**
+
 - [Platforms](deployment/platforms/) - Supported deployment platforms
 - [Configuration](deployment/config/) - Deployment configuration
 - [Monitoring](deployment/monitoring/) - Performance and error monitoring
 - [Troubleshooting](deployment/troubleshooting/) - Common deployment issues
 
 #### [Security Reference](security/)
+
 Security best practices and configurations.
 
 **Topics:**
+
 - [Authentication](security/auth/) - User authentication
 - [Authorization](security/authorization/) - Access control
 - [Data Protection](security/data/) - Data security and privacy
 - [Compliance](security/compliance/) - Regulatory compliance
 
 #### [Performance Reference](performance/)
+
 Performance optimization and monitoring.
 
 **Topics:**
+
 - [Metrics](performance/metrics/) - Performance metrics and KPIs
 - [Optimization](performance/optimization/) - Performance techniques
 - [Monitoring](performance/monitoring/) - Performance monitoring tools
@@ -187,26 +220,27 @@ Performance optimization and monitoring.
 
 ### Common Tasks
 
-| Task | Reference | Quick Link |
-|------|-----------|------------|
-| **Configure a new site** | [Site Configuration](configuration/) | [Basic Settings](configuration/basic/) |
-| **Add a new component** | [UI Components](components/) | [Component Patterns](components/patterns/) |
-| **Integrate a service** | [Integration APIs](api/integrations/) | [Integration Guide](api/integrations/guide/) |
-| **Deploy to production** | [Deployment Reference](deployment/) | [Deployment Guide](deployment/guide/) |
+| Task                     | Reference                             | Quick Link                                      |
+| ------------------------ | ------------------------------------- | ----------------------------------------------- |
+| **Configure a new site** | [Site Configuration](configuration/)  | [Basic Settings](configuration/basic/)          |
+| **Add a new component**  | [UI Components](components/)          | [Component Patterns](components/patterns/)      |
+| **Integrate a service**  | [Integration APIs](api/integrations/) | [Integration Guide](api/integrations/guide/)    |
+| **Deploy to production** | [Deployment Reference](deployment/)   | [Deployment Guide](deployment/guide/)           |
 | **Optimize performance** | [Performance Reference](performance/) | [Optimization Guide](performance/optimization/) |
-| **Secure your site** | [Security Reference](security/) | [Security Checklist](security/checklist/) |
+| **Secure your site**     | [Security Reference](security/)       | [Security Checklist](security/checklist/)       |
 
 ### Code Examples
 
 #### Site Configuration
+
 ```typescript
 // Basic site configuration
 export const siteConfig = {
-  siteName: "My Website",
-  description: "A professional website",
+  siteName: 'My Website',
+  description: 'A professional website',
   theme: {
-    primaryColor: "174 100% 26%",
-    secondaryColor: "210 100% 23%",
+    primaryColor: '174 100% 26%',
+    secondaryColor: '210 100% 23%',
   },
   features: {
     hero: true,
@@ -217,6 +251,7 @@ export const siteConfig = {
 ```
 
 #### Component Usage
+
 ```typescript
 // Using UI components
 import { Button, Input, Card } from "@repo/ui";
@@ -233,17 +268,18 @@ export default function ContactForm() {
 ```
 
 #### API Integration
+
 ```typescript
 // Using the client API
 import { useSiteConfig, submitContactForm } from "@repo/client-api";
 
 export default function ContactPage() {
   const config = useSiteConfig();
-  
+
   const handleSubmit = async (data) => {
     await submitContactForm(data);
   };
-  
+
   return (
     <div>
       <h1>{config.siteName}</h1>
@@ -294,16 +330,19 @@ export default function ContactPage() {
 ## 📚 Related Documentation
 
 ### For Learning
+
 - **[Getting Started](../1-getting-started/)** - Beginner's guide
 - **[Tutorials](../5-tutorials/)** - Step-by-step tutorials
 - **[Guides](../2-guides/)** - How-to guides
 
 ### For Understanding
+
 - **[Architecture](../4-explanation/)** - System design and principles
 - **[Decision Records](../4-explanation/adr/)** - Architecture decisions
 - **[Performance](../4-explanation/performance/)** - Performance strategies
 
 ### For Reference
+
 - **[API Documentation](api/)** - Complete API reference
 - **[Component Library](components/)** - All components
 - **[Configuration Options](configuration/)** - All settings
@@ -322,7 +361,7 @@ Found missing information? We'd love your help!
 
 Use this template for new reference pages:
 
-```markdown
+````markdown
 ---
 diataxis: reference
 audience: developer
@@ -352,9 +391,9 @@ High-level overview of the topic.
 
 #### Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| [name] | [type] | [yes/no] | [description] |
+| Parameter | Type   | Required | Description   |
+| --------- | ------ | -------- | ------------- |
+| [name]    | [type] | [yes/no] | [description] |
 
 #### Returns
 
@@ -365,6 +404,7 @@ High-level overview of the topic.
 ```typescript
 // Example code
 ```
+````
 
 ## Usage
 
@@ -373,6 +413,7 @@ How to use this feature/component/API.
 ## See Also
 
 Related documentation and references.
+
 ```
 
 ## 🆘 Getting Help
@@ -396,3 +437,4 @@ Related documentation and references.
 *Looking for something specific? Use the search function or check the [index](../index.md).* 📚
 
 *Last updated: 2026-02-19 | Review interval: 180 days*
+```

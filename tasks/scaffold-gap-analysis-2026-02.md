@@ -1,9 +1,11 @@
 # Scaffold Gap Analysis (2026-02)
 
 ## Scope and method
+
 Scanned repository source files for scaffold indicators (`(stub)`, `Status: Stub`, `not implemented for`, and scaffolded `src/index.ts` task markers), then cross-checked whether each scaffolded file path is referenced by active task specs in `tasks/*.md`.
 
 ## Scaffolded files without active tasks (before this update)
+
 1. `packages/ai-platform/agent-orchestration/src/index.ts`
 2. `packages/ai-platform/content-engine/src/index.ts`
 3. `packages/ai-platform/llm-gateway/src/index.ts`
@@ -20,6 +22,7 @@ Scanned repository source files for scaffold indicators (`(stub)`, `Status: Stub
 14. `packages/integrations/sendgrid/src/index.ts`
 
 ## Tasks added
+
 - `tasks/scaffold-ai-platform-agent-orchestration.md`
 - `tasks/scaffold-ai-platform-content-engine.md`
 - `tasks/scaffold-ai-platform-llm-gateway.md`

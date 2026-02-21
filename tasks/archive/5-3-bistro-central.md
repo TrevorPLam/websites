@@ -28,6 +28,7 @@ Copy starter-template → clients/<name>. Edit site.config.ts only. Industry, co
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-INDUSTRY**: JSON-LD, industry patterns — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-industry) for full research findings.
 
 ### Key Findings
@@ -35,6 +36,7 @@ Copy starter-template → clients/<name>. Edit site.config.ts only. Industry, co
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-INDUSTRY](RESEARCH-INVENTORY.md#r-industry) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
 
@@ -45,6 +47,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-INDUSTRY — JSON-LD schema integration
+
 ```typescript
 interface StructuredData {
   '@context': 'https://schema.org';
@@ -63,6 +66,7 @@ export function generateStructuredData(data: StructuredData) {
 ```
 
 ### R-CONFIG-VALIDATION — Zod runtime validation
+
 ```typescript
 import { z } from 'zod';
 
@@ -71,11 +75,13 @@ const siteConfigSchema = z.object({
   siteUrl: z.string().url(),
   description: z.string().optional(),
   logo: z.string().optional(),
-  social: z.object({
-    twitter: z.string().optional(),
-    facebook: z.string().optional(),
-    linkedin: z.string().optional(),
-  }).optional(),
+  social: z
+    .object({
+      twitter: z.string().optional(),
+      facebook: z.string().optional(),
+      linkedin: z.string().optional(),
+    })
+    .optional(),
 });
 
 type SiteConfig = z.infer<typeof siteConfigSchema>;
@@ -86,6 +92,7 @@ export function validateSiteConfig(config: unknown): SiteConfig {
 ```
 
 ### R-MIGRATION — Template-to-client migration
+
 ```typescript
 interface MigrationPlan {
   sourceTemplate: string;
@@ -107,6 +114,7 @@ export function executeMigration(plan: MigrationPlan) {
 ```
 
 ### Related Patterns
+
 - See [R-INDUSTRY - Research Findings](RESEARCH-INVENTORY.md#r-industry) for additional examples
 
 ## Acceptance Criteria
@@ -151,4 +159,3 @@ export function executeMigration(plan: MigrationPlan) {
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

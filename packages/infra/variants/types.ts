@@ -54,9 +54,7 @@ export interface VariantConfig<T extends Record<string, string>> {
    * Compound variant overrides — additional classes applied when a specific
    * combination of variants is active.
    */
-  compoundVariants?: Array<
-    Partial<T> & { class: ClassValue }
-  >;
+  compoundVariants?: Array<Partial<T> & { class: ClassValue }>;
   /** Default variant values used when a variant is not specified by the caller */
   defaultVariants?: Partial<T>;
 }
@@ -71,9 +69,7 @@ export interface VariantConfig<T extends Record<string, string>> {
  * // → { size?: 'sm' | 'md' | undefined }
  */
 export type VariantProps<T extends (...args: never[]) => string> =
-  Parameters<T>[0] extends undefined
-    ? Record<string, never>
-    : NonNullable<Parameters<T>[0]>;
+  Parameters<T>[0] extends undefined ? Record<string, never> : NonNullable<Parameters<T>[0]>;
 
 /**
  * Return type of `cva()` — a function that accepts variant props and returns

@@ -10,6 +10,8 @@ export interface EcommerceFeatureConfig {
   enabled?: boolean;
 }
 
-export function createEcommerceConfig(overrides: Partial<EcommerceFeatureConfig> = {}): EcommerceFeatureConfig {
+export function createEcommerceConfig(
+  overrides: Partial<EcommerceFeatureConfig> = {}
+): EcommerceFeatureConfig {
   return { provider: 'none', enabled: false, ...overrides };
 }

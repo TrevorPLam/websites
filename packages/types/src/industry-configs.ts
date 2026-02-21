@@ -22,7 +22,13 @@ import { Industry, IndustryConfig } from './industry';
 export const industryConfigs: Record<Industry, IndustryConfig> = {
   salon: {
     schemaType: 'HairSalon',
-    defaultFeatures: { hero: 'split', services: 'grid', team: 'grid', testimonials: 'carousel', booking: true },
+    defaultFeatures: {
+      hero: 'split',
+      services: 'grid',
+      team: 'grid',
+      testimonials: 'carousel',
+      booking: true,
+    },
     requiredFields: ['services', 'hours', 'team'],
     defaultIntegrations: { booking: { provider: 'internal' }, crm: { provider: 'hubspot' } },
   },
@@ -34,7 +40,12 @@ export const industryConfigs: Record<Industry, IndustryConfig> = {
   },
   'law-firm': {
     schemaType: 'LegalService',
-    defaultFeatures: { hero: 'centered', services: 'list', testimonials: 'grid', contact: 'with-booking' },
+    defaultFeatures: {
+      hero: 'centered',
+      services: 'list',
+      testimonials: 'grid',
+      contact: 'with-booking',
+    },
     requiredFields: ['services', 'team'],
     defaultIntegrations: { crm: { provider: 'hubspot' } },
   },
@@ -63,7 +74,12 @@ export const industryConfigs: Record<Industry, IndustryConfig> = {
   },
   consulting: {
     schemaType: 'ProfessionalService',
-    defaultFeatures: { hero: 'split', services: 'list', testimonials: 'grid', contact: 'multi-step' },
+    defaultFeatures: {
+      hero: 'split',
+      services: 'list',
+      testimonials: 'grid',
+      contact: 'multi-step',
+    },
     requiredFields: ['services', 'team'],
   },
   realestate: {

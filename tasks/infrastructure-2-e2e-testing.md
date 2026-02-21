@@ -14,6 +14,7 @@
 ## Context
 
 Current testing setup:
+
 - Unit tests exist (~646 tests)
 - E2E tests minimal or scaffolded
 - No systematic multi-tenant E2E strategy
@@ -23,7 +24,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
 
 ## Dependencies
 
-- **Upstream Tasks**: 
+- **Upstream Tasks**:
   - `security-2-rls-multi-tenant` — RLS policies must be in place for isolation tests
   - `security-1-server-action-hardening` — Secure actions must be implemented for security tests
 - **Required Packages**: Playwright, `@repo/infra`, test fixtures
@@ -41,7 +42,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
   - Use Playwright or Cypress with isolated tenant test data
   - Parallelism tuned for CI
   - Visual regression testing (Playwright snapshots or Percy)
-- **References**: 
+- **References**:
   - [docs/research/perplexity-performance-2026.md](../docs/research/perplexity-performance-2026.md) (Topic #21)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
   - Playwright documentation
@@ -89,6 +90,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
 ## Implementation Plan
 
 ### Phase 1: Playwright Setup
+
 - [ ] Install Playwright:
   ```bash
   pnpm add -D @playwright/test
@@ -101,6 +103,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
   - Test timeout configuration
 
 ### Phase 2: Test Fixtures
+
 - [ ] Create `tests/e2e/fixtures/tenant.ts`:
   ```typescript
   export const test = base.extend({
@@ -119,6 +122,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
   - Multi-tenant auth support
 
 ### Phase 3: Critical Flow Tests
+
 - [ ] Create `tests/e2e/specs/booking.spec.ts`:
   - Booking creation flow
   - Booking confirmation flow
@@ -130,6 +134,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
   - Same-tenant access succeeds
 
 ### Phase 4: SEO & Accessibility Tests
+
 - [ ] Create `tests/e2e/specs/seo.spec.ts`:
   - Canonical URLs present
   - Sitemap accessible
@@ -140,6 +145,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
   - WCAG 2.2 AA checks
 
 ### Phase 5: Visual Regression
+
 - [ ] Configure Playwright snapshots:
   - Key pages (home, booking, contact)
   - Responsive breakpoints
@@ -148,6 +154,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
   - Baseline creation
 
 ### Phase 6: CI Integration
+
 - [ ] Update `.github/workflows/ci.yml`:
   - Add `e2e` job
   - Run smoke suite on PRs (affected tenants)
@@ -157,6 +164,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
   - Test sharding if needed
 
 ### Phase 7: Documentation
+
 - [ ] Create/update `docs/operations/testing-strategy.md`:
   - E2E testing section
   - Fixture usage guide
@@ -165,6 +173,7 @@ This addresses **Research Topic #21: End-to-End (E2E) Testing Architecture** fro
 ## Sample code / examples
 
 ### Playwright Configuration
+
 ```typescript
 // tests/e2e/playwright.config.ts
 import { defineConfig, devices } from '@playwright/test';
@@ -199,6 +208,7 @@ export default defineConfig({
 ```
 
 ### Tenant Fixture
+
 ```typescript
 // tests/e2e/fixtures/tenant.ts
 import { test as base } from '@playwright/test';
@@ -223,6 +233,7 @@ export { expect } from '@playwright/test';
 ```
 
 ### Booking Flow Test
+
 ```typescript
 // tests/e2e/specs/booking.spec.ts
 import { test, expect } from '../fixtures/tenant';
@@ -250,6 +261,7 @@ test.describe('Booking Flow', () => {
 ```
 
 ### Tenant Isolation Test
+
 ```typescript
 // tests/e2e/specs/tenant-isolation.spec.ts
 import { test, expect } from '../fixtures/tenant';
@@ -265,7 +277,7 @@ test.describe('Tenant Isolation', () => {
 
     // Attempt to access tenant A booking
     const response = await page.goto(`/bookings/${bookingA.id}`);
-    
+
     // Should fail (403 or 404)
     expect(response?.status()).toBeGreaterThanOrEqual(400);
   });
@@ -273,6 +285,7 @@ test.describe('Tenant Isolation', () => {
 ```
 
 ### SEO Test
+
 ```typescript
 // tests/e2e/specs/seo.spec.ts
 import { test, expect } from '../fixtures/tenant';
@@ -280,7 +293,7 @@ import { test, expect } from '../fixtures/tenant';
 test.describe('SEO', () => {
   test('should have canonical URL', async ({ page, tenant }) => {
     await page.goto(`/${tenant.slug}`);
-    
+
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
     expect(canonical).toBeTruthy();
     expect(canonical).toContain(tenant.slug);
@@ -288,10 +301,10 @@ test.describe('SEO', () => {
 
   test('should have JSON-LD schema', async ({ page, tenant }) => {
     await page.goto(`/${tenant.slug}`);
-    
+
     const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
     expect(jsonLd).toBeTruthy();
-    
+
     const schema = JSON.parse(jsonLd!);
     expect(schema['@type']).toBe('LocalBusiness');
   });
@@ -314,15 +327,15 @@ test.describe('SEO', () => {
 
 ## Execution notes
 
-- **Related files — current state:** 
+- **Related files — current state:**
   - Unit tests exist (~646 tests)
   - E2E tests minimal or scaffolded
   - No Playwright configuration
-- **Potential issues / considerations:** 
+- **Potential issues / considerations:**
   - Test data isolation (cleanup between tests)
   - Flakiness (retries, timeouts)
   - CI performance (parallelism, sharding)
-- **Verification:** 
+- **Verification:**
   - E2E tests run locally
   - E2E tests run in CI
   - Visual regression baselines created

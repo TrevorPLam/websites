@@ -15,6 +15,7 @@ Upgrade Turborepo from 2.2.3 to 2.8.9 (latest stable) via `pnpm up turbo@latest 
 ## Consequences
 
 ### Positive
+
 - Improved affected package detection for CI (Task 0.13)
 - Task descriptions support in turbo.json for better TUI
 - Git worktree cache sharing (no config)
@@ -22,10 +23,12 @@ Upgrade Turborepo from 2.2.3 to 2.8.9 (latest stable) via `pnpm up turbo@latest 
 - Performance improvements in task orchestration
 
 ### Neutral
+
 - No breaking config changes; `tasks` key was already in use
 - `globalEnv` / `globalPassThroughEnv` already present (per Verified Findings fix)
 
 ### Risks
+
 - None identified; 2.8.x is backward compatible with existing turbo.json
 
 ## References

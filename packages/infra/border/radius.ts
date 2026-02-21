@@ -20,15 +20,7 @@
 // - [FEAT:BORDER] Border radius scale
 
 /** Border radius scale key identifiers */
-export type RadiusKey =
-  | 'none'
-  | 'sm'
-  | 'md'
-  | 'lg'
-  | 'xl'
-  | '2xl'
-  | '3xl'
-  | 'full';
+export type RadiusKey = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full';
 
 /** Border radius value definition */
 export interface RadiusValue {

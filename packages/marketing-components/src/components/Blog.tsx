@@ -45,7 +45,11 @@ interface BlogPaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export const BlogPagination: React.FC<BlogPaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+export const BlogPagination: React.FC<BlogPaginationProps> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
   return (
     <div className="flex justify-center space-x-2 mt-8">
       {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (

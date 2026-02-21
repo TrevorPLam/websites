@@ -31,14 +31,10 @@ export interface HslColor {
  * @throws Error if the format is invalid or values are out of the allowed ranges
  */
 export function parseHsl(hslString: string): HslColor {
-  const match = hslString
-    .trim()
-    .match(/^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/);
+  const match = hslString.trim().match(/^(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%$/);
 
   if (!match) {
-    throw new Error(
-      `Invalid HSL format: "${hslString}". Expected "H S% L%" (e.g. "174 85% 33%")`,
-    );
+    throw new Error(`Invalid HSL format: "${hslString}". Expected "H S% L%" (e.g. "174 85% 33%")`);
   }
 
   const [, hStr, sStr, lStr] = match;
@@ -58,7 +54,7 @@ export function parseHsl(hslString: string): HslColor {
     l > 100
   ) {
     throw new Error(
-      `Invalid HSL range: "${hslString}". Expected H in [0, 360] and S/L in [0, 100].`,
+      `Invalid HSL range: "${hslString}". Expected H in [0, 360] and S/L in [0, 100].`
     );
   }
 
@@ -127,13 +123,34 @@ export function hslToRgb(hslString: string): { r: number; g: number; b: number }
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = lNorm - c / 2;
 
-  let r = 0, g = 0, b = 0;
-  if (h < 60) { r = c; g = x; b = 0; }
-  else if (h < 120) { r = x; g = c; b = 0; }
-  else if (h < 180) { r = 0; g = c; b = x; }
-  else if (h < 240) { r = 0; g = x; b = c; }
-  else if (h < 300) { r = x; g = 0; b = c; }
-  else { r = c; g = 0; b = x; }
+  let r = 0,
+    g = 0,
+    b = 0;
+  if (h < 60) {
+    r = c;
+    g = x;
+    b = 0;
+  } else if (h < 120) {
+    r = x;
+    g = c;
+    b = 0;
+  } else if (h < 180) {
+    r = 0;
+    g = c;
+    b = x;
+  } else if (h < 240) {
+    r = 0;
+    g = x;
+    b = c;
+  } else if (h < 300) {
+    r = x;
+    g = 0;
+    b = c;
+  } else {
+    r = c;
+    g = 0;
+    b = x;
+  }
 
   return {
     r: Math.round((r + m) * 255),
@@ -164,10 +181,7 @@ export function mixColors(colorA: string, colorB: string, ratio: number): string
   const r = Math.max(0, Math.min(1, ratio));
 
   const d = b.h - a.h;
-  const h =
-    Math.abs(d) > 180
-      ? a.h + (d > 0 ? d - 360 : d + 360) * r
-      : a.h + d * r;
+  const h = Math.abs(d) > 180 ? a.h + (d > 0 ? d - 360 : d + 360) * r : a.h + d * r;
 
   return formatHsl({
     h: (h + 360) % 360,

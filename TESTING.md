@@ -45,11 +45,11 @@ packages/
 
 ### Test Pyramid
 
-| Test Type | Target % | Speed | Scope |
-|-----------|----------|-------|-------|
-| **Unit Tests** | 70% | < 50ms | Single functions/components |
-| **Integration Tests** | 20% | < 2s | Component interactions |
-| **E2E Tests** | 10% | < 30s | Full user flows |
+| Test Type             | Target % | Speed  | Scope                       |
+| --------------------- | -------- | ------ | --------------------------- |
+| **Unit Tests**        | 70%      | < 50ms | Single functions/components |
+| **Integration Tests** | 20%      | < 2s   | Component interactions      |
+| **E2E Tests**         | 10%      | < 30s  | Full user flows             |
 
 ### Coverage Targets
 
@@ -64,17 +64,20 @@ packages/
 **Environment:** `jsdom` (browser simulation)
 
 **Focus Areas:**
+
 - Component rendering and props
 - Accessibility (ARIA attributes, keyboard navigation)
 - User interactions (clicks, forms, validation)
 - Visual states (disabled, error, variants)
 
 **Tools:**
+
 - `@testing-library/react` for rendering
 - `@testing-library/user-event` for interactions
 - `jest-axe` for accessibility testing
 
 **Example:**
+
 ```typescript
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -89,10 +92,10 @@ describe('Button', () => {
   it('handles click events', async () => {
     const handleClick = jest.fn();
     const user = userEvent.setup();
-    
+
     render(<Button onClick={handleClick}>Click me</Button>);
     await user.click(screen.getByRole('button'));
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });
@@ -103,11 +106,13 @@ describe('Button', () => {
 **Environment:** Mixed (`node` for actions, `jsdom` for components)
 
 **Focus Areas:**
+
 - Server Actions (validation, rate limiting, error handling)
 - Schema validation (Zod schemas)
 - Feature components (forms, workflows, state)
 
 **Example:**
+
 ```typescript
 import { submitBookingRequest } from '../actions';
 
@@ -119,7 +124,7 @@ describe('submitBookingRequest', () => {
   it('validates required fields', async () => {
     const formData = new FormData();
     // Missing required fields
-    
+
     await expect(submitBookingRequest(formData)).rejects.toThrow();
   });
 });
@@ -130,11 +135,13 @@ describe('submitBookingRequest', () => {
 **Environment:** `node`
 
 **Focus Areas:**
+
 - Pure function correctness
 - Edge cases and type safety
 - Performance for hot paths
 
 **Example:**
+
 ```typescript
 import { cn } from '../cn';
 
@@ -199,12 +206,12 @@ describe('ComponentName', () => {
 
 ### Coverage Requirements
 
-| Package Type | Unit | Integration | Overall |
-|--------------|------|------------|---------|
-| **@repo/ui** | 80% | N/A | 80% |
-| **@repo/features** | 70% | 50% | 60% |
-| **@repo/utils** | 90% | N/A | 90% |
-| **@repo/infra** | 80% | 60% | 75% |
+| Package Type       | Unit | Integration | Overall |
+| ------------------ | ---- | ----------- | ------- |
+| **@repo/ui**       | 80%  | N/A         | 80%     |
+| **@repo/features** | 70%  | 50%         | 60%     |
+| **@repo/utils**    | 90%  | N/A         | 90%     |
+| **@repo/infra**    | 80%  | 60%         | 75%     |
 
 ## Common Testing Tasks
 
@@ -247,6 +254,7 @@ it('handles async operations', async () => {
 ### Test Execution in CI
 
 Tests run automatically on:
+
 - Pull requests
 - Main branch pushes
 - Release workflows
@@ -277,4 +285,4 @@ For comprehensive testing guidance, including:
 
 ---
 
-*This is a quick testing reference. See [docs/testing-strategy.md](docs/testing-strategy.md) for the complete testing strategy.*
+_This is a quick testing reference. See [docs/testing-strategy.md](docs/testing-strategy.md) for the complete testing strategy._

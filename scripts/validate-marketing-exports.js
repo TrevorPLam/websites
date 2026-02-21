@@ -49,7 +49,9 @@ function main() {
   }
 
   if (missing.length > 0) {
-    console.error('validate-marketing-exports: ERROR — index.ts exports reference missing paths:\n');
+    console.error(
+      'validate-marketing-exports: ERROR — index.ts exports reference missing paths:\n'
+    );
     missing.forEach((f) => console.error('  -', f));
     process.exit(1);
   }

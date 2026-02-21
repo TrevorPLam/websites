@@ -95,9 +95,7 @@ function validatePackageExports(pkgJsonPath, pkg) {
       // Skip non-path values (condition names like "node"/"import" can appear as values in nested structures)
       if (!relPath.startsWith('./')) continue;
       const resolvedPath = path.resolve(pkgDir, relPath);
-      const stat = fs.existsSync(resolvedPath)
-        ? fs.statSync(resolvedPath)
-        : null;
+      const stat = fs.existsSync(resolvedPath) ? fs.statSync(resolvedPath) : null;
       if (!stat) {
         errors.push({ exportKey, target: relPath, resolvedPath });
         continue;

@@ -46,10 +46,7 @@ export default function SearchPage({
   const defaultQuery = searchParams.get('q') ?? '';
   const [query, setQuery] = useState(defaultQuery);
 
-  const filteredItems = useMemo(
-    () => filterSearchItems(items, query, 10),
-    [items, query]
-  );
+  const filteredItems = useMemo(() => filterSearchItems(items, query, 10), [items, query]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -82,9 +79,7 @@ export default function SearchPage({
 
             <div className="mt-6">
               {filteredItems.length === 0 ? (
-                <p className="text-sm text-gray-500">
-                  No results found. Try a different keyword.
-                </p>
+                <p className="text-sm text-gray-500">No results found. Try a different keyword.</p>
               ) : (
                 <ul className="space-y-4">
                   {filteredItems.map((item) => (

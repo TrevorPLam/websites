@@ -40,12 +40,7 @@ export const supabaseEnvSchema = z.object({
    * @example 'https://xyzcompany.supabase.co'
    * @see {@link https://supabase.com/docs/guides/getting-started Supabase Documentation}
    */
-  SUPABASE_URL: z
-    .coerce
-    .string()
-    .url('Must be a valid URL')
-    .trim()
-    .optional(),
+  SUPABASE_URL: z.coerce.string().url('Must be a valid URL').trim().optional(),
 
   /**
    * Supabase service role key.
@@ -57,8 +52,7 @@ export const supabaseEnvSchema = z.object({
    * @example 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
    * @security This key grants full database access - keep secret
    */
-  SUPABASE_SERVICE_ROLE_KEY: z
-    .coerce
+  SUPABASE_SERVICE_ROLE_KEY: z.coerce
     .string()
     .min(1, 'Service role key cannot be empty when provided')
     .trim()
@@ -110,45 +104,45 @@ export type SupabaseEnv = z.infer<typeof supabaseEnvSchema>;
  */
 export const validateSupabaseEnv = (env: Record<string, unknown> = process.env): SupabaseEnv => {
   const result = supabaseEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     const fieldErrors = result.error.flatten().fieldErrors;
     const errorMessages = Object.entries(fieldErrors)
       .map(([field, errors]) => `${field}: ${errors?.join(', ')}`)
       .join('; ');
-    
+
     throw new Error(
       `❌ Invalid Supabase environment variables: ${errorMessages}\n\n` +
-      `Configuration options:\n` +
-      `- Production: Both SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required\n` +
-      `- Development: Optional, can use mock data\n` +
-      `- Testing: Optional, uses test database\n\n` +
-      `Setup instructions:\n` +
-      `1. Create Supabase project at https://supabase.com\n` +
-      `2. Copy project URL from Settings > API\n` +
-      `3. Copy service role key from Settings > API\n` +
-      `4. Set as environment variables\n\n` +
-      `⚠️  Security: Never expose service role key to client-side code`
+        `Configuration options:\n` +
+        `- Production: Both SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required\n` +
+        `- Development: Optional, can use mock data\n` +
+        `- Testing: Optional, uses test database\n\n` +
+        `Setup instructions:\n` +
+        `1. Create Supabase project at https://supabase.com\n` +
+        `2. Copy project URL from Settings > API\n` +
+        `3. Copy service role key from Settings > API\n` +
+        `4. Set as environment variables\n\n` +
+        `⚠️  Security: Never expose service role key to client-side code`
     );
   }
-  
+
   // Custom validation: both variables must be provided together
   const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = result.data;
   const hasUrl = !!SUPABASE_URL;
   const hasKey = !!SUPABASE_SERVICE_ROLE_KEY;
-  
+
   if (hasUrl !== hasKey) {
     throw new Error(
       `❌ Supabase configuration error: Both SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be provided together or neither.\n\n` +
-      `Current state:\n` +
-      `- SUPABASE_URL: ${hasUrl ? 'provided' : 'missing'}\n` +
-      `- SUPABASE_SERVICE_ROLE_KEY: ${hasKey ? 'provided' : 'missing'}\n\n` +
-      `Solutions:\n` +
-      `- Provide both variables for Supabase integration\n` +
-      `- Provide neither variable to disable Supabase integration`
+        `Current state:\n` +
+        `- SUPABASE_URL: ${hasUrl ? 'provided' : 'missing'}\n` +
+        `- SUPABASE_SERVICE_ROLE_KEY: ${hasKey ? 'provided' : 'missing'}\n\n` +
+        `Solutions:\n` +
+        `- Provide both variables for Supabase integration\n` +
+        `- Provide neither variable to disable Supabase integration`
     );
   }
-  
+
   return result.data;
 };
 
@@ -171,18 +165,20 @@ export const validateSupabaseEnv = (env: Record<string, unknown> = process.env):
  * }
  * ```
  */
-export const safeValidateSupabaseEnv = (env: Record<string, unknown> = process.env): SupabaseEnv | null => {
+export const safeValidateSupabaseEnv = (
+  env: Record<string, unknown> = process.env
+): SupabaseEnv | null => {
   const result = supabaseEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     return null;
   }
-  
+
   // Check custom validation rule
   const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = result.data;
   const hasUrl = !!SUPABASE_URL;
   const hasKey = !!SUPABASE_SERVICE_ROLE_KEY;
-  
+
   // Return null if validation rule is violated
   return hasUrl === hasKey ? result.data : null;
 };

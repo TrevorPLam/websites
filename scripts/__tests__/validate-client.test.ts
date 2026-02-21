@@ -119,8 +119,14 @@ export default siteConfig;`
         path.join(tmpDir, 'tsconfig.json'),
         JSON.stringify({ extends: '@repo/typescript-config/base.json' })
       );
-      fs.writeFileSync(path.join(appDir, 'layout.tsx'), 'export default function Layout({ children }) { return children; }');
-      fs.writeFileSync(path.join(appDir, 'page.tsx'), 'import x from "@clients/other"; export default () => null;');
+      fs.writeFileSync(
+        path.join(appDir, 'layout.tsx'),
+        'export default function Layout({ children }) { return children; }'
+      );
+      fs.writeFileSync(
+        path.join(appDir, 'page.tsx'),
+        'import x from "@clients/other"; export default () => null;'
+      );
       try {
         const result = validateClient(tmpDir, ROOT, { silent: true });
         expect(result.ok).toBe(false);

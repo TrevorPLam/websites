@@ -51,15 +51,8 @@ import { cx } from './utils';
  * button({ intent: 'outline', size: 'sm' });
  * // → 'inline-flex items-center … border border-border bg-transparent … h-8 px-3 text-sm'
  */
-export function cva<T extends Record<string, string>>(
-  config: VariantConfig<T>
-): CVAFunction<T> {
-  const {
-    base,
-    variants = {},
-    compoundVariants = [],
-    defaultVariants = {},
-  } = config;
+export function cva<T extends Record<string, string>>(config: VariantConfig<T>): CVAFunction<T> {
+  const { base, variants = {}, compoundVariants = [], defaultVariants = {} } = config;
 
   return function resolveVariants(
     props?: Partial<T> & { class?: ClassValue; className?: ClassValue }
@@ -80,7 +73,9 @@ export function cva<T extends Record<string, string>>(
 
     // Compound variant classes
     for (const compound of compoundVariants) {
-      const { class: compoundClass, ...conditions } = compound as { class: ClassValue } & Partial<T>;
+      const { class: compoundClass, ...conditions } = compound as {
+        class: ClassValue;
+      } & Partial<T>;
       const matches = Object.entries(conditions).every(([k, v]) => resolved[k as keyof T] === v);
       if (matches) classes.push(compoundClass);
     }

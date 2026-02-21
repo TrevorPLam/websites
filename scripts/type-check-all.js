@@ -9,7 +9,7 @@ const { execSync } = require('child_process');
 
 const packages = [
   'packages/utils',
-  'packages/types', 
+  'packages/types',
   'packages/config/eslint-config',
   'packages/config/typescript-config',
   'packages/infra',
@@ -35,7 +35,7 @@ function runCommand(command, cwd) {
 
 function main() {
   console.log('🔍 Running type-check on all packages...\n');
-  
+
   let successCount = 0;
   let totalCount = 0;
 
@@ -47,7 +47,7 @@ function main() {
   }
 
   console.log(`\n✅ Type-check completed: ${successCount}/${totalCount} packages successful`);
-  
+
   if (successCount !== totalCount) {
     process.exit(1);
   }

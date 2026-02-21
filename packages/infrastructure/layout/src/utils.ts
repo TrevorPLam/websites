@@ -26,15 +26,7 @@ export type JustifyContent =
   | 'stretch';
 export type JustifyItems = 'start' | 'center' | 'end' | 'stretch';
 
-export type GapSize =
-  | 'none'
-  | 'xs'
-  | 'sm'
-  | 'md'
-  | 'lg'
-  | 'xl'
-  | '2xl'
-  | number;
+export type GapSize = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | number;
 
 // ─── Class maps ───────────────────────────────────────────────────────────────
 
@@ -107,10 +99,14 @@ export function gapClass(gap?: GapSize): string {
 export function gapXYClass(gapX?: GapSize, gapY?: GapSize): string {
   const parts: string[] = [];
   if (gapX !== undefined) {
-    parts.push(typeof gapX === 'number' ? `gap-x-${gapX}` : (GAP_MAP[gapX]?.replace('gap-', 'gap-x-') ?? ''));
+    parts.push(
+      typeof gapX === 'number' ? `gap-x-${gapX}` : (GAP_MAP[gapX]?.replace('gap-', 'gap-x-') ?? '')
+    );
   }
   if (gapY !== undefined) {
-    parts.push(typeof gapY === 'number' ? `gap-y-${gapY}` : (GAP_MAP[gapY]?.replace('gap-', 'gap-y-') ?? ''));
+    parts.push(
+      typeof gapY === 'number' ? `gap-y-${gapY}` : (GAP_MAP[gapY]?.replace('gap-', 'gap-y-') ?? '')
+    );
   }
   return parts.filter(Boolean).join(' ');
 }

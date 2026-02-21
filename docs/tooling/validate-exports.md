@@ -34,12 +34,12 @@ Packages without an `exports` field are skipped.
 
 ## Supported Export Structures
 
-| Format | Example | Validation |
-|--------|---------|------------|
-| Simple string | `".": "./index.ts"` | Resolves `./index.ts` relative to package dir |
-| Subpath | `"./client": "./index.client.ts"` | Same |
-| Conditional | `".": { "import": "./x.mjs", "default": "./x.js" }` | All condition values validated |
-| Nested conditional | `".": { "node": { "import": "./x.mjs" } }` | Recursively extracts paths |
+| Format             | Example                                             | Validation                                    |
+| ------------------ | --------------------------------------------------- | --------------------------------------------- |
+| Simple string      | `".": "./index.ts"`                                 | Resolves `./index.ts` relative to package dir |
+| Subpath            | `"./client": "./index.client.ts"`                   | Same                                          |
+| Conditional        | `".": { "import": "./x.mjs", "default": "./x.js" }` | All condition values validated                |
+| Nested conditional | `".": { "node": { "import": "./x.mjs" } }`          | Recursively extracts paths                    |
 
 Paths must start with `./`. Non-path condition keys (e.g., `"node"`, `"browser"`) are not treated as file paths.
 
@@ -55,11 +55,11 @@ Runs as a **blocking** step after type-check and before syncpack. PRs must pass 
 
 ## Interpreting Results
 
-| Output | Action |
-|--------|--------|
-| `✔ All package.json exports resolve to existing files` | No action |
-| `✗ packages/X/package.json (name)`<br>`  - ./key → ./path (file not found)` | Fix the export: correct the path or create the file |
-| `Resolved: /absolute/path` | Use this path to locate the expected file or confirm it's missing |
+| Output                                                                      | Action                                                            |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `✔ All package.json exports resolve to existing files`                      | No action                                                         |
+| `✗ packages/X/package.json (name)`<br>`  - ./key → ./path (file not found)` | Fix the export: correct the path or create the file               |
+| `Resolved: /absolute/path`                                                  | Use this path to locate the expected file or confirm it's missing |
 
 ## Implementation Details
 

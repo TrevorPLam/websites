@@ -179,23 +179,23 @@ All documentation files must include a standardized metaheader comment block at 
 
 ### Metaheader Field Guidelines
 
-| Field | Required | Format | Guidelines |
-|-------|----------|--------|------------|
-| `@file` | ✅ | Relative path | Exact file path from repository root |
-| `@role` | ✅ | docs|code|config|test | Primary file purpose |
-| `@summary` | ✅ | One sentence | Clear, concise description |
-| `@entrypoints` | ✅ | List | How users find this content |
-| `@exports` | ✅ | List/N/A | What this file provides |
-| `@depends_on` | ✅ | List | Dependencies and prerequisites |
-| `@used_by` | ✅ | List | Primary consumers |
-| `@runtime` | ✅ | Environment | Where this runs |
-| `@data_flow` | ✅ | Inputs/outputs | Data transformation |
-| `@invariants` | ✅ | List | Critical truths |
-| `@gotchas` | ✅ | List | Common issues |
-| `@issues` | ✅ | List | Known problems |
-| `@opportunities` | ✅ | List | Improvements |
-| `@verification` | ✅ | List | How verified |
-| `@status` | ✅ | Confidence+date | Quality status |
+| Field            | Required | Format          | Guidelines                           |
+| ---------------- | -------- | --------------- | ------------------------------------ | ------ | ---- | -------------------- |
+| `@file`          | ✅       | Relative path   | Exact file path from repository root |
+| `@role`          | ✅       | docs            | code                                 | config | test | Primary file purpose |
+| `@summary`       | ✅       | One sentence    | Clear, concise description           |
+| `@entrypoints`   | ✅       | List            | How users find this content          |
+| `@exports`       | ✅       | List/N/A        | What this file provides              |
+| `@depends_on`    | ✅       | List            | Dependencies and prerequisites       |
+| `@used_by`       | ✅       | List            | Primary consumers                    |
+| `@runtime`       | ✅       | Environment     | Where this runs                      |
+| `@data_flow`     | ✅       | Inputs/outputs  | Data transformation                  |
+| `@invariants`    | ✅       | List            | Critical truths                      |
+| `@gotchas`       | ✅       | List            | Common issues                        |
+| `@issues`        | ✅       | List            | Known problems                       |
+| `@opportunities` | ✅       | List            | Improvements                         |
+| `@verification`  | ✅       | List            | How verified                         |
+| `@status`        | ✅       | Confidence+date | Quality status                       |
 
 ---
 

@@ -7,9 +7,9 @@ These documents capture migration risk matrices, go/no-go recommendations, and t
 
 ## Index
 
-| Document | Task | Recommendation | Status |
-|----------|------|----------------|--------|
-| [Tailwind CSS v4 Migration](./tailwind-v4-migration.md) | 0.4 | Migrated 2026-02-15 (user override) | Complete — ADR 0005 |
+| Document                                                | Task | Recommendation                      | Status              |
+| ------------------------------------------------------- | ---- | ----------------------------------- | ------------------- |
+| [Tailwind CSS v4 Migration](./tailwind-v4-migration.md) | 0.4  | Migrated 2026-02-15 (user override) | Complete — ADR 0005 |
 
 ## Usage
 

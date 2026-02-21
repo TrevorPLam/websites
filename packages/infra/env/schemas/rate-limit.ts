@@ -40,11 +40,7 @@ export const rateLimitEnvSchema = z.object({
    * @example 'https://awesome-george-123.upstash.io'
    * @see {@link https://upstash.com/docs/redis/overall/getstarted Upstash Redis Documentation}
    */
-  UPSTASH_REDIS_REST_URL: z
-    .coerce
-    .string()
-    .url('Must be a valid URL')
-    .optional(),
+  UPSTASH_REDIS_REST_URL: z.coerce.string().url('Must be a valid URL').optional(),
 
   /**
    * Upstash Redis REST token for authentication.
@@ -56,8 +52,7 @@ export const rateLimitEnvSchema = z.object({
    * @example 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
    * @see {@link https://upstash.com/docs/redis/overall/getstarted Upstash Redis Documentation}
    */
-  UPSTASH_REDIS_REST_TOKEN: z
-    .coerce
+  UPSTASH_REDIS_REST_TOKEN: z.coerce
     .string()
     .min(1, 'Redis token cannot be empty when provided')
     .optional(),
@@ -108,43 +103,43 @@ export type RateLimitEnv = z.infer<typeof rateLimitEnvSchema>;
  */
 export const validateRateLimitEnv = (env: Record<string, unknown> = process.env): RateLimitEnv => {
   const result = rateLimitEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     const fieldErrors = result.error.flatten().fieldErrors;
     const errorMessages = Object.entries(fieldErrors)
       .map(([field, errors]) => `${field}: ${errors?.join(', ')}`)
       .join('; ');
-    
+
     throw new Error(
       `❌ Invalid rate limit environment variables: ${errorMessages}\n\n` +
-      `Configuration options:\n` +
-      `- Production: Both UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN required\n` +
-      `- Development: Optional, falls back to in-memory rate limiting\n` +
-      `- Testing: Optional, uses mock rate limiting\n\n` +
-      `Setup instructions:\n` +
-      `1. Create Upstash Redis database at https://upstash.com\n` +
-      `2. Copy REST URL and token from dashboard\n` +
-      `3. Set as environment variables`
+        `Configuration options:\n` +
+        `- Production: Both UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN required\n` +
+        `- Development: Optional, falls back to in-memory rate limiting\n` +
+        `- Testing: Optional, uses mock rate limiting\n\n` +
+        `Setup instructions:\n` +
+        `1. Create Upstash Redis database at https://upstash.com\n` +
+        `2. Copy REST URL and token from dashboard\n` +
+        `3. Set as environment variables`
     );
   }
-  
+
   // Custom validation: both variables must be provided together
   const { UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = result.data;
   const hasUrl = !!UPSTASH_REDIS_REST_URL;
   const hasToken = !!UPSTASH_REDIS_REST_TOKEN;
-  
+
   if (hasUrl !== hasToken) {
     throw new Error(
       `❌ Rate limit configuration error: Both UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN must be provided together or neither.\n\n` +
-      `Current state:\n` +
-      `- UPSTASH_REDIS_REST_URL: ${hasUrl ? 'provided' : 'missing'}\n` +
-      `- UPSTASH_REDIS_REST_TOKEN: ${hasToken ? 'provided' : 'missing'}\n\n` +
-      `Solutions:\n` +
-      `- Provide both variables for distributed rate limiting (production)\n` +
-      `- Provide neither variable for in-memory rate limiting (development/testing)`
+        `Current state:\n` +
+        `- UPSTASH_REDIS_REST_URL: ${hasUrl ? 'provided' : 'missing'}\n` +
+        `- UPSTASH_REDIS_REST_TOKEN: ${hasToken ? 'provided' : 'missing'}\n\n` +
+        `Solutions:\n` +
+        `- Provide both variables for distributed rate limiting (production)\n` +
+        `- Provide neither variable for in-memory rate limiting (development/testing)`
     );
   }
-  
+
   return result.data;
 };
 
@@ -167,18 +162,20 @@ export const validateRateLimitEnv = (env: Record<string, unknown> = process.env)
  * }
  * ```
  */
-export const safeValidateRateLimitEnv = (env: Record<string, unknown> = process.env): RateLimitEnv | null => {
+export const safeValidateRateLimitEnv = (
+  env: Record<string, unknown> = process.env
+): RateLimitEnv | null => {
   const result = rateLimitEnvSchema.safeParse(env);
-  
+
   if (!result.success) {
     return null;
   }
-  
+
   // Check custom validation rule
   const { UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = result.data;
   const hasUrl = !!UPSTASH_REDIS_REST_URL;
   const hasToken = !!UPSTASH_REDIS_REST_TOKEN;
-  
+
   // Return null if validation rule is violated
   return hasUrl === hasToken ? result.data : null;
 };
@@ -201,7 +198,9 @@ export const safeValidateRateLimitEnv = (env: Record<string, unknown> = process.
  * }
  * ```
  */
-export const isDistributedRateLimitingEnabled = (env: Record<string, unknown> = process.env): boolean => {
+export const isDistributedRateLimitingEnabled = (
+  env: Record<string, unknown> = process.env
+): boolean => {
   const rateLimitEnv = safeValidateRateLimitEnv(env);
   return !!(rateLimitEnv?.UPSTASH_REDIS_REST_URL && rateLimitEnv?.UPSTASH_REDIS_REST_TOKEN);
 };

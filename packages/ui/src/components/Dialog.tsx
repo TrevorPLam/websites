@@ -45,8 +45,9 @@ export interface DialogProps {
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 // NOTE: Dialog content props - extends Radix Dialog content props with variant and size options.
 //       When ariaTitle is provided and no DialogTitle in children, renders a visually hidden title for screen readers.
-export interface DialogContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+export interface DialogContentProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Content
+> {
   className?: string;
   showCloseButton?: boolean;
   /** Visually hidden title for screen readers when no DialogTitle in children (WCAG 2.2) */
@@ -64,16 +65,18 @@ export interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> 
 // [TRACE:INTERFACE=packages.ui.components.DialogTitleProps]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 // NOTE: Dialog title props - extends Radix Dialog title props.
-export interface DialogTitleProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {
+export interface DialogTitleProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Title
+> {
   className?: string;
 }
 
 // [TRACE:INTERFACE=packages.ui.components.DialogDescriptionProps]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 // NOTE: Dialog description props - extends Radix Dialog description props.
-export interface DialogDescriptionProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {
+export interface DialogDescriptionProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Description
+> {
   className?: string;
 }
 
@@ -161,9 +164,7 @@ export const DialogContent = React.forwardRef<
       )}
       {...props}
     >
-      {ariaTitle && (
-        <DialogPrimitive.Title className="sr-only">{ariaTitle}</DialogPrimitive.Title>
-      )}
+      {ariaTitle && <DialogPrimitive.Title className="sr-only">{ariaTitle}</DialogPrimitive.Title>}
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close

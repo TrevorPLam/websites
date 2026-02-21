@@ -16,9 +16,4 @@ export { ResilientHttpClient, type ResilientHttpClientOptions } from './client';
 export { CircuitBreaker, type CircuitBreakerOptions } from './circuit-breaker';
 export { withRetry, isRetryableError, type RetryOptions } from './retry';
 export { addToDLQ, getDLQEntries, processDLQEntry, clearDLQ, type DLQEntry } from './dlq';
-export {
-  IntegrationError,
-  RateLimitError,
-  CircuitBreakerOpenError,
-  NetworkError,
-} from './errors';
+export { IntegrationError, RateLimitError, CircuitBreakerOpenError, NetworkError } from './errors';

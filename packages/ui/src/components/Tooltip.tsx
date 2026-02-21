@@ -56,8 +56,9 @@ TooltipArrow.displayName = 'TooltipArrow';
 
 // ─── Content ─────────────────────────────────────────────────────────────────
 
-export interface TooltipContentProps
-  extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
+export interface TooltipContentProps extends React.ComponentPropsWithoutRef<
+  typeof TooltipPrimitive.Content
+> {
   /** Render a small arrow pointing at the trigger element. */
   showArrow?: boolean;
 }

@@ -1,6 +1,7 @@
 # scaffold-infrastructure-tenant-core Implement tenant-core package scaffold
 
 ## Metadata
+
 - **Task ID**: scaffold-infrastructure-tenant-core
 - **Owner**: AGENT
 - **Priority / Severity**: P1
@@ -11,18 +12,22 @@
 - **Downstream Tasks**: TBD
 
 ## Context
+
 `packages/infrastructure/tenant-core/src/index.ts` is scaffolded but not implemented, leaving an incomplete public surface in `packages/infrastructure/tenant-core`. This creates capability gaps and blocks roadmap-aligned adoption.
 
 ## Dependencies
+
 - No hard dependency. Must follow workspace architecture boundaries and public export rules.
 
 ## Cross-Task Dependencies & Sequencing
-- **Parallel**: Other scaffold-* tasks for unrelated packages.
+
+- **Parallel**: Other scaffold-\* tasks for unrelated packages.
 - **Downstream**: Client capability activation tasks that consume this package.
 
 ## Research
+
 - **Date**: 2026-02
-- **R-* topics**: R-ARCHITECTURE, R-TYPE-SAFETY, R-VALIDATION-CHAIN (see `tasks/RESEARCH-INVENTORY.md`).
+- **R-\* topics**: R-ARCHITECTURE, R-TYPE-SAFETY, R-VALIDATION-CHAIN (see `tasks/RESEARCH-INVENTORY.md`).
 - **Findings**:
   - Keep package APIs small, typed, and exported only through package barrels.
   - Prefer config-driven enablement (CaCA) over client-specific branching.
@@ -30,28 +35,33 @@
 - **References**: `THEGOAL.md`, `NEW.md`, `docs/architecture/evolution-roadmap.md`.
 
 ## Related Files
+
 - `packages/infrastructure/tenant-core/` — implement package internals (modify/create)
 - `packages/infrastructure/tenant-core/src/index.ts` — replace scaffold/stub entrypoint (modify)
 - `tasks/scaffold-infrastructure-tenant-core.md` — implementation contract (this file)
 
 ## Acceptance Criteria
+
 - [ ] Scaffold-only implementation is replaced with production-ready module logic.
 - [ ] Public exports are explicit and validated with `pnpm validate-exports`.
 - [ ] Unit tests cover core behavior and failure paths.
 - [ ] Task references and docs are updated for the new implementation surface.
 
 ## Technical Constraints
+
 - Use strict TypeScript (no `any`) and maintain current package boundaries.
 - No deep imports; use public package exports only.
 - Preserve backwards compatibility for existing consumers where applicable.
 
 ## Implementation Plan
+
 1. Inspect current scaffold surface and define stable API contracts.
 2. Implement internal modules/types and wire `index.ts` exports.
 3. Add tests for success + error paths.
 4. Run validation chain and update docs/tasks references.
 
 ## Sample code / examples
+
 ```ts
 // packages/infrastructure/tenant-core/src/index.ts
 // Example shape only; adapt to final package contract.
@@ -66,6 +76,7 @@ export function getCapabilityStatus(): CapabilityStatus {
 ```
 
 ## Testing Requirements
+
 - `pnpm lint`
 - `pnpm type-check`
 - `pnpm test`
@@ -73,6 +84,7 @@ export function getCapabilityStatus(): CapabilityStatus {
 - Package-targeted tests (if added): `pnpm --filter <package-name> test`
 
 ## Definition of Done
+
 - [ ] Implementation merged with passing quality gates.
 - [ ] Tests added/updated and passing locally.
 - [ ] Documentation and task links updated.

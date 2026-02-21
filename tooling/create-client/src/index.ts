@@ -196,10 +196,7 @@ function patchSiteConfig(
   replace(/id:\s*'[^']*'/, `id: '${opts.id}'`);
   replace(/name:\s*'[^']*'/, `name: '${opts.name}'`);
   replace(/tagline:\s*'[^']*'/, `tagline: '${defaults.tagline}'`);
-  replace(
-    /description:\s*'[^']*'/,
-    `description: '${opts.name} — industry: ${opts.industry}'`
-  );
+  replace(/description:\s*'[^']*'/, `description: '${opts.name} — industry: ${opts.industry}'`);
   replace(
     /url:\s*process\.env\.NEXT_PUBLIC_SITE_URL\s*\?\?\s*'[^']*'/,
     `url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:${opts.port}'`

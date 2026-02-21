@@ -1,5 +1,8 @@
 // Task: [5.1] Edge: experiments, personalization
-import { createMiddleware, getAllowedOriginsFromEnv } from '@repo/infra/middleware/create-middleware';
+import {
+  createMiddleware,
+  getAllowedOriginsFromEnv,
+} from '@repo/infra/middleware/create-middleware';
 
 export const middleware = createMiddleware({
   allowedOrigins: getAllowedOriginsFromEnv(),

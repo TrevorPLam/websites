@@ -56,16 +56,16 @@ import { GalleryGrid } from '@repo/marketing-components';
 ```typescript
 interface GalleryItem {
   id: string;
-  src: string;        // Image URL
-  alt: string;        // Alt text (required for a11y)
-  caption?: string;   // Optional figure caption
-  href?: string;      // Optional link URL (wraps image in <a>)
+  src: string; // Image URL
+  alt: string; // Alt text (required for a11y)
+  caption?: string; // Optional figure caption
+  href?: string; // Optional link URL (wraps image in <a>)
 }
 
 interface GalleryGridProps {
-  title?: string;           // Optional section heading
-  items: GalleryItem[];     // Array of gallery images
-  columns?: 2 | 3 | 4;     // Grid columns (default: 3)
+  title?: string; // Optional section heading
+  items: GalleryItem[]; // Array of gallery images
+  columns?: 2 | 3 | 4; // Grid columns (default: 3)
   className?: string;
 }
 ```
@@ -96,11 +96,11 @@ export default function GalleryPage() {
 
 The `columns` prop controls the responsive grid:
 
-| `columns` | Mobile | Tablet | Desktop |
-|-----------|--------|--------|---------|
-| `2` | 1 col | 2 cols | 2 cols |
-| `3` (default) | 1 col | 2 cols | 3 cols |
-| `4` | 1 col | 2 cols | 4 cols |
+| `columns`     | Mobile | Tablet | Desktop |
+| ------------- | ------ | ------ | ------- |
+| `2`           | 1 col  | 2 cols | 2 cols  |
+| `3` (default) | 1 col  | 2 cols | 3 cols  |
+| `4`           | 1 col  | 2 cols | 4 cols  |
 
 ---
 
@@ -131,11 +131,11 @@ For production, use Next.js `<Image>` by wrapping data in a server component tha
 
 ## Planned Variants
 
-| Variant | Status | Description |
-|---------|--------|-------------|
-| `grid` | Implemented | Responsive image grid |
-| `carousel` | Planned | Auto-advancing slideshow |
-| `lightbox` | Planned | Click-to-expand full-screen view |
+| Variant    | Status      | Description                      |
+| ---------- | ----------- | -------------------------------- |
+| `grid`     | Implemented | Responsive image grid            |
+| `carousel` | Planned     | Auto-advancing slideshow         |
+| `lightbox` | Planned     | Click-to-expand full-screen view |
 
 ---
 

@@ -24,11 +24,11 @@ This document defines the testing approach for all packages in the marketing-web
 
 Following industry best practices (2026), we target the following distribution:
 
-| Test Type | Target % | Speed | Scope | Examples |
-|-----------|----------|-------|-------|----------|
-| **Unit Tests** | 70% | < 50ms | Single function/component | Utility functions, pure components, schemas |
-| **Integration Tests** | 20% | < 2s | Component interactions | Form submissions, feature workflows, API integrations |
-| **E2E Tests** | 10% | < 30s | Full user flows | Critical paths: booking, contact, search |
+| Test Type             | Target % | Speed  | Scope                     | Examples                                              |
+| --------------------- | -------- | ------ | ------------------------- | ----------------------------------------------------- |
+| **Unit Tests**        | 70%      | < 50ms | Single function/component | Utility functions, pure components, schemas           |
+| **Integration Tests** | 20%      | < 2s   | Component interactions    | Form submissions, feature workflows, API integrations |
+| **E2E Tests**         | 10%      | < 30s  | Full user flows           | Critical paths: booking, contact, search              |
 
 **Coverage Targets:**
 
@@ -95,17 +95,17 @@ describe('Button Component', () => {
   it('handles click events', async () => {
     const handleClick = jest.fn();
     const user = userEvent.setup();
-    
+
     render(<Button onClick={handleClick}>Click me</Button>);
     await user.click(screen.getByRole('button'));
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('is accessible via keyboard', async () => {
     const user = userEvent.setup();
     render(<Button>Click me</Button>);
-    
+
     await user.tab();
     expect(screen.getByRole('button')).toHaveFocus();
   });
@@ -165,14 +165,14 @@ describe('submitBookingRequest', () => {
   it('validates required fields', async () => {
     const formData = new FormData();
     // Missing required fields
-    
+
     await expect(submitBookingRequest(formData)).rejects.toThrow();
   });
 
   it('respects rate limits', async () => {
     const { checkRateLimit } = require('@repo/infra');
     checkRateLimit.mockResolvedValue(false);
-    
+
     const formData = createValidFormData();
     await expect(submitBookingRequest(formData)).rejects.toThrow(/rate limit/i);
   });
@@ -367,14 +367,18 @@ import { featureSchema } from '../schema';
 describe('featureSchema', () => {
   describe('Valid Inputs', () => {
     it('accepts valid data', () => {
-      const valid = { /* valid data */ };
+      const valid = {
+        /* valid data */
+      };
       expect(() => featureSchema.parse(valid)).not.toThrow();
     });
   });
 
   describe('Invalid Inputs', () => {
     it('rejects missing required fields', () => {
-      const invalid = { /* missing fields */ };
+      const invalid = {
+        /* missing fields */
+      };
       expect(() => featureSchema.parse(invalid)).toThrow();
     });
   });
@@ -422,12 +426,12 @@ test.skip('handles rapid clicks', async () => {
 
 ### Minimum Coverage by Package Type
 
-| Package Type | Unit | Integration | Overall |
-|--------------|------|------------|---------|
-| **@repo/ui** | 80% | N/A | 80% |
-| **@repo/features** | 70% | 50% | 60% |
-| **@repo/utils** | 90% | N/A | 90% |
-| **@repo/infra** | 80% | 60% | 75% |
+| Package Type       | Unit | Integration | Overall |
+| ------------------ | ---- | ----------- | ------- |
+| **@repo/ui**       | 80%  | N/A         | 80%     |
+| **@repo/features** | 70%  | 50%         | 60%     |
+| **@repo/utils**    | 90%  | N/A         | 90%     |
+| **@repo/infra**    | 80%  | 60%         | 75%     |
 
 ### Critical Path Coverage
 
@@ -499,12 +503,12 @@ Tests run in CI via Turborepo:
 
 ### Package Ownership
 
-| Package | Owner | Test Responsibility |
-|---------|-------|-------------------|
-| `@repo/ui` | UI Team | Component tests, accessibility |
-| `@repo/features` | Features Team | Action tests, integration tests |
-| `@repo/utils` | Platform Team | Utility tests |
-| `@repo/infra` | Platform Team | Security tests, middleware tests |
+| Package          | Owner         | Test Responsibility              |
+| ---------------- | ------------- | -------------------------------- |
+| `@repo/ui`       | UI Team       | Component tests, accessibility   |
+| `@repo/features` | Features Team | Action tests, integration tests  |
+| `@repo/utils`    | Platform Team | Utility tests                    |
+| `@repo/infra`    | Platform Team | Security tests, middleware tests |
 
 ### Feature Ownership
 

@@ -17,12 +17,12 @@ export interface ChatWidgetProps extends ChatFeatureConfig {
  * the actual widget is loaded by the provider's script (Intercom, Crisp, etc.).
  * This component renders a placeholder or nothing when disabled.
  */
-export function ChatWidget({
-  provider = 'none',
-  enabled = false,
-  children,
-}: ChatWidgetProps) {
+export function ChatWidget({ provider = 'none', enabled = false, children }: ChatWidgetProps) {
   if (!enabled || provider === 'none') return null;
 
-  return <div data-chat-provider={provider} data-chat-enabled={enabled}>{children}</div>;
+  return (
+    <div data-chat-provider={provider} data-chat-enabled={enabled}>
+      {children}
+    </div>
+  );
 }

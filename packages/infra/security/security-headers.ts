@@ -116,7 +116,8 @@ export function getSecurityHeaders(config: SecurityHeadersConfig): SecurityHeade
   // [Task 9.2.1] Named constant for HSTS max-age (1 year in seconds)
   const HSTS_MAX_AGE_SECONDS = 31_536_000;
   if (enableHSTS && environment === 'production') {
-    headers['Strict-Transport-Security'] = `max-age=${HSTS_MAX_AGE_SECONDS}; includeSubDomains; preload`;
+    headers['Strict-Transport-Security'] =
+      `max-age=${HSTS_MAX_AGE_SECONDS}; includeSubDomains; preload`;
   }
 
   // Cross-Origin Embedder Policy (COEP) - requires COOP for proper isolation

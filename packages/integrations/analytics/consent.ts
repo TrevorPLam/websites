@@ -41,7 +41,9 @@ function readStoredConsent(): string | null {
   try {
     return window.localStorage.getItem(ANALYTICS_CONSENT_KEY);
   } catch (error) {
-    logError('Failed to read analytics consent from localStorage', error, { key: ANALYTICS_CONSENT_KEY });
+    logError('Failed to read analytics consent from localStorage', error, {
+      key: ANALYTICS_CONSENT_KEY,
+    });
     return null;
   }
 }
@@ -55,7 +57,9 @@ function writeStoredConsent(consent: AnalyticsConsentState) {
     }
     window.localStorage.setItem(ANALYTICS_CONSENT_KEY, consent);
   } catch (error) {
-    logError('Failed to write analytics consent to localStorage', error, { key: ANALYTICS_CONSENT_KEY });
+    logError('Failed to write analytics consent to localStorage', error, {
+      key: ANALYTICS_CONSENT_KEY,
+    });
   }
 }
 

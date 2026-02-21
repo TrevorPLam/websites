@@ -172,6 +172,7 @@ interface ButtonProps {
 ```
 
 **Accessibility:**
+
 - Keyboard navigation support
 - ARIA attributes automatically applied
 - Focus management
@@ -203,7 +204,7 @@ interface InputProps {
 <Input placeholder="Enter text" />
 
 // With label and validation
-<Input 
+<Input
   label="Email Address"
   type="email"
   required
@@ -213,7 +214,7 @@ interface InputProps {
 
 // Controlled input
 const [value, setValue] = useState('');
-<Input 
+<Input
   value={value}
   onChange={setValue}
   placeholder="Controlled input"
@@ -245,7 +246,7 @@ const options = [
   { value: 'uk', label: 'United Kingdom' }
 ];
 
-<Select 
+<Select
   options={options}
   placeholder="Select a country"
   searchable
@@ -322,13 +323,28 @@ interface DialogProps {
 }
 
 // Dialog sub-components
-interface DialogTriggerProps { children: React.ReactNode; }
-interface DialogContentProps { children: React.ReactNode; className?: string; }
-interface DialogHeaderProps { children: React.ReactNode; }
-interface DialogTitleProps { children: React.ReactNode; }
-interface DialogDescriptionProps { children: React.ReactNode; }
-interface DialogFooterProps { children: React.ReactNode; }
-interface DialogCloseProps { children: React.ReactNode; }
+interface DialogTriggerProps {
+  children: React.ReactNode;
+}
+interface DialogContentProps {
+  children: React.ReactNode;
+  className?: string;
+}
+interface DialogHeaderProps {
+  children: React.ReactNode;
+}
+interface DialogTitleProps {
+  children: React.ReactNode;
+}
+interface DialogDescriptionProps {
+  children: React.ReactNode;
+}
+interface DialogFooterProps {
+  children: React.ReactNode;
+}
+interface DialogCloseProps {
+  children: React.ReactNode;
+}
 ```
 
 **Examples:**
@@ -372,9 +388,18 @@ interface TabsProps {
   className?: string;
 }
 
-interface TabsListProps { children: React.ReactNode; className?: string; }
-interface TabsTriggerProps { value: string; children: React.ReactNode; }
-interface TabsContentProps { value: string; children: React.ReactNode; }
+interface TabsListProps {
+  children: React.ReactNode;
+  className?: string;
+}
+interface TabsTriggerProps {
+  value: string;
+  children: React.ReactNode;
+}
+interface TabsContentProps {
+  value: string;
+  children: React.ReactNode;
+}
 ```
 
 **Examples:**
@@ -538,7 +563,7 @@ function ContactForm() {
             onChange={(value) => setFormData(prev => ({ ...prev, name: value }))}
             required
           />
-          
+
           <Input
             label="Email"
             type="email"
@@ -546,14 +571,14 @@ function ContactForm() {
             onChange={(value) => setFormData(prev => ({ ...prev, email: value }))}
             required
           />
-          
+
           <textarea
             className="w-full p-3 border rounded-md"
             placeholder="Your message"
             value={formData.message}
             onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
           />
-          
+
           <Button type="submit" className="w-full">
             Send Message
           </Button>
@@ -574,7 +599,7 @@ import { Button, Card } from '@repo/ui';
 
 export function InteractiveClient({ children }: { children: React.ReactNode }) {
   const [count, setCount] = useState(0);
-  
+
   return (
     <Card>
       <p>Count: {count}</p>
@@ -610,7 +635,7 @@ import { Button } from '@repo/ui';
 
 test('Button is accessible', () => {
   render(<Button>Click me</Button>);
-  
+
   const button = screen.getByRole('button', { name: 'Click me' });
   expect(button).toBeInTheDocument();
   expect(button).toHaveAttribute('type', 'button');
@@ -627,10 +652,10 @@ interface AccessibleComponentProps {
   ariaDescribedBy?: string;
 }
 
-export function AccessibleComponent({ 
-  children, 
-  ariaLabel, 
-  ariaDescribedBy 
+export function AccessibleComponent({
+  children,
+  ariaLabel,
+  ariaDescribedBy
 }: AccessibleComponentProps) {
   return (
     <div
@@ -743,7 +768,7 @@ export const Default: Story = {
 // Before: Custom button component
 function CustomButton({ children, onClick }) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className="px-4 py-2 bg-blue-500 text-white rounded"
     >
@@ -800,10 +825,10 @@ interface NewComponentProps {
   variant?: 'default' | 'secondary';
 }
 
-export const NewComponent = ({ 
-  children, 
+export const NewComponent = ({
+  children,
   className,
-  variant = 'default' 
+  variant = 'default'
 }: NewComponentProps) => {
   return (
     <div className={cn(

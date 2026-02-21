@@ -77,6 +77,7 @@ CREATE INDEX idx_table_name_tenant_id ON table_name(tenant_id);
 ```
 
 **Tables with RLS:**
+
 - `leads` - Contact form submissions
 - `bookings` - Appointment bookings
 - `sites` - Site configurations (tenant root)
@@ -149,12 +150,14 @@ const client = createTenantScopedClient(
 ### Query Pattern
 
 **Before (Service Role - Bypasses RLS):**
+
 ```typescript
 const client = createSupabaseClient(); // Uses service role
 const { data } = await supabase.from('leads').select('*');
 ```
 
 **After (Anon Key + JWT - Respects RLS):**
+
 ```typescript
 const tenantId = getTenantIdFromHeaders(headers);
 const client = createTenantScopedClient(tenantId, url, anonKey);

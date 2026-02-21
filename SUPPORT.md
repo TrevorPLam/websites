@@ -35,32 +35,39 @@ If you're new to the platform, start here:
 ### Support Channels
 
 #### GitHub Issues
+
 **Use for:** Bug reports, feature requests, technical problems
 
 **Before creating an issue:**
+
 - Search existing issues first
 - Check if you're using the correct versions (Node.js >=22.0.0, pnpm 10.29.2)
 - Run `pnpm validate-docs` to check for common configuration issues
 
 **Issue templates:**
+
 - **Bug Report:** For unexpected behavior or errors
 - **Feature Request:** For new functionality
 - **Documentation:** For documentation improvements
 - **Question:** For help with usage (consider Discussions first)
 
 #### GitHub Discussions
+
 **Use for:** Questions, ideas, community conversation
 
 **Discussion categories:**
+
 - **Q&A:** Help with using the platform
 - **Ideas:** Feature suggestions and brainstorming
 - **Show and Tell:** Share what you've built
 - **General:** Community topics
 
 #### Code Reviews
+
 **Use for:** Feedback on contributions, technical guidance
 
 **Process:**
+
 1. Submit pull request with clear description
 2. Request review from maintainers
 3. Address feedback promptly
@@ -70,31 +77,35 @@ If you're new to the platform, start here:
 
 ### Response Times
 
-| Issue Type | Initial Response | Resolution Target |
-|------------|------------------|-------------------|
-| **Critical** (security, production down) | 2 hours | 24 hours |
-| **High** (blocking development) | 1 business day | 1 week |
-| **Normal** (bugs, features) | 3 business days | 2 weeks |
-| **Low** (documentation, minor issues) | 1 week | 1 month |
+| Issue Type                               | Initial Response | Resolution Target |
+| ---------------------------------------- | ---------------- | ----------------- |
+| **Critical** (security, production down) | 2 hours          | 24 hours          |
+| **High** (blocking development)          | 1 business day   | 1 week            |
+| **Normal** (bugs, features)              | 3 business days  | 2 weeks           |
+| **Low** (documentation, minor issues)    | 1 week           | 1 month           |
 
 ### Priority Levels
 
 **Critical**
+
 - Security vulnerabilities
 - Production outages
 - Data loss scenarios
 
 **High**
+
 - Blocking development for multiple users
 - Broken core functionality
 - Performance regressions
 
 **Normal**
+
 - Feature requests
 - Non-critical bugs
 - Documentation issues
 
 **Low**
+
 - Minor improvements
 - Typos and formatting
 - Nice-to-have enhancements
@@ -112,6 +123,7 @@ If you're new to the platform, start here:
 ### Bug Reports
 
 **Required Information:**
+
 - **Environment:** Node.js version, pnpm version, OS
 - **Reproduction Steps:** Clear steps to reproduce the issue
 - **Expected Behavior:** What should happen
@@ -120,30 +132,38 @@ If you're new to the platform, start here:
 - **Configuration:** Relevant `site.config.ts` or environment variables
 
 **Bug Report Template:**
+
 ```markdown
 ## Bug Description
+
 Brief description of the issue
 
 ## Environment
+
 - Node.js: v22.x.x
 - pnpm: 10.29.2
 - OS: [Your OS]
 - Browser: [If applicable]
 
 ## Reproduction Steps
+
 1. Step one
 2. Step two
 3. Step three
 
 ## Expected Behavior
+
 What should happen
 
 ## Actual Behavior
+
 What actually happens
 
 ## Error Messages
 ```
+
 Paste error output here
+
 ```
 
 ## Additional Context
@@ -153,26 +173,33 @@ Any other relevant information
 ### Feature Requests
 
 **Required Information:**
+
 - **Problem Statement:** What problem are you trying to solve?
 - **Proposed Solution:** How should the feature work?
 - **Alternatives Considered:** What other approaches did you consider?
 - **Use Case:** Why is this feature important to you?
 
 **Feature Request Template:**
+
 ```markdown
 ## Problem Statement
+
 Clear description of the problem
 
 ## Proposed Solution
+
 Detailed description of the proposed feature
 
 ## Alternatives Considered
+
 Other approaches you've considered
 
 ## Use Case
+
 Why this feature is important and how you'd use it
 
 ## Implementation Ideas (Optional)
+
 Any thoughts on how this could be implemented
 ```
 
@@ -192,6 +219,7 @@ We are committed to providing a welcoming and inclusive environment. Please read
 ### Contribution Guidelines
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed information on:
+
 - Development setup
 - Code style and standards
 - Pull request process
@@ -202,6 +230,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed information on:
 ### Common Development Issues
 
 #### Installation Problems
+
 ```bash
 # Clear pnpm cache
 pnpm store prune
@@ -216,6 +245,7 @@ pnpm --version  # Should be 10.29.2
 ```
 
 #### Build Errors
+
 ```bash
 # Clear build cache
 pnpm clean
@@ -228,6 +258,7 @@ pnpm validate-exports
 ```
 
 #### Test Failures
+
 ```bash
 # Run tests with verbose output
 pnpm test --verbose
@@ -242,6 +273,7 @@ cat jest.config.js
 ### Common Configuration Issues
 
 #### Client Configuration
+
 ```bash
 # Validate client configuration
 pnpm validate-client clients/starter-template
@@ -251,6 +283,7 @@ pnpm --filter @clients/starter-template type-check
 ```
 
 #### Environment Variables
+
 ```bash
 # Check required environment variables
 cp .env.example clients/starter-template/.env.local
@@ -263,6 +296,7 @@ pnpm --filter @clients/starter-template dev
 ### Performance Issues
 
 #### Bundle Analysis
+
 ```bash
 # Analyze bundle size
 ANALYZE=true pnpm --filter @clients/starter-template build
@@ -319,6 +353,7 @@ pnpm build  # Check build output size
 ### Becoming a Maintainer
 
 Active contributors who consistently demonstrate:
+
 - Technical expertise
 - Helpful community engagement
 - Reliable code reviews
@@ -329,16 +364,19 @@ may be invited to become maintainers.
 ## Contact Information
 
 ### Project Repository
+
 - **GitHub:** https://github.com/your-org/marketing-websites
 - **Issues:** https://github.com/your-org/marketing-websites/issues
 - **Discussions:** https://github.com/your-org/marketing-websites/discussions
 
 ### Security Issues
+
 For security vulnerabilities, please follow our [Security Policy](SECURITY.md) and report issues privately.
 
 ### License
+
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-*Thank you for using the marketing-websites platform! We're here to help you succeed.*
+_Thank you for using the marketing-websites platform! We're here to help you succeed._

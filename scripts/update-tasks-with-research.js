@@ -2,7 +2,7 @@
 /**
  * @file scripts/update-tasks-with-research.js
  * Purpose: Automate updating task files with research findings and code snippets from RESEARCH-INVENTORY.md
- * 
+ *
  * Usage:
  *   node scripts/update-tasks-with-research.js [task-id]
  *   node scripts/update-tasks-with-research.js --all
@@ -33,17 +33,15 @@ function parseResearchInventory() {
 
   // Find all topic sections
   const topicHeaders = content.matchAll(/^### (R-[A-Z0-9-]+) \(([^)]+)\)/gm);
-  
+
   for (const headerMatch of topicHeaders) {
     const topicId = headerMatch[1];
     const topicName = headerMatch[2];
-    
+
     // Find the content for this topic (until next ### or end)
     const topicStart = headerMatch.index + headerMatch[0].length;
     const nextTopicMatch = content.substring(topicStart).match(/^### (R-[A-Z0-9-]+)/m);
-    const topicEnd = nextTopicMatch 
-      ? topicStart + nextTopicMatch.index 
-      : content.length;
+    const topicEnd = nextTopicMatch ? topicStart + nextTopicMatch.index : content.length;
     const topicContent = content.substring(topicStart, topicEnd);
 
     // Extract task IDs from mapping section
@@ -53,7 +51,7 @@ function parseResearchInventory() {
     );
     const mappingMatch = taskMappingSection.match(mappingRegex);
     let taskIdsText = mappingMatch?.[1] || '';
-    
+
     // Handle special cases like "Same as R-UI for 1.xx"
     if (taskIdsText.includes('Same as')) {
       const sameAsMatch = taskIdsText.match(/Same as (R-[A-Z0-9-]+)/i);
@@ -69,7 +67,7 @@ function parseResearchInventory() {
         }
       }
     }
-    
+
     // Handle patterns like "1.xx (all)" or "all 1.xx"
     if (taskIdsText.includes('(all)') || taskIdsText.toLowerCase().includes('all')) {
       const allMatch = taskIdsText.match(/(\d+)\.xx|(\d+)-xx/i);
@@ -79,7 +77,7 @@ function parseResearchInventory() {
         taskIdsText += `\nAll ${categoryNum}-xx tasks`;
       }
     }
-    
+
     const taskIds = extractTaskIds(taskIdsText);
 
     // Extract sections
@@ -113,7 +111,7 @@ function parseResearchInventory() {
  */
 function extractTaskIds(text) {
   const taskIds = new Set();
-  const lines = text.split('\n').filter(line => line.trim());
+  const lines = text.split('\n').filter((line) => line.trim());
 
   for (const line of lines) {
     // Handle "1.xx (all)" pattern - add special marker
@@ -122,7 +120,7 @@ function extractTaskIds(text) {
       const categoryNum = allPatternMatch[1];
       taskIds.add(`${categoryNum}-xx (all)`);
     }
-    
+
     // Handle "All 1.xx: 1-12, 1-13, ..."
     if (line.includes('All') && line.includes(':')) {
       const afterColon = line.split(':')[1];
@@ -135,7 +133,7 @@ function extractTaskIds(text) {
         }
       }
     }
-    
+
     // Handle ranges like "2.1–2.62" or "2.1-2.62"
     const rangeMatch = line.match(/(\d+)\.(\d+)[–-](\d+)\.(\d+)/);
     if (rangeMatch) {
@@ -146,19 +144,19 @@ function extractTaskIds(text) {
         }
       }
     }
-    
+
     // Handle individual task IDs like "2.10, 2.31" or "2-10, 2-31"
     const individualMatches = line.matchAll(/(\d+)[.-](\d+)/g);
     for (const match of individualMatches) {
       taskIds.add(`${match[1]}-${match[2]}`);
     }
-    
+
     // Handle f-xx tasks
     const fMatches = line.matchAll(/f-(\d+)/g);
     for (const match of fMatches) {
       taskIds.add(`f-${match[1]}`);
     }
-    
+
     // Handle numbered tasks like "6.1, 6.2" or "6-1, 6-2"
     const numberedMatches = line.matchAll(/(\d+)[.-](\d+)/g);
     for (const match of numberedMatches) {
@@ -175,20 +173,17 @@ function extractTaskIds(text) {
 function extractBulletPoints(content, sectionHeader) {
   // Match section header followed by any content (including newlines) until next #### or ### or end
   const escapedHeader = sectionHeader.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(
-    `${escapedHeader}[\\s\\S]*?\\n([\\s\\S]*?)(?=\\n####|\\n###|$)`,
-    'i'
-  );
+  const regex = new RegExp(`${escapedHeader}[\\s\\S]*?\\n([\\s\\S]*?)(?=\\n####|\\n###|$)`, 'i');
   const match = content.match(regex);
   if (!match) return [];
 
   const sectionContent = match[1];
   const bullets = sectionContent
     .split('\n')
-    .filter(line => line.trim().startsWith('-'))
-    .map(line => line.trim())
+    .filter((line) => line.trim().startsWith('-'))
+    .map((line) => line.trim())
     .slice(0, 5); // Limit to 5 items
-  
+
   return bullets;
 }
 
@@ -264,7 +259,7 @@ function getTopicsForTask(taskId, topics) {
 
     // Pattern matching
     if (!matches) {
-      matches = topic.taskIds.some(id => {
+      matches = topic.taskIds.some((id) => {
         // Handle patterns like "1-xx" or "1.xx" matching "1-12", "1-13", etc.
         if (id.includes('xx')) {
           // Extract number before "xx" - handle "1.xx", "1-xx", "1xx"
@@ -353,7 +348,11 @@ function generateResearchSection(topics) {
       content += '\n';
     }
 
-    if (topic.fundamentals.length > 0 && topic.highestStandards.length === 0 && topic.bestPractices.length === 0) {
+    if (
+      topic.fundamentals.length > 0 &&
+      topic.highestStandards.length === 0 &&
+      topic.bestPractices.length === 0
+    ) {
       if (!hasFindings) {
         hasFindings = true;
       }
@@ -364,9 +363,10 @@ function generateResearchSection(topics) {
       content += '\n';
     }
   }
-  
+
   if (!hasFindings) {
-    content += 'Research findings are available in the referenced RESEARCH-INVENTORY.md sections.\n\n';
+    content +=
+      'Research findings are available in the referenced RESEARCH-INVENTORY.md sections.\n\n';
   }
 
   content += `### References\n`;
@@ -445,10 +445,10 @@ function updateTaskFile(taskFilePath, topics) {
   // Extract existing code snippets before replacing
   const codeSnippetsMatch = content.match(/## Code Snippets \/ Examples([\s\S]*?)(?=\n## |$)/);
   const existingCodeSnippets = codeSnippetsMatch ? codeSnippetsMatch[1].trim() : '';
-  
+
   // Check if existing section has actual code blocks (not just links)
   const hasExistingCode = existingCodeSnippets && existingCodeSnippets.match(/```[\s\S]*?```/);
-  
+
   // Replace Code Snippets section - preserve existing code if present
   const codeSnippetsRegex = /## Code Snippets \/ Examples[\s\S]*?(?=\n## |$)/;
   if (hasExistingCode) {
@@ -456,8 +456,13 @@ function updateTaskFile(taskFilePath, topics) {
     const newPatternsSection = codeSnippetsSection.match(/### Related Patterns[\s\S]*/);
     if (newPatternsSection && !existingCodeSnippets.includes('### Related Patterns')) {
       // Add new patterns section at the end
-      updatedContent = updatedContent.replace(codeSnippetsRegex, `## Code Snippets / Examples\n\n${existingCodeSnippets}\n\n${newPatternsSection[0]}`);
-      console.log(`  ⚠ Preserved existing code snippets and added Related Patterns in ${taskFileName}`);
+      updatedContent = updatedContent.replace(
+        codeSnippetsRegex,
+        `## Code Snippets / Examples\n\n${existingCodeSnippets}\n\n${newPatternsSection[0]}`
+      );
+      console.log(
+        `  ⚠ Preserved existing code snippets and added Related Patterns in ${taskFileName}`
+      );
     } else {
       // Keep existing content as-is - don't replace
       console.log(`  ⚠ Preserving existing code snippets in ${taskFileName} (skipping update)`);
@@ -469,7 +474,9 @@ function updateTaskFile(taskFilePath, topics) {
 
   // Write updated content
   fs.writeFileSync(taskFilePath, updatedContent, 'utf-8');
-  console.log(`✓ Updated ${taskFileName} with ${relevantTopics.length} research topics: ${relevantTopics.map(t => t.id).join(', ')}`);
+  console.log(
+    `✓ Updated ${taskFileName} with ${relevantTopics.length} research topics: ${relevantTopics.map((t) => t.id).join(', ')}`
+  );
 
   return true;
 }
@@ -487,9 +494,16 @@ function main() {
   if (args.includes('--all')) {
     // Update all task files
     console.log('Updating all task files...\n');
-    const taskFiles = fs.readdirSync(TASKS_DIR)
-      .filter(file => file.endsWith('.md') && file !== 'RESEARCH-INVENTORY.md' && file !== 'TASK-UPDATE-GAMEPLAN.md' && file !== 'TASK-UPDATE-PROGRESS.md')
-      .map(file => path.join(TASKS_DIR, file));
+    const taskFiles = fs
+      .readdirSync(TASKS_DIR)
+      .filter(
+        (file) =>
+          file.endsWith('.md') &&
+          file !== 'RESEARCH-INVENTORY.md' &&
+          file !== 'TASK-UPDATE-GAMEPLAN.md' &&
+          file !== 'TASK-UPDATE-PROGRESS.md'
+      )
+      .map((file) => path.join(TASKS_DIR, file));
 
     let updated = 0;
     for (const taskFile of taskFiles) {
@@ -502,32 +516,38 @@ function main() {
     // Update tasks in a specific category
     const category = args[1];
     console.log(`Updating tasks in category: ${category}\n`);
-    
+
     // Handle different category formats: "1.xx", "1-xx", "1xx", "f-xx"
     let prefix = category.replace(/\./g, '-');
     if (!prefix.includes('-')) {
       // Handle "1xx" -> "1-"
       prefix = prefix.replace(/(\d+)(xx)/, '$1-');
     }
-    
-    const taskFiles = fs.readdirSync(TASKS_DIR)
-      .filter(file => {
+
+    const taskFiles = fs
+      .readdirSync(TASKS_DIR)
+      .filter((file) => {
         if (!file.endsWith('.md')) return false;
-        if (file === 'RESEARCH-INVENTORY.md' || file === 'TASK-UPDATE-GAMEPLAN.md' || file === 'TASK-UPDATE-PROGRESS.md') return false;
-        
+        if (
+          file === 'RESEARCH-INVENTORY.md' ||
+          file === 'TASK-UPDATE-GAMEPLAN.md' ||
+          file === 'TASK-UPDATE-PROGRESS.md'
+        )
+          return false;
+
         // Extract base task ID from filename
         const baseId = extractBaseTaskId(file);
         if (!baseId) return false;
-        
+
         // Check if it matches the category prefix
         if (category.includes('xx')) {
           const categoryPrefix = prefix.split('-')[0] || prefix.split('.')[0];
           return baseId.startsWith(`${categoryPrefix}-`);
         }
-        
+
         return baseId.startsWith(prefix);
       })
-      .map(file => path.join(TASKS_DIR, file));
+      .map((file) => path.join(TASKS_DIR, file));
 
     let updated = 0;
     for (const taskFile of taskFiles) {
@@ -540,14 +560,15 @@ function main() {
     // Update specific task - try multiple filename formats
     const taskId = args[0].replace(/\./g, '-');
     let taskFile = path.join(TASKS_DIR, `${taskId}.md`);
-    
+
     // If exact match doesn't exist, try to find matching file
     if (!fs.existsSync(taskFile)) {
-      const files = fs.readdirSync(TASKS_DIR)
-        .filter(file => file.endsWith('.md') && file.startsWith(taskId.split('-')[0]));
+      const files = fs
+        .readdirSync(TASKS_DIR)
+        .filter((file) => file.endsWith('.md') && file.startsWith(taskId.split('-')[0]));
       if (files.length > 0) {
         // Try to find exact match first
-        const exactMatch = files.find(f => f.startsWith(taskId));
+        const exactMatch = files.find((f) => f.startsWith(taskId));
         if (exactMatch) {
           taskFile = path.join(TASKS_DIR, exactMatch);
         } else {
@@ -556,7 +577,7 @@ function main() {
         }
       }
     }
-    
+
     updateTaskFile(taskFile, topics);
   } else {
     console.log(`

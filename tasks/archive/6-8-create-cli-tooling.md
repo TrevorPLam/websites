@@ -30,6 +30,7 @@ pnpm create-client, validate-config, generate-component; knip/depcheck; validate
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-DOCS**: ADRs, config reference, migration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-docs) for full research findings.
 - **[2026-02-18] R-CLI**: CLI tooling, generators, scaffolding — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-cli) for full research findings.
 
@@ -38,6 +39,7 @@ pnpm create-client, validate-config, generate-component; knip/depcheck; validate
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-DOCS](RESEARCH-INVENTORY.md#r-docs) — Full research findings
 - [RESEARCH-INVENTORY.md - R-CLI](RESEARCH-INVENTORY.md#r-cli) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
@@ -49,6 +51,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-CLI — Command-line interface patterns
+
 ```typescript
 #!/usr/bin/env node
 
@@ -56,10 +59,7 @@ import { Command } from 'commander';
 
 const program = new Command();
 
-program
-  .name('cli-tool')
-  .description('Marketing websites CLI')
-  .version('1.0.0');
+program.name('cli-tool').description('Marketing websites CLI').version('1.0.0');
 
 program
   .command('create-client <name>')
@@ -72,35 +72,42 @@ program.parse();
 ```
 
 ### R-DOCS — Architecture Decision Records
+
 ```markdown
 # ADR-001: Use App Router for Page Templates
 
 ## Context
+
 We need to decide between Pages Router and App Router for our page templates.
 
 ## Decision
+
 Use App Router with Server Components by default, Client Components only for interactivity.
 
 ## Consequences
+
 - Better performance with RSC
 - Learning curve for team
 - Migration path from existing templates
 ```
 
 ### R-UI — React 19 component with ref forwarding
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
 export function Component({ ref, className, ...props }: ComponentProps) {
-  return React.createElement(
-    Primitive.Root,
-    { ref, className: cn('component', className), ...props }
-  );
+  return React.createElement(Primitive.Root, {
+    ref,
+    className: cn('component', className),
+    ...props,
+  });
 }
 ```
 
 ### R-A11Y — Touch targets and reduced motion
+
 ```css
 .component-button {
   min-width: 24px;
@@ -109,11 +116,13 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### Reduced motion detection
+
 ```typescript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### Related Patterns
+
 - See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
 - See [R-CLI - Research Findings](RESEARCH-INVENTORY.md#r-cli) for additional examples
 
@@ -155,4 +164,3 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

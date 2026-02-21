@@ -77,9 +77,7 @@ export interface BookingFeatureConfig {
  * @returns BookingFeatureConfig with services, timeSlots, maxAdvanceDays
  * @throws Error if flowConfig.type !== 'booking'
  */
-export function createBookingConfig(
-  flowConfig: BookingFlowConfig
-): BookingFeatureConfig {
+export function createBookingConfig(flowConfig: BookingFlowConfig): BookingFeatureConfig {
   if (flowConfig.type !== 'booking') {
     throw new Error('Conversion flow must be of type "booking"');
   }

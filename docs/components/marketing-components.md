@@ -23,7 +23,10 @@ The `@repo/marketing-components` package provides display-only components organi
 Avoid `Button asChild` (not supported). Use styled anchors or `HeroCTAButton` for link-style CTAs:
 
 ```tsx
-<a href={href} className="inline-flex min-h-[44px] items-center justify-center rounded-md bg-primary px-8...">
+<a
+  href={href}
+  className="inline-flex min-h-[44px] items-center justify-center rounded-md bg-primary px-8..."
+>
   {label}
 </a>
 ```
@@ -33,75 +36,89 @@ Avoid `Button asChild` (not supported). Use styled anchors or `HeroCTAButton` fo
 ## Component Families
 
 ### Hero (2-1)
+
 - Variants: Centered, Split, Video, Carousel, ImageBackground, Gradient, etc.
 - Uses: `HeroCTAButton` for CTAs, `Container`, `Section`
 
 ### Services (2-2)
+
 - ServiceGrid, ServiceAccordion, ServiceList, ServiceTabs
 - Types: `Service`, `ServiceFilter` in `services/types.ts`
 
 ### Team (2-3)
+
 - TeamGrid, TeamCarousel, TeamDetailed
 - Types: `TeamMember` (avatar/photo, socialLinks)
 
 ### Testimonials (2-4)
+
 - TestimonialCarousel, TestimonialGrid, TestimonialMarquee
 - Types: `Testimonial` (quote/content, author, rating)
 
 ### Pricing (2-5)
+
 - PricingTable, PricingCards, PricingCalculator (stub)
 - Types: `PricingPlan`, `PricingFeature`
 
 ### Gallery (2-6)
+
 - GalleryGrid
 - Types: `GalleryItem`
 
 ### Stats (2-7)
+
 - StatsCounter
 
 ### CTA (2-8)
+
 - CTASection (styled anchors, not Button asChild)
 
 ### FAQ (2-9)
+
 - FAQSection (uses Accordion from @repo/ui)
 
 ### Navigation (2-11)
+
 - NavigationHorizontal, NavigationMobile, NavigationMegaMenu
 - Hooks: useMobileNavigation
 - Types: NavigationItem, MegaMenuFeatured
 
 ### Footer (2-12)
+
 - FooterStandard, FooterMinimal, FooterWithNewsletter, FooterSocial
 - Hooks: useNewsletter
 
 ### Blog (2-13)
+
 - BlogPostCard, BlogGrid, BlogList, BlogMasonry, BlogWithSidebar, BlogPagination, RelatedPosts
 
 ### Product (2-14)
+
 - ProductCard, ProductGrid, ProductDetail, ProductComparison
 
 ### Event (2-15)
+
 - EventCard, EventGrid, EventTimeline, EventCalendar, EventRegistration
 
 ### Industry & Advanced (2-48 through 2-62)
 
-| Family | Components | Purpose |
-|--------|------------|---------|
-| **Location (2-48)** | LocationCard, LocationList | Addresses, hours, directions |
-| **Menu (2-49)** | MenuCard, MenuList | Restaurant menus, dietary tags |
-| **Portfolio (2-50)** | PortfolioCard, PortfolioGrid | Work samples, case studies |
-| **Case Study (2-51)** | CaseStudyCard | Client success stories |
-| **Job Listing (2-52)** | JobListingCard | Career listings |
-| **Course (2-53)** | CourseCard, CourseGrid | Education courses, enrollment |
-| **Resource (2-54)** | ResourceCard, ResourceGrid | Downloadable resources |
-| **Comparison (2-55)** | ComparisonTable | Feature/price comparison |
-| **Filter (2-56)** | FilterBar | Category filter buttons |
-| **Search (2-57)** | SearchBar | Search input |
-| **Social Proof (2-58)** | SocialProofBadge, SocialProofStack | Trust badges |
-| **Video (2-59)** | VideoEmbed | YouTube, Vimeo, native |
-| **Audio (2-60)** | AudioPlayer | Native audio element |
-| **Interactive (2-61)** | AccordionContent | Accordion wrapper |
-| **Widget (2-62)** | WidgetCard | Generic widget container |
+| Family                  | Components                         | Purpose                        |
+| ----------------------- | ---------------------------------- | ------------------------------ |
+| **Location (2-48)**     | LocationCard, LocationList         | Addresses, hours, directions   |
+| **Menu (2-49)**         | MenuCard, MenuList                 | Restaurant menus, dietary tags |
+| **Portfolio (2-50)**    | PortfolioCard, PortfolioGrid       | Work samples, case studies     |
+| **Case Study (2-51)**   | CaseStudyCard                      | Client success stories         |
+| **Job Listing (2-52)**  | JobListingCard                     | Career listings                |
+| **Course (2-53)**       | CourseCard, CourseGrid             | Education courses, enrollment  |
+| **Resource (2-54)**     | ResourceCard, ResourceGrid         | Downloadable resources         |
+| **Comparison (2-55)**   | ComparisonTable                    | Feature/price comparison       |
+| **Filter (2-56)**       | FilterBar                          | Category filter buttons        |
+| **Search (2-57)**       | SearchBar                          | Search input                   |
+| **Social Proof (2-58)** | SocialProofBadge, SocialProofStack | Trust badges                   |
+| **Video (2-59)**        | VideoEmbed                         | YouTube, Vimeo, native         |
+| **Audio (2-60)**        | AudioPlayer                        | Native audio element           |
+| **Interactive (2-61)**  | AccordionContent                   | Accordion wrapper              |
+| **Widget (2-62)**       | WidgetCard                         | Generic widget container       |
 
 ---
 
@@ -109,16 +126,16 @@ Avoid `Button asChild` (not supported). Use styled anchors or `HeroCTAButton` fo
 
 Feature orchestration lives in `@repo/features`. Features depend on marketing-components for display:
 
-| Feature | Section Component | Display Components Used |
-|---------|-------------------|-------------------------|
-| Team | TeamSection | TeamGrid, TeamCarousel, TeamDetailed |
+| Feature      | Section Component   | Display Components Used                                  |
+| ------------ | ------------------- | -------------------------------------------------------- |
+| Team         | TeamSection         | TeamGrid, TeamCarousel, TeamDetailed                     |
 | Testimonials | TestimonialsSection | TestimonialCarousel, TestimonialGrid, TestimonialMarquee |
-| Gallery | GallerySection | GalleryGrid |
-| Pricing | PricingSection | PricingTable, PricingCards |
-| Newsletter | NewsletterSection | Input, custom form |
-| Social Media | SocialMediaSection | Container, Section |
-| Reviews | ReviewsSection | TestimonialGrid, TestimonialCarousel |
-| Contact | ContactFormStandard | ContactForm (in features) |
+| Gallery      | GallerySection      | GalleryGrid                                              |
+| Pricing      | PricingSection      | PricingTable, PricingCards                               |
+| Newsletter   | NewsletterSection   | Input, custom form                                       |
+| Social Media | SocialMediaSection  | Container, Section                                       |
+| Reviews      | ReviewsSection      | TestimonialGrid, TestimonialCarousel                     |
+| Contact      | ContactFormStandard | ContactForm (in features)                                |
 
 ---
 

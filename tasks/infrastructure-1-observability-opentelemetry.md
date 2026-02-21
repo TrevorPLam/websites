@@ -14,6 +14,7 @@
 ## Context
 
 Current observability setup:
+
 - Sentry integration exists for error tracking
 - Logging present but not standardized
 - No distributed tracing across serverless functions and multi-tenant boundaries
@@ -39,7 +40,7 @@ This addresses **Research Topic #20: Observability & Distributed Tracing Strateg
   - Use OpenTelemetry for tracing/metrics/logs; Next.js supports instrumentation hooks
   - Tenant-aware correlation IDs and logs
   - Sentry as error tracker, not primary tracer (skipOpenTelemetrySetup: true)
-- **References**: 
+- **References**:
   - [docs/research/perplexity-performance-2026.md](../docs/research/perplexity-performance-2026.md) (Topic #20)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
   - Next.js OpenTelemetry documentation
@@ -83,7 +84,9 @@ This addresses **Research Topic #20: Observability & Distributed Tracing Strateg
 ## Implementation Plan
 
 ### Phase 1: Core Instrumentation
+
 - [ ] Create `instrumentation.ts` at root:
+
   ```typescript
   import { registerOTel } from '@vercel/otel';
 
@@ -96,22 +99,26 @@ This addresses **Research Topic #20: Observability & Distributed Tracing Strateg
     });
   }
   ```
+
 - [ ] Configure `next.config.js`:
   - Enable `experimental.instrumentationHook: true`
 
 ### Phase 2: OpenTelemetry Configuration
+
 - [ ] Create `packages/infra/src/observability/otel.ts`:
   - OTLP exporter configuration
   - Resource attributes (service name, version, environment)
   - Span processor configuration
 
 ### Phase 3: Sentry Integration
+
 - [ ] Update Sentry configuration:
   - Set `skipOpenTelemetrySetup: true`
   - Configure OpenTelemetry context manager
   - Configure sampler to avoid conflicts
 
 ### Phase 4: Tenant-Aware Instrumentation
+
 - [ ] Create `packages/infra/src/observability/tracing.ts`:
   - Utilities for creating tenant-aware spans
   - Correlation ID propagation
@@ -120,6 +127,7 @@ This addresses **Research Topic #20: Observability & Distributed Tracing Strateg
   - Integration with OpenTelemetry spans
 
 ### Phase 5: Instrument Key Flows
+
 - [ ] Instrument booking actions:
   - `confirmBooking`, `cancelBooking` spans
   - Include `tenantId`, `userId`, `bookingId`
@@ -130,6 +138,7 @@ This addresses **Research Topic #20: Observability & Distributed Tracing Strateg
   - API call spans with retry/circuit breaker context
 
 ### Phase 6: Testing & Documentation
+
 - [ ] Instrumentation tests:
   - Verify traces are emitted
   - Verify tenant context in spans
@@ -139,6 +148,7 @@ This addresses **Research Topic #20: Observability & Distributed Tracing Strateg
 ## Sample code / examples
 
 ### Instrumentation Entry Point
+
 ```typescript
 // instrumentation.ts
 import { registerOTel } from '@vercel/otel';
@@ -155,6 +165,7 @@ export function register() {
 ```
 
 ### Next.js Config
+
 ```typescript
 // next.config.js
 export default {
@@ -166,6 +177,7 @@ export default {
 ```
 
 ### Tenant-Aware Tracing
+
 ```typescript
 // packages/infra/src/observability/tracing.ts
 import { trace, context } from '@opentelemetry/api';
@@ -178,30 +190,35 @@ export function withTenantSpan<T>(
   fn: () => Promise<T>
 ): Promise<T> {
   const tracer = trace.getTracer('marketing-platform');
-  
-  return tracer.startActiveSpan(name, {
-    attributes: {
-      'tenant.id': tenantId,
-      'user.id': userId,
-      'correlation.id': correlationId,
+
+  return tracer.startActiveSpan(
+    name,
+    {
+      attributes: {
+        'tenant.id': tenantId,
+        'user.id': userId,
+        'correlation.id': correlationId,
+      },
     },
-  }, async (span) => {
-    try {
-      const result = await fn();
-      span.setStatus({ code: 1 }); // OK
-      return result;
-    } catch (error) {
-      span.setStatus({ code: 2, message: String(error) }); // ERROR
-      span.recordException(error as Error);
-      throw error;
-    } finally {
-      span.end();
+    async (span) => {
+      try {
+        const result = await fn();
+        span.setStatus({ code: 1 }); // OK
+        return result;
+      } catch (error) {
+        span.setStatus({ code: 2, message: String(error) }); // ERROR
+        span.recordException(error as Error);
+        throw error;
+      } finally {
+        span.end();
+      }
     }
-  });
+  );
 }
 ```
 
 ### Structured Logging
+
 ```typescript
 // packages/infra/src/observability/logger.ts
 import { trace } from '@opentelemetry/api';
@@ -236,14 +253,13 @@ export function logWithContext(
   // Add to span attributes
   span?.setAttributes({
     [`log.${level}`]: message,
-    ...Object.fromEntries(
-      Object.entries(metadata).map(([k, v]) => [`log.${k}`, String(v)])
-    ),
+    ...Object.fromEntries(Object.entries(metadata).map(([k, v]) => [`log.${k}`, String(v)])),
   });
 }
 ```
 
 ### Booking Action Instrumentation
+
 ```typescript
 // packages/features/src/booking/lib/booking-actions.ts
 import { withTenantSpan } from '@repo/infra/observability/tracing';
@@ -278,15 +294,15 @@ export async function confirmBooking(input: unknown) {
 
 ## Execution notes
 
-- **Related files — current state:** 
+- **Related files — current state:**
   - Sentry configuration exists
   - Logging present but not standardized
   - No OpenTelemetry instrumentation
-- **Potential issues / considerations:** 
+- **Potential issues / considerations:**
   - OTLP endpoint configuration (local vs production)
   - Sentry integration (avoid tracer conflicts)
   - Performance impact of tracing (sampling)
-- **Verification:** 
+- **Verification:**
   - Instrumentation hook enabled
   - Traces emitted (verify in observability backend)
   - Sentry errors include trace context

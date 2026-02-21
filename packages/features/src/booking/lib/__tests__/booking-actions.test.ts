@@ -14,9 +14,7 @@ import type { BookingFeatureConfig } from '../booking-config';
 
 jest.mock('next/headers', () => ({
   headers: jest.fn().mockResolvedValue({
-    get: jest.fn((name: string) =>
-      name === 'x-forwarded-for' ? '192.168.1.1' : undefined
-    ),
+    get: jest.fn((name: string) => (name === 'x-forwarded-for' ? '192.168.1.1' : undefined)),
   }),
 }));
 
@@ -158,11 +156,10 @@ describe('getBookingDetails', () => {
     expect(submit.success).toBe(true);
     const bookingId = submit.bookingId!;
 
-    const result = await getBookingDetails(
-      bookingId,
-      testConfig,
-      { confirmationNumber: 'WRONG', email: 'wrong@example.com' }
-    );
+    const result = await getBookingDetails(bookingId, testConfig, {
+      confirmationNumber: 'WRONG',
+      email: 'wrong@example.com',
+    });
     expect(result).toBeNull();
   });
 
@@ -173,11 +170,10 @@ describe('getBookingDetails', () => {
     const bookingId = submit.bookingId!;
     const confirmationNumber = submit.confirmationNumber!;
 
-    const result = await getBookingDetails(
-      bookingId,
-      testConfig,
-      { confirmationNumber, email: 'details@test.com' }
-    );
+    const result = await getBookingDetails(bookingId, testConfig, {
+      confirmationNumber,
+      email: 'details@test.com',
+    });
     expect(result).not.toBeNull();
     expect(result?.id).toBe(bookingId);
     expect(result?.confirmationNumber).toBe(confirmationNumber);

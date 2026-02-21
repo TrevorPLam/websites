@@ -9,16 +9,16 @@
 
 ### Current State
 
-| Task | Component Family | Exists | Status | Key Dependencies |
-|------|------------------|--------|--------|------------------|
-| 2-3 | TeamDisplay | Yes | Scaffolded | TeamGrid, TeamCarousel, TeamDetailed; 1.8 Avatar |
-| 2-4 | Testimonials | Yes | Scaffolded | TestimonialCarousel, TestimonialGrid, TestimonialMarquee; 1.45 Carousel, 1.40 Rating |
-| 2-5 | Pricing | Yes | Scaffolded | PricingTable, PricingCards, PricingCalculator |
-| 2-6 | Gallery | No | Empty export | — |
-| 2-7 | Stats | No | Empty export | — |
-| 2-8 | CTA | No | Empty export | — |
-| 2-9 | FAQ | No | Empty export | Accordion from @repo/ui |
-| 2-10 | Contact | No | Empty export | 1.23 Form, 1.2 Button; features/contact has ContactForm |
+| Task | Component Family | Exists | Status       | Key Dependencies                                                                     |
+| ---- | ---------------- | ------ | ------------ | ------------------------------------------------------------------------------------ |
+| 2-3  | TeamDisplay      | Yes    | Scaffolded   | TeamGrid, TeamCarousel, TeamDetailed; 1.8 Avatar                                     |
+| 2-4  | Testimonials     | Yes    | Scaffolded   | TestimonialCarousel, TestimonialGrid, TestimonialMarquee; 1.45 Carousel, 1.40 Rating |
+| 2-5  | Pricing          | Yes    | Scaffolded   | PricingTable, PricingCards, PricingCalculator                                        |
+| 2-6  | Gallery          | No     | Empty export | —                                                                                    |
+| 2-7  | Stats            | No     | Empty export | —                                                                                    |
+| 2-8  | CTA              | No     | Empty export | —                                                                                    |
+| 2-9  | FAQ              | No     | Empty export | Accordion from @repo/ui                                                              |
+| 2-10 | Contact          | No     | Empty export | 1.23 Form, 1.2 Button; features/contact has ContactForm                              |
 
 ### Potential Issues
 
@@ -28,7 +28,7 @@
 
 3. **PricingPlan location:** PricingTable defines `PricingPlan`; PricingCards imports from PricingTable. Move to `pricing/types.ts`.
 
-4. **Contact overlap:** `@repo/features/contact` has full ContactForm. Task 2-10 is marketing-components contact *variants* (Standard, Minimal, With Map, etc.) — these wrap or compose the features ContactForm.
+4. **Contact overlap:** `@repo/features/contact` has full ContactForm. Task 2-10 is marketing-components contact _variants_ (Standard, Minimal, With Map, etc.) — these wrap or compose the features ContactForm.
 
 5. **Empty exports:** gallery, stats, cta, faq, contact have `export {}` — main index.ts does `export * from './gallery'` etc. Valid but yields no exports until we add components.
 
@@ -64,7 +64,7 @@
 
 ### Potential Issues
 
-1. **Blog vs features/blog:** features/blog provides content retrieval; marketing-components blog is *display* components (BlogCard, BlogGrid, BlogPostLayout, etc.).
+1. **Blog vs features/blog:** features/blog provides content retrieval; marketing-components blog is _display_ components (BlogCard, BlogGrid, BlogPostLayout, etc.).
 
 2. **Product:** E-commerce product display. No existing product primitives. May need Card, Badge, Button patterns.
 
@@ -154,18 +154,22 @@
 ## Cross-Cutting Issues
 
 ### 1. Button asChild pattern
+
 - **Fixed:** Created HeroCTAButton; avoid `Button asChild` (not supported).
 - **Apply to:** All new components using links styled as buttons.
 
 ### 2. Type consolidation
+
 - **Pattern:** `{component-family}/types.ts` for shared types; components import from types.
 - **Apply to:** team, testimonials, pricing (like services, hero).
 
 ### 3. @repo/ui type errors
+
 - Form, ToggleGroup, VirtualList have TS errors. marketing-components type-check fails when resolving @repo/ui.
-- **Workaround:** Exclude __tests__ from marketing-components tsconfig (done). Full fix requires fixing @repo/ui.
+- **Workaround:** Exclude **tests** from marketing-components tsconfig (done). Full fix requires fixing @repo/ui.
 
 ### 4. Empty index exports
+
 - gallery, stats, cta, faq, contact: `export {}` — valid. Add components and export as we implement.
 
 ---
@@ -186,4 +190,4 @@
 - [ ] Use HeroCTAButton or anchor for links (not Button asChild)
 - [ ] Export from family index.ts and main marketing-components index
 - [ ] Match existing patterns (Container, Section, Card, cn())
-- [ ] Add __tests__ for key components (excluded from tsconfig type-check)
+- [ ] Add **tests** for key components (excluded from tsconfig type-check)

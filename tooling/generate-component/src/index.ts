@@ -36,9 +36,7 @@ function isPascalCase(s: string): boolean {
 }
 
 function toKebabCase(s: string): string {
-  return s
-    .replace(/([A-Z])/g, (c) => `-${c.toLowerCase()}`)
-    .replace(/^-/, '');
+  return s.replace(/([A-Z])/g, (c) => `-${c.toLowerCase()}`).replace(/^-/, '');
 }
 
 interface CliArgs {
@@ -182,18 +180,16 @@ function generateTest(
   family: string | null,
   relPath: string
 ): string {
-  const importPath =
-    pkg === 'ui'
-      ? `../${name}`
-      : `../../${family ?? toKebabCase(name)}/${name}`;
+  const importPath = pkg === 'ui' ? `../${name}` : `../../${family ?? toKebabCase(name)}/${name}`;
 
-  const variantTests = pkg === 'ui'
-    ? `  it('applies outline variant', () => {
+  const variantTests =
+    pkg === 'ui'
+      ? `  it('applies outline variant', () => {
     const { container } = render(<${name} variant="outline" />);
     const el = container.firstChild as HTMLElement;
     expect(el?.getAttribute('data-variant')).toBe('outline');
   });`
-    : `  it('renders heading when provided', () => {
+      : `  it('renders heading when provided', () => {
     render(<${name} heading="Test Heading" />);
     expect(screen.getByRole('heading', { name: 'Test Heading' })).toBeDefined();
   });`;

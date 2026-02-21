@@ -17,9 +17,16 @@ export interface EmailSubscriber {
 
 export interface EmailAdapter {
   id: string;
-  subscribe: (subscriber: EmailSubscriber, listId?: string) => Promise<{ success: boolean; error?: string }>;
+  subscribe: (
+    subscriber: EmailSubscriber,
+    listId?: string
+  ) => Promise<{ success: boolean; error?: string }>;
   unsubscribe: (email: string, listId?: string) => Promise<{ success: boolean; error?: string }>;
-  sendEvent: (email: string, eventName: string, data?: Record<string, any>) => Promise<{ success: boolean; error?: string }>;
+  sendEvent: (
+    email: string,
+    eventName: string,
+    data?: Record<string, any>
+  ) => Promise<{ success: boolean; error?: string }>;
 }
 
 export interface EmailIntegrationConfig {

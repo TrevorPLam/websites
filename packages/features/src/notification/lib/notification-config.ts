@@ -10,6 +10,8 @@ export interface NotificationFeatureConfig {
   enabled?: boolean;
 }
 
-export function createNotificationConfig(overrides: Partial<NotificationFeatureConfig> = {}): NotificationFeatureConfig {
+export function createNotificationConfig(
+  overrides: Partial<NotificationFeatureConfig> = {}
+): NotificationFeatureConfig {
   return { provider: 'none', enabled: false, ...overrides };
 }

@@ -16,9 +16,7 @@ export interface TeamFeatureConfig {
   members?: TeamMember[];
 }
 
-export function createTeamConfig(
-  overrides: Partial<TeamFeatureConfig> = {}
-): TeamFeatureConfig {
+export function createTeamConfig(overrides: Partial<TeamFeatureConfig> = {}): TeamFeatureConfig {
   return {
     layout: 'grid',
     ...overrides,

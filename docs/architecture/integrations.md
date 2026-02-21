@@ -86,6 +86,7 @@ const client = new ResilientHttpClient({
 ```
 
 **States:**
+
 - **Closed:** Normal operation, requests pass through
 - **Open:** Circuit open, requests fail immediately (no retries)
 - **Half-Open:** Testing recovery, limited requests allowed
@@ -179,27 +180,29 @@ try {
 
 ### Current Integrations
 
-| Package | Provider | Status | Resilience |
-|---------|----------|--------|------------|
-| `@repo/integrations-analytics` | Google Analytics, Plausible | Scaffolded | Not implemented |
-| `@repo/integrations-hubspot` | HubSpot CRM | Scaffolded | Not implemented |
-| `@repo/integrations-supabase` | Supabase | Active | N/A (database) |
-| `@repo/integrations-scheduling` | Calendly, Acuity, Cal.com | Scaffolded | Not implemented |
-| `@repo/integrations-email` | Mailchimp, SendGrid, ConvertKit | Scaffolded | Not implemented |
-| `@repo/integrations-chat` | Intercom, Crisp, Tidio | Scaffolded | Not implemented |
-| `@repo/integrations-reviews` | Google, Yelp, Trustpilot | Scaffolded | Not implemented |
-| `@repo/integrations-maps` | Google Maps | Scaffolded | Not implemented |
+| Package                         | Provider                        | Status     | Resilience      |
+| ------------------------------- | ------------------------------- | ---------- | --------------- |
+| `@repo/integrations-analytics`  | Google Analytics, Plausible     | Scaffolded | Not implemented |
+| `@repo/integrations-hubspot`    | HubSpot CRM                     | Scaffolded | Not implemented |
+| `@repo/integrations-supabase`   | Supabase                        | Active     | N/A (database)  |
+| `@repo/integrations-scheduling` | Calendly, Acuity, Cal.com       | Scaffolded | Not implemented |
+| `@repo/integrations-email`      | Mailchimp, SendGrid, ConvertKit | Scaffolded | Not implemented |
+| `@repo/integrations-chat`       | Intercom, Crisp, Tidio          | Scaffolded | Not implemented |
+| `@repo/integrations-reviews`    | Google, Yelp, Trustpilot        | Scaffolded | Not implemented |
+| `@repo/integrations-maps`       | Google Maps                     | Scaffolded | Not implemented |
 
 ### Migration Path
 
 To add resilience to existing integrations:
 
 1. **Install dependency:**
+
    ```bash
    pnpm add @repo/integrations-core
    ```
 
 2. **Replace fetch with ResilientHttpClient:**
+
    ```typescript
    // Before
    const response = await fetch(url, options);

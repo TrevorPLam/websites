@@ -21,7 +21,11 @@ export function SocialProofBadge({ label, value, icon, className }: SocialProofB
         className
       )}
     >
-      {icon && <span className="shrink-0" aria-hidden>{icon}</span>}
+      {icon && (
+        <span className="shrink-0" aria-hidden>
+          {icon}
+        </span>
+      )}
       <span className="text-sm font-medium">{label}</span>
       {value != null && <span className="text-sm text-muted-foreground">{value}</span>}
     </div>

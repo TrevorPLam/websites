@@ -166,7 +166,7 @@ export function buildReportToConfig({
   endpoint,
   groupName = 'csp-endpoint',
   // [Task 9.2.2] Named constant for CSP report max-age (24 hours in seconds)
-  maxAge = 86_400
+  maxAge = 86_400,
 }: {
   endpoint: string;
   groupName?: string;

@@ -28,6 +28,7 @@ Storybook or docs/; site.config reference; per-feature guides; ADRs.
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-DOCS**: ADRs, config reference, migration — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-docs) for full research findings.
 
 ### Key Findings
@@ -35,6 +36,7 @@ Storybook or docs/; site.config reference; per-feature guides; ADRs.
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-DOCS](RESEARCH-INVENTORY.md#r-docs) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
 
@@ -45,22 +47,27 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-DOCS — Architecture Decision Records
+
 ```markdown
 # ADR-001: Use App Router for Page Templates
 
 ## Context
+
 We need to decide between Pages Router and App Router for our page templates.
 
 ## Decision
+
 Use App Router with Server Components by default, Client Components only for interactivity.
 
 ## Consequences
+
 - Better performance with RSC
 - Learning curve for team
 - Migration path from existing templates
 ```
 
 ### R-CONFIG-VALIDATION — Zod runtime validation
+
 ```typescript
 import { z } from 'zod';
 
@@ -69,11 +76,13 @@ const siteConfigSchema = z.object({
   siteUrl: z.string().url(),
   description: z.string().optional(),
   logo: z.string().optional(),
-  social: z.object({
-    twitter: z.string().optional(),
-    facebook: z.string().optional(),
-    linkedin: z.string().optional(),
-  }).optional(),
+  social: z
+    .object({
+      twitter: z.string().optional(),
+      facebook: z.string().optional(),
+      linkedin: z.string().optional(),
+    })
+    .optional(),
 });
 
 type SiteConfig = z.infer<typeof siteConfigSchema>;
@@ -84,19 +93,22 @@ export function validateSiteConfig(config: unknown): SiteConfig {
 ```
 
 ### R-UI — React 19 component with ref forwarding
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
 export function Component({ ref, className, ...props }: ComponentProps) {
-  return React.createElement(
-    Primitive.Root,
-    { ref, className: cn('component', className), ...props }
-  );
+  return React.createElement(Primitive.Root, {
+    ref,
+    className: cn('component', className),
+    ...props,
+  });
 }
 ```
 
 ### R-A11Y — Touch targets and reduced motion
+
 ```css
 .component-button {
   min-width: 24px;
@@ -105,11 +117,13 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### Reduced motion detection
+
 ```typescript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### Related Patterns
+
 - See [R-DOCS - Research Findings](RESEARCH-INVENTORY.md#r-docs) for additional examples
 
 ## Acceptance Criteria
@@ -150,4 +164,3 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-

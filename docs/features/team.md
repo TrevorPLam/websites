@@ -56,7 +56,7 @@ interface TeamMember {
   role: string;
   department?: string;
   bio?: string;
-  avatar?: string;          // URL to avatar image
+  avatar?: string; // URL to avatar image
   photo?: {
     src: string;
     alt: string;
@@ -171,14 +171,14 @@ const stylists = teamMembers.filter((m) => m.department === 'styling');
 
 ## Industry Recommendations
 
-| Industry | Recommended Variant |
-|----------|-------------------|
-| Salon | `grid` |
-| Restaurant | `grid` or `carousel` |
-| Law firm | `detailed` (shows credentials/bio) |
-| Dental | `detailed` |
-| Medical | `detailed` |
-| Fitness | `carousel` |
+| Industry   | Recommended Variant                |
+| ---------- | ---------------------------------- |
+| Salon      | `grid`                             |
+| Restaurant | `grid` or `carousel`               |
+| Law firm   | `detailed` (shows credentials/bio) |
+| Dental     | `detailed`                         |
+| Medical    | `detailed`                         |
+| Fitness    | `carousel`                         |
 
 ---
 

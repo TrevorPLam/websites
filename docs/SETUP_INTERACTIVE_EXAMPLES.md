@@ -66,6 +66,7 @@ This guide explains how to add interactive examples, component playgrounds, and 
 **Best for:** Component playgrounds and visual testing
 
 **Setup:**
+
 ```bash
 # Install Storybook
 npx storybook@latest init
@@ -75,6 +76,7 @@ npx storybook@latest init
 ```
 
 **Integration:**
+
 - Link Storybook from component docs
 - Embed Storybook stories in documentation
 - Use Storybook's "Try it" features
@@ -84,11 +86,13 @@ npx storybook@latest init
 **Best for:** Full code examples and tutorials
 
 **Setup:**
+
 1. Create CodeSandbox templates
 2. Add "Open in CodeSandbox" buttons
 3. Link from documentation
 
 **Example:**
+
 ```markdown
 [![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/your-template-id)
 ```
@@ -106,13 +110,10 @@ import React, { useState } from 'react';
 
 export function InteractiveExample() {
   const [value, setValue] = useState('');
-  
+
   return (
     <div>
-      <input 
-        value={value} 
-        onChange={(e) => setValue(e.target.value)} 
-      />
+      <input value={value} onChange={(e) => setValue(e.target.value)} />
       <p>You typed: {value}</p>
     </div>
   );
@@ -120,8 +121,9 @@ export function InteractiveExample() {
 ```
 
 Use in MDX:
+
 ```mdx
-import {InteractiveExample} from '@site/src/components/InteractiveExample';
+import { InteractiveExample } from '@site/src/components/InteractiveExample';
 
 <InteractiveExample />
 ```
@@ -132,11 +134,13 @@ import {InteractiveExample} from '@site/src/components/InteractiveExample';
 
 **Setup:**
 Install clipboard library:
+
 ```bash
 pnpm add react-copy-to-clipboard
 ```
 
 Create component:
+
 ```tsx
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -146,7 +150,9 @@ export function CodeBlock({ code, language }) {
       <CopyToClipboard text={code}>
         <button>Copy</button>
       </CopyToClipboard>
-      <pre><code className={language}>{code}</code></pre>
+      <pre>
+        <code className={language}>{code}</code>
+      </pre>
     </div>
   );
 }
@@ -157,11 +163,13 @@ export function CodeBlock({ code, language }) {
 ### Using Storybook
 
 1. **Install Storybook:**
+
    ```bash
    npx storybook@latest init
    ```
 
 2. **Configure for components:**
+
    ```typescript
    // .storybook/main.ts
    export default {
@@ -171,6 +179,7 @@ export function CodeBlock({ code, language }) {
    ```
 
 3. **Create stories:**
+
    ```typescript
    // packages/ui/src/components/Button/Button.stories.tsx
    import type { Meta, StoryObj } from '@storybook/react';
@@ -206,11 +215,12 @@ export function CodeBlock({ code, language }) {
    pnpm add swagger-ui-react
    ```
 3. **Embed in documentation:**
+
    ```tsx
    import SwaggerUI from 'swagger-ui-react';
    import 'swagger-ui-react/swagger-ui.css';
 
-   <SwaggerUI url="/api/openapi.json" />
+   <SwaggerUI url="/api/openapi.json" />;
    ```
 
 ## Copy-to-Clipboard Implementation
@@ -222,18 +232,14 @@ import { useState } from 'react';
 
 export function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
-  
+
   const copy = async () => {
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-  
-  return (
-    <button onClick={copy}>
-      {copied ? 'Copied!' : 'Copy'}
-    </button>
-  );
+
+  return <button onClick={copy}>{copied ? 'Copied!' : 'Copy'}</button>;
 }
 ```
 
@@ -242,8 +248,8 @@ export function CopyButton({ text }: { text: string }) {
 ### In Markdown/MDX
 
 ```mdx
-import {CodeBlock} from '@site/src/components/CodeBlock';
-import {InteractiveExample} from '@site/src/components/InteractiveExample';
+import { CodeBlock } from '@site/src/components/CodeBlock';
+import { InteractiveExample } from '@site/src/components/InteractiveExample';
 
 ## Example
 

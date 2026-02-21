@@ -60,9 +60,7 @@ export function filterFalsy(values: ClassValue[]): string[] {
  * flattenClassValues([['flex', 'items-center'], 'gap-2', undefined])
  * // → 'flex items-center gap-2'
  */
-export function flattenClassValues(
-  values: Array<ClassValue | ClassValue[]>
-): string {
+export function flattenClassValues(values: Array<ClassValue | ClassValue[]>): string {
   return values
     .flat()
     .filter((v): v is string => typeof v === 'string' && v.length > 0)

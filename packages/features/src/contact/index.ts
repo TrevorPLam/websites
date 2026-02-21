@@ -32,7 +32,11 @@ export type { ContactFormStandardProps } from './components/ContactFormStandard'
 
 // Configuration exports
 export * from './lib/contact-config';
-export type { ContactFeatureConfig, ContactFieldConfig, ContactStepConfig } from './lib/contact-config';
+export type {
+  ContactFeatureConfig,
+  ContactFieldConfig,
+  ContactStepConfig,
+} from './lib/contact-config';
 
 // Schema exports
 export * from './lib/contact-schema';

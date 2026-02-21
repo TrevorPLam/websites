@@ -68,13 +68,13 @@ marketing-websites/
 
 ## Current Status
 
-| Layer | Package | Status |
-| ----- | ------- | ------ |
-| **L2** | `@repo/ui` | 🟡 9 of 14 primitives complete |
-| **L2** | `@repo/marketing-components` | 🟡 Partial implementation |
-| **L2** | `@repo/features` | 🟡 5 of 9 features complete |
-| **L3** | `@repo/page-templates` | 🔴 Scaffolded only |
-| **Clients** | 6 implementations | 🟢 Active |
+| Layer       | Package                      | Status                         |
+| ----------- | ---------------------------- | ------------------------------ |
+| **L2**      | `@repo/ui`                   | 🟡 9 of 14 primitives complete |
+| **L2**      | `@repo/marketing-components` | 🟡 Partial implementation      |
+| **L2**      | `@repo/features`             | 🟡 5 of 9 features complete    |
+| **L3**      | `@repo/page-templates`       | 🔴 Scaffolded only             |
+| **Clients** | 6 implementations            | 🟢 Active                      |
 
 ## Complete Documentation
 
@@ -96,4 +96,4 @@ For comprehensive architecture documentation, including:
 
 ---
 
-*This is a high-level architecture overview. See [docs/architecture/README.md](docs/architecture/README.md) for the complete architecture documentation.*
+_This is a high-level architecture overview. See [docs/architecture/README.md](docs/architecture/README.md) for the complete architecture documentation._

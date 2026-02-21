@@ -40,7 +40,9 @@ export function filterSearchItems(
 
   return items.filter((item) => {
     const tagText = Array.isArray(item.tags)
-      ? item.tags.filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0).join(' ')
+      ? item.tags
+          .filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0)
+          .join(' ')
       : '';
     const haystack = [item.title, item.description, tagText].join(' ').toLowerCase();
     return haystack.includes(normalized);

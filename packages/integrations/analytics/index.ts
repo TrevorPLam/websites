@@ -41,7 +41,9 @@ export function trackEvent({ action, category, label, value }: AnalyticsEvent) {
     if (isGtagFunction(w.gtag)) {
       w.gtag('event', action, { event_category: category, event_label: label, value });
     }
-    const pw = window as Window & { plausible?: (event: string, opts?: { props?: Record<string, unknown> }) => void };
+    const pw = window as Window & {
+      plausible?: (event: string, opts?: { props?: Record<string, unknown> }) => void;
+    };
     if (pw.plausible) {
       pw.plausible(action, { props: { category, label, value } });
     }

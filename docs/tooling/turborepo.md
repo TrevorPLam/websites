@@ -19,14 +19,14 @@
 
 ### Task Definitions
 
-| Task | Depends On | Outputs | Notes |
-|------|------------|---------|-------|
-| `build` | `^build` (deps first) | `.next/**`, `dist/**`, `build/**` | Excludes `.next/cache/**` |
-| `dev` | — | — | Non-cached, persistent |
-| `lint` | `^lint` | — | Package-level ESLint |
-| `type-check` | `^type-check` | — | TypeScript `tsc --noEmit` |
-| `test` | `^build` | `coverage/**` | Jest tests |
-| `format` / `format:check` | — | — | Prettier, non-cached |
+| Task                      | Depends On            | Outputs                           | Notes                     |
+| ------------------------- | --------------------- | --------------------------------- | ------------------------- |
+| `build`                   | `^build` (deps first) | `.next/**`, `dist/**`, `build/**` | Excludes `.next/cache/**` |
+| `dev`                     | —                     | —                                 | Non-cached, persistent    |
+| `lint`                    | `^lint`               | —                                 | Package-level ESLint      |
+| `type-check`              | `^type-check`         | —                                 | TypeScript `tsc --noEmit` |
+| `test`                    | `^build`              | `coverage/**`                     | Jest tests                |
+| `format` / `format:check` | —                     | —                                 | Prettier, non-cached      |
 
 ## Upgrade History
 

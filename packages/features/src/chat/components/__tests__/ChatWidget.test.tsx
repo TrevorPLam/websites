@@ -11,9 +11,7 @@ import { ChatWidget } from '../ChatWidget';
 
 describe('ChatWidget', () => {
   it('has no accessibility violations when enabled', async () => {
-    const { container } = render(
-      <ChatWidget provider="intercom" enabled />
-    );
+    const { container } = render(<ChatWidget provider="intercom" enabled />);
     expect(await axe(container)).toHaveNoViolations();
   });
 
@@ -28,9 +26,7 @@ describe('ChatWidget', () => {
   });
 
   it('renders with data attributes when enabled', () => {
-    const { container } = render(
-      <ChatWidget provider="crisp" enabled />
-    );
+    const { container } = render(<ChatWidget provider="crisp" enabled />);
     const div = container.querySelector('[data-chat-provider="crisp"]');
     expect(div).toBeInTheDocument();
     expect(div).toHaveAttribute('data-chat-enabled', 'true');

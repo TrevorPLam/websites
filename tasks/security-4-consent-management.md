@@ -14,6 +14,7 @@
 ## Context
 
 Third-party scripts (analytics, marketing, chat widgets) currently load without consent gating, violating GDPR/CCPA requirements. Missing:
+
 1. ScriptManager component for consent-gated script loading
 2. Consent Management Platform (CMP) integration
 3. Script categorization (analytics/marketing/functional)
@@ -40,7 +41,7 @@ This addresses **Research Topic #16: Third-Party Script Loading & Consent Manage
   - Gate non-essential scripts behind CMP consent
   - Scripts load only after consent granted
 - **Threat Model**: Illegal tracking pre-consent violates GDPR/CCPA; performance regressions from early script loading
-- **References**: 
+- **References**:
   - [docs/research/perplexity-compliance-2026.md](../docs/research/perplexity-compliance-2026.md) (Topic #16)
   - [docs/research/RESEARCH-GAPS.md](../docs/research/RESEARCH-GAPS.md)
   - GDPR, ePrivacy, CCPA compliance requirements
@@ -88,6 +89,7 @@ This addresses **Research Topic #16: Third-Party Script Loading & Consent Manage
 ## Implementation Plan
 
 ### Phase 1: Consent Hook & Context
+
 - [ ] Create `packages/ui/src/hooks/useConsent.ts`:
   ```typescript
   export function useConsent() {
@@ -100,11 +102,13 @@ This addresses **Research Topic #16: Third-Party Script Loading & Consent Manage
   - Integrates with CMP provider
 
 ### Phase 2: ScriptManager Component
+
 - [ ] Create `packages/ui/src/components/ScriptManager.tsx`:
+
   ```typescript
   export function ScriptManager({ scripts }: { scripts: ScriptConfig[] }) {
     const consent = useConsent();
-    
+
     return (
       <>
         {scripts
@@ -122,6 +126,7 @@ This addresses **Research Topic #16: Third-Party Script Loading & Consent Manage
   ```
 
 ### Phase 3: Integration Metadata
+
 - [ ] Update analytics integrations:
   - Export script metadata with category: 'analytics'
   - Export script URL/component
@@ -131,6 +136,7 @@ This addresses **Research Topic #16: Third-Party Script Loading & Consent Manage
   - Export script metadata with category: 'functional' (or 'marketing' if tracking)
 
 ### Phase 4: Configuration
+
 - [ ] Update `packages/types/src/site-config.ts`:
   ```typescript
   consent: {
@@ -144,6 +150,7 @@ This addresses **Research Topic #16: Third-Party Script Loading & Consent Manage
   ```
 
 ### Phase 5: Testing & Documentation
+
 - [ ] Unit tests:
   - ScriptManager filters scripts by consent
   - Scripts not rendered without consent
@@ -155,6 +162,7 @@ This addresses **Research Topic #16: Third-Party Script Loading & Consent Manage
 ## Sample code / examples
 
 ### ScriptManager Component
+
 ```typescript
 // packages/ui/src/components/ScriptManager.tsx
 'use client';
@@ -223,6 +231,7 @@ export function ScriptManager({ scripts }: ScriptManagerProps) {
 ```
 
 ### Consent Hook
+
 ```typescript
 // packages/ui/src/hooks/useConsent.ts
 'use client';
@@ -238,7 +247,7 @@ export interface ConsentState {
 
 export function useConsent(): ConsentState {
   const context = useContext(ConsentContext);
-  
+
   if (!context) {
     // Default: no consent (GDPR/CCPA compliant)
     return {
@@ -253,6 +262,7 @@ export function useConsent(): ConsentState {
 ```
 
 ### Integration Script Metadata
+
 ```typescript
 // packages/integrations/analytics/src/script-metadata.ts
 export const googleAnalyticsScript: ScriptConfig = {
@@ -270,6 +280,7 @@ export const googleAnalyticsInitScript: ScriptConfig = {
 ```
 
 ### Site Config
+
 ```typescript
 // site.config.ts
 export const siteConfig = {
@@ -301,14 +312,14 @@ export const siteConfig = {
 
 ## Execution notes
 
-- **Related files — current state:** 
+- **Related files — current state:**
   - Integration packages may load scripts directly
   - No consent management system
-- **Potential issues / considerations:** 
+- **Potential issues / considerations:**
   - CMP provider selection (Termly, CookieScript, custom)
   - Consent state persistence (cookie vs context)
   - Script execution timing (DOM presence vs execution)
-- **Verification:** 
+- **Verification:**
   - Scripts not in DOM without consent
   - Scripts appear after consent granted
   - Performance improved (LCP/INP)

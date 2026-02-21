@@ -2,11 +2,11 @@
 /**
  * @file scripts/update-tasks-with-research-v2.js
  * Purpose: Automate updating task files with research findings from RESEARCH-INVENTORY.md
- * 
+ *
  * Standardized format:
  * - Task IDs by Topic: ### R-XXX (Description)
  * - Research Findings: ### R-XXX (Description) or ### R-XXX
- * 
+ *
  * Usage:
  *   node scripts/update-tasks-with-research-v2.js [task-id]
  *   node scripts/update-tasks-with-research-v2.js --all
@@ -35,7 +35,9 @@ function parseResearchInventory() {
   const taskMappingSection = taskMappingMatch[1];
 
   // Extract Research Findings section
-  const researchFindingsMatch = content.match(/## Research Findings[^\n]*\n([\s\S]*?)(?=\n---|\n## |$)/);
+  const researchFindingsMatch = content.match(
+    /## Research Findings[^\n]*\n([\s\S]*?)(?=\n---|\n## |$)/
+  );
   if (!researchFindingsMatch) {
     throw new Error('Could not find "Research Findings" section');
   }
@@ -43,29 +45,29 @@ function parseResearchInventory() {
 
   // Parse each topic from Task IDs by Topic section
   const topicHeaders = taskMappingSection.matchAll(/^### (R-[A-Z0-9-]+) \(([^)]+)\)/gm);
-  
+
   for (const headerMatch of topicHeaders) {
     const topicId = headerMatch[1];
     const topicDescription = headerMatch[2];
-    
+
     // Extract task IDs for this topic
     const topicStart = headerMatch.index + headerMatch[0].length;
     const nextTopicMatch = taskMappingSection.substring(topicStart).match(/^### (R-[A-Z0-9-]+)/m);
-    const topicEnd = nextTopicMatch 
-      ? topicStart + nextTopicMatch.index 
-      : taskMappingSection.length;
+    const topicEnd = nextTopicMatch ? topicStart + nextTopicMatch.index : taskMappingSection.length;
     const taskIdsText = taskMappingSection.substring(topicStart, topicEnd).trim();
-    
+
     const taskIds = extractTaskIds(taskIdsText);
 
     // Extract research findings for this topic
     const findingsHeaderRegex = new RegExp(`^### ${topicId}(?:\s+\\([^)]+\\))?$`, 'm');
     const findingsMatch = researchFindingsSection.match(findingsHeaderRegex);
-    
+
     let findingsContent = '';
     if (findingsMatch) {
       const findingsStart = findingsMatch.index + findingsMatch[0].length;
-      const nextFindingsMatch = researchFindingsSection.substring(findingsStart).match(/^### (R-[A-Z0-9-]+)/m);
+      const nextFindingsMatch = researchFindingsSection
+        .substring(findingsStart)
+        .match(/^### (R-[A-Z0-9-]+)/m);
       const findingsEnd = nextFindingsMatch
         ? findingsStart + nextFindingsMatch.index
         : researchFindingsSection.length;
@@ -74,7 +76,7 @@ function parseResearchInventory() {
 
     // Extract bullet points from findings
     const findings = extractBulletPoints(findingsContent);
-    
+
     // Extract code snippets (code blocks)
     const codeSnippets = extractCodeSnippets(findingsContent);
 
@@ -95,7 +97,7 @@ function parseResearchInventory() {
  */
 function extractTaskIds(text) {
   const taskIds = new Set();
-  const lines = text.split('\n').filter(line => line.trim());
+  const lines = text.split('\n').filter((line) => line.trim());
 
   for (const line of lines) {
     // Handle "All 1.xx: 1-12, 1-13, ..."
@@ -110,7 +112,7 @@ function extractTaskIds(text) {
         }
       }
     }
-    
+
     // Handle ranges like "2.1–2.62" or "2.1-2.62"
     const rangeMatch = line.match(/(\d+)\.(\d+)[–-](\d+)\.(\d+)/);
     if (rangeMatch) {
@@ -121,14 +123,14 @@ function extractTaskIds(text) {
         }
       }
     }
-    
+
     // Handle "1.xx (all)" pattern
     const allPatternMatch = line.match(/(\d+)[\.-]xx\s*\(all\)/i);
     if (allPatternMatch) {
       const categoryNum = allPatternMatch[1];
       taskIds.add(`${categoryNum}-xx (all)`);
     }
-    
+
     // Handle "Same as R-XXX" - will be resolved later
     if (line.includes('Same as')) {
       const sameAsMatch = line.match(/Same as (R-[A-Z0-9-]+)/i);
@@ -136,24 +138,24 @@ function extractTaskIds(text) {
         taskIds.add(`same-as-${sameAsMatch[1]}`);
       }
     }
-    
+
     // Handle individual task IDs
     const individualMatches = line.matchAll(/(\d+)[.-](\d+)/g);
     for (const match of individualMatches) {
       taskIds.add(`${match[1]}-${match[2]}`);
     }
-    
+
     // Handle f-xx tasks
     const fMatches = line.matchAll(/f-(\d+)/g);
     for (const match of fMatches) {
       taskIds.add(`f-${match[1]}`);
     }
-    
+
     // Handle "All open tasks"
     if (line.toLowerCase().includes('all open tasks')) {
       taskIds.add('all-open-tasks');
     }
-    
+
     // Handle "f-1 through f-40"
     const throughMatch = line.match(/f-(\d+)\s+through\s+f-(\d+)/i);
     if (throughMatch) {
@@ -173,11 +175,11 @@ function extractTaskIds(text) {
  */
 function extractBulletPoints(content) {
   if (!content) return [];
-  
+
   return content
     .split('\n')
-    .filter(line => line.trim().startsWith('-'))
-    .map(line => line.trim())
+    .filter((line) => line.trim().startsWith('-'))
+    .map((line) => line.trim())
     .slice(0, 10); // Limit to 10 items
 }
 
@@ -235,7 +237,7 @@ function getTopicsForTask(taskId, topics) {
     let matches = false;
 
     // Handle "same-as-R-XXX" references
-    const sameAsMatch = topic.taskIds.find(id => id.startsWith('same-as-'));
+    const sameAsMatch = topic.taskIds.find((id) => id.startsWith('same-as-'));
     if (sameAsMatch) {
       const refTopicId = sameAsMatch.replace('same-as-', '');
       const refTopic = topics.get(refTopicId);
@@ -246,13 +248,16 @@ function getTopicsForTask(taskId, topics) {
     }
 
     // Direct match
-    if (!matches && (topic.taskIds.includes(normalizedTaskId) || topic.taskIds.includes(baseTaskId))) {
+    if (
+      !matches &&
+      (topic.taskIds.includes(normalizedTaskId) || topic.taskIds.includes(baseTaskId))
+    ) {
       matches = true;
     }
 
     // Pattern matching
     if (!matches) {
-      matches = topic.taskIds.some(id => {
+      matches = topic.taskIds.some((id) => {
         // Handle "1-xx (all)" pattern
         if (id.includes('xx') && id.includes('(all)')) {
           const xxMatch = id.match(/(\d+)[\.-]xx/i);
@@ -261,7 +266,7 @@ function getTopicsForTask(taskId, topics) {
             return normalizedTaskId.startsWith(`${categoryPrefix}-`);
           }
         }
-        
+
         // Handle patterns like "1-xx" or "1.xx"
         if (id.includes('xx')) {
           const xxMatch = id.match(/(\d+)[\.-]?xx/i);
@@ -270,12 +275,12 @@ function getTopicsForTask(taskId, topics) {
             return normalizedTaskId.startsWith(`${categoryPrefix}-`);
           }
         }
-        
+
         // Handle "all-open-tasks" - skip for now (too broad)
         if (id === 'all-open-tasks') {
           return false; // Don't match all tasks automatically
         }
-        
+
         return false;
       });
     }
@@ -325,7 +330,8 @@ function generateResearchSection(topics) {
   }
 
   if (!hasFindings) {
-    content += 'Research findings are available in the referenced RESEARCH-INVENTORY.md sections.\n\n';
+    content +=
+      'Research findings are available in the referenced RESEARCH-INVENTORY.md sections.\n\n';
   }
 
   content += `### References\n`;
@@ -372,7 +378,7 @@ function generateCodeSnippetsSection(topics) {
   } else {
     content += `### Related Patterns\n`;
   }
-  
+
   for (const topic of topics) {
     content += `- See [${topic.id} - Research Findings](RESEARCH-INVENTORY.md#${topic.id.toLowerCase()}) for additional examples\n`;
   }
@@ -393,9 +399,12 @@ function isPlaceholderSnippetsOnly(sectionContent) {
     /^[\s\S]*\/\/\s*Discriminated unions[\s\S]*$/,
     /^[\s\S]*\/\/\s*Expected API[\s\S]*$/,
   ];
-  const allPlaceholder = codeBlocks.every(block => {
-    const inner = block.replace(/^```\w*\n?/, '').replace(/\n?```$/, '').trim();
-    return placeholderPatterns.some(p => p.test(inner)) || inner.length < 120;
+  const allPlaceholder = codeBlocks.every((block) => {
+    const inner = block
+      .replace(/^```\w*\n?/, '')
+      .replace(/\n?```$/, '')
+      .trim();
+    return placeholderPatterns.some((p) => p.test(inner)) || inner.length < 120;
   });
   return allPlaceholder;
 }
@@ -430,20 +439,25 @@ function updateTaskFile(taskFilePath, topics) {
   // Extract existing code snippets before replacing
   const codeSnippetsMatch = content.match(/## Code Snippets \/ Examples([\s\S]*?)(?=\n## |$)/);
   const existingCodeSnippets = codeSnippetsMatch ? codeSnippetsMatch[1].trim() : '';
-  
+
   // Check if existing section has actual code blocks (not just placeholders)
   const hasCodeBlocks = existingCodeSnippets && existingCodeSnippets.match(/```[\s\S]*?```/);
   const isPlaceholderOnly = hasCodeBlocks && isPlaceholderSnippetsOnly(existingCodeSnippets);
   const hasExistingCode = hasCodeBlocks && !isPlaceholderOnly;
-  
+
   // Replace Code Snippets section - preserve existing code if present and substantive
   const codeSnippetsRegex = /## Code Snippets \/ Examples[\s\S]*?(?=\n## |$)/;
   if (hasExistingCode) {
     // Preserve existing code snippets - only add Related Patterns if missing
     const newPatternsSection = codeSnippetsSection.match(/### Related Patterns[\s\S]*/);
     if (newPatternsSection && !existingCodeSnippets.includes('### Related Patterns')) {
-      updatedContent = updatedContent.replace(codeSnippetsRegex, `## Code Snippets / Examples\n\n${existingCodeSnippets}\n\n${newPatternsSection[0]}`);
-      console.log(`  ⚠ Preserved existing code snippets and added Related Patterns in ${taskFileName}`);
+      updatedContent = updatedContent.replace(
+        codeSnippetsRegex,
+        `## Code Snippets / Examples\n\n${existingCodeSnippets}\n\n${newPatternsSection[0]}`
+      );
+      console.log(
+        `  ⚠ Preserved existing code snippets and added Related Patterns in ${taskFileName}`
+      );
     } else {
       console.log(`  ⚠ Preserving existing code snippets in ${taskFileName} (skipping update)`);
     }
@@ -454,7 +468,9 @@ function updateTaskFile(taskFilePath, topics) {
 
   // Write updated content
   fs.writeFileSync(taskFilePath, updatedContent, 'utf-8');
-  console.log(`✓ Updated ${taskFileName} with ${relevantTopics.length} research topics: ${relevantTopics.map(t => t.id).join(', ')}`);
+  console.log(
+    `✓ Updated ${taskFileName} with ${relevantTopics.length} research topics: ${relevantTopics.map((t) => t.id).join(', ')}`
+  );
 
   return true;
 }
@@ -471,9 +487,16 @@ function main() {
 
   if (args.includes('--all')) {
     console.log('Updating all task files...\n');
-    const taskFiles = fs.readdirSync(TASKS_DIR)
-      .filter(file => file.endsWith('.md') && file !== 'RESEARCH-INVENTORY.md' && file !== 'TASK-UPDATE-GAMEPLAN.md' && file !== 'TASK-UPDATE-PROGRESS.md')
-      .map(file => path.join(TASKS_DIR, file));
+    const taskFiles = fs
+      .readdirSync(TASKS_DIR)
+      .filter(
+        (file) =>
+          file.endsWith('.md') &&
+          file !== 'RESEARCH-INVENTORY.md' &&
+          file !== 'TASK-UPDATE-GAMEPLAN.md' &&
+          file !== 'TASK-UPDATE-PROGRESS.md'
+      )
+      .map((file) => path.join(TASKS_DIR, file));
 
     let updated = 0;
     for (const taskFile of taskFiles) {
@@ -485,28 +508,34 @@ function main() {
   } else if (args[0] === '--category') {
     const category = args[1];
     console.log(`Updating tasks in category: ${category}\n`);
-    
+
     let prefix = category.replace(/\./g, '-');
     if (!prefix.includes('-')) {
       prefix = prefix.replace(/(\d+)(xx)/, '$1-');
     }
-    
-    const taskFiles = fs.readdirSync(TASKS_DIR)
-      .filter(file => {
+
+    const taskFiles = fs
+      .readdirSync(TASKS_DIR)
+      .filter((file) => {
         if (!file.endsWith('.md')) return false;
-        if (file === 'RESEARCH-INVENTORY.md' || file === 'TASK-UPDATE-GAMEPLAN.md' || file === 'TASK-UPDATE-PROGRESS.md') return false;
-        
+        if (
+          file === 'RESEARCH-INVENTORY.md' ||
+          file === 'TASK-UPDATE-GAMEPLAN.md' ||
+          file === 'TASK-UPDATE-PROGRESS.md'
+        )
+          return false;
+
         const baseId = extractBaseTaskId(file);
         if (!baseId) return false;
-        
+
         if (category.includes('xx')) {
           const categoryPrefix = prefix.split('-')[0] || prefix.split('.')[0];
           return baseId.startsWith(`${categoryPrefix}-`);
         }
-        
+
         return baseId.startsWith(prefix);
       })
-      .map(file => path.join(TASKS_DIR, file));
+      .map((file) => path.join(TASKS_DIR, file));
 
     let updated = 0;
     for (const taskFile of taskFiles) {
@@ -518,12 +547,13 @@ function main() {
   } else if (args[0]) {
     const taskId = args[0].replace(/\./g, '-');
     let taskFile = path.join(TASKS_DIR, `${taskId}.md`);
-    
+
     if (!fs.existsSync(taskFile)) {
-      const files = fs.readdirSync(TASKS_DIR)
-        .filter(file => file.endsWith('.md') && file.startsWith(taskId.split('-')[0]));
+      const files = fs
+        .readdirSync(TASKS_DIR)
+        .filter((file) => file.endsWith('.md') && file.startsWith(taskId.split('-')[0]));
       if (files.length > 0) {
-        const exactMatch = files.find(f => f.startsWith(taskId));
+        const exactMatch = files.find((f) => f.startsWith(taskId));
         if (exactMatch) {
           taskFile = path.join(TASKS_DIR, exactMatch);
         } else {
@@ -531,7 +561,7 @@ function main() {
         }
       }
     }
-    
+
     updateTaskFile(taskFile, topics);
   } else {
     console.log(`

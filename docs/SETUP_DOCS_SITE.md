@@ -92,8 +92,8 @@ npx create-docusaurus@latest . classic --typescript
 Edit `docusaurus.config.ts`:
 
 ```typescript
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
@@ -200,7 +200,7 @@ export default config;
 Edit `sidebars.ts`:
 
 ```typescript
-import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
 const sidebars: SidebarsConfig = {
   tutorialSidebar: [
@@ -208,19 +208,12 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Getting Started',
-      items: [
-        'getting-started/onboarding',
-        'getting-started/troubleshooting',
-      ],
+      items: ['getting-started/onboarding', 'getting-started/troubleshooting'],
     },
     {
       type: 'category',
       label: 'Architecture',
-      items: [
-        'architecture/README',
-        'architecture/module-boundaries',
-        'architecture/visual-guide',
-      ],
+      items: ['architecture/README', 'architecture/module-boundaries', 'architecture/visual-guide'],
     },
     {
       type: 'category',
@@ -234,11 +227,7 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Resources',
-      items: [
-        'resources/glossary',
-        'resources/faq',
-        'resources/learning-paths',
-      ],
+      items: ['resources/glossary', 'resources/faq', 'resources/learning-paths'],
     },
   ],
 };

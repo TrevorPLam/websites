@@ -3,11 +3,7 @@
  * Task: [4.2] Calendly scheduling integration
  */
 
-import {
-  SchedulingAdapter,
-  SchedulingEvent,
-  EmbedConfig,
-} from '../../scheduling/contract';
+import { SchedulingAdapter, SchedulingEvent, EmbedConfig } from '../../scheduling/contract';
 
 /**
  * Calendly adapter implementation.

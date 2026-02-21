@@ -11,8 +11,10 @@
 The `update-tasks-with-research.js` script was replacing the entire "Code Snippets / Examples" section, deleting existing code snippets that were manually added to task files.
 
 ### Example
+
 **Before (original file):**
-```typescript
+
+````typescript
 ## Code Snippets / Examples
 
 ```typescript
@@ -22,13 +24,15 @@ interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimit
   max?: number;
   // ... more code
 }
-```
+````
 
 **After (script ran):**
+
 ```markdown
 ## Code Snippets / Examples
 
 ### Related Patterns
+
 - See [R-UI - Repo-Specific Context](RESEARCH-INVENTORY.md#r-ui) for additional examples
 ```
 
@@ -39,6 +43,7 @@ interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimit
 ## Solution
 
 Updated the script to:
+
 1. **Detect existing code snippets** by checking for code blocks (```)
 2. **Preserve existing code** if present
 3. **Add Related Patterns section** only if missing
@@ -46,7 +51,7 @@ Updated the script to:
 
 ### Updated Logic
 
-```javascript
+````javascript
 // Extract existing code snippets before replacing
 const codeSnippetsMatch = content.match(/## Code Snippets \/ Examples([\s\S]*?)(?=\n## |$)/);
 const existingCodeSnippets = codeSnippetsMatch ? codeSnippetsMatch[1].trim() : '';
@@ -59,8 +64,10 @@ if (hasExistingCode) {
   const newPatternsSection = codeSnippetsSection.match(/### Related Patterns[\s\S]*/);
   if (newPatternsSection && !existingCodeSnippets.includes('### Related Patterns')) {
     // Add new patterns section at the end
-    updatedContent = updatedContent.replace(codeSnippetsRegex, 
-      `## Code Snippets / Examples\n\n${existingCodeSnippets}\n\n${newPatternsSection[0]}`);
+    updatedContent = updatedContent.replace(
+      codeSnippetsRegex,
+      `## Code Snippets / Examples\n\n${existingCodeSnippets}\n\n${newPatternsSection[0]}`
+    );
   } else {
     // Keep existing content as-is - don't replace
   }
@@ -68,7 +75,7 @@ if (hasExistingCode) {
   // No existing code, use generated section
   updatedContent = updatedContent.replace(codeSnippetsRegex, codeSnippetsSection);
 }
-```
+````
 
 ---
 
@@ -77,16 +84,19 @@ if (hasExistingCode) {
 ### Test Case: `1-12-create-slider-component.md`
 
 **Before fix:**
+
 - ❌ Code snippets deleted
 - ❌ Only Related Patterns remained
 
 **After fix:**
+
 - ✅ Code snippets preserved
 - ✅ Related Patterns added
 - ✅ Both sections present
 
 **Result:**
-```markdown
+
+````markdown
 ## Code Snippets / Examples
 
 ```typescript
@@ -95,11 +105,14 @@ interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimit
   // ... preserved code ...
 }
 ```
+````
 
 ### Related Patterns
+
 - See [R-UI - Repo-Specific Context](RESEARCH-INVENTORY.md#r-ui) for additional examples
 - See [R-A11Y - Repo-Specific Context](RESEARCH-INVENTORY.md#r-a11y) for additional examples
 - See [R-RADIX - Repo-Specific Context](RESEARCH-INVENTORY.md#r-radix) for additional examples
+
 ```
 
 ---
@@ -134,10 +147,11 @@ interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimit
 
 ## Status
 
-✅ **Fixed** - Script now preserves existing code snippets  
-✅ **Tested** - Verified on `1-12-create-slider-component.md`  
+✅ **Fixed** - Script now preserves existing code snippets
+✅ **Tested** - Verified on `1-12-create-slider-component.md`
 ✅ **Documented** - Updated AUTOMATION-GUIDE.md with preservation behavior
 
 ---
 
 **Last Updated:** 2026-02-18
+```

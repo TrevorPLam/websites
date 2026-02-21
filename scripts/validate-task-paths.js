@@ -80,9 +80,7 @@ function parseRelatedFiles(content, filePath) {
     if (!inRelatedFiles) continue;
 
     // Match list items: `- \`path\` – intent – desc` or `- path – intent – desc`
-    const match = trimmed.match(
-      /^[-*]\s+`?([^`\s][^`]*?)`?\s+[–—-]\s+(\w+)/
-    );
+    const match = trimmed.match(/^[-*]\s+`?([^`\s][^`]*?)`?\s+[–—-]\s+(\w+)/);
     if (!match) continue;
 
     const rawPath = match[1].trim();

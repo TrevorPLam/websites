@@ -74,12 +74,14 @@ Operational runbooks provide step-by-step procedures for common scenarios, incid
 ### Standard Deployment
 
 1. **Verify CI Status**
+
    ```bash
    # Check GitHub Actions for latest run
    # Ensure quality-gates job passed
    ```
 
 2. **Create Release**
+
    ```bash
    # Create changeset (if needed)
    pnpm changeset
@@ -92,6 +94,7 @@ Operational runbooks provide step-by-step procedures for common scenarios, incid
    ```
 
 3. **Deploy to Staging**
+
    ```bash
    # Vercel: Auto-deploys from main branch
    # Or manual: vercel --prod --yes
@@ -104,6 +107,7 @@ Operational runbooks provide step-by-step procedures for common scenarios, incid
    - [ ] No console errors
 
 5. **Deploy to Production**
+
    ```bash
    # Vercel: Promote staging deployment
    # Or: vercel --prod --yes
@@ -128,12 +132,14 @@ Operational runbooks provide step-by-step procedures for common scenarios, incid
 ### Rollback Procedure
 
 1. **Identify Deployment**
+
    ```bash
    # Vercel: Check deployment history
    # Identify last known good deployment
    ```
 
 2. **Rollback Deployment**
+
    ```bash
    # Vercel: Promote previous deployment
    # Or: vercel rollback [deployment-url]
@@ -156,18 +162,21 @@ Operational runbooks provide step-by-step procedures for common scenarios, incid
 ### Running Migrations
 
 1. **Review Migration**
+
    ```bash
    # Check migration file
    cat supabase/migrations/[timestamp]_migration_name.sql
    ```
 
 2. **Test Locally**
+
    ```bash
    # Run migration against local Supabase
    supabase migration up
    ```
 
 3. **Deploy to Staging**
+
    ```bash
    # Apply migration to staging database
    supabase db push --db-url [staging-url]
@@ -213,6 +222,7 @@ supabase migration down
    - [ ] Review Lighthouse reports
 
 2. **Identify Bottlenecks**
+
    ```bash
    # Run bundle analysis
    ANALYZE=true pnpm --filter @clients/starter-template build
@@ -224,6 +234,7 @@ supabase migration down
 3. **Common Fixes**
 
    **Bundle Size**
+
    ```bash
    # Identify large dependencies
    ANALYZE=true pnpm build
@@ -233,14 +244,16 @@ supabase migration down
    ```
 
    **Database Queries**
+
    ```sql
    -- Check slow queries
-   SELECT * FROM pg_stat_statements 
-   ORDER BY total_exec_time DESC 
+   SELECT * FROM pg_stat_statements
+   ORDER BY total_exec_time DESC
    LIMIT 10;
    ```
 
    **Caching**
+
    ```typescript
    // Add revalidation
    export const revalidate = 3600; // 1 hour
@@ -270,6 +283,7 @@ supabase migration down
    - [ ] Notify security team
 
 2. **Investigation**
+
    ```bash
    # Check access logs
    # Review Sentry error reports

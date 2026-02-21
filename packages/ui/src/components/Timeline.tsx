@@ -52,9 +52,7 @@ export const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
             )}
             {/* Icon/Indicator */}
             <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-border bg-background">
-              {item.icon || (
-                <div className="h-2 w-2 rounded-full bg-primary" />
-              )}
+              {item.icon || <div className="h-2 w-2 rounded-full bg-primary" />}
             </div>
             {/* Content */}
             <div className="flex-1 space-y-1">

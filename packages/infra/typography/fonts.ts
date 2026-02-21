@@ -50,7 +50,8 @@ export interface FontStack {
 /** Standard font stacks with proper fallbacks */
 export const FONT_STACKS: Readonly<Record<FontStackKey, FontStack>> = {
   'system-sans': {
-    value: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    value:
+      'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     category: 'sans-serif',
     isSystemFont: true,
     displayName: 'System Sans-Serif',
@@ -62,7 +63,8 @@ export const FONT_STACKS: Readonly<Record<FontStackKey, FontStack>> = {
     displayName: 'System Serif',
   },
   'system-mono': {
-    value: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    value:
+      'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
     category: 'monospace',
     isSystemFont: true,
     displayName: 'System Monospace',

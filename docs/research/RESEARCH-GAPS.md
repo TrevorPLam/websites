@@ -22,11 +22,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** Booking actions lack `secureAction` wrapper, tenant-scoped queries, and audit logging.
 
 **Current State:**
+
 - `packages/features/src/booking/lib/booking-actions.ts` exists with basic verification
 - Task `0-5-booking-actions-verification.md` addresses verification params
 - Missing: unified `secureAction` wrapper pattern, tenant-scoped queries, security audit logging
 
 **Recommendation:**
+
 - Create `tasks/security-1-server-action-hardening.md`
 - Implement `packages/infra/security/secure-action.ts` wrapper
 - Add tenant-scoped query helpers in `packages/database/src/booking.ts`
@@ -41,11 +43,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** No RLS policies, `tenant_id` coverage, or JWT claims pattern documented.
 
 **Current State:**
+
 - Supabase integration exists
 - Multi-tenant architecture mentioned but RLS patterns not detailed
 - Missing: RLS policies, `auth.tenant_id()` helper, membership table pattern
 
 **Recommendation:**
+
 - Create `tasks/security-2-rls-multi-tenant.md`
 - Document RLS policy patterns in `docs/architecture/security/multi-tenant-rls.md`
 - Create SQL migrations for `tenant_id` coverage and RLS policies
@@ -60,11 +64,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** No unified verification framework, idempotency, or replay protection.
 
 **Current State:**
+
 - Integration packages exist (`packages/integrations/*`)
 - Webhook handlers likely exist but verification inconsistent
 - Missing: unified `webhook-security.ts` utility, idempotency tracking, timestamp validation
 
 **Recommendation:**
+
 - Create `tasks/security-3-webhook-security.md`
 - Implement `packages/integrations-core/src/webhook-security.ts`
 - Add idempotency tracking (Redis or Postgres)
@@ -79,11 +85,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** No ScriptManager component or consent-gated script loading.
 
 **Current State:**
+
 - Third-party integrations exist
 - Script loading via Next.js `<Script>` likely present
 - Missing: consent management integration, ScriptManager component, GDPR/CCPA compliance
 
 **Recommendation:**
+
 - Create `tasks/security-4-consent-management.md`
 - Implement `packages/ui/src/components/ScriptManager.tsx`
 - Add consent configuration to `site.config.ts`
@@ -98,11 +106,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** SBOM generation exists but lacks signing/provenance verification.
 
 **Current State:**
+
 - `.github/workflows/sbom-generation.yml` exists (THEGOAL.md [D.8])
 - Task `d-8-supply-chain-sbom.md` exists
 - Missing: cosign signing, provenance attestation, dependency-review blocking
 
 **Recommendation:**
+
 - Enhance `tasks/d-8-supply-chain-sbom.md` with research findings
 - Add cosign signing to CI pipeline
 - Add `github/dependency-review-action` as blocking check
@@ -117,11 +127,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** SAST exists but threat models from research not integrated.
 
 **Current State:**
+
 - `.github/workflows/security-sast.yml` exists (THEGOAL.md [C.13])
 - Task `c-13-security-sast-regression.md` exists
 - Missing: threat models for booking flows, business logic abuse patterns
 
 **Recommendation:**
+
 - Enhance `tasks/c-13-security-sast-regression.md` with research threat models
 - Add booking-specific threat scenarios
 - Document OWASP API Top 10 coverage
@@ -135,11 +147,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** Config schema exists but no explicit versioning or migration pipeline.
 
 **Current State:**
+
 - `site.config.ts` with Zod validation exists
 - Task `d-1-config-schema-versioning.md` planned (THEGOAL.md [D.1])
 - Missing: `version` field, migration helpers, versioned schemas
 
 **Recommendation:**
+
 - Enhance `tasks/d-1-config-schema-versioning.md` with research recommendations
 - Implement discriminated union pattern for versioned schemas
 - Add migration CLI tool
@@ -155,11 +169,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** No multi-region deployment strategy or tenant→region mapping.
 
 **Current State:**
+
 - Multi-tenant architecture exists
 - No explicit data residency guarantees documented
 - Missing: tenant region mapping, multi-region DB strategy, GDPR compliance
 
 **Recommendation:**
+
 - Create `tasks/infrastructure-4-data-residency.md`
 - Design tenant region mapping model
 - Document multi-region deployment strategy
@@ -174,11 +190,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** Rate limiting exists but no honeypot, Turnstile, or timing validation.
 
 **Current State:**
+
 - Rate limiting likely present
 - Form components exist
 - Missing: honeypot fields, Cloudflare Turnstile integration, timing validation
 
 **Recommendation:**
+
 - Create `tasks/security-5-form-spam-prevention.md`
 - Implement honeypot utility in `@repo/ui` or `@repo/forms`
 - Add Turnstile integration
@@ -193,10 +211,12 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** No retry/circuit breaker pattern for integrations.
 
 **Current State:**
+
 - Integration packages exist (`packages/integrations/*`)
 - Missing: standardized retry logic, circuit breaker pattern, DLQ
 
 **Recommendation:**
+
 - Create `tasks/infrastructure-3-integration-resilience.md`
 - Implement `packages/integrations-core/src/client.ts` with retry/circuit breaker
 - Add exponential backoff and error handling
@@ -213,11 +233,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** No OpenTelemetry integration or distributed tracing.
 
 **Current State:**
+
 - Sentry integration exists
 - Logging present but not standardized
 - Missing: OpenTelemetry instrumentation, distributed tracing, tenant-aware correlation IDs
 
 **Recommendation:**
+
 - Create `tasks/infrastructure-1-observability-opentelemetry.md`
 - Add `instrumentation.ts` with `@vercel/otel`
 - Integrate with Sentry (skipOpenTelemetrySetup: true)
@@ -232,11 +254,13 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 **Gap:** No systematic multi-tenant E2E strategy.
 
 **Current State:**
+
 - Unit tests exist (~646 tests)
 - E2E tests minimal or scaffolded
 - Missing: Playwright harness, multi-tenant test strategy, visual regression
 
 **Recommendation:**
+
 - Create `tasks/infrastructure-2-e2e-testing.md`
 - Set up Playwright test harness
 - Create multi-tenant test fixtures
@@ -248,15 +272,15 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 
 ## Already Covered Topics
 
-| Topic # | Topic | THEGOAL.md Reference | Status |
-|---------|-------|---------------------|--------|
-| #2 | Supply Chain Security | `.github/workflows/sbom-generation.yml` [D.8] | Planned |
-| #2 | Security SAST | `.github/workflows/security-sast.yml` [C.13] | Planned |
-| #5 | Accessibility | `docs/accessibility/component-a11y-rubric.md` [D.6] | Planned |
-| #9 | Config Versioning | `scripts/governance/validate-schema-versioning.ts` [D.1] | Planned |
-| #10 | Client Scaffolding | `turbo/generators/config.ts` [5.1] | Planned |
-| #11 | Module Boundaries | `scripts/architecture/check-dependency-graph.ts` [C.1] | Planned |
-| #25 | AI Platform | `packages/ai-platform/` [7.1-7.3] | Future Phase 7 |
+| Topic # | Topic                 | THEGOAL.md Reference                                     | Status         |
+| ------- | --------------------- | -------------------------------------------------------- | -------------- |
+| #2      | Supply Chain Security | `.github/workflows/sbom-generation.yml` [D.8]            | Planned        |
+| #2      | Security SAST         | `.github/workflows/security-sast.yml` [C.13]             | Planned        |
+| #5      | Accessibility         | `docs/accessibility/component-a11y-rubric.md` [D.6]      | Planned        |
+| #9      | Config Versioning     | `scripts/governance/validate-schema-versioning.ts` [D.1] | Planned        |
+| #10     | Client Scaffolding    | `turbo/generators/config.ts` [5.1]                       | Planned        |
+| #11     | Module Boundaries     | `scripts/architecture/check-dependency-graph.ts` [C.1]   | Planned        |
+| #25     | AI Platform           | `packages/ai-platform/` [7.1-7.3]                        | Future Phase 7 |
 
 ---
 
@@ -285,11 +309,11 @@ Analysis of 25 research topics from perplexity research against `THEGOAL.md` rev
 
 ## Priority Matrix
 
-| Priority | Count | Topics |
-|----------|-------|--------|
-| P0 (Critical) | 7 | Server Actions, RLS, Webhooks, Consent, Supply Chain, SAST, Config Versioning |
-| P1 (High) | 5 | Data Residency, Form Spam, Integration Resilience, Observability, E2E Testing |
-| P2 (Medium) | 13 | Performance, i18n, Tailwind v4, Design System Governance, etc. |
+| Priority      | Count | Topics                                                                        |
+| ------------- | ----- | ----------------------------------------------------------------------------- |
+| P0 (Critical) | 7     | Server Actions, RLS, Webhooks, Consent, Supply Chain, SAST, Config Versioning |
+| P1 (High)     | 5     | Data Residency, Form Spam, Integration Resilience, Observability, E2E Testing |
+| P2 (Medium)   | 13    | Performance, i18n, Tailwind v4, Design System Governance, etc.                |
 
 ---
 

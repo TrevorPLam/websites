@@ -35,10 +35,12 @@ export interface SheetProps {
   children: React.ReactNode;
 }
 
-export interface SheetTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> {}
-export interface SheetContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+export interface SheetTriggerProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Trigger
+> {}
+export interface SheetContentProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Content
+> {
   /** Side of the screen */
   side?: 'top' | 'right' | 'bottom' | 'left';
   /** Size variant */
@@ -46,10 +48,12 @@ export interface SheetContentProps
 }
 export interface SheetHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 export interface SheetFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface SheetTitleProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> {}
-export interface SheetDescriptionProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> {}
+export interface SheetTitleProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Title
+> {}
+export interface SheetDescriptionProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Description
+> {}
 
 // ─── Style Maps ──────────────────────────────────────────────────────────────
 

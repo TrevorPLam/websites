@@ -9,6 +9,7 @@
 ## Executive Summary
 
 Update all ~192 task files in `tasks/` directory to include:
+
 1. **Enhanced Research & Evidence sections** with specific findings from RESEARCH-INVENTORY.md
 2. **Populated Code Snippets / Examples sections** with relevant, repository-specific code examples
 3. **Cross-references** to specific research topics (R-UI, R-A11Y, etc.)
@@ -19,20 +20,21 @@ Update all ~192 task files in `tasks/` directory to include:
 
 ### Task File Categories
 
-| Category | Count | Pattern | Primary Research Topics |
-|----------|-------|---------|------------------------|
-| **1.xx** | ~50 | UI primitives (Button, Input, etc.) | R-UI, R-RADIX, R-A11Y |
-| **2.xx** | ~62 | Marketing components & features | R-MARKETING, R-A11Y, R-PERF, R-FORM, R-INTEGRATION |
-| **3.xx** | ~8 | Page templates | R-NEXT, R-CMS |
-| **4.xx** | ~6 | Integrations | R-INTEGRATION, R-INDUSTRY |
-| **5.xx** | ~6 | Client migrations | R-MIGRATION, R-INDUSTRY, R-CONFIG-VALIDATION |
-| **6.xx** | ~13 | Documentation & tooling | R-DOCS, R-CLI, R-CLEANUP, R-MIGRATION |
-| **f-xx** | ~40 | Infrastructure systems | R-INFRA, R-DESIGN-TOKENS, R-MOTION, R-PERF |
-| **Total** | **~185** | | |
+| Category  | Count    | Pattern                             | Primary Research Topics                            |
+| --------- | -------- | ----------------------------------- | -------------------------------------------------- |
+| **1.xx**  | ~50      | UI primitives (Button, Input, etc.) | R-UI, R-RADIX, R-A11Y                              |
+| **2.xx**  | ~62      | Marketing components & features     | R-MARKETING, R-A11Y, R-PERF, R-FORM, R-INTEGRATION |
+| **3.xx**  | ~8       | Page templates                      | R-NEXT, R-CMS                                      |
+| **4.xx**  | ~6       | Integrations                        | R-INTEGRATION, R-INDUSTRY                          |
+| **5.xx**  | ~6       | Client migrations                   | R-MIGRATION, R-INDUSTRY, R-CONFIG-VALIDATION       |
+| **6.xx**  | ~13      | Documentation & tooling             | R-DOCS, R-CLI, R-CLEANUP, R-MIGRATION              |
+| **f-xx**  | ~40      | Infrastructure systems              | R-INFRA, R-DESIGN-TOKENS, R-MOTION, R-PERF         |
+| **Total** | **~185** |                                     |                                                    |
 
 ### Research Topic Mapping
 
 Each task maps to 1-5 research topics from RESEARCH-INVENTORY.md. The mapping is defined in:
+
 - `tasks/RESEARCH-INVENTORY.md` → "Task IDs by Topic" section (lines 61-199)
 
 ---
@@ -44,6 +46,7 @@ Each task maps to 1-5 research topics from RESEARCH-INVENTORY.md. The mapping is
 **Goal:** Create a mapping database of tasks → research topics → code snippets
 
 **Steps:**
+
 1. Parse RESEARCH-INVENTORY.md to extract:
    - Topic definitions (R-UI, R-A11Y, etc.)
    - Task ID mappings (which tasks use which topics)
@@ -51,7 +54,7 @@ Each task maps to 1-5 research topics from RESEARCH-INVENTORY.md. The mapping is
    - Research findings (Fundamentals, Best Practices, Highest Standards, Novel Techniques)
 
 2. Create task-to-topic mapping:
-   - For each task file, identify all relevant R-* topics
+   - For each task file, identify all relevant R-\* topics
    - Extract relevant code snippets for each topic
    - Identify key research findings to highlight
 
@@ -64,30 +67,37 @@ Each task maps to 1-5 research topics from RESEARCH-INVENTORY.md. The mapping is
 **Goal:** Define standard format for updated sections
 
 **Template for "Research & Evidence" section:**
+
 ```markdown
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-TOPIC-NAME**: Brief description — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-topic-name) for full research findings.
 
 ### Key Findings
+
 - **[2026-02-18] Finding Title**: Detailed finding with citation link - Date
 - **[2026-02-18] Finding Title**: Detailed finding with citation link - Date
 
 ### Implementation Guidance
+
 - **[2026-02-18] Pattern**: Specific pattern or approach from research
 - **[2026-02-18] Constraint**: Important constraint or requirement
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-TOPIC-NAME](RESEARCH-INVENTORY.md#r-topic-name) — Full research findings
 - [RESEARCH.md §X](RESEARCH.md) — Additional context (if applicable)
 ```
 
 **Template for "Code Snippets / Examples" section:**
-```markdown
+
+````markdown
 ## Code Snippets / Examples
 
 ### Implementation Pattern
+
 ```typescript
 // Description of what this snippet demonstrates
 // Source: packages/example/path/to/file.ts
@@ -95,8 +105,10 @@ export function exampleFunction() {
   // Code from RESEARCH-INVENTORY.md
 }
 ```
+````
 
 ### Usage Example
+
 ```typescript
 // How to use the pattern in this task's context
 import { exampleFunction } from '@repo/package';
@@ -107,8 +119,10 @@ export function taskSpecificUsage() {
 ```
 
 ### Related Patterns
+
 - See [R-TOPIC-NAME - Repo-Specific Context](RESEARCH-INVENTORY.md#r-topic-name) for additional examples
-```
+
+````
 
 ---
 
@@ -181,7 +195,7 @@ for task_file in tasks/*.md:
   assert has_section("Code Snippets / Examples")
   assert all_referenced_topics_exist()
   assert code_snippets_have_valid_paths()
-```
+````
 
 ---
 
@@ -190,6 +204,7 @@ for task_file in tasks/*.md:
 ### Step-by-Step Process
 
 #### Step 1: Create Mapping Database
+
 - [ ] Parse RESEARCH-INVENTORY.md
 - [ ] Extract topic definitions and code snippets
 - [ ] Build task → topic mapping
@@ -198,41 +213,49 @@ for task_file in tasks/*.md:
 #### Step 2: Process by Category
 
 **Category 1: 1.xx UI Components (~50 tasks)**
+
 - Primary topics: R-UI, R-RADIX, R-A11Y
 - Common patterns: React 19 ref patterns, Radix primitives, accessibility
 - [ ] Update all 1.xx tasks
 
 **Category 2: 2.xx Marketing Components (~62 tasks)**
+
 - Primary topics: R-MARKETING, R-A11Y, R-PERF, R-FORM
 - Common patterns: Component families, Server Components, form validation
 - [ ] Update all 2.xx tasks
 
 **Category 3: 3.xx Page Templates (~8 tasks)**
+
 - Primary topics: R-NEXT, R-CMS
 - Common patterns: App Router, Server Actions, MDX
 - [ ] Update all 3.xx tasks
 
 **Category 4: 4.xx Integrations (~6 tasks)**
+
 - Primary topics: R-INTEGRATION, R-INDUSTRY
 - Common patterns: Adapter pattern, OAuth, TCF compliance
 - [ ] Update all 4.xx tasks
 
 **Category 5: 5.xx Client Migrations (~6 tasks)**
+
 - Primary topics: R-MIGRATION, R-INDUSTRY, R-CONFIG-VALIDATION
 - Common patterns: Migration scripts, config validation, JSON-LD schemas
 - [ ] Update all 5.xx tasks
 
 **Category 6: 6.xx Documentation (~13 tasks)**
+
 - Primary topics: R-DOCS, R-CLI, R-CLEANUP, R-MIGRATION
 - Common patterns: CLI tools, migration guides, dead code detection
 - [ ] Update all 6.xx tasks
 
 **Category 7: f-xx Infrastructure (~40 tasks)**
+
 - Primary topics: R-INFRA, R-DESIGN-TOKENS, R-MOTION, R-PERF
 - Common patterns: CVA, design tokens, animation primitives
 - [ ] Update all f-xx tasks
 
 #### Step 3: Quality Assurance
+
 - [ ] Run validation checks
 - [ ] Review sample tasks from each category
 - [ ] Fix inconsistencies
@@ -245,6 +268,7 @@ for task_file in tasks/*.md:
 ### Code Snippet Selection Criteria
 
 For each task, include code snippets that:
+
 1. **Directly relate** to the task's implementation scope
 2. **Demonstrate patterns** mentioned in the research
 3. **Reference actual files** in the repository (when possible)
@@ -254,6 +278,7 @@ For each task, include code snippets that:
 ### Research Finding Prioritization
 
 When multiple findings exist for a topic, prioritize:
+
 1. **Highest Standards** — critical requirements
 2. **Best Practices** — recommended approaches
 3. **Repo-Specific Context** — implementation guidance
@@ -263,6 +288,7 @@ When multiple findings exist for a topic, prioritize:
 ### Cross-Reference Format
 
 Use consistent markdown links:
+
 ```markdown
 - [RESEARCH-INVENTORY.md - R-TOPIC-NAME](RESEARCH-INVENTORY.md#r-topic-name)
 - [RESEARCH.md §12](RESEARCH.md#12-feature-implementation-patterns-new)
@@ -297,7 +323,7 @@ Use consistent markdown links:
 ### Completion Metrics
 
 - [ ] **100% Coverage**: All ~185 task files updated
-- [ ] **Research Integration**: All relevant R-* topics referenced
+- [ ] **Research Integration**: All relevant R-\* topics referenced
 - [ ] **Code Examples**: All tasks have actionable code snippets
 - [ ] **Consistency**: Formatting and structure consistent across all files
 - [ ] **Accuracy**: All code snippets verified against repository structure
@@ -332,13 +358,13 @@ Use consistent markdown links:
 
 ## Timeline Estimate
 
-| Phase | Tasks | Estimated Time |
-|-------|-------|----------------|
-| Phase 1: Mapping | Create mapping database | 2-4 hours |
-| Phase 2: Templates | Define update templates | 1-2 hours |
-| Phase 3: Updates | Update all ~185 tasks | 20-30 hours |
-| Phase 4: QA | Validation and fixes | 4-6 hours |
-| **Total** | | **27-42 hours** |
+| Phase              | Tasks                   | Estimated Time  |
+| ------------------ | ----------------------- | --------------- |
+| Phase 1: Mapping   | Create mapping database | 2-4 hours       |
+| Phase 2: Templates | Define update templates | 1-2 hours       |
+| Phase 3: Updates   | Update all ~185 tasks   | 20-30 hours     |
+| Phase 4: QA        | Validation and fixes    | 4-6 hours       |
+| **Total**          |                         | **27-42 hours** |
 
 **Note:** Can be parallelized by category, reducing wall-clock time.
 

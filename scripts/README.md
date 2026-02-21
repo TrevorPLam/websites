@@ -2,7 +2,7 @@
 
 This directory contains automation scripts including task updates and client validation.
 
-## Client Validation (Task 5-*)
+## Client Validation (Task 5-\*)
 
 ### `validate-client.ts`
 

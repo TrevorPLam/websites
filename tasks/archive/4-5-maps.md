@@ -28,6 +28,7 @@ Adapter contracts. Calendly/Acuity/Cal.com; Intercom/Crisp/Tidio; Google/Yelp/Tr
 ## Research & Evidence (Date-Stamped)
 
 ### Primary Research Topics
+
 - **[2026-02-18] R-INTEGRATION**: Scheduling, OAuth, TCF — see [RESEARCH-INVENTORY.md](RESEARCH-INVENTORY.md#r-integration) for full research findings.
 
 ### Key Findings
@@ -35,6 +36,7 @@ Adapter contracts. Calendly/Acuity/Cal.com; Intercom/Crisp/Tidio; Google/Yelp/Tr
 Research findings are available in the referenced RESEARCH-INVENTORY.md sections.
 
 ### References
+
 - [RESEARCH-INVENTORY.md - R-INTEGRATION](RESEARCH-INVENTORY.md#r-integration) — Full research findings
 - [RESEARCH.md](RESEARCH.md) — Additional context
 
@@ -49,6 +51,7 @@ Research findings are available in the referenced RESEARCH-INVENTORY.md sections
 ## Code Snippets / Examples
 
 ### R-INDUSTRY — JSON-LD schema integration
+
 ```typescript
 interface StructuredData {
   '@context': 'https://schema.org';
@@ -67,6 +70,7 @@ export function generateStructuredData(data: StructuredData) {
 ```
 
 ### R-INTEGRATION — Third-party service adapter
+
 ```typescript
 interface ServiceAdapter {
   name: string;
@@ -90,19 +94,22 @@ export class EmailAdapter implements ServiceAdapter {
 ```
 
 ### R-UI — React 19 component with ref forwarding
+
 ```typescript
 import * as React from 'react';
 import { cn } from '@repo/utils';
 
 export function Component({ ref, className, ...props }: ComponentProps) {
-  return React.createElement(
-    Primitive.Root,
-    { ref, className: cn('component', className), ...props }
-  );
+  return React.createElement(Primitive.Root, {
+    ref,
+    className: cn('component', className),
+    ...props,
+  });
 }
 ```
 
 ### R-A11Y — Touch targets and reduced motion
+
 ```css
 .component-button {
   min-width: 24px;
@@ -111,11 +118,13 @@ export function Component({ ref, className, ...props }: ComponentProps) {
 ```
 
 ### Reduced motion detection
+
 ```typescript
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 ```
 
 ### Related Patterns
+
 - See [R-INTEGRATION - Research Findings](RESEARCH-INVENTORY.md#r-integration) for additional examples
 
 ## Acceptance Criteria
@@ -160,4 +169,3 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 - [ ] All tests passing
 - [ ] Documentation updated
 - [ ] Build passes
-
