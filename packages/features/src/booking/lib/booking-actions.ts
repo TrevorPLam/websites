@@ -274,7 +274,7 @@ export async function confirmBooking(
     }
 
     // Update booking status via repository
-    const updated = await bookingRepository.update(bookingId, { status: 'confirmed' });
+    const updated = await bookingRepository.update(bookingId, { status: 'confirmed' }, resolveTenantId());
 
     // Log confirmation for audit
     console.info('Booking confirmed:', {
