@@ -17,6 +17,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
     "paths": {
       "@repo/features": ["packages/features/src/index.ts"],
       "@repo/features/*": ["packages/features/src/*"],

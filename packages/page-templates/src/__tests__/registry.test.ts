@@ -274,7 +274,8 @@ describe('composePage config-driven sections (inf-1)', () => {
     const result = composePage({ sections: ['known-a', 'unknown-id', 'known-b'] }, siteConfig);
     expect(result).not.toBeNull();
     // Fragment has two Suspense children (known-a, known-b); unknown-id is skipped
-    const children = result?.props?.children;
+    const element = result as React.ReactElement<{ children?: React.ReactNode }>;
+    const children = element?.props?.children;
     expect(Array.isArray(children)).toBe(true);
     expect((children as React.ReactNode[]).length).toBe(2);
   });

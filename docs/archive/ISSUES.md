@@ -16,6 +16,7 @@ This file documents all issues discovered through exhaustive code and configurat
 **Status:** Fixed. Toast.tsx now uses `React.ReactElement` for `custom()` callback and `promise(promise, { ...messages, ...options })` (2 args) matching Sonner v2 API.
 
 **Previous Error:** When `@repo/features` (or `@repo/marketing-components`) builds, it type-checks `@repo/ui`. Two errors:
+
 - `toast.custom(jsx, options)` — Sonner expects `(id) => ReactElement` but we passed `(id) => ReactNode`
 - `sonnerToast.promise(promise, messages, options)` — Expected 1–2 arguments, got 3
 
@@ -47,7 +48,7 @@ This file documents all issues discovered through exhaustive code and configurat
 **Implementation:** These functions ignore verification:
 
 - `confirmBooking(bookingId: string)` — no verification params
-- `cancelBooking(bookingId: string)` — no verification params  
+- `cancelBooking(bookingId: string)` — no verification params
 - `getBookingDetails(bookingId, config)` — no verification params
 
 Tests call e.g. `confirmBooking(bookingId, { confirmationNumber: 'WRONG', email: '...' })`; second arg is ignored.
@@ -130,6 +131,7 @@ Tests call e.g. `confirmBooking(bookingId, { confirmationNumber: 'WRONG', email:
 **Status:** Fixed. Type-check now passes.
 
 **Previous Errors:**
+
 - Unused imports/params (TS6133)
 - `ServiceAccordion` missing `items` prop (TS2741)
 - Toast type issues (resolved with #1)
@@ -242,18 +244,23 @@ Tests call e.g. `confirmBooking(bookingId, { confirmationNumber: 'WRONG', email:
 
 ---
 
-## Summary by CI pipeline step (Updated 2026-02-19)
+## Summary by CI pipeline step (Updated 2026-02-20)
 
-| Step              | Status | Notes                                                |
-|-------------------|--------|-----------------------------------------------------|
-| validate:workspaces | PASS   | Fixed — added to CI pipeline                       |
-| validate-exports  | PASS   | —                                                   |
-| syncpack:check   | PASS   | —                                                   |
-| madge:circular    | PASS   | —                                                   |
-| lint             | PASS   | Fixed — all packages have eslint.config.mjs        |
-| type-check       | PASS   | Fixed — Toast, marketing-components, infrastructure-ui all pass |
-| build            | PASS   | Fixed — Toast type errors resolved                  |
-| test             | PASS   | Fixed — booking-actions verification implemented    |
+| Step                | Status | Notes                                                         |
+| ------------------- | ------ | ------------------------------------------------------------- |
+| validate:workspaces | PASS   | Fixed — added to CI pipeline                                  |
+| validate-exports    | PASS   | —                                                             |
+| syncpack:check      | PASS   | —                                                             |
+| madge:circular      | PASS   | —                                                             |
+| lint                | PASS   | Fixed — all packages have eslint.config.mjs                   |
+| type-check          | PASS   | Fixed — tsconfig.base.json baseUrl (TS5090), registry.test.ts |
+| build               | varies | Toast fixed; Turbopack may fail with parallel client builds   |
+| test                | PASS   | Fixed — booking-actions verification implemented              |
+
+**2026-02-20 preventative fixes:**
+
+- **tsconfig.base.json**: Added `baseUrl: "."` — TypeScript requires this when `paths` is set; fixes @repo/utils TS5090
+- **registry.test.ts**: Fixed TS2339 — assert `React.ReactElement<{ children?: React.ReactNode }>` before accessing `props.children`
 
 **Remaining issues:** See HIGH/MEDIUM/LOW sections below for non-blocking items.
 
