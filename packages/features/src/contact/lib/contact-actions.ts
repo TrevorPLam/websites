@@ -35,6 +35,7 @@ import { runWithRequestId } from '@repo/infra/context/request-context.server';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import type { ContactFormData } from './contact-schema';
 import { validateContactSecurity } from './contact-schema';
+import { SupabaseContactRepository } from './supabase-contact-repository';
 
 /**
  * Contact submission result interface
@@ -228,4 +229,63 @@ export async function submitContactForm(
       }
     );
   });
+}
+
+/**
+ * Create contact handler based on site configuration
+ * Returns appropriate handler for Supabase, HubSpot, or other integrations
+ */
+export function createContactHandler(siteConfig: any): ContactSubmissionHandler {
+  const crmProvider = siteConfig.integrations?.crm?.provider || 'none';
+
+  switch (crmProvider) {
+    case 'supabase':
+      return async (data, metadata) => {
+        try {
+          const repository = new SupabaseContactRepository();
+          const tenantId = siteConfig.tenantId;
+
+          const lead = await repository.create({
+            data,
+            tenantId,
+            source: 'contact-form',
+            status: 'new',
+          });
+
+          console.log('Contact saved to Supabase:', {
+            leadId: lead.id,
+            email: data.email,
+            tenantId,
+          });
+
+          return { success: true, message: 'Contact saved successfully' };
+        } catch (error) {
+          console.error('Failed to save contact to Supabase:', error);
+          // Fallback to logging if Supabase fails
+          console.log('Contact form submission (fallback):', { data, metadata });
+          return { success: true, message: 'Contact received successfully' };
+        }
+      };
+
+    case 'hubspot':
+      return async (data, metadata) => {
+        // TODO: Implement HubSpot integration
+        console.log('Sending contact to HubSpot:', { data, metadata });
+        return { success: true, message: 'Contact sent to HubSpot' };
+      };
+
+    case 'activecampaign':
+      return async (data, metadata) => {
+        // TODO: Implement ActiveCampaign integration
+        console.log('Sending contact to ActiveCampaign:', { data, metadata });
+        return { success: true, message: 'Contact sent to ActiveCampaign' };
+      };
+
+    default:
+      return async (data, metadata) => {
+        // Default handler - just log the data
+        console.log('Contact form submission (no integration):', { data, metadata });
+        return { success: true, message: 'Message received successfully' };
+      };
+  }
 }

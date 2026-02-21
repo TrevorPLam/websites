@@ -54,7 +54,7 @@ import { checkRateLimit, hashIp } from '@repo/infra';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import { validateEnv } from '@repo/infra/env';
 import type { BookingFeatureConfig } from './booking-config';
-import { InMemoryBookingRepository } from './booking-repository';
+import { InMemoryBookingRepository, type BookingRepository } from './booking-repository';
 import { resolveTenantId } from '@repo/infra/auth/tenant-context';
 
 // validateEnv() with default options returns CompleteEnv directly (throwOnError=true)
@@ -88,6 +88,25 @@ const getBookingDetailsSchema = z.object({
 // [FEAT:BOOKING] [FEAT:PERSISTENCE]
 // NOTE: Repository instance - replaces internalBookings Map with typed abstraction (task 0-2).
 const bookingRepository = new InMemoryBookingRepository();
+
+/**
+ * Get booking repository based on environment configuration
+ * Returns SupabaseBookingRepository if env vars are present, otherwise InMemoryBookingRepository
+ */
+export function getBookingRepository(): BookingRepository {
+  const validatedEnv = validateEnv();
+
+  // Check if Supabase environment variables are available
+  const env = validatedEnv as any;
+  if (env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY) {
+    // TODO: Import and return SupabaseBookingRepository when implemented
+    // For now, still return InMemoryBookingRepository
+    console.log('Supabase environment detected, but SupabaseBookingRepository not yet implemented');
+    return bookingRepository;
+  }
+
+  return bookingRepository;
+}
 
 /**
  * Booking submission result interface

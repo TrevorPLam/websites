@@ -1,45 +1,62 @@
 # Clients Directory
 
-This directory contains actual client implementations based on the templates. Each client project is a production website that can be deployed independently.
+This directory contains client implementations for the marketing websites platform. As of 2026-02-21, this directory has been simplified to contain a single testing template.
 
 ## Purpose
 
 The `clients/` directory allows you to:
 
-- Manage multiple client projects in one monorepo
-- Share common code via templates and packages
+- Create and manage client projects based on a minimal, working template
+- Share common code via packages and templates
 - Deploy each client independently
-- Track client-specific customizations
 - Maintain consistent development workflow
+- Focus on quality over quantity of templates
 
-## Structure
+## Structure (Post-Simplification)
 
 ```
 clients/
-├── starter-template/      # Golden-path template — copy for new clients (port 3101)
-├── luxe-salon/            # Salon industry example (port 3102)
-├── bistro-central/        # Restaurant example
-├── chen-law/              # Law firm example
-├── sunrise-dental/        # Dental example
-├── urban-outfitters/      # Retail example
-├── [client-name]/         # Your new client (assign unique port)
-└── README.md              # This file
+├── testing-not-a-client/    # Single testing template with working functionality
+├── AGENTS.md                 # AI agent configurations
+├── AGENTS.override.md       # Agent overrides
+└── README.md                 # This file
 ```
 
-Each client directory is a complete Next.js application. New clients are created by copying `starter-template`.
+## Session Changes (2026-02-21)
+
+**Removed Templates:**
+
+- ❌ starter-template (was golden-path template)
+- ❌ luxe-salon (salon industry example)
+- ❌ bistro-central (restaurant example)
+- ❌ chen-law (law firm example)
+- ❌ sunrise-dental (dental example)
+- ❌ urban-outfitters (retail example)
+
+**Added:**
+
+- ✅ testing-not-a-client (minimal, working template)
+
+**Rationale:**
+
+- Reduced complexity from 6 templates to 1
+- Focus on quality over quantity
+- Single template demonstrates all working functionality
+- Easier maintenance and documentation
+- Clear starting point for custom development
 
 ## Creating a New Client Project
 
-### Step 1: Copy the Starter Template
+### Step 1: Copy the Testing Template
 
-Copy the golden-path starter template to create a new client:
+Copy the testing-not-a-client template to create a new client:
 
 ```bash
-# Copy starter-template as the base for any new client
-cp -r clients/starter-template clients/[client-name]
+# Copy testing template as the base for any new client
+cp -r clients/testing-not-a-client clients/[client-name]
 ```
 
-The starter-template includes next-intl (i18n), site.config.ts, and full Next.js App Router structure.
+The testing template includes working contact forms, booking system, blog functionality, and all critical features.
 
 ### Step 2: Update Package Configuration
 

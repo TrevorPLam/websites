@@ -8,13 +8,18 @@ import { ContactForm, createContactConfig } from '@repo/features';
 import { registerSection } from '../../registry';
 import type { SectionProps } from '../../types';
 import { getSiteConfig } from './shared';
+import { createContactHandler } from '@repo/features/contact';
 
 function ContactFormAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   const contactConfig = createContactConfig({
     successMessage: `Thank you for contacting ${config.name}! We'll be in touch soon.`,
   });
-  return <ContactForm config={contactConfig} />;
+
+  // Create handler based on site configuration
+  const contactHandler = createContactHandler(config);
+
+  return <ContactForm config={contactConfig} onSubmit={contactHandler} />;
 }
 
 registerSection('contact-form', ContactFormAdapter);

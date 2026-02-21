@@ -1,0 +1,105 @@
+// Task: [5.1] THE ONLY FILE A CLIENT CHANGES
+import type { SiteConfig } from '@repo/types';
+
+const siteConfig: SiteConfig = {
+  id: 'testing-not-a-client',
+  name: 'Testing Template',
+  tagline: 'Clean template for testing',
+  description: 'Minimal template with working functionality',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3101',
+  industry: 'general',
+  features: {
+    hero: 'split',
+    services: 'grid',
+    team: 'grid',
+    testimonials: 'carousel',
+    pricing: 'cards',
+    contact: 'simple',
+    gallery: 'grid',
+    blog: true,
+    booking: true,
+    faq: false,
+  },
+  integrations: {
+    analytics: { provider: 'none' },
+    crm: { provider: 'supabase' },
+    booking: { provider: 'internal' },
+    email: { provider: 'none' },
+    chat: { provider: 'none' },
+  },
+  navLinks: [
+    { href: '/services', label: 'Services' },
+    { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/blog', label: 'Blog' },
+    { href: '/book', label: 'Book' },
+  ],
+  socialLinks: [],
+  footer: {
+    columns: [{ heading: 'Links', links: [{ href: '/about', label: 'About' }] }],
+    legalLinks: [],
+    copyrightTemplate: '© {year} Testing Template',
+  },
+  theme: {
+    colors: {
+      primary: '174 85% 33%',
+      'primary-foreground': '0 0% 100%',
+      secondary: '220 20% 14%',
+      'secondary-foreground': '0 0% 100%',
+      accent: '174 85% 93%',
+      'accent-foreground': '174 85% 20%',
+      background: '220 14% 96%',
+      foreground: '220 20% 8%',
+      muted: '220 14% 92%',
+      'muted-foreground': '220 10% 40%',
+      card: '0 0% 100%',
+      'card-foreground': '220 20% 8%',
+      destructive: '0 72% 38%',
+      'destructive-foreground': '0 0% 100%',
+      border: '220 14% 88%',
+      input: '220 14% 88%',
+      ring: '174 85% 33%',
+    },
+    fonts: { heading: 'Inter, system-ui, sans-serif', body: 'Inter, system-ui, sans-serif' },
+    borderRadius: 'medium',
+    shadows: 'medium',
+  },
+  contact: {
+    email: 'hello@example.com',
+    phone: '',
+    address: {
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
+      country: '',
+    },
+  },
+  conversionFlow: {
+    type: 'booking',
+    serviceCategories: ['General'],
+    timeSlots: [
+      { value: '09:00', label: '9:00 AM', available: true },
+      { value: '10:00', label: '10:00 AM', available: true },
+      { value: '11:00', label: '11:00 AM', available: true },
+      { value: '14:00', label: '2:00 PM', available: true },
+      { value: '15:00', label: '3:00 PM', available: true },
+      { value: '16:00', label: '4:00 PM', available: true },
+    ],
+    maxAdvanceDays: 30,
+  },
+  seo: {
+    titleTemplate: '%s | Testing Template',
+    defaultDescription: 'Minimal template with working functionality',
+  },
+  consent: {
+    cmpProvider: 'custom',
+    categories: {
+      analytics: false,
+      marketing: false,
+      functional: true,
+    },
+  },
+};
+
+export default siteConfig;

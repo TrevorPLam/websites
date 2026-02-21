@@ -79,6 +79,9 @@ export interface BookingRepository {
   ): Promise<BookingRecord>;
 }
 
+export { InMemoryBookingRepository };
+export type { BookingRecord, BookingRepository };
+
 // ─── In-memory implementation (default) ──────────────────────────────────────
 
 /**
