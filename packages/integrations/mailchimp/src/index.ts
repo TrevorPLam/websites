@@ -8,28 +8,34 @@ import { fetchWithRetry } from '../../email/utils';
 export class MailchimpAdapter implements EmailAdapter {
   id = 'mailchimp';
 
-  constructor(private apiKey: string, private server: string) {}
+  constructor(
+    private apiKey: string,
+    private server: string
+  ) {}
 
   async subscribe(subscriber: EmailSubscriber, listId?: string) {
     if (!listId) return { success: false, error: 'List ID required' };
 
     try {
-      const response = await fetchWithRetry(`https://${this.server}.api.mailchimp.com/3.0/lists/${listId}/members`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `apikey ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email_address: subscriber.email,
-          status: 'subscribed',
-          merge_fields: {
-            FNAME: subscriber.firstName,
-            LNAME: subscriber.lastName,
+      const response = await fetchWithRetry(
+        `https://${this.server}.api.mailchimp.com/3.0/lists/${listId}/members`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `apikey ${this.apiKey}`,
+            'Content-Type': 'application/json',
           },
-          tags: subscriber.tags,
-        }),
-      });
+          body: JSON.stringify({
+            email_address: subscriber.email,
+            status: 'subscribed',
+            merge_fields: {
+              FNAME: subscriber.firstName,
+              LNAME: subscriber.lastName,
+            },
+            tags: subscriber.tags,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const error = await response.json();
@@ -46,14 +52,17 @@ export class MailchimpAdapter implements EmailAdapter {
     if (!listId) return { success: false, error: 'List ID required' };
 
     try {
-      const response = await fetchWithRetry(`https://${this.server}.api.mailchimp.com/3.0/lists/${listId}/members/${email}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `apikey ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: 'unsubscribed' }),
-      });
+      const response = await fetchWithRetry(
+        `https://${this.server}.api.mailchimp.com/3.0/lists/${listId}/members/${email}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `apikey ${this.apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status: 'unsubscribed' }),
+        }
+      );
 
       return { success: response.ok };
     } catch (e) {
@@ -61,19 +70,22 @@ export class MailchimpAdapter implements EmailAdapter {
     }
   }
 
-  async sendEvent(email: string, eventName: string, data?: Record<string, any>) {
+  async sendEvent(email: string, eventName: string, data?: Record<string, unknown>) {
     try {
-      const response = await fetchWithRetry(`https://${this.server}.api.mailchimp.com/3.0/lists/members/${email}/events`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `apikey ${this.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: eventName,
-          properties: data,
-        }),
-      });
+      const response = await fetchWithRetry(
+        `https://${this.server}.api.mailchimp.com/3.0/lists/members/${email}/events`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `apikey ${this.apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: eventName,
+            properties: data,
+          }),
+        }
+      );
 
       return { success: response.ok };
     } catch (e) {

@@ -81,22 +81,23 @@ function mergeProps(
  *   return <Comp {...props}>{children}</Comp>;
  * }
  */
-export const Slot = React.forwardRef<HTMLElement, SlotProps>(
-  function Slot({ children, ...slotProps }, ref) {
-    if (!React.isValidElement(children)) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.warn('[Slot] Expected a single valid React element as child.');
-      }
-      return null;
+export const Slot = React.forwardRef<HTMLElement, SlotProps>(function Slot(
+  { children, ...slotProps },
+  ref
+) {
+  if (!React.isValidElement(children)) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[Slot] Expected a single valid React element as child.');
     }
-
-    const child = children as React.ReactElement<Record<string, unknown>>;
-    const childProps = child.props as Record<string, unknown>;
-    const merged = mergeProps(slotProps as Record<string, unknown>, childProps);
-
-    return React.cloneElement(child, { ...merged, ref });
+    return null;
   }
-);
+
+  const child = children as React.ReactElement<Record<string, unknown>>;
+  const childProps = child.props as Record<string, unknown>;
+  const merged = mergeProps(slotProps as Record<string, unknown>, childProps);
+
+  return React.cloneElement(child, { ...merged, ref });
+});
 Slot.displayName = 'Slot';
 
 /**
@@ -106,7 +107,7 @@ Slot.displayName = 'Slot';
  * const ButtonSlot = createSlot<HTMLButtonElement>();
  * // <ButtonSlot onClick={...}>…</ButtonSlot>
  */
-export function createSlot<_T extends HTMLElement = HTMLElement>() {
+export function createSlot() {
   return Slot;
 }
 

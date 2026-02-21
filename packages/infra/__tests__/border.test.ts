@@ -5,15 +5,13 @@
 
 import {
   RADIUS_SCALE,
-  RADIUS_INTENSITY_MAP,
   getRadius,
   radiusIntensityToKey,
   getRadiusClass,
+  getRadiusCssVars,
   BORDER_WIDTH_SCALE,
   getBorderWidth,
   getBorderWidthClass,
-  getRadiusCssVars,
-  getBorderCssVars,
   radiusVar,
   borderShorthand,
   getAllBorderCssVars,
@@ -106,9 +104,9 @@ describe('getRadiusCssVars', () => {
   });
 });
 
-describe('getBorderCssVars', () => {
+describe('getAllBorderCssVars', () => {
   it('generates CSS variables for border widths', () => {
-    const vars = getBorderCssVars();
+    const vars = getAllBorderCssVars();
     expect(vars['--border-width-default']).toBe('1px');
     expect(vars['--border-width-2']).toBe('2px');
   });

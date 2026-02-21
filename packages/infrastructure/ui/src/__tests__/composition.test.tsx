@@ -6,30 +6,10 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import {
-  Slot,
-  SlotProvider,
-  useSlot,
-  useSlots,
-  hasSlot,
-} from '../composition/slots';
-import {
-  callRenderProp,
-  callRenderPropVoid,
-  mergeRenderProps,
-} from '../composition/render-props';
-import {
-  withDefaults,
-  withInjectedProps,
-  withCondition,
-  composeHOCs,
-  getDisplayName,
-} from '../composition/hocs';
-import {
-  createStrictContext,
-  createOptionalContext,
-  createContextWithDefault,
-} from '../composition/context';
+import { Slot, SlotProvider, useSlot, useSlots, hasSlot } from '../composition/slots';
+import { callRenderProp, callRenderPropVoid, mergeRenderProps } from '../composition/render-props';
+import { withDefaults, withCondition, composeHOCs, getDisplayName } from '../composition/hocs';
+import { createStrictContext, createContextWithDefault } from '../composition/context';
 import { composeProviders, ProviderStack, createProvider } from '../composition/provider';
 
 // ─── Slot tests ───────────────────────────────────────────────────────────────
@@ -60,8 +40,12 @@ describe('SlotProvider + useSlot', () => {
   it('distributes Slot children into named slots', () => {
     render(
       <Host>
-        <Slot name="header"><span>My Header</span></Slot>
-        <Slot name="body"><span>My Body</span></Slot>
+        <Slot name="header">
+          <span>My Header</span>
+        </Slot>
+        <Slot name="body">
+          <span>My Body</span>
+        </Slot>
       </Host>
     );
     expect(screen.getByTestId('header-slot').textContent).toBe('My Header');
@@ -69,7 +53,13 @@ describe('SlotProvider + useSlot', () => {
   });
 
   it('renders fallback when slot is not provided', () => {
-    render(<Host><Slot name="header"><span>H</span></Slot></Host>);
+    render(
+      <Host>
+        <Slot name="header">
+          <span>H</span>
+        </Slot>
+      </Host>
+    );
     expect(screen.getByTestId('missing-slot').textContent).toBe('no-missing');
   });
 
@@ -80,7 +70,9 @@ describe('SlotProvider + useSlot', () => {
     }
     render(
       <SlotProvider>
-        <Slot name="header"><span>H</span></Slot>
+        <Slot name="header">
+          <span>H</span>
+        </Slot>
         <Inspector />
       </SlotProvider>
     );
@@ -110,7 +102,13 @@ describe('callRenderProp', () => {
 
 describe('callRenderPropVoid', () => {
   it('calls a no-arg render function', () => {
-    const { container } = render(<>{callRenderPropVoid(() => <span>hi</span>)}</>);
+    const { container } = render(
+      <>
+        {callRenderPropVoid(() => (
+          <span>hi</span>
+        ))}
+      </>
+    );
     expect(container.textContent).toBe('hi');
   });
 });
@@ -132,7 +130,10 @@ describe('mergeRenderProps', () => {
 // ─── HOC tests ────────────────────────────────────────────────────────────────
 
 describe('withDefaults', () => {
-  interface BtnProps { variant?: string; label?: string }
+  interface BtnProps {
+    variant?: string;
+    label?: string;
+  }
   function Btn({ variant = 'default', label = '' }: BtnProps) {
     return <button data-variant={variant}>{label}</button>;
   }
@@ -170,17 +171,25 @@ describe('withCondition', () => {
 
 describe('composeHOCs', () => {
   it('applies HOCs left-to-right (outermost first)', () => {
-    interface P { value?: string }
-    function Base({ value }: P) { return <span>{value}</span>; }
+    interface P {
+      value?: string;
+    }
+    function Base({ value }: P) {
+      return <span>{value}</span>;
+    }
 
     // A (outer) appends '-A' to value prop before passing down
     const A = (C: React.ComponentType<P>) => {
-      function WithA(p: P) { return <C value={(p.value ?? '') + '-A'} />; }
+      function WithA(p: P) {
+        return <C value={(p.value ?? '') + '-A'} />;
+      }
       return WithA;
     };
     // B (inner) appends 'B' to value prop before passing down
     const B = (C: React.ComponentType<P>) => {
-      function WithB(p: P) { return <C value={(p.value ?? '') + 'B'} />; }
+      function WithB(p: P) {
+        return <C value={(p.value ?? '') + 'B'} />;
+      }
       return WithB;
     };
 
@@ -192,10 +201,16 @@ describe('composeHOCs', () => {
   });
 
   it('single HOC in compose works as direct application', () => {
-    interface P { value?: string }
-    function Base({ value }: P) { return <span>{value ?? 'none'}</span>; }
+    interface P {
+      value?: string;
+    }
+    function Base({ value }: P) {
+      return <span>{value ?? 'none'}</span>;
+    }
     const WithX = (C: React.ComponentType<P>) => {
-      function X(p: P) { return <C value="X" {...p} />; }
+      function X(p: P) {
+        return <C value="X" {...p} />;
+      }
       return X;
     };
     const Composed = composeHOCs(WithX)(Base);
@@ -206,13 +221,17 @@ describe('composeHOCs', () => {
 
 describe('getDisplayName', () => {
   it('returns displayName when set', () => {
-    function MyComp() { return null; }
+    function MyComp() {
+      return null;
+    }
     MyComp.displayName = 'CustomName';
     expect(getDisplayName(MyComp)).toBe('CustomName');
   });
 
   it('returns function name as fallback', () => {
-    function AnotherComp() { return null; }
+    function AnotherComp() {
+      return null;
+    }
     expect(getDisplayName(AnotherComp)).toBe('AnotherComp');
   });
 });
@@ -226,13 +245,20 @@ describe('createStrictContext', () => {
       const { name } = useCtx();
       return <span>{name}</span>;
     }
-    render(<Ctx.Provider value={{ name: 'hello' }}><Consumer /></Ctx.Provider>);
+    render(
+      <Ctx.Provider value={{ name: 'hello' }}>
+        <Consumer />
+      </Ctx.Provider>
+    );
     expect(screen.getByText('hello')).toBeTruthy();
   });
 
   it('throws when used outside provider', () => {
     const [, useCtx] = createStrictContext<{ name: string }>('BrokenCtx');
-    function Consumer() { useCtx(); return null; }
+    function Consumer() {
+      useCtx();
+      return null;
+    }
     expect(() => render(<Consumer />)).toThrow('BrokenCtx');
   });
 });
@@ -266,9 +292,17 @@ describe('composeProviders', () => {
     function Consumer() {
       const a = React.useContext(CtxA);
       const b = React.useContext(CtxB);
-      return <span>{a}-{b}</span>;
+      return (
+        <span>
+          {a}-{b}
+        </span>
+      );
     }
-    render(<Composed><Consumer /></Composed>);
+    render(
+      <Composed>
+        <Consumer />
+      </Composed>
+    );
     expect(screen.getByText('a-provided-b-provided')).toBeTruthy();
   });
 });
@@ -297,8 +331,14 @@ describe('createProvider', () => {
   it('creates a typed provider from a context', () => {
     const Ctx = React.createContext('initial');
     const TypedProvider = createProvider(Ctx);
-    function Consumer() { return <span>{React.useContext(Ctx)}</span>; }
-    render(<TypedProvider value="typed-value"><Consumer /></TypedProvider>);
+    function Consumer() {
+      return <span>{React.useContext(Ctx)}</span>;
+    }
+    render(
+      <TypedProvider value="typed-value">
+        <Consumer />
+      </TypedProvider>
+    );
     expect(screen.getByText('typed-value')).toBeTruthy();
   });
 });

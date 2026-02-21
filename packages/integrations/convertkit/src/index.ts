@@ -14,18 +14,21 @@ export class ConvertKitAdapter implements EmailAdapter {
     if (!formId) return { success: false, error: 'Form ID required' };
 
     try {
-      const response = await fetchWithRetry(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          api_key: this.apiKey,
-          email: subscriber.email,
-          first_name: subscriber.firstName,
-          tags: subscriber.tags?.join(','),
-        }),
-      });
+      const response = await fetchWithRetry(
+        `https://api.convertkit.com/v3/forms/${formId}/subscribe`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            api_key: this.apiKey,
+            email: subscriber.email,
+            first_name: subscriber.firstName,
+            tags: subscriber.tags?.join(','),
+          }),
+        }
+      );
 
       return { success: response.ok };
     } catch (e) {
@@ -33,12 +36,12 @@ export class ConvertKitAdapter implements EmailAdapter {
     }
   }
 
-  async unsubscribe(email: string, _listId?: string) {
+  async unsubscribe() {
     // ConvertKit unsubscribe requires the subscriber ID which we don't have.
     return { success: false, error: 'Unsubscribe not fully implemented for ConvertKit' };
   }
 
-  async sendEvent(email: string, eventName: string, data?: Record<string, any>) {
+  async sendEvent() {
     return { success: false, error: 'Event sending not implemented for ConvertKit' };
   }
 }

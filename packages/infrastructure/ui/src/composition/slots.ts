@@ -50,7 +50,7 @@ export interface SlotProps {
  *   <Slot name="body"><p>Content here</p></Slot>
  * </Card>
  */
-export function Slot({ name: _name, children }: SlotProps): React.ReactElement | null {
+export function Slot({ children }: SlotProps): React.ReactElement | null {
   // Slot itself renders its children; SlotProvider intercepts them.
   // When rendered outside a SlotProvider, Slot just passes through.
   return React.createElement(React.Fragment, null, children);

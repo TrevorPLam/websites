@@ -5,7 +5,6 @@
 
 import {
   SHADOW_SCALE,
-  SHADOW_INTENSITY_MAP,
   getShadow,
   shadowIntensityToKey,
   getShadowClass,

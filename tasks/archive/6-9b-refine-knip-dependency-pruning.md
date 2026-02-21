@@ -67,7 +67,7 @@ Refine knip.config.ts for dead code detection; run dependency pruning. Remove un
 
 ## Definition of Done
 
-- [ ] Code reviewed and approved
-- [ ] Knip config refined
-- [ ] Dead deps removed where safe
-- [ ] Build passes
+- [x] Code reviewed and approved
+- [x] Knip config refined
+- [x] Dead deps removed where safe
+- [x] Build passes

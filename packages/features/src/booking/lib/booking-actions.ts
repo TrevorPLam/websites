@@ -40,6 +40,14 @@ import {
   createServiceLabels,
   type BookingFormData,
 } from './booking-schema';
+import { secureAction } from '@repo/infra';
+import type { Result } from '@repo/infra';
+import { z } from 'zod';
+import {
+  getBookingForTenant,
+  updateBookingStatus,
+  getBookingByConfirmationForTenant,
+} from '@repo/database';
 import { getBookingProviders } from './booking-providers';
 import type { BookingProviderResponse } from './booking-provider-adapter';
 import { checkRateLimit, hashIp } from '@repo/infra';
@@ -52,6 +60,24 @@ import { resolveTenantId } from '@repo/infra/auth/tenant-context';
 // validateEnv() with default options returns CompleteEnv directly (throwOnError=true)
 const validatedEnv = validateEnv() as { NODE_ENV: 'development' | 'production' | 'test' };
 const nodeEnv = validatedEnv.NODE_ENV ?? 'development';
+
+const confirmBookingSchema = z.object({
+  bookingId: z.string().min(1),
+  confirmationNumber: z.string().min(1),
+  email: z.string().email(),
+});
+
+const cancelBookingSchema = z.object({
+  bookingId: z.string().min(1),
+  confirmationNumber: z.string().min(1),
+  email: z.string().email(),
+});
+
+const getBookingDetailsSchema = z.object({
+  bookingId: z.string().min(1),
+  confirmationNumber: z.string().min(1),
+  email: z.string().email(),
+});
 
 /**
  * Module-level BookingRepository instance.
@@ -252,59 +278,44 @@ export async function submitBookingRequest(
 // [TRACE:FUNC=packages.features.booking.confirmBooking]
 // [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
 // NOTE: Booking confirmation - retrieves via repository, verifies, then updates status.
-export async function confirmBooking(
-  bookingId: string,
-  verification: BookingVerification
-): Promise<BookingSubmissionResult> {
-  try {
-    const booking = await bookingRepository.getById(bookingId, resolveTenantId());
+export async function confirmBooking(input: unknown): Promise<Result<BookingSubmissionResult>> {
+  return secureAction(
+    input,
+    confirmBookingSchema,
+    async (ctx, { bookingId, confirmationNumber, email }) => {
+      const booking = await getBookingForTenant(
+        { bookingId, tenantId: ctx.tenantId },
+        bookingRepository
+      );
 
-    if (!booking) {
-      return { success: false, error: 'Booking not found' };
-    }
+      if (!booking) {
+        return { success: false, error: 'Booking not found' };
+      }
 
-    if (
-      booking.confirmationNumber !== verification.confirmationNumber ||
-      booking.data.email !== verification.email
-    ) {
-      return { success: false, error: 'Booking not found' };
-    }
+      if (booking.confirmationNumber !== confirmationNumber || booking.data.email !== email) {
+        return { success: false, error: 'Booking not found' };
+      }
 
-    if (booking.status !== 'pending') {
-      return { success: false, error: 'Booking already processed' };
-    }
+      if (booking.status !== 'pending') {
+        return { success: false, error: 'Booking already processed' };
+      }
 
-    // Update booking status via repository
-    const updated = await bookingRepository.update(
-      bookingId,
-      { status: 'confirmed' },
-      resolveTenantId()
-    );
+      const updated = await updateBookingStatus(
+        { bookingId, tenantId: ctx.tenantId, status: 'confirmed' },
+        bookingRepository
+      );
 
-    // Log confirmation for audit
-    console.info('Booking confirmed:', {
-      bookingId,
-      confirmationNumber: updated.confirmationNumber,
-      timestamp: new Date().toISOString(),
-    });
+      revalidatePath('/booking-confirmation');
+      revalidatePath('/book');
 
-    // Revalidate pages
-    revalidatePath('/booking-confirmation');
-    revalidatePath('/book');
-
-    return {
-      success: true,
-      bookingId,
-      confirmationNumber: updated.confirmationNumber,
-    };
-  } catch (error: unknown) {
-    console.error('Booking confirmation error:', {
-      error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString(),
-    });
-
-    return { success: false, error: 'Failed to confirm booking' };
-  }
+      return {
+        success: true,
+        bookingId,
+        confirmationNumber: updated.confirmationNumber,
+      };
+    },
+    { actionName: 'confirmBooking' }
+  );
 }
 
 /**
@@ -314,55 +325,44 @@ export async function confirmBooking(
 // [TRACE:FUNC=packages.features.booking.cancelBooking]
 // [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
 // NOTE: Booking cancellation - retrieves via repository, verifies, then updates status.
-export async function cancelBooking(
-  bookingId: string,
-  verification: BookingVerification
-): Promise<BookingSubmissionResult> {
-  try {
-    const booking = await bookingRepository.getById(bookingId);
+export async function cancelBooking(input: unknown): Promise<Result<BookingSubmissionResult>> {
+  return secureAction(
+    input,
+    cancelBookingSchema,
+    async (ctx, { bookingId, confirmationNumber, email }) => {
+      const booking = await getBookingForTenant(
+        { bookingId, tenantId: ctx.tenantId },
+        bookingRepository
+      );
 
-    if (!booking) {
-      return { success: false, error: 'Booking not found' };
-    }
+      if (!booking) {
+        return { success: false, error: 'Booking not found' };
+      }
 
-    if (
-      booking.confirmationNumber !== verification.confirmationNumber ||
-      booking.data.email !== verification.email
-    ) {
-      return { success: false, error: 'Booking not found' };
-    }
+      if (booking.confirmationNumber !== confirmationNumber || booking.data.email !== email) {
+        return { success: false, error: 'Booking not found' };
+      }
 
-    if (booking.status === 'cancelled') {
-      return { success: false, error: 'Booking already cancelled' };
-    }
+      if (booking.status === 'cancelled') {
+        return { success: false, error: 'Booking already cancelled' };
+      }
 
-    // Update booking status via repository
-    const updated = await bookingRepository.update(bookingId, { status: 'cancelled' });
+      const updated = await updateBookingStatus(
+        { bookingId, tenantId: ctx.tenantId, status: 'cancelled' },
+        bookingRepository
+      );
 
-    // Log cancellation for audit
-    console.info('Booking cancelled:', {
-      bookingId,
-      confirmationNumber: updated.confirmationNumber,
-      timestamp: new Date().toISOString(),
-    });
+      revalidatePath('/booking-confirmation');
+      revalidatePath('/book');
 
-    // Revalidate pages
-    revalidatePath('/booking-confirmation');
-    revalidatePath('/book');
-
-    return {
-      success: true,
-      bookingId,
-      confirmationNumber: updated.confirmationNumber,
-    };
-  } catch (error: unknown) {
-    console.error('Booking cancellation error:', {
-      error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString(),
-    });
-
-    return { success: false, error: 'Failed to cancel booking' };
-  }
+      return {
+        success: true,
+        bookingId,
+        confirmationNumber: updated.confirmationNumber,
+      };
+    },
+    { actionName: 'cancelBooking' }
+  );
 }
 
 /**
@@ -373,20 +373,41 @@ export async function cancelBooking(
 // [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
 // NOTE: Booking retrieval - fetches via repository, verifies, returns enriched details.
 export async function getBookingDetails(
-  bookingId: string,
-  config: BookingFeatureConfig,
-  verification: BookingVerification
+  input: unknown,
+  config: BookingFeatureConfig
+): Promise<Result<ReturnType<typeof getBookingDetailsHandler>>> {
+  return secureAction(
+    input,
+    getBookingDetailsSchema,
+    async (ctx, { bookingId, confirmationNumber, email }) =>
+      getBookingDetailsHandler(
+        { bookingId, confirmationNumber, email, tenantId: ctx.tenantId },
+        config
+      ),
+    { actionName: 'getBookingDetails' }
+  );
+}
+
+async function getBookingDetailsHandler(
+  {
+    bookingId,
+    confirmationNumber,
+    email,
+    tenantId,
+  }: { bookingId: string; confirmationNumber: string; email: string; tenantId: string },
+  config: BookingFeatureConfig
 ) {
-  const booking = await bookingRepository.getById(bookingId);
+  const booking = await getBookingByConfirmationForTenant(
+    { confirmationNumber, email, tenantId },
+    bookingRepository
+  );
 
   if (!booking) {
     return null;
   }
 
-  if (
-    booking.confirmationNumber !== verification.confirmationNumber ||
-    booking.data.email !== verification.email
-  ) {
+  // Defensive: ensure requested bookingId matches resolved record to prevent enumeration
+  if (booking.id !== bookingId) {
     return null;
   }
 

@@ -107,6 +107,20 @@ jobs:
       - name: Syncpack
         run: pnpm syncpack:check
 
+      # [Task security-5] pnpm 10 supply chain security validation
+      - name: Validate pnpm security configuration
+        run: |
+          echo "🔒 Validating pnpm security configuration..."
+          # Validate workspace configuration
+          pnpm list --depth=0
+          # Check for security configuration in pnpm-workspace.yaml
+          if grep -q "allowBuilds:" pnpm-workspace.yaml && grep -q "blockExoticSubdeps: true" pnpm-workspace.yaml; then
+            echo "✅ pnpm security configuration is present"
+          else
+            echo "❌ pnpm security configuration missing"
+            exit 1
+          fi
+
       - name: Build
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then

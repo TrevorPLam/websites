@@ -192,7 +192,7 @@ export function createTenantScopedClient(
  * @param _headers - Ignored
  * @returns Always returns null
  */
-export function getTenantIdFromHeaders(_headers: Headers): string | null {
+export function getTenantIdFromHeaders(): string | null {
   if (process.env.NODE_ENV !== 'production') {
     console.warn(
       '[tenant-context] getTenantIdFromHeaders() is deprecated. ' +

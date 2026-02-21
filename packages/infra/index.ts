@@ -39,6 +39,7 @@ export * from './security/sanitize';
 
 // Rate Limit Module (Task 1.1.5 - COMPLETED)
 export * from './security/rate-limit';
+export * from './security/secure-action';
 
 // Request Validation Module (Task 1.1.6 - COMPLETED)
 export * from './security/request-validation';

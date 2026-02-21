@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "noEmit": true,
+    "paths": {
+      "@repo/features/booking": ["../features/src/booking/index.ts"],
+      "@repo/features": ["../features/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "build"]
+}

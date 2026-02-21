@@ -15,17 +15,19 @@ export class SendGridAdapter implements EmailAdapter {
       const response = await fetchWithRetry('https://api.sendgrid.com/v3/marketing/contacts', {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           list_ids: listId ? [listId] : [],
-          contacts: [{
-            email: subscriber.email,
-            first_name: subscriber.firstName,
-            last_name: subscriber.lastName,
-            custom_fields: subscriber.metadata,
-          }],
+          contacts: [
+            {
+              email: subscriber.email,
+              first_name: subscriber.firstName,
+              last_name: subscriber.lastName,
+              custom_fields: subscriber.metadata,
+            },
+          ],
         }),
       });
 
@@ -35,13 +37,13 @@ export class SendGridAdapter implements EmailAdapter {
     }
   }
 
-  async unsubscribe(email: string, _listId?: string) {
+  async unsubscribe() {
     // Note: SendGrid marketing contacts unsubscribe is typically done by updating the contact's status
     // or adding to a suppression group. For simplicity in this adapter:
     return { success: false, error: 'Unsubscribe not fully implemented for SendGrid' };
   }
 
-  async sendEvent(email: string, eventName: string, data?: Record<string, any>) {
+  async sendEvent() {
     // SendGrid doesn't have a direct "Events" API like Mailchimp for marketing contacts,
     // but you can use custom fields.
     return { success: false, error: 'Event sending not implemented for SendGrid' };

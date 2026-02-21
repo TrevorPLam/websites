@@ -10,6 +10,23 @@ packages:
   - clients/*
   - tooling/*
 
+# pnpm 10 supply chain security configuration
+# Prevents supply chain attacks via malicious build scripts and exotic protocols
+# See docs/architecture/security/supply-chain.md for full rationale and threat model
+allowBuilds:
+  # esbuild — JavaScript bundler used by Next.js and toolchain
+  esbuild: true
+  # sharp — native image processing; postinstall downloads prebuilt libvips bindings
+  sharp: true
+  # unrs-resolver — Rust-based module resolver used by ESLint / Rollup toolchain
+  unrs-resolver: true
+  # @sentry/cli — Sentry CLI binary download for source map uploads
+  '@sentry/cli': true
+
+# Block exotic protocols in transitive dependencies (git+ssh, tarball URLs, etc.)
+# Prevents dependency confusion and typosquatting attacks
+blockExoticSubdeps: true
+
 # pnpm 10 supply chain security — only these packages may execute build scripts
 # (install / postinstall / preinstall) during `pnpm install`. Any new dependency
 # requiring a build script must be added here with justification reviewed in PR.

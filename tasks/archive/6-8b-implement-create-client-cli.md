@@ -29,7 +29,7 @@ Implement `pnpm create-client <name> --industry=X` in tooling/create-client. Cur
 ## Research
 
 - **Primary topics**: [R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding).
-- **[2026-02] create-*-app UX**: Commander or similar; `create-client <name> --industry=X`; copy starter-template, set package name and site.config; run validate-client.
+- **[2026-02] create-\*-app UX**: Commander or similar; `create-client <name> --industry=X`; copy starter-template, set package name and site.config; run validate-client.
 - **References**: [RESEARCH-INVENTORY.md – R-CLI](RESEARCH-INVENTORY.md#r-cli-cli-tooling-generators-scaffolding), [THEGOAL.md](../THEGOAL.md).
 
 ## Related Files
@@ -48,7 +48,7 @@ Implement `pnpm create-client <name> --industry=X` in tooling/create-client. Cur
 ## Technical Constraints
 
 - Use commander or similar for CLI
-- Follow create-*-style UX (e.g. create-next-app)
+- Follow create-\*-style UX (e.g. create-next-app)
 
 ## Implementation Plan
 
