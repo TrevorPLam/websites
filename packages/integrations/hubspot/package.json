@@ -13,7 +13,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/infra": "workspace:*"
+    "@repo/infra": "workspace:*",
+    "@repo/integrations-shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

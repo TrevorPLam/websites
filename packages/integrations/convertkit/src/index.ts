@@ -1,15 +1,22 @@
 /**
  * @file packages/integrations/convertkit/src/index.ts
- * Task: [4.1] ConvertKit email marketing adapter
+ * Task: [4.1] ConvertKit email marketing adapter with circuit breaker
  *
  * Security Updates (2026-02-21):
  * - Fixed API key exposure vulnerability (moved from request body to X-Kit-Api-Key header)
  * - Updated to ConvertKit v4 API with proper authentication
  * - Implemented secure two-step subscription process
  * - Added request/response logging without exposing secrets
+ *
+ * Resilience Updates (2026-02-21):
+ * - Implemented circuit breaker pattern for fault tolerance
+ * - Added exponential backoff retry logic with jitter
+ * - Configured timeout and monitoring for API calls
+ * - Added fallback mechanisms for service outages
  */
 import type { EmailAdapter, EmailSubscriber } from '../../email/contract';
-import { fetchWithRetry } from '../../email/utils';
+import { createHttpClient, createApiKeyAuth } from '../shared';
+import type { IntegrationConfig, ApiKeyAuth } from '../shared';
 
 // Secure logging utility that redacts sensitive information
 const secureLog = (message: string, data?: any) => {
@@ -27,17 +34,77 @@ const secureLog = (message: string, data?: any) => {
 
 export class ConvertKitAdapter implements EmailAdapter {
   id = 'convertkit';
+  private httpClient: ReturnType<typeof createHttpClient>;
+  private config: IntegrationConfig;
 
-  constructor(private apiKey: string) {
+  constructor(apiKey: string) {
     if (!apiKey) {
       throw new Error('ConvertKit API key is required');
     }
     secureLog('Adapter initialized with API key', { apiKey: this.apiKey });
+
+    // Initialize HTTP client with circuit breaker and retry logic
+    this.config = this.createConfig(apiKey);
+    this.httpClient = createHttpClient({
+      baseURL: 'https://api.kit.com/v4',
+      timeout: 10000,
+      retry: {
+        maxAttempts: 3,
+        baseDelay: 1000,
+        maxDelay: 10000,
+        backoffFactor: 2,
+        jitterEnabled: true,
+      },
+      circuitBreaker: {
+        failureThreshold: 5,
+        resetTimeout: 30000,
+        monitoringEnabled: true,
+      },
+      defaultHeaders: {
+        'Content-Type': 'application/json',
+        'X-Kit-Api-Key': apiKey, // Secure header authentication (2026 best practice)
+      },
+    });
+  }
+
+  /**
+   * Create integration configuration following 2026 security standards
+   */
+  private createConfig(apiKey: string): IntegrationConfig {
+    const authConfig: ApiKeyAuth = {
+      type: 'api_key',
+      key: apiKey,
+      headerName: 'X-Kit-Api-Key',
+    };
+
+    return {
+      timeout: 10000,
+      retry: {
+        maxAttempts: 3,
+        baseDelay: 1000,
+        maxDelay: 10000,
+        backoffFactor: 2,
+        jitterEnabled: true,
+      },
+      circuitBreaker: {
+        failureThreshold: 5,
+        resetTimeout: 30000,
+        monitoringEnabled: true,
+      },
+      auth: authConfig,
+      monitoring: {
+        enabled: true,
+        alertThresholds: {
+          errorRate: 0.1, // 10%
+          responseTime: 5000, // 5 seconds
+        },
+      },
+    };
   }
 
   /**
    * Creates a subscriber in ConvertKit v4 API
-   * Uses secure X-Kit-Api-Key header authentication
+   * Uses circuit breaker and retry logic for resilience
    */
   private async createSubscriber(subscriber: EmailSubscriber): Promise<{ id: string } | null> {
     try {
@@ -46,28 +113,27 @@ export class ConvertKitAdapter implements EmailAdapter {
         firstName: subscriber.firstName,
       });
 
-      const response = await fetchWithRetry('https://api.kit.com/v4/subscribers', {
+      const result = await this.httpClient.request<{ id: string }>({
+        url: '/subscribers',
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Kit-Api-Key': this.apiKey, // Secure header authentication (2026 best practice)
-        },
-        body: JSON.stringify({
+        body: {
           email_address: subscriber.email,
           first_name: subscriber.firstName,
           state: 'inactive', // Create as inactive first, then add to form
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const error = await response.text();
-        secureLog('Failed to create subscriber', { status: response.status, error });
+      if (!result.success) {
+        secureLog('Failed to create subscriber', {
+          error: result.error,
+          code: result.code,
+          retryable: result.retryable,
+        });
         return null;
       }
 
-      const data = await response.json();
-      secureLog('Subscriber created successfully', { subscriberId: data.id });
-      return data;
+      secureLog('Subscriber created successfully', { subscriberId: result.data.id });
+      return result.data;
     } catch (error) {
       secureLog('Error creating subscriber', { error: String(error) });
       return null;
@@ -76,25 +142,26 @@ export class ConvertKitAdapter implements EmailAdapter {
 
   /**
    * Adds subscriber to a form in ConvertKit v4 API
-   * This triggers the confirmation email
+   * Uses circuit breaker and retry logic for resilience
    */
   private async addSubscriberToForm(email: string, formId: string): Promise<boolean> {
     try {
       secureLog('Adding subscriber to form', { email, formId });
 
-      const response = await fetchWithRetry(`https://api.kit.com/v4/forms/${formId}/subscribers`, {
+      const result = await this.httpClient.request<unknown>({
+        url: `/forms/${formId}/subscribers`,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Kit-Api-Key': this.apiKey, // Secure header authentication
-        },
-        body: JSON.stringify({
+        body: {
           email_address: email,
-        }),
+        },
       });
 
-      const success = response.ok;
-      secureLog('Form subscription result', { success, status: response.status });
+      const success = result.success;
+      secureLog('Form subscription result', {
+        success,
+        status: result.data ? 'success' : 'failed',
+        error: result.success ? undefined : result.error,
+      });
       return success;
     } catch (error) {
       secureLog('Error adding subscriber to form', { error: String(error) });
@@ -129,6 +196,56 @@ export class ConvertKitAdapter implements EmailAdapter {
     } catch (error) {
       secureLog('Subscription failed', { error: String(error) });
       return { success: false, error: String(error) };
+    }
+  }
+
+  /**
+   * Get circuit breaker state for monitoring
+   */
+  getCircuitBreakerState(): 'closed' | 'open' | 'half-open' {
+    return this.httpClient.getCircuitBreakerState();
+  }
+
+  /**
+   * Get integration metrics for monitoring
+   */
+  getMetrics() {
+    return {
+      success: true,
+      data: this.httpClient.getMetrics(),
+    };
+  }
+
+  /**
+   * Health check for the integration
+   */
+  async healthCheck() {
+    try {
+      const result = await this.httpClient.request<{ status: string }>({
+        url: '/account',
+        method: 'GET',
+        timeout: 5000, // Shorter timeout for health checks
+        retries: { maxAttempts: 1 }, // No retries for health checks
+      });
+
+      if (result.success) {
+        return {
+          success: true,
+          data: { status: 'healthy' },
+        };
+      } else {
+        return {
+          success: false,
+          error: result.error,
+          code: result.code,
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : String(error),
+        code: 'HEALTH_CHECK_FAILED',
+      };
     }
   }
 

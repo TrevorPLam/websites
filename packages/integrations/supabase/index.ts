@@ -1,15 +1,20 @@
 /**
  * @file packages/integrations/supabase/index.ts
  * Purpose: Supabase integration barrel — client, insertLead/updateLead, leads helpers, types.
+ * SECURITY (2026-02-21): Separated client/server configurations. Client uses anon key with RLS.
  * Relationship: Depends on @repo/infra, @repo/utils. Consumed by template lib/actions/supabase.
- * System role: createSupabaseClient, insertLead, updateLead, getSupabaseClient; leads module for legacy compat.
- * Assumptions: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY required for client; server-only usage.
+ * System role: createSupabaseClient, insertLead, updateLead, getSupabaseClient; server functions for admin.
+ * Assumptions: NEXT_PUBLIC_SUPABASE_URL/ANON_KEY for client; SUPABASE_URL/SERVICE_ROLE_KEY for server.
  */
-// Client exports
-// [Task 0.24] Added getSupabaseClient; supabaseClient kept for backward compat (deprecated)
+// Client exports (secure - uses anon key with RLS)
 export { insertLead, updateLead, getSupabaseClient, supabaseClient } from './client';
-// [Task 0.24] SupabaseClientConfig now re-exported from types.ts (removed duplicate from client.ts)
-export type { SupabaseClientConfig } from './types';
+export { createSupabaseClient } from './client';
+
+// Server exports (admin only - uses service role key)
+export { createSupabaseServerClient, getSupabaseServerClient, insertLeadServer } from './client';
+
+// Type exports
+export type { SupabaseClientConfig, SupabaseServerConfig } from './types';
 
 // Lead management exports (backward compatibility — deprecated, use client.ts insertLead/updateLead)
 // Audit complete: no callers found. Kept for external/legacy consumers. Prefer createSupabaseClient + insertLead/updateLead.
@@ -22,7 +27,7 @@ export {
   createSupabaseUpdateError,
 } from './leads';
 
-// Type exports
+// Additional type exports
 export type {
   SupabaseLeadRow,
   SupabaseLeadInsert,

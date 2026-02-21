@@ -1,0 +1,68 @@
+{
+  "name": "@repo/integrations-shared",
+  "version": "1.0.0",
+  "description": "Shared utilities and patterns for integration packages following 2026 best practices",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./types": {
+      "types": "./dist/src/types/adapter.d.ts",
+      "import": "./dist/src/types/adapter.js"
+    },
+    "./auth": {
+      "types": "./dist/src/auth/auth-manager.d.ts",
+      "import": "./dist/src/auth/auth-manager.js"
+    },
+    "./utils": {
+      "types": "./dist/src/utils/logger.d.ts",
+      "import": "./dist/src/utils/logger.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/infra": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "eslint": "^9.0.0",
+    "jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "integrations",
+    "oauth",
+    "circuit-breaker",
+    "retry",
+    "logging",
+    "monitoring",
+    "2026-standards"
+  ],
+  "author": "Marketing Websites Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TrevorPLam/websites.git",
+    "directory": "packages/integrations/shared"
+  },
+  "bugs": {
+    "url": "https://github.com/TrevorPLam/websites/issues"
+  },
+  "homepage": "https://github.com/TrevorPLam/websites/tree/main/packages/integrations/shared#readme"
+}

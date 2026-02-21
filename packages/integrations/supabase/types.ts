@@ -5,7 +5,7 @@
  */
 /**
  * Complete Supabase lead record structure.
- * Represents a lead stored in the Supabase database.
+ * Represents a lead stored in the Supabase database with tenant isolation.
  */
 export interface SupabaseLeadRow {
   /** Primary key - UUID string */
@@ -13,6 +13,9 @@ export interface SupabaseLeadRow {
 
   /** Creation timestamp - ISO string */
   created_at?: string;
+
+  /** Tenant ID for multi-tenant isolation - UUID string (REQUIRED) */
+  tenant_id: string;
 
   /** Contact name - string */
   name?: string;
@@ -49,14 +52,29 @@ export interface SupabaseLeadRow {
 }
 
 /**
- * Supabase client configuration interface.
- * Used for type-safe client initialization.
+ * Client-side Supabase configuration interface.
+ * Uses anon key with Row-Level Security (RLS) protection.
  */
 export interface SupabaseClientConfig {
   /** Supabase project URL */
   url: string;
 
-  /** Supabase service role key */
+  /** Supabase anonymous key for client-side usage */
+  anonKey: string;
+
+  /** HTTP headers for API requests */
+  headers: Record<string, string>;
+}
+
+/**
+ * Server-side Supabase configuration interface.
+ * Uses service role key for administrative operations only.
+ */
+export interface SupabaseServerConfig {
+  /** Supabase project URL */
+  url: string;
+
+  /** Supabase service role key for server-side admin operations */
   serviceRoleKey: string;
 
   /** HTTP headers for API requests */
@@ -65,9 +83,12 @@ export interface SupabaseClientConfig {
 
 /**
  * Lead insertion payload interface.
- * Data required for creating a new lead.
+ * Data required for creating a new lead with tenant isolation.
  */
 export interface SupabaseLeadInsert {
+  /** Tenant ID for multi-tenant isolation - UUID string (REQUIRED) */
+  tenant_id: string;
+
   /** Contact name - required */
   name: string;
 
