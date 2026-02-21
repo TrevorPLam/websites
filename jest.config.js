@@ -83,6 +83,8 @@ const sharedConfig = {
     '^@repo/utils$': '<rootDir>/packages/utils/src/index.ts',
     '^@repo/infra$': '<rootDir>/packages/infra/index.ts',
     '^@repo/infra/client$': '<rootDir>/packages/infra/index.client.ts',
+    // src/ subpath packages (tenant-context lives in src/auth/ per package.json exports)
+    '^@repo/infra/auth/(.*)$': '<rootDir>/packages/infra/src/auth/$1',
     '^@repo/infra/(.*)$': '<rootDir>/packages/infra/$1',
     '^@repo/types$': '<rootDir>/packages/types/src/index.ts',
     '^@repo/types/(.*)$': '<rootDir>/packages/types/src/$1',
@@ -124,6 +126,7 @@ module.exports = {
         '<rootDir>/packages/industry-schemas/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/tooling/validation/src/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/packages/infrastructure/theme/src/__tests__/**/*.test.{ts,tsx}',
+        '<rootDir>/packages/page-templates/src/**/__tests__/**/*.test.{ts,tsx}',
         '<rootDir>/scripts/__tests__/**/*.test.{ts,tsx}',
       ],
       collectCoverageFrom: [
@@ -133,6 +136,7 @@ module.exports = {
         'packages/features/**/lib/**/*.{ts,tsx}',
         'packages/integrations/**/*.{ts,tsx}',
         'packages/industry-schemas/src/**/*.{ts,tsx}',
+        'packages/page-templates/src/**/*.{ts,tsx}',
         'tooling/validation/src/**/*.{ts,tsx}',
         '!**/*.d.ts',
         '!**/index.ts',

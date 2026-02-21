@@ -80,11 +80,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
       );
     };
 
-    const monthNames = [
-      const monthNames = Array.from({ length: 12 }, (_, index) =>
-        new Date(2000, index, 1).toLocaleString(locale || undefined, { month: 'long' })
-      );
-    ];
+    const monthNames = Array.from({ length: 12 }, (_, index) =>
+      new Date(2000, index, 1).toLocaleString(locale || undefined, { month: 'long' })
+    );
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     return (
