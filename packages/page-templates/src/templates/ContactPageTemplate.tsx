@@ -17,7 +17,10 @@ export function ContactPageTemplate({
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
-  const content = composePage({ page: 'contact', searchParams }, config);
+  const content = composePage(
+    { page: 'contact', sections: config.pageSections?.contact, searchParams },
+    config
+  );
 
   return (
     <>

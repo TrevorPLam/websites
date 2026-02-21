@@ -251,3 +251,31 @@ describe('composePage with validateConfig', () => {
     expect(result).toBeNull();
   });
 });
+
+// ─── composePage — config-driven sections (inf-1) ───────────────────────────────
+
+describe('composePage config-driven sections (inf-1)', () => {
+  beforeEach(() => {
+    sectionRegistry.clear();
+  });
+
+  it('uses config.sections when provided instead of getSectionsForPage', () => {
+    registerSection('custom-hero', NoopSection);
+    registerSection('cta', NoopSection);
+    const siteConfig = makeSiteConfig();
+    const result = composePage({ sections: ['custom-hero', 'cta'] }, siteConfig);
+    expect(result).not.toBeNull();
+  });
+
+  it('skips unknown section IDs and renders only registered ones', () => {
+    registerSection('known-a', NoopSection);
+    registerSection('known-b', NoopSection);
+    const siteConfig = makeSiteConfig();
+    const result = composePage({ sections: ['known-a', 'unknown-id', 'known-b'] }, siteConfig);
+    expect(result).not.toBeNull();
+    // Fragment has two Suspense children (known-a, known-b); unknown-id is skipped
+    const children = result?.props?.children;
+    expect(Array.isArray(children)).toBe(true);
+    expect((children as React.ReactNode[]).length).toBe(2);
+  });
+});

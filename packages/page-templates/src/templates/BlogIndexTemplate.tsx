@@ -18,7 +18,14 @@ export function BlogIndexTemplate({
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
-  const content = composePage({ page: 'blog', searchParams }, config);
+  const content = composePage(
+    {
+      page: 'blog-index',
+      sections: config.pageSections?.['blog-index'] ?? config.pageSections?.blog,
+      searchParams,
+    },
+    config
+  );
 
   return (
     <>

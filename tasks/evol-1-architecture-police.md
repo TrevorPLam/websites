@@ -39,11 +39,11 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 
 ## Acceptance Criteria
 
-- [ ] Error: no imports from `@repo/*/src/**` (use package exports only)
-- [ ] Error: no imports from `@repo/clients-*` or cross-client
-- [ ] Warn: HubSpotContact (and similar) in features packages → "Use @repo/types canonical types. See ADR-012"
-- [ ] Uses ESLint 9 flat config (not .eslintrc)
-- [ ] `pnpm lint` passes with new rules
+- [x] Error: no imports from `@repo/*/src/**` (use package exports only)
+- [x] Error: no imports from `@repo/clients-*` or cross-client
+- [x] Warn: HubSpotContact (and similar) in features packages → "Use @repo/types canonical types. See ADR-012"
+- [x] Uses ESLint 9 flat config (not .eslintrc)
+- [ ] `pnpm lint` passes with new rules — _blocked by pre-existing @repo/ui (and other) errors; architecture rules are active_
 
 ## Technical Constraints
 
@@ -53,12 +53,12 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 
 ## Implementation Plan
 
-- [ ] Create architecture rules (flat config)
-- [ ] Wire into root or eslint-config package
-- [ ] Add no-restricted-imports for deep paths and cross-client
-- [ ] Add warn for integration types in features
-- [ ] Document in ROADMAP (if needed)
-- [ ] Run `pnpm lint` to verify
+- [x] Create architecture rules (flat config)
+- [x] Wire into root or eslint-config package
+- [x] Add no-restricted-imports for deep paths and cross-client
+- [x] Add warn for integration types in features
+- [x] Document in ROADMAP (if needed)
+- [x] Run `pnpm lint` to verify (infra + integrations-core errors fixed; full workspace still has @repo/ui errors)
 
 ## Sample code / examples
 

@@ -35,7 +35,7 @@ export const boundaryRules = {
       patterns: [
         // Rule 1: No deep internal imports — always use public package API
         {
-          group: ['@repo/*/src', '@repo/*/src/*'],
+          group: ['@repo/*/src', '@repo/*/src/*', '@repo/*/src/**'],
           message:
             'Use package public API (e.g. @repo/ui, @repo/utils) instead of deep /src/ imports. See docs/architecture/module-boundaries.md.',
         },

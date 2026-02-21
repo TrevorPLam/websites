@@ -18,7 +18,10 @@ export function BlogPostTemplate({
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
-  const content = composePage({ page: 'blog-post', searchParams }, config);
+  const content = composePage(
+    { page: 'blog-post', sections: config.pageSections?.['blog-post'], searchParams },
+    config
+  );
 
   return (
     <>

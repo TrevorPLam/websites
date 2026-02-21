@@ -19,7 +19,10 @@ export function ServicesPageTemplate({
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
-  const content = composePage({ page: 'services', searchParams }, config);
+  const content = composePage(
+    { page: 'services', sections: config.pageSections?.services, searchParams },
+    config
+  );
 
   return (
     <>

@@ -48,11 +48,11 @@ From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCE
 
 ## Acceptance Criteria
 
-- [ ] site.config can define custom sections array (e.g. sections: ['hero-custom', 'cta'])
-- [ ] getSectionsForPage uses config.sections when provided
-- [ ] Unknown section IDs fall back gracefully (skip or placeholder)
-- [ ] composePage resolves config-defined sections
-- [ ] No breaking change to existing section flow
+- [x] site.config can define custom sections array (e.g. pageSections: { home: ['hero-custom', 'cta'] })
+- [x] getSectionsForPage uses config.sections when provided (composePage prefers config.sections; templates pass config.pageSections)
+- [x] Unknown section IDs fall back gracefully (skip or placeholder)
+- [x] composePage resolves config-defined sections
+- [x] No breaking change to existing section flow
 
 ## Technical Constraints
 
@@ -61,10 +61,10 @@ From [docs/analysis/ADVANCED-CODE-PATTERNS-ANALYSIS.md](../docs/analysis/ADVANCE
 
 ## Implementation Plan
 
-- [ ] Add optional sections to SiteConfig (or page-level config)
-- [ ] Update composePage to prefer config sections
-- [ ] Document config-driven sections
-- [ ] Add tests
+- [x] Add optional sections to SiteConfig (or page-level config) — pageSections on SiteConfig
+- [x] Update composePage to prefer config sections (already did; templates now pass config.pageSections)
+- [x] Document config-driven sections (inline in types + registry)
+- [x] Add tests (registry.test.ts: composePage config-driven sections)
 
 ## Sample code / examples
 

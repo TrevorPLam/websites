@@ -314,6 +314,12 @@ export interface SiteConfig {
       functional?: boolean; // Always true, but can be explicit
     };
   };
+  /**
+   * Optional per-page section IDs (inf-1). When provided for a page key (e.g. 'home', 'services'),
+   * overrides the default section list from getSectionsForPage. Enables config-driven section order
+   * and custom section IDs. Unknown IDs are skipped at render with a dev console.warn.
+   */
+  pageSections?: Partial<Record<string, string[]>>;
 }
 
 // ---------------------- Zod Schemas ----------------------
@@ -558,4 +564,6 @@ export const siteConfigSchema = z.object({
         .optional(),
     })
     .optional(),
+  /** Optional per-page section IDs (inf-1). Keys: page identifiers (e.g. home, services). */
+  pageSections: z.record(z.string(), z.array(z.string())).optional(),
 });

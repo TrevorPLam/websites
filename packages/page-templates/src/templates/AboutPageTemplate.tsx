@@ -17,7 +17,10 @@ export function AboutPageTemplate({
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
-  const content = composePage({ page: 'about', searchParams }, config);
+  const content = composePage(
+    { page: 'about', sections: config.pageSections?.about, searchParams },
+    config
+  );
 
   return (
     <>

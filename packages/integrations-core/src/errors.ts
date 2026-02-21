@@ -28,8 +28,11 @@ export class IntegrationError extends Error {
   ) {
     super(message);
     this.name = 'IntegrationError';
-    if ((Error as any).captureStackTrace) {
-      (Error as any).captureStackTrace(this, IntegrationError);
+    const Err = Error as typeof Error & {
+      captureStackTrace?(target: object, ctor: typeof IntegrationError): void;
+    };
+    if (typeof Err.captureStackTrace === 'function') {
+      Err.captureStackTrace(this, IntegrationError);
     }
   }
 

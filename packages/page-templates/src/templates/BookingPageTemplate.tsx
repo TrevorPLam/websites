@@ -18,7 +18,10 @@ export function BookingPageTemplate({
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
-  const content = composePage({ page: 'booking', searchParams }, config);
+  const content = composePage(
+    { page: 'booking', sections: config.pageSections?.booking, searchParams },
+    config
+  );
 
   return (
     <>

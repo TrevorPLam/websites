@@ -15,7 +15,7 @@ import { composePage } from '../registry';
 import '../sections/home/index'; // side-effect: register home sections
 
 export function HomePageTemplate({ config, slots }: PageTemplateProps): React.ReactElement {
-  const content = composePage({ page: 'home' }, config);
+  const content = composePage({ page: 'home', sections: config.pageSections?.home }, config);
 
   return (
     <>
