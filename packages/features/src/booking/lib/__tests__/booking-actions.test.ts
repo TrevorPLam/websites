@@ -22,30 +22,44 @@ jest.mock('next/headers', () => ({
 }));
 
 jest.mock('@repo/infra', () => ({
-  secureAction: jest.fn((input, schema, handler, options) => {
-    // Mock implementation for secureAction
-    // Options used for audit logging in real implementation
-    // Return proper Result<T, ActionError> format
-    try {
-      const result = handler(
-        {
+  /**
+   * secureAction mock: validates via schema then calls handler with (ctx, validatedInput).
+   * The function signatures in booking-actions expect { bookingId, confirmationNumber, email }
+   * as the input object, so we pass the raw input directly through schema.safeParse-style.
+   */
+  secureAction: jest.fn(
+    async (
+      input,
+      _schema,
+      handler,
+      _options
+    ): Promise<{ success: boolean; data?: unknown; error?: unknown }> => {
+      try {
+        // Parse and validate input using the provided zod schema
+        const parsed = _schema.safeParse(input);
+        if (!parsed.success) {
+          return {
+            success: false,
+            error: { code: 'VALIDATION_ERROR', message: parsed.error.message },
+          };
+        }
+        const ctx = {
           tenantId: 'test-tenant',
           userId: 'test-user',
           roles: [],
           correlationId: 'test-correlation',
-        },
-        input
-      );
-      return Promise.resolve({ success: true, data: result });
-    } catch (error: unknown) {
-      console.error('Mock secureAction error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      return Promise.resolve({
-        success: false,
-        error: { code: 'INTERNAL_ERROR', message: errorMessage },
-      });
+        };
+        const result = await handler(ctx, parsed.data);
+        return { success: true, data: result };
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        return {
+          success: false,
+          error: { code: 'INTERNAL_ERROR', message: errorMessage },
+        };
+      }
     }
-  }),
+  ),
   checkRateLimit: jest.fn().mockResolvedValue(true),
   hashIp: jest.fn((ip: string) => ip),
   getBookingForTenant: jest.fn().mockImplementation(({ bookingId }) => {
@@ -147,12 +161,19 @@ describe('confirmBooking', () => {
     expect(submit.success).toBe(true);
     const bookingId = submit.bookingId!;
 
-    const result = await confirmBooking(bookingId, {
+    // Pass a single input object with wrong confirmationNumber
+    const result = await confirmBooking({
+      bookingId,
       confirmationNumber: 'WRONG-CONFIRM',
       email: 'jane@example.com',
     });
-    expect(result.success).toBe(false);
-    expect(result.error).toBe('Booking not found');
+    expect(result.success).toBe(true); // secureAction wraps; unwrap data
+    expect(
+      (result as { success: true; data: { success: boolean; error?: string } }).data.success
+    ).toBe(false);
+    expect(
+      (result as { success: true; data: { success: boolean; error?: string } }).data.error
+    ).toBe('Booking not found');
   });
 
   it('requires verification and rejects without matching email', async () => {
@@ -162,12 +183,18 @@ describe('confirmBooking', () => {
     const bookingId = submit.bookingId!;
     const confirmationNumber = submit.confirmationNumber!;
 
-    const result = await confirmBooking(bookingId, {
+    const result = await confirmBooking({
+      bookingId,
       confirmationNumber,
       email: 'wrong@example.com',
     });
-    expect(result.success).toBe(false);
-    expect(result.error).toBe('Booking not found');
+    expect(result.success).toBe(true);
+    expect(
+      (result as { success: true; data: { success: boolean; error?: string } }).data.success
+    ).toBe(false);
+    expect(
+      (result as { success: true; data: { success: boolean; error?: string } }).data.error
+    ).toBe('Booking not found');
   });
 
   it('confirms when verification matches', async () => {
@@ -177,11 +204,13 @@ describe('confirmBooking', () => {
     const bookingId = submit.bookingId!;
     const confirmationNumber = submit.confirmationNumber!;
 
-    const result = await confirmBooking(bookingId, {
+    const result = await confirmBooking({
+      bookingId,
       confirmationNumber,
       email: 'verify@test.com',
     });
     expect(result.success).toBe(true);
+    expect((result as { success: true; data: { success: boolean } }).data.success).toBe(true);
   });
 });
 
@@ -192,12 +221,18 @@ describe('cancelBooking', () => {
     expect(submit.success).toBe(true);
     const bookingId = submit.bookingId!;
 
-    const result = await cancelBooking(bookingId, {
+    const result = await cancelBooking({
+      bookingId,
       confirmationNumber: 'WRONG',
       email: 'wrong@example.com',
     });
-    expect(result.success).toBe(false);
-    expect(result.error).toBe('Booking not found');
+    expect(result.success).toBe(true);
+    expect(
+      (result as { success: true; data: { success: boolean; error?: string } }).data.success
+    ).toBe(false);
+    expect(
+      (result as { success: true; data: { success: boolean; error?: string } }).data.error
+    ).toBe('Booking not found');
   });
 
   it('cancels when verification matches', async () => {
@@ -207,11 +242,13 @@ describe('cancelBooking', () => {
     const bookingId = submit.bookingId!;
     const confirmationNumber = submit.confirmationNumber!;
 
-    const result = await cancelBooking(bookingId, {
+    const result = await cancelBooking({
+      bookingId,
       confirmationNumber,
       email: 'cancel@test.com',
     });
     expect(result.success).toBe(true);
+    expect((result as { success: true; data: { success: boolean } }).data.success).toBe(true);
   });
 });
 
@@ -222,11 +259,14 @@ describe('getBookingDetails', () => {
     expect(submit.success).toBe(true);
     const bookingId = submit.bookingId!;
 
-    const result = await getBookingDetails(bookingId, testConfig, {
-      confirmationNumber: 'WRONG',
-      email: 'wrong@example.com',
-    });
-    expect(result).toBeNull();
+    // getBookingDetails(input, config) — input contains bookingId + verification
+    const result = await getBookingDetails(
+      { bookingId, confirmationNumber: 'WRONG', email: 'wrong@example.com' },
+      testConfig
+    );
+    // secureAction wraps; data will be null (no matching booking by confirmation)
+    expect(result.success).toBe(true);
+    expect((result as { success: true; data: unknown }).data).toBeNull();
   });
 
   it('returns booking when verification matches', async () => {
@@ -236,12 +276,15 @@ describe('getBookingDetails', () => {
     const bookingId = submit.bookingId!;
     const confirmationNumber = submit.confirmationNumber!;
 
-    const result = await getBookingDetails(bookingId, testConfig, {
-      confirmationNumber,
-      email: 'details@test.com',
-    });
-    expect(result).not.toBeNull();
-    expect(result?.id).toBe(bookingId);
-    expect(result?.confirmationNumber).toBe(confirmationNumber);
+    const result = await getBookingDetails(
+      { bookingId, confirmationNumber, email: 'details@test.com' },
+      testConfig
+    );
+    expect(result.success).toBe(true);
+    const data = (result as { success: true; data: { id: string; confirmationNumber: string } })
+      .data;
+    expect(data).not.toBeNull();
+    expect(data?.id).toBe(bookingId);
+    expect(data?.confirmationNumber).toBe(confirmationNumber);
   });
 });

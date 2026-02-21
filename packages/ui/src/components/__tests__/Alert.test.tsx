@@ -37,7 +37,7 @@ describe('Alert', () => {
   });
 
   it('applies variant classes', () => {
-    const { container } = render(<Alert _variant="destructive">Error</Alert>);
+    const { container } = render(<Alert variant="destructive">Error</Alert>);
     const alert = container.querySelector('[role="alert"]');
     expect(alert).toHaveClass('text-destructive');
   });

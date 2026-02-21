@@ -10,12 +10,15 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",
+    "vitest": "catalog:",
     "@repo/eslint-config": "workspace:*"
   }
 }

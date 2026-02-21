@@ -36,7 +36,14 @@ export interface AuditLogEntry {
   /** Authenticated user ID or 'anonymous'. */
   userId?: string;
   /** Outcome of the action. */
-  status: 'started' | 'success' | 'error' | 'validation_error' | 'unauthorized' | 'rate_limited';
+  status:
+    | 'started'
+    | 'success'
+    | 'error'
+    | 'validation_error'
+    | 'unauthorized'
+    | 'rate_limited'
+    | 'forbidden';
   /** Additional structured metadata (must not contain PII or secrets). */
   metadata?: Record<string, unknown>;
 }

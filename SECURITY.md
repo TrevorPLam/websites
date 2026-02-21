@@ -130,6 +130,18 @@ When working with this repository:
 - Follow secure coding practices
 - Enable all security features in your CI/CD pipeline
 
+### Environment Variable Security
+
+For detailed guidance on environment variable management and secret handling, see:
+**[Environment Variables & Secret Management Guide](docs/security/environment-management-guide.md)**
+
+Key principles:
+
+- Use `.env.example` as a template (committed to version control)
+- Keep `.env.local` private (never committed)
+- Never use placeholder values in environment files
+- Validate all environment variables at startup
+
 ## Security Monitoring
 
 This repository uses automated security monitoring:

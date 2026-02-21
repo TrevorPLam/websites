@@ -1,5 +1,5 @@
 {
-  "name": "testing-not-a-client",
+  "name": "@clients/testing-not-a-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {

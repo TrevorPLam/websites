@@ -7,9 +7,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../Tabs';
+import type { TabsVariant, TabsSize } from '../Tabs';
 
-const BasicTabs = ({ variant, size }: { variant?: string; size?: string }) => (
-  <Tabs defaultValue="tab1" variant={variant as any} size={size as any}>
+const BasicTabs = ({ variant, size }: { variant?: TabsVariant; size?: TabsSize }) => (
+  <Tabs defaultValue="tab1" variant={variant} size={size}>
     <TabsList>
       <TabsTrigger value="tab1">Tab 1</TabsTrigger>
       <TabsTrigger value="tab2">Tab 2</TabsTrigger>
@@ -44,39 +45,39 @@ describe('Tabs', () => {
   });
 
   it('applies underline variant classes to TabsList', () => {
-    const { container } = render(<BasicTabs _variant="underline" />);
+    const { container } = render(<BasicTabs variant="underline" />);
     const list = container.querySelector('[role="tablist"]');
     expect(list).toHaveClass('border-b');
   });
 
   it('applies pills variant classes to TabsList', () => {
-    const { container } = render(<BasicTabs _variant="pills" />);
+    const { container } = render(<BasicTabs variant="pills" />);
     const list = container.querySelector('[role="tablist"]');
     expect(list).toHaveClass('bg-transparent');
   });
 
   it('applies size sm class to TabsTrigger', () => {
-    const { container } = render(<BasicTabs _size="sm" />);
+    const { container } = render(<BasicTabs size="sm" />);
     const trigger = container.querySelector('[role="tab"]');
     expect(trigger).toHaveClass('h-7');
   });
 
   it('applies size xl class to TabsTrigger', () => {
-    const { container } = render(<BasicTabs _size="xl" />);
+    const { container } = render(<BasicTabs size="xl" />);
     const trigger = container.querySelector('[role="tab"]');
     expect(trigger).toHaveClass('h-11');
   });
 
   it('propagates variant via context to TabsTrigger', () => {
-    const { container } = render(<BasicTabs _variant="pills" />);
+    const { container } = render(<BasicTabs variant="pills" />);
     const trigger = container.querySelector('[role="tab"]');
     expect(trigger).toHaveClass('rounded-full');
   });
 
   it('allows TabsList to override variant from context', () => {
     const { container } = render(
-      <Tabs defaultValue="tab1" _variant="default">
-        <TabsList _variant="underline">
+      <Tabs defaultValue="tab1" variant="default">
+        <TabsList variant="underline">
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content</TabsContent>

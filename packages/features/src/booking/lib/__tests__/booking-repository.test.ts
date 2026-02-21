@@ -18,6 +18,10 @@ const makeData = (overrides: Partial<BookingFormData> = {}): BookingFormData => 
   ...overrides,
 });
 
+const makeTenantId = () => '550e8400-e29b-41d4-a716-446655440000'; // Valid UUID for testing
+const makeTenantIdA = () => '550e8400-e29b-41d4-a716-446655440001'; // Valid UUID for tenant A
+const makeTenantIdB = () => '550e8400-e29b-41d4-a716-446655440002'; // Valid UUID for tenant B
+
 describe('InMemoryBookingRepository', () => {
   let repo: InMemoryBookingRepository;
 
@@ -31,24 +35,36 @@ describe('InMemoryBookingRepository', () => {
         data: makeData(),
         status: 'pending',
         confirmationNumber: 'BK-001',
+        tenantId: makeTenantId(),
       });
       expect(record.id).toBeDefined();
       expect(record.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
       expect(record.timestamp).toBeInstanceOf(Date);
       expect(record.status).toBe('pending');
       expect(record.confirmationNumber).toBe('BK-001');
+      expect(record.tenantId).toBe(makeTenantId());
     });
 
     it('increments store size on each create', async () => {
-      await repo.create({ data: makeData(), status: 'pending', confirmationNumber: 'BK-001' });
-      await repo.create({ data: makeData(), status: 'pending', confirmationNumber: 'BK-002' });
+      await repo.create({
+        data: makeData(),
+        status: 'pending',
+        confirmationNumber: 'BK-001',
+        tenantId: makeTenantId(),
+      });
+      await repo.create({
+        data: makeData(),
+        status: 'pending',
+        confirmationNumber: 'BK-002',
+        tenantId: makeTenantId(),
+      });
       expect(repo.size).toBe(2);
     });
   });
 
   describe('getById', () => {
     it('returns null for unknown id', async () => {
-      expect(await repo.getById('unknown')).toBeNull();
+      expect(await repo.getById('unknown', makeTenantId())).toBeNull();
     });
 
     it('returns the record by id', async () => {
@@ -56,8 +72,9 @@ describe('InMemoryBookingRepository', () => {
         data: makeData(),
         status: 'pending',
         confirmationNumber: 'BK-A',
+        tenantId: makeTenantId(),
       });
-      const found = await repo.getById(created.id);
+      const found = await repo.getById(created.id, makeTenantId());
       expect(found).not.toBeNull();
       expect(found?.id).toBe(created.id);
     });
@@ -67,9 +84,9 @@ describe('InMemoryBookingRepository', () => {
         data: makeData(),
         status: 'pending',
         confirmationNumber: 'BK-T',
-        tenantId: 'tenant-a',
+        tenantId: makeTenantIdA(),
       });
-      expect(await repo.getById(record.id, 'tenant-b')).toBeNull();
+      expect(await repo.getById(record.id, makeTenantIdB())).toBeNull();
     });
 
     it('returns record when tenantId matches', async () => {
@@ -77,26 +94,18 @@ describe('InMemoryBookingRepository', () => {
         data: makeData(),
         status: 'pending',
         confirmationNumber: 'BK-T',
-        tenantId: 'tenant-a',
+        tenantId: makeTenantIdA(),
       });
-      const found = await repo.getById(record.id, 'tenant-a');
+      const found = await repo.getById(record.id, makeTenantIdA());
       expect(found).not.toBeNull();
-    });
-
-    it('returns record when tenantId is not specified (no scoping)', async () => {
-      const record = await repo.create({
-        data: makeData(),
-        status: 'pending',
-        confirmationNumber: 'BK-T',
-        tenantId: 'tenant-a',
-      });
-      expect(await repo.getById(record.id)).not.toBeNull();
     });
   });
 
   describe('getByConfirmation', () => {
     it('returns null for unknown confirmation number', async () => {
-      expect(await repo.getByConfirmation('UNKNOWN', 'jane@example.com')).toBeNull();
+      expect(
+        await repo.getByConfirmation('UNKNOWN', 'jane@example.com', makeTenantId())
+      ).toBeNull();
     });
 
     it('returns null for correct confirmation but wrong email', async () => {
@@ -104,8 +113,9 @@ describe('InMemoryBookingRepository', () => {
         data: makeData({ email: 'jane@example.com' }),
         status: 'pending',
         confirmationNumber: 'BK-C1',
+        tenantId: makeTenantId(),
       });
-      expect(await repo.getByConfirmation('BK-C1', 'wrong@example.com')).toBeNull();
+      expect(await repo.getByConfirmation('BK-C1', 'wrong@example.com', makeTenantId())).toBeNull();
     });
 
     it('returns the record when confirmation number and email match', async () => {
@@ -113,8 +123,9 @@ describe('InMemoryBookingRepository', () => {
         data: makeData({ email: 'jane@example.com' }),
         status: 'pending',
         confirmationNumber: 'BK-C1',
+        tenantId: makeTenantId(),
       });
-      const found = await repo.getByConfirmation('BK-C1', 'jane@example.com');
+      const found = await repo.getByConfirmation('BK-C1', 'jane@example.com', makeTenantId());
       expect(found).not.toBeNull();
       expect(found?.confirmationNumber).toBe('BK-C1');
     });
@@ -124,10 +135,12 @@ describe('InMemoryBookingRepository', () => {
         data: makeData({ email: 'jane@example.com' }),
         status: 'pending',
         confirmationNumber: 'BK-C2',
-        tenantId: 'tenant-a',
+        tenantId: makeTenantIdA(),
       });
-      expect(await repo.getByConfirmation('BK-C2', 'jane@example.com', 'tenant-b')).toBeNull();
-      expect(await repo.getByConfirmation('BK-C2', 'jane@example.com', 'tenant-a')).not.toBeNull();
+      expect(await repo.getByConfirmation('BK-C2', 'jane@example.com', makeTenantIdB())).toBeNull();
+      expect(
+        await repo.getByConfirmation('BK-C2', 'jane@example.com', makeTenantIdA())
+      ).not.toBeNull();
     });
   });
 
@@ -137,8 +150,9 @@ describe('InMemoryBookingRepository', () => {
         data: makeData(),
         status: 'pending',
         confirmationNumber: 'BK-U1',
+        tenantId: makeTenantId(),
       });
-      const updated = await repo.update(record.id, { status: 'confirmed' });
+      const updated = await repo.update(record.id, { status: 'confirmed' }, makeTenantId());
       expect(updated.status).toBe('confirmed');
     });
 
@@ -147,16 +161,17 @@ describe('InMemoryBookingRepository', () => {
         data: makeData({ email: 'test@test.com' }),
         status: 'pending',
         confirmationNumber: 'BK-U2',
+        tenantId: makeTenantId(),
       });
-      const updated = await repo.update(record.id, { status: 'confirmed' });
+      const updated = await repo.update(record.id, { status: 'confirmed' }, makeTenantId());
       expect(updated.data.email).toBe('test@test.com');
       expect(updated.confirmationNumber).toBe('BK-U2');
     });
 
     it('throws for unknown id', async () => {
-      await expect(repo.update('nonexistent', { status: 'confirmed' })).rejects.toThrow(
-        'Booking not found'
-      );
+      await expect(
+        repo.update('nonexistent', { status: 'confirmed' }, makeTenantId())
+      ).rejects.toThrow('Booking not found');
     });
 
     it('throws when tenantId does not match', async () => {
@@ -164,11 +179,11 @@ describe('InMemoryBookingRepository', () => {
         data: makeData(),
         status: 'pending',
         confirmationNumber: 'BK-U3',
-        tenantId: 'tenant-a',
+        tenantId: makeTenantIdA(),
       });
-      await expect(repo.update(record.id, { status: 'confirmed' }, 'tenant-b')).rejects.toThrow(
-        'Booking not found'
-      );
+      await expect(
+        repo.update(record.id, { status: 'confirmed' }, makeTenantIdB())
+      ).rejects.toThrow('Booking not found');
     });
   });
 });

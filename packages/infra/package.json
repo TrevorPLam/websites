@@ -8,6 +8,9 @@
   "exports": {
     ".": "./index.ts",
     "./client": "./index.client.ts",
+    "./auth/core": "./src/auth/core.ts",
+    "./auth/middleware": "./src/auth/middleware.ts",
+    "./auth/tenant-context": "./src/auth/tenant-context.ts",
     "./context/request-context": "./context/request-context.ts",
     "./context/request-context.server": "./context/request-context.server.ts",
     "./security/secure-action": "./security/secure-action.ts",
@@ -17,7 +20,6 @@
     "./security/rate-limit": "./security/rate-limit/index.ts",
     "./security/csp": "./security/csp.ts",
     "./security/security-headers": "./security/security-headers.ts",
-    "./auth/tenant-context": "./src/auth/tenant-context.ts",
     "./middleware/create-middleware": "./middleware/create-middleware.ts",
     "./sentry/sanitize": "./sentry/sanitize.ts",
     "./sentry/client": "./sentry/client.ts",
@@ -68,10 +70,10 @@
   },
   "peerDependencies": {
     "@sentry/nextjs": "^10.0.0",
-    "next": "^16.0.0",
-    "react": "^19.0.0",
     "@upstash/ratelimit": "^2.0.5",
-    "@upstash/redis": "^1.34.3"
+    "@upstash/redis": "^1.34.3",
+    "next": "^16.0.0",
+    "react": "^19.0.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -85,6 +87,7 @@
   "dependencies": {
     "@repo/utils": "workspace:*",
     "@supabase/supabase-js": "^2.39.0",
+    "jose": "^5.10.0",
     "server-only": "^0.0.1",
     "zod": "^3.23.0"
   }

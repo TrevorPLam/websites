@@ -134,6 +134,14 @@ jobs:
       - name: Test
         run: pnpm test:coverage
 
+      # [SECURITY] Automated vulnerability scanning - FAIL on high/critical vulnerabilities
+      # This implements 2026 security best practices for supply chain security
+      - name: Dependency vulnerability scan (Blocking)
+        run: |
+          echo "🔒 Running security vulnerability scan..."
+          pnpm audit --audit-level high
+          echo "✅ No high or critical vulnerabilities found"
+
       # Accessibility tests — ensures WCAG 2.2 AA compliance
       - name: Accessibility (a11y)
         run: pnpm test:a11y
@@ -190,12 +198,6 @@ jobs:
           name: sbom-spdx
           path: sbom.spdx.json
           retention-days: 90
-
-      # OWASP-aligned dependency vulnerability scan
-      - name: Dependency vulnerability scan
-        continue-on-error: true
-        run: |
-          pnpm audit --audit-level high || echo "⚠️ High or critical vulnerabilities detected"
 
       # License compliance audit (informative)
       - name: License audit

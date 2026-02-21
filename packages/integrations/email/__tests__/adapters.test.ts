@@ -70,15 +70,40 @@ describe('Email Marketing Adapters', () => {
     it('should subscribe successfully', async () => {
       (fetch as jest.Mock).mockResolvedValue({
         ok: true,
-        json: async () => ({}),
+        json: async () => ({ id: 'subscriber-123' }),
       });
 
       const result = await adapter.subscribe(subscriber, 'form1');
       expect(result.success).toBe(true);
-      expect(fetch).toHaveBeenCalledWith(
-        'https://api.convertkit.com/v3/forms/form1/subscribe',
-        expect.objectContaining({ method: 'POST' })
-      );
+
+      // Should make two API calls for v4 two-step process
+      expect(fetch).toHaveBeenCalledTimes(2);
+
+      // First call: Create subscriber
+      expect((fetch as jest.Mock).mock.calls[0]).toEqual([
+        'https://api.kit.com/v4/subscribers',
+        expect.objectContaining({
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Kit-Api-Key': 'key',
+          },
+          body: expect.stringContaining('"email_address":"test@example.com"'),
+        }),
+      ]);
+
+      // Second call: Add to form
+      expect((fetch as jest.Mock).mock.calls[1]).toEqual([
+        'https://api.kit.com/v4/forms/form1/subscribers',
+        expect.objectContaining({
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Kit-Api-Key': 'key',
+          },
+          body: expect.stringContaining('"email_address":"test@example.com"'),
+        }),
+      ]);
     });
   });
 });

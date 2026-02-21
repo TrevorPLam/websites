@@ -35,21 +35,53 @@ export interface BookingRecord {
   timestamp: Date;
   status: 'pending' | 'confirmed' | 'cancelled';
   confirmationNumber: string;
-  tenantId?: string;
+  /**
+   * Tenant identifier for multi-tenant scoping.
+   * REQUIRED for all records in multi-tenant deployments.
+   */
+  tenantId: string;
 }
 
 export interface BookingRepository {
+  /**
+   * Persist a new booking record.
+   * @param record - Booking record WITHOUT id/timestamp (tenantId REQUIRED)
+   */
   create(record: Omit<BookingRecord, 'id' | 'timestamp'>): Promise<BookingRecord>;
-  getById(id: string, tenantId?: string): Promise<BookingRecord | null>;
+
+  /**
+   * Retrieve a booking by its UUID id.
+   * @param id - Booking UUID
+   * @param tenantId - REQUIRED tenant identifier
+   * @returns Booking record or null (not found or tenant mismatch)
+   */
+  getById(id: string, tenantId: string): Promise<BookingRecord | null>;
+
+  /**
+   * Retrieve a booking by confirmation number and email.
+   * @param confirmationNumber - Booking confirmation number
+   * @param email - Email address for verification
+   * @param tenantId - REQUIRED tenant identifier
+   * @returns Booking record or null (not found or tenant mismatch)
+   */
   getByConfirmation(
     confirmationNumber: string,
     email: string,
-    tenantId?: string
+    tenantId: string
   ): Promise<BookingRecord | null>;
+
+  /**
+   * Update booking status with tenant scoping.
+   * @param id - Booking UUID
+   * @param updates - Partial status updates
+   * @param tenantId - REQUIRED tenant identifier
+   * @returns Updated booking record
+   * @throws Error if booking not found or tenant mismatch
+   */
   update(
     id: string,
     updates: Partial<Pick<BookingRecord, 'status'>>,
-    tenantId?: string
+    tenantId: string
   ): Promise<BookingRecord>;
 }
 
