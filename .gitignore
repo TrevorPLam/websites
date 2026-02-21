@@ -46,3 +46,13 @@ pnpm-debug.log*
 # Misc
 .vercel
 .cache/
+
+# AI/IDE tools
+.claude/
+.windsurf/
+.cursor/
+
+# Temporary directories
+.tmp/
+temp/
+tmp/
