@@ -10,6 +10,22 @@ packages:
   - clients/*
   - tooling/*
 
+# pnpm 10 supply chain security — only these packages may execute build scripts
+# (install / postinstall / preinstall) during `pnpm install`. Any new dependency
+# requiring a build script must be added here with justification reviewed in PR.
+# See docs/architecture/security/supply-chain.md for full rationale and threat model.
+onlyBuiltDependencies:
+  # sharp — native image processing; postinstall downloads prebuilt libvips bindings.
+  # Without this, Next.js image optimisation falls back to pure-JS (10× slower) or fails.
+  - sharp
+  # unrs-resolver — Rust-based module resolver used by ESLint / Rollup toolchain.
+  # Postinstall (via napi-postinstall) selects the correct platform binary.
+  # Without this, the package is non-functional and ESLint resolution breaks.
+  - unrs-resolver
+  # @sentry/cli — Sentry CLI binary download; postinstall selects platform-specific binary.
+  # Required for source map uploads and release creation in CI/CD.
+  - '@sentry/cli'
+
 catalog:
   '@sentry/nextjs': 10.38.0
   '@types/jest': ^30.0.0

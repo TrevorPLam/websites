@@ -10,6 +10,8 @@
     "./client": "./index.client.ts",
     "./context/request-context": "./context/request-context.ts",
     "./context/request-context.server": "./context/request-context.server.ts",
+    "./security/secure-action": "./security/secure-action.ts",
+    "./security/audit-logger": "./security/audit-logger.ts",
     "./security/request-validation": "./security/request-validation.ts",
     "./security/sanitize": "./security/sanitize.ts",
     "./security/rate-limit": "./security/rate-limit/index.ts",
