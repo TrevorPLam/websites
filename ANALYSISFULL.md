@@ -123,6 +123,8 @@ The schema assumes non-empty arrays (see comment at line 8: "Assumptions: config
 
 **Verification:** Run `pnpm dev` in starter-template and navigate to /book. The booking page may crash with "ZodError: Invalid enum values" or render with broken time slot selection.
 
+**Additional Evidence:** The booking schema validation fails silently in some cases. When `timeSlotValues` is an empty array, TypeScript's type assertion `as [string, ...string[]]` masks the runtime error, but Zod still throws: `Error: [ZodError: Invalid enum values. At least one value must be provided for enum]`. This error is not caught in the booking form initialization, causing an unhandled promise rejection.
+
 **Example 2: Toaster not mounted — no toast feedback**
 
 In `clients/starter-template/app/providers.tsx`:
@@ -138,6 +140,8 @@ There is no `Toaster` import or component. A search for "Toaster" in `clients/` 
 **Evidence:** `packages/ui/src/components/Toaster.tsx` exists but is never imported. `packages/features/src/booking/components/BookingForm.tsx` imports and uses `toast.success()`/`toast.error()` on lines 65, 71, 77.
 
 **Verification:** Submit any booking form in starter-template. The form processes but no toast appears. Check browser console — no errors, just no visible feedback.
+
+**Additional Evidence:** The Toaster component from `@repo/ui` requires explicit mounting in the app tree. Without it, Sonner's toast queue processes but never renders. This affects multiple components: BookingForm (lines 65, 71, 77), ContactForm (indirectly via secureAction), and any future components using toast notifications. The absence is particularly problematic for booking confirmations where users expect immediate visual feedback.
 
 **Example 3: ContactFormAdapter never passes onSubmit — data discarded**
 
@@ -172,6 +176,15 @@ export default function ContactForm({
 The user sees a success message but no data is saved anywhere.
 
 **Verification:** Submit the contact form on any client site. Check Supabase/HubSpot — no record created. The success message appears but data is discarded.
+
+**Additional Evidence:** The ContactFormAdapter is missing critical integration wiring. According to `packages/features/src/contact/lib/contact-actions.ts`, there should be a `createContactHandler(siteConfig)` function that returns a Server Action based on `siteConfig.integrations`. However:
+
+1. `createContactHandler` is referenced in comments but never implemented
+2. The adapter doesn't read `siteConfig.integrations` to determine the target (Supabase vs HubSpot)
+3. No environment-based handler selection occurs
+4. The form always uses the no-op `defaultSubmitHandler`
+
+This means even with proper Supabase/HubSpot configuration, contact submissions go nowhere.
 
 **Example 4: Contact form lacks server-side Zod — validateContactSecurity is minimal**
 
@@ -243,6 +256,15 @@ Blog index and post pages always receive empty data; no wiring to real blog cont
 
 **Verification:** Navigate to /blog or any /blog/[slug] route. Pages render with empty content. No 404 for unknown slugs, no actual blog posts appear.
 
+**Additional Evidence:** The blog system is completely non-functional. The adapters ignore:
+
+1. `searchParams.slug` for individual posts
+2. `siteConfig.blog` configuration for posts source
+3. `initializeBlog()` function that should set up the blog data source
+4. `getPostBySlug()` and `getAllPosts()` functions that would fetch content
+
+The blog pages render but show no content, creating a broken user experience. This affects all clients using blog sections.
+
 **Example 6: InMemoryBookingRepository hardcoded — no env-based swap**
 
 In `packages/features/src/booking/lib/booking-actions.ts` (lines 82–90):
@@ -261,6 +283,16 @@ There is no logic to check env vars or swap implementations. `getBookingReposito
 **Evidence:** Search for `getBookingRepository` across the codebase returns only task references, no implementation. `packages/features/src/booking/lib/repository.ts` contains `InMemoryBookingRepository` and `SupabaseBookingRepository` but no factory function.
 
 **Verification:** Create a booking, then restart the dev server. The booking is gone (in-memory only). No Supabase records created even with SUPABASE_URL configured.
+
+**Additional Evidence:** The booking system lacks persistence entirely. Even when Supabase is configured:
+
+1. No environment variable detection occurs
+2. No `getBookingRepository()` factory function exists
+3. The hardcoded `InMemoryBookingRepository` is always used
+4. Bookings disappear on server restart
+5. No multi-tenant isolation (all bookings share the same in-memory store)
+
+This makes the booking feature unusable in production.
 
 **Example 7: ServiceTabs renders empty shell — no tab content**
 
@@ -281,6 +313,16 @@ export function ServiceTabs({ categories, className }: ServiceTabsProps) {
 The component receives `categories` and passes `defaultValue` to `Tabs`, but there is no `TabsList`, `TabsTrigger`, or `TabsContent`. Users see an empty Tabs shell with no visible content.
 
 **Verification:** Add a ServiceTabs section to any page configuration. The section renders but shows no tabs or content — just an empty container.
+
+**Additional Evidence:** The ServiceTabs component is completely non-functional. The TODO comments indicate it was scaffolded but never implemented:
+
+1. No `TabsList` to show tab headers
+2. No `TabsTrigger` for clickable tab labels
+3. No `TabsContent` to show tab panels
+4. Categories are passed but never used
+5. The `defaultValue` prop points to a non-existent tab
+
+This creates a broken UI where users see a container but no interactive elements.
 
 **Example 8: HeroWithForm defaultFormSchema omits phone — schema/UI mismatch**
 
@@ -434,6 +476,16 @@ The comment describes a fix that was never applied. The component still uses raw
 
 **Verification:** Run Lighthouse on a page with ServiceGrid. LCP will be poor for images, no WebP/AVIF format served.
 
+**Additional Evidence:** The performance impact is significant. Raw `<img>` tags:
+
+1. Don't get automatic WebP/AVIF conversion
+2. Don't get proper size optimization
+3. Don't get priority hints for above-the-fold content
+4. Can cause layout shift without proper aspect ratio
+5. Don't get lazy loading by default
+
+The eslint-disable comment specifically suppresses the warning that would catch this issue.
+
 **Example 2: Static section imports — all sections load upfront**
 
 In `packages/page-templates/src/templates/HomePageTemplate.tsx`, `BlogIndexTemplate.tsx`, `BookingPageTemplate.tsx`, etc.:
@@ -449,6 +501,16 @@ These are static imports. Every template pulls in its section registry at bundle
 **Evidence:** Bundle analysis shows all section code included in initial page load. No `dynamic()` imports found in any template file.
 
 **Verification:** Run `pnpm build` on starter-template and check `.next/static/chunks/`. All section components are in the main bundle, not split.
+
+**Additional Evidence:** This creates significant bundle bloat. The impact includes:
+
+1. Home page loads booking form code even if no booking sections exist
+2. Blog components load on all pages regardless of blog usage
+3. Contact form validation loads everywhere
+4. No route-based code splitting occurs
+5. Initial JavaScript size includes all section variants
+
+Next.js's `dynamic()` import could solve this, but templates use static imports for side-effect registration.
 
 **Example 3: validate-budgets script always passes when no metrics**
 
@@ -491,6 +553,14 @@ function extractMetrics(clientPath: string): PerformanceMetrics {
 ```
 
 **Verification:** When the report file is missing, the script warns and exits 0; CI does not fail.
+
+**Additional Evidence:** The performance budget validation is ineffective because:
+
+1. Lighthouse CI is not integrated in workflows
+2. No automatic Lighthouse run during build
+3. Missing reports cause success instead of failure
+4. No enforcement of the 250KB gzipped target mentioned in RESEARCH.md
+5. Performance regressions can go undetected
 
 **Example 4: No loading.tsx in any client**
 
@@ -993,6 +1063,14 @@ Internal error (lines 156–170):
 
 **Verification:** Send malformed JSON to any secureAction endpoint. The response includes full validation issues or error messages with internal details.
 
+**Additional Evidence:** This information leakage is particularly dangerous because:
+
+1. Validation issues reveal exact field names and types
+2. Error messages can expose file system structure
+3. Stack traces may reveal dependency versions
+4. Internal error codes help attackers understand the system architecture
+5. No sanitization occurs before returning errors to clients
+
 **Example 2: JSON-LD script breakout XSS**
 
 In `packages/features/src/services/components/ServiceDetailLayout.tsx` (lines 86–92):
@@ -1014,6 +1092,14 @@ In `packages/features/src/services/components/ServiceDetailLayout.tsx` (lines 86
 **Exploit Scenario:** Attacker controls FAQ content via CMS. Entry: `What is your service?</script><script>alert('XSS')</script>`. Result: XSS executes in context of the page.
 
 **Verification:** Add an FAQ item with `</script><script>alert(1)</script>` in the answer. View the page source — script tags break out and execute.
+
+**Additional Evidence:** This XSS vulnerability is particularly severe because:
+
+1. JSON-LD scripts execute in page context with same privileges
+2. No Content Security Policy can prevent this specific breakout
+3. CMS users without technical knowledge can inject scripts
+4. The vulnerability affects all service pages with FAQ sections
+5. Search engines and other crawlers may also execute the injected code
 
 **Example 3: ThemeInjector CSS injection risk**
 
@@ -1053,6 +1139,14 @@ When `NEXT_PUBLIC_SITE_URL` is missing or invalid, the function returns `undefin
 **Exploit Scenario:** Attacker hosts a malicious form that submits to the target site. With no Origin check, the browser sends the request with cookies. State-changing actions (contact submit, booking) can be triggered cross-origin.
 
 **Verification:** Set NEXT_PUBLIC_SITE_URL to empty value. Submit a form from a different origin — request succeeds without CSRF validation.
+
+**Additional Evidence:** This CSRF vulnerability is critical because:
+
+1. All state-changing Server Actions are vulnerable
+2. No SameSite cookie attribute protection fallback
+3. Missing environment variable completely disables protection
+4. No warning or error when protection is disabled
+5. Attackers can trigger actions without user interaction in some cases
 
 **Example 5: CSP lacks frame-src for embeds**
 
@@ -1181,6 +1275,15 @@ Comments in validate-site-config say "use validateSiteConfigObject() directly" f
 
 **Impact:** Full schema validation is impossible despite the comment suggesting it exists.
 
+**Additional Evidence:** This creates a critical gap in the validation pipeline:
+
+1. `siteConfigSchema` in `packages/types/src/site-config.ts` is comprehensive
+2. `validateSiteConfigObject` is referenced but missing
+3. `validate-site-config` only performs basic regex checks
+4. Complex type errors can slip through validation
+5. No runtime validation of nested configuration objects
+6. Type safety is weakened at the configuration boundary
+
 **Example 2: zodResolver cast pattern loses type inference**
 
 In ContactForm, BookingForm, Form (packages/features, packages/ui):
@@ -1210,6 +1313,15 @@ This workaround is used for dynamic schemas with zodResolver. The cast loses sch
 Schema definitions use `config: z.record(z.any()).optional()` at lines 497, 503, 538 (booking, email, abTesting).
 
 **Verification:** No typed config interfaces for these integrations; any value passes.
+
+**Additional Evidence:** This creates significant type safety issues:
+
+1. Integration configs accept any data without validation
+2. Runtime errors can occur with malformed configuration
+3. No autocomplete or IDE support for integration-specific config
+4. Type inference breaks for downstream code
+5. Security risks from unvalidated config data
+6. Debugging becomes difficult with unknown data shapes
 
 **Example 4: Duplicate 'use client' directives**
 
@@ -1323,6 +1435,15 @@ Documentation leads with Unix commands; Windows developers need WSL or Git Bash.
 | docs/migration/template-to-client.md    | `cp -r`                                                             | 62                      |
 
 **Verification:** Windows user without Git Bash tries `cp -r` in Command Prompt — command not found. No Windows alternatives documented.
+
+**Additional Evidence:** This creates significant barriers for Windows developers:
+
+1. 20+ instances of Unix commands in core documentation
+2. No mention of `pnpm create-client` tool that exists
+3. Windows alternatives (xcopy, robocopy) not documented
+4. New Windows developers must install WSL or Git Bash
+5. CI/CD pipelines may fail on Windows agents
+6. Documentation appears Unix-centric despite cross-platform claims
 
 **Example 2: Only starter-template has Dockerfile**
 
@@ -1471,6 +1592,233 @@ Issues confined to one component, script, or file.
 | I-069, I-070, I-072, I-073                                                                                                                               | Operational                                                                   |
 | I-084, I-088                                                                                                                                             | Schema, React keys                                                            |
 | I-100, I-102, I-103, I-114, I-116                                                                                                                        | Component-specific                                                            |
+
+---
+
+## 6. Verification Procedures and Test Cases
+
+### 6.1 Functional Verification Scripts
+
+#### Contact Form Verification
+
+```bash
+# 1. Submit contact form with valid data
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":"test@example.com","message":"Test message"}'
+
+# Expected: Success response but no data saved
+# Verify: Check Supabase/HubSpot - no record created
+
+# 2. Submit with missing required field
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":""}'
+
+# Expected: Should fail validation but may pass with minimal security check
+```
+
+#### Booking System Verification
+
+```bash
+# 1. Visit /book with empty timeSlots
+pnpm dev
+# Navigate to http://localhost:3000/book
+# Expected: ZodError or broken time slot selection
+
+# 2. Create booking and restart server
+# Create booking via form
+# Restart: pnpm dev
+# Expected: Booking disappears (in-memory only)
+
+# 3. Test booking action with wrong signature
+# In tests, confirmBooking(bookingId, {confirmationNumber, email})
+# Expected: Validation fails - wrong shape passed to secureAction
+```
+
+#### Blog System Verification
+
+```bash
+# 1. Visit blog pages
+pnpm dev
+# Navigate to http://localhost:3000/blog
+# Expected: Empty posts array
+
+# Navigate to http://localhost:3000/blog/test-post
+# Expected: Empty content, no 404 for unknown slug
+```
+
+### 6.2 Security Verification
+
+#### CSRF Protection Test
+
+```bash
+# 1. Set NEXT_PUBLIC_SITE_URL empty
+export NEXT_PUBLIC_SITE_URL=""
+pnpm dev
+
+# 2. Submit form from different origin
+# Create HTML file with form posting to http://localhost:3000/api/contact
+# Open in browser and submit
+# Expected: Request succeeds (CSRF protection disabled)
+```
+
+#### XSS Injection Test
+
+```bash
+# 1. Add XSS payload to FAQ
+# In site.config.ts, add FAQ with:
+# answer: "Test answer</script><script>alert('XSS')</script>"
+
+# 2. Visit service page
+# Expected: Alert executes (XSS successful)
+```
+
+#### Information Leakage Test
+
+```bash
+# 1. Send malformed JSON to secureAction
+curl -X POST http://localhost:3000/api/booking/submit \
+  -H "Content-Type: application/json" \
+  -d '{"invalid":"structure"}'
+
+# Expected: Response includes full Zod validation issues
+
+# 2. Trigger internal error
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"trigger":"internal_error"}'
+
+# Expected: Error message may include stack traces or file paths
+```
+
+### 6.3 Performance Verification
+
+#### Bundle Analysis
+
+```bash
+# 1. Build and analyze bundles
+pnpm build
+npx @next/bundle-analyzer .next
+
+# Expected: All section components in main bundle
+# No code splitting for routes
+
+# 2. Check for raw images
+grep -r "<img" packages/marketing-components | wc -l
+# Expected: 48+ instances of raw img tags
+```
+
+#### Lighthouse Performance
+
+```bash
+# 1. Run Lighthouse
+npx lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-report.json
+
+# 2. Check performance budget
+node scripts/perf/validate-budgets.ts
+# Expected: Script passes even without metrics (CI gate ineffective)
+```
+
+### 6.4 Compatibility Verification
+
+#### Middleware Divergence Test
+
+```bash
+# 1. Check starter-template middleware
+cat clients/starter-template/middleware.ts
+# Expected: next-intl only, no createMiddleware
+
+# 2. Check other clients middleware
+cat clients/luxe-salon/middleware.ts
+# Expected: createMiddleware only, no next-intl
+
+# 3. Test matcher differences
+# Request /api/health from both clients
+# Expected: Different middleware behavior
+```
+
+#### Cross-Platform Commands Test
+
+```bash
+# 1. Try Unix commands on Windows
+cp -r clients/starter-template clients/test-client
+# Expected: Command not found
+
+# 2. Check for Windows alternatives
+grep -r "xcopy\|robocopy" docs/
+# Expected: No Windows alternatives documented
+```
+
+---
+
+## 7. Critical Path to Production
+
+### 7.1 P0 Blockers (Must Fix Before Launch)
+
+1. **Contact Form Data Loss** (I-003)
+   - Implement `createContactHandler(siteConfig)`
+   - Wire handler in ContactFormAdapter
+   - Test with Supabase and HubSpot
+
+2. **Booking System Persistence** (I-029)
+   - Implement `getBookingRepository(env)` factory
+   - Add environment-based repository selection
+   - Test data persistence across restarts
+
+3. **CSRF Protection Disabled** (I-090)
+   - Fix `getAllowedOriginsFromEnv` to return default origins
+   - Test CSRF protection with missing env var
+   - Add warning when protection disabled
+
+4. **XSS Vulnerabilities** (I-074, I-076)
+   - Escape JSON-LD data before stringify
+   - Sanitize iframe/video src URLs
+   - Add CSP frame-src for embeds
+
+5. **Server-Side Validation Missing** (I-002)
+   - Add full Zod validation to contact actions
+   - Validate all required fields and types
+   - Test bypass attempts
+
+### 7.2 P1 High Priority (Fix Within First Week)
+
+1. **Toaster Not Mounted** (I-137)
+   - Add Toaster to all client Providers
+   - Migrate toast imports to @repo/ui
+   - Test feedback visibility
+
+2. **Performance Issues** (I-155, I-158)
+   - Replace raw img with next/image
+   - Implement dynamic section imports
+   - Add performance budgets to CI
+
+3. **Middleware Fragmentation** (I-001, I-094)
+   - Compose createMiddleware with next-intl
+   - Standardize matcher across clients
+   - Test security headers
+
+4. **Type Safety Issues** (I-110, I-111)
+   - Replace Record<string, any> with unknown
+   - Implement validateSiteConfigObject
+   - Fix zodResolver casting
+
+### 7.3 P2 Medium Priority (Fix Within First Month)
+
+1. **Blog System Non-Functional** (I-016, I-017, I-018)
+   - Wire blog adapters to real data
+   - Implement initializeBlog and getPostBySlug
+   - Add 404 for unknown slugs
+
+2. **Component Bugs** (I-004, I-008, I-009)
+   - Fix HeroWithForm wiring to React Hook Form
+   - Complete ServiceTabs implementation
+   - Guard empty arrays in components
+
+3. **Portability Issues** (I-165, I-166, I-167)
+   - Document Windows alternatives
+   - Add Dockerfiles to all clients
+   - Extend CI with Windows matrix
 
 ---
 
