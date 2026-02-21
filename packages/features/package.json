@@ -7,9 +7,11 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./client": "./src/index.client.ts",
     "./booking": "./src/booking/index.ts",
     "./contact": "./src/contact/index.ts",
     "./blog": "./src/blog/index.ts",
+    "./blog/client": "./src/blog/index.client.ts",
     "./services": "./src/services/index.ts",
     "./search": "./src/search/index.ts",
     "./localization": "./src/localization/index.ts",

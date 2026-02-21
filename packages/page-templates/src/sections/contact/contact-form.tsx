@@ -4,20 +4,20 @@
  * Note: Server Component adapter — ContactForm uses its built-in default handler.
  *       Provide a Server Action via onSubmit from a client wrapper for production CRM integration.
  */
-import { ContactForm, createContactConfig } from '@repo/features';
+import { ContactForm, createContactConfig } from '@repo/features/client';
 import { registerSection } from '../../registry';
 import type { SectionProps } from '../../types';
 import { getSiteConfig } from './shared';
 import { createContactHandler } from '@repo/features/contact';
 
-function ContactFormAdapter(props: SectionProps) {
+async function ContactFormAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   const contactConfig = createContactConfig({
     successMessage: `Thank you for contacting ${config.name}! We'll be in touch soon.`,
   });
 
   // Create handler based on site configuration
-  const contactHandler = createContactHandler(config);
+  const contactHandler = await createContactHandler(config);
 
   return <ContactForm config={contactConfig} onSubmit={contactHandler} />;
 }

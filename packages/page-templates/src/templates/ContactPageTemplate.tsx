@@ -7,6 +7,8 @@
  * Slots allow injecting nav/banner/footer without modifying the section registry.
  */
 
+'use client';
+
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';

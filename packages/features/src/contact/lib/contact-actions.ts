@@ -262,15 +262,19 @@ export async function submitContactForm(
  * Create contact handler based on site configuration
  * Returns appropriate handler for Supabase, HubSpot, or other integrations
  */
-export function createContactHandler(siteConfig: any): ContactSubmissionHandler {
-  const crmProvider = siteConfig.integrations?.crm?.provider || 'none';
+export async function createContactHandler(siteConfig: unknown): Promise<ContactSubmissionHandler> {
+  const config = siteConfig as {
+    integrations?: { crm?: { provider?: string } };
+    tenantId?: string;
+  };
+  const crmProvider = config.integrations?.crm?.provider || 'none';
 
   switch (crmProvider) {
     case 'supabase':
       return async (data, metadata) => {
         try {
           const repository = new SupabaseContactRepository();
-          const tenantId = siteConfig.tenantId;
+          const tenantId = config.tenantId;
 
           const lead = await repository.create({
             data,

@@ -2,7 +2,16 @@
   "extends": "@repo/typescript-config/react.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "paths": {
+      "@repo/infra": ["../../packages/infra/index.ts"],
+      "@repo/infra/*": ["../../packages/infra/*"],
+      "@repo/ui": ["../../packages/ui/src/index.ts"],
+      "@repo/ui/*": ["../../packages/ui/src/*"],
+      "@repo/utils": ["../../packages/utils/src/index.ts"],
+      "@repo/utils/*": ["../../packages/utils/src/*"],
+      "@repo/types": ["../../packages/types/src/index.ts"],
+      "@repo/types/*": ["../../packages/types/src/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "**/__tests__/**", "**/*.test.tsx", "**/*.test.ts"]

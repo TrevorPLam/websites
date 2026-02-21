@@ -3,7 +3,7 @@
  * Purpose: Booking form section adapter and registration.
  */
 import * as React from 'react';
-import { BookingForm, createBookingConfig } from '@repo/features';
+import { BookingForm, createBookingConfig } from '@repo/features/client';
 import { registerSection } from '../../registry';
 import type { SectionProps } from '../../types';
 import { getSiteConfig } from './shared';

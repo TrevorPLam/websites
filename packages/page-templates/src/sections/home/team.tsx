@@ -2,7 +2,7 @@
  * @file packages/page-templates/src/sections/home/team.tsx
  * Purpose: Team section adapter and registration.
  */
-import { TeamSection } from '@repo/features';
+import { TeamSection } from '@repo/features/client';
 import { registerSection } from '../../registry';
 import type { SectionProps } from '../../types';
 import { getSiteConfig } from './shared';

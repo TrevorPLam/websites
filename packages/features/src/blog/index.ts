@@ -25,21 +25,11 @@
 // - [FEAT:ARCHITECTURE] Clean barrel export pattern
 // - [FEAT:CONFIGURATION] Configurable blog feature setup
 
-// Component exports
-export { default as BlogPostContent } from './components/BlogPostContent';
-export type { BlogPostContentProps } from './components/BlogPostContent';
+import 'server-only';
 
-// Content management exports
+// Content management exports (server-only)
 export * from './lib/blog';
 export type { BlogPost } from './lib/blog-types';
 
-// Configuration exports
-export * from './lib/blog-config';
-export type { BlogFeatureConfig } from './lib/blog-config';
-
-// Content source exports
-export * from './lib/blog-content-source';
-export type { BlogContentSource, BlogContentSourceConfig } from './lib/blog-content-source';
-
-// Image utilities
+// Image utilities (server-only - uses fs)
 export * from './lib/blog-images';

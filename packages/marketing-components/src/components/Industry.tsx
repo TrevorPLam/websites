@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { cn } from '@repo/utils';
-import { sanitizeUrl } from '@repo/infra';
+import { sanitizeUrl } from '@repo/infra/client';
 
 // Location components
 interface LocationListProps {
@@ -244,37 +244,6 @@ export const SocialProofStack: React.FC<{ items: any[] }> = ({ items }) => (
     ))}
   </div>
 );
-
-// Sanitize URL to prevent XSS
-function sanitizeUrl(url: string): string {
-  if (!url || typeof url !== 'string') return '';
-
-  try {
-    const parsed = new URL(url);
-
-    // Allow only safe protocols
-    const allowedProtocols = ['http:', 'https:'];
-    if (!allowedProtocols.includes(parsed.protocol)) {
-      return '';
-    }
-
-    // Allow only safe domains for embeds
-    const allowedDomains = [
-      'www.youtube.com',
-      'player.vimeo.com',
-      'vimeo.com',
-      'www.youtube-nocookie.com',
-    ];
-
-    if (allowedDomains.some((domain) => parsed.hostname.includes(domain))) {
-      return parsed.toString();
-    }
-
-    return '';
-  } catch {
-    return '';
-  }
-}
 
 export const VideoEmbed: React.FC<{ url: string; title?: string }> = ({ url, title }) => (
   <div className="aspect-w-16 aspect-h-9">

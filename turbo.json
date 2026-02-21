@@ -11,17 +11,23 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
+      "cache": true,
+      "inputs": ["src/**", "public/**", "package.json", "tsconfig.json", "next.config.js"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "cache": true,
+      "inputs": ["src/**", "package.json", "*.config.{js,mjs,cjs}"]
     },
     "type-check": {
-      "dependsOn": ["^type-check"]
+      "dependsOn": ["^type-check"],
+      "cache": true,
+      "inputs": ["src/**", "package.json", "tsconfig.json", "*.d.ts"]
     },
     "test": {
       "dependsOn": ["^build"],
@@ -29,13 +35,17 @@
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "**/__tests__/**", "jest.config.js"]
     },
     "format": {
-      "cache": false
+      "cache": false,
+      "inputs": ["src/**", "package.json", "*.{json,md,yml,yaml}"]
     },
     "format:check": {
-      "cache": false
+      "cache": false,
+      "inputs": ["src/**", "package.json", "*.{json,md,yml,yaml}"]
     },
     "@repo/marketing-components#build": {
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "cache": true,
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
     }
   }
 }

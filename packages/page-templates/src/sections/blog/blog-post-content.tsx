@@ -3,7 +3,7 @@
  * Purpose: Blog post content section adapter and registration.
  */
 import * as React from 'react';
-import { BlogPostContent } from '@repo/features';
+import { BlogPostContent } from '@repo/features/blog/client';
 import { registerSection } from '../../registry';
 import type { SectionProps } from '../../types';
 import { getBlogPost } from './blog-content-loader';

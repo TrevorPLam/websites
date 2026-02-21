@@ -20,7 +20,23 @@
     "baseUrl": ".",
     "paths": {
       "@repo/features": ["packages/features/src/index.ts"],
-      "@repo/features/*": ["packages/features/src/*"]
+      "@repo/features/*": ["packages/features/src/*"],
+      "@repo/infra": ["packages/infra/index.ts"],
+      "@repo/infra/*": ["packages/infra/*"],
+      "@repo/ui": ["packages/ui/src/index.ts"],
+      "@repo/ui/*": ["packages/ui/src/*"],
+      "@repo/utils": ["packages/utils/src/index.ts"],
+      "@repo/utils/*": ["packages/utils/src/*"],
+      "@repo/types": ["packages/types/src/index.ts"],
+      "@repo/types/*": ["packages/types/src/*"],
+      "@repo/marketing-components": ["packages/marketing-components/src/index.ts"],
+      "@repo/marketing-components/*": ["packages/marketing-components/src/*"],
+      "@repo/page-templates": ["packages/page-templates/src/index.ts"],
+      "@repo/page-templates/*": ["packages/page-templates/src/*"],
+      "@repo/integrations": ["packages/integrations/src/index.ts"],
+      "@repo/integrations/*": ["packages/integrations/*"],
+      "@repo/integrations-core": ["packages/integrations-core/src/index.ts"],
+      "@repo/integrations-core/*": ["packages/integrations-core/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build", ".next"]

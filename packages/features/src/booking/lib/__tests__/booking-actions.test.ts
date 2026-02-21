@@ -12,6 +12,9 @@ import {
 } from '../booking-actions';
 import type { BookingFeatureConfig } from '../booking-config';
 
+// Shared mock state for testing
+const mockBookings = new Map();
+
 jest.mock('next/headers', () => ({
   headers: jest.fn().mockResolvedValue({
     get: jest.fn((name: string) => (name === 'x-forwarded-for' ? '192.168.1.1' : undefined)),
@@ -19,8 +22,56 @@ jest.mock('next/headers', () => ({
 }));
 
 jest.mock('@repo/infra', () => ({
+  secureAction: jest.fn((input, schema, handler, options) => {
+    // Mock implementation for secureAction
+    // Options used for audit logging in real implementation
+    // Return proper Result<T, ActionError> format
+    try {
+      const result = handler(
+        {
+          tenantId: 'test-tenant',
+          userId: 'test-user',
+          roles: [],
+          correlationId: 'test-correlation',
+        },
+        input
+      );
+      return Promise.resolve({ success: true, data: result });
+    } catch (error: unknown) {
+      console.error('Mock secureAction error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      return Promise.resolve({
+        success: false,
+        error: { code: 'INTERNAL_ERROR', message: errorMessage },
+      });
+    }
+  }),
   checkRateLimit: jest.fn().mockResolvedValue(true),
   hashIp: jest.fn((ip: string) => ip),
+  getBookingForTenant: jest.fn().mockImplementation(({ bookingId }) => {
+    return Promise.resolve(mockBookings.get(bookingId));
+  }),
+  updateBookingStatus: jest.fn().mockImplementation(({ bookingId, status }) => {
+    const booking = mockBookings.get(bookingId);
+    if (booking) {
+      const updated = { ...booking, status };
+      mockBookings.set(bookingId, updated);
+      return Promise.resolve(updated);
+    }
+    return Promise.resolve(null);
+  }),
+  getBookingByConfirmationForTenant: jest
+    .fn()
+    .mockImplementation(({ confirmationNumber, email }) => {
+      for (const booking of mockBookings.values()) {
+        if (booking.confirmationNumber === confirmationNumber && booking.data.email === email) {
+          return Promise.resolve(booking);
+        }
+      }
+      return Promise.resolve(null);
+    }),
+  resolveTenantId: jest.fn(() => 'test-tenant'),
+  validateEnv: jest.fn(() => ({ NODE_ENV: 'test' })),
 }));
 
 jest.mock('@repo/infra/security/request-validation', () => ({
@@ -29,6 +80,21 @@ jest.mock('@repo/infra/security/request-validation', () => ({
 
 jest.mock('next/cache', () => ({
   revalidatePath: jest.fn(),
+}));
+
+jest.mock('../booking-repository', () => ({
+  getBookingRepository: jest.fn(() => ({
+    create: jest.fn().mockImplementation(({ data, confirmationNumber }) => {
+      const booking = {
+        id: 'test-booking-id',
+        confirmationNumber,
+        status: 'pending',
+        data,
+      };
+      mockBookings.set('test-booking-id', booking);
+      return booking;
+    }),
+  })),
 }));
 
 jest.mock('../booking-providers', () => ({
