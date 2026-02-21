@@ -87,7 +87,7 @@ export function ColorPicker({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          _variant="outline"
           className={cn(
             'w-[280px] justify-start text-left font-normal gap-2',
             disabled && 'opacity-50'

@@ -37,14 +37,14 @@ export interface PaginationProps extends React.ComponentPropsWithoutRef<'nav'> {
   siblingCount?: number;
 }
 
-export interface PaginationContentProps extends React.ComponentPropsWithoutRef<'ul'> {}
-export interface PaginationItemProps extends React.ComponentPropsWithoutRef<'li'> {}
+export type PaginationContentProps = React.ComponentPropsWithoutRef<'ul'>;
+export type PaginationItemProps = React.ComponentPropsWithoutRef<'li'>;
 export interface PaginationLinkProps extends React.ComponentPropsWithoutRef<'a'> {
   isActive?: boolean;
 }
-export interface PaginationPreviousProps extends React.ComponentPropsWithoutRef<'button'> {}
-export interface PaginationNextProps extends React.ComponentPropsWithoutRef<'button'> {}
-export interface PaginationEllipsisProps extends React.ComponentPropsWithoutRef<'span'> {}
+export type PaginationPreviousProps = React.ComponentPropsWithoutRef<'button'>;
+export type PaginationNextProps = React.ComponentPropsWithoutRef<'button'>;
+export type PaginationEllipsisProps = React.ComponentPropsWithoutRef<'span'>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 
@@ -161,8 +161,8 @@ export const PaginationPrevious = React.forwardRef<HTMLButtonElement, Pagination
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      variant="outline"
-      size="small"
+      _variant="outline"
+      _size="small"
       className={cn('gap-1 pl-2.5', className)}
       {...props}
     >
@@ -177,8 +177,8 @@ export const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNext
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      variant="outline"
-      size="small"
+      _variant="outline"
+      _size="small"
       className={cn('gap-1 pr-2.5', className)}
       {...props}
     >

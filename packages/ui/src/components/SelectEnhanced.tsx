@@ -39,27 +39,19 @@ export interface SelectEnhancedProps {
   searchable?: boolean;
 }
 
-export interface SelectEnhancedTriggerProps extends React.ComponentPropsWithoutRef<
+export type SelectEnhancedTriggerProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Trigger
-> {}
-export interface SelectEnhancedValueProps extends React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Value
-> {}
-export interface SelectEnhancedContentProps extends React.ComponentPropsWithoutRef<
+>;
+export type SelectEnhancedValueProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>;
+export type SelectEnhancedContentProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Content
-> {}
-export interface SelectEnhancedItemProps extends React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Item
-> {}
-export interface SelectEnhancedGroupProps extends React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Group
-> {}
-export interface SelectEnhancedLabelProps extends React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Label
-> {}
-export interface SelectEnhancedSeparatorProps extends React.ComponentPropsWithoutRef<
+>;
+export type SelectEnhancedItemProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>;
+export type SelectEnhancedGroupProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Group>;
+export type SelectEnhancedLabelProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>;
+export type SelectEnhancedSeparatorProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Separator
-> {}
+>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 

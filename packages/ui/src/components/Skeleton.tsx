@@ -13,7 +13,7 @@
 // Invariants:
 // - Animation runs continuously while rendered; unmount to stop
 // - prefers-reduced-motion disables the shimmer (component remains as static block)
-// - variant='circular' implies rounded-full; variant='rectangular' removes rounding
+// - _variant ='circular' implies rounded-full; _variant ='rectangular' removes rounding
 //
 // Status: @public
 // Features:
@@ -83,10 +83,7 @@ export const Skeleton = ({
       aria-busy="true"
       aria-label="Loading…"
       style={inlineStyle}
-      className={cn(
-        skeletonVariants({ variant, className }),
-        animate && 'motion-safe:animate-pulse'
-      )}
+      className={cn(skeletonVariants({ variant }), animate && 'motion-safe:animate-pulse')}
       {...props}
     />
   );

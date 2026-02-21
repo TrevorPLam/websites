@@ -53,10 +53,10 @@ export interface TableProps<T = unknown> extends React.HTMLAttributes<HTMLTableE
   onFilterChange?: (value: string) => void;
 }
 
-export interface TableHeaderProps extends React.HTMLAttributes<HTMLTableSectionElement> {}
-export interface TableBodyProps extends React.HTMLAttributes<HTMLTableSectionElement> {}
-export interface TableFooterProps extends React.HTMLAttributes<HTMLTableSectionElement> {}
-export interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {}
+export type TableHeaderProps = React.HTMLAttributes<HTMLTableSectionElement>;
+export type TableBodyProps = React.HTMLAttributes<HTMLTableSectionElement>;
+export type TableFooterProps = React.HTMLAttributes<HTMLTableSectionElement>;
+export type TableRowProps = React.HTMLAttributes<HTMLTableRowElement>;
 export interface TableHeadProps extends React.HTMLAttributes<HTMLTableCellElement> {
   /** Whether column is sortable */
   sortable?: boolean;
@@ -65,7 +65,7 @@ export interface TableHeadProps extends React.HTMLAttributes<HTMLTableCellElemen
   /** Callback when header is clicked */
   onSort?: () => void;
 }
-export interface TableCellProps extends React.HTMLAttributes<HTMLTableCellElement> {}
+export type TableCellProps = React.HTMLAttributes<HTMLTableCellElement>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 

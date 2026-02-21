@@ -35,11 +35,11 @@ export interface BreadcrumbProps extends React.ComponentPropsWithoutRef<'nav'> {
   separator?: React.ReactNode;
 }
 
-export interface BreadcrumbItemProps extends React.ComponentPropsWithoutRef<'li'> {}
+export type BreadcrumbItemProps = React.ComponentPropsWithoutRef<'li'>;
 export interface BreadcrumbLinkProps extends React.ComponentPropsWithoutRef<'a'> {
   asChild?: boolean;
 }
-export interface BreadcrumbPageProps extends React.ComponentPropsWithoutRef<'span'> {}
+export type BreadcrumbPageProps = React.ComponentPropsWithoutRef<'span'>;
 export interface BreadcrumbSeparatorProps extends React.ComponentPropsWithoutRef<'li'> {
   children?: React.ReactNode;
 }

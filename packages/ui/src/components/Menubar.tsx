@@ -27,44 +27,34 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface MenubarProps extends React.ComponentPropsWithoutRef<
-  typeof MenubarPrimitive.Root
-> {}
-export interface MenubarMenuProps extends React.ComponentPropsWithoutRef<
-  typeof MenubarPrimitive.Menu
-> {}
-export interface MenubarTriggerProps extends React.ComponentPropsWithoutRef<
-  typeof MenubarPrimitive.Trigger
-> {}
-export interface MenubarContentProps extends React.ComponentPropsWithoutRef<
-  typeof MenubarPrimitive.Content
-> {}
+export type MenubarProps = React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>;
+export type MenubarMenuProps = React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Menu>;
+export type MenubarTriggerProps = React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Trigger>;
+export type MenubarContentProps = React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Content>;
 export interface MenubarItemProps extends React.ComponentPropsWithoutRef<
   typeof MenubarPrimitive.Item
 > {
   inset?: boolean;
 }
-export interface MenubarCheckboxItemProps extends React.ComponentPropsWithoutRef<
+export type MenubarCheckboxItemProps = React.ComponentPropsWithoutRef<
   typeof MenubarPrimitive.CheckboxItem
-> {}
-export interface MenubarRadioItemProps extends React.ComponentPropsWithoutRef<
+>;
+export type MenubarRadioItemProps = React.ComponentPropsWithoutRef<
   typeof MenubarPrimitive.RadioItem
-> {}
+>;
 export interface MenubarLabelProps extends React.ComponentPropsWithoutRef<
   typeof MenubarPrimitive.Label
 > {
   inset?: boolean;
 }
-export interface MenubarSeparatorProps extends React.ComponentPropsWithoutRef<
+export type MenubarSeparatorProps = React.ComponentPropsWithoutRef<
   typeof MenubarPrimitive.Separator
-> {}
-export interface MenubarShortcutProps extends React.HTMLAttributes<HTMLSpanElement> {}
-export interface MenubarSubProps extends React.ComponentPropsWithoutRef<
-  typeof MenubarPrimitive.Sub
-> {}
-export interface MenubarSubContentProps extends React.ComponentPropsWithoutRef<
+>;
+export type MenubarShortcutProps = React.HTMLAttributes<HTMLSpanElement>;
+export type MenubarSubProps = React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Sub>;
+export type MenubarSubContentProps = React.ComponentPropsWithoutRef<
   typeof MenubarPrimitive.SubContent
-> {}
+>;
 export interface MenubarSubTriggerProps extends React.ComponentPropsWithoutRef<
   typeof MenubarPrimitive.SubTrigger
 > {

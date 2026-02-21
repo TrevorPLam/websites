@@ -74,11 +74,11 @@ export interface FormFieldProps<T extends FieldValues> {
   }) => React.ReactNode;
 }
 
-export interface FormItemProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {}
-export interface FormControlProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface FormDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
-export interface FormMessageProps extends React.HTMLAttributes<HTMLParagraphElement> {}
+export type FormItemProps = React.HTMLAttributes<HTMLDivElement>;
+export type FormLabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
+export type FormControlProps = React.HTMLAttributes<HTMLDivElement>;
+export type FormDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
+export type FormMessageProps = React.HTMLAttributes<HTMLParagraphElement>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 

@@ -32,38 +32,36 @@ export interface ContextMenuProps {
   children: React.ReactNode;
 }
 
-export interface ContextMenuTriggerProps extends React.ComponentPropsWithoutRef<
+export type ContextMenuTriggerProps = React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.Trigger
-> {}
-export interface ContextMenuContentProps extends React.ComponentPropsWithoutRef<
+>;
+export type ContextMenuContentProps = React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.Content
-> {}
+>;
 export interface ContextMenuItemProps extends React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.Item
 > {
   inset?: boolean;
 }
-export interface ContextMenuCheckboxItemProps extends React.ComponentPropsWithoutRef<
+export type ContextMenuCheckboxItemProps = React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.CheckboxItem
-> {}
-export interface ContextMenuRadioItemProps extends React.ComponentPropsWithoutRef<
+>;
+export type ContextMenuRadioItemProps = React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.RadioItem
-> {}
+>;
 export interface ContextMenuLabelProps extends React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.Label
 > {
   inset?: boolean;
 }
-export interface ContextMenuSeparatorProps extends React.ComponentPropsWithoutRef<
+export type ContextMenuSeparatorProps = React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.Separator
-> {}
-export interface ContextMenuShortcutProps extends React.HTMLAttributes<HTMLSpanElement> {}
-export interface ContextMenuSubProps extends React.ComponentPropsWithoutRef<
-  typeof ContextMenuPrimitive.Sub
-> {}
-export interface ContextMenuSubContentProps extends React.ComponentPropsWithoutRef<
+>;
+export type ContextMenuShortcutProps = React.HTMLAttributes<HTMLSpanElement>;
+export type ContextMenuSubProps = React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.Sub>;
+export type ContextMenuSubContentProps = React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.SubContent
-> {}
+>;
 export interface ContextMenuSubTriggerProps extends React.ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.SubTrigger
 > {

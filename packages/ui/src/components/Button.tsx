@@ -61,7 +61,7 @@ const buttonVariants = cva({
 /**
  * Accessible button with variant/size styling. Focus ring and disabled state handled via Tailwind.
  *
- * @param props - ButtonProps (variant, size, type, className, and HTML button attributes)
+ * @param props - ButtonProps (_variant, _size, type, className, and HTML button attributes)
  * @returns Forwarded ref to the native button element
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -70,7 +70,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         type={type}
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ size, variant }), className)}
         {...props}
       />
     );

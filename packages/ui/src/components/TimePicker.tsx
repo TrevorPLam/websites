@@ -92,7 +92,7 @@ export function TimePicker({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          _variant="outline"
           className={cn(
             'w-[280px] justify-start text-left font-normal',
             !selectedTime && 'text-muted-foreground'
@@ -107,8 +107,11 @@ export function TimePicker({
         <div className="flex gap-2">
           {/* Hours */}
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-muted-foreground">Hour</label>
+            <label htmlFor="hour-select" className="text-xs text-muted-foreground">
+              Hour
+            </label>
             <select
+              id="hour-select"
               className="h-10 w-16 rounded-md border border-input bg-background px-2 text-sm"
               value={selectedTime?.getHours() || 0}
               onChange={(e) => {
@@ -130,8 +133,11 @@ export function TimePicker({
           </div>
           {/* Minutes */}
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-muted-foreground">Minute</label>
+            <label htmlFor="minute-select" className="text-xs text-muted-foreground">
+              Minute
+            </label>
             <select
+              id="minute-select"
               className="h-10 w-16 rounded-md border border-input bg-background px-2 text-sm"
               value={selectedTime?.getMinutes() || 0}
               onChange={(e) => {
@@ -150,8 +156,11 @@ export function TimePicker({
           </div>
           {showSeconds && (
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-muted-foreground">Second</label>
+              <label htmlFor="second-select" className="text-xs text-muted-foreground">
+                Second
+              </label>
               <select
+                id="second-select"
                 className="h-10 w-16 rounded-md border border-input bg-background px-2 text-sm"
                 value={selectedTime?.getSeconds() || 0}
                 onChange={(e) => {
@@ -171,8 +180,11 @@ export function TimePicker({
           )}
           {format === '12h' && (
             <div className="flex flex-col gap-1">
-              <label className="text-xs text-muted-foreground">Period</label>
+              <label htmlFor="period-select" className="text-xs text-muted-foreground">
+                Period
+              </label>
               <select
+                id="period-select"
                 className="h-10 w-16 rounded-md border border-input bg-background px-2 text-sm"
                 value={selectedTime && selectedTime.getHours() >= 12 ? 'PM' : 'AM'}
                 onChange={(e) => {

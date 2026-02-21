@@ -44,14 +44,14 @@ export interface AlertDialogContentProps extends React.ComponentPropsWithoutRef<
   className?: string;
 }
 
-export interface AlertDialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface AlertDialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface AlertDialogTitleProps extends React.ComponentPropsWithoutRef<
+export type AlertDialogHeaderProps = React.HTMLAttributes<HTMLDivElement>;
+export type AlertDialogFooterProps = React.HTMLAttributes<HTMLDivElement>;
+export type AlertDialogTitleProps = React.ComponentPropsWithoutRef<
   typeof AlertDialogPrimitive.Title
-> {}
-export interface AlertDialogDescriptionProps extends React.ComponentPropsWithoutRef<
+>;
+export type AlertDialogDescriptionProps = React.ComponentPropsWithoutRef<
   typeof AlertDialogPrimitive.Description
-> {}
+>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 

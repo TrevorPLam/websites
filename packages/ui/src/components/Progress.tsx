@@ -83,7 +83,7 @@ const progressIndicatorVariants = cva({
 export const Progress = React.forwardRef<
   React.ComponentRef<typeof ProgressPrimitive.Root>,
   ProgressProps
->(({ className, variant = 'default', size = 'md', label, value, ...props }, ref) => (
+>(({ className, _variant = 'default', _size = 'md', label, value, ...props }, ref) => (
   <div className="w-full">
     {label && (
       <div className="mb-2 flex items-center justify-between text-sm">

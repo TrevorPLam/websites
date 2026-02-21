@@ -68,7 +68,7 @@ export const Badge = ({
   children,
   ...props
 }: BadgeProps) => (
-  <span className={cn(badgeVariants({ variant, size, className }))} {...props}>
+  <span className={cn(badgeVariants({ variant, size }), className)} {...props}>
     {dot && <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />}
     {children}
   </span>

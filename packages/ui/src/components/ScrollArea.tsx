@@ -27,9 +27,7 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface ScrollAreaProps extends React.ComponentPropsWithoutRef<
-  typeof ScrollAreaPrimitive.Root
-> {}
+export type ScrollAreaProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>;
 
 export interface ScrollBarProps extends React.ComponentPropsWithoutRef<
   typeof ScrollAreaPrimitive.ScrollAreaScrollbar

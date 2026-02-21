@@ -69,7 +69,7 @@ export const Toggle = React.forwardRef<
 >(({ className, variant = 'default', size = 'md', ...props }, ref) => (
   <TogglePrimitive.Root
     ref={ref}
-    className={cn(toggleVariants({ variant, size, className }))}
+    className={cn(toggleVariants({ size, variant }), className)}
     {...props}
   />
 ));

@@ -34,12 +34,12 @@ const containerVariants = cva({
 /**
  * Renders a centered, width-constrained div. Forwards ref and spreads HTML div attributes.
  *
- * @param props - ContainerProps (size, className, and HTMLDivElement props)
+ * @param props - ContainerProps (_size, className, and HTMLDivElement props)
  * @returns Forwarded ref to the root div
  */
 export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   ({ className, size = 'default', ...props }, ref) => {
-    return <div ref={ref} className={cn(containerVariants({ size, className }))} {...props} />;
+    return <div ref={ref} className={cn(containerVariants({ size }), className)} {...props} />;
   }
 );
 Container.displayName = 'Container';

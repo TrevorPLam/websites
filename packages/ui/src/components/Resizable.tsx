@@ -33,7 +33,7 @@ export interface ResizablePanelGroupProps extends React.HTMLAttributes<HTMLDivEl
   direction?: 'horizontal' | 'vertical';
 }
 
-export interface ResizablePanelProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type ResizablePanelProps = React.HTMLAttributes<HTMLDivElement>;
 
 export interface ResizableHandleProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Show grip icon */

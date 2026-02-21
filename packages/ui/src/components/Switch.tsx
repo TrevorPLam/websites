@@ -41,7 +41,7 @@ export interface SwitchProps extends React.ComponentPropsWithoutRef<typeof Switc
 // ─── CVA Variant Definitions ─────────────────────────────────────────────────
 
 // [TRACE:CONST=packages.ui.components.Switch.switchTrackVariants]
-// Track (Root element): controls background color (variant) and track dimensions (size).
+// Track (Root element): controls background color (_variant) and track dimensions (_size).
 const switchTrackVariants = cva({
   base: [
     'peer inline-flex shrink-0 cursor-pointer items-center rounded-full',
@@ -65,7 +65,7 @@ const switchTrackVariants = cva({
 });
 
 // [TRACE:CONST=packages.ui.components.Switch.switchThumbVariants]
-// Thumb (Thumb element): controls thumb dimensions and translate distance (must match track size).
+// Thumb (Thumb element): controls thumb dimensions and translate distance (must match track _size).
 const switchThumbVariants = cva({
   base: [
     'pointer-events-none block rounded-full bg-background shadow-lg',
@@ -91,7 +91,7 @@ export const Switch = React.forwardRef<
 >(({ className, size = 'md', variant = 'default', ...props }, ref) => (
   <SwitchPrimitive.Root
     ref={ref}
-    className={cn(switchTrackVariants({ variant, size }), className)}
+    className={cn(switchTrackVariants({ size, variant }), className)}
     {...props}
   >
     <SwitchPrimitive.Thumb className={switchThumbVariants({ size })} />

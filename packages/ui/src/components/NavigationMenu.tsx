@@ -27,24 +27,24 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface NavigationMenuProps extends React.ComponentPropsWithoutRef<
+export type NavigationMenuProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.Root
-> {}
-export interface NavigationMenuListProps extends React.ComponentPropsWithoutRef<
+>;
+export type NavigationMenuListProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.List
-> {}
-export interface NavigationMenuItemProps extends React.ComponentPropsWithoutRef<
+>;
+export type NavigationMenuItemProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.Item
-> {}
-export interface NavigationMenuTriggerProps extends React.ComponentPropsWithoutRef<
+>;
+export type NavigationMenuTriggerProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.Trigger
-> {}
-export interface NavigationMenuContentProps extends React.ComponentPropsWithoutRef<
+>;
+export type NavigationMenuContentProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.Content
-> {}
-export interface NavigationMenuLinkProps extends React.ComponentPropsWithoutRef<
+>;
+export type NavigationMenuLinkProps = React.ComponentPropsWithoutRef<
   typeof NavigationMenuPrimitive.Link
-> {}
+>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 

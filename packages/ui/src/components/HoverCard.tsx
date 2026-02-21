@@ -34,12 +34,12 @@ export interface HoverCardProps {
   children: React.ReactNode;
 }
 
-export interface HoverCardTriggerProps extends React.ComponentPropsWithoutRef<
+export type HoverCardTriggerProps = React.ComponentPropsWithoutRef<
   typeof HoverCardPrimitive.Trigger
-> {}
-export interface HoverCardContentProps extends React.ComponentPropsWithoutRef<
+>;
+export type HoverCardContentProps = React.ComponentPropsWithoutRef<
   typeof HoverCardPrimitive.Content
-> {}
+>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 

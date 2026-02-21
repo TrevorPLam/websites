@@ -33,12 +33,12 @@ const cardVariants = cva({
 /**
  * Renders a card div with optional variant styling. Forwards ref and div attributes.
  *
- * @param props - CardProps (variant, className, and HTMLDivElement props)
+ * @param props - CardProps (_variant, className, and HTMLDivElement props)
  * @returns Forwarded ref to the root div
  */
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', ...props }, ref) => {
-    return <div ref={ref} className={cn(cardVariants({ variant, className }))} {...props} />;
+    return <div ref={ref} className={cn(cardVariants({ variant }), className)} {...props} />;
   }
 );
 Card.displayName = 'Card';

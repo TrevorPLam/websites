@@ -89,6 +89,13 @@ const TreeNodeComponent = ({
         )}
         style={{ paddingLeft: `${level * 16 + 8}px` }}
         onClick={() => onSelect?.(node.id)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect?.(node.id);
+          }
+        }}
+        tabIndex={0}
         role="treeitem"
         aria-selected={isSelected}
         aria-expanded={hasChildren ? isExpanded : undefined}

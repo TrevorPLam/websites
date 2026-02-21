@@ -31,13 +31,13 @@ describe('Button', () => {
   });
 
   it('applies variant classes', () => {
-    const { container } = render(<Button variant="secondary">Secondary</Button>);
+    const { container } = render(<Button _variant="secondary">Secondary</Button>);
     const button = container.querySelector('button');
     expect(button).toHaveClass('bg-secondary');
   });
 
   it('applies size classes', () => {
-    const { container } = render(<Button size="small">Small</Button>);
+    const { container } = render(<Button _size="small">Small</Button>);
     const button = container.querySelector('button');
     expect(button).toHaveClass('min-h-[44px]');
   });

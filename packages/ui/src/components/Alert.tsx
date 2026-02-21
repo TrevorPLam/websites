@@ -32,8 +32,8 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
 }
 
-export interface AlertTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
-export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
+export type AlertTitleProps = React.HTMLAttributes<HTMLHeadingElement>;
+export type AlertDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
 
 const alertVariants = cva({
   base: 'relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
@@ -64,7 +64,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, variant = 'default', ...props }, ref) => {
     const Icon = iconMap[variant];
     return (
-      <div ref={ref} role="alert" className={cn(alertVariants({ variant, className }))} {...props}>
+      <div ref={ref} role="alert" className={cn(alertVariants({ variant }), className)} {...props}>
         <Icon className="h-4 w-4" />
         {props.children}
       </div>
@@ -74,12 +74,14 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
 Alert.displayName = 'Alert';
 
 export const AlertTitle = React.forwardRef<HTMLParagraphElement, AlertTitleProps>(
-  ({ className, ...props }, ref) => (
+  ({ className, children, ...props }, ref) => (
     <h5
       ref={ref}
       className={cn('mb-1 font-medium leading-none tracking-tight', className)}
       {...props}
-    />
+    >
+      {children}
+    </h5>
   )
 );
 AlertTitle.displayName = 'AlertTitle';

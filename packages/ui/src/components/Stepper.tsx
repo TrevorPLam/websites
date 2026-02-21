@@ -44,14 +44,14 @@ export interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
-  ({ className, steps, currentStep, onStepClick, variant = 'default', ...props }, ref) => {
+  ({ className, steps, currentStep, onStepClick, _variant = 'default', ...props }, ref) => {
     const getStepStatus = (index: number): 'completed' | 'current' | 'upcoming' => {
       if (index < currentStep) return 'completed';
       if (index === currentStep) return 'current';
       return 'upcoming';
     };
 
-    if (variant === 'vertical') {
+    if (_variant === 'vertical') {
       return (
         <div ref={ref} className={cn('flex flex-col', className)} {...props}>
           {steps.map((step, index) => {

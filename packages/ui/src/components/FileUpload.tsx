@@ -142,7 +142,7 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
           </p>
           <Button
             type="button"
-            variant="outline"
+            _variant="outline"
             className="mt-4"
             onClick={() => fileInputRef.current?.click()}
             disabled={disabled}
@@ -175,8 +175,8 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
                 </div>
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="small"
+                  _variant="ghost"
+                  _size="small"
                   onClick={() => removeFile(index)}
                   disabled={disabled}
                 >

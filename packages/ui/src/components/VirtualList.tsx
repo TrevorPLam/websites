@@ -31,9 +31,9 @@ export interface VirtualListProps<T = unknown> {
   items: T[];
   /** Height of the list container */
   height: number;
-  /** Height of each item (for fixed size) */
+  /** Height of each item (for fixed _size) */
   itemHeight?: number;
-  /** Function to get item height (for variable size) */
+  /** Function to get item height (for variable _size) */
   getItemHeight?: (index: number) => number;
   /** Render function for each item */
   renderItem: (props: { item: T; index: number; style: React.CSSProperties }) => React.ReactNode;

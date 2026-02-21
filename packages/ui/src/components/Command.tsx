@@ -60,7 +60,7 @@ export interface CommandItemProps extends React.ComponentPropsWithoutRef<
 > {
   className?: string;
 }
-export interface CommandShortcutProps extends React.HTMLAttributes<HTMLSpanElement> {}
+export type CommandShortcutProps = React.HTMLAttributes<HTMLSpanElement>;
 export interface CommandSeparatorProps extends React.ComponentPropsWithoutRef<
   typeof CommandPrimitive.Separator
 > {

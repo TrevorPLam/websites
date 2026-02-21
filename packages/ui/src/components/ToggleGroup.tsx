@@ -80,8 +80,8 @@ export const ToggleGroup = React.forwardRef<
   (
     {
       className,
-      variant = 'default',
-      size = 'md',
+      _variant = 'default',
+      _size = 'md',
       type = 'single',
       value,
       defaultValue,
@@ -128,9 +128,9 @@ ToggleGroup.displayName = 'ToggleGroup';
 export const ToggleGroupItem = React.forwardRef<
   React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
   ToggleGroupItemProps
->(({ className, variant = 'default', size = 'md', ...props }, ref) => (
+>(({ className, _variant = 'default', _size = 'md', ...props }, ref) => (
   <ToggleGroupPrimitive.Item ref={ref} asChild {...props}>
-    <Toggle variant={variant} size={size} className={className} />
+    <Toggle _variant={variant} _size={size} className={className} />
   </ToggleGroupPrimitive.Item>
 ));
 ToggleGroupItem.displayName = 'ToggleGroupItem';

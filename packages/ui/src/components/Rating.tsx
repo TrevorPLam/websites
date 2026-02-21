@@ -61,7 +61,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
       max = 5,
       readOnly = false,
       allowHalf = false,
-      size = 'md',
+      _size = 'md',
       ...props
     },
     ref

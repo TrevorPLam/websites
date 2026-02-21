@@ -29,9 +29,7 @@ import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export interface CollapsibleProps extends React.ComponentPropsWithoutRef<
-  typeof CollapsiblePrimitive.Root
-> {}
+export type CollapsibleProps = React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root>;
 
 export interface CollapsibleTriggerProps extends React.ComponentPropsWithoutRef<
   typeof CollapsiblePrimitive.Trigger

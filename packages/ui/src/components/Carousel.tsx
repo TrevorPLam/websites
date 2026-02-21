@@ -43,10 +43,10 @@ export interface CarouselProps extends React.HTMLAttributes<HTMLDivElement> {
   showIndicators?: boolean;
 }
 
-export interface CarouselContentProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface CarouselItemProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface CarouselPreviousProps extends React.ComponentPropsWithoutRef<typeof Button> {}
-export interface CarouselNextProps extends React.ComponentPropsWithoutRef<typeof Button> {}
+export type CarouselContentProps = React.HTMLAttributes<HTMLDivElement>;
+export type CarouselItemProps = React.HTMLAttributes<HTMLDivElement>;
+export type CarouselPreviousProps = React.ComponentPropsWithoutRef<typeof Button>;
+export type CarouselNextProps = React.ComponentPropsWithoutRef<typeof Button>;
 
 // ─── Components ──────────────────────────────────────────────────────────────
 
@@ -167,7 +167,7 @@ export const CarouselPrevious = React.forwardRef<HTMLButtonElement, CarouselPrev
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      variant="outline"
+      _variant="outline"
       className={cn('absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 p-0', className)}
       {...props}
     >
@@ -182,7 +182,7 @@ export const CarouselNext = React.forwardRef<HTMLButtonElement, CarouselNextProp
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      variant="outline"
+      _variant="outline"
       className={cn('absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 p-0', className)}
       {...props}
     >

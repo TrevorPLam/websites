@@ -35,9 +35,7 @@ export interface SheetProps {
   children: React.ReactNode;
 }
 
-export interface SheetTriggerProps extends React.ComponentPropsWithoutRef<
-  typeof DialogPrimitive.Trigger
-> {}
+export type SheetTriggerProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>;
 export interface SheetContentProps extends React.ComponentPropsWithoutRef<
   typeof DialogPrimitive.Content
 > {
@@ -46,14 +44,12 @@ export interface SheetContentProps extends React.ComponentPropsWithoutRef<
   /** Size variant */
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
-export interface SheetHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface SheetFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
-export interface SheetTitleProps extends React.ComponentPropsWithoutRef<
-  typeof DialogPrimitive.Title
-> {}
-export interface SheetDescriptionProps extends React.ComponentPropsWithoutRef<
+export type SheetHeaderProps = React.HTMLAttributes<HTMLDivElement>;
+export type SheetFooterProps = React.HTMLAttributes<HTMLDivElement>;
+export type SheetTitleProps = React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>;
+export type SheetDescriptionProps = React.ComponentPropsWithoutRef<
   typeof DialogPrimitive.Description
-> {}
+>;
 
 // ─── Style Maps ──────────────────────────────────────────────────────────────
 
@@ -106,7 +102,7 @@ SheetOverlay.displayName = 'SheetOverlay';
 export const SheetContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
   SheetContentProps
->(({ side = 'right', size = 'md', className, children, ...props }, ref) => (
+>(({ side = 'right', _size = 'md', className, children, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <DialogPrimitive.Content
