@@ -1,5 +1,6 @@
 // Gallery components - placeholder implementations
 import React from 'react';
+import Image from 'next/image';
 import { cn } from '@repo/utils';
 import type { GalleryItem } from '../types';
 
@@ -21,11 +22,15 @@ export const ImageGrid: React.FC<ImageGridProps> = ({ items, columns = 3 }) => {
     >
       {items.map((item) => (
         <div key={item.id} className="relative group overflow-hidden rounded-lg">
-          <img
-            src={item.src}
-            alt={item.alt}
-            className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+          <div className="relative h-64">
+            <Image
+              src={item.src}
+              alt={item.alt}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </div>
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300">
             <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
               <h3 className="font-semibold">{item.title ?? item.alt}</h3>
@@ -49,8 +54,8 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({ items, showThumbna
       <div className="overflow-hidden rounded-lg">
         <div className="flex space-x-4">
           {items.map((item) => (
-            <div key={item.id} className="flex-shrink-0">
-              <img src={item.src} alt={item.alt} className="w-full h-96 object-cover" />
+            <div key={item.id} className="shrink-0 relative h-96 w-64">
+              <Image src={item.src} alt={item.alt} fill className="object-cover" sizes="256px" />
             </div>
           ))}
         </div>
@@ -58,12 +63,15 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({ items, showThumbna
       {showThumbnails && (
         <div className="flex space-x-2 mt-4 overflow-x-auto">
           {items.map((item) => (
-            <img
-              key={item.id}
-              src={item.src}
-              alt={item.alt}
-              className="flex-shrink-0 w-20 h-20 object-cover rounded cursor-pointer"
-            />
+            <div key={item.id} className="shrink-0 relative w-20 h-20">
+              <Image
+                src={item.src}
+                alt={item.alt}
+                fill
+                className="object-cover rounded cursor-pointer"
+                sizes="80px"
+              />
+            </div>
           ))}
         </div>
       )}

@@ -30,8 +30,13 @@ import type { ServiceDetailProps } from '../types';
 // Sanitize JSON-LD data to prevent XSS breakout
 function sanitizeJSONLD(data: any): any {
   if (typeof data === 'string') {
-    // Escape </script> tags to prevent breakout
-    return data.replace(/<\/?script[^>]*>/gi, '');
+    // Escape HTML entities to prevent script breakout and XSS
+    return data
+      .replace(/&/g, '\\u0026')
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/"/g, '\\u0022')
+      .replace(/'/g, '\\u0027');
   }
 
   if (Array.isArray(data)) {

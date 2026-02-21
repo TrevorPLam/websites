@@ -43,6 +43,14 @@ const PHONE_REGEX = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[
 // [FEAT:BOOKING] [FEAT:VALIDATION] [FEAT:CONFIGURATION]
 // NOTE: Schema factory - creates Zod schema dynamically from configuration, enabling template-agnostic validation.
 export function createBookingFormSchema(config: BookingFeatureConfig) {
+  // Validate that we have at least one service and time slot
+  if (config.services.length === 0) {
+    throw new Error('Booking configuration must include at least one service');
+  }
+  if (config.timeSlots.length === 0) {
+    throw new Error('Booking configuration must include at least one time slot');
+  }
+
   const serviceTypes = config.services.map((s) => s.id) as [string, ...string[]];
   const timeSlotValues = config.timeSlots.map((t) => t.value) as [string, ...string[]];
 

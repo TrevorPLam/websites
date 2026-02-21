@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 /**
  * @file packages/marketing-components/src/gallery/GalleryGrid.tsx
  * @role component
@@ -37,11 +39,16 @@ export function GalleryGrid({ title, items, columns = 3, className }: GalleryGri
           {items.map((item) => {
             const content = (
               <figure>
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="aspect-square w-full rounded-lg object-cover"
-                />
+                <div className="relative aspect-square w-full">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    className="rounded-lg object-cover"
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    quality={85}
+                  />
+                </div>
                 {item.description && (
                   <figcaption className="mt-2 text-center text-sm text-muted-foreground">
                     {item.description}

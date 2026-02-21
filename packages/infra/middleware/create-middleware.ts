@@ -38,8 +38,12 @@ export function getAllowedOriginsFromEnv(): string[] {
     }
   }
 
-  // If no origins were added, provide safe defaults
+  // If no origins were added, provide safe defaults and warn
   if (origins.length === 0) {
+    console.warn(
+      '[SECURITY] NEXT_PUBLIC_SITE_URL not configured. Using default localhost origins for CSRF protection. ' +
+        'Set NEXT_PUBLIC_SITE_URL in production for proper security.'
+    );
     return ['http://localhost:3000', 'https://localhost:3000'];
   }
 

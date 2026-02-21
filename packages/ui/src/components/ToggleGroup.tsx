@@ -80,8 +80,10 @@ export const ToggleGroup = React.forwardRef<
   (
     {
       className,
-      _variant = 'default',
-      _size = 'md',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      variant = 'default',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      size = 'md',
       type = 'single',
       value,
       defaultValue,
@@ -110,11 +112,11 @@ export const ToggleGroup = React.forwardRef<
           };
 
     return (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Radix discriminated union
       <ToggleGroupPrimitive.Root
         ref={ref}
         type={type}
         className={cn('flex items-center justify-center gap-1', className)}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {...(rootProps as any)}
         {...props}
       >
@@ -128,9 +130,9 @@ ToggleGroup.displayName = 'ToggleGroup';
 export const ToggleGroupItem = React.forwardRef<
   React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
   ToggleGroupItemProps
->(({ className, _variant = 'default', _size = 'md', ...props }, ref) => (
+>(({ className, variant = 'default', size = 'md', ...props }, ref) => (
   <ToggleGroupPrimitive.Item ref={ref} asChild {...props}>
-    <Toggle _variant={variant} _size={size} className={className} />
+    <Toggle variant={variant} size={size} className={className} />
   </ToggleGroupPrimitive.Item>
 ));
 ToggleGroupItem.displayName = 'ToggleGroupItem';

@@ -10,13 +10,16 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/about/index'; // side-effect: register about sections
 
 export function AboutPageTemplate({
   config,
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
+  // Dynamically load about sections only when this template is used
+  React.useEffect(() => {
+    import('../sections/about/index').then((mod) => mod.registerAboutSections());
+  }, []);
   const content = composePage(
     { page: 'about', sections: config.pageSections?.about, searchParams },
     config

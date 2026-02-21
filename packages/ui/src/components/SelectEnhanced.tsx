@@ -61,6 +61,7 @@ export function SelectEnhanced({
   defaultOpen,
   onOpenChange,
   multiple,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   searchable: _searchable,
 }: SelectEnhancedProps) {
   return (

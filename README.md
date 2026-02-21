@@ -159,16 +159,32 @@ pnpm format        # Format with Prettier
 
 ```bash
 # Copy starter template to create a new client
+# Unix/Linux/macOS:
 cp -r clients/starter-template clients/my-client-name
+
+# Windows:
+xcopy /E /I clients\starter-template clients\my-client-name
+# Or using PowerShell:
+Copy-Item -Recurse -Force clients\starter-template clients\my-client-name
+
+# Or use the provided pnpm script (recommended):
+pnpm create-client my-client-name
 ```
 
 **Step 2: Configure the client**
 
 ```bash
+# Navigate to your new client directory
 cd clients/my-client-name
 
 # Copy environment file
+# Unix/Linux/macOS:
 cp .env.example .env.local
+
+# Windows:
+copy .env.example .env.local
+# Or using PowerShell:
+Copy-Item .env.example .env.local
 
 # Edit .env.local with your configuration
 # Update site.config.ts with client-specific settings

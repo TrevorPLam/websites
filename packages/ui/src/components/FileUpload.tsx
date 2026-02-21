@@ -131,6 +131,8 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             onChange={handleFileInputChange}
             disabled={disabled}
             className="hidden"
+            title="Select files to upload"
+            aria-label="Select files to upload"
           />
           <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
           <p className="text-sm font-medium text-foreground">
@@ -142,7 +144,7 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
           </p>
           <Button
             type="button"
-            _variant="outline"
+            variant="outline"
             className="mt-4"
             onClick={() => fileInputRef.current?.click()}
             disabled={disabled}
@@ -175,8 +177,8 @@ export const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
                 </div>
                 <Button
                   type="button"
-                  _variant="ghost"
-                  _size="small"
+                  variant="ghost"
+                  size="small"
                   onClick={() => removeFile(index)}
                   disabled={disabled}
                 >

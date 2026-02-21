@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 /**
  * @file packages/marketing-components/src/hero/HeroImageBackground.tsx
  * @role component
@@ -86,14 +88,14 @@ export function HeroImageBackground({
   return (
     <Section className={cn('relative overflow-hidden', className)}>
       <div className={cn('absolute inset-0 -z-10', parallax && 'bg-fixed')}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={backgroundImage.src}
           alt={backgroundImage.alt}
           className="h-full w-full object-cover"
-          width={backgroundImage.width}
-          height={backgroundImage.height}
-          loading={backgroundImage.priority ? 'eager' : 'lazy'}
+          fill
+          sizes="100vw"
+          priority={backgroundImage.priority}
+          quality={85}
         />
         <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
       </div>

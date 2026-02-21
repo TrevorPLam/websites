@@ -1,6 +1,8 @@
 // Industry components - placeholder implementations
 import React from 'react';
+import Image from 'next/image';
 import { cn } from '@repo/utils';
+import { sanitizeUrl } from '@repo/infra';
 
 // Location components
 interface LocationListProps {
@@ -88,7 +90,15 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ items, columns = 3
     >
       {items.map((item) => (
         <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
+          <div className="relative h-48">
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </div>
           <div className="p-6">
             <span className="text-sm text-blue-600">{item.category}</span>
             <h3 className="font-semibold mt-2">{item.title}</h3>

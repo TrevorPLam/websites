@@ -30,12 +30,26 @@
 'use server';
 
 import { headers } from 'next/headers';
+import { z } from 'zod';
 import { checkRateLimit, hashIp, logError, withServerSpan } from '@repo/infra';
 import { runWithRequestId } from '@repo/infra/context/request-context.server';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import type { ContactFormData } from './contact-schema';
 import { validateContactSecurity } from './contact-schema';
 import { SupabaseContactRepository } from './supabase-contact-repository';
+
+/**
+ * Default server-side validation schema for contact forms
+ * Provides comprehensive validation when client config is not available
+ */
+const defaultContactSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().optional(),
+  message: z.string().min(1, 'Message is required').max(2000, 'Message too long'),
+  // Honeypot field for bot protection
+  website: z.string().max(0, 'Bot detected').optional(),
+});
 
 /**
  * Contact submission result interface
@@ -167,6 +181,19 @@ export async function submitContactForm(
               success: false,
               message: 'Invalid form submission. Please check your inputs.',
               errors: securityCheck.errors.map((msg) => ({ path: [], message: msg })),
+            };
+          }
+
+          // Server-side schema validation
+          const schemaResult = defaultContactSchema.safeParse(data);
+          if (!schemaResult.success) {
+            return {
+              success: false,
+              message: 'Validation failed. Please check your inputs.',
+              errors: schemaResult.error.issues.map((issue) => ({
+                path: issue.path.map(String),
+                message: issue.message,
+              })),
             };
           }
 

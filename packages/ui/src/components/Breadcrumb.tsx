@@ -106,11 +106,9 @@ export const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLink
       return <>{props.children}</>;
     }
     return (
-      <a
-        ref={ref}
-        className={cn('transition-colors hover:text-foreground', className)}
-        {...props}
-      />
+      <a ref={ref} className={cn('transition-colors hover:text-foreground', className)} {...props}>
+        {props.children || <span className="sr-only">Breadcrumb link</span>}
+      </a>
     );
   }
 );

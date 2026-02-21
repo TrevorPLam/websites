@@ -41,7 +41,15 @@ export interface TimelineProps extends React.HTMLAttributes<HTMLDivElement> {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export const Timeline = React.forwardRef<HTMLDivElement, TimelineProps>(
-  ({ className, items, _variant = 'default', ...props }, ref) => {
+  (
+    {
+      className,
+      items, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      variant = 'default',
+      ...props
+    },
+    ref
+  ) => {
     return (
       <div ref={ref} className={cn('relative', className)} {...props}>
         {items.map((item, index) => (

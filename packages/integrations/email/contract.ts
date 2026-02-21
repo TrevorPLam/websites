@@ -12,7 +12,7 @@ export interface EmailSubscriber {
   firstName?: string;
   lastName?: string;
   tags?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface EmailAdapter {
@@ -25,7 +25,7 @@ export interface EmailAdapter {
   sendEvent: (
     email: string,
     eventName: string,
-    data?: Record<string, any>
+    data?: Record<string, unknown>
   ) => Promise<{ success: boolean; error?: string }>;
 }
 

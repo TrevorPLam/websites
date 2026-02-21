@@ -56,5 +56,6 @@
     "**/.next/**": true,
     "**/.turbo/**": true,
     "**/.pnpm-store/**": true
-  }
+  },
+  "markdown.validate.enabled": true
 }

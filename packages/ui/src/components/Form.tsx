@@ -143,6 +143,7 @@ FormItem.displayName = 'FormItem';
 
 export const FormLabel = React.forwardRef<HTMLLabelElement, FormLabelProps>(
   ({ className, ...props }, ref) => (
+    // Note: This is a generic label component. Association with controls is handled by consumers.
     <label
       ref={ref}
       className={cn(

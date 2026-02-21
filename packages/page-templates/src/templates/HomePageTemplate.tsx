@@ -12,9 +12,13 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/home/index'; // side-effect: register home sections
 
 export function HomePageTemplate({ config, slots }: PageTemplateProps): React.ReactElement {
+  // Dynamically load home sections only when this template is used
+  React.useEffect(() => {
+    import('../sections/home/index').then((mod) => mod.registerHomeSections());
+  }, []);
+
   const content = composePage({ page: 'home', sections: config.pageSections?.home }, config);
 
   return (

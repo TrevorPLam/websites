@@ -167,7 +167,7 @@ export const CarouselPrevious = React.forwardRef<HTMLButtonElement, CarouselPrev
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      _variant="outline"
+      variant="outline"
       className={cn('absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 p-0', className)}
       {...props}
     >
@@ -182,7 +182,7 @@ export const CarouselNext = React.forwardRef<HTMLButtonElement, CarouselNextProp
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      _variant="outline"
+      variant="outline"
       className={cn('absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 p-0', className)}
       {...props}
     >

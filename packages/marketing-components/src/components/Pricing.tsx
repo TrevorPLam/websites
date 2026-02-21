@@ -21,7 +21,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({ plans, title, descri
             {plans.map((plan) => (
               <th
                 key={plan.id}
-                className={`text-center p-4 border-b ${plan.highlighted ? 'bg-blue-50' : ''}`}
+                className={cn('text-center p-4 border-b', plan.highlighted && 'bg-blue-50')}
               >
                 {plan.name}
               </th>
@@ -35,7 +35,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({ plans, title, descri
               {plans.map((plan) => (
                 <td
                   key={plan.id}
-                  className={`text-center p-4 border-b ${plan.highlighted ? 'bg-blue-50' : ''}`}
+                  className={cn('text-center p-4 border-b', plan.highlighted && 'bg-blue-50')}
                 >
                   ✓
                 </td>
@@ -47,7 +47,10 @@ export const PricingTable: React.FC<PricingTableProps> = ({ plans, title, descri
             {plans.map((plan) => (
               <td
                 key={plan.id}
-                className={`text-center p-4 border-b font-bold ${plan.highlighted ? 'bg-blue-50' : ''}`}
+                className={cn(
+                  'text-center p-4 border-b font-bold',
+                  plan.highlighted && 'bg-blue-50'
+                )}
               >
                 {plan.price}
               </td>
@@ -87,9 +90,10 @@ export const PricingCards: React.FC<PricingCardsProps> = ({
       {plans.map((plan) => (
         <div
           key={plan.id}
-          className={`bg-white rounded-lg shadow-sm p-6 border-2 ${
+          className={cn(
+            'bg-white rounded-lg shadow-sm p-6 border-2',
             plan.highlighted ? 'border-blue-500 relative' : 'border-gray-200'
-          }`}
+          )}
         >
           {plan.highlighted && (
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">

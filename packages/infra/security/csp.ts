@@ -136,6 +136,9 @@ export function buildContentSecurityPolicy({
     // Connect sources: analytics and API endpoints
     "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com",
 
+    // Frame sources: allow YouTube and Vimeo embeds
+    "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://youtube.com https://vimeo.com",
+
     // Frame security: prevent clickjacking
     "frame-ancestors 'none'",
 

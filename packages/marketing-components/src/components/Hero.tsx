@@ -1,5 +1,6 @@
 // Hero components - placeholder implementations
 import React from 'react';
+import Image from 'next/image';
 
 interface CTAProps {
   text?: string;
@@ -62,8 +63,14 @@ export const HeroSplit: React.FC<HeroSplitProps> = ({
         )}
       </div>
       {image && (
-        <div className="w-1/2">
-          <img src={image} alt={title} className="w-full h-auto rounded" />
+        <div className="w-1/2 relative aspect-[4/3]">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover rounded"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
         </div>
       )}
     </section>

@@ -82,7 +82,7 @@ const checkboxIconVariants = cva({
 export const Checkbox = React.forwardRef<
   React.ComponentRef<typeof CheckboxPrimitive.Root>,
   CheckboxProps
->(({ className, _size = 'md', ...props }, ref) => (
+>(({ className, size = 'md', ...props }, ref) => (
   <CheckboxPrimitive.Root
     ref={ref}
     className={cn(checkboxVariants({ size }), className)}

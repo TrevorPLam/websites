@@ -145,14 +145,12 @@ Tabs.displayName = 'Tabs';
 export const TabsList = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.List>,
   TabsListProps
->(({ className, variant: variantProp, size: sizeProp, ...props }, ref) => {
+>(({ className, variant: variantProp, ...props }, ref) => {
   const ctx = React.useContext(TabsContext);
-  const _variant = variantProp ?? ctx.variant;
-  const _size = sizeProp ?? ctx.size;
   return (
     <TabsPrimitive.List
       ref={ref}
-      className={cn(tabsListVariants({ variant: _variant }), className)}
+      className={cn(tabsListVariants({ variant: variantProp ?? ctx.variant }), className)}
       {...props}
     />
   );
@@ -164,14 +162,12 @@ TabsList.displayName = 'TabsList';
 export const TabsTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Trigger>,
   TabsTriggerProps
->(({ className, variant: variantProp, size: sizeProp, ...props }, ref) => {
+>(({ className, size: sizeProp, ...props }, ref) => {
   const ctx = React.useContext(TabsContext);
-  const _variant = variantProp ?? ctx.variant;
-  const _size = sizeProp ?? ctx.size;
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={cn(tabsTriggerVariants({ size: _size }), className)}
+      className={cn(tabsTriggerVariants({ size: sizeProp ?? ctx.size }), className)}
       {...props}
     />
   );

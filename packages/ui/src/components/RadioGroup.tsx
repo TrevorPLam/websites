@@ -117,7 +117,7 @@ RadioGroup.displayName = 'RadioGroup';
 export const RadioGroupItem = React.forwardRef<
   React.ComponentRef<typeof RadioGroupPrimitive.Item>,
   RadioGroupItemProps
->(({ className, _size = 'md', ...props }, ref) => (
+>(({ className, size = 'md', ...props }, ref) => (
   <RadioGroupPrimitive.Item
     ref={ref}
     className={cn(radioGroupItemVariants({ size }), className)}

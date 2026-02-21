@@ -78,7 +78,7 @@ const statusSizeStyles: Record<AvatarSize, string> = {
 // [TRACE:FUNC=packages.ui.components.Avatar]
 // [FEAT:UI] [FEAT:ACCESSIBILITY]
 export const Avatar = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, AvatarProps>(
-  ({ className, _size = 'md', shape = 'circle', status, ...props }, ref) => (
+  ({ className, size = 'md', shape = 'circle', status, ...props }, ref) => (
     <span className="relative inline-flex">
       <AvatarPrimitive.Root
         ref={ref}

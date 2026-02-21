@@ -18,6 +18,7 @@
  * - No breaking change to existing composePage / registerSection API
  */
 import * as React from 'react';
+import dynamic from 'next/dynamic';
 import type { SiteConfig } from '@repo/types';
 import type { SectionDefinition, SectionProps, TemplateConfig } from './types';
 
@@ -210,7 +211,12 @@ export function composePage(
           } as SectionProps;
         }
       }
-      const sectionElement = React.createElement(Section, sectionProps as SectionProps);
+      // Create dynamic component for code splitting
+      const DynamicSection = dynamic(() => Promise.resolve({ default: Section }), {
+        loading: () => React.createElement(SectionFallback, null),
+        ssr: true, // Enable server-side rendering for better performance
+      });
+      const sectionElement = React.createElement(DynamicSection, sectionProps as SectionProps);
       return React.createElement(
         React.Suspense,
         {

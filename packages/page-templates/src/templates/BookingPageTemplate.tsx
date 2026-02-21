@@ -11,13 +11,17 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/booking/index'; // side-effect: register booking sections
 
 export function BookingPageTemplate({
   config,
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
+  // Dynamically load booking sections only when this template is used
+  React.useEffect(() => {
+    import('../sections/booking/index').then((mod) => mod.registerBookingSections());
+  }, []);
+
   const content = composePage(
     { page: 'booking', sections: config.pageSections?.booking, searchParams },
     config

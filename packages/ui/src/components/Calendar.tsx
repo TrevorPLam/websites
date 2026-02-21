@@ -138,7 +138,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
                   'min-w-[24px] min-h-[24px]'
                 )}
                 aria-label={`Select ${monthNames[month]} ${day}, ${year}`}
-                aria-selected={isSelected(day)}
+                // aria-selected={isSelected(day)} // Not supported on button elements
               >
                 {day}
               </button>

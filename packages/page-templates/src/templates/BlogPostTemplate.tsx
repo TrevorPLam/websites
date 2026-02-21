@@ -11,13 +11,17 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/blog/index'; // side-effect: register blog sections
 
 export function BlogPostTemplate({
   config,
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
+  // Dynamically load blog sections only when this template is used
+  React.useEffect(() => {
+    import('../sections/blog/index').then((mod) => mod.registerBlogSections());
+  }, []);
+
   const content = composePage(
     { page: 'blog-post', sections: config.pageSections?.['blog-post'], searchParams },
     config

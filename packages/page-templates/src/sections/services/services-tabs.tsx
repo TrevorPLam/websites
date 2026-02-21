@@ -17,6 +17,7 @@ function ServicesTabsAdapter(props: SectionProps) {
   const config = getSiteConfig(props);
   const rawServices = getServicesFromConfig(config);
   if (rawServices.length === 0) return null;
+
   const categoryMap = new Map<string, ServiceItem[]>();
   for (const s of rawServices) {
     const cat = s.category ?? 'General';
@@ -24,6 +25,7 @@ function ServicesTabsAdapter(props: SectionProps) {
     list.push(s);
     categoryMap.set(cat, list);
   }
+
   const categories: ServiceCategoryItem[] = Array.from(categoryMap.entries()).map(
     ([name, services]) => ({
       id: name.toLowerCase().replace(/\s+/g, '-'),
@@ -31,7 +33,9 @@ function ServicesTabsAdapter(props: SectionProps) {
       services,
     })
   );
+
   if (categories.length === 0) return null;
+
   return (
     <ServiceTabs
       services={categories.flatMap((c) => c.services)}

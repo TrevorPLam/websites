@@ -20,9 +20,7 @@
     "baseUrl": ".",
     "paths": {
       "@repo/features": ["packages/features/src/index.ts"],
-      "@repo/features/*": ["packages/features/src/*"],
-      "@repo/database": ["packages/database/src/index.ts"],
-      "@repo/database/*": ["packages/database/src/*"]
+      "@repo/features/*": ["packages/features/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build", ".next"]

@@ -142,7 +142,7 @@ export const PaginationItem = React.forwardRef<HTMLLIElement, PaginationItemProp
 PaginationItem.displayName = 'PaginationItem';
 
 export const PaginationLink = React.forwardRef<HTMLAnchorElement, PaginationLinkProps>(
-  ({ className, isActive, ...props }, ref) => (
+  ({ className, isActive, children, ...props }, ref) => (
     <a
       ref={ref}
       aria-current={isActive ? 'page' : undefined}
@@ -152,7 +152,9 @@ export const PaginationLink = React.forwardRef<HTMLAnchorElement, PaginationLink
         className
       )}
       {...props}
-    />
+    >
+      {children || <span className="sr-only">Page {isActive ? '(current)' : ''}</span>}
+    </a>
   )
 );
 PaginationLink.displayName = 'PaginationLink';
@@ -161,8 +163,8 @@ export const PaginationPrevious = React.forwardRef<HTMLButtonElement, Pagination
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      _variant="outline"
-      _size="small"
+      variant="outline"
+      size="small"
       className={cn('gap-1 pl-2.5', className)}
       {...props}
     >
@@ -177,8 +179,8 @@ export const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNext
   ({ className, ...props }, ref) => (
     <Button
       ref={ref}
-      _variant="outline"
-      _size="small"
+      variant="outline"
+      size="small"
       className={cn('gap-1 pr-2.5', className)}
       {...props}
     >

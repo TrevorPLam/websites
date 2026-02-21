@@ -54,7 +54,9 @@ export interface ColorPickerProps {
 export function ColorPicker({
   value = '#000000',
   onValueChange,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   format: _format = 'hex',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   showAlpha: _showAlpha = false,
   presets = [
     '#000000',
@@ -87,7 +89,7 @@ export function ColorPicker({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          _variant="outline"
+          variant="outline"
           className={cn(
             'w-[280px] justify-start text-left font-normal gap-2',
             disabled && 'opacity-50'
@@ -108,9 +110,12 @@ export function ColorPicker({
         <div className="space-y-4">
           {/* Color input */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Color</label>
+            <label htmlFor="color-input" className="text-sm font-medium">
+              Color
+            </label>
             <div className="flex gap-2">
               <input
+                id="color-input"
                 type="color"
                 value={selectedColor}
                 onChange={(e) => handleColorChange(e.target.value)}
@@ -127,8 +132,10 @@ export function ColorPicker({
           {/* Presets */}
           {presets.length > 0 && (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Presets</label>
-              <div className="grid grid-cols-5 gap-2">
+              <label htmlFor="presets-grid" className="text-sm font-medium">
+                Presets
+              </label>
+              <div id="presets-grid" className="grid grid-cols-5 gap-2">
                 {presets.map((preset, index) => (
                   <button
                     key={index}

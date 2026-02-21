@@ -12,13 +12,16 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/services/index'; // side-effect: register services sections
 
 export function ServicesPageTemplate({
   config,
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
+  // Dynamically load services sections only when this template is used
+  React.useEffect(() => {
+    import('../sections/services/index').then((mod) => mod.registerServicesSections());
+  }, []);
   const content = composePage(
     { page: 'services', sections: config.pageSections?.services, searchParams },
     config

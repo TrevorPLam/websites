@@ -61,7 +61,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
       max = 5,
       readOnly = false,
       allowHalf = false,
-      _size = 'md',
+      size = 'md',
       ...props
     },
     ref
@@ -96,7 +96,7 @@ export const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
         ref={ref}
         className={cn('flex items-center gap-0.5', className)}
         onMouseLeave={handleMouseLeave}
-        role={readOnly ? 'img' : 'radiogroup'}
+        role={readOnly ? 'img' : 'group'}
         aria-label={readOnly ? `Rating: ${value} out of ${max}` : 'Rating'}
         {...props}
       >

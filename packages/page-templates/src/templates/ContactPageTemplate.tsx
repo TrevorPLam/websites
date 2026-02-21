@@ -10,13 +10,16 @@
 import * as React from 'react';
 import type { PageTemplateProps } from '../types';
 import { composePage } from '../registry';
-import '../sections/contact/index'; // side-effect: register contact sections
 
 export function ContactPageTemplate({
   config,
   searchParams,
   slots,
 }: PageTemplateProps): React.ReactElement {
+  // Dynamically load contact sections only when this template is used
+  React.useEffect(() => {
+    import('../sections/contact/index').then((mod) => mod.registerContactSections());
+  }, []);
   const content = composePage(
     { page: 'contact', sections: config.pageSections?.contact, searchParams },
     config

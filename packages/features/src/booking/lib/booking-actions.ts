@@ -53,10 +53,7 @@ import type { BookingProviderResponse } from './booking-provider-adapter';
 import { checkRateLimit, hashIp } from '@repo/infra';
 import { getValidatedClientIp } from '@repo/infra/security/request-validation';
 import type { BookingFeatureConfig } from './booking-config';
-import {
-  getBookingRepository as getBookingRepositoryFactory,
-  type BookingRepository,
-} from './booking-repository';
+import { getBookingRepository } from './booking-repository';
 import { resolveTenantId } from '@repo/infra/auth/tenant-context';
 import { validateEnv } from '@repo/infra/env';
 
@@ -81,14 +78,6 @@ const getBookingDetailsSchema = z.object({
   confirmationNumber: z.string().min(1),
   email: z.string().email(),
 });
-
-/**
- * Get booking repository based on environment configuration
- * Returns SupabaseBookingRepository if env vars are present, otherwise InMemoryBookingRepository
- */
-export function getBookingRepository(): BookingRepository {
-  return getBookingRepositoryFactory();
-}
 
 /**
  * Booking submission result interface
@@ -391,6 +380,18 @@ export async function getBookingDetails(
   );
 }
 
+/**
+ * Format booking date with locale awareness
+ */
+function formatBookingDate(date: Date, locale: string = 'en-US'): string {
+  return date.toLocaleDateString(locale, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 async function getBookingDetailsHandler(
   {
     bookingId,
@@ -419,12 +420,7 @@ async function getBookingDetailsHandler(
   return {
     ...booking,
     serviceLabel: serviceLabels[booking.data.serviceType] ?? booking.data.serviceType,
-    formattedDate: new Date(booking.data.preferredDate).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }),
+    formattedDate: formatBookingDate(new Date(booking.data.preferredDate)),
   };
 }
 

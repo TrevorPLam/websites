@@ -65,11 +65,12 @@ export const BlogPagination: React.FC<BlogPaginationProps> = ({
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-4 py-2 rounded ${
+          className={cn(
+            'px-4 py-2 rounded',
             page === currentPage
               ? 'bg-blue-500 text-white'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
+          )}
         >
           {page}
         </button>
