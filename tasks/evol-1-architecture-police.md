@@ -40,7 +40,7 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 ## Acceptance Criteria
 
 - [x] Error: no imports from `@repo/*/src/**` (use package exports only)
-- [x] Error: no imports from `@repo/clients-*` or cross-client
+- [x] Error: no imports from `@repo/clients-*` or `@clients/*` (cross-client)
 - [x] Warn: HubSpotContact (and similar) in features packages → "Use @repo/types canonical types. See ADR-012"
 - [x] Uses ESLint 9 flat config (not .eslintrc)
 - [ ] `pnpm lint` passes with new rules — _blocked by pre-existing @repo/ui (and other) errors; architecture rules are active_
@@ -59,6 +59,20 @@ Enforce architectural invariants via ESLint to catch drift and prepare for data 
 - [x] Add warn for integration types in features
 - [x] Document in ROADMAP (if needed)
 - [x] Run `pnpm lint` to verify (infra + integrations-core errors fixed; full workspace still has @repo/ui errors)
+- [x] Expand cross-client restriction to include `@repo/clients-*` aliases in shared boundary config
+
+## Execution Notes (2026-02-21)
+
+- Updated `packages/config/eslint-config/boundaries.js` to explicitly block both `@clients/*` and `@repo/clients-*` import patterns under architecture boundary enforcement.
+- Validation status:
+  - `pnpm lint` fails due to unrelated, pre-existing workspace lint errors (not introduced by this task update).
+  - `pnpm type-check` fails in `@repo/utils` due to an existing tsconfig path/baseUrl issue.
+  - `pnpm test` fails in existing booking action tests (`secureAction` runtime issue).
+  - `pnpm validate-exports` passes.
+
+## Lessons Learned
+
+- Cross-client restrictions must account for both naming conventions (`@clients/*` and `@repo/clients-*`) because historical package aliases and workspace naming can coexist during evolution.
 
 ## Sample code / examples
 
