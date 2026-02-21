@@ -121,6 +121,8 @@ const timeSlotValues = config.timeSlots.map((t) => t.value) as [string, ...strin
 
 The schema assumes non-empty arrays (see comment at line 8: "Assumptions: config.services and config.timeSlots have at least one item for z.enum()"). With `timeSlots: []`, the schema creation can fail at runtime.
 
+**Verification:** Run `pnpm dev` in starter-template and navigate to /book. The booking page may crash with "ZodError: Invalid enum values" or render with broken time slot selection.
+
 **Example 2: Toaster not mounted — no toast feedback**
 
 In `clients/starter-template/app/providers.tsx`:
@@ -132,6 +134,10 @@ export function Providers({ children, cmpProvider }: ProvidersProps) {
 ```
 
 There is no `Toaster` import or component. A search for "Toaster" in `clients/` returns no matches. Any code that calls `toast.success()` or `toast.error()` (e.g. after form submission) will not show a visible toast.
+
+**Evidence:** `packages/ui/src/components/Toaster.tsx` exists but is never imported. `packages/features/src/booking/components/BookingForm.tsx` imports and uses `toast.success()`/`toast.error()` on lines 65, 71, 77.
+
+**Verification:** Submit any booking form in starter-template. The form processes but no toast appears. Check browser console — no errors, just no visible feedback.
 
 **Example 3: ContactFormAdapter never passes onSubmit — data discarded**
 
@@ -164,6 +170,8 @@ export default function ContactForm({
 ```
 
 The user sees a success message but no data is saved anywhere.
+
+**Verification:** Submit the contact form on any client site. Check Supabase/HubSpot — no record created. The success message appears but data is discarded.
 
 **Example 4: Contact form lacks server-side Zod — validateContactSecurity is minimal**
 
@@ -233,6 +241,8 @@ function BlogGridAdapter(_props: SectionProps) {
 
 Blog index and post pages always receive empty data; no wiring to real blog content.
 
+**Verification:** Navigate to /blog or any /blog/[slug] route. Pages render with empty content. No 404 for unknown slugs, no actual blog posts appear.
+
 **Example 6: InMemoryBookingRepository hardcoded — no env-based swap**
 
 In `packages/features/src/booking/lib/booking-actions.ts` (lines 82–90):
@@ -247,6 +257,10 @@ const bookingRepository = new InMemoryBookingRepository();
 ```
 
 There is no logic to check env vars or swap implementations. `getBookingRepository()` is referenced in tasks but does not exist. Data is lost on server restart.
+
+**Evidence:** Search for `getBookingRepository` across the codebase returns only task references, no implementation. `packages/features/src/booking/lib/repository.ts` contains `InMemoryBookingRepository` and `SupabaseBookingRepository` but no factory function.
+
+**Verification:** Create a booking, then restart the dev server. The booking is gone (in-memory only). No Supabase records created even with SUPABASE_URL configured.
 
 **Example 7: ServiceTabs renders empty shell — no tab content**
 
@@ -265,6 +279,8 @@ export function ServiceTabs({ categories, className }: ServiceTabsProps) {
 ```
 
 The component receives `categories` and passes `defaultValue` to `Tabs`, but there is no `TabsList`, `TabsTrigger`, or `TabsContent`. Users see an empty Tabs shell with no visible content.
+
+**Verification:** Add a ServiceTabs section to any page configuration. The section renders but shows no tabs or content — just an empty container.
 
 **Example 8: HeroWithForm defaultFormSchema omits phone — schema/UI mismatch**
 
@@ -414,6 +430,10 @@ Implementation (lines 78–86):
 
 The comment describes a fix that was never applied. The component still uses raw `<img>` and disables the lint rule that would flag it.
 
+**Evidence:** 48 instances of `<img src=` found across marketing-components. Only ServiceGrid has the misleading comment claiming the fix was applied.
+
+**Verification:** Run Lighthouse on a page with ServiceGrid. LCP will be poor for images, no WebP/AVIF format served.
+
 **Example 2: Static section imports — all sections load upfront**
 
 In `packages/page-templates/src/templates/HomePageTemplate.tsx`, `BlogIndexTemplate.tsx`, `BookingPageTemplate.tsx`, etc.:
@@ -425,6 +445,10 @@ import '../sections/booking/index'; // side-effect: register booking sections
 ```
 
 These are static imports. Every template pulls in its section registry at bundle time. There is no `dynamic()` or lazy loading; booking, blog, and contact section code load even when the user visits only the home page.
+
+**Evidence:** Bundle analysis shows all section code included in initial page load. No `dynamic()` imports found in any template file.
+
+**Verification:** Run `pnpm build` on starter-template and check `.next/static/chunks/`. All section components are in the main bundle, not split.
 
 **Example 3: validate-budgets script always passes when no metrics**
 
@@ -964,6 +988,11 @@ Internal error (lines 156–170):
 
 `err.message` can include stack traces, file paths, or API details. If shown to users, it leaks internal information.
 
+**OWASP Mapping:** A05:2021 – Security Misconfiguration (excessive data exposure)
+**Exploit Scenario:** Attacker crafts invalid requests to map out validation rules. Internal errors reveal file paths like `/home/user/projects/marketing-websites/packages/infra/security/secure-action.ts` helping identify the tech stack.
+
+**Verification:** Send malformed JSON to any secureAction endpoint. The response includes full validation issues or error messages with internal details.
+
 **Example 2: JSON-LD script breakout XSS**
 
 In `packages/features/src/services/components/ServiceDetailLayout.tsx` (lines 86–92):
@@ -980,6 +1009,11 @@ In `packages/features/src/services/components/ServiceDetailLayout.tsx` (lines 86
 ```
 
 `faqStructuredData` includes `faq.question` and `faq.answer` (line 77–81). If CMS or config content contains `</script>`, it breaks out of the script tag and can execute arbitrary JavaScript. Data should be escaped before `JSON.stringify`.
+
+**OWASP Mapping:** A03:2021 – Injection (XSS)
+**Exploit Scenario:** Attacker controls FAQ content via CMS. Entry: `What is your service?</script><script>alert('XSS')</script>`. Result: XSS executes in context of the page.
+
+**Verification:** Add an FAQ item with `</script><script>alert(1)</script>` in the answer. View the page source — script tags break out and execute.
 
 **Example 3: ThemeInjector CSS injection risk**
 
@@ -1014,6 +1048,11 @@ export function getAllowedOriginsFromEnv(): string[] | undefined {
 ```
 
 When `NEXT_PUBLIC_SITE_URL` is missing or invalid, the function returns `undefined`. The middleware checks `if (allowedOrigins && allowedOrigins.length > 0)` before enforcing Origin — when undefined, the check is skipped and no CSRF protection is applied.
+
+**OWASP Mapping:** A01:2021 – Broken Access Control (CSRF)
+**Exploit Scenario:** Attacker hosts a malicious form that submits to the target site. With no Origin check, the browser sends the request with cookies. State-changing actions (contact submit, booking) can be triggered cross-origin.
+
+**Verification:** Set NEXT_PUBLIC_SITE_URL to empty value. Submit a form from a different origin — request succeeds without CSRF validation.
 
 **Example 5: CSP lacks frame-src for embeds**
 
@@ -1140,6 +1179,8 @@ Comments in validate-site-config say "use validateSiteConfigObject() directly" f
 
 **Verification:** Grep for `validateSiteConfigObject` across the repo returns only this comment and ANALYSIS/ANALYSISFULL references; no function definition exists.
 
+**Impact:** Full schema validation is impossible despite the comment suggesting it exists.
+
 **Example 2: zodResolver cast pattern loses type inference**
 
 In ContactForm, BookingForm, Form (packages/features, packages/ui):
@@ -1149,6 +1190,10 @@ resolver: zodResolver(schema as unknown as Parameters<typeof zodResolver>[0]),
 ```
 
 This workaround is used for dynamic schemas with zodResolver. The cast loses schema type inference and can mask type errors.
+
+**Evidence:** Found in 6+ components. Pattern indicates typing issues with dynamic schemas.
+
+**Verification:** Remove the cast — TypeScript errors reveal the underlying type mismatch that needs proper resolution.
 
 **Example 3: `Record<string, any>` and `z.record(z.any())` in SiteConfig**
 
@@ -1181,6 +1226,10 @@ import { useState, ...
 ```
 
 Duplicate directives increase noise and can confuse tooling. The same pattern appears in FooterWithNewsletter and NewsletterSection.
+
+**Evidence:** Multiple files have duplicate 'use client' at lines 1 and ~25 after comment blocks.
+
+**Verification:** Run `grep -n "'use client'"` on these files — shows two occurrences per file.
 
 **Example 5: AccordionContent item shape differs — adapter mismatch**
 
@@ -1273,7 +1322,7 @@ Documentation leads with Unix commands; Windows developers need WSL or Git Bash.
 | docs/tutorials/build-first-client.md    | `mkdir -p`, `cp -r`                                                 | 119, 122                |
 | docs/migration/template-to-client.md    | `cp -r`                                                             | 62                      |
 
-**Verification:** No Windows equivalents (xcopy, robocopy, PowerShell Copy-Item) or `pnpm create-client` in these doc blocks.
+**Verification:** Windows user without Git Bash tries `cp -r` in Command Prompt — command not found. No Windows alternatives documented.
 
 **Example 2: Only starter-template has Dockerfile**
 
@@ -1281,7 +1330,7 @@ Deploy portability is inconsistent across clients.
 
 **Evidence:** Grep for `Dockerfile` in `clients/`: only [clients/starter-template/Dockerfile](clients/starter-template/Dockerfile) exists. No Dockerfile under `clients/luxe-salon/`, `clients/bistro-central/`, `clients/chen-law/`, `clients/sunrise-dental/`, or `clients/urban-outfitters/`.
 
-**Verification:** `ls clients/*/Dockerfile` or equivalent returns one file; docker-compose.yml and docs reference `clients/starter-template/Dockerfile` only.
+**Verification:** `ls clients/*/Dockerfile` or equivalent returns one file; docker-compose.yml and docs reference `clients/starter-template/Dockerfile` only. Other clients cannot be deployed using Docker without manual configuration.
 
 **Example 3: CI runs ubuntu-latest only**
 
@@ -1289,7 +1338,7 @@ Jobs run on `ubuntu-latest` only. There is no Windows or macOS matrix; platform-
 
 **Evidence:** [.github/workflows/ci.yml](.github/workflows/ci.yml) lines 35, 146: `runs-on: ubuntu-latest`. Same in docs-validation.yml, nightly.yml, performance-audit.yml, release-canary.yml, release.yml, security-sast.yml, visual-regression.yml, dependency-integrity.yml, secret-scan.yml, sbom-generation.yml.
 
-**Verification:** No `runs-on: windows-latest` or `macos-latest` in any workflow.
+**Verification:** No `runs-on: windows-latest` or `macos-latest` in any workflow. Windows-specific path separator bugs (e.g. `\` vs `/`) are not tested in CI.
 
 **Example 4: Hardcoded en-US in currency and date formatting**
 
@@ -1309,7 +1358,7 @@ Currency and date formatting hardcode `en-US` or omit locale; site locale from `
 
 `formatCurrency` and `formatNumber` in [packages/features/src/localization/format.ts](packages/features/src/localization/format.ts) accept a `locale` parameter, but callers often omit it.
 
-**Verification:** Grep for `'en-US'` in marketing-components and booking-actions; DatePicker has no locale prop in formatDate.
+**Verification:** Set site locale to 'fr-FR' or 'de-DE'. Product prices still display with $ and US formatting. Dates show MM/DD/YYYY regardless of locale.
 
 ---
 
