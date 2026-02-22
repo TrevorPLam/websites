@@ -1,10 +1,4 @@
 // @ts-check
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import config from '@repo/eslint-config';
 
-export default tseslint.config(js.configs.recommended, ...tseslint.configs.recommended, {
-  files: ['src/**/*.{ts,tsx,js,jsx}'],
-  rules: {
-    'no-console': 'off',
-  },
-});
+export default [...config];

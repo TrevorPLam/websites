@@ -259,7 +259,7 @@ Looking for something specific? Use your browser's search (Ctrl+F / Cmd+F) or ch
 
 - **[Glossary](resources/glossary.md)** - Definitions of terms and concepts
 - **[FAQ](resources/faq.md)** - Frequently asked questions
-- **[Troubleshooting](getting-started/troubleshooting.md)** - Common issues and solutions
+- **[Troubleshooting](getting-started/comprehensive-guide.md#troubleshooting)** - Common issues and solutions
 
 > **Note:** Full-text search will be available when the documentation site is deployed.
 
@@ -270,6 +270,7 @@ Looking for something specific? Use your browser's search (Ctrl+F / Cmd+F) or ch
 - **🧩 Component Usage?** Check [Components Documentation](components/)
 - **⚙️ Development Standards?** Review [Documentation Standards](DOCUMENTATION_STANDARDS.md)
 - **📚 Reference Materials?** See [Resources](resources/) (Glossary, FAQ, Learning Paths)
+- **🔧 Client Setup?** See [Client Directory README](../clients/README.md)
 
 ---
 
@@ -277,22 +278,17 @@ Looking for something specific? Use your browser's search (Ctrl+F / Cmd+F) or ch
 
 ### For New Developers
 
-**[Developer Onboarding Guide](getting-started/onboarding.md)**  
+**[Comprehensive Getting Started Guide](getting-started/comprehensive-guide.md)**  
 _Estimated time: 2-4 hours_
 
 Complete guide to setting up your development environment and understanding the codebase.
-
-**[Troubleshooting](getting-started/troubleshooting.md)**  
-_Solutions to common issues_
-
-Frequently encountered problems and their solutions.
 
 ### For New Projects
 
 **[Client Directory README](../clients/README.md)**  
 _Client setup and deployment_
 
-Step-by-step guide to creating clients from `starter-template` and deploying.
+Step-by-step guide to creating clients from `testing-not-a-client` and deploying.
 
 **[Build Your First Client](tutorials/build-first-client.md)**  
 _Step-by-step tutorial_
@@ -699,7 +695,7 @@ Documentation is continuously improved through:
 
 ---
 
-_This documentation hub is regularly updated. Last revised: 2026-02-18_
+_This documentation hub is regularly updated. Last revised: 2026-02-21_
 
 ---
 

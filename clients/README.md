@@ -261,12 +261,14 @@ Each client can be deployed independently:
 
 ### Docker Deployment
 
-Only `starter-template` has a Dockerfile. From monorepo root:
+Clients can be deployed using Docker. From monorepo root:
 
 ```bash
-docker build -f clients/starter-template/Dockerfile -t starter-template .
-docker run -p 3101:3101 starter-template
+docker build -f clients/[client-name]/Dockerfile -t [client-name] .
+docker run -p [port]:[port] [client-name]
 ```
+
+Add appropriate Dockerfile to your client directory based on deployment needs.
 
 ### Other Platforms
 
@@ -336,7 +338,7 @@ Each client should have its own `README.md` with:
 
 ## Example Clients
 
-See `clients/starter-template/` for the golden-path reference. See `clients/luxe-salon/`, `clients/bistro-central/`, etc. for industry-specific examples.
+See `clients/testing-not-a-client/` for the reference implementation. This single template demonstrates all working functionality including contact forms, booking system, blog features, and integrations.
 
 ## Validation
 
@@ -400,4 +402,4 @@ For questions or issues:
 
 ---
 
-**Last Updated:** 2026-02-18
+**Last Updated:** 2026-02-21

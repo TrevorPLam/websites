@@ -22,8 +22,8 @@
  * Blocks imports that bypass package public APIs or violate the dependency matrix.
  *
  * Rules:
- * 1. No deep /src/ imports from @repo/* packages — use public exports only
- * 2. No relative paths that cross package boundaries — use @repo/* aliases
+ * 1. No deep internal imports — always use public package API
+ * 2. No relative paths escaping package boundaries — use @repo/* aliases
  * 3. No cross-client imports — clients must be fully isolated
  *
  * @see docs/architecture/module-boundaries.md

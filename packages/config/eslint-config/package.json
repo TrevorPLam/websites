@@ -5,12 +5,10 @@
   "type": "module",
   "description": "Shared ESLint configuration",
   "exports": {
-    ".": "./library.js",
-    "./next": "./next.js",
+    ".": "./next.js",
     "./boundaries": "./boundaries.js"
   },
   "dependencies": {
-    "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "eslint": "^9.18.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",

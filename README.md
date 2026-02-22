@@ -81,36 +81,36 @@ Professional multi-industry marketing website template system built with modern 
 
 ### Current Status
 
-**Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Timeline:** 12 weeks | **Current State:** Config-driven clients (6 industry clients) → **Target:** 12 industries, 20+ components
+**Phase:** Architecture Complete → Client Simplification | **Timeline:** 12 weeks | **State:** Robust package ecosystem with simplified client structure
 
 > **Quality gates:** Run `pnpm lint type-check build test` to verify. Historical issue analysis is in [docs/archive/ISSUES.md](docs/archive/ISSUES.md).
 
-| Layer  | Package                      | Status         | Progress                                                                        |
-| ------ | ---------------------------- | -------------- | ------------------------------------------------------------------------------- |
-| **L0** | `@repo/infra`                | 🟢 Complete    | Security, middleware, logging, 7 env schemas                                    |
-| **L2** | `@repo/ui`                   | 🟡 In Progress | 9+ UI primitives (Button, Dialog, Input, Slider, Toast, etc.)                   |
-| **L2** | `@repo/marketing-components` | 🟡 Partial     | Package exists; scaffolded component families                                   |
-| **L2** | `@repo/features`             | 🟡 Partial     | 5 features (booking, contact, blog, services, search); all tests pass           |
-| **L2** | `@repo/types`                | 🟢 Complete    | Shared TypeScript types/interfaces                                              |
-| **L2** | `@repo/infrastructure-*`     | 🟡 Partial     | tenant-core, theme, layout, ui (type-check passes)                              |
-| **L3** | `@repo/page-templates`       | 🟡 Wired       | 7 templates use section registry + marketing-components adapters                |
-| **L3** | `clients/starter-template`   | 🟢 Active      | Golden-path template (port 3101, next-intl, Docker)                             |
-| **L3** | `clients/luxe-salon`, etc.   | 🟡 Partial     | 6 industry clients (bistro-central, chen-law, sunrise-dental, urban-outfitters) |
+| Layer  | Package                        | Status      | Details                                                                         |
+| ------ | ------------------------------ | ----------- | ------------------------------------------------------------------------------- |
+| **L0** | `@repo/infra`                  | 🟢 Complete | Security, middleware, logging, 7 env schemas                                    |
+| **L2** | `@repo/ui`                     | � Complete  | 68+ UI primitives (Button, Dialog, Input, Slider, Toast, etc.)                  |
+| **L2** | `@repo/marketing-components`   | � Complete  | Marketing component families implemented                                        |
+| **L2** | `@repo/features`               | � Complete  | 20+ features (booking, contact, blog, services, search, analytics, etc.)        |
+| **L2** | `@repo/types`                  | 🟢 Complete | Shared TypeScript types/interfaces                                              |
+| **L2** | `@repo/infrastructure-*`       | � Complete  | tenant-core, theme, layout, ui (type-check passes)                              |
+| **L2** | `@repo/integrations-*`         | 🟢 Complete | 21 integrations (analytics, hubspot, supabase, scheduling, chat, reviews, etc.) |
+| **L3** | `@repo/page-templates`         | 🟡 Wired    | Template system with section registry                                           |
+| **L3** | `clients/testing-not-a-client` | 🟢 Active   | Single working template (demonstrates all functionality)                        |
+| **L3** | Industry Templates             | ⚪ Archived | Simplified to focus on quality over quantity                                    |
 
 See task specs in [tasks/](tasks/) (e.g. [tasks/archive/0-4-fix-toast-sonner-api.md](tasks/archive/0-4-fix-toast-sonner-api.md)) and [docs/architecture/README.md](docs/architecture/README.md) for architecture details.
 
 ### Key Features
 
-- 🎨 **Industry Templates** - Ready-to-use templates (starting with hair salon, expandable to all industries)
-- 🚀 **Multi-Client Support** - Manage unlimited client projects in one repository
+- 🎨 **Component-Rich Platform** - 68+ UI primitives and 20+ feature modules
+- 🚀 **Simplified Client Structure** - Single working template demonstrating all functionality
 - 🔧 **Highly Customizable** - Configuration-driven architecture with easy branding and feature customization
-- 📦 **Shared Components** - Reusable UI primitives, marketing components, and features across templates
+- 📦 **Extensive Package Ecosystem** - 21 integrations, AI platform, content platform, marketing ops
 - 🏗️ **Modern Architecture** - Next.js 16, React 19, TypeScript 5.9, Tailwind CSS 4
 - 🔒 **Production-Ready** - Security, performance, and SEO optimized
 - 📱 **Responsive** - Mobile-first design approach
 - ♿ **Accessible** - WCAG 2.2 AA compliance built-in
-- 🎯 **Marketing-First** - Conversion optimization features (planned)
+- 🎯 **Marketing-First** - Conversion optimization features
 - 🔐 **Privacy-First** - Consent-gated analytics, GDPR/CCPA compliant
 
 ## 🚀 Quick Start
@@ -136,12 +136,12 @@ pnpm install
 ### Development
 
 ```bash
-# Start the starter template development server
-cd clients/starter-template
+# Start the testing template development server
+cd clients/testing-not-a-client
 pnpm dev
 
-# Or use workspace filter (runs on port 3101)
-pnpm --filter @clients/starter-template dev
+# Or use workspace filter
+pnpm --filter @clients/testing-not-a-client dev
 
 # Build all packages and projects
 pnpm build
@@ -155,17 +155,17 @@ pnpm format        # Format with Prettier
 
 ### Creating a New Client Project
 
-**Step 1: Copy the template**
+**Step 1: Copy the testing template**
 
 ```bash
-# Copy starter template to create a new client
+# Copy testing template to create a new client
 # Unix/Linux/macOS:
-cp -r clients/starter-template clients/my-client-name
+cp -r clients/testing-not-a-client clients/my-client-name
 
 # Windows:
-xcopy /E /I clients\starter-template clients\my-client-name
+xcopy /E /I clients\testing-not-a-client clients\my-client-name
 # Or using PowerShell:
-Copy-Item -Recurse -Force clients\starter-template clients\my-client-name
+Copy-Item -Recurse -Force clients\testing-not-a-client clients\my-client-name
 
 # Or use the provided pnpm script (recommended):
 pnpm create-client my-client-name
@@ -204,6 +204,8 @@ pnpm install
 pnpm --filter @clients/my-client-name dev --port 3001
 ```
 
+The testing template includes working contact forms, booking system, blog functionality, and all critical features for a complete marketing website.
+
 For detailed instructions, see:
 
 - **[Developer Onboarding](docs/getting-started/onboarding.md)** - Complete setup guide
@@ -214,32 +216,26 @@ For detailed instructions, see:
 ```
 marketing-websites/
 ├── clients/                      # Client implementations
-│   ├── starter-template/        # Golden-path template (@clients/starter-template, port 3101)
-│   ├── luxe-salon/              # Salon industry
-│   ├── bistro-central/          # Restaurant industry
-│   ├── chen-law/                # Law firm
-│   ├── sunrise-dental/          # Dental practice
-│   ├── urban-outfitters/        # Retail
-│   └── [client-name]/           # Your client projects
+│   ├── testing-not-a-client/     # Single working template (@clients/testing-not-a-client)
+│   ├── AGENTS.md                 # AI agent configurations
+│   └── README.md                 # Client directory documentation
 │
 ├── packages/                     # Shared packages (Layer 0-2)
-│   ├── ui/                      # @repo/ui - UI primitives (Button, Input, Dialog, Toast, etc.)
-│   ├── features/                 # @repo/features - Feature modules (booking, contact, blog)
+│   ├── ui/                      # @repo/ui - 68+ UI primitives (Button, Input, Dialog, Toast, etc.)
+│   ├── features/                 # @repo/features - 20+ feature modules (booking, contact, blog, etc.)
 │   ├── marketing-components/    # @repo/marketing-components - Hero, services, testimonials
-│   ├── page-templates/          # @repo/page-templates - 7 templates wired via section registry
+│   ├── page-templates/          # @repo/page-templates - Template system with section registry
 │   ├── types/                   # @repo/types - Shared TypeScript types
 │   ├── utils/                   # @repo/utils - Utility functions (cn, etc.)
 │   ├── infra/                   # @repo/infra - Security, middleware, logging, env schemas
-│   ├── industry-schemas/        # @repo/industry-schemas - JSON-LD per industry
-│   ├── integrations/            # 20+ integration packages
+│   ├── integrations/            # 21 integration packages
 │   │   ├── analytics/           # @repo/integrations-analytics
 │   │   ├── hubspot/             # @repo/integrations-hubspot
 │   │   ├── supabase/            # @repo/integrations-supabase
 │   │   ├── scheduling/          # @repo/integrations-scheduling (Calendly, Acuity, Cal.com)
 │   │   ├── chat/                # @repo/integrations-chat (Intercom, Crisp, Tidio)
 │   │   ├── reviews/             # @repo/integrations-reviews (Google, Yelp, Trustpilot)
-│   │   ├── maps/                # @repo/integrations-maps
-│   │   └── ...                  # acuity, calendly, convertkit, mailchimp, sendgrid, etc.
+│   │   └── ...                  # 15+ other integrations
 │   ├── ai-platform/             # @repo/ai-platform-* (agent-orchestration, llm-gateway, content-engine)
 │   ├── content-platform/       # dam-core, visual-editor
 │   ├── marketing-ops/           # campaign-orchestration
@@ -255,11 +251,10 @@ marketing-websites/
 │   ├── getting-started/         # Onboarding guides
 │   ├── tutorials/               # Step-by-step tutorials
 │   ├── architecture/            # Architecture documentation
-│   ├── ci/                      # CI/CD (required-checks.md)
 │   └── ...
 │
-├── tasks/                       # Task specifications (e.g. 0-4-fix-toast-sonner-api.md)
-├── scripts/                     # validate-documentation, validate-exports, validate-workspaces
+├── tasks/                       # Task specifications
+├── scripts/                     # Validation and automation scripts
 ├── docker-compose.yml           # Docker Compose configuration
 ├── turbo.json                   # Turborepo pipeline config
 ├── pnpm-workspace.yaml          # Workspace globs + version catalog
@@ -268,8 +263,8 @@ marketing-websites/
 
 ### Architecture Layers
 
-- **Layer 0 (Infrastructure):** `@repo/infra`, `@repo/integrations-*` - Security, middleware, logging, env schemas
-- **Layer 2 (Components):** `@repo/ui`, `@repo/marketing-components`, `@repo/features`, `@repo/infrastructure-*` - Reusable components
+- **Layer 0 (Infrastructure):** `@repo/infra`, `@repo/integrations-*` - Security, middleware, logging, env schemas, 21 integrations
+- **Layer 2 (Components):** `@repo/ui` (68+ components), `@repo/marketing-components`, `@repo/features` (20+ modules), `@repo/infrastructure-*` - Reusable components
 - **Layer 3 (Experience):** `@repo/page-templates`, `clients/` - Composed sites
 
 See [Architecture Overview](docs/architecture/README.md) for detailed architecture documentation.
@@ -373,9 +368,9 @@ All versions verified against [package.json](package.json) and [pnpm-workspace.y
 ### Client Commands
 
 ```bash
-# Work on starter template (golden path)
-pnpm --filter @clients/starter-template dev
-pnpm --filter @clients/starter-template build
+# Work on testing template (reference implementation)
+pnpm --filter @clients/testing-not-a-client dev
+pnpm --filter @clients/testing-not-a-client build
 
 # Work on specific client (when created)
 pnpm --filter @clients/my-client dev
@@ -401,9 +396,7 @@ docker-compose logs -f
 docker-compose down
 ```
 
-The Docker Compose configuration includes:
-
-- **Starter Template** - Available on `http://localhost:3101`
+The Docker Compose configuration can be used for client deployments.
 
 See [docker-compose.yml](docker-compose.yml) for configuration details and [docs/deployment/docker.md](docs/deployment/docker.md) for deployment documentation.
 
@@ -463,9 +456,9 @@ For issues, questions, or suggestions:
 
 ## 📊 Project Status
 
-**Last Updated:** 2026-02-19  
-**Current Phase:** Wave 0 Complete → Wave 1 In Progress  
-**Next Milestone:** Continue Wave 1 implementation; all CI quality gates passing
+**Last Updated:** 2026-02-21  
+**Current Phase:** Architecture Complete → Client Simplification  
+**Next Milestone:** Continue documentation alignment; all CI quality gates passing
 
 For task specifications, see [tasks/](tasks/).
 
