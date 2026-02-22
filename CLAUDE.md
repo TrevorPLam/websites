@@ -11,7 +11,7 @@ This file provides context for AI assistants (Claude Code and others) working in
 **marketing-websites** is a **pnpm monorepo** for building multi-industry marketing websites. It uses a configuration-as-code (CaCA) architecture where a single `site.config.ts` drives all client-site behavior — theming, page composition, feature flags, SEO schema, and integrations.
 
 - **Current phase:** Phase 1 (Foundation) in progress; Phase 2–5 planned per [NEW.md](NEW.md) and [docs/architecture/evolution-roadmap.md](docs/architecture/evolution-roadmap.md)
-- **Starter template:** `clients/starter-template` (package `@clients/starter-template`, port 3101)
+- **Starter template:** `clients/testing-not-a-client` (package `@clients/testing-not-a-client`, port 3101)
 - **Package manager:** pnpm 10.29.2 (strictly enforced via `packageManager` field)
 - **Node.js:** >=22.0.0 (enforced via `engines`)
 
@@ -49,8 +49,8 @@ pnpm syncpack:fix          # Auto-fix version drift
 ### Targeting specific packages
 
 ```bash
-pnpm --filter @clients/starter-template dev     # Starter template dev server (port 3101)
-pnpm --filter @clients/starter-template build   # Build starter template
+pnpm --filter @clients/testing-not-a-client dev     # Testing template dev server (port 3101)
+pnpm --filter @clients/testing-not-a-client build   # Build testing template
 pnpm --filter @repo/ui lint               # Lint UI package only
 pnpm --filter "@clients/*" build          # Build all clients
 ```
@@ -58,7 +58,7 @@ pnpm --filter "@clients/*" build          # Build all clients
 ### Bundle analysis
 
 ```bash
-ANALYZE=true pnpm --filter @clients/starter-template build
+ANALYZE=true pnpm --filter @clients/testing-not-a-client build
 ```
 
 ---
@@ -68,7 +68,7 @@ ANALYZE=true pnpm --filter @clients/starter-template build
 ```
 marketing-websites/
 ├── clients/                 # Client projects
-│   └── starter-template/    # Golden-path template — @clients/starter-template, port 3101
+│   └── testing-not-a-client/    # Testing template — @clients/testing-not-a-client, port 3101
 │       ├── app/             # Next.js App Router (layout.tsx, page.tsx, route dirs)
 │       ├── components/      # Client-local components
 │       ├── site.config.ts   # THE central config — drives everything
@@ -259,19 +259,19 @@ All environment variables are optional for local development — the app runs wi
 Copy `.env.example` to `.env.local` in the client directory:
 
 ```bash
-cp .env.example clients/starter-template/.env.local
+cp .env.example clients/testing-not-a-client/.env.local
 ```
 
 Key variables (all optional locally):
 
-| Variable                                              | Description                                                             |
-| ----------------------------------------------------- | ----------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`                                | Public site URL (default: `http://localhost:3101` for starter-template) |
-| `NEXT_PUBLIC_SENTRY_DSN`                              | Sentry error tracking DSN                                               |
-| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`          | Must be set together (pair)                                             |
-| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (pair; falls back to in-memory)                           |
-| `HUBSPOT_PRIVATE_APP_TOKEN`                           | CRM integration                                                         |
-| `MINDBODY_API_KEY` + `MINDBODY_BUSINESS_ID`           | Booking provider (pair)                                                 |
+| Variable                                              | Description                                                                 |
+| ----------------------------------------------------- | --------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`                                | Public site URL (default: `http://localhost:3101` for testing-not-a-client) |
+| `NEXT_PUBLIC_SENTRY_DSN`                              | Sentry error tracking DSN                                                   |
+| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`          | Must be set together (pair)                                                 |
+| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | Rate limiting (pair; falls back to in-memory)                               |
+| `HUBSPOT_PRIVATE_APP_TOKEN`                           | CRM integration                                                             |
+| `MINDBODY_API_KEY` + `MINDBODY_BUSINESS_ID`           | Booking provider (pair)                                                     |
 
 Environment schemas are defined in `packages/infra/env/schemas/*.ts`.
 
@@ -310,8 +310,8 @@ When creating a new client, copy the template and update `site.config.ts` — no
 ## Adding New Templates / Clients
 
 ```bash
-# Copy the starter-template as a starting point
-cp -r clients/starter-template clients/my-client
+# Copy the testing-not-a-client template as a starting point
+cp -r clients/testing-not-a-client clients/my-client
 
 # Update package name in package.json
 # Update site.config.ts with client-specific settings
@@ -374,7 +374,7 @@ Config in `.changeset/config.json` — base branch is `main`.
 ## Docker
 
 ```bash
-docker-compose up -d        # Start starter-template on http://localhost:3101
+docker-compose up -d        # Start testing-not-a-client on http://localhost:3101
 docker-compose logs -f
 docker-compose down
 ```

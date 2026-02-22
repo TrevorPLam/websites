@@ -27,7 +27,7 @@ Full checklist: [.context/RULES.md](.context/RULES.md#task-execution-non-negotia
 ## Build & test
 
 - **Install:** `pnpm install`
-- **Dev (prefer during iteration):** `pnpm dev` or `pnpm --filter @clients/starter-template dev` (starter on port **3101**). Prefer dev over `pnpm build` while iterating.
+- **Dev (prefer during iteration):** `pnpm dev` or `pnpm --filter @clients/testing-not-a-client dev` (testing template on port **3101**). Prefer dev over `pnpm build` while iterating.
 - **Quality:** `pnpm lint`, `pnpm type-check`, `pnpm test`
 - **Validation:** `pnpm validate-exports`, `pnpm validate-client [path]` (e.g. `clients/luxe-salon`), optionally `pnpm validate-docs`
 - **Full build:** `pnpm build` (use when verifying CI or before release)
