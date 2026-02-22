@@ -661,7 +661,7 @@ All documentation follows the [Documentation Standards](DOCUMENTATION_STANDARDS.
 - ✅ **Documentation aligned with codebase** - Architecture, module-boundaries, clients/README, CI checks reflect actual state
 - ✅ **docs/archive/ISSUES.md** - Archived issue analysis (historical)
 - ✅ **Architecture** - Repository structure, layer status, tech stack (Next 16, TS 5.9, Tailwind 4)
-- ✅ **Clients** - Copy from `starter-template` (not templates/); 6 clients documented
+- ✅ **Clients** - Copy from `testing-not-a-client` (not templates/); single testing template documented
 
 ### Upcoming Improvements
 

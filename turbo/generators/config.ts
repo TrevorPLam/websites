@@ -59,7 +59,7 @@ const INDUSTRIES = [
 
 function isValidClientName(value: string): true | string {
   if (!value) return 'Client name is required.';
-  if (value === 'starter-template') return 'The name "starter-template" is reserved.';
+  if (value === 'testing-not-a-client') return 'The name "testing-not-a-client" is reserved.';
   if (!/^[a-z0-9-]+$/.test(value)) {
     return 'Use kebab-case: lowercase letters, numbers, and hyphens only.';
   }
@@ -68,7 +68,7 @@ function isValidClientName(value: string): true | string {
 
 export default function registerGenerators(plop: PlopLike): void {
   plop.setGenerator('new-client', {
-    description: 'Scaffold a client from clients/starter-template',
+    description: 'Scaffold a client from clients/testing-not-a-client',
     prompts: [
       {
         type: 'input',
@@ -94,8 +94,8 @@ export default function registerGenerators(plop: PlopLike): void {
       {
         type: 'addMany',
         destination: 'clients/{{name}}',
-        base: 'clients/starter-template',
-        templateFiles: 'clients/starter-template/**',
+        base: 'clients/testing-not-a-client',
+        templateFiles: 'clients/testing-not-a-client/**',
         globOptions: {
           dot: true,
           ignore: ['**/node_modules/**', '**/.next/**', '**/.turbo/**', '**/dist/**'],
@@ -105,21 +105,21 @@ export default function registerGenerators(plop: PlopLike): void {
       {
         type: 'modify',
         path: 'clients/{{name}}/package.json',
-        pattern: /"name":\s*"@clients\/starter-template"/,
+        pattern: /"name":\s*"@clients\/testing-not-a-client"/,
         template: '"name": "@clients/{{name}}"',
         abortOnFail: true,
       },
       {
         type: 'modify',
         path: 'clients/{{name}}/site.config.ts',
-        pattern: /id:\s*'starter-template'/,
+        pattern: /id:\s*'testing-not-a-client'/,
         template: "id: '{{name}}'",
         abortOnFail: true,
       },
       {
         type: 'modify',
         path: 'clients/{{name}}/site.config.ts',
-        pattern: /name:\s*'Starter Template'/,
+        pattern: /name:\s*'Testing Template'/,
         template: "name: '{{name}}'",
         abortOnFail: true,
       },

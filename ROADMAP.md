@@ -149,14 +149,9 @@ Primary execution plan: Strangler Fig — new system grows around existing. **So
 
 ### Client Implementation Status
 
-| Client               | Status    | Port | Notes                       |
-| -------------------- | --------- | ---- | --------------------------- |
-| **starter-template** | ✅ Active | 3101 | Golden path template        |
-| **luxe-salon**       | ✅ Active | 3102 | Salon industry example      |
-| **bistro-central**   | ✅ Active | 3103 | Restaurant industry example |
-| **chen-law**         | ✅ Active | 3104 | Law firm industry example   |
-| **sunrise-dental**   | ✅ Active | 3105 | Dental industry example     |
-| **urban-outfitters** | ✅ Active | 3106 | Retail industry example     |
+| Client                   | Status    | Port | Notes                   |
+| ------------------------ | --------- | ---- | ----------------------- |
+| **testing-not-a-client** | ✅ Active | 3101 | Single testing template |
 
 ---
 

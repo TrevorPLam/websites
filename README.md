@@ -273,21 +273,21 @@ See [Architecture Overview](docs/architecture/README.md) for detailed architectu
 
 All versions verified against [package.json](package.json) and [pnpm-workspace.yaml](pnpm-workspace.yaml):
 
-| Category               | Technology   | Version  | Source                                                                         |
-| ---------------------- | ------------ | -------- | ------------------------------------------------------------------------------ |
-| **Runtime**            | Node.js      | >=22.0.0 | [package.json](package.json)                                                   |
-| **Package Manager**    | pnpm         | 10.29.2  | [package.json](package.json)                                                   |
-| **Frontend Framework** | Next.js      | 16.1.5   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
-| **UI Library**         | React        | 19.0.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
-| **Styling**            | Tailwind CSS | 4.1.0    | [clients/starter-template/package.json](clients/starter-template/package.json) |
-| **Type Safety**        | TypeScript   | 5.9.3    | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
-| **Linting**            | ESLint       | 9.18.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
-| **Code Formatting**    | Prettier     | 3.8.1    | [package.json](package.json)                                                   |
-| **Monorepo Tool**      | Turbo        | 2.8.10   | [package.json](package.json)                                                   |
-| **Testing**            | Jest         | 30.2.0   | [package.json](package.json)                                                   |
-| **Database**           | Supabase     | -        | PostgreSQL with RLS                                                            |
-| **Error Tracking**     | Sentry       | 10.38.0  | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                             |
-| **Container**          | Docker       | -        | [docker-compose.yml](docker-compose.yml)                                       |
+| Category               | Technology   | Version  | Source                                                                                 |
+| ---------------------- | ------------ | -------- | -------------------------------------------------------------------------------------- |
+| **Runtime**            | Node.js      | >=22.0.0 | [package.json](package.json)                                                           |
+| **Package Manager**    | pnpm         | 10.29.2  | [package.json](package.json)                                                           |
+| **Frontend Framework** | Next.js      | 16.1.5   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                                     |
+| **UI Library**         | React        | 19.0.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                                     |
+| **Styling**            | Tailwind CSS | 4.1.0    | [clients/testing-not-a-client/package.json](clients/testing-not-a-client/package.json) |
+| **Type Safety**        | TypeScript   | 5.9.3    | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                                     |
+| **Linting**            | ESLint       | 9.18.0   | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                                     |
+| **Code Formatting**    | Prettier     | 3.8.1    | [package.json](package.json)                                                           |
+| **Monorepo Tool**      | Turbo        | 2.8.10   | [package.json](package.json)                                                           |
+| **Testing**            | Jest         | 30.2.0   | [package.json](package.json)                                                           |
+| **Database**           | Supabase     | -        | PostgreSQL with RLS                                                                    |
+| **Error Tracking**     | Sentry       | 10.38.0  | [pnpm-workspace.yaml catalog](pnpm-workspace.yaml)                                     |
+| **Container**          | Docker       | -        | [docker-compose.yml](docker-compose.yml)                                               |
 
 ### Key Dependencies
 

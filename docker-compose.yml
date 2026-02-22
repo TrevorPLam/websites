@@ -4,12 +4,12 @@
 # Removed volume mount overriding built files (2.6.2)
 # Added env_file directive (2.6.3)
 # Added restart policy and resource limits (2.6.4)
-# [6.3] Replaced hair-salon with starter-template
+# [6.3] Replaced hair-salon with testing-not-a-client
 services:
-  starter-template:
+  testing-not-a-client:
     build:
       context: .
-      dockerfile: clients/starter-template/Dockerfile
+      dockerfile: clients/testing-not-a-client/Dockerfile
     ports:
       - '3101:3101'
     environment:

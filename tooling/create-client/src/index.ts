@@ -3,7 +3,7 @@
  * @file tooling/create-client/src/index.ts
  * Task: [6.8] pnpm create-client my-client --industry=restaurant
  *
- * Purpose: CLI scaffolder that creates a new client site by copying starter-template,
+ * Purpose: CLI scaffolder that creates a new client site by copying testing-not-a-client,
  *          updating package.json name/port, and pre-filling site.config.ts with
  *          industry-specific defaults.
  *
@@ -247,11 +247,11 @@ async function main(): Promise<void> {
   const __filename = fileURLToPath(import.meta.url);
   const repoRoot = path.resolve(path.dirname(__filename), '../../../..');
   const clientsDir = path.join(repoRoot, 'clients');
-  const templateDir = path.join(clientsDir, 'starter-template');
+  const templateDir = path.join(clientsDir, 'testing-not-a-client');
   const destDir = path.join(clientsDir, name);
 
   if (!fs.existsSync(templateDir)) {
-    warn(`Starter template not found: ${templateDir}`);
+    warn(`Testing template not found: ${templateDir}`);
     process.exit(1);
   }
 
@@ -299,7 +299,7 @@ async function main(): Promise<void> {
     });
   }
 
-  log('Copying starter-template…');
+  log('Copying testing-not-a-client…');
   copyDirSync(templateDir, destDir);
 
   log('Patching package.json…');
