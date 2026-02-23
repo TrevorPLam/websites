@@ -10,7 +10,6 @@ This domain covers the complete `site.config.ts` schema aspects of the marketing
 - [2.2 Full Zod Schema with All Configuration Options](2.2-full-zod-schema-with-all-configuration-options.md)
 - [2.3 Config Validation CI Step](2.3-config-validation-ci-step.md)
 - [2.4 Golden Path CLI: `pnpm create-site`](2.4-golden-path-cli-pnpm-create-site.md)
-- [2.5 Example Configs for Three Client Archetypes](2.5-example-configs-for-three-client-archetypes.md)
 
 ## Priority
 
