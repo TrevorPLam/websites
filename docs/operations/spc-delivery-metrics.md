@@ -1,1 +1,0 @@
-# TODO: SPC delivery metrics

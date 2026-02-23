@@ -1,1 +1,0 @@
-# TODO: Progressive conversion patterns

@@ -1,1 +1,0 @@
-# TODO: Content source adapters

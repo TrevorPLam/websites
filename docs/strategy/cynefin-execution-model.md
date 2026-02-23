@@ -1,1 +1,0 @@
-# TODO: Cynefin execution model

@@ -1,1 +1,0 @@
-# TODO: Schema change checklist

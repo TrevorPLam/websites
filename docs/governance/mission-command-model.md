@@ -1,1 +1,0 @@
-# TODO: Mission command model

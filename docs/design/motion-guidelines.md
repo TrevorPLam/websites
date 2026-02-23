@@ -1,1 +1,0 @@
-# TODO: Motion guidelines

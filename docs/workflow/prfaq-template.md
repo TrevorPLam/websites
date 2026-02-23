@@ -1,1 +1,0 @@
-# TODO: PR FAQ template

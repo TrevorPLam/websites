@@ -1,1 +1,0 @@
-# TODO: Spec-driven development
