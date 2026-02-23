@@ -9,3 +9,13 @@
 - [x] DOMAIN-2-001 · Implement complete Zod config schema with validation
 - [x] DOMAIN-2-002 · Implement config validation CI step with conflict detection
 - [x] DOMAIN-2-003 · Implement golden path CLI pnpm create-site
+- [x] DOMAIN-3-001 · Adopt Feature-Sliced Design rationale and conventions
+- [x] DOMAIN-3-002 · Implement complete layer architecture baseline
+- [x] DOMAIN-3-003 · Document and enforce @x cross-slice import notation
+- [x] DOMAIN-3-004 · Add Steiger CI integration entrypoint
+- [x] DOMAIN-3-005 · Define FSD layer mapping for every package
+- [x] DOMAIN-3-006 · Define FSD structure guidance for marketing sites
+- [x] DOMAIN-3-007 · Add per-package AGENTS.md stubs
+- [x] DOMAIN-3-008 · Create root AGENTS.md master context
+- [x] DOMAIN-3-009 · Create CLAUDE.md sub-agent definitions
+- [x] DOMAIN-3-010 · Create AI agent cold-start checklist + MCP config

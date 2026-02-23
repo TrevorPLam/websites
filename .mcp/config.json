@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "dependency-graph": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-dependency-graph"],
+      "env": {
+        "ROOT_DIR": "."
+      }
+    }
+  }
+}
