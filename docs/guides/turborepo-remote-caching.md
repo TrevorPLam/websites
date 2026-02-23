@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file turborepo-remote-caching.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for turborepo remote caching.
+ * @entrypoints docs/guides/turborepo-remote-caching.md
+ * @exports turborepo remote caching
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Turborepo Remote Caching: Official Guide
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Introduction
 
@@ -286,3 +315,31 @@ metrics.trackCacheMiss({ task: 'test', reason: 'input-changed' });
 6. **Set up proper retention policies** to control costs
 7. **Use compression** to reduce bandwidth usage
 8. **Regular security audits** of cache access patterns
+
+
+--- 
+
+## References
+
+- [Official Documentation](https://example.com) — Replace with actual source
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
+
+## Overview
+
+[Add content here]
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

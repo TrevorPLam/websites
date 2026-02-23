@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file steiger-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for steiger documentation.
+ * @entrypoints docs/guides/steiger-documentation.md
+ * @exports steiger documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Steiger: Official Documentation
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Introduction
 
@@ -156,3 +185,31 @@ See the [Migration Guide](https://github.com/feature-sliced/steiger/blob/master/
 ## 7. Conclusion
 
 Steiger is an essential tool for any team adopting Feature-Sliced Design. By automating architectural linting, it ensures consistency, prevents accidental violations of dependency rules, and helps keep the codebase maintainable as it grows. Its configuration flexibility allows teams to tailor it to their specific needs without losing the benefits of a standardized structure.
+
+
+--- 
+
+## References
+
+- [Official Documentation](https://example.com) — Replace with actual source
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
+
+## Overview
+
+[Add content here]
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file monorepo-context-protocol-proposal.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for monorepo context protocol proposal.
+ * @entrypoints docs/guides/monorepo-context-protocol-proposal.md
+ * @exports monorepo context protocol proposal
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # monorepo-context-protocol-proposal.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -295,9 +324,16 @@ error_recovery:
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Nx AI Agent Skills Documentation](https://nx.dev/blog/nx-ai-agent-skills)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
 - [Agent Skills Framework](https://agentskills.io/)
 - [Nx MCP Server Documentation](https://nx.dev/docs/reference/nx-mcp)
 - [Monorepo Tools AI Integration](https://monorepo.tools/ai)
 - [Claude Code Documentation](https://code.claude.com/docs/en/overview)
+
+
+## Testing
+
+[Add content here]

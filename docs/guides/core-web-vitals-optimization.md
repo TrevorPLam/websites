@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file core-web-vitals-optimization.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for core web vitals optimization.
+ * @entrypoints docs/guides/core-web-vitals-optimization.md
+ * @exports core web vitals optimization
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # core-web-vitals-optimization.md
 
 # Core Web Vitals Optimization Strategies and Implementation
@@ -1555,6 +1575,8 @@ const LayoutStabilityManager = {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Web.dev Core Web Vitals](https://web.dev/vitals/)
 - [Web.dev Learn Core Web Vitals](https://web.dev/learn-core-web-vitals/)
 - [OpenTelemetry Documentation](https://opentelemetry.io/docs/)
@@ -1584,3 +1606,18 @@ const LayoutStabilityManager = {
 - [Google Analytics 4](https://developers.google.com/analytics/devguides/collection/web-vitals)
 - [New Relic Browser Monitoring](https://newrelic.com/browser/)
 - [Datadog Real User Monitoring](https://docs.datadogh.com/real-user-monitoring/)
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

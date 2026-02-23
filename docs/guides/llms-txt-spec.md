@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file llms-txt-spec.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for llms txt spec.
+ * @entrypoints docs/guides/llms-txt-spec.md
+ * @exports llms txt spec
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # llms.txt-spec.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # llms.txt Specification
 
@@ -236,6 +265,8 @@ As of early 2026, llms.txt has gained moderate attention with:
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Official llms.txt specification](https://llmstxt.org/)
 - [Answer.AI original proposal](https://www.answer.ai/posts/2024-09-03-llmstxt.html)
 - [FastHTML implementation example](https://www.fastht.ml/docs/llms.txt)
@@ -244,3 +275,8 @@ As of early 2026, llms.txt has gained moderate attention with:
 - [Mintlify adoption announcement](https://www.mintlify.com/blog/simplifying-docs-with-llms-txt)
 - [VitePress plugin](https://github.com/okineadev/vitepress-plugin-llms)
 - [Docusaurus plugin](https://github.com/rachfop/docusaurus-plugin-llms)
+
+
+## Overview
+
+[Add content here]

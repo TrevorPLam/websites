@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file sentry-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for sentry documentation.
+ * @entrypoints docs/guides/sentry-documentation.md
+ * @exports sentry documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # sentry-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -1018,6 +1047,8 @@ alertManager.addRule({
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Sentry Documentation](https://docs.sentry.io/)
 - [Sentry Next.js Integration](https://docs.sentry.io/platforms/javascript/guides/nextjs/)
 - [Sentry React Integration](https://docs.sentry.io/platforms/javascript/guides/react/)
@@ -1026,3 +1057,13 @@ alertManager.addRule({
 - [Sentry Security and PII Documentation](https://docs.sentry.io/security-legal-pii/)
 - [Sentry API Documentation](https://docs.sentry.io/api/)
 - [Sentry for AI Integration](https://docs.sentry.io/ai/)
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]

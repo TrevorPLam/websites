@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file deployment-runbook.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for deployment runbook.
+ * @entrypoints docs/guides/deployment-runbook.md
+ * @exports deployment runbook
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # deployment-runbook.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Internal Document — Customize as needed for your organization.**
 
@@ -225,9 +254,26 @@ After every production promotion, verify in order:
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - Vercel Zero-Downtime Deployments — https://vercel.com/docs/frameworks/full-stack/nextjs
 - Stage and Promote Deployments — https://vercel.com/changelog/stage-and-manually-promote-deployments-to-production
 - Vercel Staging Environment Setup — https://vercel.com/kb/guide/set-up-a-staging-environment-on-vercel
 - Vercel Incremental Migration — https://vercel.com/docs/incremental-migration
 - Zero-Downtime Database Migrations — https://hrekov.com/blog/vercel-migrations
 - Vercel `alias` CLI Docs — https://vercel.com/docs/cli/alias
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

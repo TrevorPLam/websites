@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file internal-developer-portal-patterns.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for internal developer portal patterns.
+ * @entrypoints docs/guides/internal-developer-portal-patterns.md
+ * @exports internal developer portal patterns
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # internal-developer-portal-patterns.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # Internal Developer Portal Patterns and Best Practices
 
@@ -1032,6 +1061,8 @@ export class AWSProvider implements CloudProvider {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Platform Engineering Resources
 
 - [Platform Engineering Community](https://platformengineering.org/)
@@ -1063,3 +1094,8 @@ export class AWSProvider implements CloudProvider {
 - [Core Web Vitals](https://web.dev/vitals/)
 - [OpenTelemetry Documentation](https://opentelemetry.io/docs/)
 - [Observability Primer](https://opentelemetry.io/docs/concepts/observability-primer/)
+
+
+## Testing
+
+[Add content here]

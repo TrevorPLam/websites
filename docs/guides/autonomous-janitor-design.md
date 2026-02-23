@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file autonomous-janitor-design.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for autonomous janitor design.
+ * @entrypoints docs/guides/autonomous-janitor-design.md
+ * @exports autonomous janitor design
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # autonomous-janitor-design.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -508,8 +537,20 @@ agent:
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Measuring AI Agent Autonomy in Practice - Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)
 - [Autonomous AI Agents: Transforming Enterprise Workflows 2026](https://www.aibmag.com/featured-stories/autonomous-ai-agents-enterprise-workflows-2026/)
 - [6 Best Autonomous AI Agents in the U.S. (2026)](https://minami.ai/blog/best-autonomous-ai-agent)
 - [Taming AI agents: The autonomous workforce of 2026](https://www.cio.com/article/4064998/taming-ai-agents-the-autonomous-workforce-of-2026.html)
 - [10 Real-World Intelligent Agent Examples in AI (2026)](https://www.aitude.com/10-real-world-intelligent-agent-examples-in-artificial-intelligence/)
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

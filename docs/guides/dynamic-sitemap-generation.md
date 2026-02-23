@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file dynamic-sitemap-generation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for dynamic sitemap generation.
+ * @entrypoints docs/guides/dynamic-sitemap-generation.md
+ * @exports dynamic sitemap generation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Dynamic Sitemap Generation
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Reference Documentation — February 2026**
 
@@ -102,6 +131,8 @@ describe('Dynamic Sitemap Generation Integration', () => {
 ---
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - https://nextjs.org/docs/app/api-reference/functions/generate-sitemaps — nextjs.org
 - https://developers.google.com/search/docs/advanced/sitemaps — developers.google.com

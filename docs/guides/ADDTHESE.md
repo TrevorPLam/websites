@@ -1,8 +1,37 @@
+<!--
+/**
+ * @file ADDTHESE.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for ADDTHESE.
+ * @entrypoints docs/guides/ADDTHESE.md
+ * @exports ADDTHESE
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 Given the enormous scope of this request (48 categories, 150+ new documents), I'll generate the first major batch of unchecked documents now, organized by section. This response covers **Sections 1, 2, 3, 6, and key sections of 25, 31, 35, and 45** — the highest-priority new items.
 
 ---
 
 # renovate-configuration-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Reference Documentation — February 2026**
 
@@ -210,6 +239,8 @@ Renovate supports the `catalog:` protocol introduced in pnpm 9. Ensure the `pnpm
 ---
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - Renovate Official Documentation — https://docs.renovatebot.com
 - Renovate Configuration Options — https://docs.renovatebot.com/configuration-options/
@@ -3723,3 +3754,13 @@ process.exit(0);
 | `security-headers-system.md`            | Dynamic nonce CSP builder, `next.config.ts` static headers, all 9 security headers, CSP violation reporter endpoint, nonce flow in Server Components |
 | `multi-layer-rate-limiting.md`          | 3-layer strategy, Sliding Window / Token Bucket algorithms, per-plan limits (free/pro/enterprise), Upstash Jan 2026 dynamic limits feature           |
 | `secrets-manager.md`                    | `@t3-oss/env-nextjs` Zod validation, Doppler→Vercel sync workflow, rotation API, break-glass runbook, CI validation script                           |
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

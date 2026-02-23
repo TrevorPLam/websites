@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file dynamic-og-images.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for dynamic og images.
+ * @entrypoints docs/guides/dynamic-og-images.md
+ * @exports dynamic og images
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Dynamic OG Images
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Reference Documentation — February 2026**
 
@@ -102,6 +131,8 @@ describe('Dynamic OG Images Integration', () => {
 ---
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - https://nextjs.org/docs/app/api-reference/functions/image-response — nextjs.org
 - https://vercel.com/docs/concepts/edge-functions/og-image-generation — vercel.com

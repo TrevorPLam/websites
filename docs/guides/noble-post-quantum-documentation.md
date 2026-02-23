@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file noble-post-quantum-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for noble post quantum documentation.
+ * @entrypoints docs/guides/noble-post-quantum-documentation.md
+ * @exports noble post quantum documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # noble-post-quantum-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -294,6 +323,8 @@ function testSignatures() {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [noble-post-quantum GitHub Repository](https://github.com/paulmillr/noble-post-quantum)
 - [FIPS-203: ML-KEM Specification](https://doi.org/10.6028/NIST.FIPS.203)
 - [FIPS-204: ML-DSA Specification](https://doi.org/10.6028/NIST.FIPS.204)
@@ -305,3 +336,8 @@ function testSignatures() {
 - [IRTF CFRG Hybrid KEMs Draft](https://datatracker.ietf.org/doc/draft-irtf-cfrg-hybrid-kems/)
 - [XWing KEM Specification](https://datatracker.ietf.org/doc/draft-connolly-cfrg-xwing-kem/)
 - [noble Cryptography Homepage](https://paulmillr.com/noble/)
+
+
+## Best Practices
+
+[Add content here]

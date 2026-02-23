@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file postgresql-rls-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for postgresql rls documentation.
+ * @entrypoints docs/guides/postgresql-rls-documentation.md
+ * @exports postgresql rls documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # PostgreSQL Row Level Security (RLS) — Official Reference Documentation
 
 > **Version Reference:** PostgreSQL 15+ | Last Updated: 2026-02-23
@@ -410,3 +430,21 @@ WHERE tablename = 'documents';
 10. **Version-control policies as migrations** — treat them as first-class schema objects
 11. **Audit policies quarterly** — revoke stale policies as access requirements change
 12. **Use `pg_policies` view** to document and monitor all active policies
+
+
+--- 
+
+## References
+
+- [Official Documentation](https://example.com) — Replace with actual source
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
+
+## Overview
+
+[Add content here]
+
+
+## Implementation
+
+[Add content here]

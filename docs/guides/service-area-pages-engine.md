@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file service-area-pages-engine.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for service area pages engine.
+ * @entrypoints docs/guides/service-area-pages-engine.md
+ * @exports service area pages engine
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # service-area-pages-engine.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -157,7 +186,24 @@ function RelatedServiceAreas({ currentSlug, areas, siteUrl }) {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - Next.js `generateStaticParams` — https://nextjs.org/docs/app/api-reference/functions/generate-static-params
 - Programmatic SEO with Next.js ISR — https://www.mgphq.com/blog/nextjs-programmatic-seo-isr-guide
 - Multi-Tenant SEO with Next.js — https://www.buildwithmatija.com/blog/multi-tenant-seo-payload-nextjs-guide
 - SSR in Next.js for Local SEO — https://kreativekommit.com/guides/2025/07/ssr-nextjs-local-seo
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

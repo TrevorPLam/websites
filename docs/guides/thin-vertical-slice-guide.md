@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file thin-vertical-slice-guide.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for thin vertical slice guide.
+ * @entrypoints docs/guides/thin-vertical-slice-guide.md
+ * @exports thin vertical slice guide
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # thin-vertical-slice-guide.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -634,6 +663,8 @@ interface SliceMetrics {
 ```
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - [Vertical Slice Explained for 2026 - Monday.com](https://monday.com/blog/rnd/vertical-slice/)
 - [Vertical Slicing and How to Boost Value Delivery Right Now](https://www.agilerant.info/vertical-slicing-to-boost-software-value/)

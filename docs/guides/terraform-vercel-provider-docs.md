@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file terraform-vercel-provider-docs.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for terraform vercel provider docs.
+ * @entrypoints docs/guides/terraform-vercel-provider-docs.md
+ * @exports terraform vercel provider docs
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # terraform-vercel-provider-docs.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -701,8 +730,20 @@ terraform fmt
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Vercel Provider Documentation](https://registry.terraform.io/providers/vercel/vercel/latest/docs)
 - [Vercel API Documentation](https://vercel.com/docs/rest-api)
 - [Terraform Configuration Language](https://www.terraform.io/docs/language/index.html)
 - [Vercel Platform Documentation](https://vercel.com/docs)
 - [Vercel CLI Documentation](https://vercel.com/docs/cli)
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

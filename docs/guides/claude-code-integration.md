@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file claude-code-integration.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for claude code integration.
+ * @entrypoints docs/guides/claude-code-integration.md
+ * @exports claude code integration
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # claude-code-integration.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # Claude Code Integration Patterns and Workflows
 
@@ -688,6 +717,8 @@ claude --headless --batch-file tasks.txt
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official Documentation
 
 - [Claude Code Documentation](https://code.claude.com/docs/en/overview)
@@ -716,3 +747,8 @@ claude --headless --batch-file tasks.txt
 - [MCP Server Repository](https://github.com/modelcontextprotocol/servers)
 - [Claude Code GitHub](https://github.com/anthropics/claude-code)
 - [Community Examples](https://github.com/anthropics/claude-code-examples)
+
+
+## Implementation
+
+[Add content here]

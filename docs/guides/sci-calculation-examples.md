@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file sci-calculation-examples.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for sci calculation examples.
+ * @entrypoints docs/guides/sci-calculation-examples.md
+ * @exports sci calculation examples
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # sci-calculation-examples.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # SCI Calculation Examples
 
@@ -539,6 +568,8 @@ By following these examples and methodologies, organizations can effectively mea
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Software Carbon Intensity Specification](https://sci.greensoftware.foundation/)
 - [Green Software Foundation](https://greensoftware.foundation/)
 - [AWS Customer Carbon Footprint Tool](https://aws.amazon.com/customer-carbon-footprint/)
@@ -548,3 +579,18 @@ By following these examples and methodologies, organizations can effectively mea
 - [ElectricityMap Real-Time Data](https://www.electricitymaps.com/)
 - [Thoughtworks SCI Calculation Guide](https://www.thoughtworks.com/insights/blog/ethical-tech/calculating-software-carbon-intensity)
 - [Green Agile SCI Framework](https://greenagile.org/metrics-and-impact/code-build-and-cicd/sci)
+
+
+## Overview
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

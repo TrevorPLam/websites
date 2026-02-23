@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file ai-agent-cold-start-checklist.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for ai agent cold start checklist.
+ * @entrypoints docs/guides/ai-agent-cold-start-checklist.md
+ * @exports ai agent cold start checklist
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # AI Agent Cold Start Checklist
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Reference Documentation — February 2026**
 
@@ -102,6 +131,8 @@ describe('AI Agent Cold Start Checklist Integration', () => {
 ---
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - https://docs.anthropic.com/claude/docs — docs.anthropic.com
 - https://platform.openai.com/docs — platform.openai.com

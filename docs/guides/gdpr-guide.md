@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file gdpr-guide.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for gdpr guide.
+ * @entrypoints docs/guides/gdpr-guide.md
+ * @exports gdpr guide
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # gdpr-guide.md
 
 > **Version Reference:** GDPR (General Data Protection Regulation) 2016/679 | Last Updated: 2026-02-23
@@ -1704,6 +1724,8 @@ class ZeroKnowledgeProof {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official GDPR Documentation
 
 - [GDPR Official Text](https://gdpr-info.eu/)
@@ -1731,3 +1753,13 @@ class ZeroKnowledgeProof {
 - [EDPB Guidelines on DPIA](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-03-2021/)
 - [Data Breach Notification Guidelines](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-04-2021/)
 - [International Data Transfer Guidelines](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-02-2021/)
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file electricsql-docs.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for electricsql docs.
+ * @entrypoints docs/guides/electricsql-docs.md
+ * @exports electricsql docs
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # electricsql-docs.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ElectricSQL is a local-first sync layer for PostgreSQL that enables developers to build reactive, real-time applications with automatic data synchronization between client devices and server databases. It provides a read-path sync engine that handles partial replication, data delivery, and fan-out to millions of concurrent users.
 
@@ -570,9 +599,21 @@ const subscription = posts.subscribe(setPosts);
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [ElectricSQL Official Website](https://electric-sql.com/)
 - [ElectricSQL Documentation](https://electric-sql.com/docs)
 - [ElectricSQL GitHub](https://github.com/electric-sql/electric)
 - [PostgreSQL Logical Replication](https://www.postgresql.org/docs/current/logical-replication.html)
 - [ElectricSQL Community](https://github.com/electric-sql/electric/discussions)
 - [ElectricSQL Blog](https://electric-sql.com/blog)
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file design-tokens-w3c-cg-report.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for design tokens w3c cg report.
+ * @entrypoints docs/guides/design-tokens-w3c-cg-report.md
+ * @exports design tokens w3c cg report
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # design-tokens-w3c-cg-report.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 W3C Design Tokens Community Group (DTCG) draft report on the design tokens specification as of February 2026, covering the stable v1.0 specification, implementation guidance, and ecosystem adoption.
 
@@ -463,7 +492,9 @@ Groups can reference and extend other groups:
 }
 ```
 
-## References and Aliases
+## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns and Aliases
 
 ### Reference Syntax
 

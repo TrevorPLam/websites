@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file postgresql-pg-stat-statements.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for postgresql pg stat statements.
+ * @entrypoints docs/guides/postgresql-pg-stat-statements.md
+ * @exports postgresql pg stat statements
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # PostgreSQL pg_stat_statements — Query Monitoring & Noisy Neighbor Detection
 
 > **Version Reference:** PostgreSQL 14+ | pg_stat_statements 1.10+ | Last Updated: 2026-02-23
@@ -568,3 +588,21 @@ SELECT cron.schedule('weekly-stats-reset', '0 3 * * 0', 'CALL reset_query_stats_
 10. **Combine with `pg_stat_activity`** — Real-time correlation of current load to historical patterns
 11. **Alert on `temp_blks_written`** — Any significant value indicates work_mem pressure
 12. **Cross-reference with `pg_statio_user_tables`** — Correlate query patterns with table I/O
+
+
+--- 
+
+## References
+
+- [Official Documentation](https://example.com) — Replace with actual source
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

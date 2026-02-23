@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file supabase-auth-docs.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for supabase auth docs.
+ * @entrypoints docs/guides/supabase-auth-docs.md
+ * @exports supabase auth docs
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Supabase Authentication & RLS Integration — Official Reference
 
 > **Version Reference:** Supabase Auth v2 / PostgreSQL 15+ | Last Updated: 2026-02-23
@@ -603,3 +623,26 @@ user's authenticated JWT. Use `SELECT auth.jwt();` to inspect what the token loo
 | Calling DB functions in policy       | N+1 per row performance           | Use JWT claims or `current_setting()`               |
 | No `ON DELETE CASCADE` on user_id FK | Orphaned rows after user deletion | Always add `ON DELETE CASCADE`                      |
 | Mixing OAuth and user policies       | Unintended access grants          | Separate policies for direct users vs OAuth clients |
+
+
+--- 
+
+## References
+
+- [Official Documentation](https://example.com) — Replace with actual source
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
+
+## Overview
+
+[Add content here]
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]

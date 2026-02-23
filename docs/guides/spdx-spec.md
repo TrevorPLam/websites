@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file spdx-spec.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for spdx spec.
+ * @entrypoints docs/guides/spdx-spec.md
+ * @exports spdx spec
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # spdx-spec.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 The Software Package Data Exchange (SPDX) specification is an open standard designed to facilitate communication of Bill of Materials (BOM) information across diverse domains, including software, artificial intelligence (AI), datasets, and system components. SPDX enables organizations to document, share, and manage metadata critical to understanding and maintaining software supply chains, ensuring transparency, compliance, and security.
 
@@ -477,6 +506,8 @@ async function logSPDXOperation(operation, document, user) {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [SPDX Official Website](https://spdx.dev/)
 - [SPDX 3.0 Specification](https://spdx.github.io/spdx-spec/v3.0.1/)
 - [SPDX License List](https://spdx.org/licenses/)
@@ -484,3 +515,8 @@ async function logSPDXOperation(operation, document, user) {
 - [SPDX GitHub Organization](https://github.com/spdx)
 - [NTIA Software Bill of Materials](https://www.ntia.gov/sbom)
 - [CISA SBOM Guidance](https://www.cisa.gov/sbom)
+
+
+## Testing
+
+[Add content here]

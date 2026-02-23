@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file ai-context-json-proposal.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for ai context json proposal.
+ * @entrypoints docs/guides/ai-context-json-proposal.md
+ * @exports ai context json proposal
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # ai-context-json-proposal.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # AI Context JSON Proposal
 
@@ -424,6 +453,8 @@ Use JSON Schema validation to ensure compliance:
 - **Integration-specific**: Extensions for specific integration patterns
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - [context.json Open Standard](https://github.com/davidkimai/context.json)
 - [Model Context Protocol](https://modelcontextprotocol.io/)

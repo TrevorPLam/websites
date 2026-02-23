@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file architecture-decision-record-template.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for architecture decision record template.
+ * @entrypoints docs/guides/architecture-decision-record-template.md
+ * @exports architecture decision record template
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Architecture Decision Record (ADR) Template
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Title
 
@@ -89,3 +118,26 @@
 ---
 
 **Note to ADR Author:** Keep the document concise and focused on a single decision. Link to relevant pull requests, issues, or design documents for additional detail.
+
+
+--- 
+
+## References
+
+- [Official Documentation](https://example.com) — Replace with actual source
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
+
+## Overview
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file terraform-aws-provider-docs.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for terraform aws provider docs.
+ * @entrypoints docs/guides/terraform-aws-provider-docs.md
+ * @exports terraform aws provider docs
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # terraform-aws-provider-docs.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -686,8 +715,20 @@ terraform plan
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [AWS Provider Changelog](https://github.com/hashicorp/terraform-provider-aws/blob/main/CHANGELOG.md)
 - [Terraform Configuration Language](https://www.terraform.io/docs/language/index.html)
 - [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
 - [Terraform Best Practices](https://www.terraform.io/docs/cloud-docs/best-practices/index.html)
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

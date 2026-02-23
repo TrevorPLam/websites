@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file playwright-best-practices.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for playwright best practices.
+ * @entrypoints docs/guides/playwright-best-practices.md
+ * @exports playwright best practices
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # playwright-best-practices.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # Playwright Best Practices
 
@@ -625,6 +654,8 @@ export default defineConfig({
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Playwright Official Documentation](https://playwright.dev/docs)
 - [Playwright Best Practices](https://playwright.dev/docs/best-practices)
 - [Playwright VS Code Extension](https://playwright.dev/docs/getting-started-vscode)
@@ -634,3 +665,8 @@ export default defineConfig({
 - [Playwright GitHub Repository](https://github.com/microsoft/playwright)
 - [BrowserStack Playwright Guide](https://www.browserstack.com/guide/playwright-best-practices)
 - [Playwright Release Notes](https://playwright.dev/docs/release-notes)
+
+
+## Implementation
+
+[Add content here]

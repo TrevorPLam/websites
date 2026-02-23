@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file cli-scaffold-design.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for cli scaffold design.
+ * @entrypoints docs/guides/cli-scaffold-design.md
+ * @exports cli scaffold design
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # cli-scaffold-design.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # CLI Scaffold Design for Golden Path Development
 
@@ -963,6 +992,8 @@ class ErrorReporter {
 ```
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 ### Official Documentation
 

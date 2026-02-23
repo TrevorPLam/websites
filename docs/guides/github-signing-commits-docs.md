@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file github-signing-commits-docs.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for github signing commits docs.
+ * @entrypoints docs/guides/github-signing-commits-docs.md
+ * @exports github signing commits docs
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # github-signing-commits-docs.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -465,6 +494,8 @@ fi
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official GitHub Documentation
 
 - [Signing Commits - GitHub Docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits)
@@ -495,3 +526,13 @@ fi
 - [GitHub Actions Security](https://docs.github.com/en/actions/security-guides)
 - [Enterprise Security Best Practices](https://docs.github.com/en/enterprise-security)
 - [Open Source Security Guidelines](https://docs.github.com/en/organizations/security-guidance)
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

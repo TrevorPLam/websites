@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file resend-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for resend documentation.
+ * @entrypoints docs/guides/resend-documentation.md
+ * @exports resend documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # resend-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 Resend is a modern email API platform that provides a developer-friendly interface for sending emails. This guide covers API integration, configuration patterns, and best practices for production use.
 
@@ -668,8 +697,15 @@ export class EmailMonitor {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Resend API Documentation](https://resend.com/docs/api-reference/introduction)
 - [Resend Webhooks Guide](https://resend.com/docs/api-reference/webhooks)
 - [Resend Templates](https://resend.com/docs/api-reference/templates)
 - [Resend Best Practices](https://resend.com/docs/guides/getting-started)
 - [Resend Error Codes](https://resend.com/docs/api-reference/error-codes)
+
+
+## Implementation
+
+[Add content here]

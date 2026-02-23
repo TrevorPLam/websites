@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file aws-rds-proxy-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for aws rds proxy documentation.
+ * @entrypoints docs/guides/aws-rds-proxy-documentation.md
+ * @exports aws rds proxy documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # AWS RDS Proxy — Connection Pooling & Database Proxy Reference
 
 > **Version Reference:** AWS RDS Proxy (2026) | PostgreSQL & MySQL compatible | Last Updated: 2026-02-23
@@ -1270,6 +1290,8 @@ class IntelligentConnectionPool {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official AWS Documentation
 
 - [AWS RDS Proxy User Guide](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html)
@@ -1295,3 +1317,18 @@ class IntelligentConnectionPool {
 - [AWS Database Blog](https://aws.amazon.com/blogs/database/)
 - [RDS Proxy Best Practices](https://aws.amazon.com/blogs/database/amazon-rds-proxy-best-practices-and-tips/)
 - [Multi-AZ and Read Replicas](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html)
+
+
+## Overview
+
+[Add content here]
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

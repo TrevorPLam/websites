@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file cyclonedx-spec.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for cyclonedx spec.
+ * @entrypoints docs/guides/cyclonedx-spec.md
+ * @exports cyclonedx spec
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # cyclonedx-spec.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -656,6 +685,8 @@ with open("sbom.json", "w") as f:
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official Documentation
 
 - [CycloneDX Specification](https://cyclonedx.org/specification/overview/)
@@ -683,3 +714,8 @@ with open("sbom.json", "w") as f:
 - [CycloneDX Tool Center](https://cyclonedx.org/tool-center/)
 - [CycloneDX Community](https://cyclonedx.org/community/)
 - [OWASP Supply Chain Security](https://owasp.org/www-project-supply-chain-security/)
+
+
+## Testing
+
+[Add content here]

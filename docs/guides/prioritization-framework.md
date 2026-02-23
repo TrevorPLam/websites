@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file prioritization-framework.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for prioritization framework.
+ * @entrypoints docs/guides/prioritization-framework.md
+ * @exports prioritization framework
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # prioritization-framework.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -666,8 +695,15 @@ interface ReleasePriority {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [P0, P1, P2, P3, and P4 Priority Levels Explained - Fibery](https://fibery.com/blog/product-management/p0-p1-p2-p3-p4/)
 - [Product Prioritization Frameworks: The Complete Guide for 2026 - Monday.com](https://monday.com/blog/rnd/product-prioritization-frameworks/)
 - [Levels of Priority: Best P0 to P4 System Applied in Product](https://plakyguide.com/levels-of-priority-frameworks/business/)
 - [Product Prioritization in Hardware Development - Penchant for Product](https://penchantforproduct.com/product-prioritization-in-hardware-development/)
 - [Product Prioritization Frameworks: 12 Common Models - Aha.io](https://www.aha.io/roadmapping/guide/release-management/prioritization-framework)
+
+
+## Testing
+
+[Add content here]

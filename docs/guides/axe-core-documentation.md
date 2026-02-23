@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file axe-core-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for axe core documentation.
+ * @entrypoints docs/guides/axe-core-documentation.md
+ * @exports axe core documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # axe-core-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # axe-core Documentation - Accessibility Testing Engine
 
@@ -524,6 +553,8 @@ try {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official Documentation
 
 - [axe-core GitHub Repository](https://github.com/dequelabs/axe-core)
@@ -542,3 +573,8 @@ try {
 - [axe-core NPM Package](https://www.npmjs.com/package/axe-core)
 - [axe-core Discussions](https://github.com/dequelabs/axe-core/discussions)
 - [Deque Accessibility Blog](https://www.deque.com/blog/)
+
+
+## Implementation
+
+[Add content here]

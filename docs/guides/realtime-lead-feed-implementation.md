@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file realtime-lead-feed-implementation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for realtime lead feed implementation.
+ * @entrypoints docs/guides/realtime-lead-feed-implementation.md
+ * @exports realtime lead feed implementation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # realtime-lead-feed-implementation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -278,7 +307,24 @@ Supabase Realtime `postgres_changes` uses WAL decoding, which adds load proporti
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - Supabase Realtime Postgres Changes — https://supabase.com/docs/guides/realtime/postgres-changes
 - Supabase Realtime RLS — https://supabase.com/blog/realtime-row-level-security-in-postgresql
 - Supabase Realtime GitHub — https://github.com/supabase/realtime
 - Supabase Realtime Filter Syntax — https://supabase.com/docs/guides/realtime/postgres-changes#filtering-for-specific-changes
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

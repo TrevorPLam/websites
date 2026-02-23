@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file react-hook-form-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for react hook form documentation.
+ * @entrypoints docs/guides/react-hook-form-documentation.md
+ * @exports react hook form documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # react-hook-form-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -710,8 +739,15 @@ const {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [React Hook Form Official Documentation](https://react-hook-form.com/)
 - [React Hook Form API Reference](https://react-hook-form.com/api/)
 - [React Hook Form Examples](https://react-hook-form.com/get-started)
 - [Zod Resolver Documentation](https://github.com/react-hook-form/resolvers)
 - [Testing Library Documentation](https://testing-library.com/docs/react-testing-library/)
+
+
+## Implementation
+
+[Add content here]

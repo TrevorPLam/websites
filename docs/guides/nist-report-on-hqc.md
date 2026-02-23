@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file nist-report-on-hqc.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for nist report on hqc.
+ * @entrypoints docs/guides/nist-report-on-hqc.md
+ * @exports nist report on hqc
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # nist-report-on-hqc.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Executive Summary
 
@@ -325,6 +354,8 @@ function HQC_Decapsulate(ciphertext: Uint8Array, privateKey: Uint8Array): Uint8A
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official NIST Documents
 
 - [NIST Selects HQC as Fifth Algorithm for Post-Quantum Encryption](https://www.nist.gov/news-events/news/2025/03/nist-selects-hqc-fifth-algorithm-post-quantum-encryption)
@@ -360,3 +391,18 @@ HQC's code-based approach complements the lattice-based algorithms that dominate
 As organizations continue their migration to post-quantum cryptography, HQC will play an important role as a backup option and high-security alternative, particularly for systems requiring mathematical diversity or enhanced security guarantees. The standardization process timeline suggests that HQC will be ready for production use by 2027, providing organizations with additional options for their post-quantum cryptography strategies.
 
 The inclusion of HQC alongside ML-KEM, ML-DSA, and SLH-DSA creates a comprehensive post-quantum cryptographic foundation that addresses the diverse security needs of modern information systems and provides multiple layers of protection against both classical and quantum threats.
+
+
+## Overview
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

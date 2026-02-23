@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file slsa-provenance-spec.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for slsa provenance spec.
+ * @entrypoints docs/guides/slsa-provenance-spec.md
+ * @exports slsa provenance spec
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # slsa-provenance-spec.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -435,6 +464,8 @@ steps:
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official SLSA Documentation
 
 - [SLSA Specification v1.2](https://slsa.dev/spec/v1.2/)
@@ -462,3 +493,8 @@ steps:
 - [Executive Order 14028](https://www.whitehouse.gov/briefing-room/presidential-actions/2021/05/12/executive-order-on-improving-the-nations-cybersecurity/)
 - [CISA Supply Chain Security](https://www.cisa.gov/news-events/news/cisa-releases-guidance-software-supply-chain-security)
 - [EU Cybersecurity Act](https://ec.europa.eu/digital-single-market/en/cybersecurity-act)
+
+
+## Testing
+
+[Add content here]

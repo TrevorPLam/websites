@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file prettier-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for prettier documentation.
+ * @entrypoints docs/guides/prettier-documentation.md
+ * @exports prettier documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # prettier-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -303,6 +332,8 @@ git diff
 ```
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - [Official Prettier Documentation](https://prettier.io/docs/)
 - [Prettier Options Reference](https://prettier.io/docs/options)
@@ -1009,3 +1040,13 @@ const debugConfig: Config = {
 - [Prettier Editor Integration](https://prettier.io/docs/editors)
 - [Prettier Plugins](https://prettier.io/docs/plugins)
 - [Prettier CLI](https://prettier.io/docs/cli)
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

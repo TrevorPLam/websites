@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file opentelemetry-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for opentelemetry documentation.
+ * @entrypoints docs/guides/opentelemetry-documentation.md
+ * @exports opentelemetry documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # opentelemetry-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 OpenTelemetry (OTel) is a vendor-neutral open source observability framework for instrumenting, generating, collecting, and exporting telemetry data such as traces, metrics, and logs. As an industry standard, OpenTelemetry is supported by more than 90 observability vendors and integrated by many libraries, services, and applications.
 
@@ -299,6 +328,8 @@ export default sdk;
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [OpenTelemetry Official Documentation](https://opentelemetry.io/docs/)
 - [OpenTelemetry Concepts](https://opentelemetry.io/docs/concepts/)
 - [OpenTelemetry Getting Started](https://opentelemetry.io/docs/getting-started/)
@@ -306,3 +337,18 @@ export default sdk;
 - [OpenTelemetry GitHub](https://github.com/open-telemetry/opentelemetry-js)
 - [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/)
 - [Semantic Conventions](https://opentelemetry.io/docs/specs/semconv/)
+
+
+## Overview
+
+[Add content here]
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

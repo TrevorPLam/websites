@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file tinybird-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for tinybird documentation.
+ * @entrypoints docs/guides/tinybird-documentation.md
+ * @exports tinybird documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # tinybird-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # Tinybird Official Documentation: Real-Time Analytics & Core Web Vitals
 
@@ -68,7 +97,19 @@ Tinybird uses **Pipes** to define data transformations in SQL. These pipes are b
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Tinybird Official Documentation](https://www.tinybird.co/docs)
 - [Tinybird Web Analytics Starter Kit](https://www.tinybird.co/web-analytics)
 - [Tracking Core Web Vitals with Tinybird](https://www.tinybird.co/docs/guides/web-analytics-starter-kit.html)
 - [Tinybird Events API Reference](https://www.tinybird.co/docs/api-reference/events-api.html)
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

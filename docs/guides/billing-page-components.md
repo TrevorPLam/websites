@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file billing-page-components.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for billing page components.
+ * @entrypoints docs/guides/billing-page-components.md
+ * @exports billing page components
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Billing Page Components
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Reference Documentation — February 2026**
 
@@ -102,6 +131,8 @@ describe('Billing Page Components Integration', () => {
 ---
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - https://stripe.com/docs/js — stripe.com
 - https://stripe.com/docs/billing/subscriptions/integrating — stripe.com

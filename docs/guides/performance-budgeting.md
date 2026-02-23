@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file performance-budgeting.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for performance budgeting.
+ * @entrypoints docs/guides/performance-budgeting.md
+ * @exports performance budgeting
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # performance-budgeting.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 Performance budgeting is a critical practice for maintaining web application performance by setting and enforcing quantitative limits on resource usage. This approach ensures consistent user experience, prevents performance regressions, and aligns development teams around performance goals.
 
@@ -630,6 +659,8 @@ class BudgetAlertManager {
 - [GTmetrix](https://gtmetrix.com/) - Performance monitoring and optimization
 
 ## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
 - [Web Performance Budgets](https://developers.google.com/web/tools/chrome-devtools/performances/performance-budgets)
 - [Core Web Vitals](https://web.dev/vitals/)

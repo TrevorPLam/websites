@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file terraform-supabase-provider-docs.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for terraform supabase provider docs.
+ * @entrypoints docs/guides/terraform-supabase-provider-docs.md
+ * @exports terraform supabase provider docs
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # terraform-supabase-provider-docs.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -549,9 +578,21 @@ resource "supabase_settings" "backups" {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Supabase Terraform Provider Documentation](https://supabase.com/docs/guides/platform/terraform)
 - [Supabase Terraform Provider Registry](https://registry.terraform.io/providers/supabase/supabase/latest/docs)
 - [Terraform Provider GitHub Repository](https://github.com/supabase/terraform-provider-supabase)
 - [CI/CD Example Repository](https://github.com/supabase/supabase-action-example/tree/main/supabase/remotes)
 - [Step-by-step Tutorial](https://supabase.com/docs/guides/deployment/terraform/tutorial)
 - [Contributing Guide](https://github.com/supabase/terraform-provider-supabase/blob/v1.1.3/CONTRIBUTING.md)
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

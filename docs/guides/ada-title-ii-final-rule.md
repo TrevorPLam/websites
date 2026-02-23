@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file ada-title-ii-final-rule.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for ada title ii final rule.
+ * @entrypoints docs/guides/ada-title-ii-final-rule.md
+ * @exports ada title ii final rule
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # ada-title-ii-final-rule.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 # ADA Title II Final Rule on Web Accessibility
 
@@ -196,9 +225,21 @@ Key areas requiring attention include:
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - U.S. Department of Justice. "Nondiscrimination on the Basis of Disability; Accessibility of Web Information and Services of State and Local Government Entities." Federal Register, Vol. 89, No. 81, April 24, 2024.
 - ADA.gov. "Fact Sheet: New Rule on the Accessibility of Web Content and Mobile Apps Provided by State and Local Governments." https://www.ada.gov/resources/2024-03-08-web-rule/
 - ADA.gov. "State and Local Governments: First Steps Toward Complying with the Americans with Disabilities Act Title II Web and Mobile Application Accessibility Rule." https://www.ada.gov/resources/web-rule-first-steps/
 - World Wide Web Consortium. "Web Content Accessibility Guidelines (WCAG) 2.1." https://www.w3.org/TR/WCAG21/
 - U.S. Census Bureau. "2020 Decennial Census." https://www.census.gov/programs-surveys/decennial-census/decade/2020/2020-census-main.html
 - U.S. Census Bureau. "Small Area Income and Poverty Estimates." https://www.census.gov/programs-surveys/saipe.html
+
+
+## Best Practices
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]

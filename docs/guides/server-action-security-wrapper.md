@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file server-action-security-wrapper.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for server action security wrapper.
+ * @entrypoints docs/guides/server-action-security-wrapper.md
+ * @exports server action security wrapper
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # server-action-security-wrapper.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Reference Documentation — February 2026**
 
@@ -500,6 +529,8 @@ export const config = {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - Next.js Server Actions Documentation — https://nextjs.org/docs/app/api-reference/functions/server-actions
 - Zod Validation Documentation — https://zod.dev/
 - OWASP Server Security Cheat Sheet — https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet/
@@ -507,3 +538,13 @@ export const config = {
 - Rate Limiting Best Practices — https://owasp.org/www-project-rate-limiting/
 
 ---
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]

@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file launchdarkly-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for launchdarkly documentation.
+ * @entrypoints docs/guides/launchdarkly-documentation.md
+ * @exports launchdarkly documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # launchdarkly-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 Official LaunchDarkly documentation for feature flags, feature management, and experimentation as of February 2026.
 
@@ -969,6 +998,8 @@ const mockClient = {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official Resources
 
 - [LaunchDarkly Documentation](https://launchdarkly.com/docs) - Official documentation and guides
@@ -1006,3 +1037,8 @@ const mockClient = {
 - [Experimentation Guide](https://launchdarkly.com/docs/home/experimentation) - Experimentation guide
 - [Targeting Guide](https://launchdarkly.com/docs/home/targeting) - Targeting and segmentation guide
 - [Analytics Guide](https://launchdarkly.com/docs/home/analytics) - Analytics and metrics guide
+
+
+## Implementation
+
+[Add content here]

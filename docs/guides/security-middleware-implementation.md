@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file security-middleware-implementation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for security middleware implementation.
+ * @entrypoints docs/guides/security-middleware-implementation.md
+ * @exports security middleware implementation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # security-middleware-implementation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 > **Reference Documentation — February 2026**
 
@@ -492,6 +521,8 @@ describe('Security Middleware', () => {
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - Next.js Middleware Documentation — https://nextjs.org/docs/app/building-your-application/routing/middleware
 - OWASP Security Headers — https://owasp.org/www-project-secure-headers/
 - Rate Limiting Best Practices — https://owasp.org/www-project-rate-limiting/
@@ -499,3 +530,13 @@ describe('Security Middleware', () => {
 - Next.js Security Best Practices — https://nextjs.org/docs/app/building-your-application/deploying#security-considerations
 
 ---
+
+
+## Implementation
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]

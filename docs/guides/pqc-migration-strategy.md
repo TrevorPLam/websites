@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file pqc-migration-strategy.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for pqc migration strategy.
+ * @entrypoints docs/guides/pqc-migration-strategy.md
+ * @exports pqc migration strategy
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # pqc-migration-strategy.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Executive Summary
 
@@ -407,6 +436,8 @@ The window for methodical migration is closing rapidly. Acting now—before regu
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [NIST Post-Quantum Cryptography Standardization](https://csrc.nist.gov/projects/post-quantum-cryptography)
 - [NIST IR 8547: Transition to Post-Quantum Cryptography](https://csrc.nist.gov/pubs/ir/8547/ipd)
 - [NSA CNSA 2.0 Suite](https://www.nsa.gov/Cybersecurity/NSA-is-Transitioning-to-Quantum-Resistant-Algorithms/)
@@ -415,3 +446,13 @@ The window for methodical migration is closing rapidly. Acting now—before regu
 - [Open Quantum Safe Project](https://openquantumsafe.org/)
 - [Palo Alto Networks PQC Standards Guide](https://www.paloaltonetworks.com/cyberpedia/pqc-standards)
 - [QuantumXC 2026 PQC Predictions](https://quantumxc.com/blog/quantum-predictions-it-network-infrastructure/)
+
+
+## Overview
+
+[Add content here]
+
+
+## Best Practices
+
+[Add content here]

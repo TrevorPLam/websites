@@ -1,4 +1,33 @@
+<!--
+/**
+ * @file vitest-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for vitest documentation.
+ * @entrypoints docs/guides/vitest-documentation.md
+ * @exports vitest documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # vitest-documentation.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
 
 ## Overview
 
@@ -775,9 +804,16 @@ vi.spyOn();
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 - [Vitest Official Documentation](https://vitest.dev/)
 - [Vitest Configuration Guide](https://vitest.dev/config/)
 - [Vitest API Reference](https://vitest.dev/api/)
 - [Vitest Examples](https://github.com/vitest-dev/vitest/tree/main/examples)
 - [Testing Library with Vitest](https://testing-library.com/docs/react-testing-library/docs/vitest)
 - [Vitest Migration Guide](https://vitest.dev/guide/migration.html)
+
+
+## Implementation
+
+[Add content here]

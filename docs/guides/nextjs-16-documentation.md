@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file nextjs-16-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for nextjs 16 documentation.
+ * @entrypoints docs/guides/nextjs-16-documentation.md
+ * @exports nextjs 16 documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Next.js 16 — Official Reference Documentation
 
 > **Version Reference:** Next.js 16.1 (stable) | Released: October 21, 2025 / Updated: December 18, 2025
@@ -1425,6 +1445,8 @@ export function withPerformanceTracking<T extends Record<string, any>>(
 
 ## References
 
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
 ### Official Next.js Documentation
 
 - [Next.js 16 Documentation](https://nextjs.org/docs)
@@ -1449,3 +1471,18 @@ export function withPerformanceTracking<T extends Record<string, any>>(
 - [Edge Computing with Next.js](https://vercel.com/docs/concepts/functions/edge-functions)
 - [React Server Components](https://react.dev/reference/rsc/server-components)
 - [Next.js Caching Documentation](https://nextjs.org/docs/app/building-your-application/caching)
+
+
+## Overview
+
+[Add content here]
+
+
+## Implementation
+
+[Add content here]
+
+
+## Testing
+
+[Add content here]
