@@ -2,10 +2,6 @@ import { Octokit } from "@octokit/rest";
 
 /**
  * Reorganization Script for docs/guides
- * Performs:
- * 1. Categorization into subfolders
- * 2. Content cleanup (removal of agentic boilerplate)
- * 3. Deduplication and consolidation
  */
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -117,15 +113,10 @@ const CATEGORIES = {
 const JUNK_FILES = ["ADDTHESE.md", "0000.md", "000.md"];
 
 function cleanContent(content) {
-  // Remove JSDoc-style headers
-  content = content.replace(/\/\*\*[\s\S]*?\*\/
-/g, "");
-  // Remove fake Table of Contents blocks
-  content = content.replace(/## Table of Contents[\s\S]*?(?=# |## )/g, "");
-  // Remove HTML comments used for agentic metadata
-  content = content.replace(/<!--[\s\S]*?-->/g, "");
-  // Trim excessive whitespace
-  return content.trim();
+  let cleaned = content.replace(/\/\*\*[\s\S]*?\*\/\n/g, "");
+  cleaned = cleaned.replace(/<!--[\s\S]*?-->/g, "");
+  cleaned = cleaned.replace(/## Table of Contents[\s\S]*?(?=# |## )/g, "");
+  return cleaned.trim();
 }
 
 async function run() {
@@ -161,7 +152,6 @@ async function run() {
     const cleaned = cleanContent(contentData);
     const newPath = `${baseDir}/${targetCategory}/${file.name}`;
 
-    // Create new file in subfolder
     await octokit.repos.createOrUpdateFileContents({
       owner, repo, path: newPath,
       message: `reorg: move and clean ${file.name}`,
@@ -169,7 +159,6 @@ async function run() {
       branch
     });
 
-    // Delete old file
     await octokit.repos.deleteFile({
       owner, repo, path: file.path,
       message: `reorg: remove legacy ${file.name}`,
@@ -178,4 +167,7 @@ async function run() {
   }
 }
 
-run().catch(console.error);
+run().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
