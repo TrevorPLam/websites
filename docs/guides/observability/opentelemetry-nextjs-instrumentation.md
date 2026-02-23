@@ -1,33 +1,4 @@
-<!--
-/**
- * @file opentelemetry-nextjs-instrumentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for opentelemetry nextjs instrumentation.
- * @entrypoints docs/guides/opentelemetry-nextjs-instrumentation.md
- * @exports opentelemetry nextjs instrumentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # opentelemetry-nextjs-instrumentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 # OpenTelemetry Instrumentation for Next.js Applications
 
@@ -1186,7 +1157,6 @@ groups:
 - [OpenTelemetry Best Practices](https://opentelemetry.io/docs/best-practices/)
 - [Next.js Performance Optimization](https://nextjs.org/docs/advanced-features/measuring-performance)
 - [Observability Engineering](https://www.oreilly.com/library/view/observability-engineering/9781492076438/)
-
 
 ## Implementation
 

@@ -1,33 +1,4 @@
-<!--
-/**
- * @file terraform-supabase-provider-docs.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for terraform supabase provider docs.
- * @entrypoints docs/guides/terraform-supabase-provider-docs.md
- * @exports terraform supabase provider docs
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # terraform-supabase-provider-docs.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -587,11 +558,9 @@ resource "supabase_settings" "backups" {
 - [Step-by-step Tutorial](https://supabase.com/docs/guides/deployment/terraform/tutorial)
 - [Contributing Guide](https://github.com/supabase/terraform-provider-supabase/blob/v1.1.3/CONTRIBUTING.md)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

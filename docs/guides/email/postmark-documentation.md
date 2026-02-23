@@ -1,33 +1,4 @@
-<!--
-/**
- * @file postmark-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for postmark documentation.
- * @entrypoints docs/guides/postmark-documentation.md
- * @exports postmark documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # postmark-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 Postmark is a transactional email delivery service that provides reliable email delivery for applications. This guide covers API integration, configuration patterns, and best practices for production use.
 
@@ -531,7 +502,6 @@ export class EmailMonitor {
 - [Postmark Templates](https://postmarkapp.com/developer/api/templates)
 - [Postmark Best Practices](https://postmarkapp.com/guides/best-practices)
 - [Postmark Error Codes](https://postmarkapp.com/developer/api/overview#error-codes)
-
 
 ## Implementation
 

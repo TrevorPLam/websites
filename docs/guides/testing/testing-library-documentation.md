@@ -1,33 +1,4 @@
-<!--
-/**
- * @file testing-library-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for testing library documentation.
- * @entrypoints docs/guides/testing-library-documentation.md
- * @exports testing library documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # testing-library-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -700,7 +671,6 @@ export default defineConfig({
 - [Jest DOM Matchers](https://github.com/testing-library/jest-dom)
 - [axe-core Accessibility Testing](https://github.com/dequelabs/axe-core)
 - [User Event Documentation](https://testing-library.com/docs/user-event/intro/)
-
 
 ## Implementation
 

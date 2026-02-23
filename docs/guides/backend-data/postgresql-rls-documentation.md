@@ -1,31 +1,9 @@
-<!--
-/**
- * @file postgresql-rls-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for postgresql rls documentation.
- * @entrypoints docs/guides/postgresql-rls-documentation.md
- * @exports postgresql rls documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # PostgreSQL Row Level Security (RLS) — Official Reference Documentation
 
 > **Version Reference:** PostgreSQL 15+ | Last Updated: 2026-02-23
 > **Purpose:** AI agent reference for implementing Row Security Policies with multi-tenant data isolation.
 
 ---
-
-## Table of Contents
 
 1. [What is Row Level Security?](#what-is-rls)
 2. [Core Concepts](#core-concepts)

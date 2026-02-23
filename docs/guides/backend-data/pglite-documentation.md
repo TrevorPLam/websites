@@ -1,33 +1,4 @@
-<!--
-/**
- * @file pglite-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for pglite documentation.
- * @entrypoints docs/guides/pglite-documentation.md
- * @exports pglite documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # pglite-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 PGlite is a lightweight WebAssembly (WASM) build of PostgreSQL packaged into a TypeScript/JavaScript client library that enables you to run a full PostgreSQL database in the browser, Node.js, and Bun without any external dependencies. Under 3MB gzipped, PGlite provides a complete PostgreSQL experience with support for many extensions including pgvector.
 
@@ -850,11 +821,9 @@ async function migrateFromSQLite(sqliteDB: any, pgliteDB: PGlite) {
 - [WebAssembly Documentation](https://webassembly.org/)
 - [ElectricSQL Website](https://electric-sql.com/)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

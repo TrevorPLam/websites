@@ -1,33 +1,4 @@
-<!--
-/**
- * @file offline-first-forms-pwa.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for offline first forms pwa.
- * @entrypoints docs/guides/offline-first-forms-pwa.md
- * @exports offline first forms pwa
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # offline-first-forms-pwa.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -249,16 +220,13 @@ export function OfflineBanner() {
 - PWA Performance Guide 2026 — https://www.digitalapplied.com/blog/progressive-web-apps-2026-pwa-performance-guide
 - LogRocket Next.js 16 PWA — https://blog.logrocket.com/nextjs-16-pwa-offline-support/
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

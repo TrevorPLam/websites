@@ -1,33 +1,4 @@
-<!--
-/**
- * @file eslint-9-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for eslint 9 documentation.
- * @entrypoints docs/guides/eslint-9-documentation.md
- * @exports eslint 9 documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # eslint-9-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -516,11 +487,9 @@ eslint src/**/*.ts --max-warnings 0
 - [Compatibility Utilities](https://eslint.org/blog/2024/05/eslint-compatibility-utilities/)
 - [ESLint TypeScript Types](https://www.npmjs.com/package/@types/eslint)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

@@ -1,33 +1,4 @@
-<!--
-/**
- * @file blog-content-architecture.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for blog content architecture.
- * @entrypoints docs/guides/blog-content-architecture.md
- * @exports blog content architecture
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # blog-content-architecture.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -212,16 +183,13 @@ const articleSchema = {
 - On-demand ISR by Sanity Webhooks — https://dev.to/valse/nextjs-on-demand-isr-by-sanity-groq-powered-webhooks-221n
 - Sanity Toolkit for Next.js Enhancements — https://www.sanity.io/blog/sanity-nextjs-enhancements
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

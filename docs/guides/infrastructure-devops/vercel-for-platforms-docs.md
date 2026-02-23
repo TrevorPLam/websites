@@ -1,32 +1,4 @@
-<!--
-/**
- * @file vercel-for-platforms-docs.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for vercel for platforms docs.
- * @entrypoints docs/guides/vercel-for-platforms-docs.md
- * @exports vercel for platforms docs
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Vercel for Platforms: Official Guide
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
 
 ## Introduction
 

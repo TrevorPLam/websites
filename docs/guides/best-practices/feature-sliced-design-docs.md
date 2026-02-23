@@ -1,33 +1,4 @@
-<!--
-/**
- * @file feature-sliced-design-docs.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for feature sliced design docs.
- * @entrypoints docs/guides/feature-sliced-design-docs.md
- * @exports feature sliced design docs
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Feature-Sliced Design (FSD) 2.1: Official Documentation
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Introduction
 
@@ -117,29 +88,24 @@ This is a non-breaking change, so existing FSD 2.0 projects can continue working
 
 FSD 2.1 is a pragmatic evolution of the methodology. By prioritizing the "pages-first" mental model, it lowers the barrier to entry while still providing the necessary structure for scalable, maintainable frontend applications. The introduction of tools like Steiger and conventions like the `@x` notation provide the necessary support to enforce and navigate this architecture.
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

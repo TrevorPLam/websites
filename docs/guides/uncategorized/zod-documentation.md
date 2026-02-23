@@ -1,33 +1,4 @@
-<!--
-/**
- * @file zod-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for zod documentation.
- * @entrypoints docs/guides/zod-documentation.md
- * @exports zod documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # zod-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 Official Zod documentation for schema definition, validation, TypeScript inference, and safe parsing as of February 2026.
 
@@ -1046,7 +1017,6 @@ const generateMockUsers = (count: number) =>
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/) - TypeScript documentation
 - [JSON Schema Specification](https://json-schema.org/) - JSON Schema standard
 - [Form Validation Best Practices](https://www.w3.org/WAI/WCAG21/Understanding/validation.html) - Accessibility guidelines
-
 
 ## Implementation
 

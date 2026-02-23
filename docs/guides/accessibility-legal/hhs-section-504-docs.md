@@ -1,33 +1,4 @@
-<!--
-/**
- * @file hhs-section-504-docs.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for hhs section 504 docs.
- * @entrypoints docs/guides/hhs-section-504-docs.md
- * @exports hhs section 504 docs
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # hhs-section-504-docs.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 

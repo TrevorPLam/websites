@@ -1,33 +1,4 @@
-<!--
-/**
- * @file upstash-redis-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for upstash redis documentation.
- * @entrypoints docs/guides/upstash-redis-documentation.md
- * @exports upstash redis documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # upstash-redis-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 Official Upstash Redis documentation for serverless Redis caching, rate limiting, and real-time data management as of February 2026.
 
@@ -1242,7 +1213,6 @@ class DebugRedis extends Redis {
 - [Rate Limiting Examples](https://github.com/upstash/ratelimit) - Rate limiting examples
 - [Performance Guide](https://upstash.com/docs/redis/performance) - Performance optimization
 - [Security Guide](https://upstash.com/docs/redis/security) - Security best practices
-
 
 ## Implementation
 

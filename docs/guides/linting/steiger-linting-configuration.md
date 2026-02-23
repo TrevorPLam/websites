@@ -1,33 +1,4 @@
-<!--
-/**
- * @file steiger-linting-configuration.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for steiger linting configuration.
- * @entrypoints docs/guides/steiger-linting-configuration.md
- * @exports steiger linting configuration
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # steiger-linting-configuration.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -1437,11 +1408,9 @@ export default defineConfig([
 - [Steiger Migration Guide](https://github.com/feature-sliced/steiger/discussions/53)
 - [FSD Layer Structure](https://feature-sliced.design/docs/getting-started/concepts)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

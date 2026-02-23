@@ -1,33 +1,4 @@
-<!--
-/**
- * @file nist-report-on-hqc.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for nist report on hqc.
- * @entrypoints docs/guides/nist-report-on-hqc.md
- * @exports nist report on hqc
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # nist-report-on-hqc.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Executive Summary
 
@@ -392,16 +363,13 @@ As organizations continue their migration to post-quantum cryptography, HQC will
 
 The inclusion of HQC alongside ML-KEM, ML-DSA, and SLH-DSA creates a comprehensive post-quantum cryptographic foundation that addresses the diverse security needs of modern information systems and provides multiple layers of protection against both classical and quantum threats.
 
-
 ## Overview
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

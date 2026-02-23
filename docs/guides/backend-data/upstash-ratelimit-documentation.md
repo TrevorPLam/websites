@@ -1,33 +1,4 @@
-<!--
-/**
- * @file upstash-ratelimit-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for upstash ratelimit documentation.
- * @entrypoints docs/guides/upstash-ratelimit-documentation.md
- * @exports upstash ratelimit documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # upstash-ratelimit-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 Official Upstash Rate Limit documentation for API rate limiting, DDoS protection, and traffic management as of February 2026.
 
@@ -1338,7 +1309,6 @@ class DebugRateLimiter extends Ratelimit {
 - [Best Practices](https://upstash.com/docs/redis/sdks/ratelimit-ts/best-practices) - Implementation guidelines
 - [Security Guide](https://upstash.com/docs/redis/sdks/ratelimit-ts/security) - Security considerations
 - [Performance Guide](https://upstash.com/docs/redis/sdks/ratelimit-ts/performance) - Performance optimization
-
 
 ## Implementation
 

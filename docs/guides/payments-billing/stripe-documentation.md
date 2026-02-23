@@ -1,33 +1,4 @@
-<!--
-/**
- * @file stripe-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for stripe documentation.
- * @entrypoints docs/guides/stripe-documentation.md
- * @exports stripe documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # stripe-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -855,11 +826,9 @@ class StripeAnalytics {
 - [Stripe Testing Guide](https://docs.stripe.com/testing)
 - [Stripe Security Best Practices](https://docs.stripe.com/security)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Best Practices
 

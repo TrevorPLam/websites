@@ -1,33 +1,4 @@
-<!--
-/**
- * @file independent-release-patterns.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for independent release patterns.
- * @entrypoints docs/guides/independent-release-patterns.md
- * @exports independent release patterns
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Independent Release Patterns with Changesets
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Introduction
 
@@ -479,29 +450,24 @@ This ensures only one release process runs at a time per branch .
 - Dependency resolution performance
 - User adoption rates for new versions
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

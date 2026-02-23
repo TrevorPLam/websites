@@ -1,33 +1,4 @@
-<!--
-/**
- * @file turbo-json-configuration.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for turbo json configuration.
- * @entrypoints docs/guides/turbo-json-configuration.md
- * @exports turbo json configuration
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # turbo-json-configuration.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -1196,11 +1167,9 @@ Key differences:
 - [Turborepo Caching](https://turborepo.dev/docs/core-concepts/caching)
 - [Turborepo Task Dependencies](https://turborepo.dev/docs/core-concepts/monorepos/running-tasks)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

@@ -1,38 +1,4 @@
-<!--
-/**
- * @file quality-assurance-checklist.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for quality assurance checklist.
- * @entrypoints docs/guides/quality-assurance-checklist.md
- * @exports quality assurance checklist
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Documentation Quality Assurance Checklist
-
-## Table of Contents
-
-- [Evaluation Criteria](#evaluation-criteria)
-- [Complete File-by-File Assessment](#complete-file-by-file-assessment)
-- [Improvement Priorities](#improvement-priorities)
-- [Summary Statistics](#summary-statistics)
-- [Quality Standards Checklist](#quality-standards-checklist)
-- [Specific Improvement Recommendations](#specific-improvement-recommendations)
-- [2026 Standards Compliance Assessment](#2026-standards-compliance-assessment)
-- [Advanced Coding Patterns Analysis](#advanced-coding-patterns-analysis)
-- [Action Items for Quality Improvement](#action-items-for-quality-improvement)
-- [Quality Assurance Process](#quality-assurance-process)
-- [Conclusion](#conclusion)
 
 > **Complete file-by-file QA framework for evaluating every documentation guide with standardized criteria for easy tracking and grading.**
 > **Last Updated:** 2026-02-23  

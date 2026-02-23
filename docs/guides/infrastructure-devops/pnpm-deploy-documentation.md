@@ -1,33 +1,4 @@
-<!--
-/**
- * @file pnpm-deploy-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for pnpm deploy documentation.
- * @entrypoints docs/guides/pnpm-deploy-documentation.md
- * @exports pnpm deploy documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Official Guide: pnpm deploy for Slim Production Bundles
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Introduction
 
@@ -213,29 +184,24 @@ Typical size reductions with pnpm deploy:
 
 By combining `pnpm deploy` and `pnpm fetch`, teams can create highly optimized, fast, and secure deployment pipelines for their pnpm-based monorepos.
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

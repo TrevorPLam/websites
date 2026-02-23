@@ -1,33 +1,4 @@
-<!--
-/**
- * @file storyblok-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for storyblok documentation.
- * @entrypoints docs/guides/storyblok-documentation.md
- * @exports storyblok documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # storyblok-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -1121,11 +1092,9 @@ module.exports = {
 - [Storyblok Community](https://www.storyblok.com/community)
 - [Storyblok GitHub](https://github.com/storyblok/storyblok)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Best Practices
 

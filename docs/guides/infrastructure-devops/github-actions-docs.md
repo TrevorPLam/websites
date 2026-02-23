@@ -1,33 +1,4 @@
-<!--
-/**
- * @file github-actions-docs.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for github actions docs.
- * @entrypoints docs/guides/github-actions-docs.md
- * @exports github actions docs
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # GitHub Actions: Caching, Artifacts, and Workflow Optimization
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Introduction
 
@@ -411,29 +382,24 @@ jobs:
 4. **Monitor usage metrics** regularly to identify optimization opportunities
 5. **Consider self-hosted runners** for high-volume workloads
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

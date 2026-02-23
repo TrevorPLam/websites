@@ -1,33 +1,4 @@
-<!--
-/**
- * @file pnpm-vs-yarn-vs-npm-benchmarks.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for pnpm vs yarn vs npm benchmarks.
- * @entrypoints docs/guides/pnpm-vs-yarn-vs-npm-benchmarks.md
- * @exports pnpm vs yarn vs npm benchmarks
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # pnpm-vs-yarn-vs-npm-benchmarks.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 A comprehensive performance comparison of JavaScript package managers as of February 2026, based on official benchmarks, real-world testing, and production deployment patterns.
 
@@ -430,21 +401,17 @@ yarn install
 - [JavaScript Package Manager Security](https://owasp.org/www-project-nodejs-goat/) - OWASP security guidelines
 - [Monorepo Best Practices](https://monorepo.tools/) - Industry best practices for large-scale projects
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

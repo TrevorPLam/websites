@@ -1,33 +1,4 @@
-<!--
-/**
- * @file report-generation-engine.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for report generation engine.
- * @entrypoints docs/guides/report-generation-engine.md
- * @exports report generation engine
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # report-generation-engine.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -203,16 +174,13 @@ This route must use the **Node.js runtime**, not Edge — `@react-pdf/renderer` 
 - PDF Generation with React-PDF — https://pdfnoodle.com/blog/how-to-generate-pdf-reports-from-html-with-react-pdf
 - Upstash QStash Documentation — https://upstash.com/docs/qstash/overall/getstarted
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

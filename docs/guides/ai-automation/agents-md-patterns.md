@@ -1,36 +1,4 @@
-<!--
-/**
- * @file agents-md-patterns.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for agents md patterns.
- * @entrypoints docs/guides/agents-md-patterns.md
- * @exports agents md patterns
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # agents-md-patterns.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Code Examples](#code-examples)
-- [Security Considerations](#security-considerations)
-- [Performance Optimization](#performance-optimization)
-- [2026 Standards Compliance](#2026-standards-compliance)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
 
 # AGENTS.md File Patterns and Best Practices
 

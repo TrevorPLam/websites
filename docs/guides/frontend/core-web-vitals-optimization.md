@@ -1,31 +1,9 @@
-<!--
-/**
- * @file core-web-vitals-optimization.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for core web vitals optimization.
- * @entrypoints docs/guides/core-web-vitals-optimization.md
- * @exports core web vitals optimization
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # core-web-vitals-optimization.md
 
 # Core Web Vitals Optimization Strategies and Implementation
 
 > **Version Reference:** Core Web Vitals 2026 Specification | Last Updated: 2026-02-23
 > **Purpose:** Comprehensive guide for optimizing Core Web Vitals with latest 2026 standards, advanced patterns, and production-ready implementations
-
-## Table of Contents
 
 1. [Overview](#overview)
 2. [Core Web Vitals Metrics (2026)](#core-web-vitals-metrics-2026)
@@ -1607,16 +1585,13 @@ const LayoutStabilityManager = {
 - [New Relic Browser Monitoring](https://newrelic.com/browser/)
 - [Datadog Real User Monitoring](https://docs.datadogh.com/real-user-monitoring/)
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

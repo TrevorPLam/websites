@@ -1,33 +1,4 @@
-<!--
-/**
- * @file tailwindcss-v4-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for tailwindcss v4 documentation.
- * @entrypoints docs/guides/tailwindcss-v4-documentation.md
- * @exports tailwindcss v4 documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # tailwindcss-v4-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 Official Tailwind CSS v4 documentation covering CSS-first configuration, the @theme directive, and modern features as of February 2026.
 
@@ -760,11 +731,9 @@ export default defineConfig({
 - [Adding Custom Styles](https://tailwindcss.com/docs/adding-custom-styles) - Custom utilities and variants
 - [Tailwind CSS GitHub Repository](https://github.com/tailwindlabs/tailwindcss) - Source code and development
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

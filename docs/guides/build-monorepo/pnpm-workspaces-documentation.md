@@ -1,33 +1,4 @@
-<!--
-/**
- * @file pnpm-workspaces-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for pnpm workspaces documentation.
- * @entrypoints docs/guides/pnpm-workspaces-documentation.md
- * @exports pnpm workspaces documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # pnpm Workspaces: Official Documentation
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -190,24 +161,20 @@ pnpm automatically optimizes for CI environments:
 The `catalog:` protocol streamlines monorepo maintenance by providing a single source of truth for dependency versions, ensuring all your projects use consistent, compatible versions of shared libraries.
 ````
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

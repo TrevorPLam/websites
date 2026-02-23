@@ -1,23 +1,3 @@
-<!--
-/**
- * @file turbopack-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for turbopack documentation.
- * @entrypoints docs/guides/turbopack-documentation.md
- * @exports turbopack documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Turbopack — Official Documentation Reference
 
 > **Version Reference:** Turbopack (Stable, Next.js 16) | Turbopack FS Cache (Stable, Next.js 16.1) | Last Updated: 2026-02-23
@@ -25,8 +5,6 @@
 > Webpack migration, and ecosystem compatibility.
 
 ---
-
-## Table of Contents
 
 1. [What is Turbopack?](#what-is-turbopack)
 2. [Architecture](#architecture)

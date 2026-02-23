@@ -1,33 +1,4 @@
-<!--
-/**
- * @file nx-core-team-whitepaper.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for nx core team whitepaper.
- * @entrypoints docs/guides/nx-core-team-whitepaper.md
- * @exports nx core team whitepaper
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Nx Monorepo Whitepaper: Architecture, Best Practices, and Enterprise Adoption
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Executive Summary
 
@@ -101,29 +72,24 @@ The partnership with the Nx team provided strategic guidance and bespoke metric 
 
 Adopting a monorepo with Nx is not an end in itself but the beginning of a journey to reevaluate and optimize your architecture. By adhering to its core principles of modularization, dependency management, and incremental builds, organizations can transform their development processes. As demonstrated by Caseware, the result is not just faster CI pipelines, but a more cohesive, productive, and scalable engineering culture.
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

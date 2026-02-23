@@ -1,33 +1,4 @@
-<!--
-/**
- * @file acuity-scheduling-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for acuity scheduling documentation.
- * @entrypoints docs/guides/acuity-scheduling-documentation.md
- * @exports acuity scheduling documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # acuity-scheduling-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 # Acuity Scheduling API Documentation: Appointment Booking
 
@@ -122,11 +93,9 @@ If the appointment type requires custom information, these fields must be popula
 - [Acuity Webhooks Guide](https://developers.acuityscheduling.com/docs/webhooks)
 - [Handling Multi-User Access (OAuth2)](https://developers.acuityscheduling.com/docs/oauth2)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

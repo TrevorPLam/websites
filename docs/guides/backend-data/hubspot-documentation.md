@@ -1,33 +1,4 @@
-<!--
-/**
- * @file hubspot-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for hubspot documentation.
- * @entrypoints docs/guides/hubspot-documentation.md
- * @exports hubspot documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # hubspot-documentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 # HubSpot API Documentation: CRM Integration & Lead Management
 
@@ -113,11 +84,9 @@ createLead();
 - [HubSpot Leads API Guide](https://developers.hubspot.com/docs/api/crm/leads)
 - [HubSpot OAuth v3 Migration Guide](https://developers.hubspot.com/docs/api/oauth-v3)
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

@@ -1,33 +1,4 @@
-<!--
-/**
- * @file green-software-foundation-sci-spec.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for green software foundation sci spec.
- * @entrypoints docs/guides/green-software-foundation-sci-spec.md
- * @exports green software foundation sci spec
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # green-software-foundation-sci-spec.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 # Green Software Foundation SCI Specification
 
@@ -642,11 +613,9 @@ SCI Score: X gCO₂eq per [functional unit]
 - [EPA eGRID Database](https://www.epa.gov/egrid)
 - [IEA Emission Factors](https://www.iea.org/data-and-statistics/data-products)
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

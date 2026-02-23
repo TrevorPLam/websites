@@ -1,33 +1,4 @@
-<!--
-/**
- * @file opentelemetry-instrumentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for opentelemetry instrumentation.
- * @entrypoints docs/guides/opentelemetry-instrumentation.md
- * @exports opentelemetry instrumentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # opentelemetry-instrumentation.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 # OpenTelemetry Instrumentation Patterns for Next.js Applications
 
@@ -106,11 +77,9 @@ Ensuring trace IDs are propagated across asynchronous boundaries and external se
 - [Vercel OpenTelemetry Guide](https://vercel.com/docs/concepts/observability/opentelemetry)
 - [OpenTelemetry Semantic Conventions for HTTP](https://opentelemetry.io/docs/specs/semconv/http/)
 
-
 ## Implementation
 
 [Add content here]
-
 
 ## Testing
 

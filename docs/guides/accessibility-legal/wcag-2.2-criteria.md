@@ -1,33 +1,4 @@
-<!--
-/**
- * @file wcag-2.2-criteria.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for wcag 2.2 criteria.
- * @entrypoints docs/guides/wcag-2.2-criteria.md
- * @exports wcag 2.2 criteria
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # wcag-2.2-criteria.md
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Overview
 
@@ -200,7 +171,6 @@ function testFocusNotObscured(element) {
 - [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/)
 - [W3C Web Accessibility Initiative](https://www.w3.org/WAI/)
 - [Section 508 Refresh Requirements](https://www.access-board.gov/ict/)
-
 
 ## Best Practices
 

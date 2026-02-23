@@ -1,33 +1,4 @@
-<!--
-/**
- * @file nx-affected-documentation.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for nx affected documentation.
- * @entrypoints docs/guides/nx-affected-documentation.md
- * @exports nx affected documentation
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # Nx Affected Commands: Official Documentation
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Implementation](#implementation)
-- [Best Practices](#best-practices)
-- [Testing](#testing)
-- [References](#references)
-
 
 ## Introduction
 
@@ -253,29 +224,24 @@ jobs:
 5. **Leverage AI-enhanced detection** in Nx 2026 for better accuracy
 6. **Monitor performance** with new output formats for optimization insights
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

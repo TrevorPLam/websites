@@ -1,23 +1,3 @@
-<!--
-/**
- * @file react-compiler-docs.md
- * @role Technical Documentation Guide
- * @summary Documentation and implementation guide for react compiler docs.
- * @entrypoints docs/guides/react-compiler-docs.md
- * @exports react compiler docs
- * @depends_on [List dependencies here]
- * @used_by [List consumers here]
- * @runtime Multi-agent / Node.js 20+
- * @data_flow Documentation -> Agentic Context
- * @invariants Standard Markdown format, 2026 technical writing standards
- * @gotchas Missing references in some legacy versions
- * @issues Needs TOC and Reference section standardization
- * @opportunities Automate with multi-agent refinement loop
- * @verification validate-documentation.js
- * @status DRAFT
- */
--->
-
 # React Compiler v1.0 — Official Documentation Reference
 
 > **Version Reference:** React Compiler 1.0 (October 7, 2025) | babel-plugin-react-compiler@1.x
@@ -25,8 +5,6 @@
 > annotation mode, incremental adoption, and advanced configuration.
 
 ---
-
-## Table of Contents
 
 1. [What is React Compiler?](#what-is-react-compiler)
 2. [How It Works](#how-it-works)
