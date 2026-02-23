@@ -30,9 +30,10 @@
     "type-check": "turbo run type-check",
     "type-check:workaround": "node scripts/turbo-workaround.js type-check",
     "type-check:simple": "node scripts/type-check-all.js",
-    "test": "jest --maxWorkers=50%",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --maxWorkers=50%",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "test:jest": "jest --maxWorkers=50%",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
@@ -88,6 +89,7 @@
     "@types/jest": "^30.0.0",
     "@typescript-eslint/eslint-plugin": "8.56.0",
     "@typescript-eslint/parser": "8.56.0",
+    "@vitest/ui": "^4.0.18",
     "axe-playwright": "^2.2.2",
     "cross-env": "^10.1.0",
     "glob": "^13.0.6",
@@ -103,7 +105,8 @@
     "syncpack": "14.0.0",
     "ts-jest": "^29.4.6",
     "turbo": "2.8.10",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@10.29.2",
   "pnpm": {

@@ -1,0 +1,27 @@
+{
+  "name": "@repo/vitest-config",
+  "version": "0.0.0",
+  "description": "Shared Vitest configuration for the monorepo",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "vitest": "^3.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "catalog:",
+    "jsdom": "catalog:",
+    "@testing-library/jest-dom": "catalog:"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "internal"
+  }
+}
