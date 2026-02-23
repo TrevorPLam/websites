@@ -11,126 +11,108 @@ created: 2026-02-23
 updated: 2026-02-23
 owner: '' # agent or human responsible
 branch: feat/DOMAIN-2-003-golden-path-cli
-allowed-tools: Bash(git:*) Read Write Bash(npm:*) Bash(pnpm:*)
+allowed-tools: Bash(git:*) Read Write Bash(pnpm:*) Bash(node:*)
 ---
 
 # DOMAIN-2-003 · Implement golden path CLI pnpm create-site
 
 ## Objective
 
-Implement the golden path CLI tool `pnpm create-site` that guides users through creating new client sites with interactive prompts, generates type-safe configuration files, and sets up the complete site structure.
+Implement the golden path CLI tool `pnpm create-site` that guides users through creating new client sites with interactive prompts, generates type-safe configuration files, and sets up the complete site structure following section 2.4 specification.
+
+---
 
 ## Context
 
-**Current State Analysis:**
+**Codebase area:** `tooling/create-client/` or new `packages/create-site/` — interactive CLI tool
 
-- Repository lacks automated site creation tooling
-- No interactive CLI for new client onboarding
-- Missing golden path for site creation
-- No automated site.config.ts generation
-- Missing directory structure creation for new sites
+**Related files:** `packages/config-schema/`, `sites/` directory, pnpm-workspace.yaml, site.config.ts templates
 
-**Codebase area:** CLI tooling and site creation automation
-**Related files:** `packages/create-site/`, `scripts/create-site.ts`
-**Dependencies:** Inquirer.js for prompts, UUID generation, file system operations
-**Prior work:** Basic scripts exist but lack comprehensive CLI functionality
-**Constraints:** Must integrate with existing monorepo structure and config schema
+**Dependencies:** Inquirer.js for prompts, Zod for validation, fs-extra for file operations, existing config schema
 
-**2026 Standards Compliance:**
+**Prior work:** Basic CLI structure exists in `tooling/create-client/` but lacks interactive prompts and comprehensive site generation
 
-- Golden path CLI for developer experience optimization
-- Interactive prompts with validation and error handling
-- Type-safe configuration generation
-- AI agent-friendly CLI interface
-- Automated site structure creation
+**Constraints:** Must integrate with existing monorepo structure and pnpm workspace
+
+---
 
 ## Tech Stack
 
-| Layer              | Technology                          |
-| ------------------ | ----------------------------------- |
-| CLI Framework      | Inquirer.js for interactive prompts |
-| Validation         | Zod schema validation               |
-| File Operations    | Node.js fs/promises                 |
-| UUID Generation    | uuid v4 for tenant IDs              |
-| Package Management | pnpm workspace integration          |
+| Layer              | Technology                           |
+| ------------------ | ------------------------------------ |
+| CLI Framework      | Inquirer.js for interactive prompts  |
+| Validation         | Zod schema validation for inputs     |
+| File Operations    | fs-extra for robust file handling    |
+| Templates          | Handlebars or similar for templating |
+| Package Management | pnpm workspace integration           |
+
+---
 
 ## Acceptance Criteria
 
-Testable, binary conditions. Each line must be verifiable.
-Use "Given / When / Then" framing where it adds clarity.
-All criteria must be markable with checkboxes and assigned to agent or human.
+- [ ] **[Agent]** Create comprehensive interactive CLI with all prompts from section 2.4
+- [ ] **[Agent]** Implement identity collection (tenant slug, site name, business info, contact)
+- [ ] **[Agent]** Add domain strategy selection (subdomain vs custom domain)
+- [ ] **[Agent]** Include billing tier selection with proper limits
+- [ ] **[Agent]** Add theme customization (colors, fonts, branding)
+- [ ] **[Agent]** Generate complete site.config.ts file with all sections
+- [ ] **[Agent]** Create site directory structure with proper files
+- [ ] **[Agent]** Add conflict detection for duplicate tenantIds and domains
+- [ ] **[Agent]** Integrate with pnpm workspace (add to pnpm-workspace.yaml)
+- [ ] **[Agent]** Add proper error handling and validation
+- [ ] **[Agent]** Test CLI with various input scenarios
+- [ ] **[Human]** Verify CLI creates functional site configurations
 
-- [ ] **[Agent]** Interactive CLI implemented with comprehensive prompts
-- [ ] **[Agent]** Site configuration generation with type-safe validation
-- [ ] **[Agent]** Directory structure creation for new sites
-- [ ] **[Agent]** Integration with config schema validation
-- [ ] **[Agent]** Business type selection with archetype presets
-- [ ] **[Agent]** Error handling and validation for all inputs
-- [ ] **[Agent]** Package.json and workspace integration
-- [ ] **[Human]** Documentation updated with CLI usage examples
+---
 
 ## Implementation Plan
 
-Ordered, dependency-aware steps. Each step is independently testable.
-Do NOT skip steps. Do NOT combine steps.
-All steps must be markable with checkboxes and assigned to agent or human.
+- [ ] **[Agent]** **Update/create CLI package** — Enhance existing tooling/create-client or create new packages/create-site
+- [ ] **[Agent]** **Implement interactive prompts** — Add all prompts from section 2.4 specification
+- [ ] **[Agent]** **Add input validation** — Validate all user inputs with Zod schemas
+- [ ] **[Agent]** **Create site templates** — Generate site.config.ts and basic site structure
+- [ ] **[Agent]** **Add conflict detection** — Check for duplicate tenantIds and domain conflicts
+- [ ] **[Agent]** **Integrate workspace** — Update pnpm-workspace.yaml automatically
+- [ ] **[Agent]** **Add error handling** — Graceful error handling with helpful messages
+- [ ] **[Agent]** **Create documentation** — Document CLI usage and examples
+- [ ] **[Agent]** **Test thoroughly** — Test various scenarios and edge cases
 
-- [ ] **[Agent]** **Create CLI package** - Set up create-site package structure
-- [ ] **[Agent]** **Implement interactive prompts** - Add Inquirer.js prompts for site creation
-- [ ] **[Agent]** **Add business type selection** - Implement archetype selection with presets
-- [ ] **[Agent]** **Generate site configuration** - Create type-safe site.config.ts files
-- [ ] **[Agent]** **Create directory structure** - Set up complete site directory structure
-- [ ] **[Agent]** **Add validation and error handling** - Implement input validation and error messages
-- [ ] **[Agent]** **Integrate with workspace** - Add pnpm workspace integration
-- [ ] **[Agent]** **Create test suite** - Test CLI functionality and edge cases
-- [ ] **[Human]** **Update documentation** - Document CLI usage and examples
+> ⚠️ **Agent Question**: Ask human before deciding between enhancing existing tooling/create-client vs creating new packages/create-site.
 
-> ⚠️ **Agent Question**: Ask human before proceeding if step 4 conflicts with existing config schema validation.
+---
 
 ## Commands
 
 ```bash
-# Create CLI package
-mkdir -p packages/create-site/src
-cd packages/create-site
+# Test CLI development
+pnpm dev --filter="@repo/create-site"
 
-# Initialize package
-pnpm init
+# Run CLI locally
+node packages/create-site/src/index.ts
 
-# Install dependencies
-pnpm add @inquirer/prompts uuid zod chalk
-pnpm add -D @types/node typescript vitest
+# Test CLI with pnpm
+pnpm create-site
 
-# Create package structure
-mkdir -p src/{prompts,templates,utils}
-
-# Build package
-pnpm build
-
-# Install in workspace
-cd ../../
-pnpm install
-
-# Test CLI
-pnpm create-site --help
-
-# Test interactive mode
-echo -e "\n\n\n\n\n\n\n\n\n\n" | pnpm create-site
+# Validate generated config
+pnpm run validate:configs
 ```
+
+---
 
 ## Code Style
 
 ```typescript
-// ✅ Correct - Interactive CLI with validation
+// ✅ Correct — Interactive CLI implementation
+#!/usr/bin/env node
 import { input, select, confirm } from '@inquirer/prompts';
 import { SiteConfigSchema, validateSiteConfigSafe } from '@repo/config-schema';
-import fs from 'fs/promises';
+import fs from 'fs-extra';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import chalk from 'chalk';
 
 async function createSite() {
-  console.log('🚀 Create New Client Site\n');
+  console.log(chalk.blue('🚀 Create New Client Site\n'));
 
   // Step 1: Basic Identity
   const tenantSlug = await input({
@@ -143,95 +125,139 @@ async function createSite() {
     validate: (value) => value.length > 0 || 'Site name is required',
   });
 
+  const businessName = await input({
+    message: 'Legal business name:',
+    validate: (value) => value.length > 0 || 'Required',
+  });
+
+  // Step 2: Contact Information
+  const contactEmail = await input({
+    message: 'Contact email:',
+    validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || 'Invalid email',
+  });
+
+  const contactPhone = await input({
+    message: 'Contact phone (E.164 format, e.g., +14155552671):',
+    validate: (value) => /^\+?[1-9]\d{1,14}$/.test(value) || 'Invalid phone number',
+  });
+
+  // Step 3: Domain Strategy
+  const domainStrategy = await select({
+    message: 'Domain strategy:',
+    choices: [
+      { value: 'subdomain', name: `Subdomain (${tenantSlug}.platform.com)` },
+      { value: 'custom', name: 'Custom domain (clientdomain.com)' },
+    ],
+  });
+
+  // Step 4: Business Type
   const businessType = await select({
     message: 'Business type:',
     choices: [
       { value: 'LocalBusiness', name: 'Local Business' },
       { value: 'Attorney', name: 'Law Firm' },
       { value: 'Restaurant', name: 'Restaurant' },
+      { value: 'HomeAndConstructionBusiness', name: 'Home Services' },
+      { value: 'MedicalBusiness', name: 'Medical Practice' },
+      { value: 'ProfessionalService', name: 'Professional Service' },
+      { value: 'Store', name: 'Store' },
     ],
+  });
+
+  // Step 5: Billing Tier
+  const tier = await select({
+    message: 'Billing tier:',
+    choices: [
+      { value: 'free', name: 'Free (100 requests/10s, 1000 leads/mo)' },
+      { value: 'starter', name: 'Starter (500 requests/10s, 5000 leads/mo)' },
+      { value: 'professional', name: 'Professional (1000 requests/10s, unlimited leads)' },
+      { value: 'enterprise', name: 'Enterprise (custom limits)' },
+    ],
+  });
+
+  // Step 6: Theme Customization
+  const primaryColor = await input({
+    message: 'Primary Brand Color (hex):',
+    default: '#3b82f6',
+    validate: (value) => /^#[0-9A-Fa-f]{6}$/.test(value) || 'Must be hex color',
   });
 
   // Generate configuration
   const config = generateSiteConfig({
     tenantSlug,
     siteName,
+    businessName,
+    contactEmail,
+    contactPhone,
+    domainStrategy,
     businessType,
-    // ... other fields
+    tier,
+    primaryColor,
   });
 
-  // Validate configuration
-  const validation = validateSiteConfigSafe(config);
-  if (!validation.success) {
-    console.error(chalk.red('❌ Configuration validation failed:'));
-    validation.error.issues.forEach((issue) => {
-      console.error(chalk.red(`  - ${issue.path?.join('.')} ${issue.message}`));
-    });
-    process.exit(1);
-  }
+  // Create site
+  await createSiteStructure(tenantSlug, config);
 
-  // Create site directory and files
-  await createSiteDirectory(tenantSlug, config);
-
-  console.log(chalk.green(`✅ Site created successfully: sites/${tenantSlug}`));
-}
-
-// ❌ Incorrect - Missing validation and error handling
-async function createSite() {
-  const tenantSlug = await input({ message: 'Tenant slug:' });
-  const siteName = await input({ message: 'Site name:' });
-
-  // No validation, no error handling
-  const config = { tenantSlug, siteName };
-
-  await fs.writeFile(`sites/${tenantSlug}/site.config.ts`, JSON.stringify(config));
+  console.log(chalk.green(`\n✅ Site "${tenantSlug}" created successfully!`));
+  console.log(chalk.gray(`📁 Location: sites/${tenantSlug}`));
+  console.log(chalk.gray(`⚙️  Config: sites/${tenantSlug}/site.config.ts`));
 }
 ```
 
-**Naming conventions:**
+**CLI principles:**
 
-- Functions: `camelCase` - `createSite`, `generateSiteConfig`, `validateInput`
-- Variables: `camelCase` - `tenantSlug`, `siteName`, `businessType`
-- Files: `kebab-case` - `create-site.ts`, `site.config.ts`
+- Use clear, helpful prompts with validation
+- Provide sensible defaults where appropriate
+- Generate complete, type-safe configurations
+- Handle errors gracefully with helpful messages
+- Integrate seamlessly with existing monorepo structure
+
+---
 
 ## Boundaries
 
-| Tier             | Scope                                                                                                                           |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| ✅ **Always**    | Create CLI package; implement interactive prompts; generate configurations; create directory structures; add validation         |
-| ⚠️ **Ask first** | Modifying existing site templates; changing CLI interface; adding new business types; changing directory structure              |
-| 🚫 **Never**     | Overwriting existing sites without confirmation; bypassing validation; creating invalid configurations; ignoring error handling |
+| Tier             | Scope                                                                                                                              |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| ✅ **Always**    | Implement all prompts from section 2.4; generate complete site.config.ts; follow CLI best practices; integrate with pnpm workspace |
+| ⚠️ **Ask first** | Modifying existing tooling/create-client structure; changing pnpm workspace integration; updating site template structure          |
+| 🚫 **Never**     | Skip input validation; generate incomplete configurations; ignore conflict detection; break existing workspace structure           |
+
+---
 
 ## Success Verification
 
-How the agent (or reviewer) confirms the task is truly done.
-All verification steps must be markable with checkboxes and assigned to agent or human.
-
-- [ ] **[Agent]** Run `pnpm create-site --help` — CLI help displays correctly
-- [ ] **[Agent]** Test interactive mode — CLI prompts work and validate input
-- [ ] **[Agent]** Test site creation — CLI creates complete site structure
-- [ ] **[Agent]** Test configuration generation — Generated site.config.ts is valid
-- [ ] **[Agent]** Test error handling — Invalid inputs show clear error messages
-- [ ] **[Agent]** Verify workspace integration — New site appears in pnpm list
+- [ ] **[Agent]** Run `pnpm create-site` — CLI launches and prompts for all required information
+- [ ] **[Agent]** Test with valid inputs — Creates complete site structure and configuration
+- [ ] **[Agent]** Test conflict detection — Rejects duplicate tenantIds and domains
+- [ ] **[Agent]** Validate generated config — Generated site.config.ts passes validation
+- [ ] **[Agent]** Test workspace integration — New site recognized by pnpm workspace
+- [ ] **[Human]** Test CLI interactively — User experience is intuitive and helpful
 - [ ] **[Agent]** Self-audit: re-read Acceptance Criteria above and check each box
+
+---
 
 ## Edge Cases & Gotchas
 
-- **Input validation:** Must handle all edge cases for user input
-- **File system permissions:** CLI must handle permission errors gracefully
-- **Existing sites:** Must prevent overwriting existing sites without confirmation
-- **Configuration conflicts:** Generated configs must pass schema validation
-- **Workspace integration:** Must properly integrate with pnpm workspace
+- **Input validation:** Ensure all user inputs are properly validated before site creation
+- **File permissions:** Handle file system operations with proper error handling
+- **Workspace conflicts:** Check for existing sites with same tenantId or domain
+- **Template errors:** Ensure generated templates are valid TypeScript and pass validation
+- **Cross-platform:** Handle Windows/Unix path differences in file operations
+
+---
 
 ## Out of Scope
 
-- Modifying existing site configurations
-- Creating admin interfaces for site management
-- Implementing site deployment automation
-- Database schema changes
+- Web-based site creation interface
+- Automatic DNS configuration
+- Site deployment automation
+- Ongoing site management through CLI
+
+---
 
 ## References
 
-- [Domain 2.4 Golden Path CLI](../../../docs/plan/domain-2/2.4-golden-path-cli-pnpm-create-site.md)
-- [Inquirer.js Documentation](https://github.com/SBoudrias/Inquirer.js)
-- [Configuration Schema](../../../docs/plan/domain-2/2.2-full-zod-schema-with-all-configuration-options.md)
+- [Section 2.4 Golden Path CLI Specification](docs/plan/domain-2/2.4-golden-path-cli-pnpm-create-site.md)
+- [Inquirer.js Documentation](https://www.npmjs.com/package/inquirer)
+- [Zod Validation Documentation](https://zod.dev/)
+- [pnpm Workspaces Documentation](https://pnpm.io/workspaces)
