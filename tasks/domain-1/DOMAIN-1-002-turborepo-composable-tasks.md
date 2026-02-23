@@ -4,12 +4,12 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-1-002
 title: 'Upgrade Turborepo to composable tasks configuration'
-status: pending # pending | in-progress | blocked | review | done
+status: review # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: refactor # feature | fix | refactor | test | docs | chore
 created: 2026-02-23
 updated: 2026-02-23
-owner: '' # agent or human responsible
+owner: 'codex' # agent or human responsible
 branch: feat/DOMAIN-1-002-turborepo-composable
 allowed-tools: Bash(git:*) Read Write Bash(npm:*) Bash(turbo:*)
 ---
@@ -61,12 +61,12 @@ Testable, binary conditions. Each line must be verifiable.
 Use "Given / When / Then" framing where it adds clarity.
 All criteria must be markable with checkboxes and assigned to agent or human.
 
-- [ ] **[Agent]** Root `turbo.json` updated with composable configuration using `$TURBO_EXTENDS$`
-- [ ] **[Agent]** All 2026 task definitions implemented (build, typecheck, lint, test, test:e2e, dev)
-- [ ] **[Agent]** Remote caching configured with Vercel integration
-- [ ] **[Agent]** Browser devtools enabled with `experimentalUI: true`
-- [ ] **[Agent]** Comprehensive environment variable handling for multi-tenant apps
-- [ ] **[Agent]** Package-specific override examples created for `apps/web`
+- [x] **[Agent]** Root `turbo.json` updated with composable configuration using `$TURBO_EXTENDS$`
+- [x] **[Agent]** All 2026 task definitions implemented (build, typecheck, lint, test, test:e2e, dev)
+- [x] **[Agent]** Remote caching configured with Vercel integration
+- [x] **[Agent]** Browser devtools enabled with `experimentalUI: true`
+- [x] **[Agent]** Comprehensive environment variable handling for multi-tenant apps
+- [x] **[Agent]** Package-specific override examples created for `apps/web`
 - [ ] **[Human]** All existing build workflows continue to function
 - [ ] **[Agent]** Performance improvements validated (cache hit rate >85%)
 
@@ -76,12 +76,12 @@ Ordered, dependency-aware steps. Each step is independently testable.
 Do NOT skip steps. Do NOT combine steps.
 All steps must be markable with checkboxes and assigned to agent or human.
 
-- [ ] **[Agent]** **Backup current configuration** - Save existing `turbo.json`
-- [ ] **[Agent]** **Update root configuration** - Implement composable base with `$TURBO_EXTENDS$`
-- [ ] **[Agent]** **Add comprehensive tasks** - Implement all 2026 task definitions
-- [ ] **[Agent]** **Configure remote caching** - Set up Vercel remote cache integration
-- [ ] **[Agent]** **Enable experimental features** - Browser devtools and UI enhancements
-- [ ] **[Agent]** **Create package examples** - Demonstrate composable overrides
+- [x] **[Agent]** **Backup current configuration** - Save existing `turbo.json`
+- [x] **[Agent]** **Update root configuration** - Implement composable base with `$TURBO_EXTENDS$`
+- [x] **[Agent]** **Add comprehensive tasks** - Implement all 2026 task definitions
+- [x] **[Agent]** **Configure remote caching** - Set up Vercel remote cache integration
+- [x] **[Agent]** **Enable experimental features** - Browser devtools and UI enhancements
+- [x] **[Agent]** **Create package examples** - Demonstrate composable overrides
 - [ ] **[Agent]** **Test build performance** - Validate cache efficiency and build times
 - [ ] **[Human]** **Update documentation** - Document composable patterns in README
 
@@ -190,3 +190,9 @@ All verification steps must be markable with checkboxes and assigned to agent or
 - [Domain 1.3 Complete Turborepo Configuration](../docs/plan/domain-1/1.3-complete-turborepo-configuration-with-composable-tasks.md)
 - [Turborepo 2.7 Release Notes](https://turbo.build/release-notes)
 - [Vercel Remote Cache Documentation](https://turbo.build/repo/docs/core-concepts/remote-caching)
+
+## Execution Notes
+
+- 2026-02-23 (agent run): Updated `turbo.json` to a composable 2026-style task graph including `extends: []`, `experimentalUI`, `remoteCache`, global env/dependencies, and expanded task definitions.
+- 2026-02-23 (agent run): Added package-level override example at `clients/testing-not-a-client/turbo.json` using `$TURBO_EXTENDS$` (repository has no `apps/web` directory).
+- 2026-02-23 (agent run): Verification commands requiring installed dependencies remain environment-blocked due npm registry access restrictions and Node engine mismatch in this container.
