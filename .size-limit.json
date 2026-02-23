@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Shared UI Package (@repo/ui)",
+    "path": "packages/ui/src/index.ts",
+    "limit": "50 kB",
+    "gzip": true
+  },
+  {
+    "name": "Marketing Site — Homepage JS",
+    "path": "clients/testing-not-a-client/.next/static/chunks/app/page-*.js",
+    "limit": "75 kB",
+    "gzip": true
+  },
+  {
+    "name": "Marketing Site — Shared Chunks",
+    "path": "clients/testing-not-a-client/.next/static/chunks/framework-*.js",
+    "limit": "130 kB",
+    "gzip": true
+  }
+]
