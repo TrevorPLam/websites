@@ -16,6 +16,6 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "devDependencies": {
-    "tailwindcss": "^4.1.0"
+    "tailwindcss": "catalog:"
   }
 }

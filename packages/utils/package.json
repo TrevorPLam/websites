@@ -15,14 +15,14 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "clsx": "2.1.1",
-    "tailwind-merge": "2.6.1"
+    "clsx": "catalog:",
+    "tailwind-merge": "catalog:"
   },
   "devDependencies": {
-    "@eslint/js": "^9.18.0",
+    "@eslint/js": "catalog:",
     "@repo/eslint-config": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "8.56.0"
+    "typescript-eslint": "catalog:"
   }
 }
