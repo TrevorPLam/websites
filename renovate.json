@@ -1,67 +1,34 @@
-/**
- * @file renovate.json
- * @role config
- * @summary Renovate configuration for automated dependency updates.
- *
- * @entrypoints
- * - Renovate bot reads this configuration for dependency management
- *
- * @exports
- * - N/A
- *
- * @depends_on
- * - External: Renovate bot
- *
- * @used_by
- * - Renovate automated dependency updates
- *
- * @runtime
- * - environment: ci/cd
- * - side_effects: automated pull requests
- *
- * @data_flow
- * - inputs: package.json files
- * - outputs: dependency update pull requests
- *
- * @invariants
- * - Patch updates auto-merge if CI passes
- * - Minor updates require approval
- * - Major updates require manual review
- *
- * @gotchas
- * - Auto-merge only works if CI checks pass
- * - Monorepo requires proper workspace configuration
- *
- * @verification
- * - Renovate creates PRs for dependency updates
- * - Patch updates auto-merge when CI is green
- *
- * @status
- * - confidence: high
- * - last_audited: 2026-02-10
- */
-
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
+    "config:recommended",
     ":dependencyDashboard",
     ":semanticCommits",
     ":automergeDigest",
-    ":automergeBranch",
-    "group:allNonMajor",
-    "group:recommended"
+    "group:recommended",
+    "helpers:pinGitHubActionDigests"
   ],
   "timezone": "UTC",
   "schedule": ["before 6am on monday"],
   "labels": ["dependencies", "renovate"],
   "assignees": ["TrevorPLam"],
   "reviewers": ["TrevorPLam"],
-
-  "automerge": true,
-  "automergeType": "pr",
-  "automergeStrategy": "auto",
-
+  "rangeStrategy": "replace",
+  "prConcurrentLimit": 3,
+  "branchConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "minimumReleaseAge": "3 days",
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security", "critical"],
+    "assignees": ["TrevorPLam"],
+    "schedule": ["at any time"]
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "schedule": ["before 6am on the first day of the month"]
+  },
   "packageRules": [
     {
       "description": "Auto-merge patch updates for dev dependencies",
@@ -70,7 +37,7 @@
       "automerge": true
     },
     {
-      "description": "Require approval for minor updates of production dependencies",
+      "description": "Require approval for production minor updates",
       "matchDepTypes": ["dependencies", "peerDependencies"],
       "matchUpdateTypes": ["minor"],
       "automerge": false,
@@ -83,39 +50,37 @@
       "stabilityDays": 7
     },
     {
-      "description": "Group React ecosystem updates together",
-      "matchPackagePatterns": ["@types/react", "@types/react-dom", "react", "react-dom"],
-      "groupName": "React ecosystem",
-      "automerge": false
-    },
-    {
       "description": "Group Next.js updates together",
-      "matchPackagePatterns": ["next", "@next/*"],
+      "matchPackagePatterns": ["^next$", "^@next/"],
       "groupName": "Next.js ecosystem",
       "automerge": false
     },
     {
-      "description": "Group TypeScript updates together",
-      "matchPackagePatterns": ["typescript", "@types/*"],
-      "groupName": "TypeScript ecosystem",
+      "description": "Group Supabase packages",
+      "matchPackagePatterns": ["^@supabase/"],
+      "groupName": "Supabase ecosystem",
       "automerge": false
+    },
+    {
+      "description": "Group testing toolchain",
+      "matchPackagePatterns": ["^vitest$", "^jest$", "^@testing-library/", "^@playwright/test$", "^jsdom$"],
+      "groupName": "Testing toolchain",
+      "automerge": false
+    },
+    {
+      "description": "Pin PQC and cryptography packages for review",
+      "matchPackagePatterns": ["^jose$", "^libsodium", "^@noble/", "^openpgp"],
+      "rangeStrategy": "pin",
+      "automerge": false,
+      "labels": ["dependencies", "security", "crypto-review"]
+    },
+    {
+      "description": "Catalog-based workspace dependency management",
+      "matchManagers": ["npm"],
+      "postUpgradeTasks": {
+        "commands": ["pnpm install --lockfile-only"],
+        "fileFilters": ["pnpm-lock.yaml", "pnpm-workspace.yaml"]
+      }
     }
-  ],
-
-  "vulnerabilityAlerts": {
-    "enabled": true,
-    "labels": ["security", "critical"],
-    "assignees": ["TrevorPLam"],
-    "schedule": ["at any time"]
-  },
-
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true,
-    "schedule": ["before 6am on the first day of the month"]
-  },
-
-  "prConcurrentLimit": 3,
-  "branchConcurrentLimit": 5,
-  "prHourlyLimit": 2
+  ]
 }
