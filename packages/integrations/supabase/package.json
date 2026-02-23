@@ -8,6 +8,7 @@
   "exports": {
     ".": "./index.ts",
     "./client": "./client.ts",
+    "./pooling": "./pooling.ts",
     "./types": "./types.ts"
   },
   "scripts": {
@@ -20,6 +21,7 @@
   "dependencies": {
     "@repo/infra": "workspace:*",
     "@repo/utils": "workspace:*",
+    "@supabase/supabase-js": "catalog:",
     "server-only": "catalog:"
   },
   "devDependencies": {

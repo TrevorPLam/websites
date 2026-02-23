@@ -1,10 +1,18 @@
-# Supabase Authentication & RLS Integration — Official Reference
+# Supabase Authentication & RLS Integration — 2026 Reference
 
-> **Version Reference:** Supabase Auth v2 / PostgreSQL 15+ | Last Updated: 2026-02-23
-> **Purpose:** AI agent reference for Supabase authentication, JWT integration, and RLS policy patterns.
+> **2026 Standards Reference** | Last Updated: 2026-02-23
+> **Purpose:** Complete Supabase authentication, JWT integration, and Row-Level Security patterns for multi-tenant SaaS
+
+## 2026 Standards Compliance
+
+- **OAuth 2.1 with PKCE**: Modern authentication flow for all clients
+- **Zero-Trust Architecture**: Per-request validation, defense-in-depth security
+- **Multi-Tenant Isolation**: Complete tenant data separation via RLS
+- **Post-Quantum Ready**: JWT algorithm migration path to ML-DSA
+- **GDPR/CCPA Compliant**: Data minimization and right-to-erasure patterns
+- **Core Web Vitals**: Auth flows < 2s LCP, < 200ms INP
 
 ---
-
 
 ## Architecture Overview
 
@@ -587,25 +595,16 @@ user's authenticated JWT. Use `SELECT auth.jwt();` to inspect what the token loo
 | No `ON DELETE CASCADE` on user_id FK | Orphaned rows after user deletion | Always add `ON DELETE CASCADE`                      |
 | Mixing OAuth and user policies       | Unintended access grants          | Separate policies for direct users vs OAuth clients |
 
-
---- 
+---
 
 ## References
 
-- [Official Documentation](https://example.com) — Replace with actual source
-- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+- [Supabase Auth Documentation](https://supabase.com/docs/guides/auth) — Official authentication guide
+- [PostgreSQL Row-Level Security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) — RLS specification
+- [OAuth 2.1 Security Best Practices](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-01) — Authentication standards
+- [JWT Security Considerations](https://datatracker.ietf.org/doc/html/rfc7519#section-11) — Token security
+- [Post-Quantum Cryptography Migration](https://csrc.nist.gov/projects/post-quantum-cryptography) — PQC standards
+- [GDPR Compliance Guide](https://gdpr.eu/) — Data protection requirements
+- [Core Web Vitals](https://web.dev/vitals/) — Performance standards
 
-
-## Overview
-
-[Add content here]
-
-
-## Implementation
-
-[Add content here]
-
-
-## Best Practices
-
-[Add content here]
+---

@@ -1,2837 +1,329 @@
-Given the enormous scope of this request (48 categories, 150+ new documents), I'll generate the first major batch of unchecked documents now, organized by section. This response covers **Sections 1, 2, 3, 6, and key sections of 25, 31, 35, and 45** — the highest-priority new items.
+Excellent — rich, current data across all critical topics. Generating Batch 3 now — prioritizing the **🚨 CRITICAL** tier docs first, in decreasing priority order.
 
 ---
 
-# renovate-configuration-documentation.md
+# security-headers-system.md
+
+````markdown
+# security-headers-system.md
+
+> **2026 Standards Compliance** | CSP Level 3 · Permissions-Policy · HSTS Preload ·
+> Next.js 16 Edge Middleware · OWASP Top 10 2025
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Security Headers Reference](#security-headers-reference)
+3. [CSP with Per-Request Nonces](#csp-with-per-request-nonces)
+4. [Next.js Middleware Implementation](#nextjs-middleware-implementation)
+5. [Static Headers via next.config.ts](#static-headers-via-nextconfigts)
+6. [Tenant-Aware Header Overrides](#tenant-aware-header-overrides)
+7. [Permissions Policy](#permissions-policy)
+8. [Header Audit & CI Enforcement](#header-audit--ci-enforcement)
+9. [Post-Quantum Readiness Notes](#post-quantum-readiness-notes)
+10. [Testing](#testing)
+11. [References](#references)
+
+---
 
 ## Overview
 
-Renovate is an open-source automated dependency update bot that detects outdated dependencies across your repository, creates PRs to update them, and supports advanced monorepo configurations including `packageRules`, grouping, and per-package schedules. [docs.renovatebot](https://docs.renovatebot.com/configuration-options/)
+Security headers are the first and cheapest layer of defense for web applications.
+They instruct browsers to enforce policies that mitigate XSS, clickjacking,
+MIME sniffing, information leakage, and cross-origin data theft — **before any
+application code runs**.
 
-## Installation
+In Next.js 16, headers are applied at two levels:
 
-### Self-Hosted (GitHub Actions)
+- **Middleware (Edge)** — per-request, dynamic; required for CSP nonces
+- **next.config.ts** — build-time static headers; used for non-dynamic pages
 
-```yaml
-# .github/workflows/renovate.yml
-name: Renovate
-on:
-  schedule:
-    - cron: '0 3 * * 1' # Every Monday at 3 AM UTC
-  workflow_dispatch: # Allow manual trigger
-
-jobs:
-  renovate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: renovatebot/github-action@v40
-        with:
-          token: ${{ secrets.RENOVATE_TOKEN }}
-        env:
-          LOG_LEVEL: debug
-```
-
-### GitHub App (recommended for orgs)
-
-Install the [Renovate GitHub App](https://github.com/apps/renovate) and add a `renovate.json` config to the root of your repository. [docs.renovatebot](https://docs.renovatebot.com)
+> ⚠️ **Critical:** CSP with nonces **requires** middleware-based dynamic rendering.
+> Static-only CSP (`next.config.ts` headers) cannot use nonces; use strict CSP
+> directives instead. [web:20][web:21]
 
 ---
 
-## Base Configuration for pnpm Monorepos
+## Security Headers Reference
 
-```json
-// renovate.json (repo root)
-{
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":dependencyDashboard",
-    ":semanticCommits",
-    "group:monorepos",
-    "group:recommended",
-    "workarounds:all"
-  ],
+| Header                         | Purpose                                   | Recommended Value                              |
+| ------------------------------ | ----------------------------------------- | ---------------------------------------------- |
+| `Content-Security-Policy`      | Prevents XSS, injections                  | See full policy below                          |
+| `Strict-Transport-Security`    | Enforces HTTPS                            | `max-age=63072000; includeSubDomains; preload` |
+| `X-Frame-Options`              | Prevents clickjacking                     | `DENY` (or `SAMEORIGIN` if iframe needed)      |
+| `X-Content-Type-Options`       | Prevents MIME sniffing                    | `nosniff`                                      |
+| `Referrer-Policy`              | Controls referrer leakage                 | `strict-origin-when-cross-origin`              |
+| `Permissions-Policy`           | Disables browser features                 | See full policy below                          |
+| `Cross-Origin-Opener-Policy`   | Protects from cross-origin attacks        | `same-origin`                                  |
+| `Cross-Origin-Resource-Policy` | Blocks cross-origin resource reads        | `same-origin`                                  |
+| `Cross-Origin-Embedder-Policy` | Required for SharedArrayBuffer            | `require-corp`                                 |
+| `X-DNS-Prefetch-Control`       | Controls DNS prefetching                  | `off`                                          |
+| `X-XSS-Protection`             | Legacy XSS filter (kept for old browsers) | `0` (disabled — CSP is better)                 |
 
-  // Limit PR creation rate — prevent overwhelming CI
-  "prConcurrentLimit": 8,
-  "prHourlyLimit": 2,
-  "rebaseWhen": "conflicted",
-  "schedule": ["before 6am on Monday"],
+---
 
-  // Auto-merge patch/minor for trusted packages
-  "packageRules": [
-    {
-      "description": "Automerge patch updates for all packages",
-      "matchUpdateTypes": ["patch", "pin", "digest"],
-      "automerge": true,
-      "automergeType": "pr",
-      "platformAutomerge": true,
-      "minimumReleaseAge": "3 days"
-    },
-    {
-      "description": "Group all Next.js ecosystem updates",
-      "matchPackageNames": ["next", "eslint-config-next", "@next/bundle-analyzer", "@next/font"],
-      "groupName": "Next.js ecosystem",
-      "automerge": false
-    },
-    {
-      "description": "Group all Supabase packages",
-      "matchPackagePatterns": ["^@supabase/"],
-      "groupName": "Supabase",
-      "automerge": false
-    },
-    {
-      "description": "Group all Radix UI packages (safe to automerge patches)",
-      "matchPackagePatterns": ["^@radix-ui/"],
-      "groupName": "Radix UI",
-      "automerge": true,
-      "matchUpdateTypes": ["minor", "patch"]
-    },
-    {
-      "description": "Group all testing dependencies",
-      "matchPackagePatterns": ["^@playwright/", "^vitest", "^@testing-library/"],
-      "groupName": "Testing dependencies",
-      "automerge": true
-    },
-    {
-      "description": "Pin Node.js major version — manual upgrade only",
-      "matchPackageNames": ["node"],
-      "allowedVersions": "^22",
-      "enabled": true
-    },
-    {
-      "description": "Security updates — always open immediately",
-      "matchCategories": ["security"],
-      "automerge": false,
-      "prPriority": 10,
-      "labels": ["security", "dependencies"]
-    },
-    {
-      "description": "Major version bumps — never automerge, assign reviewer",
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "assignees": ["@team-leads"],
-      "reviewers": ["@team-leads"],
-      "labels": ["major-update"]
-    },
-    {
-      "description": "TypeScript and type definitions — automerge patches",
-      "matchPackageNames": ["typescript"],
-      "matchPackagePatterns": ["^@types/"],
-      "groupName": "TypeScript and type definitions",
-      "automerge": true,
-      "matchUpdateTypes": ["patch", "minor"]
-    }
-  ]
+## CSP with Per-Request Nonces
+
+### Why Nonces Over Hashes
+
+A **nonce** (number used once) is a cryptographically random value generated per
+request, embedded into the CSP header and into every `<script>` and `<style>` tag.
+Browsers only execute scripts whose nonce matches the CSP header's nonce — blocking
+all injected scripts even if they appear in the DOM. [web:21][web:27]
+
+**Advantage over `'unsafe-inline'`**: Eliminates the largest XSS attack vector.
+**Advantage over hashes**: No need to rehash on every content change; nonces rotate
+per request automatically.
+
+### Nonce Generation
+
+```typescript
+// packages/security/src/nonce.ts
+import { Buffer } from 'node:buffer';
+
+/**
+ * Generates a cryptographically secure, URL-safe base64 nonce.
+ * Must be regenerated per request — never reuse across requests.
+ */
+export function generateNonce(): string {
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  // URL-safe base64 (no +/=)
+  return Buffer.from(array)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
 }
 ```
+````
 
----
+### CSP Policy Builder
 
-## Monorepo-Specific Configuration
+```typescript
+// packages/security/src/csp.ts
 
-For large monorepos where different teams own different packages, use `additionalBranchPrefix` to create per-package PRs: [jvt](https://www.jvt.me/posts/2025/07/07/renovate-monorepo/)
-
-```json
-{
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-
-  "packageRules": [
-    {
-      "description": "Split dependency updates by package directory",
-      "matchFileNames": ["apps/**", "packages/**"],
-      "additionalBranchPrefix": "{{packageFileDir}}/",
-      "commitMessagePrefix": "{{packageFileDir}}:"
-    },
-    {
-      "description": "apps/marketing — automerge UI patches",
-      "matchPaths": ["apps/marketing/**"],
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
-    },
-    {
-      "description": "apps/portal — conservative, no automerge",
-      "matchPaths": ["apps/portal/**"],
-      "automerge": false
-    }
-  ]
+interface CspOptions {
+  nonce: string;
+  isDev?: boolean;
+  trustedDomains?: string[]; // Per-tenant allowed origins (e.g., analytics, fonts)
 }
-```
 
----
-
-## Dependency Dashboard
-
-The Dependency Dashboard is a GitHub Issue (automatically maintained by Renovate) that shows all pending updates in one place. Enable it with: [docs.mend](https://docs.mend.io/wsk/common-practices-for-renovate-configuration)
-
-```json
-{
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "🔄 Dependency Updates Dashboard",
-  "dependencyDashboardLabels": ["dependencies"]
-}
-```
-
----
-
-## Security Vulnerability Auto-Patching
-
-Renovate integrates with GitHub's dependency graph to detect and immediately open PRs for CVE-affected packages:
-
-```json
-{
-  "vulnerabilityAlerts": {
-    "enabled": true,
-    "labels": ["security"],
-    "automerge": true,
-    "schedule": ["at any time"], // Override schedule for security patches
-    "prPriority": 10
-  },
-  "osvVulnerabilityAlerts": true // Also check OSV database
-}
-```
-
----
-
-## pnpm Catalog Support
-
-Renovate supports the `catalog:` protocol introduced in pnpm 9. Ensure the `pnpm-workspace.yaml` is in `includePaths`:
-
-```json
-{
-  "includePaths": ["pnpm-workspace.yaml", "package.json", "apps/**", "packages/**"]
-}
-```
-
----
-
-## References
-
-- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
-
-- Renovate Official Documentation — https://docs.renovatebot.com
-- Renovate Configuration Options — https://docs.renovatebot.com/configuration-options/
-- Renovate Monorepo Presets — https://docs.renovatebot.com/presets-monorepo/
-- Monorepo Optimization Tips — https://www.jvt.me/posts/2025/07/07/renovate-monorepo/
-- Mend Common Practices — https://docs.mend.io/wsk/common-practices-for-renovate-configuration
-
----
-
-# git-branching-strategies.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-Modern high-velocity teams use **trunk-based development** (TBD) combined with **feature flags** as the primary branching strategy. Long-lived branches like `develop` and `release/*` introduce merge conflicts, delay integration, and break continuous delivery. [remoteenv](https://www.remoteenv.com/blog/feature-flag-branching-strategies-git-workflow)
-
----
-
-## Branching Model Comparison
-
-| Strategy                    | Integration Frequency | Merge Conflicts | CD Compatible | Feature Isolation |
-| --------------------------- | --------------------- | --------------- | ------------- | ----------------- |
-| GitFlow                     | Rare (per release)    | High            | ❌            | Via branches      |
-| GitHub Flow                 | On PR merge           | Medium          | ⚠️            | Via branches      |
-| **Trunk-Based Development** | Daily (or per commit) | Minimal         | ✅            | Via feature flags |
-
----
-
-## Trunk-Based Development
-
-**Core Rule:** All engineers commit to `main` at least once per day. Long-lived branches are prohibited. [launchdarkly](https://launchdarkly.com/blog/git-branching-strategies-vs-trunk-based-development/)
-
-### Branch Naming Convention
-
-```
-main                    ← production; always deployable
-feature/<ticket-id>-short-description   ← max 2 days lifespan
-fix/<ticket-id>-short-description       ← max 1 day lifespan
-chore/<description>                     ← dependency updates, config
-```
-
-### Branch Lifecycle Rules
-
-```
-feature/  → must merge to main within 48 hours
-fix/      → must merge to main within 24 hours
-No branch → survives a weekly cleanup (Autonomous Janitor job closes stale)
-```
-
----
-
-## Feature Flag Branching Pattern
-
-Every feature ≥ 4 hours of work gets a feature flag **before** any code is written. The flag gates the feature at the UI/API level, allowing incomplete code to safely land in `main`. [configcat](https://configcat.com/trunk-based-development/)
-
-```typescript
-// Workflow:
-// 1. Create flag in LaunchDarkly / Flagsmith BEFORE writing code
-// 2. Write code behind the flag — commit to main daily
-// 3. Flag starts at 0% rollout (off by default)
-// 4. Enable for internal team → QA → gradual rollout → 100%
-// 5. Remove flag + dead code within 1 sprint of full rollout
-
-// Example:
-const { enabled } = useFlag('new-booking-calendar-v2');
-
-return enabled ? <BookingCalendarV2 /> : <BookingCalendarV1 />;
-```
-
----
-
-## GitHub Flow (Secondary Pattern)
-
-Used when a project does not yet have feature flags infrastructure:
-
-```
-main ──────────────────────────────────────────► (production)
-         ↑                    ↑
-  PR merge (squash)      PR merge (squash)
-         │                    │
-feature/abc-123 ──────► feature/xyz-456
-(reviewed, CI green)   (reviewed, CI green)
-```
-
-**Rules for GitHub Flow:**
-
-- `main` is always deployable
-- Feature branches are short-lived (< 3 days)
-- All changes require a PR with ≥ 1 approval
-- Squash merge (clean linear history)
-
----
-
-## Branch Protection Rules
-
-```yaml
-# GitHub repository settings (Infrastructure as Code via Terraform)
-branch_protection_rules:
-  main:
-    required_status_checks:
-      strict: true
-      contexts:
-        - 'TypeScript Check'
-        - 'Tests'
-        - 'Build Check'
-        - 'Bundle Size Check'
-    required_pull_request_reviews:
-      required_approving_review_count: 1
-      dismiss_stale_reviews: true
-      require_code_owner_reviews: true
-    restrictions:
-      push: [] # Nobody force-pushes to main
-    enforce_admins: true
-    allow_force_pushes: false
-    allow_deletions: false
-    require_linear_history: true # Squash or rebase merges only
-```
-
----
-
-## Commit Convention (Conventional Commits)
-
-```
-type(scope): short description
-
-Types: feat | fix | chore | docs | style | refactor | test | perf | ci | build | revert
-
-Examples:
-  feat(leads): add real-time lead scoring via QStash job
-  fix(portal): correct CSS variable injection order to prevent FOUC
-  chore(deps): update @supabase/supabase-js to v2.50.0
-  perf(marketing): add priority prop to hero image for LCP improvement
-  ci(lighthouse): lower LCP threshold to 2.2s
-```
-
-Enforced by `commitlint` + `husky`:
-
-```json
-// package.json (root)
-{
-  "commitlint": { "extends": ["@commitlint/config-conventional"] },
-  "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
-    "*.{json,md,yaml}": ["prettier --write"]
-  }
-}
-```
-
----
-
-## References
-
-- Trunk-Based Development — https://trunkbaseddevelopment.com
-- Feature Flags + TBD (LaunchDarkly) — https://launchdarkly.com/blog/git-branching-strategies-vs-trunk-based-development/
-- TBD vs Git Branching (Statsig) — https://www.statsig.com/perspectives/trunk-based-development-vs-git-branching
-- Feature Flag Branching Strategies — https://www.remoteenv.com/blog/feature-flag-branching-strategies-git-workflow
-- ConfigCat TBD Guide — https://configcat.com/trunk-based-development/
-
----
-
-# monorepo-directory-structure.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-This document defines the canonical directory structure for the multi-tenant SaaS platform monorepo, optimized for Turborepo, pnpm workspaces, Feature-Sliced Design, and Next.js App Router. [makerkit](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure)
-
----
-
-## Complete Directory Tree
-
-```
-repo-root/
-├── .github/
-│   ├── workflows/
-│   │   ├── ci.yml                    # Main CI pipeline (typecheck, test, build)
-│   │   ├── lighthouse.yml            # Performance gate
-│   │   ├── bundle-size.yml           # Bundle size enforcement
-│   │   ├── e2e.yml                   # Playwright E2E suite
-│   │   ├── renovate.yml              # Automated dependency updates
-│   │   └── release.yml               # Changesets publish workflow
-│   ├── CODEOWNERS                    # Package ownership map
-│   └── pull_request_template.md
-│
-├── apps/
-│   ├── marketing/                    # Tenant marketing sites (Next.js 16)
-│   │   ├── src/
-│   │   │   ├── app/                  # Next.js App Router
-│   │   │   │   ├── [domain]/         # Per-tenant wildcard routing
-│   │   │   │   ├── api/              # API routes
-│   │   │   │   ├── layout.tsx        # Root layout
-│   │   │   │   └── middleware.ts     # Tenant resolution (Edge)
-│   │   │   ├── widgets/             # FSD: Widgets layer
-│   │   │   ├── features/            # FSD: Features layer
-│   │   │   ├── entities/            # FSD: Entities layer
-│   │   │   └── shared/              # FSD: Shared layer
-│   │   ├── public/
-│   │   │   └── sw.js                # Service Worker (built by Serwist)
-│   │   ├── next.config.ts
-│   │   ├── package.json
-│   │   └── AGENTS.md                # AI agent context for this app
-│   │
-│   ├── portal/                      # Client dashboard (Next.js 16)
-│   │   └── ...                      # Same structure as marketing
-│   │
-│   ├── super-admin/                 # Agency super admin panel (Next.js 16)
-│   │   └── ...
-│   │
-│   └── docs/                        # Internal documentation site (optional)
-│
-├── packages/
-│   ├── ui/                          # Shared component library
-│   │   ├── src/
-│   │   │   ├── components/          # Radix UI + shadcn/ui primitives
-│   │   │   ├── hooks/               # Shared React hooks
-│   │   │   └── index.ts             # Barrel export
-│   │   ├── package.json
-│   │   └── AGENTS.md
-│   │
-│   ├── db/                          # Database client + schema types
-│   │   ├── src/
-│   │   │   ├── client.ts            # Supabase client factory
-│   │   │   ├── types.ts             # Generated Supabase types
-│   │   │   └── queries/             # Reusable typed queries
-│   │   └── package.json
-│   │
-│   ├── auth/                        # Authentication utilities (Clerk)
-│   │   ├── src/
-│   │   │   ├── middleware.ts        # Auth middleware helpers
-│   │   │   ├── server-action-wrapper.ts
-│   │   │   └── index.ts
-│   │   └── package.json
-│   │
-│   ├── config/                      # Shared configuration types + validation
-│   │   ├── src/
-│   │   │   ├── types.ts             # SiteConfig type definition
-│   │   │   ├── schema.ts            # Zod validation schema
-│   │   │   └── next.config.ts       # Shared Next.js config factory
-│   │   └── package.json
-│   │
-│   ├── multi-tenant/                # Tenant resolution + routing
-│   │   ├── src/
-│   │   │   ├── resolve-tenant.ts
-│   │   │   ├── middleware-helpers.ts
-│   │   │   └── domain-api.ts        # Vercel Domains API wrapper
-│   │   └── package.json
-│   │
-│   ├── email/                       # Email templates + sending
-│   │   ├── src/
-│   │   │   ├── templates/           # React Email components
-│   │   │   ├── send.ts              # Unified send function
-│   │   │   └── routing.ts           # Resend/Postmark routing
-│   │   └── package.json
-│   │
-│   ├── jobs/                        # Background job handlers
-│   │   ├── src/
-│   │   │   ├── handlers/            # QStash job handlers
-│   │   │   ├── schedules/           # Cron schedule registration
-│   │   │   └── verify.ts            # QStash signature verification
-│   │   └── package.json
-│   │
-│   ├── billing/                     # Stripe integration
-│   │   ├── src/
-│   │   │   ├── stripe-client.ts
-│   │   │   ├── webhook-handler.ts
-│   │   │   └── checkout.ts
-│   │   └── package.json
-│   │
-│   ├── analytics/                   # Tinybird + Vercel Analytics
-│   │   ├── src/
-│   │   │   ├── tinybird-client.ts
-│   │   │   └── track-event.ts
-│   │   └── package.json
-│   │
-│   ├── realtime/                    # Supabase Realtime hooks
-│   │   ├── src/
-│   │   │   ├── use-realtime-leads.ts
-│   │   │   └── channels.ts
-│   │   └── package.json
-│   │
-│   ├── seo/                         # SEO utilities: metadata, JSON-LD, sitemap
-│   │   ├── src/
-│   │   │   ├── metadata-factory.ts
-│   │   │   ├── json-ld-builders.ts
-│   │   │   └── sitemap-generator.ts
-│   │   └── package.json
-│   │
-│   ├── settings/                    # Tenant settings server actions
-│   │   ├── src/
-│   │   │   ├── actions/
-│   │   │   └── schema.ts
-│   │   └── package.json
-│   │
-│   ├── content/                     # CMS clients (Sanity + Storyblok)
-│   │   ├── src/
-│   │   │   ├── sanity-client.ts
-│   │   │   ├── groq/                # Typed GROQ queries
-│   │   │   └── portable-text.ts
-│   │   └── package.json
-│   │
-│   ├── security/                    # PQC, rate limiting, security headers
-│   │   ├── src/
-│   │   │   ├── pqc.ts
-│   │   │   ├── rate-limit.ts
-│   │   │   └── csp.ts
-│   │   └── package.json
-│   │
-│   └── observability/               # OpenTelemetry + Sentry
-│       ├── src/
-│       │   ├── instrumentation.ts
-│       │   └── sentry-config.ts
-│       └── package.json
-│
-├── supabase/
-│   ├── migrations/                  # SQL migration files (sequential)
-│   │   ├── 0001_create_tenants.sql
-│   │   ├── 0002_create_leads.sql
-│   │   └── ...
-│   ├── seed.sql                     # Test seed data
-│   └── config.toml                  # Supabase local dev config
-│
-├── scripts/
-│   ├── setup-env.sh                 # Fresh environment setup
-│   ├── seed.ts                      # TypeScript seeder
-│   └── generate-types.sh            # Supabase type generation
-│
-├── docs/
-│   ├── adr/                         # Architecture Decision Records
-│   │   ├── 0000-use-adrs.md
-│   │   └── 0001-monorepo-tooling.md
-│   └── runbooks/                    # Operational runbooks
-│
-├── .github/
-├── .changeset/                      # Changesets for versioning
-│   └── config.json
-│
-├── AGENTS.md                        # Root AI agent orchestration
-├── CLAUDE.md                        # Claude-specific context
-├── turbo.json                       # Turborepo pipeline config
-├── pnpm-workspace.yaml              # pnpm workspace + catalog
-├── package.json                     # Root package.json
-├── .size-limit.ts                   # Bundle size budgets
-├── .lighthouserc.ts                 # Lighthouse CI thresholds
-├── renovate.json                    # Automated dependency updates
-└── tsconfig.json                    # Root TypeScript config (base)
-```
-
----
-
-## Package Naming Convention
-
-All internal packages are namespaced under `@repo/`:
-
-```json
-// packages/ui/package.json
-{
-  "name": "@repo/ui",
-  "version": "0.0.0", // Managed by Changesets
-  "private": true,
-  "main": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts",
-    "./hooks": "./src/hooks/index.ts"
-  }
-}
-```
-
-**Convention:** `@repo/<package-name>` — never use `@org/` or unscoped names for workspace packages.
-
----
-
-## pnpm Workspace Catalog
-
-```yaml
-# pnpm-workspace.yaml
-packages:
-  - 'apps/*'
-  - 'packages/*'
-
-catalog:
-  # Pin all apps to identical versions via catalog: protocol
-  react: ^19.0.0
-  react-dom: ^19.0.0
-  next: ^16.0.0
-  typescript: ^5.7.0
-  '@supabase/supabase-js': ^2.50.0
-  'zod': ^3.24.0
-  'tailwindcss': ^4.0.0
-  'vitest': ^3.0.0
-  '@playwright/test': ^1.50.0
-```
-
----
-
-## References
-
-- next-forge (Vercel reference architecture) — https://github.com/vercel/next-forge
-- Next.js 16 App Router Project Structure — https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure
-- Monorepo Setup with Next.js and Turborepo — https://alexpate.com/posts/monorepo-setup
-- pnpm Workspaces — https://pnpm.io/workspaces
-- Turborepo Monorepo Guide — https://turbo.build/repo/docs
-
----
-
-# fsd-layer-architecture.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-Feature-Sliced Design (FSD) 2.1 organizes frontend code into six hierarchical **layers**, each subdivided into domain-specific **slices**, each slice containing technical **segments**. The single most important rule: **a module can only import from layers below it**. [feature-sliced](https://feature-sliced.design)
-
----
-
-## Layer Hierarchy (Top to Bottom)
-
-```
-app/         ← Initialization, providers, global styles, router
-pages/       ← Route-level composition (Next.js app/ directory maps here)
-widgets/     ← Self-contained UI blocks composing features + entities
-features/    ← User interactions, business operations (actions)
-entities/    ← Business objects (Lead, Tenant, Booking)
-shared/      ← Reusable primitives with no business logic
-```
-
-**Import rule:** A module in `features/` can import from `entities/` and `shared/` but **never** from `widgets/` or `pages/`. [feature-sliced](https://feature-sliced.design/docs/get-started/overview)
-
----
-
-## Layer Responsibilities
-
-### `shared/`
-
-Infrastructure and utilities with zero business domain knowledge:
-
-```
-shared/
-├── ui/               # Generic UI components (Button, Input, Modal)
-├── api/              # Base HTTP client, fetch wrappers
-├── lib/              # Pure utilities (dates, strings, numbers)
-├── config/           # Environment variable accessors
-├── types/            # Primitive TypeScript types
-└── constants/        # Application-wide constants
-```
-
-### `entities/`
-
-Business objects — the nouns of your domain:
-
-```
-entities/
-├── lead/
-│   ├── model/        # Zustand slice or React context for lead state
-│   ├── api/          # CRUD queries for leads
-│   ├── ui/           # Lead card, lead avatar, lead status badge
-│   └── index.ts      # Public API (what other layers can import)
-├── tenant/
-├── booking/
-└── user/
-```
-
-### `features/`
-
-User-initiated operations — the verbs of your domain:
-
-```
-features/
-├── submit-contact-form/
-│   ├── ui/           # The form component itself
-│   ├── model/        # Form state, validation, submission handler
-│   ├── api/          # POST /api/contact
-│   └── index.ts
-├── update-lead-status/
-├── book-appointment/
-└── manage-service-areas/
-```
-
-### `widgets/`
-
-Stateful compositions of features and entities (e.g., a sidebar combining the lead list + filter controls):
-
-```
-widgets/
-├── lead-feed/        # RealtimeLeadFeed + filter bar + export button
-├── site-header/      # Nav + CTA + mobile menu
-├── booking-modal/    # Cal.com embed + trigger button
-└── contact-cta/      # Contact section composing submit-contact-form
-```
-
-### `pages/` (= Next.js `app/` routes)
-
-Route-level components that assemble widgets:
-
-```
-// In Next.js, each app/*/page.tsx IS the FSD pages/ layer
-// Do not create a separate pages/ directory — use app/ directory directly
-```
-
-### `app/` (= Next.js `app/layout.tsx`)
-
-Global initialization: providers, fonts, global CSS, root error boundaries.
-
----
-
-## Segments (Technical Subdivisions)
-
-Every slice has the same internal structure — **segments**:
-
-| Segment   | Contains                                                |
-| --------- | ------------------------------------------------------- |
-| `ui/`     | React components for this slice                         |
-| `model/`  | State management, business logic, custom hooks          |
-| `api/`    | Data fetching, mutations (server actions or REST calls) |
-| `lib/`    | Pure utilities specific to this slice                   |
-| `config/` | Slice-specific constants and configuration              |
-
-```
-entities/lead/
-├── ui/
-│   ├── LeadCard.tsx
-│   ├── LeadScoreBadge.tsx
-│   └── LeadStatusSelect.tsx
-├── model/
-│   ├── use-lead-store.ts   # Zustand or Jotai slice
-│   └── lead-helpers.ts
-├── api/
-│   ├── get-leads.ts
-│   ├── update-lead-status.ts
-│   └── delete-lead.ts
-└── index.ts               # Public surface — ONLY export from here
-```
-
----
-
-## Public API (index.ts)
-
-Each slice exposes **only** what other layers need via `index.ts`. Internal modules are private:
-
-```typescript
-// entities/lead/index.ts
-// ✅ Export: public surface for the lead entity
-export { LeadCard } from './ui/LeadCard';
-export { LeadScoreBadge } from './ui/LeadScoreBadge';
-export { useLeadStore } from './model/use-lead-store';
-export { getLeads, updateLeadStatus } from './api';
-export type { Lead, LeadStatus, LeadSource } from './model/types';
-
-// ❌ NOT exported: internal implementation details
-// do NOT re-export from LeadCard.tsx internals
-```
-
----
-
-## @x Cross-Slice Notation
-
-When two slices on the same layer must communicate, use the `@x` notation to make the dependency explicit and auditable: [github](https://github.com/feature-sliced/documentation)
-
-```typescript
-// features/book-appointment/model/use-booking.ts
-
-// ✅ Correct @x cross-slice import — explicit, visible to Steiger
-import { useLeadStore } from 'entities/lead/@x/book-appointment';
-//                                             ^^^^^^^^^^^^^^^^^^^
-// entities/lead must explicitly expose this in @x/book-appointment.ts
-
-// ❌ Wrong — direct deep import bypasses the public API
-import { useLeadStore } from 'entities/lead/model/use-lead-store';
-```
-
-The slice being imported from must create the `@x/` file:
-
-```typescript
-// entities/lead/@x/book-appointment.ts
-// Explicit cross-slice export for the book-appointment feature
-export { useLeadStore } from '../model/use-lead-store';
-```
-
----
-
-## Layer Mapping in Next.js App Router
-
-```
-FSD Layer       Next.js Location
-──────────────────────────────────────────────────
-app/            src/app/layout.tsx (+ providers.tsx)
-pages/          src/app/**/page.tsx (one-to-one mapping)
-widgets/        src/widgets/ (imported by page.tsx)
-features/       src/features/ (imported by widgets/)
-entities/       src/entities/ (imported by features/ + widgets/)
-shared/         src/shared/ (imported by all layers)
-```
-
----
-
-## References
-
-- FSD Official Documentation — https://feature-sliced.design/docs/get-started/overview
-- FSD GitHub Repository — https://github.com/feature-sliced/documentation
-- FSD Tutorial (Real World App) — https://feature-sliced.design/docs/get-started/tutorial
-- Mastering FSD: Lessons from Real Projects — https://dev.to/arjunsanthosh/mastering-feature-sliced-design-lessons-from-real-projects-2ida
-
----
-
-# cross-slice-import-patterns.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-In Feature-Sliced Design, modules on the **same layer cannot import each other** by default. The `@x` (cross-import) notation provides a controlled, auditable escape hatch for necessary cross-slice dependencies within the same layer. [feature-sliced](https://feature-sliced.design/docs/get-started/overview)
-
----
-
-## The Problem: Same-Layer Imports
-
-```typescript
-// ❌ VIOLATION — feature importing from another feature on the same layer
-// features/book-appointment/model/use-booking.ts
-
-import { useContactForm } from 'features/submit-contact-form';
-// Steiger will flag this as: "no-cross-imports" violation
-```
-
-This creates hidden coupling between slices, making refactoring unpredictable.
-
----
-
-## The Solution: @x Notation
-
-The `@x/` directory creates an **explicit contract** between two slices:
-
-```
-entities/lead/
-├── ...                         # Internal implementation
-└── @x/
-    ├── book-appointment.ts     # Exports only for book-appointment feature
-    └── analytics-dashboard.ts  # Exports only for analytics-dashboard widget
-```
-
-**Consumer (importer):**
-
-```typescript
-// features/book-appointment/model/use-booking.ts
-
-// ✅ Explicit @x import — visible in code review, tracked by Steiger
-import { useLeadStore, type Lead } from 'entities/lead/@x/book-appointment';
-```
-
-**Provider (exporter) — must be explicit:**
-
-```typescript
-// entities/lead/@x/book-appointment.ts
-// Only export what book-appointment legitimately needs.
-// This file documents the dependency contract.
-
-export { useLeadStore } from '../model/use-lead-store';
-export type { Lead, LeadId } from '../model/types';
-
-// Do NOT export UI components here — book-appointment has no right to render lead UI
-```
-
----
-
-## Dependency Flow Examples
-
-### Valid: entity → shared
-
-```typescript
-// entities/lead/api/get-leads.ts
-import { supabaseClient } from 'shared/api/supabase'; // ✅ entity → shared
-```
-
-### Valid: feature → entity (direct)
-
-```typescript
-// features/update-lead-status/api/update.ts
-import { updateLeadStatus } from 'entities/lead'; // ✅ feature → entity public API
-```
-
-### Valid: feature → entity (cross-slice via @x)
-
-```typescript
-// features/book-appointment/model/use-booking.ts
-import { type Lead } from 'entities/lead/@x/book-appointment'; // ✅ @x notation
-```
-
-### Invalid: feature → feature
-
-```typescript
-// features/book-appointment/model/use-booking.ts
-import { formState } from 'features/submit-contact-form/model'; // ❌ same-layer import
-```
-
-**Resolution:** Extract the shared state to an `entity` or `shared` slice.
-
----
-
-## Steiger Rule: `no-cross-imports`
-
-Steiger's `no-cross-imports` rule enforces the `@x` pattern and fails CI for violations:
-
-```typescript
-// .steiger.config.ts
-export default defineConfig({
-  rules: {
-    '@feature-sliced/no-cross-imports': [
-      'error',
-      {
-        // Allow @x notation — it IS the sanctioned cross-import mechanism
-        allowViaXNotation: true,
-      },
+export function buildCsp(options: CspOptions): string {
+  const { nonce, isDev = false, trustedDomains = [] } = options;
+
+  const directives: Record<string, string[]> = {
+    'default-src': ["'self'"],
+
+    'script-src': [
+      "'self'",
+      `'nonce-${nonce}'`,
+      "'strict-dynamic'", // Trusts scripts loaded by nonce-marked scripts
+      // Dev-only: allow eval for HMR
+      ...(isDev ? ["'unsafe-eval'"] : []),
     ],
-  },
-});
-```
 
----
-
-## When to Use @x vs. Lifting to Shared
-
-| Situation                                           | Solution                                                    |
-| --------------------------------------------------- | ----------------------------------------------------------- |
-| One feature needs a type from another feature       | Lift the type to `entities/` or `shared/types/`             |
-| One entity needs state from another entity          | Lift to `shared/model/` or create a new higher-level entity |
-| Feature needs to call an entity's internal function | Expose via entity's `index.ts` public API                   |
-| Two features need the same ephemeral state          | Extract to `entities/` slice                                |
-| Cross-entity read for rendering (rare, audited)     | `@x` notation with explicit contract file                   |
-
-**Rule of thumb:** If you need `@x` more than twice per feature, the feature should probably be split or the shared logic lifted to `entities/`.
-
----
-
-## References
-
-- FSD Cross-Import (@x notation) — https://feature-sliced.design/docs/reference/slices-segments#cross-imports
-- FSD Overview — https://feature-sliced.design/docs/get-started/overview
-- Steiger no-cross-imports rule — https://github.com/feature-sliced/steiger
-
----
-
-# steiger-ci-integration.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-Steiger is the official FSD linter. Integrating it into CI ensures that architectural violations — wrong layer imports, missing `index.ts` public APIs, insignificant slices — are caught automatically before merging. [github](https://github.com/feature-sliced/documentation)
-
----
-
-## Installation
-
-```bash
-pnpm add -D steiger @feature-sliced/steiger-plugin
-```
-
----
-
-## Configuration
-
-```typescript
-// .steiger.config.ts (repo root)
-import { defineConfig } from 'steiger';
-import fsd from '@feature-sliced/steiger-plugin';
-
-export default defineConfig([
-  ...fsd.configs.recommended,
-  {
-    rules: {
-      // Error on any slice that is never imported anywhere
-      '@feature-sliced/insignificant-slice': 'error',
-
-      // Error on direct cross-layer imports not using @x
-      '@feature-sliced/no-cross-imports': 'error',
-
-      // Error on missing public API (index.ts)
-      '@feature-sliced/public-api': 'error',
-
-      // Error on imports skipping a layer
-      '@feature-sliced/layers-slices': 'error',
-
-      // Warn on ambiguously named slices (should be noun for entities, verb for features)
-      '@feature-sliced/ambiguous-slice-names': 'warn',
-    },
-  },
-  {
-    // Exclude auto-generated files
-    files: ['**/node_modules/**', '**/.next/**', '**/dist/**'],
-    rules: {
-      '@feature-sliced/no-cross-imports': 'off',
-    },
-  },
-]);
-```
-
----
-
-## Running Steiger
-
-```bash
-# Check a specific app
-pnpm steiger apps/marketing/src
-
-# Check all apps
-pnpm steiger apps/*/src packages/*/src
-
-# Add to turbo.json pipeline
-```
-
-```json
-// turbo.json
-{
-  "tasks": {
-    "lint:arch": {
-      "dependsOn": [],
-      "cache": true,
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", ".steiger.config.ts"]
-    }
-  }
-}
-```
-
----
-
-## GitHub Actions Integration
-
-```yaml
-# .github/workflows/ci.yml (additions)
-- name: FSD Architecture Check (Steiger)
-  run: pnpm steiger apps/*/src packages/*/src
-  # Reports all violations; fails CI on any 'error' level rule
-```
-
----
-
-## Common Violations and Fixes
-
-| Violation             | Cause                                      | Fix                                         |
-| --------------------- | ------------------------------------------ | ------------------------------------------- |
-| `insignificant-slice` | Slice has no importers                     | Delete or merge into an existing slice      |
-| `no-cross-imports`    | `features/a` imports `features/b` directly | Use `@x` notation or lift to `entities/`    |
-| `public-api`          | Slice missing `index.ts`                   | Create `index.ts` and export public surface |
-| `layers-slices`       | `shared/` importing from `entities/`       | Move shared code down to `shared/lib/`      |
-
----
-
-## References
-
-- Steiger GitHub — https://github.com/feature-sliced/steiger
-- FSD Steiger Plugin — https://github.com/feature-sliced/steiger/tree/main/packages/steiger-plugin-fsd
-- FSD CI Integration — https://feature-sliced.design/docs/guides/tech/with-steiger
-
----
-
-# github-actions-workflow-complete.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-This document defines the complete GitHub Actions CI/CD pipeline for the monorepo, covering type checking, unit tests, build validation, bundle size enforcement, Lighthouse performance gates, E2E tests, and staged production promotion. [github](https://github.com/marketplace/actions/lighthouse-ci-action)
-
----
-
-## Complete Workflow
-
-```yaml
-# .github/workflows/ci.yml
-name: CI
-
-on:
-  push:
-    branches: [main, staging]
-  pull_request:
-    branches: [main, staging]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  PNPM_VERSION: '9'
-  NODE_VERSION: '22'
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-
-jobs:
-  # ── 1. TypeScript & Lint ──────────────────────────────────────────────────
-  typecheck:
-    name: TypeScript + ESLint + Steiger
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: '${{ env.PNPM_VERSION }}' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '${{ env.NODE_VERSION }}', cache: 'pnpm' }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck # Runs tsc --noEmit across all packages
-      - run: pnpm lint # ESLint 9 flat config
-      - run: pnpm lint:arch # Steiger FSD architecture check
-
-  # ── 2. Unit Tests ─────────────────────────────────────────────────────────
-  test:
-    name: Unit Tests + Coverage
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: typecheck
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: '${{ env.PNPM_VERSION }}' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '${{ env.NODE_VERSION }}', cache: 'pnpm' }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test --coverage
-        env:
-          NODE_ENV: test
-      - uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-
-  # ── 3. Build ──────────────────────────────────────────────────────────────
-  build:
-    name: Production Build
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    needs: typecheck
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: '${{ env.PNPM_VERSION }}' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '${{ env.NODE_VERSION }}', cache: 'pnpm' }
-      - run: pnpm install --frozen-lockfile
-      - name: Build (with Turborepo remote cache)
-        run: pnpm build
-        env:
-          NODE_ENV: production
-          NEXT_TELEMETRY_DISABLED: '1'
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.STAGING_SUPABASE_ANON_KEY }}
-          NEXT_PUBLIC_ROOT_DOMAIN: staging.agency.com
-
-  # ── 4. Bundle Size ────────────────────────────────────────────────────────
-  bundle-size:
-    name: Bundle Size Check
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: '${{ env.PNPM_VERSION }}' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '${{ env.NODE_VERSION }}', cache: 'pnpm' }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter marketing build
-        env:
-          ANALYZE: 'true'
-          NODE_ENV: production
-          NEXT_PUBLIC_SUPABASE_URL: 'https://stub.supabase.co'
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: 'stub'
-      - run: pnpm size-limit --json > size-report.json
-        continue-on-error: true
-      - uses: actions/github-script@v7
-        name: Post size report comment
-        with:
-          script: |
-            const fs = require('fs');
-            const report = JSON.parse(fs.readFileSync('size-report.json', 'utf8'));
-            const exceeded = report.filter(r => r.exceeded);
-            const rows = report.map(r =>
-              `| ${r.exceeded ? '❌' : '✅'} | ${r.name} | ${(r.sizeRaw/1024).toFixed(1)} KB | ${(r.limitRaw/1024).toFixed(1)} KB |`
-            ).join('\n');
-            const body = `## 📦 Bundle Size Report\n\n| Status | Bundle | Size | Limit |\n|--------|--------|------|-------|\n${rows}\n\n${exceeded.length ? '> ⚠️ **Limits exceeded — fix before merging**' : '> ✅ All bundles within budget'}`;
-            github.rest.issues.createComment({ issue_number: context.issue.number, owner: context.repo.owner, repo: context.repo.repo, body });
-      - name: Fail on exceeded budgets
-        run: |
-          FAILED=$(cat size-report.json | jq '[.[] | select(.exceeded == true)] | length')
-          if [ "$FAILED" -gt "0" ]; then exit 1; fi
-
-  # ── 5. E2E Tests ──────────────────────────────────────────────────────────
-  e2e:
-    name: E2E Tests (Playwright)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    needs: [test, build]
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: '${{ env.PNPM_VERSION }}' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '${{ env.NODE_VERSION }}', cache: 'pnpm' }
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter e2e exec playwright install chromium
-      - run: pnpm --filter e2e test
-        env:
-          CI: true
-          PLAYWRIGHT_BASE_URL: ${{ steps.vercel-preview.outputs.url }}
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report-${{ github.sha }}
-          path: packages/e2e/playwright-report/
-          retention-days: 14
-
-  # ── 6. Lighthouse CI ──────────────────────────────────────────────────────
-  lighthouse:
-    name: Lighthouse Performance Gate
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    needs: build
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Wait for Vercel Preview
-        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
-        id: vercel-preview
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 300
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      - run: pnpm add -g @lhci/cli@0.14.x
-      - name: Run Lighthouse CI
-        run: lhci autorun
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          LHCI_BASE_URL: ${{ steps.vercel-preview.outputs.url }}
-
-  # ── 7. Deploy Staging ─────────────────────────────────────────────────────
-  deploy-staging:
-    name: Deploy to Staging
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: [test, build, bundle-size]
-    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
-    environment:
-      name: staging
-      url: https://staging.agency.com
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to Vercel (staging)
-        run: npx vercel --token=${{ secrets.VERCEL_TOKEN }} --env=staging
-      - name: Smoke tests
-        run: pnpm --filter e2e test:smoke
-        env:
-          PLAYWRIGHT_BASE_URL: https://staging.agency.com
-
-  # ── 8. Deploy Production (staged) ─────────────────────────────────────────
-  deploy-production:
-    name: Stage Production Deployment
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: [test, build, bundle-size]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment:
-      name: production-db # Requires manual approval
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy (staged, no domain assignment)
-        run: |
-          STAGED=$(npx vercel --prod --skip-domain --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tail -1)
-          echo "STAGED_URL=$STAGED" >> $GITHUB_ENV
-      - name: Run smoke tests against staged URL
-        run: pnpm --filter e2e test:smoke
-        env:
-          PLAYWRIGHT_BASE_URL: ${{ env.STAGED_URL }}
-      - name: Notify team (promote manually in Vercel dashboard)
-        run: |
-          curl -X POST ${{ secrets.SLACK_WEBHOOK_DEPLOYMENTS }} \
-            -H 'Content-type: application/json' \
-            -d '{"text":"🚀 Production staged: ${{ env.STAGED_URL }} — promote when ready"}'
-```
-
----
-
-## References
-
-- GitHub Actions Workflow Syntax — https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
-- Lighthouse CI Action — https://github.com/marketplace/actions/lighthouse-ci-action
-- Monitoring with Lighthouse CI — https://softwarehouse.au/blog/monitoring-performance-with-lighthouse-ci-in-github-actions/
-- Vercel Staging Environments — https://vercel.com/kb/guide/set-up-a-staging-environment-on-vercel
-
----
-
-# stripe-webhook-handler.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-Stripe webhooks notify your application of billing events (subscription created, invoice paid, payment failed). The handler must verify the Stripe signature before processing, use `stripe.webhooks.constructEvent()` with the raw request body, and return 200 immediately — long processing goes to a QStash queue. [digitalapplied](https://www.digitalapplied.com/blog/stripe-payment-integration-developer-guide-2026)
-
----
-
-## Critical: Raw Body Requirement
-
-Next.js App Router does not buffer the raw body by default. Stripe signature verification requires the **raw bytes** — not the parsed JSON. This is the most common source of webhook verification failures:
-
-```typescript
-// apps/*/src/app/api/webhooks/stripe/route.ts
-export const runtime = 'nodejs'; // Must be Node.js — not Edge
-export const dynamic = 'force-dynamic';
-
-import Stripe from 'stripe';
-import { NextRequest, NextResponse } from 'next/server';
-import { handleStripeEvent } from '@repo/billing/webhook-handler';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia', // Use latest stable API version
-});
-
-export async function POST(req: NextRequest) {
-  const rawBody = await req.text(); // ← Must use .text(), not .json()
-  const signature = req.headers.get('stripe-signature');
-
-  if (!signature) {
-    return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
-  }
-
-  let event: Stripe.Event;
-  try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch (err) {
-    console.error('[Stripe] Webhook signature verification failed:', err);
-    return NextResponse.json({ error: 'Signature verification failed' }, { status: 400 });
-  }
-
-  // Return 200 immediately — process async via QStash
-  await handleStripeEvent(event);
-
-  return NextResponse.json({ received: true }, { status: 200 });
-}
-```
-
----
-
-## Event Handler (packages/billing)
-
-```typescript
-// packages/billing/src/webhook-handler.ts
-import type Stripe from 'stripe';
-import { db } from '@repo/db';
-import { qstash } from '@repo/jobs/client';
-
-export async function handleStripeEvent(event: Stripe.Event): Promise<void> {
-  switch (event.type) {
-    // ── Subscription lifecycle ────────────────────────────────────────────
-    case 'customer.subscription.created':
-    case 'customer.subscription.updated': {
-      const sub = event.data.object as Stripe.Subscription;
-      await syncSubscriptionToDb(sub);
-      break;
-    }
-
-    case 'customer.subscription.deleted': {
-      const sub = event.data.object as Stripe.Subscription;
-      await db
-        .from('tenants')
-        .update({ status: 'cancelled', plan: null })
-        .eq('stripe_customer_id', sub.customer as string);
-      break;
-    }
-
-    // ── Invoice events ────────────────────────────────────────────────────
-    case 'invoice.payment_succeeded': {
-      const invoice = event.data.object as Stripe.Invoice;
-      // Enqueue receipt email via QStash (async — don't block webhook response)
-      await qstash.publishJSON({
-        url: `${process.env.APP_URL}/api/jobs/email/receipt`,
-        body: {
-          type: 'payment_receipt',
-          invoiceId: invoice.id,
-          customerId: invoice.customer,
-          amountPaid: invoice.amount_paid,
-          periodEnd: invoice.period_end,
-        },
-      });
-      break;
-    }
-
-    case 'invoice.payment_failed': {
-      const invoice = event.data.object as Stripe.Invoice;
-      await db
-        .from('tenants')
-        .update({ billing_status: 'past_due' })
-        .eq('stripe_customer_id', invoice.customer as string);
-      // Email dunning sequence starts here
-      await qstash.publishJSON({
-        url: `${process.env.APP_URL}/api/jobs/email/payment-failed`,
-        body: { customerId: invoice.customer, attemptCount: invoice.attempt_count },
-      });
-      break;
-    }
-
-    // ── Checkout ─────────────────────────────────────────────────────────
-    case 'checkout.session.completed': {
-      const session = event.data.object as Stripe.Checkout.Session;
-      if (session.mode === 'subscription') {
-        await activateTenantSubscription(session);
-      }
-      break;
-    }
-
-    default:
-      console.log(`[Stripe] Unhandled event type: ${event.type}`);
-  }
-}
-
-async function syncSubscriptionToDb(sub: Stripe.Subscription) {
-  const planMap: Record<string, 'starter' | 'pro' | 'enterprise'> = {
-    price_starter: 'starter',
-    price_pro: 'pro',
-    price_enterprise: 'enterprise',
+    'style-src': [
+      "'self'",
+      `'nonce-${nonce}'`,
+      // Allow inline styles from Tailwind CSS (hash or nonce)
+    ],
+
+    'img-src': [
+      "'self'",
+      'data:',
+      'blob:',
+      'https://*.supabase.co', // Supabase Storage
+      'https://*.sanity.io', // Sanity CDN
+      'https://cdn.sanity.io',
+      'https://*.cloudinary.com',
+      ...trustedDomains,
+    ],
+
+    'font-src': ["'self'", 'https://fonts.gstatic.com'],
+
+    'connect-src': [
+      "'self'",
+      'https://*.supabase.co',
+      'https://*.supabase.io', // Supabase Realtime
+      'wss://*.supabase.co', // WebSocket for Realtime
+      'https://api.stripe.com',
+      'https://checkout.stripe.com',
+      'https://js.stripe.com',
+      'https://app.posthog.com', // Analytics
+      'https://*.sentry.io', // Error reporting
+      ...(isDev ? ['ws://localhost:*', 'http://localhost:*'] : []),
+      ...trustedDomains,
+    ],
+
+    'frame-src': [
+      'https://js.stripe.com', // Stripe Elements iframes
+      'https://hooks.stripe.com',
+      "'none'", // Restrict other frames
+    ],
+
+    'object-src': ["'none'"],
+    'base-uri': ["'self'"],
+    'form-action': ["'self'"],
+
+    'frame-ancestors': ["'none'"], // Replaces X-Frame-Options for modern browsers
+
+    'upgrade-insecure-requests': [], // Force HTTPS for all embedded resources
+
+    // Report-only URI for monitoring violations in prod
+    'report-to': ['csp-endpoint'],
   };
 
-  const priceId = sub.items.data[0]?.price.id ?? '';
-  const plan = planMap[priceId] ?? 'starter';
-  const status = sub.status === 'active' ? 'active' : 'suspended';
-
-  await db
-    .from('tenants')
-    .update({
-      plan,
-      status,
-      billing_status: sub.status,
-      stripe_subscription_id: sub.id,
-      current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
-    })
-    .eq('stripe_customer_id', sub.customer as string);
+  return Object.entries(directives)
+    .map(([key, values]) => (values.length ? `${key} ${values.join(' ')}` : key))
+    .join('; ');
 }
+
+// Reporting endpoint configuration (add to headers)
+export const REPORTING_ENDPOINTS = 'csp-endpoint="https://your-csp-report-endpoint.com/csp"';
 ```
 
 ---
 
-## Idempotency
-
-Stripe retries webhooks for up to 72 hours if your endpoint returns non-200. Use the event `id` as an idempotency key to prevent duplicate processing: [digitalapplied](https://www.digitalapplied.com/blog/stripe-payment-integration-developer-guide-2026)
+## Next.js Middleware Implementation
 
 ```typescript
-// At the start of handleStripeEvent:
-const { data: existing } = await db
-  .from('processed_webhook_events')
-  .select('id')
-  .eq('event_id', event.id)
-  .maybeSingle();
-
-if (existing) {
-  console.log(`[Stripe] Event ${event.id} already processed — skipping`);
-  return;
-}
-
-await db.from('processed_webhook_events').insert({ event_id: event.id });
-// Proceed with processing...
-```
-
----
-
-## References
-
-- Stripe Webhook Documentation — https://stripe.com/docs/webhooks
-- Stripe Webhooks with Next.js App Router — https://www.mtechzilla.com/blogs/integrate-stripe-checkout-with-nextjs
-- Complete Stripe Integration Guide 2026 — https://www.digitalapplied.com/blog/stripe-payment-integration-developer-guide-2026
-
----
-
-# qstash-client-setup.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-QStash is Upstash's serverless message queue and scheduler. It enables background processing in Next.js without requiring a persistent server — jobs are invoked via HTTP POST from QStash to your API routes. [upstash](https://upstash.com/docs/qstash/quickstarts/vercel-nextjs)
-
----
-
-## Installation
-
-```bash
-pnpm add @upstash/qstash
-```
-
----
-
-## Client Setup
-
-```typescript
-// packages/jobs/src/client.ts
-import { Client } from '@upstash/qstash';
-
-export const qstash = new Client({
-  token: process.env.QSTASH_TOKEN!,
-});
-
-// Shorthand for publishing to an internal API route
-export function publishJob<T extends Record<string, unknown>>(
-  route: string,
-  body: T,
-  options?: {
-    delay?: number; // Delay in seconds
-    retries?: number; // Default: 3
-    timeout?: number; // Handler timeout in seconds
-    deduplicationId?: string; // Prevent duplicate messages
-  }
-) {
-  return qstash.publishJSON({
-    url: `${process.env.APP_URL}${route}`,
-    body,
-    retries: options?.retries ?? 3,
-    delay: options?.delay,
-    timeout: options?.timeout,
-    deduplicationId: options?.deduplicationId,
-  });
-}
-```
-
----
-
-## Request Verification Middleware
-
-Every QStash consumer route **must** verify the signature to prevent unauthorized invocation: [upstash](https://upstash.com/docs/qstash/quickstarts/vercel-nextjs)
-
-```typescript
-// packages/jobs/src/verify.ts
-import { verifySignatureAppRouter } from '@upstash/qstash/nextjs';
-
-// Wrap any API route handler with this to verify QStash signature
-export { verifySignatureAppRouter as verifyQStashSignature };
-
-// Usage in a route:
-// export const POST = verifyQStashSignature(async (req: Request) => { ... });
-```
-
----
-
-## Example: Weekly Report Job
-
-```typescript
-// apps/*/src/app/api/jobs/reports/weekly/route.ts
-import { verifySignatureAppRouter } from '@upstash/qstash/nextjs';
-import { generateAndSendWeeklyReports } from '@repo/jobs/handlers/weekly-reports';
-
-export const maxDuration = 60; // Required for PDF generation
-export const runtime = 'nodejs';
-
-export const POST = verifySignatureAppRouter(async (req: Request) => {
-  const body = await req.json();
-  await generateAndSendWeeklyReports(body);
-  return Response.json({ success: true });
-});
-```
-
----
-
-## Scheduled Jobs Registration
-
-```typescript
-// packages/jobs/src/schedules/register.ts
-// Run once at startup or via admin action to register cron schedules
-
-import { qstash } from '../client';
-
-const SCHEDULES = [
-  {
-    name: 'weekly-reports',
-    cron: '0 23 * * 0', // Sunday 11 PM UTC
-    url: '/api/jobs/reports/weekly',
-    body: { trigger: 'cron' },
-  },
-  {
-    name: 'daily-crm-sync',
-    cron: '0 6 * * *', // Daily at 6 AM UTC
-    url: '/api/jobs/crm/sync',
-    body: { trigger: 'cron' },
-  },
-  {
-    name: 'gdpr-deletion-check',
-    cron: '0 2 * * 0', // Weekly Sunday 2 AM UTC
-    url: '/api/jobs/gdpr/deletion-check',
-    body: { trigger: 'cron' },
-  },
-];
-
-export async function registerAllSchedules() {
-  const existing = await qstash.schedules.list();
-  const existingNames = existing.map((s: any) => s.destination.split('/').pop());
-
-  for (const schedule of SCHEDULES) {
-    if (!existingNames.includes(schedule.name)) {
-      await qstash.schedules.create({
-        destination: `${process.env.APP_URL}${schedule.url}`,
-        cron: schedule.cron,
-        body: JSON.stringify(schedule.body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      console.log(`[QStash] Registered schedule: ${schedule.name}`);
-    }
-  }
-}
-```
-
----
-
-## References
-
-- QStash Next.js Quickstart — https://upstash.com/docs/qstash/quickstarts/vercel-nextjs
-- QStash Background Jobs — https://upstash.com/docs/qstash/features/background-jobs
-- QStash Schedules — https://upstash.com/docs/qstash/features/schedules
-- Upstash QStash SDK — https://github.com/upstash/qstash-js
-
----
-
-# rendering-decision-matrix.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-Next.js 16 supports four rendering modes: Static Site Generation (SSG), Incremental Static Regeneration (ISR), Server-Side Rendering (SSR), and Client-Side Rendering (CSR). Choosing the wrong mode for a page type is the most common source of performance regressions and unnecessary server load. [digitalapplied](https://www.digitalapplied.com/blog/nextjs-16-performance-server-components-guide)
-
----
-
-## Decision Matrix
-
-| Page Type          | Mode                                               | Reason                                               |
-| ------------------ | -------------------------------------------------- | ---------------------------------------------------- |
-| Marketing homepage | **PPR** (SSG shell + dynamic island)               | Best LCP; only above-fold is static                  |
-| Service area pages | **ISR** (`cacheLife: 24h`)                         | SEO-critical; changes infrequently                   |
-| Blog posts         | **ISR** (`cacheLife: 1h`) + on-demand revalidation | CMS-driven; on-demand ISR on publish                 |
-| Contact form page  | **SSG**                                            | Pure static; form is client-side                     |
-| Portal dashboard   | **SSR** + `use cache` per-query                    | Always-fresh data; authenticated                     |
-| Realtime lead feed | **SSR** initial + **CSR** updates                  | Server renders initial leads; Realtime adds new ones |
-| Booking page       | **SSG** + CSR for Cal.com embed                    | Cal.com embeds as CSR component                      |
-| Super admin panel  | **SSR**                                            | Must never cache admin data                          |
-| PDF report pages   | **Streaming SSR** (`Suspense`)                     | Large data queries stream progressively              |
-| A/B test variants  | **Edge Middleware + SSG**                          | Middleware selects variant at edge; no layout shift  |
-
----
-
-## Mode Implementation Patterns
-
-### SSG (Static)
-
-```typescript
-// No exports needed — Next.js defaults to static if no dynamic data
-export default async function ContactPage() {
-  return <ContactForm />;
-}
-```
-
-### ISR (Incremental Static Regeneration)
-
-```typescript
-// Next.js 16 uses cacheLife instead of revalidate
-import { unstable_cacheLife as cacheLife } from 'next/cache';
-
-export default async function ServiceAreaPage({ params }: Props) {
-  const area = await getServiceAreaData(params.slug, { cacheLife: '24h' });
-  return <ServiceAreaContent area={area} />;
-}
-```
-
-### PPR (Partial Pre-rendering)
-
-```typescript
-// next.config.ts
-const config: NextConfig = {
-  experimental: { ppr: true },
-};
-
-// page.tsx
-export default function HomePage() {
-  return (
-    <main>
-      {/* Static shell — pre-rendered at build */}
-      <HeroSection />
-      <ServicesSection />
-
-      {/* Dynamic island — streamed at request time */}
-      <Suspense fallback={<ReviewsSkeleton />}>
-        <DynamicReviews />
-      </Suspense>
-    </main>
-  );
-}
-```
-
-### SSR (Server-Side Rendering)
-
-```typescript
-// Force dynamic rendering — runs on every request
-export const dynamic = 'force-dynamic';
-
-export default async function DashboardPage() {
-  // Runs fresh on every request
-  const leads = await getRecentLeads();
-  return <LeadDashboard leads={leads} />;
-}
-```
-
----
-
-## `use cache` Directive (Next.js 16)
-
-The `use cache` directive allows granular caching of individual functions without making an entire page static:
-
-```typescript
-// Cache a specific data fetch for 5 minutes
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache';
-
-async function getTenantConfig(tenantId: string) {
-  'use cache';
-  cacheTag(`tenant:${tenantId}`);
-  cacheLife('5m');
-
-  return db.from('tenants').select('config').eq('id', tenantId).single();
-}
-```
-
----
-
-## References
-
-- Next.js 16 Rendering Modes — https://nextjs.org/docs/app/building-your-application/rendering
-- Next.js PPR Documentation — https://nextjs.org/docs/app/api-reference/config/next-config-js/ppr
-- Next.js `use cache` Directive — https://nextjs.org/docs/app/api-reference/directives/use-cache
-- Next.js 16 Performance Guide — https://www.digitalapplied.com/blog/nextjs-16-performance-server-components-guide
-
----
-
-# tenant-caching-patterns.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-Tenant-isolated caching prevents one tenant's data from ever appearing in another tenant's response. This requires every `use cache` call, ISR page, and Upstash Redis key to include the `tenantId` as a cache key component and cache tag. [vercel](https://vercel.com/docs/incremental-migration)
-
----
-
-## The Isolation Invariant
-
-```
-RULE: Every cache key and cache tag that contains tenant-specific data
-      MUST include tenantId as a component.
-
-CORRECT:   cacheTag(`tenant:${tenantId}:leads`)
-INCORRECT: cacheTag('leads')   ← shared across ALL tenants
-```
-
----
-
-## `use cache` + `cacheTag` Pattern
-
-```typescript
-// packages/db/src/queries/tenant-queries.ts
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache';
-
-export async function getTenantConfig(tenantId: string) {
-  'use cache';
-  cacheTag(`tenant:${tenantId}`); // Bust all tenant data
-  cacheTag(`tenant:${tenantId}:config`); // Bust only config
-  cacheLife('1h');
-
-  const { data } = await supabase
-    .from('tenants')
-    .select('config, plan, status')
-    .eq('id', tenantId)
-    .single();
-
-  return data;
-}
-
-export async function getTenantLeads(tenantId: string, limit = 20) {
-  'use cache';
-  cacheTag(`tenant:${tenantId}`);
-  cacheTag(`tenant:${tenantId}:leads`);
-  cacheLife('5m');
-
-  return supabase
-    .from('leads')
-    .select('*')
-    .eq('tenant_id', tenantId)
-    .order('created_at', { ascending: false })
-    .limit(limit);
-}
-```
-
----
-
-## Tag-Based Invalidation Map
-
-| Tenant Action              | `revalidateTag()` Calls                              |
-| -------------------------- | ---------------------------------------------------- |
-| Update identity settings   | `tenant:${id}`, `tenant:${id}:config`                |
-| New lead created           | `tenant:${id}:leads`                                 |
-| Service area added/removed | `tenant:${id}:sitemap`, `tenant:${id}:service-areas` |
-| Blog post published        | `tenant:${id}:blog`, `tenant:${id}:blog:${slug}`     |
-| Plan upgrade/downgrade     | `tenant:${id}` (full bust)                           |
-
----
-
-## Upstash Redis Key Namespace
-
-```typescript
-// packages/security/src/rate-limit.ts
-
-// All Redis keys prefixed with tenant ID
-export function tenantRateLimitKey(tenantId: string, action: string) {
-  return `ratelimit:${tenantId}:${action}`;
-}
-
-// Cache keys
-export function tenantCacheKey(tenantId: string, resource: string) {
-  return `cache:v1:${tenantId}:${resource}`;
-}
-
-// Session keys (Upstash Redis)
-export function tenantSessionKey(tenantId: string, userId: string) {
-  return `session:${tenantId}:${userId}`;
-}
-```
-
----
-
-## References
-
-- Next.js `cacheTag` Documentation — https://nextjs.org/docs/app/api-reference/functions/cacheTag
-- Next.js `use cache` Directive — https://nextjs.org/docs/app/api-reference/directives/use-cache
-- Vercel Incremental Migration — https://vercel.com/docs/incremental-migration
-
----
-
-# bundle-size-budgets.md
-
-> **Reference Documentation — February 2026**
-
-## Overview
-
-Bundle size budgets prevent unintentional performance regressions from landing in production. The budget system has two layers: `size-limit` (enforces hard byte limits per route) and `@next/bundle-analyzer` (visual treemap for investigation). Both run in CI. [catchmetrics](http://www.catchmetrics.io/blog/reducing-nextjs-bundle-size-with-nextjs-bundle-analyzer)
-
----
-
-## `size-limit` Configuration
-
-```typescript
-// .size-limit.ts (repo root)
-const config = [
-  // ── Marketing site (SEO-critical — hard limits) ──────────────────────────
-  {
-    name: 'Marketing: Homepage first-load JS',
-    path: '.next/static/chunks/pages/index.js',
-    limit: '85 KB',
-    gzip: true,
-  },
-  {
-    name: 'Marketing: Service area page',
-    path: '.next/static/chunks/pages/service-area/**/*.js',
-    limit: '60 KB',
-    gzip: true,
-  },
-  {
-    name: 'Marketing: Contact page',
-    path: '.next/static/chunks/pages/contact.js',
-    limit: '50 KB',
-    gzip: true,
-  },
-
-  // ── Framework chunks ─────────────────────────────────────────────────────
-  {
-    name: 'React + Next.js runtime',
-    path: '.next/static/chunks/framework-*.js',
-    limit: '50 KB',
-    gzip: true,
-  },
-
-  // ── Portal (authenticated — softer limits) ────────────────────────────────
-  {
-    name: 'Portal: Dashboard first-load JS',
-    path: '.next/static/chunks/pages/dashboard/index.js',
-    limit: '120 KB',
-    gzip: true,
-  },
-];
-
-export default config;
-```
-
----
-
-## Bundle Analyzer Integration
-
-```typescript
-// packages/config/src/next.config.ts
-import bundleAnalyzer from '@next/bundle-analyzer';
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-  openAnalyzer: false,
-});
-
-// Usage:
-// ANALYZE=true pnpm --filter marketing build
-// Open .next/analyze/client.html to inspect treemap
-```
-
----
-
-## `optimizePackageImports` — Tree-Shaking Enforcement
-
-```typescript
-// next.config.ts
-const config: NextConfig = {
-  experimental: {
-    optimizePackageImports: [
-      'lucide-react', // Without this: entire icon library ships (500+ icons)
-      '@radix-ui/react-icons',
-      'date-fns', // Without this: entire date-fns tree ships
-      'lodash-es',
-    ],
-  },
-};
-```
-
-**Impact:** `lucide-react` without `optimizePackageImports` adds ~180 KB gzip. With it: ~2 KB per icon used. [dev](https://dev.to/gouranga-das-khulna/how-to-reduce-bundle-size-in-next-js-5fdl)
-
----
-
-## Common Bundle Size Culprits
-
-| Package                    | Default Size | Optimized                                     |
-| -------------------------- | ------------ | --------------------------------------------- |
-| `lucide-react` (all icons) | ~180 KB gzip | ~2 KB/icon with `optimizePackageImports`      |
-| `date-fns` (full)          | ~75 KB gzip  | ~5–15 KB with tree-shaking                    |
-| `@react-pdf/renderer`      | ~200 KB      | Lazy load in report routes only               |
-| Recharts                   | ~120 KB      | Lazy load behind `dynamic(() => import(...))` |
-| `moment.js`                | ~72 KB       | Replace with `date-fns` or `Temporal`         |
-
----
-
-## References
-
-- `@next/bundle-analyzer` — https://www.npmjs.com/package/@next/bundle-analyzer
-- Next.js Package Bundling Guide — https://nextjs.org/docs/app/guides/package-bundling
-- Reducing Bundle Size in Next.js — https://dev.to/gouranga-das-khulna/how-to-reduce-bundle-size-in-next-js-5fdl
-- `size-limit` npm — https://github.com/ai/size-limit
-
----
-
-Now I have enough context to generate all 5 Batch B documents at production depth. Here they are:
-
----
-
-# `security-middleware-implementation.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# security-middleware-implementation.md
-```
-
-## Overview
-
-This document specifies the complete `middleware.ts` implementation for the multi-tenant SaaS platform. The middleware runs at the Vercel Edge Runtime on every request and orchestrates a layered security pipeline: bot detection → IP allow/deny → per-tenant rate limiting → tenant resolution → Clerk authentication → CSP nonce injection → security header attachment. Each layer is independently composable and fails closed (deny on error). [projectdiscovery](https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass)
-
-> **CVE-2025-29927 Note:** Never rely solely on middleware for auth. Every protected Server Component and Route Handler must independently call `auth()` or `protect()` from Clerk. Middleware is a first-line filter only. [clerk](https://clerk.com/blog/cve-2025-29927)
-
----
-
-## Architecture
-
-```
-Incoming Request
-       │
-       ▼
-┌─────────────────────────────────────────┐
-│  1. STRIP INTERNAL HEADERS              │  ← Block x-middleware-subrequest forgery
-│     (CVE-2025-29927 hardening)          │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│  2. BOT / UA DETECTION                  │  ← Block known scrapers, scanners
-│     (user-agent + IP reputation)        │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│  3. GLOBAL RATE LIMIT (Edge)            │  ← Upstash Ratelimit sliding window
-│     10 req/s per IP                     │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│  4. TENANT RESOLUTION                   │  ← hostname → tenantId lookup
-│     (subdomain + custom domain)         │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│  5. PER-TENANT RATE LIMIT               │  ← Upstash Ratelimit token bucket
-│     100 req/min per tenantId            │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│  6. CLERK AUTH GATE                     │  ← JWT verification, redirect logic
-│     (clerkMiddleware)                   │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│  7. CSP NONCE GENERATION                │  ← crypto.randomUUID() nonce
-│     Injected into x-nonce header        │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-┌─────────────────────────────────────────┐
-│  8. SECURITY HEADERS                    │  ← HSTS, CSP, X-Frame, Permissions
-│     (applied to response)               │
-└───────────────┬─────────────────────────┘
-                │
-                ▼
-             Route Handler / Page
-```
-
----
-
-## Implementation
-
-### `apps/portal/middleware.ts`
-
-```typescript
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-import { geolocation, ipAddress } from '@vercel/functions';
-import { type NextRequest, NextResponse } from 'next/server';
-
-// ─── Redis clients (reused across invocations via module scope) ───────────────
-const redis = Redis.fromEnv();
-
-const globalRatelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(10, '1 s'),
-  analytics: true,
-  prefix: 'rl:global',
-  ephemeralCache: new Map(),
-});
-
-const tenantRatelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.tokenBucket(100, '1 m', 20),
-  analytics: true,
-  prefix: 'rl:tenant',
-  ephemeralCache: new Map(),
-});
-
-// ─── Route matchers ───────────────────────────────────────────────────────────
-const isPublicRoute = createRouteMatcher([
-  '/',
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/webhooks/(.*)',   // Stripe, Cal.com, QStash — verified by their own HMAC
-  '/api/health',
-  '/_next/(.*)',
-  '/favicon.ico',
-  '/robots.txt',
-  '/sitemap(.*)',
-]);
-
-const isApiRoute = createRouteMatcher(['/api/(.*)']);
-
-// ─── Known bot user-agent patterns ───────────────────────────────────────────
-const BOT_UA_PATTERNS = [
-  /sqlmap/i, /nikto/i, /nmap/i, /masscan/i,
-  /zgrab/i, /nuclei/i, /python-requests\/ [nextjs](https://nextjs.org/docs/pages/guides/content-security-policy)\./i,
-  /go-http-client\/1\./i, /curl\/[0-6]\./i,
-];
-
-function isBotUserAgent(ua: string | null): boolean {
-  if (!ua) return false;
-  return BOT_UA_PATTERNS.some((p) => p.test(ua));
-}
-
-// ─── Tenant resolution ────────────────────────────────────────────────────────
-async function resolveTenantId(hostname: string): Promise<string | null> {
-  // Strip port for local dev
-  const host = hostname.split(':')[0];
-
-  // Architecture invariant: all Redis keys include tenantId namespace
-  const cached = await redis.get<string>(`tenant:hostname:${host}`);
-  if (cached) return cached;
-
-  // Fallback: subdomain resolution for *.yourdomain.com
-  const BASE_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? 'yourdomain.com';
-  if (host.endsWith(`.${BASE_DOMAIN}`)) {
-    const subdomain = host.replace(`.${BASE_DOMAIN}`, '');
-    // Cache miss → store for 5 min
-    await redis.setex(`tenant:hostname:${host}`, 300, subdomain);
-    return subdomain;
-  }
-
-  return null;
-}
-
-// ─── CSP nonce + header builder ───────────────────────────────────────────────
-function buildSecurityHeaders(nonce: string, tenantId: string | null) {
-  const isDev = process.env.NODE_ENV === 'development';
-
-  const csp = [
-    `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ''} https://clerk.accounts.dev https://*.clerk.accounts.dev https://js.stripe.com https://cal.com`,
-    `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' blob: data: https://*.supabase.co https://res.cloudinary.com https://images.unsplash.com`,
-    `font-src 'self' data:`,
-    `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://o*.ingest.sentry.io https://*.tinybird.co`,
-    `frame-src 'self' https://js.stripe.com https://cal.com https://*.cal.com`,
-    `frame-ancestors 'none'`,
-    `object-src 'none'`,
-    `base-uri 'self'`,
-    `form-action 'self'`,
-    `upgrade-insecure-requests`,
-    `report-uri /api/csp-report?tenantId=${tenantId ?? 'unknown'}`,
-  ].join('; ');
-
-  return {
-    'Content-Security-Policy': csp,
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'X-DNS-Prefetch-Control': 'on',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': [
-      'camera=()',
-      'microphone=()',
-      'geolocation=()',
-      'payment=(self "https://js.stripe.com")',
-      'usb=()',
-      'bluetooth=()',
-      'accelerometer=()',
-      'gyroscope=()',
-    ].join(', '),
-    'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
-    'Cross-Origin-Opener-Policy': 'same-origin',
-    'Cross-Origin-Resource-Policy': 'cross-origin',
-    'Cross-Origin-Embedder-Policy': 'credentialless',
-  } as const;
-}
-
-// ─── Main middleware (Clerk wraps the core logic) ─────────────────────────────
-export default clerkMiddleware(async (auth, request: NextRequest) => {
-  const response = NextResponse.next();
-
-  // 1. Strip forged internal routing headers (CVE-2025-29927 hardening)
-  //    If present on inbound edge requests, strip them to prevent bypass.
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.delete('x-middleware-subrequest');
-
-  // 2. Bot detection
-  const ua = request.headers.get('user-agent');
-  if (isBotUserAgent(ua)) {
-    return new NextResponse(null, { status: 403 });
-  }
-
-  // 3. Global IP rate limit
-  const ip = ipAddress(request) ?? 'anonymous';
-  const geo = geolocation(request);
-  const { success: globalOk, limit, reset, remaining } = await globalRatelimit.limit(ip);
-  if (!globalOk) {
-    return new NextResponse(
-      JSON.stringify({ error: 'Too many requests', retryAfter: reset }),
-      {
-        status: 429,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-RateLimit-Limit': String(limit),
-          'X-RateLimit-Remaining': String(remaining),
-          'X-RateLimit-Reset': String(reset),
-          'Retry-After': String(Math.ceil((reset - Date.now()) / 1000)),
-        },
-      },
-    );
-  }
-
-  // 4. Tenant resolution
-  const hostname = request.headers.get('host') ?? '';
-  const tenantId = await resolveTenantId(hostname);
-
-  // Attach tenantId to forwarded request headers for downstream consumption
-  if (tenantId) {
-    requestHeaders.set('x-tenant-id', tenantId);
-  }
-
-  // 5. Per-tenant rate limit (only if tenant identified)
-  if (tenantId) {
-    const tenantKey = `${tenantId}:${ip}`;
-    const { success: tenantOk, reset: tenantReset } = await tenantRatelimit.limit(tenantKey);
-    if (!tenantOk) {
-      return new NextResponse(
-        JSON.stringify({ error: 'Tenant rate limit exceeded' }),
-        {
-          status: 429,
-          headers: {
-            'Content-Type': 'application/json',
-            'Retry-After': String(Math.ceil((tenantReset - Date.now()) / 1000)),
-          },
-        },
-      );
-    }
-  }
-
-  // 6. Auth gate (Clerk handles JWT verification internally)
-  if (!isPublicRoute(request)) {
-    const { userId, orgId } = await auth();
-
-    if (!userId) {
-      const signInUrl = new URL('/sign-in', request.url);
-      signInUrl.searchParams.set('redirect_url', request.url);
-      return NextResponse.redirect(signInUrl);
-    }
-
-    // For API routes, return 401 instead of redirect
-    if (isApiRoute(request) && !userId) {
-      return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Tenant <-> org isolation check
-    if (tenantId && orgId && orgId !== tenantId) {
-      return new NextResponse(JSON.stringify({ error: 'Forbidden' }), {
-        status: 403,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-  }
-
-  // 7. CSP nonce generation
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-  requestHeaders.set('x-nonce', nonce);
-
-  // 8. Build and attach security headers
-  const secHeaders = buildSecurityHeaders(nonce, tenantId);
-
-  const finalResponse = NextResponse.next({
-    request: { headers: requestHeaders },
-  });
-
-  for (const [key, value] of Object.entries(secHeaders)) {
-    finalResponse.headers.set(key, value);
-  }
-
-  // Forward diagnostic headers (stripped in production by Vercel edge)
-  if (process.env.NODE_ENV !== 'production') {
-    finalResponse.headers.set('x-debug-tenant', tenantId ?? 'unresolved');
-    finalResponse.headers.set('x-debug-geo', JSON.stringify(geo));
-  }
-
-  return finalResponse;
-});
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { generateNonce, buildCsp } from '@repo/security';
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths EXCEPT:
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico, sitemap.xml, robots.txt
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Apply to all routes EXCEPT static files and health checks
+    '/((?!_next/static|_next/image|favicon.ico|api/health|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|eot)$).*)',
   ],
 };
-```
 
----
-
-## Middleware Execution Performance Targets
-
-| Layer                            | P50    | P95   | Failure mode             |
-| -------------------------------- | ------ | ----- | ------------------------ |
-| Bot UA check                     | <0.1ms | 0.5ms | 403                      |
-| Global rate limit (Upstash edge) | 2ms    | 8ms   | 429                      |
-| Tenant resolution (Redis cached) | 1ms    | 4ms   | Continue (tenantId=null) |
-| Per-tenant rate limit            | 2ms    | 8ms   | 429                      |
-| Clerk JWT verification           | 12ms   | 18ms  | 401/redirect             |
-| Total middleware                 | ~18ms  | ~40ms | Fail closed              |
-
-Clerk's session validation averages 12.5ms at P50 and 18ms at P95. [clerk](https://clerk.com/articles/complete-authentication-guide-for-nextjs-app-router)
-
----
-
-## References
-
-- [Next.js Middleware Docs](https://nextjs.org/docs/app/building-your-application/routing/middleware)
-- [CVE-2025-29927: Middleware Authorization Bypass](https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass) [projectdiscovery](https://projectdiscovery.io/blog/nextjs-middleware-authorization-bypass)
-- [Clerk CVE-2025-29927 Advisory](https://clerk.com/blog/cve-2025-29927) [clerk](https://clerk.com/blog/cve-2025-29927)
-- [Upstash Ratelimit Overview](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) [upstash](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview)
-- [Upstash Dynamic Rate Limits (Jan 2026)](https://upstash.com/blog/dynamic-rate-limits) [upstash](https://upstash.com/blog/dynamic-rate-limits)
-- [Next.js CSP Guide](https://nextjs.org/docs/app/guides/content-security-policy) [nextjs](https://nextjs.org/docs/app/guides/content-security-policy)
-
----
-
----
-
-# `server-action-security-wrapper.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# server-action-security-wrapper.md
-```
-
-## Overview
-
-This document specifies `createServerAction()` — the platform's universal security wrapper for all Next.js Server Actions. Every Server Action in the codebase MUST be created through this factory. It enforces: Clerk authentication, tenant scoping, Zod input validation, per-action rate limiting, and structured error responses. CSRF protection is handled natively by Next.js (POST-only + Origin header check), so no manual token is required. [makerkit](https://makerkit.dev/blog/tutorials/secure-nextjs-server-actions)
-
----
-
-## Architecture
-
-```
-Client calls Server Action
-         │
-         ▼
-┌────────────────────────────┐
-│  createServerAction()      │
-│  ┌──────────────────────┐  │
-│  │ 1. Auth check        │  │ ← Clerk auth(), returns userId + orgId
-│  │    (fail → throw)    │  │
-│  ├──────────────────────┤  │
-│  │ 2. Tenant scoping    │  │ ← orgId must match x-tenant-id header
-│  │    (fail → throw)    │  │
-│  ├──────────────────────┤  │
-│  │ 3. Zod validation    │  │ ← Input schema parse
-│  │    (fail → return    │  │   structured error)
-│  │     field errors)    │  │
-│  ├──────────────────────┤  │
-│  │ 4. Rate limit        │  │ ← Per-action, per-user Upstash check
-│  │    (fail → throw)    │  │
-│  ├──────────────────────┤  │
-│  │ 5. Execute handler   │  │ ← Wrapped in try/catch + Sentry
-│  │    (fail → Sentry)   │  │
-│  └──────────────────────┘  │
-└────────────────────────────┘
-         │
-         ▼
-   ActionResult<TOutput>
-```
-
----
-
-## Core Implementation
-
-### `packages/server-actions/src/create-server-action.ts`
-
-```typescript
-import { auth } from '@clerk/nextjs/server';
-import * as Sentry from '@sentry/nextjs';
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-import { headers } from 'next/headers';
-import { z, type ZodSchema, type ZodError } from 'zod';
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-export type ActionSuccess<T> = {
-  success: true;
-  data: T;
-};
-
-export type ActionError = {
-  success: false;
-  error: string;
-  code: 'UNAUTHORIZED' | 'FORBIDDEN' | 'VALIDATION_ERROR' | 'RATE_LIMITED' | 'INTERNAL_ERROR';
-  fieldErrors?: Record<string, string[]>;
-};
-
-export type ActionResult<T> = ActionSuccess<T> | ActionError;
-
-export type ActionContext = {
-  userId: string;
-  tenantId: string;
-  orgId: string | null;
-};
-
-export type ServerActionHandler<TInput, TOutput> = (
-  input: TInput,
-  ctx: ActionContext
-) => Promise<TOutput>;
-
-export interface CreateServerActionOptions<TInput, TOutput> {
-  /** Zod schema for input validation */
-  schema: ZodSchema<TInput>;
-  /** The action handler receives validated input + auth context */
-  handler: ServerActionHandler<TInput, TOutput>;
-  /** Optional: allow unauthenticated callers (public actions) */
-  allowUnauthenticated?: boolean;
-  /** Optional: rate limit override (default: 20 req / 1 min per user) */
-  rateLimit?: { requests: number; window: string };
-  /** Optional: action name for rate limit key namespacing + Sentry tagging */
-  actionName?: string;
-}
-
-// ─── Redis singleton ──────────────────────────────────────────────────────────
-const redis = Redis.fromEnv();
-
-// ─── Default rate limit: 20 requests per minute per user ─────────────────────
-const defaultRatelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(20, '1 m'),
-  analytics: true,
-  prefix: 'rl:action',
-  ephemeralCache: new Map(),
-});
-
-const ratelimitCache = new Map<string, Ratelimit>();
-
-function getRatelimit(options?: { requests: number; window: string }): Ratelimit {
-  if (!options) return defaultRatelimit;
-  const key = `${options.requests}:${options.window}`;
-  if (!ratelimitCache.has(key)) {
-    ratelimitCache.set(
-      key,
-      new Ratelimit({
-        redis,
-        limiter: Ratelimit.slidingWindow(options.requests, options.window),
-        analytics: true,
-        prefix: 'rl:action:custom',
-        ephemeralCache: new Map(),
-      })
-    );
-  }
-  return ratelimitCache.get(key)!;
-}
-
-// ─── Factory ──────────────────────────────────────────────────────────────────
-
-export function createServerAction<TInput, TOutput>(
-  options: CreateServerActionOptions<TInput, TOutput>
-) {
-  const {
-    schema,
-    handler,
-    allowUnauthenticated = false,
-    rateLimit,
-    actionName = 'unknown',
-  } = options;
-
-  return async (rawInput: unknown): Promise<ActionResult<TOutput>> => {
-    return Sentry.withScope(async (scope) => {
-      scope.setTag('serverAction', actionName);
-
-      try {
-        // ── Step 1: Authentication ─────────────────────────────────────────
-        const { userId, orgId } = await auth();
-
-        if (!allowUnauthenticated && !userId) {
-          return {
-            success: false,
-            error: 'Authentication required',
-            code: 'UNAUTHORIZED',
-          } satisfies ActionError;
-        }
-
-        // ── Step 2: Tenant scoping ─────────────────────────────────────────
-        //    Architecture invariant: tenantId must be present in all actions
-        const headerStore = await headers();
-        const tenantId = headerStore.get('x-tenant-id');
-
-        if (!tenantId) {
-          Sentry.captureMessage(
-            `Server action ${actionName} called without x-tenant-id header`,
-            'warning'
-          );
-          return {
-            success: false,
-            error: 'Tenant context missing',
-            code: 'FORBIDDEN',
-          } satisfies ActionError;
-        }
-
-        // Verify orgId matches tenantId for authenticated actions
-        if (userId && orgId && orgId !== tenantId) {
-          scope.setTag('tenantMismatch', 'true');
-          Sentry.captureMessage(
-            `Tenant isolation violation in ${actionName}: orgId=${orgId} tenantId=${tenantId}`,
-            'error'
-          );
-          return {
-            success: false,
-            error: 'Forbidden',
-            code: 'FORBIDDEN',
-          } satisfies ActionError;
-        }
-
-        scope.setTag('tenantId', tenantId);
-        scope.setUser({ id: userId ?? 'anonymous' });
-
-        // ── Step 3: Input validation ───────────────────────────────────────
-        const parsed = schema.safeParse(rawInput);
-
-        if (!parsed.success) {
-          const zodError = parsed.error as ZodError;
-          const fieldErrors = zodError.flatten().fieldErrors as Record<string, string[]>;
-          return {
-            success: false,
-            error: 'Validation failed',
-            code: 'VALIDATION_ERROR',
-            fieldErrors,
-          } satisfies ActionError;
-        }
-
-        // ── Step 4: Rate limiting ──────────────────────────────────────────
-        //    Architecture invariant: rate limit key includes tenantId
-        const rl = getRatelimit(rateLimit);
-        const rlKey = `${tenantId}:${userId ?? 'anon'}:${actionName}`;
-        const { success: rlOk, reset } = await rl.limit(rlKey);
-
-        if (!rlOk) {
-          return {
-            success: false,
-            error: `Rate limit exceeded. Retry after ${new Date(reset).toISOString()}`,
-            code: 'RATE_LIMITED',
-          } satisfies ActionError;
-        }
-
-        // ── Step 5: Execute handler ────────────────────────────────────────
-        const ctx: ActionContext = {
-          userId: userId!,
-          tenantId,
-          orgId: orgId ?? null,
-        };
-
-        const data = await handler(parsed.data, ctx);
-
-        return { success: true, data } satisfies ActionSuccess<TOutput>;
-      } catch (err) {
-        Sentry.captureException(err, {
-          tags: { serverAction: actionName },
-        });
-
-        if (process.env.NODE_ENV === 'development') {
-          console.error(`[createServerAction:${actionName}]`, err);
-        }
-
-        return {
-          success: false,
-          error: 'An unexpected error occurred',
-          code: 'INTERNAL_ERROR',
-        } satisfies ActionError;
-      }
-    });
-  };
-}
-```
-
----
-
-## Usage Examples
-
-### Authenticated, tenant-scoped action
-
-```typescript
-// features/leads/actions/create-lead.action.ts
-'use server';
-
-import { createServerAction } from '@your-org/server-actions';
-import { createLeadSchema } from '../schemas/lead.schema';
-import { db } from '@/lib/db';
-
-export const createLeadAction = createServerAction({
-  actionName: 'createLead',
-  schema: createLeadSchema,
-  rateLimit: { requests: 10, window: '1 m' },
-  handler: async (input, ctx) => {
-    // ctx.tenantId is guaranteed present and verified
-    const lead = await db
-      .from('leads')
-      .insert({
-        ...input,
-        tenant_id: ctx.tenantId, // Architecture invariant: always scope to tenantId
-        created_by: ctx.userId,
-      })
-      .select()
-      .single();
-
-    return lead;
-  },
-});
-```
-
-### Public action (no auth required)
-
-```typescript
-// features/contact/actions/submit-contact.action.ts
-'use server';
-
-import { createServerAction } from '@your-org/server-actions';
-import { contactFormSchema } from '../schemas/contact.schema';
-
-export const submitContactAction = createServerAction({
-  actionName: 'submitContact',
-  schema: contactFormSchema,
-  allowUnauthenticated: true,
-  rateLimit: { requests: 3, window: '5 m' }, // Aggressive limit for public
-  handler: async (input, ctx) => {
-    // ctx.tenantId still present (from x-tenant-id header via middleware)
-    await sendLeadNotification({ ...input, tenantId: ctx.tenantId });
-    return { submitted: true };
-  },
-});
-```
-
-### Consuming in a React component
-
-```typescript
-// features/leads/ui/lead-form.tsx
-'use client';
-
-import { useActionState } from 'react';
-import { createLeadAction } from '../actions/create-lead.action';
-import type { ActionResult } from '@your-org/server-actions';
-
-const initialState: ActionResult<{ id: string }> = { success: false, error: '', code: 'INTERNAL_ERROR' };
-
-export function LeadForm() {
-  const [state, formAction, isPending] = useActionState(
-    async (_prev: typeof initialState, formData: FormData) => {
-      return createLeadAction(Object.fromEntries(formData));
-    },
-    initialState,
+export async function middleware(req: NextRequest) {
+  const nonce = generateNonce();
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // Build CSP (tenant-aware: read allowed domains from tenant context)
+  const tenantPlan = req.headers.get('x-tenant-plan');
+  const trustedDomains = getTrustedDomainsByPlan(tenantPlan);
+  const csp = buildCsp({ nonce, isDev, trustedDomains });
+
+  const requestHeaders = new Headers(req.headers);
+  // Pass nonce to Server Components via header
+  requestHeaders.set('x-nonce', nonce);
+  requestHeaders.set('Content-Security-Policy', csp);
+
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
+
+  // ─── Security Headers ─────────────────────────────────────────────────────
+  response.headers.set('Content-Security-Policy', csp);
+  response.headers.set(
+    'Strict-Transport-Security',
+    'max-age=63072000; includeSubDomains; preload' // 2 years, HSTS preload
   );
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('X-DNS-Prefetch-Control', 'off');
+  response.headers.set('X-XSS-Protection', '0'); // Disabled — CSP is the real protection
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
+  response.headers.set('Permissions-Policy', buildPermissionsPolicy(tenantPlan));
+  response.headers.set('Reporting-Endpoints', REPORTING_ENDPOINTS);
+
+  // Remove headers that leak server info
+  response.headers.delete('X-Powered-By');
+  response.headers.delete('Server');
+
+  return response;
+}
+
+function getTrustedDomainsByPlan(plan: string | null): string[] {
+  // Enterprise tenants may have additional trusted domains
+  // (e.g., their own analytics, fonts, or media CDN)
+  if (plan === 'enterprise') return [];
+  return [];
+}
+```
+
+### Reading the Nonce in Server Components
+
+The nonce must be accessed via `headers()` — **never via client-side JS**:
+
+```typescript
+// app/layout.tsx
+import { headers } from 'next/headers'
+import Script from 'next/script'
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  // Read nonce injected by middleware
+  // Requires dynamic rendering (PPR shell must be dynamic for nonce support)
+  const headersList = await headers()
+  const nonce = headersList.get('x-nonce') ?? ''
 
   return (
-    <form action={formAction}>
-      {/* fields */}
-      {!state.success && state.code === 'VALIDATION_ERROR' && (
-        <ul>
-          {Object.entries(state.fieldErrors ?? {}).map(([field, errors]) => (
-            <li key={field}>{errors.join(', ')}</li>
-          ))}
-        </ul>
-      )}
-      <button type="submit" disabled={isPending}>Submit</button>
-    </form>
-  );
+    <html lang="en">
+      <head>
+        {/* Inline scripts MUST carry the nonce */}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `window.__NONCE__ = "${nonce}";`,
+          }}
+        />
+      </head>
+      <body>
+        {children}
+        {/* Third-party scripts must use next/script with nonce */}
+        <Script
+          src="https://app.posthog.com/static/array.js"
+          nonce={nonce}
+          strategy="afterInteractive"
+        />
+      </body>
+    </html>
+  )
 }
 ```
 
 ---
 
-## Package Export
+## Static Headers via next.config.ts
 
-### `packages/server-actions/src/index.ts`
-
-```typescript
-export { createServerAction } from './create-server-action';
-export type {
-  ActionResult,
-  ActionSuccess,
-  ActionError,
-  ActionContext,
-} from './create-server-action';
-```
-
-### `packages/server-actions/package.json`
-
-```json
-{
-  "name": "@your-org/server-actions",
-  "version": "1.0.0",
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts"
-    }
-  },
-  "dependencies": {
-    "@clerk/nextjs": "^6.0.0",
-    "@sentry/nextjs": "^9.0.0",
-    "@upstash/ratelimit": "^2.0.0",
-    "@upstash/redis": "^1.34.0",
-    "zod": "^3.23.0"
-  }
-}
-```
-
----
-
-## CSRF Posture
-
-Next.js Server Actions have native CSRF protection via: [nextjs](https://nextjs.org/blog/security-nextjs-server-components-actions)
-
-- Only accept `POST` requests
-- Verify `Origin` header matches the deployment domain
-- Use internally generated, encrypted action IDs that cannot be forged by attackers
-
-Manual CSRF token injection is therefore **not needed** and would be redundant. [makerkit](https://makerkit.dev/blog/tutorials/secure-nextjs-server-actions)
-
----
-
-## References
-
-- [Next.js Security in Server Actions](https://nextjs.org/blog/security-nextjs-server-components-actions) [nextjs](https://nextjs.org/blog/security-nextjs-server-components-actions)
-- [Server Actions Security — 5 Vulnerabilities](https://makerkit.dev/blog/tutorials/secure-nextjs-server-actions) [makerkit](https://makerkit.dev/blog/tutorials/secure-nextjs-server-actions)
-- [Next.js Server Action and Frontend Security](https://www.querypie.com/features/documentation/blog/20/nextjs-server-action-security) [querypie](https://www.querypie.com/features/documentation/blog/20/nextjs-server-action-security)
-- [Next-level security: Next.js applications](https://www.vintasoftware.com/blog/security-nextjs-applications) [vintasoftware](https://www.vintasoftware.com/blog/security-nextjs-applications)
-
----
-
----
-
-# `security-headers-system.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# security-headers-system.md
-```
-
-## Overview
-
-This document specifies the complete HTTP security header system for all apps in the platform. Headers are applied at two layers: **middleware-level** (dynamic, nonce-bearing CSP) for all runtime responses, and **`next.config.ts`-level** (static headers) as a fallback for static assets and edge-cached responses. The combination achieves an A+ rating on [securityheaders.com](https://securityheaders.com). [nextjs](https://nextjs.org/docs/pages/guides/content-security-policy)
-
----
-
-## Header Architecture
-
-```
-┌───────────────────────────────────────────────────────────┐
-│                     Header Sources                        │
-│                                                           │
-│  next.config.ts headers()          middleware.ts          │
-│  ─────────────────────────         ──────────────────     │
-│  • Static fallback headers         • Dynamic CSP w/ nonce │
-│  • Applied at build time           • Applied at runtime   │
-│  • Cached with static assets       • Per-request nonce    │
-│  • No nonce support                • Tenant-aware report  │
-│                                      URI                  │
-└───────────────────────────────────────────────────────────┘
-         │                                    │
-         ▼                                    ▼
-    Edge Cache                          Dynamic Response
-    (CDN layer)                         (SSR / RSC)
-```
-
-**Rule:** The middleware CSP **always wins** (applied last, overrides static config headers at the edge). The `next.config.ts` headers serve as defense-in-depth for paths that bypass middleware (e.g. `/_next/static/**`). [nextjs](https://nextjs.org/docs/app/guides/content-security-policy)
-
----
-
-## Implementation
-
-### `apps/portal/next.config.ts` — Static Security Headers
+For routes that don't need nonces (API routes, static pages), apply security headers
+in `next.config.ts` — these are set at the CDN edge via Vercel:
 
 ```typescript
+// next.config.ts
 import type { NextConfig } from 'next';
 
-const securityHeaders = [
-  // Prevent MIME type sniffing
+const STATIC_SECURITY_HEADERS = [
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-DNS-Prefetch-Control', value: 'off' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+  { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
+  { key: 'Permissions-Policy', value: buildPermissionsPolicy() },
+  // Static CSP (no nonce — use hash-based for inline scripts if needed)
   {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
-  },
-  // Prevent clickjacking
-  {
-    key: 'X-Frame-Options',
-    value: 'DENY',
-  },
-  // HSTS: 2 years, includeSubDomains, preload-eligible
-  {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload',
-  },
-  // Referrer leakage prevention
-  {
-    key: 'Referrer-Policy',
-    value: 'strict-origin-when-cross-origin',
-  },
-  // Disable dangerous browser features
-  {
-    key: 'Permissions-Policy',
+    key: 'Content-Security-Policy',
     value: [
-      'camera=()',
-      'microphone=()',
-      'geolocation=()',
-      'payment=(self "https://js.stripe.com")',
-      'usb=()',
-      'bluetooth=()',
-      'accelerometer=()',
-      'gyroscope=()',
-      'magnetometer=()',
-      'midi=()',
-      'fullscreen=(self)',
-      'picture-in-picture=()',
-    ].join(', '),
-  },
-  // Cross-origin isolation (enables SharedArrayBuffer)
-  {
-    key: 'Cross-Origin-Opener-Policy',
-    value: 'same-origin',
-  },
-  {
-    key: 'Cross-Origin-Resource-Policy',
-    value: 'cross-origin',
-  },
-  {
-    key: 'Cross-Origin-Embedder-Policy',
-    value: 'credentialless',
-  },
-  // DNS prefetch control
-  {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on',
+      "default-src 'self'",
+      "script-src 'self' 'strict-dynamic'",
+      "style-src 'self' 'unsafe-inline'", // Relaxed for static — upgrade to nonce in middleware
+      "img-src 'self' data: https:",
+      "connect-src 'self' https://*.supabase.co https://api.stripe.com",
+      'frame-src https://js.stripe.com',
+      "object-src 'none'",
+      "base-uri 'self'",
+      'upgrade-insecure-requests',
+    ].join('; '),
   },
 ];
 
@@ -2839,17 +331,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        // Apply to all routes
-        source: '/(.*)',
-        headers: securityHeaders,
-      },
-      {
-        // Static assets: long-lived cache but still secure
-        source: '/_next/static/(.*)',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
-        ],
+        source: '/:path*',
+        headers: STATIC_SECURITY_HEADERS,
       },
     ];
   },
@@ -2860,2523 +343,2081 @@ export default nextConfig;
 
 ---
 
-### `packages/security/src/csp-builder.ts` — Dynamic CSP Builder
+## Tenant-Aware Header Overrides
+
+Some enterprise tenants may require custom CSP adjustments — e.g., allowing their own
+CDN domain or embedding your app in their portal:
 
 ```typescript
-export interface CspConfig {
-  nonce: string;
-  tenantId: string | null;
-  isDev: boolean;
-  /** Additional allowed script origins for this tenant */
-  extraScriptSrc?: string[];
-  /** Additional allowed connect origins for this tenant */
-  extraConnectSrc?: string[];
+// packages/security/src/tenant-csp.ts
+interface TenantCspOverrides {
+  allowedImageDomains?: string[];
+  allowedConnectDomains?: string[];
+  allowIframe?: boolean; // Enterprise: embed in tenant's portal
+  iframeAllowedOrigins?: string[];
 }
 
-export interface CspDirectives {
-  [directive: string]: string[];
-}
+export function buildTenantCsp(baseNonce: string, overrides: TenantCspOverrides = {}): string {
+  const extraImages = overrides.allowedImageDomains ?? [];
+  const extraConnect = overrides.allowedConnectDomains ?? [];
 
-/**
- * Builds a strict nonce-based CSP.
- * Architecture invariant: report-uri always includes tenantId.
- */
-export function buildCsp(config: CspConfig): string {
-  const { nonce, tenantId, isDev, extraScriptSrc = [], extraConnectSrc = [] } = config;
+  // Override frame-ancestors for enterprise iframe embedding
+  const frameAncestors =
+    overrides.allowIframe && overrides.iframeAllowedOrigins?.length
+      ? overrides.iframeAllowedOrigins.join(' ')
+      : "'none'";
 
-  const directives: CspDirectives = {
-    'default-src': ["'self'"],
-    'script-src': [
-      "'self'",
-      `'nonce-${nonce}'`,
-      "'strict-dynamic'",
-      ...(isDev ? ["'unsafe-eval'"] : []),
-      // Clerk
-      'https://clerk.accounts.dev',
-      'https://*.clerk.accounts.dev',
-      // Stripe
-      'https://js.stripe.com',
-      // Cal.com
-      'https://cal.com',
-      'https://*.cal.com',
-      ...extraScriptSrc,
-    ],
-    'style-src': ["'self'", "'unsafe-inline'"],
-    'img-src': [
-      "'self'",
-      'blob:',
-      'data:',
-      'https://*.supabase.co',
-      'https://img.clerk.com',
-      'https://res.cloudinary.com',
-    ],
-    'font-src': ["'self'", 'data:'],
-    'connect-src': [
-      "'self'",
-      // Supabase
-      'https://*.supabase.co',
-      'wss://*.supabase.co',
-      // Clerk
-      'https://clerk.accounts.dev',
-      'https://*.clerk.accounts.dev',
-      // Stripe
-      'https://api.stripe.com',
-      // Sentry
-      'https://o*.ingest.sentry.io',
-      'https://o*.ingest.us.sentry.io',
-      // Tinybird
-      'https://api.tinybird.co',
-      'https://*.tinybird.co',
-      ...extraConnectSrc,
-    ],
-    'frame-src': [
-      "'self'",
-      'https://js.stripe.com',
-      'https://hooks.stripe.com',
-      'https://cal.com',
-      'https://*.cal.com',
-    ],
-    'frame-ancestors': ["'none'"],
-    'object-src': ["'none'"],
-    'base-uri': ["'self'"],
-    'form-action': ["'self'"],
-    'upgrade-insecure-requests': [],
-    'report-uri': [`/api/csp-report?tenantId=${encodeURIComponent(tenantId ?? 'unknown')}`],
-  };
-
-  return Object.entries(directives)
-    .map(([key, values]) => (values.length > 0 ? `${key} ${values.join(' ')}` : key))
-    .join('; ');
+  return buildCsp({
+    nonce: baseNonce,
+    trustedDomains: [...extraImages, ...extraConnect],
+  }).replace("frame-ancestors 'none'", `frame-ancestors ${frameAncestors}`);
 }
 ```
 
 ---
 
-### `apps/portal/app/api/csp-report/route.ts` — CSP Violation Reporter
+## Permissions Policy
+
+Control which browser APIs are available to your app and third-party scripts:
 
 ```typescript
-import * as Sentry from '@sentry/nextjs';
-import { type NextRequest, NextResponse } from 'next/server';
-
-interface CspReport {
-  'csp-report': {
-    'document-uri': string;
-    referrer: string;
-    'violated-directive': string;
-    'effective-directive': string;
-    'original-policy': string;
-    'blocked-uri': string;
-    'status-code': number;
-    'script-sample'?: string;
-  };
+// packages/security/src/permissions-policy.ts
+interface PermissionsPolicyOptions {
+  plan?: string;
 }
 
-export async function POST(request: NextRequest) {
-  const tenantId = request.nextUrl.searchParams.get('tenantId') ?? 'unknown';
+export function buildPermissionsPolicy(plan?: string | null): string {
+  const policies: Record<string, string> = {
+    // Camera/mic/geo: only allow if explicitly needed (default: none)
+    camera: '()', // Blocked
+    microphone: '()', // Blocked
+    geolocation: '(self)', // Only self — for local SEO features
+    fullscreen: '(self)', // For video embeds
+    payment: '()', // Stripe uses its own iframe — never expose API
+    usb: '()', // Block hardware access
+    bluetooth: '()',
+    magnetometer: '()',
+    gyroscope: '()',
+    accelerometer: '()',
+    'ambient-light-sensor': '()',
+    autoplay: '()', // No autoplay — accessibility
+    'picture-in-picture': '(self)',
+    'screen-wake-lock': '()',
+    serial: '()',
+    'xr-spatial-tracking': '()',
 
-  try {
-    const report = (await request.json()) as CspReport;
-    const cspReport = report['csp-report'];
+    // Enterprise plans may need additional permissions for embedded widgets
+    ...(plan === 'enterprise'
+      ? {
+          geolocation: '(self)',
+        }
+      : {}),
+  };
 
-    // Filter noise: browser extension violations
-    const blockedUri = cspReport['blocked-uri'];
-    if (blockedUri.startsWith('chrome-extension://') || blockedUri === 'about') {
-      return NextResponse.json({ ok: true });
+  return Object.entries(policies)
+    .map(([key, value]) => `${key}=${value}`)
+    .join(', ');
+}
+```
+
+---
+
+## Header Audit & CI Enforcement
+
+### Automated Header Testing Script
+
+```typescript
+// scripts/audit-security-headers.ts
+import { execSync } from 'node:child_process'
+
+const REQUIRED_HEADERS = [
+  'content-security-policy',
+  'strict-transport-security',
+  'x-frame-options',
+  'x-content-type-options',
+  'referrer-policy',
+  'permissions-policy',
+  'cross-origin-opener-policy',
+  'cross-origin-resource-policy',
+]
+
+const FORBIDDEN_HEADERS = [
+  'x-powered-by',
+  'server',
+]
+
+async function auditHeaders(url: string) {
+  const response = await fetch(url, { method: 'HEAD' })
+  const issues: string[] = []
+
+  for (const header of REQUIRED_HEADERS) {
+    if (!response.headers.has(header)) {
+      issues.push(`MISSING: ${header}`)
     }
-
-    Sentry.captureMessage('CSP Violation', {
-      level: 'warning',
-      tags: {
-        tenantId,
-        violatedDirective: cspReport['violated-directive'],
-        blockedUri,
-      },
-      extra: { report: cspReport },
-    });
-  } catch {
-    // Malformed report — ignore
   }
 
-  return NextResponse.json({ ok: true });
-}
-```
-
----
-
-## Header Reference Table
-
-| Header                         | Value                                          | Purpose                        |
-| ------------------------------ | ---------------------------------------------- | ------------------------------ |
-| `Content-Security-Policy`      | Nonce-based (see builder)                      | XSS, data injection prevention |
-| `Strict-Transport-Security`    | `max-age=63072000; includeSubDomains; preload` | Force HTTPS for 2 years        |
-| `X-Frame-Options`              | `DENY`                                         | Clickjacking prevention        |
-| `X-Content-Type-Options`       | `nosniff`                                      | MIME sniffing prevention       |
-| `Referrer-Policy`              | `strict-origin-when-cross-origin`              | Referrer leakage control       |
-| `Permissions-Policy`           | (see above)                                    | Feature/API gating             |
-| `Cross-Origin-Opener-Policy`   | `same-origin`                                  | Cross-origin isolation         |
-| `Cross-Origin-Resource-Policy` | `cross-origin`                                 | CORP for CDN assets            |
-| `Cross-Origin-Embedder-Policy` | `credentialless`                               | Enable `SharedArrayBuffer`     |
-| `X-DNS-Prefetch-Control`       | `on`                                           | DNS performance (safe)         |
-
----
-
-## Nonce Flow in Server Components
-
-```typescript
-// app/layout.tsx — Reading nonce for inline scripts
-import { headers } from 'next/headers';
-import Script from 'next/script';
-
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const headerStore = await headers();
-  const nonce = headerStore.get('x-nonce') ?? '';
-
-  return (
-    <html lang="en">
-      <head>
-        {/* Architecture invariant: third-party scripts use next/script afterInteractive */}
-        <Script
-          src="https://js.stripe.com/v3/"
-          strategy="afterInteractive"
-          nonce={nonce}
-        />
-      </head>
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
----
-
-## References
-
-- [Next.js CSP Documentation](https://nextjs.org/docs/app/guides/content-security-policy) [nextjs](https://nextjs.org/docs/app/guides/content-security-policy)
-- [Next.js Headers Config](https://nextjs.org/docs/pages/api-reference/config/next-config-js/headers) [nextjs](https://nextjs.org/docs/pages/api-reference/config/next-config-js/headers)
-- [Security Headers Guide (2025/2026)](https://github.com/VolkanSah/Security-Headers-Guide) [github](https://github.com/VolkanSah/Security-Headers-Guide)
-- [Security Headers Best Practices](https://barrion.io/blog/security-headers-guide) [barrion](https://barrion.io/blog/security-headers-guide)
-
----
-
----
-
-# `multi-layer-rate-limiting.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# multi-layer-rate-limiting.md
-```
-
-## Overview
-
-The platform implements a three-layer rate limiting strategy using Upstash Ratelimit: **Edge** (global IP protection in middleware), **API** (per-route, per-tenant protection in Route Handlers), and **Action** (per-server-action, per-user protection via `createServerAction()`). Each layer uses a different algorithm tuned to its traffic profile. All rate limit keys include `tenantId` per platform invariant. [upstash](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview)
-
----
-
-## Layer Architecture
-
-```
-                     Incoming Request
-                            │
-              ┌─────────────▼─────────────┐
-              │   LAYER 1: EDGE (Global)   │  middleware.ts
-              │   Algorithm: Sliding Window │  Key: ip
-              │   Limit: 10 req/sec        │  Redis prefix: rl:global
-              └─────────────┬─────────────┘
-                            │ pass
-              ┌─────────────▼─────────────┐
-              │  LAYER 2: API (Per-Route)  │  Route Handler / tRPC
-              │  Algorithm: Token Bucket   │  Key: tenantId:userId:route
-              │  Limit: varies by plan     │  Redis prefix: rl:api
-              └─────────────┬─────────────┘
-                            │ pass
-              ┌─────────────▼─────────────┐
-              │  LAYER 3: ACTION          │  createServerAction()
-              │  Algorithm: Sliding Window │  Key: tenantId:userId:action
-              │  Limit: 20 req/min        │  Redis prefix: rl:action
-              └─────────────┬─────────────┘
-                            │ pass
-                       Route Handler
-```
-
----
-
-## Layer 1: Edge Global Rate Limit
-
-Applied in `middleware.ts` (see `security-middleware-implementation.md`). Uses **sliding window** — appropriate for smoothing bursty traffic. [upstash](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview)
-
-```typescript
-// packages/ratelimit/src/edge.ts
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-
-export const edgeRatelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(10, '1 s'),
-  analytics: true,
-  prefix: 'rl:global',
-  ephemeralCache: new Map(), // In-process cache reduces Redis calls for blocked IPs
-});
-```
-
----
-
-## Layer 2: API Route Rate Limit
-
-Applied in Route Handlers using a `withRateLimit()` HOF. Uses **token bucket** — permits short bursts while enforcing sustained limits. [upstash](https://upstash.com/blog/dynamic-rate-limits)
-
-```typescript
-// packages/ratelimit/src/api.ts
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-
-const redis = Redis.fromEnv();
-
-export type PlanTier = 'free' | 'pro' | 'enterprise';
-
-/**
- * Per-plan rate limit configurations.
- * Architecture invariant: key always includes tenantId.
- */
-const PLAN_LIMITS: Record<PlanTier, { requests: number; window: string; burst: number }> = {
-  free: { requests: 60, window: '1 m', burst: 10 },
-  pro: { requests: 600, window: '1 m', burst: 50 },
-  enterprise: { requests: 6000, window: '1 m', burst: 200 },
-};
-
-const ratelimitByPlan = Object.fromEntries(
-  Object.entries(PLAN_LIMITS).map(([plan, config]) => [
-    plan,
-    new Ratelimit({
-      redis,
-      limiter: Ratelimit.tokenBucket(config.requests, config.window, config.burst),
-      analytics: true,
-      prefix: `rl:api:${plan}`,
-      ephemeralCache: new Map(),
-    }),
-  ])
-) as Record<PlanTier, Ratelimit>;
-
-export interface RateLimitResult {
-  success: boolean;
-  limit: number;
-  remaining: number;
-  reset: number;
-}
-
-/**
- * Rate limit an API request by tenantId + userId.
- * Falls back to 'free' tier if plan unknown.
- */
-export async function checkApiRateLimit(params: {
-  tenantId: string;
-  userId: string;
-  routeKey: string;
-  plan?: PlanTier;
-}): Promise<RateLimitResult> {
-  const { tenantId, userId, routeKey, plan = 'free' } = params;
-  // Architecture invariant: key includes tenantId
-  const key = `${tenantId}:${userId}:${routeKey}`;
-  return ratelimitByPlan[plan].limit(key);
-}
-```
-
-### Usage in a Route Handler
-
-```typescript
-// app/api/leads/route.ts
-import { auth } from '@clerk/nextjs/server';
-import { checkApiRateLimit } from '@your-org/ratelimit/api';
-import { headers } from 'next/headers';
-import { type NextRequest, NextResponse } from 'next/server';
-
-export async function GET(request: NextRequest) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const headerStore = await headers();
-  const tenantId = headerStore.get('x-tenant-id');
-  if (!tenantId) return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
-
-  const rl = await checkApiRateLimit({
-    tenantId,
-    userId,
-    routeKey: 'GET:/api/leads',
-    plan: 'pro', // Fetch from Stripe subscription in production
-  });
-
-  if (!rl.success) {
-    return NextResponse.json(
-      { error: 'Rate limit exceeded' },
-      {
-        status: 429,
-        headers: {
-          'X-RateLimit-Limit': String(rl.limit),
-          'X-RateLimit-Remaining': String(rl.remaining),
-          'X-RateLimit-Reset': String(rl.reset),
-          'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)),
-        },
-      }
-    );
+  for (const header of FORBIDDEN_HEADERS) {
+    if (response.headers.has(header)) {
+      issues.push(`LEAKING: ${header} = ${response.headers.get(header)}`)
+    }
   }
 
-  // ... handle request
-}
-```
-
----
-
-## Layer 3: Action Rate Limit
-
-Built into `createServerAction()` (see `server-action-security-wrapper.md`). Sensitive actions get tighter limits:
-
-```typescript
-// Aggressive limits for auth-adjacent actions
-export const requestPasswordResetAction = createServerAction({
-  actionName: 'requestPasswordReset',
-  schema: z.object({ email: z.string().email() }),
-  allowUnauthenticated: true,
-  rateLimit: { requests: 3, window: '15 m' }, // 3 per 15 minutes
-  handler: async (input, ctx) => {
-    /* ... */
-  },
-});
-
-// Normal limits for data mutations
-export const updateProfileAction = createServerAction({
-  actionName: 'updateProfile',
-  schema: updateProfileSchema,
-  rateLimit: { requests: 30, window: '1 m' },
-  handler: async (input, ctx) => {
-    /* ... */
-  },
-});
-```
-
----
-
-## Dynamic Rate Limits (Upstash Jan 2026 Feature)
-
-Upstash introduced `dynamicLimits` in January 2026, allowing runtime limit overrides without redeployment. This is useful for temporarily throttling a misbehaving tenant. [upstash](https://upstash.com/blog/dynamic-rate-limits)
-
-```typescript
-// packages/ratelimit/src/dynamic.ts
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
-
-const redis = Redis.fromEnv();
-
-export const dynamicRatelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(100, '1 m'),
-  analytics: true,
-  prefix: 'rl:dynamic',
-  // enableDynamicLimits allows per-identifier overrides stored in Redis
-  // See: https://upstash.com/blog/dynamic-rate-limits
-});
-
-/**
- * Throttle a specific tenant at runtime (e.g. from super-admin dashboard).
- * Architecture invariant: key includes tenantId.
- */
-export async function throttleTenant(tenantId: string, requestsPerMin: number) {
-  // Store dynamic limit override in Redis
-  await redis.set(
-    `rl:dynamic:override:${tenantId}`,
-    JSON.stringify({ limit: requestsPerMin }),
-    { ex: 3600 } // 1 hour override
-  );
-}
-```
-
----
-
-## Rate Limit Monitoring
-
-```typescript
-// packages/ratelimit/src/analytics.ts
-import { Redis } from '@upstash/redis';
-
-const redis = Redis.fromEnv();
-
-/**
- * Fetch rate limit analytics for a tenant (past 24h).
- * Used by super-admin dashboard.
- */
-export async function getTenantRateLimitStats(tenantId: string) {
-  const keys = await redis.keys(`rl:*:${tenantId}:*`);
-  const stats = await Promise.all(
-    keys.map(async (key) => ({
-      key,
-      count: (await redis.get<number>(key)) ?? 0,
-    }))
-  );
-  return stats.sort((a, b) => b.count - a.count).slice(0, 20);
-}
-```
-
----
-
-## Rate Limit Limit Reference
-
-| Layer            | Algorithm      | Default Limit   | Key Pattern              | 429 Headers       |
-| ---------------- | -------------- | --------------- | ------------------------ | ----------------- |
-| Edge (global)    | Sliding Window | 10 req/s per IP | `ip`                     | `Retry-After`     |
-| API (free)       | Token Bucket   | 60 req/min      | `tenantId:userId:route`  | `X-RateLimit-*`   |
-| API (pro)        | Token Bucket   | 600 req/min     | `tenantId:userId:route`  | `X-RateLimit-*`   |
-| API (enterprise) | Token Bucket   | 6000 req/min    | `tenantId:userId:route`  | `X-RateLimit-*`   |
-| Action (default) | Sliding Window | 20 req/min      | `tenantId:userId:action` | none (JSON error) |
-| Action (auth)    | Sliding Window | 3 per 15 min    | `tenantId:userId:action` | none (JSON error) |
-
----
-
-## References
-
-- [Upstash Ratelimit Overview](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) [upstash](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview)
-- [Upstash Dynamic Rate Limits (Jan 2026)](https://upstash.com/blog/dynamic-rate-limits) [upstash](https://upstash.com/blog/dynamic-rate-limits)
-- [Next.js Rate Limiting Patterns](https://github.com/vercel/next.js/discussions/79579) [github](https://github.com/vercel/next.js/discussions/79579)
-
----
-
----
-
-# `secrets-manager.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# secrets-manager.md
-```
-
-## Overview
-
-This document specifies the platform's secret management strategy: environment variable validation with Zod at startup, a secrets rotation protocol, and the Doppler → Vercel env sync pipeline. Every secret is validated at boot time — the application fails fast rather than running with undefined credentials. The strategy supports both Vercel's native environment variable system and Doppler for teams requiring centralized rotation and audit trails. [doppler](https://www.doppler.com/blog/dynamic-secrets-in-action)
-
----
-
-## Architecture
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                  Secret Lifecycle                         │
-│                                                          │
-│  Doppler (source of truth)                               │
-│       │                                                  │
-│       ├─── Doppler CLI sync ──► Vercel Env Vars          │
-│       │                              │                   │
-│       ├─── GitHub Actions ◄──────────┘                   │
-│       │    (DOPPLER_TOKEN secret)                        │
-│       │                                                  │
-│       └─── Auto-rotation ──► Webhook ──► Vercel rotate   │
-│            (30-day schedule)              API             │
-│                                                          │
-│  Environment Hierarchy:                                  │
-│  doppler/production ──► vercel/production                │
-│  doppler/staging    ──► vercel/preview                   │
-│  doppler/dev        ──► .env.local (gitignored)          │
-└──────────────────────────────────────────────────────────┘
-```
-
----
-
-## Zod Environment Validation
-
-### `packages/env/src/server.ts`
-
-```typescript
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
-
-/**
- * Server-side environment schema.
- * Application will throw at startup if any required variable is missing or invalid.
- * Never import this in client-side code.
- */
-export const serverEnv = createEnv({
-  server: {
-    // ── Node ──────────────────────────────────────────────────────────
-    NODE_ENV: z.enum(['development', 'test', 'production']),
-
-    // ── Database ──────────────────────────────────────────────────────
-    DATABASE_URL: z
-      .string()
-      .url()
-      .refine((url) => url.startsWith('postgresql://'), 'Must be a PostgreSQL URL'),
-    DATABASE_POOL_URL: z
-      .string()
-      .url()
-      .refine((url) => url.includes('supavisor') || url.includes('pooler'), {
-        message: 'Pool URL must use Supavisor',
-      }),
-    SUPABASE_URL: z.string().url(),
-    SUPABASE_ANON_KEY: z.string().min(100),
-    SUPABASE_SERVICE_ROLE_KEY: z.string().min(100),
-
-    // ── Auth ──────────────────────────────────────────────────────────
-    CLERK_SECRET_KEY: z.string().startsWith('sk_'),
-    CLERK_WEBHOOK_SECRET: z.string().startsWith('whsec_'),
-
-    // ── Payments ──────────────────────────────────────────────────────
-    STRIPE_SECRET_KEY: z
-      .string()
-      .startsWith('sk_')
-      .refine(
-        (key) =>
-          process.env.NODE_ENV === 'production'
-            ? key.startsWith('sk_live_')
-            : key.startsWith('sk_test_'),
-        { message: 'Wrong Stripe key for environment' }
-      ),
-    STRIPE_WEBHOOK_SECRET: z.string().startsWith('whsec_'),
-    STRIPE_PRICE_ID_PRO_MONTHLY: z.string().startsWith('price_'),
-    STRIPE_PRICE_ID_PRO_ANNUAL: z.string().startsWith('price_'),
-    STRIPE_PRICE_ID_ENTERPRISE_MONTHLY: z.string().startsWith('price_'),
-
-    // ── Email ─────────────────────────────────────────────────────────
-    RESEND_API_KEY: z.string().startsWith('re_'),
-    POSTMARK_SERVER_TOKEN: z.string().min(20),
-
-    // ── Upstash ───────────────────────────────────────────────────────
-    UPSTASH_REDIS_REST_URL: z.string().url(),
-    UPSTASH_REDIS_REST_TOKEN: z.string().min(20),
-    QSTASH_TOKEN: z.string().min(20),
-    QSTASH_CURRENT_SIGNING_KEY: z.string().min(20),
-    QSTASH_NEXT_SIGNING_KEY: z.string().min(20),
-
-    // ── CMS ───────────────────────────────────────────────────────────
-    SANITY_API_TOKEN: z.string().min(20),
-    SANITY_WEBHOOK_SECRET: z.string().min(20),
-
-    // ── Analytics ─────────────────────────────────────────────────────
-    TINYBIRD_API_KEY: z.string().min(20),
-
-    // ── Observability ─────────────────────────────────────────────────
-    SENTRY_AUTH_TOKEN: z.string().min(20),
-    SENTRY_DSN: z.string().url(),
-
-    // ── Cal.com ───────────────────────────────────────────────────────
-    CALCOM_API_KEY: z.string().min(20),
-    CALCOM_WEBHOOK_SECRET: z.string().min(20),
-
-    // ── Vercel ────────────────────────────────────────────────────────
-    VERCEL_TOKEN: z.string().min(20).optional(),
-
-    // ── PQC ───────────────────────────────────────────────────────────
-    PQC_PRIVATE_KEY_HEX: z.string().length(64).optional(), // ML-KEM-768 private key hex
-  },
-
-  runtimeEnv: {
-    NODE_ENV: process.env.NODE_ENV,
-    DATABASE_URL: process.env.DATABASE_URL,
-    DATABASE_POOL_URL: process.env.DATABASE_POOL_URL,
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
-    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
-    STRIPE_PRICE_ID_PRO_MONTHLY: process.env.STRIPE_PRICE_ID_PRO_MONTHLY,
-    STRIPE_PRICE_ID_PRO_ANNUAL: process.env.STRIPE_PRICE_ID_PRO_ANNUAL,
-    STRIPE_PRICE_ID_ENTERPRISE_MONTHLY: process.env.STRIPE_PRICE_ID_ENTERPRISE_MONTHLY,
-    RESEND_API_KEY: process.env.RESEND_API_KEY,
-    POSTMARK_SERVER_TOKEN: process.env.POSTMARK_SERVER_TOKEN,
-    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
-    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
-    QSTASH_TOKEN: process.env.QSTASH_TOKEN,
-    QSTASH_CURRENT_SIGNING_KEY: process.env.QSTASH_CURRENT_SIGNING_KEY,
-    QSTASH_NEXT_SIGNING_KEY: process.env.QSTASH_NEXT_SIGNING_KEY,
-    SANITY_API_TOKEN: process.env.SANITY_API_TOKEN,
-    SANITY_WEBHOOK_SECRET: process.env.SANITY_WEBHOOK_SECRET,
-    TINYBIRD_API_KEY: process.env.TINYBIRD_API_KEY,
-    SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
-    SENTRY_DSN: process.env.SENTRY_DSN,
-    CALCOM_API_KEY: process.env.CALCOM_API_KEY,
-    CALCOM_WEBHOOK_SECRET: process.env.CALCOM_WEBHOOK_SECRET,
-    VERCEL_TOKEN: process.env.VERCEL_TOKEN,
-    PQC_PRIVATE_KEY_HEX: process.env.PQC_PRIVATE_KEY_HEX,
-  },
-
-  // Skip validation in Jest (vars are mocked)
-  skipValidation: process.env.SKIP_ENV_VALIDATION === 'true',
-
-  // Throw on access of unknown env var (prevents accidental process.env usage)
-  emptyStringAsUndefined: true,
-});
-```
-
-### `packages/env/src/client.ts`
-
-```typescript
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
-
-/** Client-safe environment variables (prefixed NEXT_PUBLIC_). */
-export const clientEnv = createEnv({
-  client: {
-    NEXT_PUBLIC_ROOT_DOMAIN: z.string().min(3),
-    NEXT_PUBLIC_APP_URL: z.string().url(),
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().startsWith('pk_'),
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().startsWith('pk_'),
-    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(100),
-    NEXT_PUBLIC_SENTRY_DSN: z.string().url(),
-    NEXT_PUBLIC_CALCOM_EMBED_URL: z.string().url().optional(),
-    NEXT_PUBLIC_TINYBIRD_TRACKER_TOKEN: z.string().min(20).optional(),
-  },
-
-  runtimeEnv: {
-    NEXT_PUBLIC_ROOT_DOMAIN: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-    NEXT_PUBLIC_CALCOM_EMBED_URL: process.env.NEXT_PUBLIC_CALCOM_EMBED_URL,
-    NEXT_PUBLIC_TINYBIRD_TRACKER_TOKEN: process.env.NEXT_PUBLIC_TINYBIRD_TRACKER_TOKEN,
-  },
-});
-```
-
----
-
-## Secret Rotation Protocol
-
-### Rotation Triggers
-
-| Trigger              | Cadence              | Method                   |
-| -------------------- | -------------------- | ------------------------ |
-| Scheduled            | 30-day auto-rotation | Doppler → Vercel webhook |
-| Security audit       | On-demand            | Manual Doppler rotation  |
-| Compromise detected  | Immediate            | Break-glass runbook      |
-| Employee offboarding | Within 1 hour        | Doppler team key revoke  |
-
-### Vercel Secrets Rotation API
-
-Vercel supports synchronous and asynchronous rotation callbacks as of January 2025. [vercel](https://vercel.com/docs/integrations/create-integration/secrets-rotation)
-
-```typescript
-// apps/super-admin/app/api/rotate-secrets/route.ts
-import { type NextRequest, NextResponse } from 'next/server';
-import { serverEnv } from '@your-org/env/server';
-
-interface RotationRequest {
-  projectId: string;
-  secretName: string;
-  reason?: string;
-  delayOldSecretsExpirationHours?: number;
-}
-
-/**
- * Vercel calls this endpoint during secret rotation.
- * Returns new secret values synchronously.
- * Architecture invariant: protected by Vercel webhook signature.
- */
-export async function POST(request: NextRequest) {
-  const signature = request.headers.get('x-vercel-signature');
-  if (!signature) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  // Validate HSTS: must include preload and be ≥ 1 year
+  const hsts = response.headers.get('strict-transport-security')
+  if (hsts) {
+    const maxAge = parseInt(hsts.match(/max-age=(\d+)/)?. ?? '0')
+    if (maxAge < 31_536_000) {
+      issues.push(`WEAK HSTS: max-age=${maxAge} (minimum: 31536000 = 1 year)`)
+    }
+    if (!hsts.includes('includeSubDomains')) {
+      issues.push('WEAK HSTS: missing includeSubDomains')
+    }
   }
 
-  const body = (await request.json()) as RotationRequest;
+  // Validate CSP: must not contain 'unsafe-inline' or 'unsafe-eval'
+  const csp = response.headers.get('content-security-policy')
+  if (csp) {
+    if (csp.includes("'unsafe-inline'") && !csp.includes('nonce-')) {
+      issues.push("WEAK CSP: 'unsafe-inline' without nonce")
+    }
+    if (csp.includes("'unsafe-eval'") && process.env.NODE_ENV !== 'development') {
+      issues.push("WEAK CSP: 'unsafe-eval' in production")
+    }
+  }
 
-  // Log rotation event to Sentry for audit trail
-  const { captureMessage } = await import('@sentry/nextjs');
-  captureMessage(`Secret rotation triggered: ${body.secretName}`, {
-    level: 'info',
-    tags: { rotation: 'true', secretName: body.secretName },
-  });
-
-  // Synchronous rotation response
-  return NextResponse.json({
-    sync: true,
-    secrets: [
-      {
-        name: body.secretName,
-        value: await generateNewSecret(body.secretName),
-      },
-    ],
-  });
+  return { url, issues, passed: issues.length === 0 }
 }
 
-async function generateNewSecret(secretName: string): Promise<string> {
-  // In practice, call the relevant provider API (Stripe, Resend, etc.)
-  // to generate a new key, then return it.
-  // This is a stub — implement per-provider rotation logic.
-  throw new Error(`Rotation for ${secretName} not yet implemented`);
+// Run in CI:
+// pnpm tsx scripts/audit-security-headers.ts https://staging.yoursaas.com
+const results = await Promise.all([
+  auditHeaders(process.argv ?? 'https://localhost:3000'),
+])
+
+for (const result of results) {
+  if (!result.passed) {
+    console.error(`❌ ${result.url}:`)
+    result.issues.forEach(i => console.error(`   - ${i}`))
+    process.exit(1)
+  } else {
+    console.log(`✅ ${result.url}: All security headers present`)
+  }
 }
 ```
 
----
-
-## Doppler → Vercel Sync (CI/CD)
-
-### `.github/workflows/sync-secrets.yml`
+### CI Integration
 
 ```yaml
-name: Sync Secrets to Vercel
+# .github/workflows/security-headers.yml
+name: Security Headers Audit
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 2 * * 1' # Every Monday at 2am UTC
+  deployment_status:
 
 jobs:
-  sync:
+  audit:
+    if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
-      - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v3
-
-      - name: Sync production secrets to Vercel
-        env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          doppler secrets download \
-            --project your-saas \
-            --config production \
-            --format env \
-            --no-file | while IFS='=' read -r key value; do
-              vercel env add "$key" production <<< "$value" --token="$VERCEL_TOKEN" || true
-            done
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Audit Security Headers
+        run: pnpm tsx scripts/audit-security-headers.ts ${{ github.event.deployment_status.environment_url }}
 ```
 
 ---
 
-## Break-Glass Secret Rotation Runbook
+## Post-Quantum Readiness Notes
 
-When a secret compromise is detected: [doppler](https://www.doppler.com/blog/lifecycle-secrets-security-posture)
+> **Timeline:** NIST finalized FIPS 203 (ML-KEM), FIPS 204 (ML-DSA), FIPS 205
+> (SLH-DSA) in August 2024. TLS 1.3 with hybrid PQC key exchange is being rolled
+> out by Cloudflare and major CDNs through 2025–2026.
 
-```
-1. CONTAIN
-   ├── Immediately revoke the compromised key at source (Stripe/Resend/etc.)
-   ├── Identify exposure window from audit log
-   └── Block suspicious IP addresses via Upstash deny list
+**What this means for your app today:**
 
-2. ROTATE
-   ├── Generate new secret at provider dashboard
-   ├── Update Doppler: doppler secrets set KEY_NAME=<new_value>
-   ├── Trigger Doppler → Vercel sync
-   └── Verify deployment picks up new secret (check Vercel deploy logs)
-
-3. VALIDATE
-   ├── Run: pnpm exec ts-node packages/env/scripts/validate.ts
-   ├── Smoke test critical paths (auth, payments, email)
-   └── Monitor Sentry for auth errors for 30 minutes
-
-4. DOCUMENT
-   ├── Create incident report in Linear
-   ├── Update secret rotation log in Notion
-   └── Schedule post-mortem within 48 hours
-```
+- Your HTTPS traffic is protected by your CDN (Vercel → Cloudflare) — PQC migration
+  happens at the TLS layer, not in your application headers.
+- **Action required now:** Ensure all API keys, signing keys, and session tokens use
+  256-bit symmetric keys (not 128-bit) — these are already quantum-resistant.
+- **Action required by 2027:** Replace any RSA-2048 or ECDSA P-256 signing (JWT,
+  webhook signatures) with Ed25519 or ML-DSA when library support stabilizes.
+- **Monitor:** [NIST PQC Project](https://csrc.nist.gov/projects/post-quantum-cryptography)
 
 ---
-
-## CI Validation
-
-```typescript
-// packages/env/scripts/validate.ts
-import { serverEnv } from '../src/server';
-import { clientEnv } from '../src/client';
-
-// This script is run in CI to validate all required env vars are present.
-// It fails the build if any are missing.
-console.log('✅ Server env validated:', Object.keys(serverEnv).length, 'variables');
-console.log('✅ Client env validated:', Object.keys(clientEnv).length, 'variables');
-process.exit(0);
-```
-
-```yaml
-# In github-actions-workflow-complete.yml — add this step to the validate job:
-- name: Validate environment variables
-  run: pnpm --filter @your-org/env exec ts-node scripts/validate.ts
-  env:
-    SKIP_ENV_VALIDATION: 'false'
-    # All required secrets injected from GitHub Secrets
-    DATABASE_URL: ${{ secrets.DATABASE_URL }}
-    # ... etc
-```
-
----
-
-## References
-
-- [Vercel Secrets Rotation](https://vercel.com/docs/integrations/create-integration/secrets-rotation) [vercel](https://vercel.com/docs/integrations/create-integration/secrets-rotation)
-- [Rotating Vercel Environment Variables](https://vercel.com/docs/environment-variables/rotating-secrets) [vercel](https://vercel.com/docs/environment-variables/rotating-secrets)
-- [Doppler Dynamic Secrets & Rotation](https://www.doppler.com/blog/dynamic-secrets-in-action) [doppler](https://www.doppler.com/blog/dynamic-secrets-in-action)
-- [Secret Lifecycle and Security Posture](https://www.doppler.com/blog/lifecycle-secrets-security-posture) [doppler](https://www.doppler.com/blog/lifecycle-secrets-security-posture)
-- [@t3-oss/env-nextjs](https://env.t3.gg/)
-
----
-
----
-
-**All 5 Batch B documents are complete.** Here's a summary of what was generated:
-
-| Document                                | Key Patterns Covered                                                                                                                                 |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `security-middleware-implementation.md` | 8-layer pipeline, CVE-2025-29927 hardening, bot detection, dual rate limiting, Clerk auth gate, nonce injection, tenant resolution                   |
-| `server-action-security-wrapper.md`     | `createServerAction()` factory, auth + tenant scoping + Zod + rate limit, `ActionResult<T>` type, React 19 `useActionState` integration              |
-| `security-headers-system.md`            | Dynamic nonce CSP builder, `next.config.ts` static headers, all 9 security headers, CSP violation reporter endpoint, nonce flow in Server Components |
-| `multi-layer-rate-limiting.md`          | 3-layer strategy, Sliding Window / Token Bucket algorithms, per-plan limits (free/pro/enterprise), Upstash Jan 2026 dynamic limits feature           |
-| `secrets-manager.md`                    | `@t3-oss/env-nextjs` Zod validation, Doppler→Vercel sync workflow, rotation API, break-glass runbook, CI validation script                           |
-
-## Best Practices
-
-[Add content here]
 
 ## Testing
 
-[Add content here]
-
-Excellent — deep research complete. Generating all 4 Batch D documents at maximum production depth now.
-
----
-
-# `email-package-structure.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# email-package-structure.md
-```
-
-## Overview
-
-This document specifies the complete `packages/email/` package — a standalone, fully typed email library that contains all React Email 5 templates, the provider abstraction layer, multi-tenant routing logic, and the unified `send()` function. Every application in the monorepo imports from this package; no app sends email directly. React Email 5.0 (released November 2025) added Tailwind v4 support, a dark mode switcher, 8 new components (Avatars, Stats, Testimonials), and native React 19.2 + Next.js 16 compatibility. [resend](https://resend.com/blog/react-email-5)
-
----
-
-## Directory Structure
-
-```
-packages/email/
-├── package.json
-├── tsconfig.json
-├── .react-email/                    ← Local preview dev server config
-├── src/
-│   ├── index.ts                     ← Barrel: re-exports send(), templates, types
-│   │
-│   ├── providers/
-│   │   ├── resend.ts                ← Resend client + send adapter
-│   │   ├── postmark.ts              ← Postmark client + send adapter
-│   │   ├── types.ts                 ← EmailProvider interface
-│   │   └── index.ts
-│   │
-│   ├── send/
-│   │   ├── send.ts                  ← Unified send() with fallback circuit breaker
-│   │   ├── idempotency.ts           ← Idempotency key generation helpers
-│   │   ├── routing.ts               ← Per-tenant from-address resolver
-│   │   └── index.ts
-│   │
-│   ├── templates/
-│   │   ├── base/
-│   │   │   ├── base-layout.tsx      ← Shared wrapper: logo, footer, unsubscribe
-│   │   │   └── styles.ts            ← Shared token values
-│   │   │
-│   │   ├── lead-notification/
-│   │   │   ├── index.tsx            ← Lead notification template
-│   │   │   └── preview.tsx          ← Preview data for react-email dev
-│   │   │
-│   │   ├── booking-confirmation/
-│   │   │   ├── index.tsx
-│   │   │   └── preview.tsx
-│   │   │
-│   │   ├── booking-reminder/
-│   │   │   ├── index.tsx
-│   │   │   └── preview.tsx
-│   │   │
-│   │   ├── booking-cancelled/
-│   │   │   ├── index.tsx
-│   │   │   └── preview.tsx
-│   │   │
-│   │   ├── welcome/
-│   │   │   ├── index.tsx
-│   │   │   └── preview.tsx
-│   │   │
-│   │   ├── password-reset/
-│   │   │   ├── index.tsx
-│   │   │   └── preview.tsx
-│   │   │
-│   │   ├── invoice/
-│   │   │   ├── index.tsx
-│   │   │   └── preview.tsx
-│   │   │
-│   │   ├── weekly-digest/
-│   │   │   ├── index.tsx
-│   │   │   └── preview.tsx
-│   │   │
-│   │   └── index.ts                 ← Template barrel exports
-│   │
-│   └── utils/
-│       ├── render.ts                ← Async render wrapper (React Email 5 render is async)
-│       └── sanitize.ts             ← Input sanitization before template injection
-│
-└── emails/                          ← Symlink or copy for react-email CLI preview
-```
-
----
-
-## `package.json`
-
-```json
-{
-  "name": "@your-org/email",
-  "version": "1.0.0",
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts"
-    },
-    "./templates/*": {
-      "import": "./src/templates/*/index.tsx",
-      "types": "./src/templates/*/index.tsx"
-    },
-    "./send": {
-      "import": "./src/send/index.ts",
-      "types": "./src/send/index.ts"
-    }
-  },
-  "scripts": {
-    "dev": "email dev --dir src/templates --port 3333",
-    "build": "tsc --noEmit",
-    "lint": "eslint src/",
-    "upload": "email resend upload --dir src/templates"
-  },
-  "dependencies": {
-    "@react-email/components": "^0.0.31",
-    "@react-email/tailwind": "^0.1.4",
-    "postmark": "^4.0.5",
-    "resend": "^4.2.0"
-  },
-  "devDependencies": {
-    "react-email": "^4.0.6",
-    "typescript": "^5.8.0"
-  },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  }
-}
-```
-
----
-
-## Provider Interface
-
-### `packages/email/src/providers/types.ts`
+### Vitest Unit Tests
 
 ```typescript
-export interface SendEmailParams {
-  to: string | string[];
-  from: string;
-  replyTo?: string;
-  subject: string;
-  html: string;
-  text?: string;
-  /** Resend/Postmark idempotency — prevents duplicate sends on retry */
-  idempotencyKey?: string;
-  /** Postmark: 'outbound' (transactional) | 'broadcasts' | custom stream ID */
-  messageStream?: string;
-  /** Metadata attached to the send for webhook routing and analytics */
-  metadata?: Record<string, string>;
-  tags?: Array<{ name: string; value: string }>;
-}
+// packages/security/src/csp.test.ts
+import { describe, it, expect } from 'vitest';
+import { buildCsp, generateNonce } from './csp';
 
-export interface SendEmailResult {
-  messageId: string;
-  provider: 'resend' | 'postmark';
-}
+describe('CSP Builder', () => {
+  it('generates a unique nonce per call', () => {
+    const n1 = generateNonce();
+    const n2 = generateNonce();
+    expect(n1).not.toBe(n2);
+    expect(n1).toHaveLength(22); // 16 bytes base64url = 22 chars
+  });
 
-export interface EmailProvider {
-  name: 'resend' | 'postmark';
-  send(params: SendEmailParams): Promise<SendEmailResult>;
-  isHealthy(): Promise<boolean>;
-}
+  it('includes nonce in script-src', () => {
+    const nonce = generateNonce();
+    const csp = buildCsp({ nonce });
+    expect(csp).toContain(`'nonce-${nonce}'`);
+  });
+
+  it('blocks unsafe-inline in production', () => {
+    const csp = buildCsp({ nonce: 'abc123', isDev: false });
+    expect(csp).not.toContain("'unsafe-inline'");
+  });
+
+  it('disables object-src', () => {
+    const csp = buildCsp({ nonce: 'abc123' });
+    expect(csp).toContain("object-src 'none'");
+  });
+
+  it('blocks frame-ancestors by default', () => {
+    const csp = buildCsp({ nonce: 'abc123' });
+    expect(csp).toContain("frame-ancestors 'none'");
+  });
+});
 ```
 
----
-
-## Resend Provider
-
-### `packages/email/src/providers/resend.ts`
+### Integration Test with Playwright
 
 ```typescript
-import { Resend } from 'resend';
-import type { EmailProvider, SendEmailParams, SendEmailResult } from './types';
+// e2e/security-headers.spec.ts
+import { test, expect } from '@playwright/test';
 
-// Module-level singleton — reuses HTTP connection pool
-let _resend: Resend | null = null;
+test.describe('Security Headers', () => {
+  test('homepage has correct security headers', async ({ request }) => {
+    const response = await request.head('/');
 
-function getResend(): Resend {
-  if (!_resend) {
-    _resend = new Resend(process.env.RESEND_API_KEY!);
-  }
-  return _resend;
-}
+    expect(response.headers()['x-content-type-options']).toBe('nosniff');
+    expect(response.headers()['x-frame-options']).toBe('DENY');
+    expect(response.headers()['content-security-policy']).toContain("object-src 'none'");
+    expect(response.headers()['strict-transport-security']).toContain('preload');
+    expect(response.headers()['x-powered-by']).toBeUndefined();
+  });
 
-export const resendProvider: EmailProvider = {
-  name: 'resend',
-
-  async send(params: SendEmailParams): Promise<SendEmailResult> {
-    const resend = getResend();
-
-    const { data, error } = await resend.emails.send(
-      {
-        to: params.to,
-        from: params.from,
-        reply_to: params.replyTo,
-        subject: params.subject,
-        html: params.html,
-        text: params.text,
-        tags: params.tags,
-        // Architecture invariant: metadata includes tenantId (set by routing layer)
-        headers: params.metadata
-          ? Object.fromEntries(Object.entries(params.metadata).map(([k, v]) => [`X-Meta-${k}`, v]))
-          : undefined,
-      },
-      // Idempotency key prevents duplicate sends on retry [web:90]
-      // TTL: 24 hours. Key must be unique per distinct email send.
-      // Best practice: format as `<event-type>/<entity-id>` [web:92]
-      params.idempotencyKey ? { idempotencyKey: params.idempotencyKey } : undefined
-    );
-
-    if (error) {
-      throw new Error(`Resend error: ${error.message} (${error.name})`);
-    }
-
-    return {
-      messageId: data!.id,
-      provider: 'resend',
-    };
-  },
-
-  async isHealthy(): Promise<boolean> {
-    try {
-      // Resend has no dedicated health endpoint; listing domains is lightweight
-      const resend = getResend();
-      const { error } = await resend.domains.list();
-      return !error;
-    } catch {
-      return false;
-    }
-  },
-};
-```
-
----
-
-## Postmark Provider
-
-### `packages/email/src/providers/postmark.ts`
-
-```typescript
-import * as postmark from 'postmark';
-import type { EmailProvider, SendEmailParams, SendEmailResult } from './types';
-
-let _client: postmark.ServerClient | null = null;
-
-function getPostmarkClient(): postmark.ServerClient {
-  if (!_client) {
-    _client = new postmark.ServerClient(process.env.POSTMARK_SERVER_TOKEN!);
-  }
-  return _client;
-}
-
-export const postmarkProvider: EmailProvider = {
-  name: 'postmark',
-
-  async send(params: SendEmailParams): Promise<SendEmailResult> {
-    const client = getPostmarkClient();
-
-    // Postmark: separate transactional and broadcast via Message Streams [web:94][web:99]
-    // 'outbound' = default transactional stream (fastest delivery, <2s typical)
-    // Custom stream IDs can be created per-tenant for reputation isolation
-    const messageStream = params.messageStream ?? 'outbound';
-
-    const response = await client.sendEmail({
-      To: Array.isArray(params.to) ? params.to.join(',') : params.to,
-      From: params.from,
-      ReplyTo: params.replyTo,
-      Subject: params.subject,
-      HtmlBody: params.html,
-      TextBody: params.text,
-      MessageStream: messageStream,
-      // Postmark metadata (max 50 chars per key/value)
-      Metadata: params.metadata,
-      Tag: params.tags?.[0]?.value,
-    });
-
-    if (response.ErrorCode !== 0) {
-      throw new Error(`Postmark error ${response.ErrorCode}: ${response.Message}`);
-    }
-
-    return {
-      messageId: response.MessageID,
-      provider: 'postmark',
-    };
-  },
-
-  async isHealthy(): Promise<boolean> {
-    try {
-      const client = getPostmarkClient();
-      const server = await client.getServer();
-      return !!server.ID;
-    } catch {
-      return false;
-    }
-  },
-};
-```
-
----
-
-## Barrel Exports
-
-### `packages/email/src/providers/index.ts`
-
-```typescript
-export { resendProvider } from './resend';
-export { postmarkProvider } from './postmark';
-export type { EmailProvider, SendEmailParams, SendEmailResult } from './types';
-```
-
-### `packages/email/src/index.ts`
-
-```typescript
-// Core send function
-export { send } from './send/send';
-export type { SendOptions } from './send/send';
-
-// Providers
-export { resendProvider, postmarkProvider } from './providers';
-export type { EmailProvider, SendEmailParams, SendEmailResult } from './providers/types';
-
-// Routing
-export { resolveTenantFromAddress } from './send/routing';
-
-// Idempotency
-export { buildIdempotencyKey } from './send/idempotency';
-
-// Templates
-export * from './templates';
-
-// Utilities
-export { renderEmail } from './utils/render';
-```
-
-### `packages/email/src/templates/index.ts`
-
-```typescript
-export { LeadNotificationEmail } from './lead-notification';
-export { BookingConfirmationEmail } from './booking-confirmation';
-export { BookingReminderEmail } from './booking-reminder';
-export { BookingCancelledEmail } from './booking-cancelled';
-export { WelcomeEmail } from './welcome';
-export { PasswordResetEmail } from './password-reset';
-export { InvoiceEmail } from './invoice';
-export { WeeklyDigestEmail } from './weekly-digest';
-
-// Template prop types
-export type { LeadNotificationProps } from './lead-notification';
-export type { BookingConfirmationProps } from './booking-confirmation';
-export type { BookingReminderProps } from './booking-reminder';
-export type { WelcomeEmailProps } from './welcome';
-```
-
----
-
-## Render Utility (React Email 5 async render)
-
-React Email 5 unified `render()` and `renderAsync()` into a single async `render()` function in preparation for React DOM dropping sync rendering. [github](https://github.com/resend/react-email/issues/1924)
-
-### `packages/email/src/utils/render.ts`
-
-```typescript
-import { render } from '@react-email/components';
-import type { ReactElement } from 'react';
-
-/**
- * Renders a React Email component to HTML + plain text.
- * React Email 5: render() is now always async (Promise<string>). [web:95]
- * renderAsync() is deprecated — use render() directly.
- */
-export async function renderEmail(
-  template: ReactElement,
-  options?: { plainText?: boolean }
-): Promise<{ html: string; text: string }> {
-  const [html, text] = await Promise.all([
-    render(template, { plainText: false }),
-    render(template, { plainText: true }),
-  ]);
-  return { html, text };
-}
+  test('CSP contains nonce on dynamic pages', async ({ request }) => {
+    const response = await request.get('/dashboard');
+    const csp = response.headers()['content-security-policy'];
+    expect(csp).toMatch(/nonce-[A-Za-z0-9\-_]{20,}/);
+  });
+});
 ```
 
 ---
 
 ## References
 
-- [React Email 5.0 Announcement](https://resend.com/blog/react-email-5) [resend](https://resend.com/blog/react-email-5)
-- [React Email 5.0 LinkedIn](https://www.linkedin.com/posts/resend_today-were-excited-to-announce-react-email-activity-7392583394888663040-56v0) [linkedin](https://www.linkedin.com/posts/resend_today-were-excited-to-announce-react-email-activity-7392583394888663040-56v0)
-- [React Email Templates Gallery](https://react.email/templates) [react](https://react.email/templates)
-- [React Email render() async behavior](https://github.com/resend/react-email/issues/1924) [github](https://github.com/resend/react-email/issues/1924)
-- [Postmark Message Streams API](https://postmarkapp.com/support/article/1215-managing-message-streams-with-postmarks-api) [postmarkapp](https://postmarkapp.com/support/article/1215-managing-message-streams-with-postmarks-api)
-- [Resend Domains Introduction](https://resend.com/docs/dashboard/domains/introduction) [resend](https://resend.com/docs/dashboard/domains/introduction)
+- [Next.js CSP Guide](https://nextjs.org/docs/app/guides/content-security-policy) [web:20]
+- [Nonce Setup in Next.js](https://centralcsp.com/articles/how-to-setup-nonce-with-nextjs) [web:21]
+- [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/)
+- [MDN CSP Reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+- [HSTS Preload List](https://hstspreload.org/)
+- [Permissions-Policy Reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy)
+- [NIST Post-Quantum Cryptography Standards](https://csrc.nist.gov/projects/post-quantum-cryptography)
+- [OneUptime Security Headers Guide](https://oneuptime.com/blog/post/2026-01-24-handle-security-headers/) [web:33]
+
+````
+
+***
+
+# react-19-documentation.md
+
+```markdown
+# react-19-documentation.md
+
+> **2026 Standards Compliance** | React 19.2 · React Compiler 1.0 Stable ·
+> Activity API · useEffectEvent · View Transitions · Next.js 16 Integration
+
+## Table of Contents
+1. [Overview & What's New in 19.2](#overview--whats-new-in-192)
+2. [React Compiler 1.0 — Stable](#react-compiler-10--stable)
+3. [Activity Component](#activity-component)
+4. [useEffectEvent Hook](#useeffectevent-hook)
+5. [Actions & Form State (19.0 Recap)](#actions--form-state-190-recap)
+6. [Server Components Patterns](#server-components-patterns)
+7. [View Transitions](#view-transitions)
+8. [Performance Patterns with Activity](#performance-patterns-with-activity)
+9. [Migration Guide](#migration-guide)
+10. [References](#references)
 
 ---
 
----
+## Overview & What's New in 19.2
 
-# `multi-tenant-email-routing.md`
+React 19.2, shipped in October 2025, is a significant update that stabilizes the React
+Compiler and introduces first-class primitives for managing UI state complexity. [web:25][web:28]
 
-> **Internal Template — customize as needed.**
-
-```
-# multi-tenant-email-routing.md
-```
-
-## Overview
-
-This document specifies the per-tenant `from` address routing system. Each tenant sends email from a branded subdomain (e.g. `hello@notifications.acmeplumbing.com`) rather than a shared platform domain. This isolates sending reputation per tenant, ensures DMARC alignment, and supports custom return paths for bounce handling. The routing layer resolves the tenant's verified domain at send time, falls back to the platform domain, and selects the appropriate provider (Resend primary, Postmark fallback). [reddit](https://www.reddit.com/r/webdev/comments/1pa5dnx/multitenant_email_service_for_clients/)
-
----
-
-## Architecture
-
-```
-send({ tenantId, template, ... })
-         │
-         ▼
-resolveTenantFromAddress(tenantId)
-         │
-         ├── Redis cache hit? → return cached FromAddress
-         │
-         └── Cache miss:
-             ├── Supabase: SELECT email_from, email_domain, email_provider
-             │   FROM tenants WHERE id = tenantId
-             │
-             ├── Resend domain verified? → use tenant subdomain
-             │   "hello@notifications.{tenantDomain}"
-             │
-             └── Fallback → platform default domain
-                 "hello@mail.yourdomain.com"
-         │
-         ▼
-EmailRouteConfig {
-  fromAddress: string,    ← e.g. "ACME <hello@notifications.acmeplumbing.com>"
-  provider: 'resend' | 'postmark',
-  replyTo: string,
-  messageStream?: string  ← Postmark stream ID if using Postmark
-}
-```
+| Feature | Status | Description |
+|---------|--------|-------------|
+| React Compiler | **Stable 1.0** | Build-time memoization; replaces `useMemo`/`useCallback` [web:34] |
+| `<Activity />` | **New** | Hide/show UI preserving state without unmounting [web:28] |
+| `useEffectEvent` | **New** | Decouple event logic from effect dependencies [web:25] |
+| View Transitions | **New** | Declarative page/element transitions via browser API [web:31] |
+| Performance Tracks | **New** | Chrome DevTools integration for React render profiling [web:31] |
+| `use()` | **Stable** | Read Promises and Context in render |
+| Actions / `useActionState` | **Stable** | Full-stack form mutations [web:34] |
 
 ---
 
-## Domain Verification Flow
+## React Compiler 1.0 — Stable
 
-```
-Tenant Onboarding
-      │
-      ▼
-1. Platform creates Resend domain via API:
-   POST https://api.resend.com/domains
-   { name: "notifications.{tenantDomain}", region: "us-east-1" }
+The React Compiler is now **stable and production-ready**. It eliminates the need for
+manual memoization by analyzing your component tree at build time and inserting optimal
+`useMemo`/`useCallback` equivalents automatically. [web:34]
 
-2. Platform returns DNS records to tenant:
-   MX: send.notifications.{tenantDomain} → feedback-smtp.us-east-1.amazonses.com
-   TXT (SPF): v=spf1 include:amazonses.com ~all
-   CNAME (DKIM): resend._domainkey.notifications.{tenantDomain} → ...
-   CNAME (Return-Path): bounces.notifications.{tenantDomain} → ... [web:72]
-
-3. Tenant adds DNS records (guided in portal)
-
-4. Platform polls Resend verify endpoint:
-   POST https://api.resend.com/domains/{id}/verify
-
-5. On verification success:
-   - Store domain in Supabase: tenants.email_domain = "notifications.{tenantDomain}"
-   - Invalidate Redis cache for tenant
-   - Send confirmation email to tenant admin
-```
-
----
-
-## Routing Implementation
-
-### `packages/email/src/send/routing.ts`
+### Setup in Next.js 16
 
 ```typescript
-import { Redis } from '@upstash/redis';
-import { createClient } from '@supabase/supabase-js';
-import { Resend } from 'resend';
+// next.config.ts
+import type { NextConfig } from 'next'
 
-const redis = Redis.fromEnv();
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-const resend = new Resend(process.env.RESEND_API_KEY!);
-
-export interface EmailRouteConfig {
-  fromAddress: string;
-  fromName: string;
-  replyTo: string;
-  provider: 'resend' | 'postmark';
-  /** Postmark message stream ID (undefined = use 'outbound' default) */
-  messageStream?: string;
-  /** Whether tenant has a verified custom domain */
-  hasCustomDomain: boolean;
+const nextConfig: NextConfig = {
+  experimental: {
+    reactCompiler: true,   // Enable stable React Compiler
+  },
 }
 
-// Platform default fallback sending domain
-const PLATFORM_FROM_DOMAIN = process.env.PLATFORM_EMAIL_DOMAIN ?? 'mail.yourdomain.com';
-const PLATFORM_FROM_NAME = process.env.PLATFORM_FROM_NAME ?? 'YourSaaS';
-
-/**
- * Resolves the from-address configuration for a given tenant.
- * Architecture invariant: Redis cache key includes tenantId.
- * Cache TTL: 1 hour (invalidated on domain verification change).
- */
-export async function resolveTenantFromAddress(tenantId: string): Promise<EmailRouteConfig> {
-  // Architecture invariant: all Redis keys include tenantId
-  const cacheKey = `email:route:${tenantId}`;
-  const cached = await redis.get<EmailRouteConfig>(cacheKey);
-  if (cached) return cached;
-
-  // Fetch tenant config from Supabase
-  const { data: tenant, error } = await supabase
-    .from('tenants')
-    .select(
-      'email_from_name, email_domain, email_domain_status, reply_to_email, preferred_email_provider, postmark_stream_id'
-    )
-    .eq('id', tenantId)
-    .single();
-
-  if (error || !tenant) {
-    // Fail open: return platform defaults so email still sends
-    return buildPlatformDefault(tenantId);
-  }
-
-  const hasCustomDomain = !!tenant.email_domain && tenant.email_domain_status === 'verified';
-
-  const fromDomain = hasCustomDomain ? tenant.email_domain : PLATFORM_FROM_DOMAIN;
-
-  const fromName = tenant.email_from_name ?? PLATFORM_FROM_NAME;
-
-  // Use "notifications." subdomain prefix per Resend best practice [web:79]
-  // Subdomain isolates sending reputation from the root marketing domain
-  const fromAddress = hasCustomDomain
-    ? `${fromName} <hello@${fromDomain}>`
-    : `${fromName} <noreply@${PLATFORM_FROM_DOMAIN}>`;
-
-  const config: EmailRouteConfig = {
-    fromAddress,
-    fromName,
-    replyTo: tenant.reply_to_email ?? `support@${fromDomain}`,
-    provider: (tenant.preferred_email_provider as 'resend' | 'postmark') ?? 'resend',
-    messageStream: tenant.postmark_stream_id ?? undefined,
-    hasCustomDomain,
-  };
-
-  // Cache for 1 hour — invalidated on domain status change via webhook
-  await redis.setex(cacheKey, 3600, config);
-
-  return config;
-}
-
-function buildPlatformDefault(tenantId: string): EmailRouteConfig {
-  return {
-    fromAddress: `${PLATFORM_FROM_NAME} <noreply@${PLATFORM_FROM_DOMAIN}>`,
-    fromName: PLATFORM_FROM_NAME,
-    replyTo: `support@${PLATFORM_FROM_DOMAIN}`,
-    provider: 'resend',
-    hasCustomDomain: false,
-  };
-}
-
-/**
- * Invalidates the routing cache for a tenant.
- * Call when email domain is verified or updated.
- */
-export async function invalidateTenantEmailRouteCache(tenantId: string): Promise<void> {
-  await redis.del(`email:route:${tenantId}`);
-}
-```
-
----
-
-## Resend Domain Provisioning
-
-### `packages/email/src/providers/domain-provisioning.ts`
-
-```typescript
-import { Resend } from 'resend';
-import { createClient } from '@supabase/supabase-js';
-import { invalidateTenantEmailRouteCache } from '../send/routing';
-
-const resend = new Resend(process.env.RESEND_API_KEY!);
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-
-export interface DomainProvisionResult {
-  domainId: string;
-  dnsRecords: Array<{
-    record: string;
-    name: string;
-    type: string;
-    value: string;
-    ttl: string;
-    status: string;
-    priority?: number;
-  }>;
-}
-
-/**
- * Creates a Resend sending domain for a tenant's custom domain.
- * Architecture invariant: domain stored with tenantId association.
- * Resend recommendation: use subdomain (e.g. notifications.domain.com) [web:79]
- */
-export async function provisionTenantEmailDomain(
-  tenantId: string,
-  rootDomain: string
-): Promise<DomainProvisionResult> {
-  // Use "notifications." subdomain for reputation isolation [web:79]
-  const sendingDomain = `notifications.${rootDomain}`;
-
-  const { data, error } = await resend.domains.create({
-    name: sendingDomain,
-    region: 'us-east-1',
-    // Custom return path: "bounces.notifications.domain.com" [web:72][web:76]
-    customReturnPath: 'bounces',
-  });
-
-  if (error || !data) {
-    throw new Error(`Failed to provision domain: ${error?.message}`);
-  }
-
-  // Store pending domain in Supabase
-  await supabase
-    .from('tenants')
-    .update({
-      email_domain: sendingDomain,
-      email_domain_id: data.id,
-      email_domain_status: 'pending',
-      email_domain_dns_records: data.records,
-    })
-    .eq('id', tenantId);
-
-  await invalidateTenantEmailRouteCache(tenantId);
-
-  return {
-    domainId: data.id,
-    dnsRecords: data.records as DomainProvisionResult['dnsRecords'],
-  };
-}
-
-/**
- * Polls Resend and updates domain verification status.
- * Called from a QStash scheduled job every 10 minutes for pending domains.
- */
-export async function checkDomainVerification(
-  tenantId: string,
-  domainId: string
-): Promise<'verified' | 'pending' | 'failed'> {
-  // Trigger verification check
-  const { error } = await resend.domains.verify(domainId);
-
-  if (error) return 'pending';
-
-  // Fetch updated status
-  const { data } = await resend.domains.get(domainId);
-  if (!data) return 'pending';
-
-  const status = data.status === 'verified' ? 'verified' : 'pending';
-
-  await supabase.from('tenants').update({ email_domain_status: status }).eq('id', tenantId);
-
-  if (status === 'verified') {
-    await invalidateTenantEmailRouteCache(tenantId);
-  }
-
-  return status;
-}
-```
-
----
-
-## Supabase Schema
-
-```sql
--- migration: add_email_routing_fields.sql (expand/contract — additive only)
-ALTER TABLE tenants
-  ADD COLUMN IF NOT EXISTS email_from_name          TEXT,
-  ADD COLUMN IF NOT EXISTS email_domain             TEXT,
-  ADD COLUMN IF NOT EXISTS email_domain_id          TEXT,
-  ADD COLUMN IF NOT EXISTS email_domain_status      TEXT DEFAULT 'unverified'
-      CHECK (email_domain_status IN ('unverified', 'pending', 'verified', 'failed')),
-  ADD COLUMN IF NOT EXISTS email_domain_dns_records JSONB,
-  ADD COLUMN IF NOT EXISTS reply_to_email           TEXT,
-  ADD COLUMN IF NOT EXISTS preferred_email_provider TEXT DEFAULT 'resend'
-      CHECK (preferred_email_provider IN ('resend', 'postmark')),
-  ADD COLUMN IF NOT EXISTS postmark_stream_id       TEXT;
-
-CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_tenants_email_domain
-  ON tenants(email_domain)
-  WHERE email_domain IS NOT NULL;
-
-COMMENT ON COLUMN tenants.email_domain IS
-  'Verified Resend subdomain, e.g. notifications.acmeplumbing.com. NULL = use platform default.';
-COMMENT ON COLUMN tenants.email_domain_status IS
-  'Resend domain verification status. unverified → pending → verified.';
-```
-
----
-
-## References
-
-- [Resend Domain Introduction](https://resend.com/docs/dashboard/domains/introduction) [resend](https://resend.com/docs/dashboard/domains/introduction)
-- [Subdomain vs Root Domain for Sending](https://resend.com/docs/knowledge-base/is-it-better-to-send-emails-from-a-subdomain-or-the-root-domain) [resend](https://resend.com/docs/knowledge-base/is-it-better-to-send-emails-from-a-subdomain-or-the-root-domain)
-- [Custom Return Path — Resend](https://resend.com/changelog/custom-return-path) [resend](https://resend.com/changelog/custom-return-path)
-- [Multi-tenant email with Resend (Reddit)](https://www.reddit.com/r/webdev/comments/1pa5dnx/multitenant_email_service_for_clients/) [reddit](https://www.reddit.com/r/webdev/comments/1pa5dnx/multitenant_email_service_for_clients/)
-- [Resend Domain Management (DeepWiki)](https://deepwiki.com/resend/resend-node/4-domain-management) [deepwiki](https://deepwiki.com/resend/resend-node/4-domain-management)
-- [Postmark Message Streams Guide (2026)](https://www.youtube.com/watch?v=quZlAwkxaSA) [youtube](https://www.youtube.com/watch?v=quZlAwkxaSA)
-
----
-
----
-
-# `unified-email-send.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# unified-email-send.md
-```
-
-## Overview
-
-This document specifies the unified `send()` function — the single entry point for all email dispatch in the platform. It implements a **circuit-breaker + hot-standby failover** pattern: Resend is the primary provider and Postmark is the warm standby. If Resend returns a 5xx or network error, the circuit opens and the send is retried immediately against Postmark. Idempotency keys prevent duplicate delivery on retry. All sends are scoped to a `tenantId` per architecture invariant. [shadecoder](https://www.shadecoder.com/topics/the-circuit-breaker-pattern-a-comprehensive-guide-for-2025)
-
----
-
-## Circuit Breaker Architecture
-
-```
-send(options)
-     │
-     ▼
-resolveTenantFromAddress(tenantId)     ← From-address + provider selection
-     │
-     ▼
-renderEmail(template, props)           ← React Email 5 async render
-     │
-     ▼
-buildIdempotencyKey(event, entityId)   ← `<event>/<tenantId>/<entityId>` [web:92]
-     │
-     ▼
-╔══════════════════════════════════╗
-║  Circuit Breaker State Machine   ║
-║                                  ║
-║  CLOSED ──fail──► OPEN           ║
-║  OPEN ──timeout──► HALF-OPEN     ║
-║  HALF-OPEN ──success──► CLOSED   ║
-╚══════════════════════════════════╝
-     │
-     ├── Circuit CLOSED (normal)
-     │   └── Primary provider (Resend)
-     │           │ success → return MessageId
-     │           │ fail    → open circuit → try Postmark fallback
-     │
-     └── Circuit OPEN (primary degraded)
-         └── Fallback provider (Postmark)
-                 │ success → return MessageId + log event to Sentry
-                 │ fail    → throw (QStash retries the job)
-```
-
----
-
-## Idempotency Key Helper
-
-### `packages/email/src/send/idempotency.ts`
-
-```typescript
-/**
- * Builds an idempotency key for email sends.
- *
- * Resend idempotency keys:
- * - Up to 256 characters [web:90]
- * - Stored 24 hours — safe to retry within window [web:90]
- * - Must be UNIQUE per distinct email (same key + different payload = 409) [web:92]
- * - Best practice: format as `<event-type>/<entity-id>` [web:92]
- *
- * Architecture invariant: key always includes tenantId.
- *
- * @example
- * buildIdempotencyKey('lead-notification', 'tenant-abc', 'lead-xyz-123')
- * // → "lead-notification/tenant-abc/lead-xyz-123"
- */
-export function buildIdempotencyKey(eventType: string, tenantId: string, entityId: string): string {
-  // Sanitize: idempotency key may only contain safe URL characters
-  const safe = (s: string) => s.replace(/[^a-zA-Z0-9\-_./]/g, '-');
-  const key = `${safe(eventType)}/${safe(tenantId)}/${safe(entityId)}`;
-
-  if (key.length > 256) {
-    // Truncate from the left (preserve entityId specificity)
-    return key.slice(key.length - 256);
-  }
-  return key;
-}
-```
-
----
-
-## Circuit Breaker State
-
-### `packages/email/src/send/circuit-breaker.ts`
-
-```typescript
-import { Redis } from '@upstash/redis';
-
-const redis = Redis.fromEnv();
-
-export type CircuitState = 'closed' | 'open' | 'half-open';
-
-const FAILURE_THRESHOLD = 3; // Open after N consecutive failures
-const RECOVERY_TIMEOUT_SEC = 60; // Try half-open after 60s
-const SUCCESS_THRESHOLD = 2; // Close after N successes in half-open
-
-interface CircuitData {
-  state: CircuitState;
-  failureCount: number;
-  successCount: number;
-  lastFailureAt: number;
-}
-
-function circuitKey(provider: string): string {
-  return `email:circuit:${provider}`;
-}
-
-export async function getCircuitState(provider: string): Promise<CircuitState> {
-  const data = await redis.get<CircuitData>(circuitKey(provider));
-  if (!data) return 'closed';
-
-  if (data.state === 'open') {
-    const elapsed = (Date.now() - data.lastFailureAt) / 1000;
-    if (elapsed >= RECOVERY_TIMEOUT_SEC) {
-      // Transition to half-open for probe
-      await redis.setex(circuitKey(provider), 300, {
-        ...data,
-        state: 'half-open',
-        successCount: 0,
-      });
-      return 'half-open';
-    }
-  }
-
-  return data.state;
-}
-
-export async function recordSuccess(provider: string): Promise<void> {
-  const data = await redis.get<CircuitData>(circuitKey(provider));
-  if (!data || data.state === 'closed') return;
-
-  if (data.state === 'half-open') {
-    const newSuccessCount = (data.successCount ?? 0) + 1;
-    if (newSuccessCount >= SUCCESS_THRESHOLD) {
-      // Provider recovered — close circuit
-      await redis.del(circuitKey(provider));
-    } else {
-      await redis.setex(circuitKey(provider), 300, { ...data, successCount: newSuccessCount });
-    }
-  }
-}
-
-export async function recordFailure(provider: string): Promise<void> {
-  const existing = await redis.get<CircuitData>(circuitKey(provider));
-  const failureCount = (existing?.failureCount ?? 0) + 1;
-
-  const state: CircuitState = failureCount >= FAILURE_THRESHOLD ? 'open' : 'closed';
-
-  await redis.setex(circuitKey(provider), 300, {
-    state,
-    failureCount,
-    successCount: 0,
-    lastFailureAt: Date.now(),
-  });
-}
-```
-
----
-
-## Unified Send Function
-
-### `packages/email/src/send/send.ts`
-
-```typescript
-import * as Sentry from '@sentry/nextjs';
-import type { ReactElement } from 'react';
-import { resendProvider } from '../providers/resend';
-import { postmarkProvider } from '../providers/postmark';
-import type { EmailProvider, SendEmailResult } from '../providers/types';
-import { resolveTenantFromAddress } from './routing';
-import { buildIdempotencyKey } from './idempotency';
-import { getCircuitState, recordSuccess, recordFailure } from './circuit-breaker';
-import { renderEmail } from '../utils/render';
-
-export interface SendOptions {
-  /** Architecture invariant: always required */
-  tenantId: string;
-  to: string | string[];
-  subject: string;
-  /** React Email 5 template element */
-  template: ReactElement;
-  /** Used for idempotency key construction: `<eventType>/<tenantId>/<entityId>` */
-  eventType: string;
-  /** Unique entity ID (lead ID, booking UID, invoice ID, etc.) */
-  entityId: string;
-  /** Override auto-resolved from address */
-  fromOverride?: string;
-  replyTo?: string;
-  /** Postmark message stream override */
-  messageStream?: string;
-  /** Additional metadata attached to the send */
-  metadata?: Record<string, string>;
-}
-
-export interface SendResult extends SendEmailResult {
-  idempotencyKey: string;
-  usedFallback: boolean;
-}
-
-/**
- * Unified email send function with circuit-breaker fallover.
- *
- * Primary:  Resend  (modern React-native API, React Email 5 native)
- * Fallback: Postmark (sub-2s delivery, purpose-built transactional) [web:67][web:70]
- *
- * Idempotency: keyed as `<eventType>/<tenantId>/<entityId>`.
- * A QStash job calling send() multiple times will NOT result in duplicate emails.
- */
-export async function send(options: SendOptions): Promise<SendResult> {
-  const {
-    tenantId,
-    to,
-    subject,
-    template,
-    eventType,
-    entityId,
-    fromOverride,
-    replyTo,
-    messageStream,
-    metadata = {},
-  } = options;
-
-  // Architecture invariant: tenantId must be present
-  if (!tenantId) throw new Error('tenantId is required for email send');
-
-  // Step 1: Resolve tenant from-address and preferred provider
-  const route = await resolveTenantFromAddress(tenantId);
-  const fromAddress = fromOverride ?? route.fromAddress;
-  const effectiveReplyTo = replyTo ?? route.replyTo;
-
-  // Step 2: Render template to HTML + plain text (React Email 5 async render)
-  const { html, text } = await renderEmail(template);
-
-  // Step 3: Build idempotency key
-  // Format: `<event-type>/<tenantId>/<entityId>` per Resend best practice [web:92]
-  const idempotencyKey = buildIdempotencyKey(eventType, tenantId, entityId);
-
-  // Architecture invariant: always include tenantId in metadata
-  const enrichedMetadata: Record<string, string> = {
-    ...metadata,
-    tenantId,
-    eventType,
-    entityId,
-  };
-
-  const sendParams = {
-    to,
-    from: fromAddress,
-    replyTo: effectiveReplyTo,
-    subject,
-    html,
-    text,
-    idempotencyKey,
-    messageStream: messageStream ?? route.messageStream,
-    metadata: enrichedMetadata,
-    tags: [
-      { name: 'tenantId', value: tenantId },
-      { name: 'eventType', value: eventType },
-    ],
-  };
-
-  // Step 4: Select provider with circuit breaker
-  const primaryProvider = route.provider === 'postmark' ? postmarkProvider : resendProvider;
-  const fallbackProvider = route.provider === 'postmark' ? resendProvider : postmarkProvider;
-
-  return Sentry.withScope(async (scope) => {
-    scope.setTag('tenantId', tenantId);
-    scope.setTag('eventType', eventType);
-    scope.setTag('emailTo', Array.isArray(to) ? to[0] : to);
-
-    // Try primary
-    const primaryState = await getCircuitState(primaryProvider.name);
-
-    if (primaryState !== 'open') {
-      try {
-        const result = await primaryProvider.send(sendParams);
-        await recordSuccess(primaryProvider.name);
-
-        return {
-          ...result,
-          idempotencyKey,
-          usedFallback: false,
-        };
-      } catch (err) {
-        await recordFailure(primaryProvider.name);
-
-        Sentry.captureException(err, {
-          tags: { emailProvider: primaryProvider.name, emailFallback: 'triggering' },
-        });
-      }
-    } else {
-      Sentry.captureMessage(
-        `Email circuit OPEN for ${primaryProvider.name} — routing to ${fallbackProvider.name}`,
-        'warning'
-      );
-    }
-
-    // Try fallback
-    try {
-      // Postmark doesn't support idempotency keys natively — use metadata for tracking
-      const result = await fallbackProvider.send({
-        ...sendParams,
-        idempotencyKey: undefined, // Not supported by Postmark
-        metadata: {
-          ...enrichedMetadata,
-          originalIdempotencyKey: idempotencyKey,
-          usedFallback: 'true',
-        },
-      });
-
-      await recordSuccess(fallbackProvider.name);
-
-      Sentry.captureMessage(`Email fallback used: ${fallbackProvider.name}`, 'info');
-
-      return {
-        ...result,
-        idempotencyKey,
-        usedFallback: true,
-      };
-    } catch (fallbackErr) {
-      await recordFailure(fallbackProvider.name);
-      Sentry.captureException(fallbackErr, {
-        tags: { emailProvider: fallbackProvider.name, emailFallback: 'failed' },
-      });
-      // Both providers failed — throw so QStash retries the job
-      throw new Error(
-        `Email send failed on both providers (${primaryProvider.name}, ${fallbackProvider.name}). Will retry.`
-      );
-    }
-  });
-}
-```
-
----
-
-## Usage in a QStash Job
-
-```typescript
-// apps/portal/app/api/jobs/booking-confirmation/route.ts
-import { verifySignatureAppRouter } from '@upstash/qstash/nextjs';
-import { send } from '@your-org/email';
-import { BookingConfirmationEmail } from '@your-org/email/templates';
-import { type NextRequest, NextResponse } from 'next/server';
-
-async function handler(request: NextRequest) {
-  const body = await request.json();
-  const { tenantId, attendees, startTime, endTime, bookingUid } = body;
-
-  await send({
-    tenantId,
-    to: attendees.map((a: { email: string }) => a.email),
-    subject: 'Your booking is confirmed',
-    template: (
-      <BookingConfirmationEmail
-        tenantId={tenantId}
-        attendeeName={attendees[0].name}
-        startTime={startTime}
-        endTime={endTime}
-        bookingUid={bookingUid}
-      />
-    ),
-    eventType: 'booking-confirmation',
-    entityId: bookingUid,
-  });
-
-  return NextResponse.json({ ok: true });
-}
-
-export const POST = verifySignatureAppRouter(handler);
-```
-
----
-
-## Performance Characteristics
-
-| Provider         | Typical Delivery                                                                                                  | Idempotency                                                                              | Best For                               |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------- |
-| Resend           | 1–5s                                                                                                              | ✅ Native (24hr TTL) [resend](https://resend.com/docs/dashboard/emails/idempotency-keys) | React Email 5 native, modern DX        |
-| Postmark         | <2s [courier](https://www.courier.com/blog/top-6-email-service-providers-for-transactional-notifications-in-2025) | ❌ Manual (metadata)                                                                     | Critical transactional, time-sensitive |
-| Fallback trigger | +50–200ms overhead                                                                                                | —                                                                                        | Resend 5xx / network timeout           |
-
----
-
-## References
-
-- [Resend Idempotency Keys Docs](https://resend.com/docs/dashboard/emails/idempotency-keys) [resend](https://resend.com/docs/dashboard/emails/idempotency-keys)
-- [Engineering Idempotency Keys — Resend Blog](https://resend.com/blog/engineering-idempotency-keys) [resend](https://resend.com/blog/engineering-idempotency-keys)
-- [Resend Idempotency Key Best Practices (LinkedIn)](https://www.linkedin.com/posts/resend_resend-now-supports-idempotency-keys-what-activity-7323709095155265538-bAFP) [linkedin](https://www.linkedin.com/posts/resend_resend-now-supports-idempotency-keys-what-activity-7323709095155265538-bAFP)
-- [Top ESPs for Transactional Email 2025](https://www.courier.com/blog/top-6-email-service-providers-for-transactional-notifications-in-2025) [courier](https://www.courier.com/blog/top-6-email-service-providers-for-transactional-notifications-in-2025)
-- [Circuit Breaker Pattern 2025](https://www.shadecoder.com/topics/the-circuit-breaker-pattern-a-comprehensive-guide-for-2025) [shadecoder](https://www.shadecoder.com/topics/the-circuit-breaker-pattern-a-comprehensive-guide-for-2025)
-- [Postmark Technical Guide 2026](https://www.captaindns.com/en/blog/postmark-transactional-email-technical-guide) [captaindns](https://www.captaindns.com/en/blog/postmark-transactional-email-technical-guide)
-- [Top 5 Email APIs for Developers 2025](https://emailable.com/blog/top-email-api/) [emailable](https://emailable.com/blog/top-email-api/)
-
----
-
----
-
-# `lead-notification-template.md`
-
-> **Internal Template — customize as needed.**
-
-```
-# lead-notification-template.md
-```
-
-## Overview
-
-This document specifies the `LeadNotificationEmail` React Email 5 template — sent to the tenant's business owner when a new lead submits the contact form on their marketing site. The template is fully branded per-tenant (logo, brand color, business name), mobile-first, dark-mode compatible (React Email 5 Dark Mode Switcher ), and renders correctly in Gmail, Outlook, Apple Mail, and Yahoo Mail. [sendlayer](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/)
-
----
-
-## Design Principles
-
-Per React Email 5 + email client best practices: [sendlayer](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/)
-
-1. **No React hooks** — templates are statically rendered to HTML; `useState`/`useEffect` are unavailable
-2. **Inline or `<Tailwind>` styles only** — external CSS is stripped by email clients
-3. **Mobile-first** — majority of email opens are on mobile
-4. **One primary CTA** — single clear action per email
-5. **Tailwind v4 inside `<Tailwind>` wrapper** — React Email 5 now fully supports Tailwind v4 [resend](https://resend.com/blog/react-email-5)
-6. **Dark mode via `@media (prefers-color-scheme: dark)`** — tested across major clients [youtube](https://www.youtube.com/watch?v=RnKvlWIF1xk)
-7. **Plain text fallback** — always rendered alongside HTML via `renderEmail()`
-
----
-
-## Template
-
-### `packages/email/src/templates/lead-notification/index.tsx`
-
-```typescript
-import {
-  Body,
-  Button,
-  Column,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Img,
-  Link,
-  Preview,
-  Row,
-  Section,
-  Text,
-} from '@react-email/components';
-import { Tailwind } from '@react-email/tailwind';
-
-export interface LeadNotificationProps {
-  // ── Tenant branding ────────────────────────────────────────────────
-  businessName: string;
-  brandColor: string;
-  logoUrl?: string;
-  portalUrl: string;
-
-  // ── Lead details ──────────────────────────────────────────────────
-  leadName: string;
-  leadEmail: string;
-  leadPhone?: string;
-  leadMessage?: string;
-  /** Service type selected by lead (e.g. "Plumbing Repair") */
-  serviceType?: string;
-  /** Page the form was submitted from */
-  sourceUrl?: string;
-  /** ISO timestamp */
-  submittedAt: string;
-  /** Lead ID for CRM deep-link */
-  leadId: string;
-
-  // ── Attribution ───────────────────────────────────────────────────
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-}
-
-/**
- * Lead notification email sent to business owner on new form submission.
- *
- * React Email 5:
- * - Tailwind v4 inside <Tailwind> wrapper [web:62]
- * - Dark mode tested via @media prefers-color-scheme [web:83]
- * - render() is now async — use await renderEmail(template) [web:95]
- */
-export function LeadNotificationEmail({
-  businessName,
-  brandColor,
-  logoUrl,
-  portalUrl,
-  leadName,
-  leadEmail,
-  leadPhone,
-  leadMessage,
-  serviceType,
-  sourceUrl,
-  submittedAt,
-  leadId,
-  utmSource,
-  utmMedium,
-  utmCampaign,
-}: LeadNotificationProps) {
-  const formattedDate = new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZoneName: 'short',
-  }).format(new Date(submittedAt));
-
-  const viewLeadUrl = `${portalUrl}/leads/${leadId}`;
-
-  // Attribution summary string
-  const attribution = [utmSource, utmMedium, utmCampaign]
-    .filter(Boolean)
-    .join(' / ');
-
-  return (
-    <Html lang="en" dir="ltr">
-      <Head>
-        {/* Dark mode support — React Email 5 tests across major clients [web:83] */}
-        <style>{`
-          @media (prefers-color-scheme: dark) {
-            .email-bg { background-color: #1a1a1a !important; }
-            .email-card { background-color: #2a2a2a !important; border-color: #3a3a3a !important; }
-            .email-text { color: #e5e5e5 !important; }
-            .email-muted { color: #a1a1a1 !important; }
-            .email-border { border-color: #3a3a3a !important; }
-          }
-        `}</style>
-      </Head>
-
-      <Preview>🔔 New lead from {leadName} — {businessName}</Preview>
-
-      <Tailwind>
-        <Body className="email-bg m-0 bg-gray-50 p-0 font-sans">
-          <Container className="mx-auto max-w-[600px] py-8">
-
-            {/* ── Header ─────────────────────────────────────────────── */}
-            <Section
-              className="email-card rounded-t-2xl border border-b-0 border-gray-200 bg-white px-8 pt-8 pb-4"
-            >
-              <Row>
-                <Column>
-                  {logoUrl ? (
-                    <Img
-                      src={logoUrl}
-                      alt={`${businessName} logo`}
-                      height={40}
-                      style={{ maxWidth: '160px', height: 'auto' }}
-                    />
-                  ) : (
-                    <Text
-                      className="email-text m-0 text-lg font-bold"
-                      style={{ color: brandColor }}
-                    >
-                      {businessName}
-                    </Text>
-                  )}
-                </Column>
-                <Column align="right">
-                  <Text className="email-muted m-0 text-xs text-gray-500">
-                    Lead Notification
-                  </Text>
-                </Column>
-              </Row>
-            </Section>
-
-            {/* ── Alert Banner ───────────────────────────────────────── */}
-            <Section
-              style={{ backgroundColor: brandColor }}
-              className="px-8 py-4"
-            >
-              <Text className="m-0 text-center text-sm font-semibold text-white">
-                🔔 You have a new lead!
-              </Text>
-            </Section>
-
-            {/* ── Lead Details Card ──────────────────────────────────── */}
-            <Section className="email-card border border-t-0 border-b-0 border-gray-200 bg-white px-8 py-6">
-              <Heading
-                as="h2"
-                className="email-text mt-0 mb-4 text-xl font-bold text-gray-900"
-              >
-                {leadName} wants to connect
-              </Heading>
-
-              <Text className="email-muted mb-6 text-sm text-gray-500">
-                Submitted {formattedDate}
-                {sourceUrl && (
-                  <> via{' '}
-                    <Link
-                      href={sourceUrl}
-                      className="text-blue-600 underline"
-                    >
-                      {new URL(sourceUrl).pathname}
-                    </Link>
-                  </>
-                )}
-              </Text>
-
-              {/* Lead Info Grid */}
-              <Section className="email-card rounded-xl border border-gray-100 bg-gray-50 p-4">
-                <Row className="mb-3">
-                  <Column className="w-1/3">
-                    <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                      Name
-                    </Text>
-                  </Column>
-                  <Column>
-                    <Text className="email-text m-0 text-sm font-medium text-gray-800">
-                      {leadName}
-                    </Text>
-                  </Column>
-                </Row>
-
-                <Row className="mb-3">
-                  <Column className="w-1/3">
-                    <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                      Email
-                    </Text>
-                  </Column>
-                  <Column>
-                    <Link
-                      href={`mailto:${leadEmail}`}
-                      className="text-sm"
-                      style={{ color: brandColor }}
-                    >
-                      {leadEmail}
-                    </Link>
-                  </Column>
-                </Row>
-
-                {leadPhone && (
-                  <Row className="mb-3">
-                    <Column className="w-1/3">
-                      <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                        Phone
-                      </Text>
-                    </Column>
-                    <Column>
-                      <Link
-                        href={`tel:${leadPhone.replace(/\D/g, '')}`}
-                        className="text-sm"
-                        style={{ color: brandColor }}
-                      >
-                        {leadPhone}
-                      </Link>
-                    </Column>
-                  </Row>
-                )}
-
-                {serviceType && (
-                  <Row className="mb-3">
-                    <Column className="w-1/3">
-                      <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                        Service
-                      </Text>
-                    </Column>
-                    <Column>
-                      <Text className="email-text m-0 text-sm text-gray-800">
-                        {serviceType}
-                      </Text>
-                    </Column>
-                  </Row>
-                )}
-              </Section>
-
-              {/* Message */}
-              {leadMessage && (
-                <Section className="mt-4">
-                  <Text className="email-muted mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                    Message
-                  </Text>
-                  <Section className="email-card rounded-xl border border-gray-100 bg-gray-50 p-4">
-                    <Text className="email-text m-0 text-sm leading-relaxed text-gray-700">
-                      "{leadMessage}"
-                    </Text>
-                  </Section>
-                </Section>
-              )}
-
-              {/* Attribution */}
-              {attribution && (
-                <Text className="email-muted mt-4 text-xs text-gray-400">
-                  📊 Source: {attribution}
-                </Text>
-              )}
-
-              {/* CTA */}
-              <Section className="mt-8 text-center">
-                <Button
-                  href={viewLeadUrl}
-                  style={{
-                    backgroundColor: brandColor,
-                    borderRadius: '8px',
-                    color: '#ffffff',
-                    display: 'inline-block',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    padding: '12px 32px',
-                    textDecoration: 'none',
-                  }}
-                >
-                  View Lead in Portal →
-                </Button>
-              </Section>
-
-              <Text className="email-muted mt-3 text-center text-xs text-gray-400">
-                Or copy this link:{' '}
-                <Link href={viewLeadUrl} style={{ color: brandColor }}>
-                  {viewLeadUrl}
-                </Link>
-              </Text>
-            </Section>
-
-            {/* ── Quick Actions ──────────────────────────────────────── */}
-            <Section className="email-card border border-t-0 border-b-0 border-gray-200 bg-white px-8 pb-6">
-              <Hr className="email-border border-gray-100" />
-              <Text className="email-muted mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                Quick Actions
-              </Text>
-              <Row>
-                <Column>
-                  <Link
-                    href={`mailto:${leadEmail}?subject=Re: Your inquiry to ${businessName}`}
-                    style={{ color: brandColor }}
-                    className="text-sm font-medium underline"
-                  >
-                    📧 Reply by Email
-                  </Link>
-                </Column>
-                {leadPhone && (
-                  <Column>
-                    <Link
-                      href={`tel:${leadPhone.replace(/\D/g, '')}`}
-                      style={{ color: brandColor }}
-                      className="text-sm font-medium underline"
-                    >
-                      📞 Call Now
-                    </Link>
-                  </Column>
-                )}
-                <Column>
-                  <Link
-                    href={`${portalUrl}/leads/${leadId}/schedule`}
-                    style={{ color: brandColor }}
-                    className="text-sm font-medium underline"
-                  >
-                    📅 Schedule Meeting
-                  </Link>
-                </Column>
-              </Row>
-            </Section>
-
-            {/* ── Footer ─────────────────────────────────────────────── */}
-            <Section className="email-card rounded-b-2xl border border-t-0 border-gray-200 bg-white px-8 pb-8 pt-4">
-              <Hr className="email-border border-gray-100" />
-              <Text className="email-muted m-0 text-center text-xs text-gray-400">
-                {businessName} · Powered by YourSaaS
-              </Text>
-              <Text className="email-muted mt-1 text-center text-xs text-gray-400">
-                <Link
-                  href={`${portalUrl}/settings/notifications`}
-                  className="text-gray-400 underline"
-                >
-                  Manage notification preferences
-                </Link>
-                {' · '}
-                <Link
-                  href={`${portalUrl}/settings/notifications?unsubscribe=lead-notifications`}
-                  className="text-gray-400 underline"
-                >
-                  Unsubscribe
-                </Link>
-              </Text>
-            </Section>
-
-          </Container>
-        </Body>
-      </Tailwind>
-    </Html>
-  );
-}
-
-LeadNotificationEmail.displayName = 'LeadNotificationEmail';
-```
-
----
-
-## Preview Data
-
-### `packages/email/src/templates/lead-notification/preview.tsx`
-
-```typescript
-import { LeadNotificationEmail } from './index';
-
-export default function Preview() {
-  return (
-    <LeadNotificationEmail
-      businessName="ACME Plumbing & HVAC"
-      brandColor="#1e40af"
-      logoUrl="https://example.com/logo.png"
-      portalUrl="https://portal.yourdomain.com"
-      leadName="Sarah Johnson"
-      leadEmail="sarah.johnson@example.com"
-      leadPhone="(214) 555-0182"
-      leadMessage="Hi, my water heater is making a loud banging noise and I'm worried it might need to be replaced. Can you come take a look this week?"
-      serviceType="Water Heater Repair"
-      sourceUrl="https://acmeplumbing.com/services/water-heater"
-      submittedAt={new Date().toISOString()}
-      leadId="lead_abc123xyz"
-      utmSource="google"
-      utmMedium="cpc"
-      utmCampaign="water-heater-spring-2026"
-    />
-  );
-}
-```
-
----
-
-## Sending Lead Notification
-
-```typescript
-// apps/portal/features/leads/actions/notify-lead.action.ts
-'use server';
-
-import { send } from '@your-org/email';
-import { LeadNotificationEmail } from '@your-org/email/templates';
-import { serverEnv } from '@your-org/env/server';
-
-export async function notifyTenantOfNewLead(params: {
-  tenantId: string;
-  ownerEmail: string;
-  lead: {
-    id: string;
-    name: string;
-    email: string;
-    phone?: string;
-    message?: string;
-    serviceType?: string;
-    sourceUrl?: string;
-    submittedAt: string;
-    utmSource?: string;
-    utmMedium?: string;
-    utmCampaign?: string;
-  };
-  tenant: {
-    businessName: string;
-    brandColor: string;
-    logoUrl?: string;
-  };
-}) {
-  const { tenantId, ownerEmail, lead, tenant } = params;
-
-  await send({
-    tenantId,
-    to: ownerEmail,
-    subject: `🔔 New lead: ${lead.name}`,
-    template: (
-      <LeadNotificationEmail
-        businessName={tenant.businessName}
-        brandColor={tenant.brandColor}
-        logoUrl={tenant.logoUrl}
-        portalUrl={serverEnv.NEXT_PUBLIC_APP_URL}
-        leadName={lead.name}
-        leadEmail={lead.email}
-        leadPhone={lead.phone}
-        leadMessage={lead.message}
-        serviceType={lead.serviceType}
-        sourceUrl={lead.sourceUrl}
-        submittedAt={lead.submittedAt}
-        leadId={lead.id}
-        utmSource={lead.utmSource}
-        utmMedium={lead.utmMedium}
-        utmCampaign={lead.utmCampaign}
-      />
-    ),
-    eventType: 'lead-notification',
-    entityId: lead.id,
-    metadata: {
-      leadId: lead.id,
-      leadEmail: lead.email,
-    },
-  });
-}
-```
-
----
-
-## Local Preview
+export default nextConfig
+````
 
 ```bash
-# Start React Email dev server on port 3333
-pnpm --filter @your-org/email dev
+# Install compiler babel plugin (used by Next.js internally)
+pnpm add -D babel-plugin-react-compiler
+```
 
-# Upload templates to Resend (React Email 5 CLI integration) [web:62]
-npx react-email@latest resend setup
-pnpm --filter @your-org/email upload
+### Before vs After Compiler
+
+**Before (manual memoization — verbose and error-prone):**
+
+```typescript
+// ❌ Manual memoization — what you had to write before
+function ProductList({ products, onSelect }: ProductListProps) {
+  const sortedProducts = useMemo(
+    () => [...products].sort((a, b) => a.name.localeCompare(b.name)),
+    [products],
+  )
+
+  const handleSelect = useCallback(
+    (id: string) => onSelect(id),
+    [onSelect],
+  )
+
+  return (
+    <ul>
+      {sortedProducts.map(p => (
+        <ProductItem key={p.id} product={p} onSelect={handleSelect} />
+      ))}
+    </ul>
+  )
+}
+```
+
+**After (compiler handles it — clean component logic):**
+
+```typescript
+// ✅ React Compiler handles memoization at build time
+function ProductList({ products, onSelect }: ProductListProps) {
+  // Compiler automatically memoizes derived values and callbacks
+  const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name))
+
+  return (
+    <ul>
+      {sortedProducts.map(p => (
+        <ProductItem key={p.id} product={p} onSelect={id => onSelect(id)} />
+      ))}
+    </ul>
+  )
+}
+```
+
+### Compiler Linting Rules
+
+```bash
+# Install the compiler ESLint plugin
+pnpm add -D eslint-plugin-react-compiler
+```
+
+```javascript
+// eslint.config.js
+import reactCompiler from 'eslint-plugin-react-compiler';
+
+export default [
+  {
+    plugins: { 'react-compiler': reactCompiler },
+    rules: {
+      // Warns about patterns that prevent compiler optimization
+      'react-compiler/react-compiler': 'warn',
+    },
+  },
+];
+```
+
+### Rules of React Compiler (What Breaks Optimization)
+
+The compiler can only optimize components that follow the Rules of React. Common
+violations that prevent optimization:
+
+```typescript
+// ❌ Mutating props or state directly — breaks compiler
+function BadComponent({ items }: { items: string[] }) {
+  items.push('new') // Direct mutation — unpredictable
+  return <ul>{items.map(i => <li key={i}>{i}</li>)}</ul>
+}
+
+// ✅ Pure, immutable operations — compiler can optimize
+function GoodComponent({ items }: { items: string[] }) {
+  const withNew = [...items, 'new']
+  return <ul>{withNew.map(i => <li key={i}>{i}</li>)}</ul>
+}
+
+// ❌ Calling hooks conditionally — breaks compiler
+function ConditionalHook({ isAdmin }: { isAdmin: boolean }) {
+  if (isAdmin) {
+    const data = useAdminData() // Conditional hook — forbidden
+  }
+}
+
+// ❌ Reading refs during render — breaks optimization
+function RefDuringRender({ ref }: { ref: React.RefObject<HTMLElement> }) {
+  const height = ref.current?.offsetHeight  // Side effect during render
+}
+```
+
+---
+
+## Activity Component
+
+`<Activity>` is React 19.2's solution for managing hidden-but-retained UI — tabs,
+drawers, wizard steps, and back-navigation state. [web:25][web:28]
+
+### Core Behavior
+
+```
+mode="visible"  →  Component renders normally, is interactive, paints to screen
+mode="hidden"   →  Component continues rendering (data fetches, state updates)
+                   but does NOT paint — zero visual or layout impact
+```
+
+This means hidden activities can **prefetch data** and **warm up state** while
+invisible, making the transition to `visible` instantaneous.
+
+### Basic Usage
+
+```typescript
+import { Activity } from 'react'
+
+function TabbedDashboard() {
+  const [activeTab, setActiveTab] = useState<'analytics' | 'leads' | 'settings'>('analytics')
+
+  return (
+    <div>
+      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
+
+      {/* ✅ All tabs render simultaneously; only active one paints */}
+      <Activity mode={activeTab === 'analytics' ? 'visible' : 'hidden'}>
+        <AnalyticsTab />    {/* Data fetches continue in background */}
+      </Activity>
+
+      <Activity mode={activeTab === 'leads' ? 'visible' : 'hidden'}>
+        <LeadsTab />        {/* Form state preserved when switching away */}
+      </Activity>
+
+      <Activity mode={activeTab === 'settings' ? 'visible' : 'hidden'}>
+        <SettingsTab />     {/* Settings don't lose unsaved changes */}
+      </Activity>
+    </div>
+  )
+}
+```
+
+**Compared to previous patterns:**
+
+```typescript
+// ❌ Before — loses state on tab switch, refetches data every time
+{activeTab === 'leads' && <LeadsTab />}
+
+// ❌ Before — CSS hide (display: none) — component still in DOM but hidden
+<div style={{ display: activeTab === 'leads' ? 'block' : 'none' }}>
+  <LeadsTab />
+</div>
+
+// ✅ Activity — state preserved, data prefetched, zero paint overhead
+<Activity mode={activeTab === 'leads' ? 'visible' : 'hidden'}>
+  <LeadsTab />
+</Activity>
+```
+
+### Route Prefetching with Activity
+
+One of the most powerful uses: prefetch the next likely page while the current one
+is visible:
+
+```typescript
+// components/NavigationPrefetcher.tsx
+import { Activity } from 'react'
+
+interface NavigationPrefetcherProps {
+  currentPath: string
+  children: React.ReactNode
+}
+
+export function NavigationPrefetcher({
+  currentPath,
+  children,
+}: NavigationPrefetcherProps) {
+  return (
+    <>
+      {children}
+
+      {/* Prefetch dashboard while user is on login page */}
+      {currentPath === '/login' && (
+        <Activity mode="hidden">
+          <DashboardShell />   {/* Prefetches dashboard data in background */}
+        </Activity>
+      )}
+
+      {/* Prefetch settings while user is on dashboard */}
+      {currentPath === '/dashboard' && (
+        <Activity mode="hidden">
+          <SettingsPage />
+        </Activity>
+      )}
+    </>
+  )
+}
+```
+
+### Wizard / Multi-Step Form State Preservation
+
+```typescript
+// components/OnboardingWizard.tsx
+import { Activity } from 'react'
+import { useState } from 'react'
+
+export function OnboardingWizard() {
+  const [step, setStep] = useState(1)
+
+  return (
+    <div>
+      <StepIndicator current={step} total={4} />
+
+      {/* Each step retains its form state even when navigating back */}
+      <Activity mode={step === 1 ? 'visible' : 'hidden'}>
+        <BusinessInfoStep onNext={() => setStep(2)} />
+      </Activity>
+
+      <Activity mode={step === 2 ? 'visible' : 'hidden'}>
+        <ServiceAreaStep onNext={() => setStep(3)} onBack={() => setStep(1)} />
+      </Activity>
+
+      <Activity mode={step === 3 ? 'visible' : 'hidden'}>
+        <BillingStep onNext={() => setStep(4)} onBack={() => setStep(2)} />
+      </Activity>
+
+      <Activity mode={step === 4 ? 'visible' : 'hidden'}>
+        <ReviewStep onBack={() => setStep(3)} />
+      </Activity>
+    </div>
+  )
+}
+```
+
+---
+
+## useEffectEvent Hook
+
+`useEffectEvent` separates **event-driven logic** (values read at the time of an
+event) from **reactive dependencies** (values that should retrigger the effect). [web:25]
+
+### The Problem It Solves
+
+```typescript
+// ❌ Before — verbose suppression or stale closure problems
+function AnalyticsTracker({ eventName, userId }: { eventName: string; userId: string }) {
+  useEffect(() => {
+    // We want this to run when eventName changes
+    // BUT userId should be current at time of event, not a dependency
+    trackEvent(eventName, { userId }); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [eventName]); // Stale userId — but adding it causes unwanted re-runs
+}
+```
+
+```typescript
+// ✅ After — useEffectEvent: userId is always fresh, eventName triggers re-runs
+import { useEffect, useEffectEvent } from 'react';
+
+function AnalyticsTracker({ eventName, userId }: { eventName: string; userId: string }) {
+  // track is an "effect event" — not reactive, always reads latest values
+  const track = useEffectEvent(() => {
+    trackEvent(eventName, { userId });
+  });
+
+  useEffect(() => {
+    track();
+  }, [eventName]); // Only eventName is a dependency — userId reads current value
+}
+```
+
+### Real-World Pattern: Realtime Subscription with Non-Reactive Config
+
+```typescript
+// packages/realtime/src/use-realtime-channel.ts
+import { useEffect, useEffectEvent } from 'react';
+import { supabase } from '@/shared/api/supabase-client';
+
+function useRealtimeChannel<T>(
+  channel: string,
+  onMessage: (payload: T) => void,
+  options: { enabled: boolean; debug: boolean }
+) {
+  // Capture non-reactive values in effect event
+  // onMessage and options.debug should not retrigger the subscription
+  const handleMessage = useEffectEvent((payload: T) => {
+    if (options.debug) console.log('[Realtime]', channel, payload);
+    onMessage(payload);
+  });
+
+  useEffect(() => {
+    if (!options.enabled) return;
+
+    const sub = supabase
+      .channel(channel)
+      .on('broadcast', { event: '*' }, ({ payload }) => {
+        handleMessage(payload as T);
+      })
+      .subscribe();
+
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [channel, options.enabled]); // Only reactive to channel + enabled changes
+}
+```
+
+---
+
+## Actions & Form State (19.0 Recap)
+
+React 19.0 (Dec 2024) introduced Actions as the canonical mutation pattern. In 19.2
+these are now fully stable and integrated with the compiler.
+
+```typescript
+// features/contact-form/ui/ContactForm.tsx
+'use client'
+import { useActionState, useOptimistic, startTransition } from 'react'
+import { submitContactAction } from '../api/submit-contact-action'
+
+export function ContactForm() {
+  const [state, action, isPending] = useActionState(submitContactAction, null)
+
+  // Optimistic UI: show "Submitting..." state immediately
+  const [optimisticState, addOptimistic] = useOptimistic(
+    state,
+    (_, newState: string) => ({ status: newState }),
+  )
+
+  return (
+    <form
+      action={action}
+      aria-live="polite"
+      aria-busy={isPending}
+    >
+      <input
+        type="text"
+        name="name"
+        placeholder="Your name"
+        required
+        aria-required="true"
+        disabled={isPending}
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="your@email.com"
+        required
+        aria-required="true"
+        disabled={isPending}
+      />
+      <textarea name="message" rows={4} disabled={isPending} />
+
+      <button type="submit" disabled={isPending} aria-disabled={isPending}>
+        {isPending ? 'Sending…' : 'Send Message'}
+      </button>
+
+      {state?.success && (
+        <p role="status" className="text-green-600">
+          Message sent! We'll be in touch within 24 hours.
+        </p>
+      )}
+      {state?.error && (
+        <p role="alert" className="text-red-600">
+          {state.error}
+        </p>
+      )}
+    </form>
+  )
+}
+```
+
+---
+
+## Server Components Patterns
+
+### Data Fetching Without `useEffect`
+
+```typescript
+// pages/dashboard/index.tsx — Server Component
+// No useEffect, no useState for async data — just async/await
+export async function DashboardPage({ tenantId }: { tenantId: string }) {
+  // Parallel data fetching — compiler optimizes re-renders
+  const [analytics, leads, team] = await Promise.all([
+    fetchAnalyticsSummary(tenantId),
+    fetchRecentLeads(tenantId, { limit: 10 }),
+    fetchTeamMembers(tenantId),
+  ])
+
+  return (
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <AnalyticsCard data={analytics} />
+      <LeadFeed leads={leads} />
+      <TeamPanel members={team} />
+    </div>
+  )
+}
+```
+
+### `use()` for Deferred Data
+
+```typescript
+// Use the `use()` hook to read a Promise in a Client Component
+// (enables streaming — the Suspense boundary above handles loading)
+'use client'
+import { use } from 'react'
+
+export function LazyAnalyticsChart({
+  dataPromise,
+}: {
+  dataPromise: Promise<AnalyticsData>
+}) {
+  // `use()` suspends the component until the promise resolves
+  // The nearest <Suspense fallback> handles loading state
+  const data = use(dataPromise)
+  return <LineChart data={data} />
+}
+```
+
+---
+
+## View Transitions
+
+```typescript
+// hooks/use-view-transition.ts
+import { startTransition } from 'react';
+import { useRouter } from 'next/navigation';
+
+export function useViewTransition() {
+  const router = useRouter();
+
+  const navigateWithTransition = (href: string) => {
+    if (!document.startViewTransition) {
+      router.push(href);
+      return;
+    }
+
+    document.startViewTransition(() => {
+      startTransition(() => {
+        router.push(href);
+      });
+    });
+  };
+
+  return { navigateWithTransition };
+}
+
+// CSS for View Transitions
+// app/globals.css
+// ::view-transition-old(root) { animation: fade-out 0.15s ease; }
+// ::view-transition-new(root) { animation: fade-in 0.15s ease; }
+```
+
+---
+
+## Migration Guide
+
+### From React 18 to 19.2
+
+| React 18 Pattern                         | React 19.2 Replacement              | Notes                      |
+| ---------------------------------------- | ----------------------------------- | -------------------------- |
+| `useCallback(fn, deps)`                  | Remove — Compiler handles it        | Only if Compiler enabled   |
+| `useMemo(fn, deps)`                      | Remove — Compiler handles it        | Only for pure computations |
+| `useState` + `useEffect` for server data | Server Component + `async/await`    | For server-rendered data   |
+| Manual loading/error state               | `useActionState`                    | For mutations              |
+| `{cond && <Comp />}` for hidden UI       | `<Activity mode="hidden\|visible">` | For state preservation     |
+| `useEffect` with stale closures          | `useEffectEvent` + `useEffect`      | For reactive effects       |
+
+### Compiler Adoption Strategy
+
+1. **Audit first**: Run `eslint-plugin-react-compiler` and fix violations
+2. **Enable incrementally**: Start with `packages/ui` (pure components, easiest)
+3. **Remove useMemo/useCallback** only after verifying with React DevTools Profiler
+4. **Do not remove `memo()`** on list items yet — wait for performance profiling data
+
+---
+
+## References
+
+- [React 19.2 Official Blog](https://react.dev/blog/2025/10/01/react-19-2) [web:28]
+- [React Compiler Docs](https://react.dev/learn/react-compiler)
+- [Activity API Docs](https://react.dev/reference/react/Activity)
+- [useEffectEvent Docs](https://react.dev/reference/react/experimental_useEffectEvent)
+- [React 19.2 — InfoQ Coverage](https://www.infoq.com/news/2025/10/meta-ships-react-19-2/) [web:25]
+- [JSJ 670 — React 19.2 Deep Dive](https://www.youtube.com/watch?v=-BMm--uHb6s) [web:31]
+- [Reddit: React 19 → 19.2 Key Features](https://www.reddit.com/r/react/comments/1rb7qub/) [web:34]
+
+````
+
+***
+
+# nextjs-16-documentation.md
+
+```markdown
+# nextjs-16-documentation.md
+
+> **2026 Standards Compliance** | Next.js 16 · Stable PPR · `use cache` Directive ·
+> Cache Components · Platform Adapters · DevTools MCP
+
+## Table of Contents
+1. [What's New in Next.js 16](#whats-new-in-nextjs-16)
+2. [Partial Pre-Rendering (PPR) — Now Stable](#partial-pre-rendering-ppr--now-stable)
+3. [`use cache` Directive & Cache Components](#use-cache-directive--cache-components)
+4. [Cache Life Profiles](#cache-life-profiles)
+5. [Cache Tags & Revalidation](#cache-tags--revalidation)
+6. [Async Request APIs](#async-request-apis)
+7. [Platform Adapters](#platform-adapters)
+8. [Next.js DevTools MCP](#nextjs-devtools-mcp)
+9. [Migration from Next.js 15](#migration-from-nextjs-15)
+10. [Complete Rendering Decision Tree](#complete-rendering-decision-tree)
+11. [References](#references)
+
+---
+
+## What's New in Next.js 16
+
+| Feature | Status | Impact |
+|---------|--------|--------|
+| PPR (Partial Pre-Rendering) | **Stable** | Static speed + dynamic personalization |
+| `use cache` directive | **Stable** | Component-level caching |
+| Cache Components | **Stable** | Cache any async Server Component |
+| `cacheLife()` API | **New** | Declarative cache lifetime profiles |
+| `cacheTag()` API | **New** | Fine-grained cache invalidation |
+| Async Request APIs | **Breaking** | `cookies()`, `headers()`, `params` now async |
+| Platform Adapters | **New** | Native Cloudflare Workers, OpenNext deploy targets |
+| Next.js DevTools MCP | **New** | AI agent access to build analysis |
+| React 19.2 | **Bundled** | Compiler, Activity, useEffectEvent |
+| `cacheComponents: true` config | **New** | Opt-in flag for Cache Components [web:29][web:32] |
+
+---
+
+## Partial Pre-Rendering (PPR) — Now Stable
+
+PPR is the core innovation of Next.js 16: a **single HTTP response** delivers a static
+HTML shell instantly (cached at CDN edge), while dynamic Suspense boundaries stream in
+as their data resolves. The browser renders meaningful content immediately, then
+progressively hydrates dynamic sections. [web:29]
+
+### How PPR Detects Static vs Dynamic
+
+The static/dynamic boundary is determined **automatically** by the presence of
+dynamic signals: [web:29]
+
+````
+
+Static signals → can be cached:
+
+- async Server Components with no dynamic APIs
+- Cached `fetch()` calls
+- `use cache` directives
+
+Dynamic signals → cannot be cached, stream in:
+
+- `cookies()`, `headers()` calls
+- `searchParams` access
+- `new Date()`, `Math.random()`
+- `unstable_noStore()` calls
+
+````
+
+### Enabling PPR
+
+```typescript
+// next.config.ts
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  experimental: {
+    ppr: true,             // Enable stable PPR
+    cacheComponents: true, // Enable cache components (use cache directive)
+    reactCompiler: true,   // React Compiler 1.0
+  },
+}
+
+export default nextConfig
+````
+
+### PPR Page Architecture
+
+```typescript
+// app/dashboard/page.tsx — PPR: static shell + dynamic islands
+import { Suspense } from 'react'
+import { DashboardShell } from '@/widgets/dashboard-shell'
+import { PersonalizedGreeting } from '@/widgets/personalized-greeting'
+import { AnalyticsChart } from '@/widgets/analytics-chart'
+import { LiveLeadFeed } from '@/widgets/live-lead-feed'
+import { Skeleton } from '@/shared/ui'
+
+// This entire route uses PPR automatically when next.config has ppr: true
+// Static shell renders at build time, dynamic parts stream in
+export default async function DashboardPage() {
+  return (
+    <DashboardShell>
+      {/* DYNAMIC — reads cookies() for user session → streams in */}
+      <Suspense fallback={<Skeleton className="h-8 w-48" />}>
+        <PersonalizedGreeting />
+      </Suspense>
+
+      {/* STATIC CACHED — analytics query cached for 1 hour → in static shell */}
+      <Suspense fallback={<Skeleton className="h-64" />}>
+        <AnalyticsChart />
+      </Suspense>
+
+      {/* DYNAMIC — real-time feed, no caching → streams in */}
+      <Suspense fallback={<Skeleton className="h-96" />}>
+        <LiveLeadFeed />
+      </Suspense>
+    </DashboardShell>
+  )
+}
+```
+
+---
+
+## `use cache` Directive & Cache Components
+
+The `use cache` directive marks any async Server Component or function as cacheable.
+This is built on top of PPR — it allows **dynamic routes** to have **cached portions**,
+giving granular control that route-level `revalidate` can't provide. [web:26][web:29][web:32]
+
+### Function-Level Caching
+
+```typescript
+// Caching a data-fetch function
+import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache';
+
+async function getProductCatalog(tenantId: string) {
+  'use cache';
+  cacheLife('hours'); // Cache for hours (built-in profile)
+  cacheTag(`catalog:${tenantId}`); // Tag for on-demand revalidation
+
+  const products = await db.products.findMany({ where: { tenantId } });
+  return products;
+}
+
+// Any call to getProductCatalog('t_123') uses the cache for hours
+// Manually invalidate with: revalidateTag('catalog:t_123')
+```
+
+### Component-Level Caching
+
+```typescript
+// widgets/analytics-chart/ui/AnalyticsChart.tsx
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from 'next/cache'
+
+// The ENTIRE component output is cached — not just its data
+export async function AnalyticsChart({ tenantId }: { tenantId: string }) {
+  'use cache'
+  cacheLife('hours')
+  cacheTag(`analytics:${tenantId}`)
+
+  // This fetch runs once per hour per tenant, then the rendered HTML is cached
+  const data = await fetchAnalyticsSummary(tenantId)
+
+  return (
+    <div className="rounded-lg border p-4">
+      <h2 className="text-sm font-medium text-gray-500">Leads This Month</h2>
+      <p className="mt-1 text-3xl font-bold">{data.leadsThisMonth}</p>
+      <LineChart data={data.trend} />
+    </div>
+  )
+}
+```
+
+### Critical Rules for `use cache`
+
+```typescript
+// ❌ BREAKS CACHE: new Date() is dynamic — causes cache miss every render
+async function BadCachedComponent() {
+  'use cache'
+  const now = new Date()  // Dynamic value — defeats caching
+  return <p>Rendered at {now.toISOString()}</p>
+}
+
+// ✅ CORRECT: move dynamic values outside the cached boundary
+async function GoodCachedComponent({ staticDate }: { staticDate: string }) {
+  'use cache'
+  cacheLife('hours')
+  return <p>Content as of {staticDate}</p>
+}
+
+// In the parent (not cached):
+// <GoodCachedComponent staticDate={lastRevalidatedAt} />
+
+// ❌ BREAKS CACHE: cookies() and headers() are request-specific
+async function BadCachedPersonalized() {
+  'use cache'
+  const cookieStore = cookies()  // Dynamic — cannot be cached
+  const userId = cookieStore.get('userId')?.value
+}
+
+// ✅ CORRECT: read dynamic values in parent, pass as props into cached component
+async function PersonalizedPage() {
+  // NOT cached — reads cookies
+  const cookieStore = await cookies()
+  const userId = cookieStore.get('userId')?.value
+
+  return (
+    // Cached — receives userId as prop, makes it part of cache key
+    <CachedUserProfile userId={userId} />
+  )
+}
+```
+
+---
+
+## Cache Life Profiles
+
+Built-in profiles for common caching needs: [web:26][web:29]
+
+```typescript
+// Built-in cacheLife profiles:
+cacheLife('seconds'); // stale: 0s,   revalidate: 1s,    expire: 10s
+cacheLife('minutes'); // stale: 60s,  revalidate: 60s,   expire: 10m
+cacheLife('hours'); // stale: 1h,   revalidate: 1h,    expire: 1d
+cacheLife('days'); // stale: 1d,   revalidate: 1d,    expire: 1w
+cacheLife('weeks'); // stale: 1w,   revalidate: 1w,    expire: 1mo
+cacheLife('max'); // stale: 1y,   revalidate: 1y,    expire: 1y (forever)
+```
+
+### Custom Cache Life Profiles
+
+```typescript
+// next.config.ts
+const nextConfig: NextConfig = {
+  experimental: {
+    ppr: true,
+    cacheComponents: true,
+    // Define custom profiles matching your data freshness requirements
+    cacheProfiles: {
+      realtime: { stale: 0, revalidate: 5, expire: 30 },
+      'lead-analytics': { stale: 300, revalidate: 300, expire: 86400 },
+      'site-config': { stale: 3600, revalidate: 3600, expire: 604800 },
+      'blog-content': { stale: 3600, revalidate: 3600, expire: 604800 },
+    },
+  },
+};
+```
+
+```typescript
+// Usage with custom profile:
+async function LeadAnalyticsWidget({ tenantId }: { tenantId: string }) {
+  'use cache';
+  cacheLife('lead-analytics'); // 5 min freshness
+  cacheTag(`leads:${tenantId}`);
+  // ...
+}
+```
+
+---
+
+## Cache Tags & Revalidation
+
+Cache tags enable on-demand, surgical revalidation from webhook handlers, Server
+Actions, or API routes:
+
+```typescript
+// Tagging pattern — use hierarchical tags for flexibility
+async function getTenantData(tenantId: string) {
+  'use cache';
+  cacheTag(
+    `tenant:${tenantId}`, // Invalidate everything for a tenant
+    `tenant:${tenantId}:sites` // Or just their sites data
+  );
+  return fetchTenantWithSites(tenantId);
+}
+
+// On-demand revalidation from Sanity webhook:
+// apps/portal/src/app/api/revalidate/sanity/route.ts
+import { revalidateTag } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(req: NextRequest) {
+  const secret = req.headers.get('x-sanity-webhook-secret');
+  if (secret !== process.env.SANITY_WEBHOOK_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const body = await req.json();
+  const { _type, tenantId, slug } = body;
+
+  // Surgical invalidation based on content type
+  switch (_type) {
+    case 'blogPost':
+      revalidateTag(`blog:${slug}`);
+      revalidateTag('blog-index');
+      break;
+    case 'serviceArea':
+      revalidateTag(`service-area:${slug}`);
+      revalidateTag(`tenant:${tenantId}:service-areas`);
+      break;
+    case 'siteConfig':
+      revalidateTag(`tenant:${tenantId}:config`);
+      revalidateTag(`tenant:${tenantId}`); // Broad invalidation
+      break;
+  }
+
+  return NextResponse.json({ revalidated: true, timestamp: Date.now() });
+}
+```
+
+---
+
+## Async Request APIs
+
+**Breaking change in Next.js 15/16**: `cookies()`, `headers()`, `params`, and
+`searchParams` are now async. Failure to await them causes a runtime error. [web:29]
+
+```typescript
+// ❌ Next.js 14 (sync — no longer works)
+import { cookies, headers } from 'next/headers';
+
+export default function Page() {
+  const token = cookies().get('token'); // Sync — THROWS in Next.js 16
+  const nonce = headers().get('x-nonce');
+}
+
+// ✅ Next.js 16 (async — required)
+import { cookies, headers } from 'next/headers';
+
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>; // async params
+  searchParams: Promise<{ q?: string }>; // async searchParams
+}) {
+  // All request APIs require await
+  const cookieStore = await cookies();
+  const headersList = await headers();
+  const { slug } = await params;
+  const { q } = await searchParams;
+
+  const token = cookieStore.get('token');
+  const nonce = headersList.get('x-nonce');
+  // ...
+}
+```
+
+---
+
+## Platform Adapters
+
+Next.js 16 ships with first-class **platform adapters** that emit platform-native
+builds — not just Node.js: [web:29]
+
+```typescript
+// next.config.ts — Cloudflare Workers adapter
+import type { NextConfig } from 'next';
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
+
+if (process.env.NODE_ENV === 'development') {
+  await initOpenNextCloudflareForDev();
+}
+
+const nextConfig: NextConfig = {
+  // Target Cloudflare Workers runtime
+};
+
+export default nextConfig;
+```
+
+| Adapter            | Use Case                    | Status                   |
+| ------------------ | --------------------------- | ------------------------ |
+| Vercel (default)   | Vercel deployment           | Built-in                 |
+| Node.js            | Self-hosted / Docker        | Built-in                 |
+| Cloudflare Workers | Edge-native, no cold starts | `@opennextjs/cloudflare` |
+| AWS Lambda         | AWS deployments             | `@opennextjs/aws`        |
+| Docker             | Containerized               | Built-in                 |
+
+---
+
+## Next.js DevTools MCP
+
+Next.js 16 ships a built-in **Model Context Protocol (MCP) server** that exposes
+your build analysis and route structure to AI agents: [web:29]
+
+```json
+// .mcp/config.json — already present in your repo!
+{
+  "mcpServers": {
+    "nextjs-devtools": {
+      "command": "npx",
+      "args": ["@vercel/next-devtools-mcp", "--project", "."]
+    }
+  }
+}
+```
+
+**What the MCP exposes to agents:**
+
+- Build output (bundle sizes, route list, cache hit rates)
+- Rendering mode per route (static / dynamic / PPR)
+- `use cache` coverage report
+- Turbopack module graph
+
+---
+
+## Migration from Next.js 15
+
+### Automated Codemod
+
+```bash
+# Run the official migration codemod
+npx @next/codemod@latest next-async-request-api .
+
+# What it does:
+# - Wraps cookies(), headers() in await
+# - Updates params/searchParams to Promise<> types
+# - Updates middleware usage of these APIs
+```
+
+### Manual Migration Checklist
+
+```
+□ Run async-request-api codemod
+□ Set experimental.ppr: true in next.config.ts
+□ Set experimental.cacheComponents: true
+□ Install React 19.2 (ships with Next.js 16)
+□ Enable React Compiler (experimental.reactCompiler: true)
+□ Run React Compiler lint; fix violations
+□ Audit 'use cache' placement in components
+□ Replace revalidate = X with cacheLife() where granular caching is needed
+□ Test all webhook revalidation flows with cacheTag()
+```
+
+---
+
+## Complete Rendering Decision Tree
+
+```
+For each route/component, ask:
+
+1. Does it read cookies/headers/searchParams at render time?
+   └─ YES → DYNAMIC (Suspense boundary; stream in)
+   └─ NO  → Continue ↓
+
+2. Does it have time-sensitive data (stock prices, live counts)?
+   └─ YES → DYNAMIC (Suspense + short revalidate)
+   └─ NO  → Continue ↓
+
+3. Does it have data that changes occasionally (hours/days)?
+   └─ YES → use cache + cacheLife('hours'/'days') + cacheTag()
+   └─ NO  → Continue ↓
+
+4. Is it completely static (marketing copy, pricing)?
+   └─ YES → Static (build-time, no cache directive needed)
+              → generateStaticParams for parameterized routes
 ```
 
 ---
 
 ## References
 
-- [React Email 5.0](https://resend.com/blog/react-email-5) [resend](https://resend.com/blog/react-email-5)
-- [React Email 5 Dark Mode Switcher (YouTube)](https://www.youtube.com/watch?v=RnKvlWIF1xk) [youtube](https://www.youtube.com/watch?v=RnKvlWIF1xk)
-- [Building Email Templates in React](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/) [sendlayer](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/)
-- [React Email with Tailwind (Everestek)](https://blog.everestek.com/how-we-simplified-email-templating-with-react-email-2/) [blog.everestek](https://blog.everestek.com/how-we-simplified-email-templating-with-react-email-2/)
-- [React Email Templates Gallery](https://react.email/templates) [react](https://react.email/templates)
-- [5 Best Email Tools with React Email Support (2026)](https://www.sequenzy.com/blog/best-email-tools-with-react-email-support) [sequenzy](https://www.sequenzy.com/blog/best-email-tools-with-react-email-support)
+- [Next.js 16 Master PPR Tutorial](https://www.youtube.com/watch?v=WJn1rXesTtg) [web:29]
+- [Cache Components — Shahin.page Deep Dive](https://shahin.page/article/nextjs-cache-components-partial-prerendering-streaming-caching) [web:26]
+- [Cache Components — YouTube](https://www.youtube.com/watch?v=Rodyt22D84A) [web:32]
+- [Next.js generateMetadata Reference](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) [web:41]
+- [Next.js Sitemap Reference](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap) [web:47]
+- [Next.js 16 Blog Post](https://nextjs.org/blog/next-16)
+- [React 19.2 Blog](https://react.dev/blog/2025/10/01/react-19-2) [web:28]
+
+````
+
+***
+
+# stripe-documentation.md
+
+```markdown
+# stripe-documentation.md
+
+> **2026 Standards Compliance** | Stripe API 2025-11-20 · Payment Intents v2 ·
+> SCA/3DS2 · Idempotency · Webhook Best Practices · Radar Fraud Rules
+
+## Table of Contents
+1. [Overview](#overview)
+2. [API Versioning & 2026 Changes](#api-versioning--2026-changes)
+3. [Payment Intents — Complete Implementation](#payment-intents--complete-implementation)
+4. [Stripe Elements (React)](#stripe-elements-react)
+5. [Webhook Handling — Production Patterns](#webhook-handling--production-patterns)
+6. [Idempotency Keys — Complete Guide](#idempotency-keys--complete-guide)
+7. [Stripe Checkout Sessions](#stripe-checkout-sessions)
+8. [Customer Portal](#customer-portal)
+9. [Subscription Management](#subscription-management)
+10. [Radar Fraud Prevention](#radar-fraud-prevention)
+11. [SCA / 3D Secure 2](#sca--3d-secure-2)
+12. [Testing Patterns](#testing-patterns)
+13. [Security Checklist](#security-checklist)
+14. [References](#references)
 
 ---
 
-**All 4 Batch D documents are complete.** Here's the full summary:
+## Overview
 
-| Document                        | Depth Highlights                                                                                                                                                                           |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `email-package-structure.md`    | Complete directory tree, `package.json`, provider interface, Resend + Postmark adapters, React Email 5 async `render()` note, barrel exports                                               |
-| `multi-tenant-email-routing.md` | Per-tenant subdomain provisioning flow, Resend Domain API with custom return path, Redis cache with invalidation, Supabase schema migration, DNS records guide                             |
-| `unified-email-send.md`         | Circuit breaker state machine (closed/open/half-open) with Redis state storage, idempotency key builder with format best practices, full `send()` with primary/fallback, performance table |
-| `lead-notification-template.md` | Full React Email 5 template with Tailwind v4, dark mode `@media` CSS, quick-action row, UTM attribution, branded per-tenant, preview data, Resend CLI upload workflow                      |
+Stripe is the payments backbone for subscription billing, one-time charges, and
+customer portal management. In 2026, the core patterns center on:
+- **Payment Intents API** for all charge flows (not Charges API)
+- **Idempotency keys** on every write operation
+- **Webhook-driven state machine** for subscription lifecycle
+- **Radar** for ML-based fraud prevention
+- **SAQ A compliance** via Stripe-hosted Elements (no card data touches your servers)
 
-Which batch would you like next?
+---
 
-- **Batch E** — SEO & GEO Engine (`generateMetadata()` factory, dynamic sitemaps, JSON-LD builders, Edge OG images, composable metadata factory)
-- **Batch F** — AI Agent Documentation (AGENTS.md per-package stubs, root orchestration, CLAUDE.md sub-agents, cold-start checklist)
-- **Batch G** — Architecture & FSD (package-level FSD, tenant resolution sequence, Supavisor config, schema migration playbook, golden-path CLI)
-- **Batch H** — Background Jobs, PWA, Realtime, Super Admin, AI Chat, Lead Scoring
+## API Versioning & 2026 Changes
+
+Always pin the Stripe API version in your client initialization:
+
+```typescript
+// packages/billing/src/stripe-client.ts
+import Stripe from 'stripe'
+
+// Pin to the version your integration was tested against
+// Stripe issues changelogs for each version at stripe.com/docs/upgrades
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-11-20',   // Latest stable as of Feb 2026
+  typescript: true,
+  appInfo: {
+    name: 'YourSaaS',
+    version: '1.0.0',
+    url: process.env.NEXT_PUBLIC_APP_URL,
+  },
+  // Automatic retry on network failures (3 retries with exponential backoff)
+  maxNetworkRetries: 3,
+})
+
+export const stripePublishable = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+````
+
+---
+
+## Payment Intents — Complete Implementation
+
+The Payment Intents API is the **only** recommended way to accept payments in 2026.
+The legacy Charges API does not support SCA/3DS2 and will be deprecated. [web:35]
+
+### Server: Create PaymentIntent
+
+```typescript
+// apps/portal/src/app/api/payments/create-intent/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { stripe } from '@repo/billing/stripe-client';
+import { verifyTenantSession } from '@repo/auth';
+import { getTenantSubscription } from '@repo/db/subscriptions';
+
+export async function POST(req: NextRequest) {
+  const session = await verifyTenantSession();
+  const { amount, currency = 'usd', priceId, metadata = {} } = await req.json();
+
+  // Validate amount server-side — NEVER trust client-provided amounts for subscriptions
+  if (!Number.isInteger(amount) || amount < 50 || amount > 99_999_99) {
+    return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
+  }
+
+  // Generate idempotency key tied to the specific cart/session
+  // Using session.cartId ensures the same cart won't create 2 PaymentIntents
+  const idempotencyKey = `pi_${session.tenantId}_${session.cartId ?? Date.now()}`;
+
+  const paymentIntent = await stripe.paymentIntents.create(
+    {
+      amount, // Amount in smallest currency unit (cents for USD)
+      currency,
+      customer: session.stripeCustomerId,
+      automatic_payment_methods: {
+        enabled: true, // Enables cards, Apple Pay, Google Pay, Link, etc.
+        allow_redirects: 'never', // Keep user on your page (no bank redirects)
+      },
+      metadata: {
+        tenant_id: session.tenantId,
+        user_id: session.userId,
+        price_id: priceId,
+        ...metadata,
+      },
+      // SCA: capture method determines when the charge is captured
+      capture_method: 'automatic',
+      // Statement descriptor: what appears on customer's bank statement
+      statement_descriptor_suffix: 'YOURSAAS',
+    },
+    {
+      idempotencyKey,
+    }
+  );
+
+  return NextResponse.json({
+    clientSecret: paymentIntent.client_secret,
+    paymentIntentId: paymentIntent.id,
+  });
+}
+```
+
+### Client: Stripe Elements
+
+```typescript
+// features/checkout/ui/CheckoutForm.tsx
+'use client'
+import {
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/js'
+import { useState } from 'react'
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+
+export function CheckoutWrapper({ clientSecret }: { clientSecret: string }) {
+  return (
+    <Elements
+      stripe={stripePromise}
+      options={{
+        clientSecret,
+        appearance: {
+          theme: 'flat',
+          variables: {
+            colorPrimary: '#2563eb',
+            fontFamily: 'Inter, system-ui, sans-serif',
+            borderRadius: '8px',
+          },
+        },
+        loader: 'auto',
+      }}
+    >
+      <CheckoutForm clientSecret={clientSecret} />
+    </Elements>
+  )
+}
+
+function CheckoutForm({ clientSecret }: { clientSecret: string }) {
+  const stripe = useStripe()
+  const elements = useElements()
+  const [error, setError] = useState<string | null>(null)
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!stripe || !elements) return
+
+    setIsProcessing(true)
+    setError(null)
+
+    // Trigger form validation and wallet collection
+    const { error: submitError } = await elements.submit()
+    if (submitError) {
+      setError(submitError.message ?? 'Form validation failed')
+      setIsProcessing(false)
+      return
+    }
+
+    const { error: confirmError } = await stripe.confirmPayment({
+      elements,
+      clientSecret,
+      confirmParams: {
+        return_url: `${window.location.origin}/checkout/success`,
+      },
+      redirect: 'if_required',  // Avoid redirect when not needed (e.g., card payments)
+    })
+
+    if (confirmError) {
+      // Show user-friendly error message
+      setError(
+        confirmError.type === 'card_error' || confirmError.type === 'validation_error'
+          ? (confirmError.message ?? 'Payment failed')
+          : 'An unexpected error occurred. Please try again.',
+      )
+    }
+    // If no error + no redirect: payment succeeded, handle success state here
+
+    setIsProcessing(false)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <PaymentElement
+        options={{
+          layout: 'accordion',   // Clean accordion layout for multiple methods
+          paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'link'],
+        }}
+      />
+
+      {error && (
+        <p role="alert" className="text-sm text-red-600">
+          {error}
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={!stripe || isProcessing}
+        aria-disabled={!stripe || isProcessing}
+        aria-busy={isProcessing}
+        className="w-full rounded-md bg-blue-600 py-3 text-white font-medium
+                   hover:bg-blue-700 disabled:opacity-50"
+      >
+        {isProcessing ? 'Processing…' : 'Pay Now'}
+      </button>
+    </form>
+  )
+}
+```
+
+---
+
+## Webhook Handling — Production Patterns
+
+Webhooks are the **authoritative source of truth** for payment state. Never rely
+solely on redirect URLs — they can be bypassed or lost on network failure. [web:38]
+
+```typescript
+// apps/portal/src/app/api/webhooks/stripe/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { stripe } from '@repo/billing/stripe-client';
+import { redis } from '@repo/cache';
+
+// Disable body parsing — Stripe needs raw body for signature verification
+export const dynamic = 'force-dynamic';
+
+const WEBHOOK_HANDLERS: Partial<Record<Stripe.Event.Type, (event: Stripe.Event) => Promise<void>>> =
+  {
+    'payment_intent.succeeded': handlePaymentSucceeded,
+    'payment_intent.payment_failed': handlePaymentFailed,
+    'customer.subscription.created': handleSubscriptionCreated,
+    'customer.subscription.updated': handleSubscriptionUpdated,
+    'customer.subscription.deleted': handleSubscriptionDeleted,
+    'invoice.payment_succeeded': handleInvoiceSucceeded,
+    'invoice.payment_failed': handleInvoiceFailed,
+    'customer.subscription.trial_will_end': handleTrialEnding,
+  };
+
+export async function POST(req: NextRequest) {
+  const body = await req.text(); // Raw body for signature verification
+  const sig = req.headers.get('stripe-signature');
+
+  if (!sig) {
+    return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
+  }
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+  } catch (err) {
+    console.error('Webhook signature verification failed:', err);
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
+  }
+
+  // IDEMPOTENCY: Track processed events to prevent duplicate processing
+  const eventKey = `stripe:event:${event.id}`;
+  const alreadyProcessed = await redis.get(eventKey);
+  if (alreadyProcessed) {
+    console.log(`Skipping duplicate webhook event: ${event.id}`);
+    return NextResponse.json({ received: true, duplicate: true });
+  }
+
+  // Mark as processing before handling (prevents race condition)
+  await redis.set(eventKey, '1', { ex: 86400 }); // 24h dedup window
+
+  const handler = WEBHOOK_HANDLERS[event.type];
+  if (handler) {
+    try {
+      await handler(event);
+    } catch (err) {
+      console.error(`Failed to handle webhook ${event.type}:`, err);
+      // Delete the processed flag so Stripe retries
+      await redis.del(eventKey);
+      return NextResponse.json({ error: 'Handler failed' }, { status: 500 });
+    }
+  }
+
+  return NextResponse.json({ received: true });
+}
+
+async function handlePaymentSucceeded(event: Stripe.Event) {
+  const intent = event.data.object as Stripe.PaymentIntent;
+  const tenantId = intent.metadata.tenant_id;
+  const orderId = intent.metadata.order_id;
+
+  if (!tenantId) {
+    console.warn('PaymentIntent missing tenant_id metadata', intent.id);
+    return;
+  }
+
+  await Promise.all([
+    updateOrderStatus(orderId, 'paid'),
+    updateTenantBillingStatus(tenantId, 'active'),
+    sendReceiptEmail(tenantId, intent),
+  ]);
+}
+```
+
+---
+
+## Idempotency Keys — Complete Guide
+
+Idempotency keys prevent duplicate charges when network timeouts cause retries. [web:35][web:36][web:37]
+
+```typescript
+// packages/billing/src/idempotency.ts
+
+/**
+ * Generate a stable idempotency key for Stripe API calls.
+ *
+ * Rules:
+ * 1. Same key = same logical operation (safe to retry)
+ * 2. Different key = different operation (creates new charge)
+ * 3. Keys expire after 24 hours in Stripe
+ * 4. Keys must be unique per operation type
+ */
+export function generateIdempotencyKey(operation: string, ...identifiers: string[]): string {
+  // Stable, deterministic key from operation + identifiers
+  // Do NOT include timestamps — that defeats idempotency
+  return [operation, ...identifiers].join(':');
+}
+
+// Usage patterns:
+
+// ✅ PaymentIntent creation: key = operation + cart ID (stable per cart)
+const piKey = generateIdempotencyKey('create_pi', tenantId, cartId);
+await stripe.paymentIntents.create(params, { idempotencyKey: piKey });
+
+// ✅ Subscription creation: key = operation + tenant + price
+const subKey = generateIdempotencyKey('create_sub', tenantId, priceId);
+await stripe.subscriptions.create(params, { idempotencyKey: subKey });
+
+// ✅ Refund: key = operation + payment intent ID (one refund per PI)
+const refundKey = generateIdempotencyKey('refund', paymentIntentId);
+await stripe.refunds.create({ payment_intent: paymentIntentId }, { idempotencyKey: refundKey });
+
+// ❌ WRONG — timestamp in key defeats idempotency
+const badKey = `create_pi_${tenantId}_${Date.now()}`; // Never do this
+```
+
+---
+
+## Stripe Checkout Sessions
+
+For simpler integrations (no custom UI needed), Stripe Checkout handles the full
+payment flow with a hosted page:
+
+```typescript
+// Server Action: create checkout session
+// apps/portal/src/app/billing/upgrade/actions.ts
+'use server';
+import { redirect } from 'next/navigation';
+import { stripe } from '@repo/billing/stripe-client';
+
+export async function createCheckoutSession(priceId: string) {
+  const session = await verifyTenantSession();
+  const tenant = await getTenant(session.tenantId);
+
+  const checkoutSession = await stripe.checkout.sessions.create(
+    {
+      customer: tenant.stripeCustomerId,
+      mode: 'subscription',
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${process.env.APP_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.APP_URL}/billing/upgrade`,
+      subscription_data: {
+        metadata: {
+          tenant_id: session.tenantId,
+          tenant_slug: tenant.slug,
+        },
+        trial_period_days: tenant.isEligibleForTrial ? 14 : 0,
+      },
+      allow_promotion_codes: true,
+      automatic_tax: { enabled: true },
+      customer_update: {
+        address: 'auto',
+        name: 'auto',
+      },
+    },
+    {
+      idempotencyKey: generateIdempotencyKey('checkout', session.tenantId, priceId),
+    }
+  );
+
+  redirect(checkoutSession.url!);
+}
+```
+
+---
+
+## Customer Portal
+
+```typescript
+// Server Action: create billing portal session
+export async function createBillingPortalSession() {
+  const session = await verifyTenantSession();
+  const tenant = await getTenant(session.tenantId);
+
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: tenant.stripeCustomerId,
+    return_url: `${process.env.APP_URL}/settings/billing`,
+    // Optional: customize which features are visible
+    // configuration: portalConfigId,
+  });
+
+  redirect(portalSession.url);
+}
+```
+
+---
+
+## Radar Fraud Prevention
+
+```typescript
+// Enable Radar rules in PaymentIntent
+const paymentIntent = await stripe.paymentIntents.create({
+  amount,
+  currency,
+  metadata: {
+    tenant_id: tenantId,
+    // Radar uses metadata for rule matching
+    plan: tenant.plan,
+    account_age_days: String(daysSinceSignup),
+    is_verified: String(tenant.isVerified),
+  },
+  radar_options: {
+    // Associate with your user's session for velocity checks
+    session: stripeRadarSessionId,
+  },
+});
+```
+
+---
+
+## Testing Patterns
+
+```typescript
+// packages/billing/src/stripe.test.ts — use Stripe test mode
+const TEST_CARDS = {
+  success: '4242424242424242',
+  decline: '4000000000000002',
+  sca_required: '4000002500003155', // Triggers 3DS2
+  insufficient: '4000000000009995',
+};
+
+describe('Stripe Integration', () => {
+  it('creates PaymentIntent with idempotency', async () => {
+    const key = generateIdempotencyKey('test_pi', 'tenant_001', 'cart_001');
+    const pi1 = await stripe.paymentIntents.create(
+      { amount: 2000, currency: 'usd' },
+      { idempotencyKey: key }
+    );
+    const pi2 = await stripe.paymentIntents.create(
+      { amount: 2000, currency: 'usd' },
+      { idempotencyKey: key }
+    );
+    // Same key = same PaymentIntent returned
+    expect(pi1.id).toBe(pi2.id);
+  });
+});
+```
+
+---
+
+## Security Checklist
+
+```
+□ Never log or store raw card data — SAQ A requirement
+□ Verify webhook signature on EVERY incoming webhook
+□ Use idempotency keys on ALL write operations
+□ Store Stripe secret key in environment variables only
+□ Never expose secret key to client-side code
+□ Pin API version in stripe client initialization
+□ Set statement_descriptor to identify charges to customers
+□ Enable Radar for ML-based fraud prevention
+□ Restrict Stripe dashboard access to need-to-know
+□ Use restricted keys for read-only webhook endpoints
+□ Enable email notifications for failed payments
+□ Test with Stripe test mode before live deployment
+```
+
+---
+
+## References
+
+- [Stripe Payment Intents API](https://docs.stripe.com/payments/payment-intents) [web:35]
+- [Stripe Idempotent Requests](https://docs.stripe.com/api/idempotent_requests) [web:37]
+- [Building Solid Stripe Integrations](https://stripe.dev/blog/building-solid-stripe-integrations-developers-guide-success) [web:38]
+- [Stripe 2026 Developer Guide](https://www.digitalapplied.com/blog/stripe-payment-integration-developer-guide-2026) [web:36]
+- [Stripe React Elements](https://stripe.com/docs/stripe-js/react)
+- [Stripe Webhooks Best Practices](https://www.stigg.io/blog-posts/best-practices-i-wish-we-knew-when-integrating-stripe-webhooks)
+
+````
+
+***
+
+# core-web-vitals-optimization.md
+
+```markdown
+# core-web-vitals-optimization.md
+
+> **2026 Standards Compliance** | INP (Replaces FID) · LCP · CLS · TTFB ·
+> Google CrUX 2026 Thresholds · Next.js 16 PPR · React 19.2 Compiler
+
+## Table of Contents
+1. [2026 Metric Overview & Thresholds](#2026-metric-overview--thresholds)
+2. [INP — Interaction to Next Paint](#inp--interaction-to-next-paint)
+3. [LCP — Largest Contentful Paint](#lcp--largest-contentful-paint)
+4. [CLS — Cumulative Layout Shift](#cls--cumulative-layout-shift)
+5. [TTFB & FCP](#ttfb--fcp)
+6. [Measurement Infrastructure](#measurement-infrastructure)
+7. [Performance Budget System](#performance-budget-system)
+8. [INP Optimization Patterns](#inp-optimization-patterns)
+9. [LCP Optimization Patterns](#lcp-optimization-patterns)
+10. [CLS Optimization Patterns](#cls-optimization-patterns)
+11. [CI Performance Gates](#ci-performance-gates)
+12. [References](#references)
+
+---
+
+## 2026 Metric Overview & Thresholds
+
+**Core Web Vitals are a Google ranking signal.** In 2026, INP has fully replaced FID as
+the responsiveness metric, providing a far more accurate picture of interactive
+performance across the entire user session. [web:40][web:46][web:49]
+
+| Metric | Good | Needs Improvement | Poor | What It Measures |
+|--------|------|------------------|------|-----------------|
+| **INP** | ≤ 200ms | 200–500ms | > 500ms | Worst interaction latency across full session |
+| **LCP** | ≤ 2.5s | 2.5–4.0s | > 4.0s | Time for largest visible element to render |
+| **CLS** | ≤ 0.1 | 0.1–0.25 | > 0.25 | Unexpected layout shifts during page lifetime |
+| **TTFB** | ≤ 800ms | 800ms–1.8s | > 1.8s | Server response time (not a CWV, but a ranking signal) |
+| **FCP** | ≤ 1.8s | 1.8–3.0s | > 3.0s | First meaningful paint |
+
+**INP Measurement Phase Breakdown:** [web:43]
+````
+
+User Click/Tap/Keyboard
+│
+▼ [Input Delay] ← Main thread busy with other tasks
+Event Handler Runs
+│
+▼ [Processing Time] ← Your JS executes, DOM updates
+Frame Produced
+│
+▼ [Presentation Delay] ← Browser renders/composites
+Next Paint
+
+```
+
+---
+
+## INP — Interaction to Next Paint
+
+INP is the most difficult CWV to optimize because it measures **every interaction**
+throughout the session, not just the first. The worst interaction becomes the score. [web:40][web:49]
+
+### Why INP Is Hard
+
+Traditional performance optimizations (bundle size, SSR, CDN) barely affect INP.
+INP is dominated by **main thread contention** — JavaScript blocking the event loop
+between a user's click and the next paint.
+
+### INP Optimization Checklist
+
+```
+
+□ Break up long tasks (> 50ms) using scheduler.yield()
+□ Defer non-critical JS until after first interaction
+□ Use React Compiler to reduce unnecessary re-renders
+□ Move expensive computations off the main thread (Web Workers)
+□ Use CSS containment to limit layout recalculation scope
+□ Virtualize long lists (react-window, TanStack Virtual)
+□ Debounce/throttle search inputs and filter controls
+□ Use startTransition() for non-urgent state updates
+□ Profile with Chrome DevTools Performance Tracks (new in 2026)
+□ Measure with web-vitals library (INP + attribution)
+
+````
+
+### `scheduler.yield()` — Break Up Long Tasks
+
+```typescript
+// packages/performance/src/scheduler.ts
+
+/**
+ * Yield to the browser event loop, allowing it to process
+ * pending user input before continuing.
+ *
+ * Use inside loops that process many items or do heavy computation.
+ */
+export async function yieldToMain(): Promise<void> {
+  if ('scheduler' in globalThis && 'yield' in globalThis.scheduler) {
+    // Modern Scheduling API — respects user input priority
+    return globalThis.scheduler.yield()
+  }
+  // Fallback: setTimeout(0) yields to the task queue
+  return new Promise(resolve => setTimeout(resolve, 0))
+}
+
+// Usage: Process 1000 items without blocking user interactions
+export async function processItemsWithYield<T, R>(
+  items: T[],
+  processor: (item: T) => R,
+  chunkSize = 50,
+): Promise<R[]> {
+  const results: R[] = []
+  for (let i = 0; i < items.length; i += chunkSize) {
+    const chunk = items.slice(i, i + chunkSize)
+    results.push(...chunk.map(processor))
+    // Yield after each chunk — lets browser handle clicks between chunks
+    await yieldToMain()
+  }
+  return results
+}
+````
+
+### React `startTransition` for Non-Urgent Updates
+
+```typescript
+// features/lead-search/ui/LeadSearch.tsx
+'use client'
+import { useState, useTransition } from 'react'
+
+export function LeadSearch() {
+  const [query, setQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<Lead[]>([])
+  const [isPending, startTransition] = useTransition()
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    // URGENT: update the input immediately (low INP for keypress)
+    setQuery(value)
+
+    // NON-URGENT: search results can wait — React batches + defers
+    startTransition(async () => {
+      const results = await searchLeads(value)
+      setSearchResults(results)
+    })
+  }
+
+  return (
+    <>
+      <input
+        type="search"
+        value={query}
+        onChange={handleSearch}
+        placeholder="Search leads…"
+        aria-label="Search leads"
+        aria-busy={isPending}
+        className="w-full rounded-md border px-3 py-2"
+      />
+      {isPending && <SearchSkeleton />}
+      <LeadList leads={searchResults} />
+    </>
+  )
+}
+```
+
+### Web Worker for Heavy Computation
+
+```typescript
+// Move CSV processing off main thread to prevent INP degradation
+// workers/csv-processor.worker.ts
+self.addEventListener('message', async (e: MessageEvent) => {
+  const { csvText, tenantId } = e.data;
+
+  // This runs in a separate thread — zero main thread impact
+  const leads = parseAndValidateCsv(csvText);
+  const deduplicated = deduplicateLeads(leads);
+
+  self.postMessage({ leads: deduplicated, count: deduplicated.length });
+});
+
+// usage in component:
+// const worker = new Worker(new URL('./csv-processor.worker.ts', import.meta.url))
+// worker.postMessage({ csvText: fileContent, tenantId })
+// worker.onmessage = (e) => setLeads(e.data.leads)
+```
+
+### Virtualization for Long Lists
+
+```typescript
+// widgets/lead-feed/ui/VirtualLeadList.tsx
+import { useVirtualizer } from '@tanstack/react-virtual'
+import { useRef } from 'react'
+
+export function VirtualLeadList({ leads }: { leads: Lead[] }) {
+  const parentRef = useRef<HTMLDivElement>(null)
+
+  const virtualizer = useVirtualizer({
+    count: leads.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 72,       // Estimated row height in px
+    overscan: 5,                  // Render 5 extra rows above/below viewport
+  })
+
+  return (
+    <div
+      ref={parentRef}
+      style={{ height: '600px', overflow: 'auto' }}
+    >
+      <div
+        style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}
+      >
+        {virtualizer.getVirtualItems().map(virtualItem => (
+          <div
+            key={virtualItem.key}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: `${virtualItem.size}px`,
+              transform: `translateY(${virtualItem.start}px)`,
+            }}
+          >
+            <LeadCard lead={leads[virtualItem.index]} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+## LCP — Largest Contentful Paint
+
+LCP is typically the **hero image** or the **largest text block** above the fold.
+The target is ≤ 2.5s
