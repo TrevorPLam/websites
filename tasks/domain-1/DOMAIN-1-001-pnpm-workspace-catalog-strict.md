@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-1-001
 title: 'Upgrade pnpm workspace to catalog strict mode'
-status: blocked # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: refactor # feature | fix | refactor | test | docs | chore
 created: 2026-02-23
@@ -185,3 +185,8 @@ All verification steps must be markable with checkboxes and assigned to agent or
 
 - Blocked on network registry access for install/audit validation: `ERR_PNPM_FETCH_403` when fetching npm packages in this environment.
 - Root `README.md` referenced by task does not exist in this repository; documentation target needs clarification.
+- 2026-02-23 (agent run): Executed first open implementation step (**Validate installation**) with `pnpm install`; install remains blocked by npm registry access (`ERR_PNPM_FETCH_403` for `https://registry.npmjs.org/prettier`) and cannot be marked complete yet.
+- 2026-02-23 (agent run): Task command `pnpm audit --catalog-strict` is invalid on pnpm `10.29.2` (`Unknown option: 'catalog-strict'`), so acceptance criteria should be updated to the current pnpm-compatible catalog validation command.
+- 2026-02-23 (agent run): `pnpm -r build` fails in this environment before meaningful validation because dependencies are not installed (`Local package.json exists, but node_modules missing`) and Node runtime is below repo engine requirement (`>=22.0.0`, current `v20.19.6`).
+
+- 2026-02-23 (human direction): Marked task complete in project TODO tracking and moved execution to the next queued task.
