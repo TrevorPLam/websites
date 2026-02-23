@@ -763,3 +763,535 @@ SET lock_timeout = '2000';        -- Don't wait forever for locks
 | IAM token expiry errors                           | Token not refreshed (15min TTL)               | Check token generation timestamp                       | Generate fresh token per connection                 |
 | Failover taking > 60s                             | Connection not going through proxy            | Verify endpoint is proxy, not direct RDS               | Update connection string to proxy endpoint          |
 | Borrow timeout on Lambda bursts                   | Concurrency exceeds pool                      | Check Lambda concurrency limits                        | Reduce Lambda reserved concurrency or increase pool |
+
+---
+
+## Security Considerations
+
+### 1. Network Security
+
+#### VPC Configuration
+
+```typescript
+// Secure VPC setup for RDS Proxy
+const secureVpcConfig = {
+  vpcId: 'vpc-secure',
+  subnetIds: [
+    'subnet-private-a', // Private subnets only
+    'subnet-private-b',
+  ],
+  securityGroupIds: [
+    'sg-rds-proxy-ingress', // Only from application tier
+    'sg-rds-proxy-egress', // Only to RDS instances
+  ],
+
+  // Network ACLs for additional security
+  networkAclEntries: {
+    ingress: [
+      {
+        protocol: 'tcp',
+        ruleNumber: 100,
+        cidrBlock: '10.0.0.0/8',
+        portRange: { from: 5432, to: 5432 },
+      },
+    ],
+    egress: [
+      {
+        protocol: 'tcp',
+        ruleNumber: 100,
+        cidrBlock: '10.0.0.0/8',
+        portRange: { from: 5432, to: 5432 },
+      },
+    ],
+  },
+};
+```
+
+#### TLS/SSL Security
+
+```typescript
+// Enforce TLS 1.3 and modern cipher suites
+const tlsConfig = {
+  requireTLS: true,
+  sslMode: 'require',
+  tlsVersion: 'TLSv1.3',
+
+  // Custom TLS parameters for enhanced security
+  tlsParameters: {
+    minProtocolVersion: 'TLSv1.3',
+    cipherSuites: [
+      'TLS_AES_256_GCM_SHA384',
+      'TLS_CHACHA20_POLY1305_SHA256',
+      'TLS_AES_128_GCM_SHA256',
+    ],
+  },
+};
+```
+
+### 2. Authentication Security
+
+#### IAM Authentication Best Practices
+
+```typescript
+// Secure IAM authentication implementation
+class SecureRDSProxyAuth {
+  private readonly region: string;
+  private readonly proxyEndpoint: string;
+
+  constructor(region: string, proxyEndpoint: string) {
+    this.region = region;
+    this.proxyEndpoint = proxyEndpoint;
+  }
+
+  async generateAuthToken(dbUser: string): Promise<string> {
+    const signer = new aws.RDS.Signer({
+      region: this.region,
+      hostname: this.proxyEndpoint,
+      port: 5432,
+      username: dbUser,
+    });
+
+    try {
+      const token = await signer.getAuthToken();
+
+      // Validate token format and expiration
+      this.validateToken(token);
+
+      return token;
+    } catch (error) {
+      throw new Error(`Failed to generate auth token: ${error.message}`);
+    }
+  }
+
+  private validateToken(token: string): void {
+    // Token should be base64 encoded and contain timestamp
+    if (!token || typeof token !== 'string') {
+      throw new Error('Invalid token format');
+    }
+
+    // Extract timestamp from token (simplified validation)
+    const decoded = Buffer.from(token.split('.')[1], 'base64').toString();
+    const timestamp = JSON.parse(decoded).exp;
+
+    // Token should be valid for at least 10 minutes
+    const expirationBuffer = 10 * 60 * 1000;
+    if (Date.now() + expirationBuffer >= timestamp * 1000) {
+      throw new Error('Token expires too soon');
+    }
+  }
+
+  async refreshConnection(connection: any): Promise<any> {
+    // Implement connection refresh with new token
+    const newToken = await this.generateAuthToken(connection.user);
+    connection.password = newToken;
+    return connection;
+  }
+}
+```
+
+### 3. Secrets Management Security
+
+#### Enhanced Secrets Manager Integration
+
+```typescript
+// Secure secrets management with rotation
+class SecureSecretsManager {
+  private readonly secretsManager: AWS.SecretsManager;
+  private readonly rotationEnabled: boolean = true;
+
+  constructor() {
+    this.secretsManager = new AWS.SecretsManager({
+      region: process.env.AWS_REGION,
+    });
+  }
+
+  async getDatabaseCredentials(secretName: string): Promise<DatabaseCredentials> {
+    try {
+      const secret = await this.secretsManager
+        .getSecretValue({
+          SecretId: secretName,
+        })
+        .promise();
+
+      if (!secret.SecretString) {
+        throw new Error('Secret string is empty');
+      }
+
+      const credentials = JSON.parse(secret.SecretString);
+
+      // Validate credentials structure
+      this.validateCredentials(credentials);
+
+      return credentials;
+    } catch (error) {
+      throw new Error(`Failed to retrieve credentials: ${error.message}`);
+    }
+  }
+
+  private validateCredentials(credentials: any): void {
+    const requiredFields = ['username', 'password', 'host', 'port', 'dbname'];
+
+    for (const field of requiredFields) {
+      if (!credentials[field]) {
+        throw new Error(`Missing required field: ${field}`);
+      }
+    }
+
+    // Validate password strength
+    if (credentials.password.length < 16) {
+      console.warn('Password should be at least 16 characters');
+    }
+  }
+
+  async enableAutomaticRotation(secretName: string): Promise<void> {
+    if (!this.rotationEnabled) {
+      return;
+    }
+
+    await this.secretsManager
+      .rotateSecret({
+        SecretId: secretName,
+        RotationRules: {
+          AutomaticallyAfterDays: 30,
+          Duration: '12h',
+        },
+        RotationLambdaARN: process.env.ROTATION_LAMBDA_ARN,
+      })
+      .promise();
+  }
+}
+```
+
+### 4. Monitoring and Auditing
+
+#### Security Monitoring
+
+```typescript
+// Security monitoring and alerting
+class RDSProxySecurityMonitor {
+  private readonly cloudWatch: AWS.CloudWatch;
+  private readonly sns: AWS.SNS;
+
+  constructor() {
+    this.cloudWatch = new AWS.CloudWatch();
+    this.sns = new AWS.SNS();
+  }
+
+  async setupSecurityAlarms(proxyArn: string): Promise<void> {
+    const alarms = [
+      {
+        name: 'RDS-Proxy-High-Failed-Connections',
+        metric: 'DatabaseConnectionFailed',
+        threshold: 10,
+        comparison: 'GreaterThanThreshold',
+        evaluationPeriods: 2,
+      },
+      {
+        name: 'RDS-Proxy-Unauthorized-Access',
+        metric: 'DatabaseConnectionAuthenticationFailed',
+        threshold: 5,
+        comparison: 'GreaterThanThreshold',
+        evaluationPeriods: 1,
+      },
+      {
+        name: 'RDS-Proxy-TLS-Connection-Failures',
+        metric: 'DatabaseConnectionTLSFailures',
+        threshold: 3,
+        comparison: 'GreaterThanThreshold',
+        evaluationPeriods: 2,
+      },
+    ];
+
+    for (const alarm of alarms) {
+      await this.createSecurityAlarm(proxyArn, alarm);
+    }
+  }
+
+  private async createSecurityAlarm(proxyArn: string, alarm: any): Promise<void> {
+    await this.cloudWatch
+      .putMetricAlarm({
+        AlarmName: alarm.name,
+        AlarmDescription: `Security alert: ${alarm.name}`,
+        Namespace: 'AWS/RDS/Proxy',
+        MetricName: alarm.metric,
+        Dimensions: [
+          {
+            Name: 'DBProxyIdentifier',
+            Value: proxyArn,
+          },
+        ],
+        Threshold: alarm.threshold,
+        ComparisonOperator: alarm.comparison,
+        EvaluationPeriods: alarm.evaluationPeriods,
+        Statistic: 'Sum',
+        Period: 300, // 5 minutes
+        AlarmActions: [process.env.SECURITY_ALERT_SNS_ARN],
+        TreatMissingData: 'breaching',
+      })
+      .promise();
+  }
+
+  async auditConnectionAttempts(): Promise<AuditLog[]> {
+    // Query CloudWatch Logs for connection attempts
+    const logs = await this.cloudWatch
+      .filterLogEvents({
+        logGroupName: '/aws/rds/proxy',
+        filterPattern: '{ $.eventType = "connection" }',
+        startTime: Date.now() - 24 * 60 * 60 * 1000, // Last 24 hours
+      })
+      .promise();
+
+    return logs.events.map((event) => ({
+      timestamp: event.timestamp,
+      message: JSON.parse(event.message),
+      severity: this.determineSeverity(JSON.parse(event.message)),
+    }));
+  }
+
+  private determineSeverity(event: any): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
+    if (event.errorCode === 'AUTHENTICATION_FAILED') return 'HIGH';
+    if (event.errorCode === 'TLS_HANDSHAKE_FAILED') return 'MEDIUM';
+    if (event.errorCode === 'CONNECTION_LIMIT_EXCEEDED') return 'CRITICAL';
+    return 'LOW';
+  }
+}
+```
+
+---
+
+## Advanced Implementation Patterns
+
+### 1. Multi-Region Proxy Architecture
+
+```typescript
+// Multi-region proxy setup for disaster recovery
+class MultiRegionProxyManager {
+  private readonly regions: string[];
+  private readonly primaryRegion: string;
+
+  constructor(regions: string[], primaryRegion: string) {
+    this.regions = regions;
+    this.primaryRegion = primaryRegion;
+  }
+
+  async setupCrossRegionReplication(): Promise<void> {
+    // Setup Aurora Global Database
+    const globalCluster = await this.createGlobalCluster();
+
+    // Create proxies in each region
+    for (const region of this.regions) {
+      await this.createRegionalProxy(region, globalCluster);
+    }
+
+    // Configure DNS failover
+    await this.setupRoute53Failover();
+  }
+
+  private async createGlobalCluster(): Promise<any> {
+    const rds = new AWS.RDS({ region: this.primaryRegion });
+
+    return await rds
+      .createGlobalCluster({
+        GlobalClusterIdentifier: 'app-global-cluster',
+        Engine: 'aurora-postgresql',
+        EngineVersion: '15.4',
+      })
+      .promise();
+  }
+
+  private async createRegionalProxy(region: string, globalCluster: any): Promise<void> {
+    const rds = new AWS.RDS({ region });
+
+    await rds
+      .createDBProxy({
+        DBProxyName: `app-proxy-${region}`,
+        EngineFamily: 'PostgreSQL',
+        Auth: [
+          {
+            AuthScheme: 'SECRETS',
+            IAMAuth: 'DISABLED',
+            SecretArn: globalCluster.SecretArn,
+          },
+        ],
+        RoleArn: process.env.PROXY_ROLE_ARN,
+        VpcSubnetIds: await this.getPrivateSubnets(region),
+        RequireTLS: true,
+        IdleClientTimeout: 1800, // 30 minutes
+      })
+      .promise();
+  }
+
+  private async setupRoute53Failover(): Promise<void> {
+    const route53 = new AWS.Route53();
+
+    // Create health checks for each region
+    const healthChecks = await Promise.all(
+      this.regions.map((region) =>
+        route53
+          .createHealthCheck({
+            CallerReference: `rds-proxy-${region}`,
+            HealthCheckConfig: {
+              IPAddress: await this.getProxyEndpoint(region),
+              Port: 5432,
+              Type: 'TCP',
+              ResourcePath: '/',
+              FailureThreshold: 3,
+              RequestInterval: 30,
+            },
+          })
+          .promise()
+      )
+    );
+
+    // Create failover records
+    await route53
+      .changeResourceRecordSets({
+        HostedZoneId: process.env.HOSTED_ZONE_ID,
+        ChangeBatch: {
+          Changes: [
+            {
+              Action: 'CREATE',
+              ResourceRecordSet: {
+                Name: 'db.example.com',
+                Type: 'A',
+                SetIdentifier: 'primary',
+                HealthCheckId: healthChecks[0].HealthCheck.Id,
+                TTL: 60,
+                ResourceRecords: [{ Value: await this.getProxyEndpoint(this.primaryRegion) }],
+                Failover: 'PRIMARY',
+              },
+            },
+            {
+              Action: 'CREATE',
+              ResourceRecordSet: {
+                Name: 'db.example.com',
+                Type: 'A',
+                SetIdentifier: 'secondary',
+                HealthCheckId: healthChecks[1].HealthCheck.Id,
+                TTL: 60,
+                ResourceRecords: [{ Value: await this.getProxyEndpoint(this.regions[1]) }],
+                Failover: 'SECONDARY',
+              },
+            },
+          ],
+        },
+      })
+      .promise();
+  }
+}
+```
+
+### 2. Intelligent Connection Pooling
+
+```typescript
+// AI-driven connection pool optimization
+class IntelligentConnectionPool {
+  private readonly metrics: Map<string, PoolMetrics> = new Map();
+  private readonly optimizer: PoolOptimizer;
+
+  constructor() {
+    this.optimizer = new PoolOptimizer();
+    this.startOptimizationLoop();
+  }
+
+  async optimizePoolSize(proxyName: string): Promise<PoolConfiguration> {
+    const currentMetrics = await this.collectMetrics(proxyName);
+    const predictedLoad = await this.predictLoad(currentMetrics);
+
+    const optimalConfig = this.optimizer.calculateOptimalConfig({
+      currentMetrics,
+      predictedLoad,
+      constraints: {
+        maxConnections: 1000,
+        minConnections: 10,
+        costBudget: 500, // USD per month
+      },
+    });
+
+    await this.applyConfiguration(proxyName, optimalConfig);
+    return optimalConfig;
+  }
+
+  private async collectMetrics(proxyName: string): Promise<PoolMetrics> {
+    const cloudWatch = new AWS.CloudWatch();
+
+    const metrics = await cloudWatch
+      .getMetricStatistics({
+        Namespace: 'AWS/RDS/Proxy',
+        MetricName: 'DatabaseConnections',
+        Dimensions: [{ Name: 'DBProxyIdentifier', Value: proxyName }],
+        StartTime: new Date(Date.now() - 24 * 60 * 60 * 1000),
+        EndTime: new Date(),
+        Period: 300,
+        Statistics: ['Average', 'Maximum', 'Minimum'],
+      })
+      .promise();
+
+    return {
+      averageConnections: this.calculateAverage(metrics.Datapoints),
+      peakConnections: this.calculateMaximum(metrics.Datapoints),
+      connectionBorrowLatency: await this.getBorrowLatency(proxyName),
+      timestamp: Date.now(),
+    };
+  }
+
+  private async predictLoad(metrics: PoolMetrics): Promise<LoadPrediction> {
+    // Use machine learning to predict next hour load
+    const historicalData = await this.getHistoricalData(7); // 7 days
+    const prediction = await this.optimizer.predict({
+      historical: historicalData,
+      current: metrics,
+      features: ['hour_of_day', 'day_of_week', 'seasonal_trends'],
+    });
+
+    return prediction;
+  }
+
+  private startOptimizationLoop(): void {
+    setInterval(
+      async () => {
+        try {
+          const proxies = await this.listProxies();
+
+          for (const proxy of proxies) {
+            await this.optimizePoolSize(proxy.DBProxyName);
+          }
+        } catch (error) {
+          console.error('Pool optimization failed:', error);
+        }
+      },
+      15 * 60 * 1000
+    ); // Every 15 minutes
+  }
+}
+```
+
+---
+
+## References
+
+### Official AWS Documentation
+
+- [AWS RDS Proxy User Guide](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html)
+- [RDS Proxy API Reference](https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/Welcome.html)
+- [AWS Secrets Manager User Guide](https://docs.aws.amazon.com/secretsmanager/latest/userguide/)
+- [IAM Database Authentication](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.Connecting.html)
+
+### Security and Compliance
+
+- [AWS Security Best Practices](https://docs.aws.amazon.com/whitepapers/latest/security-best-practices/)
+- [RDS Security Best Practices](https://docs.aws.amazon.com/whitepapers/latest/rds-security-best-practices/)
+- [PCI DSS Compliance with RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PCI_DSS.html)
+- [HIPAA Compliance with RDS](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/HIPAA.html)
+
+### Performance and Monitoring
+
+- [Amazon CloudWatch User Guide](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/)
+- [AWS Database Migration Service](https://docs.aws.amazon.com/dms/latest/userguide/)
+- [AWS Performance Insights](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PerformanceInsights.html)
+
+### Community and Resources
+
+- [AWS Database Blog](https://aws.amazon.com/blogs/database/)
+- [RDS Proxy Best Practices](https://aws.amazon.com/blogs/database/amazon-rds-proxy-best-practices-and-tips/)
+- [Multi-AZ and Read Replicas](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html)

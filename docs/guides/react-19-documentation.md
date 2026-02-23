@@ -757,3 +757,664 @@ npm install --save-dev @types/react@latest @types/react-dom@latest
 13. **Install React Compiler** — `babel-plugin-react-compiler@latest` for auto-memoization
 14. **Remove manual `useMemo`/`useCallback` after enabling compiler** — test first, remove gradually
 15. **Use Performance Tracks in Chrome** — Profile Scheduler + Components tracks to identify bottlenecks
+
+---
+
+## Security Considerations
+
+### 1. Server Actions Security
+
+#### Input Validation and Sanitization
+
+```typescript
+// Secure Server Action with comprehensive validation
+import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
+
+const CreateLeadSchema = z.object({
+  name: z.string().min(2).max(100).trim(),
+  email: z.string().email().toLowerCase(),
+  phone: z
+    .string()
+    .regex(/^\+?[\d\s-()]+$/)
+    .optional(),
+  message: z.string().min(10).max(1000).trim(),
+  tenantId: z.string().uuid(),
+  source: z.enum(['contact', 'booking', 'inquiry']).default('contact'),
+});
+
+type CreateLeadInput = z.infer<typeof CreateLeadSchema>;
+
+export async function createLeadAction(formData: FormData) {
+  'use server';
+
+  // Validate and sanitize input
+  const rawInput = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    message: formData.get('message'),
+    tenantId: formData.get('tenantId'),
+    source: formData.get('source'),
+  };
+
+  const validatedInput = CreateLeadSchema.parse(rawInput);
+
+  // Additional security: Rate limiting per tenant
+  await checkRateLimit(validatedInput.tenantId, 'create-lead');
+
+  // Sanitize HTML content to prevent XSS
+  const sanitizedMessage = sanitizeHtml(validatedInput.message, {
+    allowedTags: ['b', 'i', 'em', 'strong'],
+    allowedAttributes: {},
+  });
+
+  try {
+    // Create lead with validated and sanitized data
+    const lead = await db.createLead({
+      ...validatedInput,
+      message: sanitizedMessage,
+      ip: headers().get('x-forwarded-for') || 'unknown',
+      userAgent: headers().get('user-agent') || 'unknown',
+    });
+
+    // Revalidate relevant cache
+    revalidatePath(`/dashboard/leads`);
+    revalidateTag(`tenant:${validatedInput.tenantId}:leads`);
+
+    return { success: true, leadId: lead.id };
+  } catch (error) {
+    console.error('Failed to create lead:', error);
+    throw new Error('Unable to create lead. Please try again.');
+  }
+}
+
+async function checkRateLimit(tenantId: string, action: string): Promise<void> {
+  const key = `ratelimit:${tenantId}:${action}`;
+  const limit = await redis.incr(key);
+
+  if (limit === 1) {
+    await redis.expire(key, 3600); // 1 hour window
+  }
+
+  if (limit > 50) {
+    // 50 leads per hour per tenant
+    throw new Error('Rate limit exceeded. Please try again later.');
+  }
+}
+```
+
+#### CSRF Protection for Server Actions
+
+```typescript
+// lib/server-action-security.ts
+import { cookies } from 'next/headers';
+import { randomBytes } from 'crypto';
+
+export class ServerActionSecurity {
+  private static readonly CSRF_COOKIE_NAME = 'sa-csrf-token';
+  private static readonly TOKEN_LENGTH = 32;
+
+  // Generate CSRF token for Server Actions
+  static generateCSRFToken(): string {
+    return randomBytes(this.TOKEN_LENGTH).toString('base64');
+  }
+
+  // Set CSRF token in HTTP-only cookie
+  static setCSRFToken(token: string): void {
+    cookies().set(this.CSRF_COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60, // 1 hour
+      path: '/',
+    });
+  }
+
+  // Validate CSRF token for Server Actions
+  static validateCSRFToken(providedToken: string): boolean {
+    const cookieToken = cookies().get(this.CSRF_COOKIE_NAME)?.value;
+
+    if (!cookieToken || !providedToken) {
+      return false;
+    }
+
+    // Use constant-time comparison to prevent timing attacks
+    return crypto.timingSafeEqual(
+      Buffer.from(cookieToken, 'base64'),
+      Buffer.from(providedToken, 'base64')
+    );
+  }
+
+  // Wrapper function for secure Server Actions
+  static secureAction<T extends any[], R>(action: (...args: T) => Promise<R>) {
+    return async (...args: T): Promise<R> => {
+      const formData = args[0] as FormData;
+      const csrfToken = formData.get('csrfToken') as string;
+
+      if (!this.validateCSRFToken(csrfToken)) {
+        throw new Error('Invalid CSRF token');
+      }
+
+      return await action(...args);
+    };
+  }
+}
+
+// Usage
+export const secureCreateLead = ServerActionSecurity.secureAction(createLeadAction);
+```
+
+### 2. Client-Side Security
+
+#### Secure Component Patterns
+
+```typescript
+// Secure data handling in client components
+'use client';
+
+import { use } from 'react';
+import { z } from 'zod';
+
+const LeadSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  email: z.string().email(),
+  status: z.enum(['new', 'contacted', 'qualified', 'converted']),
+  createdAt: z.string().datetime(),
+});
+
+type Lead = z.infer<typeof LeadSchema>;
+
+export function LeadCard({ leadPromise }: { leadPromise: Promise<Lead> }) {
+  const lead = use(leadPromise);
+
+  // Validate data on client side for additional security
+  const validatedLead = LeadSchema.parse(lead);
+
+  return (
+    <div className="lead-card">
+      <h3>{validatedLead.name}</h3>
+      <p>{validatedLead.email}</p>
+      <span className={`status status-${validatedLead.status}`}>
+        {validatedLead.status}
+      </span>
+    </div>
+  );
+}
+```
+
+#### Secure State Management
+
+```typescript
+// Secure state patterns with Zod validation
+import { createStore } from 'zustand';
+import { z } from 'zod';
+
+const LeadStateSchema = z.object({
+  leads: z.array(LeadSchema),
+  loading: z.boolean(),
+  error: z.string().optional(),
+  filters: z.object({
+    status: z.enum(['all', 'new', 'contacted', 'qualified', 'converted']),
+    dateRange: z.object({
+      start: z.string().datetime().optional(),
+      end: z.string().datetime().optional(),
+    }),
+  }),
+});
+
+type LeadState = z.infer<typeof LeadStateSchema>;
+
+export const useLeadStore = createStore<LeadState>((set, get) => ({
+  leads: [],
+  loading: false,
+  error: undefined,
+  filters: {
+    status: 'all',
+    dateRange: {},
+  },
+
+  setLeads: (leads) => {
+    // Validate leads before setting state
+    const validatedLeads = z.array(LeadSchema).parse(leads);
+    set({ leads: validatedLeads, loading: false, error: undefined });
+  },
+
+  setLoading: (loading) => set({ loading }),
+
+  setError: (error) => set({ error, loading: false }),
+
+  setFilters: (filters) => {
+    const validatedFilters = LeadStateSchema.shape.filters.parse(filters);
+    set({ filters: validatedFilters });
+  },
+
+  // Secure update method with validation
+  updateLead: (id, updates) => {
+    const { leads } = get();
+    const leadIndex = leads.findIndex((lead) => lead.id === id);
+
+    if (leadIndex === -1) return;
+
+    const updatedLead = LeadSchema.partial().parse({ ...leads[leadIndex], ...updates });
+    const newLeads = [...leads];
+    newLeads[leadIndex] = updatedLead;
+
+    set({ leads: newLeads });
+  },
+}));
+```
+
+---
+
+## Advanced Implementation Patterns
+
+### 1. Concurrent Rendering Patterns
+
+#### Advanced Suspense Boundaries
+
+```typescript
+// Advanced Suspense boundary with error boundaries and loading states
+'use client';
+
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+
+interface AdvancedSuspenseProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  errorFallback?: React.ComponentType<{ error: Error; reset: () => void }>;
+  loadingComponent?: React.ComponentType<{ delay: number }>;
+  maxLoadingTime?: number;
+}
+
+export function AdvancedSuspense({
+  children,
+  fallback = <div>Loading...</div>,
+  errorFallback: ErrorFallback,
+  loadingComponent: LoadingComponent,
+  maxLoadingTime = 5000,
+}: AdvancedSuspenseProps) {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback || DefaultErrorFallback}>
+      <Suspense
+        fallback={
+          loadingComponent ? (
+            <LoadingComponentWithTimeout
+              Component={loadingComponent}
+              maxTime={maxLoadingTime}
+              defaultFallback={fallback}
+            />
+          ) : (
+            fallback
+          )
+        }
+      >
+        {children}
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+
+function LoadingComponentWithTimeout({
+  Component,
+  maxTime,
+  defaultFallback,
+}: {
+  Component: React.ComponentType<{ delay: number }>;
+  maxTime: number;
+  defaultFallback: React.ReactNode;
+}) {
+  const [showDefault, setShowDefault] = useState(false);
+  const [delay] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowDefault(true), maxTime);
+    return () => clearTimeout(timer);
+  }, [maxTime]);
+
+  if (showDefault) return defaultFallback;
+  return <Component delay={delay} />;
+}
+
+function DefaultErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
+  return (
+    <div className="error-boundary">
+      <h2>Something went wrong</h2>
+      <details>
+        <summary>Error details</summary>
+        <pre>{error.message}</pre>
+      </details>
+      <button onClick={reset}>Try again</button>
+    </div>
+  );
+}
+```
+
+#### Concurrent Data Fetching with use()
+
+```typescript
+// Advanced data fetching pattern with concurrent requests
+import { use } from 'react';
+
+interface DashboardData {
+  leads: Lead[];
+  analytics: Analytics;
+  notifications: Notification[];
+  userSettings: UserSettings;
+}
+
+async function fetchDashboardData(tenantId: string): Promise<DashboardData> {
+  // Fetch all data concurrently
+  const [leads, analytics, notifications, userSettings] = await Promise.all([
+    fetchLeads(tenantId),
+    fetchAnalytics(tenantId),
+    fetchNotifications(tenantId),
+    fetchUserSettings(tenantId),
+  ]);
+
+  return {
+    leads,
+    analytics,
+    notifications,
+    userSettings,
+  };
+}
+
+export function Dashboard({ tenantId }: { tenantId: string }) {
+  const dataPromise = fetchDashboardData(tenantId);
+
+  return (
+    <div className="dashboard">
+      <Suspense fallback={<LeadsSkeleton />}>
+        <LeadsSection leadsPromise={dataPromise.then(d => d.leads)} />
+      </Suspense>
+
+      <Suspense fallback={<AnalyticsSkeleton />}>
+        <AnalyticsSection analyticsPromise={dataPromise.then(d => d.analytics)} />
+      </Suspense>
+
+      <Suspense fallback={<NotificationsSkeleton />}>
+        <NotificationsSection notificationsPromise={dataPromise.then(d => d.notifications)} />
+      </Suspense>
+
+      <Suspense fallback={<SettingsSkeleton />}>
+        <SettingsSection settingsPromise={dataPromise.then(d => d.userSettings)} />
+      </Suspense>
+    </div>
+  );
+}
+
+function LeadsSection({ leadsPromise }: { leadsPromise: Promise<Lead[]> }) {
+  const leads = use(leadsPromise);
+  return <LeadsGrid leads={leads} />;
+}
+```
+
+### 2. Advanced Server Component Patterns
+
+#### Streaming Server Components
+
+```typescript
+// Streaming large datasets with progressive loading
+import { unstable_cache } from 'next/cache';
+
+const getLargeDataset = unstable_cache(
+  async (tenantId: string, offset: number = 0, limit: number = 100) => {
+    // Simulate large dataset fetch
+    const data = await fetchLargeDatasetFromDB(tenantId, offset, limit);
+    return data;
+  },
+  ['large-dataset'],
+  {
+    revalidate: 3600, // 1 hour
+    tags: ['dataset']
+  }
+);
+
+export async function StreamingDataTable({ tenantId }: { tenantId: string }) {
+  const initialData = await getLargeDataset(tenantId, 0, 50);
+
+  return (
+    <div className="data-table">
+      <TableHeader />
+
+      {/* Render initial data immediately */}
+      <TableRows data={initialData} />
+
+      {/* Stream additional data */}
+      <Suspense fallback={<TableRowsSkeleton count={50} />}>
+        <MoreDataStreamer tenantId={tenantId} offset={50} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function MoreDataStreamer({ tenantId, offset }: { tenantId: string; offset: number }) {
+  const moreData = await getLargeDataset(tenantId, offset, 100);
+
+  return (
+    <>
+      <TableRows data={moreData} />
+      {moreData.length === 100 && (
+        <Suspense fallback={<TableRowsSkeleton count={100} />}>
+          <MoreDataStreamer tenantId={tenantId} offset={offset + 100} />
+        </Suspense>
+      )}
+    </>
+  );
+}
+```
+
+#### Dynamic Server Components with Caching
+
+```typescript
+// Dynamic Server Components with intelligent caching
+import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache';
+
+async function getCachedComponentData(tenantId: string, componentType: string) {
+  'use cache';
+
+  cacheTag(`tenant:${tenantId}`);
+  cacheTag(`component:${componentType}`);
+  cacheLife('5m');
+
+  return fetchComponentData(tenantId, componentType);
+}
+
+export async function DynamicComponent({
+  tenantId,
+  componentType
+}: {
+  tenantId: string;
+  componentType: string;
+}) {
+  const data = await getCachedComponentData(tenantId, componentType);
+
+  switch (componentType) {
+    case 'lead-form':
+      return <LeadFormComponent data={data} />;
+    case 'analytics':
+      return <AnalyticsComponent data={data} />;
+    case 'notifications':
+      return <NotificationsComponent data={data} />;
+    default:
+      return <div>Unknown component type</div>;
+  }
+}
+```
+
+### 3. Performance Optimization Patterns
+
+#### Advanced React Compiler Integration
+
+```typescript
+// Advanced React Compiler configuration with custom optimizations
+// next.config.ts
+const nextConfig = {
+  experimental: {
+    reactCompiler: {
+      compilationMode: 'full',
+      options: {
+        // Custom compiler options for optimal performance
+        optimize: true,
+        sourceMap: process.env.NODE_ENV === 'development',
+
+        // Custom optimization rules
+        rules: {
+          // Optimize frequently re-rendering components
+          'react-compiler/optimize-frequent-renders': 'error',
+
+          // Warn about potential optimization opportunities
+          'react-compiler/suggest-optimization': 'warn',
+        },
+
+        // Plugin configuration
+        plugins: [
+          // Custom optimization plugins
+          {
+            name: 'optimize-large-objects',
+            options: {
+              threshold: 1024, // 1KB
+            },
+          },
+        ],
+      },
+    },
+  },
+};
+
+// Component with compiler hints
+export function OptimizedLeadCard({ lead }: { lead: Lead }) {
+  // React Compiler will automatically optimize this component
+  // based on usage patterns and dependency analysis
+
+  return (
+    <div className="lead-card">
+      <h3>{lead.name}</h3>
+      <p>{lead.email}</p>
+      <span className={`status-${lead.status}`}>
+        {lead.status}
+      </span>
+    </div>
+  );
+}
+```
+
+#### Memory Management and Cleanup
+
+```typescript
+// Advanced memory management patterns
+'use client';
+
+import { useEffect, useRef, useCallback } from 'react';
+
+export function MemoryEfficientComponent({ data }: { data: any[] }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver>();
+  const visibleItemsRef = useRef(new Set<number>());
+
+  // Cleanup function for memory management
+  const cleanup = useCallback(() => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+      observerRef.current = undefined;
+    }
+    visibleItemsRef.current.clear();
+  }, []);
+
+  useEffect(() => {
+    // Set up intersection observer for lazy loading
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(entry.target.getAttribute('data-index') || '0');
+
+          if (entry.isIntersecting) {
+            visibleItemsRef.current.add(index);
+          } else {
+            visibleItemsRef.current.delete(index);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    );
+
+    // Observe all items
+    const items = containerRef.current?.querySelectorAll('[data-index]');
+    items?.forEach((item) => observerRef.current?.observe(item));
+
+    // Cleanup on unmount
+    return cleanup;
+  }, [cleanup]);
+
+  // Render only visible items for memory efficiency
+  return (
+    <div ref={containerRef} className="memory-efficient-list">
+      {data.map((item, index) => (
+        <div
+          key={item.id}
+          data-index={index}
+          className={`list-item ${
+            visibleItemsRef.current.has(index) ? 'visible' : 'hidden'
+          }`}
+        >
+          {visibleItemsRef.current.has(index) ? (
+            <ExpensiveListItem data={item} />
+          ) : (
+            <div className="placeholder" style={{ height: '100px' }} />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ExpensiveListItem({ data }: { data: any }) {
+  // This component is expensive to render
+  // Only render when visible
+  return (
+    <div className="expensive-item">
+      {/* Complex rendering logic */}
+      <ComplexVisualization data={data} />
+    </div>
+  );
+}
+```
+
+---
+
+## References
+
+### Official React Documentation
+
+- [React 19 Documentation](https://react.dev/)
+- [React 19 Release Notes](https://react.dev/blog/2024/12/05/react-19)
+- [React 19.1 Update](https://react.dev/blog/2025/06/04/react-19.1)
+- [React 19.2 Update](https://react.dev/blog/2025/10/01/react-19.2)
+- [React Compiler Documentation](https://react.dev/learn/react-compiler)
+
+### Security Resources
+
+- [React Security Best Practices](https://react.dev/learn/security-in-react)
+- [Server Actions Security](https://nextjs.org/docs/app/api-reference/server-actions)
+- [OWASP React Security Guide](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/)
+- [Content Security Policy with React](https://web.dev/csp/)
+
+### Performance Resources
+
+- [React Performance Optimization](https://react.dev/learn/render-and-commit)
+- [React DevTools Profiler](https://react.dev/learn/react-developer-tools)
+- [Chrome DevTools Performance Tracks](https://developer.chrome.com/docs/devtools/performance/)
+- [Web Performance with React](https://web.dev/performance/)
+
+### Advanced Patterns
+
+- [Concurrent React Patterns](https://react.dev/learn/concurrent-react)
+- [Server Components Best Practices](https://react.dev/reference/rsc/server-components)
+- [React Suspense Patterns](https://react.dev/reference/react/Suspense)
+- [React Compiler Advanced Usage](https://react.dev/learn/react-compiler#advanced-usage)

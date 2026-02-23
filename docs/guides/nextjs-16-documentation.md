@@ -846,3 +846,606 @@ Capabilities provided to AI agents:
 13. **Add `default.js` to all parallel route slots** — Required or build fails
 14. **Use OpenTelemetry for observability** — Built-in span emission; no custom instrumentation needed for routes
 15. **Pin compiler to exact version** — Use `--save-exact` when installing `babel-plugin-react-compiler`
+
+---
+
+## Security Considerations
+
+### 1. Next.js 16 Security Features
+
+#### Enhanced Security Headers
+
+```typescript
+// next.config.ts - Security headers configuration
+const securityConfig = {
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains; preload',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.vercel-insights.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: https:",
+              "font-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              'upgrade-insecure-requests',
+            ].join('; '),
+          },
+        ],
+      },
+    ];
+  },
+};
+
+module.exports = securityConfig;
+```
+
+#### Secure Cache Implementation
+
+```typescript
+// app/components/SecureCacheComponent.tsx
+import { cache } from 'react';
+
+// Secure cached component with proper validation
+const SecureUserData = cache(async (userId: string) => {
+  // Validate input to prevent injection
+  if (!userId || typeof userId !== 'string' || !/^[a-zA-Z0-9-_]+$/.test(userId)) {
+    throw new Error('Invalid user ID format');
+  }
+
+  // Use parameterized queries to prevent SQL injection
+  const userData = await db.query(
+    'SELECT id, name, email FROM users WHERE id = $1 AND active = true',
+    [userId]
+  );
+
+  // Sanitize output data
+  return {
+    id: userData.id,
+    name: sanitizeHtml(userData.name),
+    email: userData.email.toLowerCase().trim()
+  };
+}, {
+  tags: ['user-data'],
+  revalidate: 3600 // 1 hour
+});
+
+// Usage in component
+export default async function UserProfile({ userId }: { userId: string }) {
+  "use cache";
+
+  const user = await SecureUserData(userId);
+
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  );
+}
+```
+
+### 2. Advanced Security Patterns
+
+#### Rate Limiting with proxy.ts
+
+```typescript
+// proxy.ts - Advanced rate limiting
+import { NextRequest, NextResponse } from 'next/server';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
+
+const rateLimiter = new RateLimiterMemory({
+  keyGenerator: (req: NextRequest) => req.ip || 'unknown',
+  points: 100, // Number of requests
+  duration: 60, // Per 60 seconds
+  blockDuration: 300, // Block for 5 minutes
+});
+
+export async function middleware(request: NextRequest) {
+  try {
+    // Check rate limit
+    await rateLimiter.consume(request.ip || 'unknown');
+
+    // Add security headers
+    const response = NextResponse.next();
+
+    response.headers.set('X-Content-Type-Options', 'nosniff');
+    response.headers.set('X-Frame-Options', 'DENY');
+    response.headers.set('X-XSS-Protection', '1; mode=block');
+
+    return response;
+  } catch (rejRes) {
+    // Rate limit exceeded
+    return new NextResponse('Too Many Requests', {
+      status: 429,
+      headers: {
+        'Retry-After': Math.round(rejRes.msBeforeNext / 1000).toString(),
+        'X-RateLimit-Limit': '100',
+        'X-RateLimit-Remaining': '0',
+        'X-RateLimit-Reset': new Date(Date.now() + rejRes.msBeforeNext).toISOString(),
+      },
+    });
+  }
+}
+```
+
+#### CSRF Protection
+
+```typescript
+// app/lib/csrf.ts
+import { cookies } from 'next/headers';
+import { randomBytes } from 'crypto';
+
+export class CSRFProtection {
+  private static readonly CSRF_COOKIE_NAME = 'csrf-token';
+  private static readonly CSRF_HEADER_NAME = 'x-csrf-token';
+  private static readonly TOKEN_LENGTH = 32;
+
+  // Generate CSRF token
+  static generateToken(): string {
+    return randomBytes(this.TOKEN_LENGTH).toString('base64');
+  }
+
+  // Set CSRF token in HTTP-only cookie
+  static setToken(token: string): void {
+    cookies().set(this.CSRF_COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24, // 24 hours
+      path: '/',
+    });
+  }
+
+  // Validate CSRF token
+  static validateToken(requestToken: string): boolean {
+    const cookieToken = cookies().get(this.CSRF_COOKIE_NAME)?.value;
+
+    if (!cookieToken || !requestToken) {
+      return false;
+    }
+
+    // Use constant-time comparison to prevent timing attacks
+    return crypto.timingSafeEqual(
+      Buffer.from(cookieToken, 'base64'),
+      Buffer.from(requestToken, 'base64')
+    );
+  }
+
+  // Extract token from request headers
+  static extractToken(request: Request): string | null {
+    return request.headers.get(this.CSRF_HEADER_NAME);
+  }
+}
+
+// Usage in API routes
+export async function POST(request: Request) {
+  const token = CSRFProtection.extractToken(request);
+
+  if (!CSRFProtection.validateToken(token || '')) {
+    return Response.json({ error: 'Invalid CSRF token' }, { status: 403 });
+  }
+
+  // Process request...
+}
+```
+
+---
+
+## Advanced Implementation Patterns
+
+### 1. Edge-Native Architecture
+
+#### Edge Computing with Next.js 16
+
+```typescript
+// app/api/edge-function/route.ts
+export const runtime = 'edge';
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const location = searchParams.get('location');
+
+  // Use edge-optimized APIs
+  const geoData = request.geo || {};
+  const userLocation = location || geoData.city || 'unknown';
+
+  // Edge-optimized data fetching
+  const data = await fetch(`https://api.example.com/data?location=${userLocation}`, {
+    headers: {
+      'X-Edge-Compute': 'true',
+      'X-User-Location': userLocation,
+    },
+  });
+
+  return Response.json({
+    location: userLocation,
+    data: await data.json(),
+    edge: true,
+    timestamp: Date.now(),
+  });
+}
+```
+
+#### Predictive Prefetching
+
+```typescript
+// app/components/PredictivePrefetch.tsx
+'use client';
+
+import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+
+export function PredictivePrefetch({
+  probableRoutes,
+  userBehavior,
+}: {
+  probableRoutes: string[];
+  userBehavior: any;
+}) {
+  const router = useRouter();
+  const prefetchedRoutes = useRef(new Set<string>());
+
+  useEffect(() => {
+    // Analyze user behavior to predict next navigation
+    const predictedRoute = predictNextRoute(userBehavior, probableRoutes);
+
+    if (predictedRoute && !prefetchedRoutes.current.has(predictedRoute)) {
+      // Prefetch the predicted route
+      router.prefetch(predictedRoute);
+      prefetchedRoutes.current.add(predictedRoute);
+
+      // Log prefetch for analytics
+      console.log(`Prefetched predicted route: ${predictedRoute}`);
+    }
+  }, [userBehavior, probableRoutes, router]);
+
+  function predictNextRoute(behavior: any, routes: string[]): string | null {
+    // Simple prediction logic (replace with ML model in production)
+    if (behavior.timeOnPage > 30000 && behavior.scrollDepth > 0.8) {
+      return routes[0]; // User is engaged, likely to continue
+    }
+
+    return null;
+  }
+
+  return null;
+}
+```
+
+### 2. Advanced Caching Strategies
+
+#### Multi-Layer Caching
+
+```typescript
+// app/lib/advanced-cache.ts
+import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
+
+// Layer 1: React cache (component-level)
+const reactCache = cache(async (key: string) => {
+  return await fetchDataFromDatabase(key);
+});
+
+// Layer 2: Next.js unstable_cache (API-level)
+const nextCache = unstable_cache(
+  async (key: string) => {
+    return await reactCache(key);
+  },
+  ['advanced-cache'],
+  {
+    revalidate: 3600,
+    tags: ['data-layer'],
+  }
+);
+
+// Layer 3: Edge cache (CDN-level)
+export async function getMultiLayerData(key: string) {
+  // Check React cache first
+  const cached = await reactCache(key);
+
+  if (cached) {
+    // Set edge cache headers
+    return new Response(JSON.stringify(cached), {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        'CDN-Cache-Control': 'public, max-age=3600',
+        Vary: 'Accept-Encoding',
+      },
+    });
+  }
+
+  // Fetch fresh data
+  const freshData = await nextCache(key);
+
+  return new Response(JSON.stringify(freshData), {
+    headers: {
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+    },
+  });
+}
+```
+
+#### Intelligent Cache Invalidation
+
+```typescript
+// app/lib/smart-cache.ts
+import { revalidateTag, revalidatePath } from 'next/cache';
+
+export class SmartCacheManager {
+  private static readonly CACHE_STRATEGIES = {
+    USER_DATA: {
+      tags: ['user-data'],
+      ttl: 300, // 5 minutes
+      invalidationTriggers: ['user-update', 'profile-change'],
+    },
+    CONTENT: {
+      tags: ['content'],
+      ttl: 3600, // 1 hour
+      invalidationTriggers: ['content-update', 'publish'],
+    },
+    ANALYTICS: {
+      tags: ['analytics'],
+      ttl: 1800, // 30 minutes
+      invalidationTriggers: ['page-view', 'interaction'],
+    },
+  };
+
+  // Smart invalidation based on event type
+  static async invalidateCache(eventType: string, data: any): Promise<void> {
+    const strategies = Object.values(this.CACHE_STRATEGIES);
+
+    for (const strategy of strategies) {
+      if (strategy.invalidationTriggers.includes(eventType)) {
+        // Invalidate all related tags
+        for (const tag of strategy.tags) {
+          await revalidateTag(tag);
+        }
+
+        // Log invalidation for monitoring
+        console.log(`Cache invalidated for tags: ${strategy.tags.join(', ')} due to: ${eventType}`);
+      }
+    }
+
+    // Path-based invalidation for specific routes
+    if (data.userId) {
+      await revalidatePath(`/user/${data.userId}`);
+    }
+
+    if (data.contentId) {
+      await revalidatePath(`/content/${data.contentId}`);
+    }
+  }
+
+  // Predictive cache warming
+  static async warmCache(userContext: any): Promise<void> {
+    const probableRoutes = this.predictUserRoutes(userContext);
+
+    for (const route of probableRoutes) {
+      // Trigger cache warming
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${route}`, {
+        method: 'HEAD',
+        headers: {
+          'X-Cache-Warm': 'true',
+        },
+      });
+    }
+  }
+
+  private static predictUserRoutes(context: any): string[] {
+    // Simple prediction based on user behavior
+    const routes = [];
+
+    if (context.recentlyViewed) {
+      routes.push(...context.recentlyViewed);
+    }
+
+    if (context.userType === 'premium') {
+      routes.push('/dashboard', '/analytics', '/reports');
+    }
+
+    return routes;
+  }
+}
+```
+
+### 3. Performance Optimization
+
+#### React Compiler Integration
+
+```typescript
+// next.config.ts - React Compiler configuration
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    reactCompiler: {
+      // Enable compiler in production
+      compilationMode: 'full',
+
+      // Compiler options
+      options: {
+        // Optimize for production builds
+        optimize: true,
+
+        // Enable source maps for debugging
+        sourceMap: process.env.NODE_ENV === 'development',
+
+        // Custom compiler plugins
+        plugins: [
+          // Add custom optimization plugins
+        ],
+      },
+    },
+  },
+
+  // Enable Turbopack with custom configuration
+  turbo: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+    resolveAlias: {
+      '@': './src',
+    },
+  },
+};
+
+module.exports = nextConfig;
+```
+
+#### Advanced Performance Monitoring
+
+```typescript
+// app/lib/performance-monitor.ts
+import { getServerSnapshot } from 'next/dist/client/app-index';
+
+export class PerformanceMonitor {
+  private static metrics: Map<string, number> = new Map();
+
+  // Track component render performance
+  static trackComponentRender(componentName: string, renderTime: number): void {
+    this.metrics.set(`${componentName}-render`, renderTime);
+
+    // Alert if render time exceeds threshold
+    if (renderTime > 100) { // 100ms threshold
+      console.warn(`Slow render detected: ${componentName} took ${renderTime}ms`);
+    }
+  }
+
+  // Track API response times
+  static trackApiResponse(endpoint: string, responseTime: number): void {
+    this.metrics.set(`${endpoint}-api`, responseTime);
+
+    // Log slow APIs
+    if (responseTime > 500) { // 500ms threshold
+      console.warn(`Slow API response: ${endpoint} took ${responseTime}ms`);
+    }
+  }
+
+  // Get performance summary
+  static getPerformanceSummary(): PerformanceSummary {
+    const summary: PerformanceSummary = {
+      slowComponents: [],
+      slowApis: [],
+      averageRenderTime: 0,
+      averageApiResponseTime: 0
+    };
+
+    // Analyze component performance
+    for (const [key, value] of this.metrics.entries()) {
+      if (key.endsWith('-render') && value > 100) {
+        summary.slowComponents.push({
+          name: key.replace('-render', ''),
+          renderTime: value
+        });
+      }
+
+      if (key.endsWith('-api') && value > 500) {
+        summary.slowApis.push({
+          endpoint: key.replace('-api', ''),
+          responseTime: value
+        });
+      }
+    }
+
+    return summary;
+  }
+
+  // Performance optimization suggestions
+  static getOptimizationSuggestions(): string[] {
+    const suggestions: string[] = [];
+    const summary = this.getPerformanceSummary();
+
+    if (summary.slowComponents.length > 0) {
+      suggestions.push('Consider using React.memo() for slow components');
+      suggestions.push('Enable React Compiler for automatic optimization');
+    }
+
+    if (summary.slowApis.length > 0) {
+      suggestions.push('Implement API response caching');
+      suggestions.push('Consider edge computing for faster responses');
+    }
+
+    return suggestions;
+  }
+}
+
+// Usage in components
+export function withPerformanceTracking<T extends Record<string, any>>(
+  Component: React.ComponentType<T>,
+  componentName: string
+) {
+  return function TrackedComponent(props: T) {
+    const startTime = performance.now();
+
+    useEffect(() => {
+      const endTime = performance.now();
+      PerformanceMonitor.trackComponentRender(componentName, endTime - startTime);
+    });
+
+    return <Component {...props} />;
+  };
+}
+```
+
+---
+
+## References
+
+### Official Next.js Documentation
+
+- [Next.js 16 Documentation](https://nextjs.org/docs)
+- [Next.js 16 Release Notes](https://nextjs.org/blog/next-16)
+- [React Compiler Documentation](https://react.dev/learn/react-compiler)
+- [Turbopack Documentation](https://turbo.build/pack/docs)
+
+### Security Resources
+
+- [Next.js Security Best Practices](https://nextjs.org/docs/security)
+- [OWASP Next.js Security Guide](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/)
+- [Content Security Policy Guide](https://csp.withgoogle.com/docs/)
+
+### Performance Resources
+
+- [Web.dev Performance](https://web.dev/performance/)
+- [Core Web Vitals](https://web.dev/vitals/)
+- [Next.js Performance Optimization](https://nextjs.org/docs/advanced-features/measuring-performance)
+
+### Advanced Patterns
+
+- [Edge Computing with Next.js](https://vercel.com/docs/concepts/functions/edge-functions)
+- [React Server Components](https://react.dev/reference/rsc/server-components)
+- [Next.js Caching Documentation](https://nextjs.org/docs/app/building-your-application/caching)

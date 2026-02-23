@@ -2,6 +2,25 @@
 
 # Core Web Vitals Optimization Strategies and Implementation
 
+> **Version Reference:** Core Web Vitals 2026 Specification | Last Updated: 2026-02-23
+> **Purpose:** Comprehensive guide for optimizing Core Web Vitals with latest 2026 standards, advanced patterns, and production-ready implementations
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Core Web Vitals Metrics (2026)](#core-web-vitals-metrics-2026)
+3. [Optimization Strategies](#optimization-strategies)
+4. [Performance Monitoring](#performance-monitoring)
+5. [Advanced Optimization Techniques](#advanced-optimization-techniques)
+6. [Performance Budgeting](#performance-budgeting)
+7. [Framework-Specific Optimizations](#framework-specific-optimizations)
+8. [Monitoring and Analytics](#monitoring-and-analytics)
+9. [Security Considerations](#security-considerations)
+10. [Troubleshooting Guide](#troubleshooting-guide)
+11. [References](#references)
+
+---
+
 ## Overview
 
 Core Web Vitals (CWV) are a set of specific metrics that Google uses to measure user experience on the web. In 2026, these metrics have evolved beyond the original three to include Interaction to Next Paint (INP) as a replacement for First Input Delay (FID). This comprehensive guide covers optimization strategies for all current Core Web Vitals metrics and their impact on user experience and SEO rankings.
@@ -1190,9 +1209,351 @@ const PerformanceDashboard = () => {
 };
 ```
 
-## References
+## Security Considerations
 
-### Official Documentation
+### Performance-Related Security Risks
+
+#### 1. Resource Loading Security
+
+```typescript
+// Secure resource loading with CSP and integrity checks
+const SecureResourceLoader = {
+  loadScript: async (src: string, integrity?: string) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.crossOrigin = 'anonymous';
+
+    if (integrity) {
+      script.integrity = integrity;
+    }
+
+    return new Promise((resolve, reject) => {
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  },
+
+  // Preload critical resources with security headers
+  preloadCriticalResources: (resources: Resource[]) => {
+    return resources.map((resource) => ({
+      rel: 'preload',
+      href: resource.url,
+      as: resource.type,
+      integrity: resource.integrity,
+      crossOrigin: 'anonymous',
+    }));
+  },
+};
+```
+
+#### 2. Performance Monitoring Security
+
+```typescript
+// Secure performance data collection
+class SecurePerformanceMonitor {
+  private readonly allowedOrigins = ['https://your-domain.com'];
+
+  private sanitizeMetrics(metrics: WebVitalsMetrics): WebVitalsMetrics {
+    // Remove sensitive information
+    return {
+      ...metrics,
+      url: this.sanitizeUrl(metrics.url),
+      userAgent: this.sanitizeUserAgent(metrics.userAgent),
+    };
+  }
+
+  private sanitizeUrl(url: string): string {
+    const urlObj = new URL(url);
+    return `${urlObj.protocol}//${urlObj.hostname}${urlObj.pathname}`;
+  }
+
+  private sanitizeUserAgent(ua: string): string {
+    // Remove version numbers and unique identifiers
+    return ua
+      .replace(/\/[\d.]+/g, '/x.x.x')
+      .replace(/\([^)]*\)/g, '')
+      .substring(0, 50);
+  }
+
+  async sendMetrics(metrics: WebVitalsMetrics): Promise<void> {
+    const sanitizedMetrics = this.sanitizeMetrics(metrics);
+
+    await fetch('/api/web-vitals', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': this.getCSRFToken(),
+      },
+      body: JSON.stringify(sanitizedMetrics),
+    });
+  }
+}
+```
+
+### Privacy-First Performance Monitoring
+
+#### 1. GDPR-Compliant Analytics
+
+```typescript
+// Privacy-compliant performance tracking
+class PrivacyAwareAnalytics {
+  private hasConsent: boolean = false;
+
+  constructor() {
+    this.checkConsent();
+  }
+
+  private checkConsent(): void {
+    // Check for user consent before tracking
+    this.hasConsent = document.cookie.includes('analytics-consent=true');
+  }
+
+  trackPerformanceEvent(eventName: string, data: any): void {
+    if (!this.hasConsent) {
+      return; // Respect user privacy preferences
+    }
+
+    // Minimize data collection
+    const minimalData = {
+      event: eventName,
+      timestamp: Date.now(),
+      // Only collect essential metrics
+      ...(data.lcp && { lcp: Math.round(data.lcp) }),
+      ...(data.inp && { inp: Math.round(data.inp) }),
+      ...(data.cls && { cls: Math.round(data.cls * 1000) / 1000 }),
+    };
+
+    this.sendToAnalytics(minimalData);
+  }
+
+  private async sendToAnalytics(data: any): Promise<void> {
+    // Use beacon API for reliable delivery
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/analytics', JSON.stringify(data));
+    } else {
+      await fetch('/api/analytics', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        keepalive: true,
+      });
+    }
+  }
+}
+```
+
+---
+
+## Troubleshooting Guide
+
+### Common Performance Issues and Solutions
+
+#### 1. LCP Issues
+
+##### Problem: Slow LCP due to large images
+
+**Symptoms:**
+
+- LCP > 4 seconds
+- Largest element is always an image
+- Network waterfall shows delayed image loading
+
+**Solutions:**
+
+```typescript
+// Implement progressive image loading
+const ProgressiveImageLoader = {
+  // Convert images to WebP with multiple sizes
+  optimizeImages: async (imageSrc: string) => {
+    const sizes = [640, 768, 1024, 1280, 1536];
+
+    return Promise.all(
+      sizes.map((size) =>
+        convertToWebP(imageSrc, {
+          width: size,
+          quality: 80,
+          format: 'webp',
+        })
+      )
+    );
+  },
+
+  // Implement blur-up technique
+  createBlurPlaceholder: (imageSrc: string) => {
+    const img = new Image();
+    img.src = imageSrc;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Create tiny blurred version
+      canvas.width = 20;
+      canvas.height = 20;
+      ctx.filter = 'blur(10px)';
+      ctx.drawImage(img, 0, 0, 20, 20);
+
+      return canvas.toDataURL();
+    };
+  },
+};
+```
+
+##### Problem: Server response time delays
+
+**Symptoms:**
+
+- TTFB > 1.5 seconds
+- LCP consistently slow across all pages
+- Network tab shows long waiting times
+
+**Solutions:**
+
+```typescript
+// Implement edge caching and CDN optimization
+const EdgeOptimization = {
+  // Configure edge caching headers
+  setCacheHeaders: (response: Response) => {
+    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+    response.headers.set('Edge-Cache-Tag', 'static-assets');
+    response.headers.set('Surrogate-Control', 'max-age=86400');
+  },
+
+  // Implement edge-side includes for dynamic content
+  edgeSideInclude: async (template: string, data: any) => {
+    // Process template at edge for faster delivery
+    const processed = await processTemplateAtEdge(template, data);
+    return processed;
+  },
+};
+```
+
+#### 2. INP Issues
+
+##### Problem: JavaScript blocking main thread
+
+**Symptoms:**
+
+- INP > 300ms during interactions
+- Janky animations and scrolling
+- Long tasks in DevTools (>50ms)
+
+**Solutions:**
+
+```typescript
+// Implement main thread optimization
+constMainThreadOptimizer = {
+  // Break up long tasks
+  scheduleTask: (task: () => void, priority: 'high' | 'normal' | 'low' = 'normal') => {
+    if (priority === 'high' && 'scheduler' in window) {
+      // Use scheduler API for high-priority tasks
+      (window as any).scheduler.postTask(task, { priority: 'user-blocking' });
+    } else {
+      // Fallback to setTimeout for lower priority
+      setTimeout(task, priority === 'low' ? 100 : 0);
+    }
+  },
+
+  // Implement time slicing for heavy computations
+  timeSlice: <T>(items: T[], processor: (item: T) => void, batchSize = 5) => {
+    let index = 0;
+
+    const processBatch = () => {
+      const endIndex = Math.min(index + batchSize, items.length);
+
+      for (let i = index; i < endIndex; i++) {
+        processor(items[i]);
+      }
+
+      index = endIndex;
+
+      if (index < items.length) {
+        this.scheduleTask(processBatch, 'normal');
+      }
+    };
+
+    processBatch();
+  },
+};
+```
+
+#### 3. CLS Issues
+
+##### Problem: Dynamic content causing layout shifts
+
+**Symptoms:**
+
+- CLS > 0.25 on page load
+- Elements jumping during content loading
+- Poor visual stability
+
+**Solutions:**
+
+```typescript
+// Implement layout stability techniques
+const LayoutStabilityManager = {
+  // Reserve space for dynamic content
+  reserveSpace: (selector: string, dimensions: { width: number; height: number }) => {
+    const element = document.querySelector(selector);
+    if (element) {
+      element.style.width = `${dimensions.width}px`;
+      element.style.height = `${dimensions.height}px`;
+      element.style.overflow = 'hidden';
+    }
+  },
+
+  // Implement skeleton screens
+  createSkeleton: (type: 'text' | 'image' | 'card', dimensions?: any) => {
+    const skeleton = document.createElement('div');
+    skeleton.className = `skeleton skeleton-${type}`;
+
+    if (dimensions) {
+      Object.assign(skeleton.style, dimensions);
+    }
+
+    return skeleton;
+  },
+
+  // Font loading with size adjustment
+  loadFontsWithStability: async (fonts: string[]) => {
+    const fontPromises = fonts.map((font) => {
+      return new Promise((resolve) => {
+        const fontFace = new FontFace(font, `url(/fonts/${font}.woff2)`);
+        fontFace.load().then(() => {
+          document.fonts.add(fontFace);
+          resolve(font);
+        });
+      });
+    });
+
+    await Promise.all(fontPromises);
+  },
+};
+```
+
+### Performance Debugging Checklist
+
+#### Pre-Launch Checklist
+
+- [ ] All images optimized and in modern formats (WebP/AVIF)
+- [ ] Critical CSS inlined and non-critical CSS loaded asynchronously
+- [ ] Fonts preloaded with font-display: swap
+- [ ] JavaScript code-split and lazy-loaded
+- [ ] Resource hints (preload, prefetch, preconnect) implemented
+- [ ] CDN configured with proper caching headers
+- [ ] Core Web Vitals measured and within thresholds
+
+#### Runtime Monitoring
+
+- [ ] Real User Monitoring (RUM) implemented
+- [ ] Performance budgets enforced in CI/CD
+- [ ] Alerting configured for performance regressions
+- [ ] A/B testing for performance optimizations
+- [ ] Regular performance audits scheduled
+
+---
+
+## References
 
 - [Web.dev Core Web Vitals](https://web.dev/vitals/)
 - [Web.dev Learn Core Web Vitals](https://web.dev/learn-core-web-vitals/)

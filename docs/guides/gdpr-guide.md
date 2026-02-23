@@ -1,5 +1,26 @@
 # gdpr-guide.md
 
+> **Version Reference:** GDPR (General Data Protection Regulation) 2016/679 | Last Updated: 2026-02-23
+> **Purpose:** Comprehensive GDPR compliance guide with 2026 best practices, implementation strategies, and advanced privacy patterns
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Key GDPR Principles](#key-gdpr-principles)
+3. [Legal Bases for Processing](#legal-bases-for-processing)
+4. [Data Subject Rights](#data-subject-rights)
+5. [Data Protection Impact Assessments](#data-protection-impact-assessments)
+6. [Data Breach Management](#data-breach-management)
+7. [International Data Transfers](#international-data-transfers)
+8. [Privacy by Design and Default](#privacy-by-design-and-default)
+9. [Technical Implementation](#technical-implementation)
+10. [Compliance Monitoring](#compliance-monitoring)
+11. [Security Considerations](#security-considerations)
+12. [Advanced Privacy Patterns](#advanced-privacy-patterns)
+13. [References](#references)
+
+---
+
 ## Overview
 
 The General Data Protection Regulation (GDPR) is a comprehensive data protection law that sets requirements for organizations processing personal data of individuals in the European Union. This guide covers key compliance requirements, implementation strategies, and best practices for 2026.
@@ -1188,11 +1209,525 @@ class ComplianceMonitor {
 }
 ```
 
+---
+
+## Security Considerations
+
+### 1. Technical Security Measures
+
+#### Data Encryption
+
+```typescript
+// Comprehensive encryption strategy for GDPR compliance
+class GDPRCompliantEncryption {
+  private readonly encryptionKey: string;
+  private readonly algorithm = 'AES-256-GCM';
+
+  constructor(key: string) {
+    this.encryptionKey = key;
+  }
+
+  // Encrypt personal data at rest
+  async encryptPersonalData(data: PersonalData): Promise<EncryptedData> {
+    const key = await crypto.subtle.importKey(
+      'raw',
+      Buffer.from(this.encryptionKey, 'base64'),
+      { name: 'AES-GCM' },
+      false,
+      ['encrypt']
+    );
+
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encodedData = new TextEncoder().encode(JSON.stringify(data));
+
+    const encrypted = await crypto.subtle.encrypt({ name: this.algorithm, iv }, key, encodedData);
+
+    return {
+      data: Buffer.from(encrypted).toString('base64'),
+      iv: Buffer.from(iv).toString('base64'),
+      algorithm: this.algorithm,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // Decrypt personal data with audit logging
+  async decryptPersonalData(encryptedData: EncryptedData): Promise<PersonalData> {
+    // Log decryption attempt for audit trail
+    await this.auditLog('DATA_DECRYPTION_ATTEMPT', {
+      timestamp: new Date().toISOString(),
+      dataType: 'personal_data',
+      encrypted: true,
+    });
+
+    const key = await crypto.subtle.importKey(
+      'raw',
+      Buffer.from(this.encryptionKey, 'base64'),
+      { name: 'AES-GCM' },
+      false,
+      ['decrypt']
+    );
+
+    const iv = Buffer.from(encryptedData.iv, 'base64');
+    const encrypted = Buffer.from(encryptedData.data, 'base64');
+
+    const decrypted = await crypto.subtle.decrypt({ name: this.algorithm, iv }, key, encrypted);
+
+    const decryptedData = new TextDecoder().decode(decrypted);
+
+    // Log successful decryption
+    await this.auditLog('DATA_DECRYPTION_SUCCESS', {
+      timestamp: new Date().toISOString(),
+      dataType: 'personal_data',
+    });
+
+    return JSON.parse(decryptedData);
+  }
+
+  private async auditLog(action: string, details: any): Promise<void> {
+    // Implement audit logging for compliance
+    console.log(`GDPR Audit: ${action}`, details);
+  }
+}
+```
+
+#### Access Control
+
+```typescript
+// Role-based access control for personal data
+class GDPRAccessControl {
+  private readonly userRoles: Map<string, UserRole> = new Map();
+  private readonly dataCategories: Map<string, DataCategory> = new Map();
+
+  constructor() {
+    this.initializeRoles();
+    this.initializeDataCategories();
+  }
+
+  // Check if user has permission to access specific data category
+  async checkAccessPermission(
+    userId: string,
+    dataCategory: string,
+    operation: 'read' | 'write' | 'delete'
+  ): Promise<AccessResult> {
+    const userRole = this.userRoles.get(userId);
+    const category = this.dataCategories.get(dataCategory);
+
+    if (!userRole || !category) {
+      return { allowed: false, reason: 'Invalid user or data category' };
+    }
+
+    // Check role-based permissions
+    const hasPermission = this.checkRolePermission(userRole, category, operation);
+
+    if (!hasPermission) {
+      await this.logAccessDenied(userId, dataCategory, operation);
+      return { allowed: false, reason: 'Insufficient permissions' };
+    }
+
+    // Log access for audit trail
+    await this.logAccessGranted(userId, dataCategory, operation);
+
+    return { allowed: true, reason: 'Permission granted' };
+  }
+
+  private checkRolePermission(role: UserRole, category: DataCategory, operation: string): boolean {
+    const permissions = role.permissions[category.sensitivity];
+    return permissions && permissions.includes(operation);
+  }
+
+  private async logAccessDenied(
+    userId: string,
+    dataCategory: string,
+    operation: string
+  ): Promise<void> {
+    await this.auditLog('ACCESS_DENIED', {
+      userId,
+      dataCategory,
+      operation,
+      timestamp: new Date().toISOString(),
+      severity: 'HIGH',
+    });
+  }
+
+  private async logAccessGranted(
+    userId: string,
+    dataCategory: string,
+    operation: string
+  ): Promise<void> {
+    await this.auditLog('ACCESS_GRANTED', {
+      userId,
+      dataCategory,
+      operation,
+      timestamp: new Date().toISOString(),
+      severity: 'LOW',
+    });
+  }
+}
+```
+
+### 2. Data Breach Security
+
+#### Breach Detection and Response
+
+```typescript
+// Automated breach detection system
+class GDPRBreachDetector {
+  private readonly alertThresholds = {
+    unusualAccessPattern: 10, // 10 unusual accesses in 1 hour
+    dataExportVolume: 1000, // 1000 records exported
+    failedAuthAttempts: 5, // 5 failed authentication attempts
+    dataAccessOutsideHours: true, // Access outside business hours
+  };
+
+  async monitorDataAccess(accessEvent: DataAccessEvent): Promise<BreachAlert[]> {
+    const alerts: BreachAlert[] = [];
+
+    // Check for unusual access patterns
+    const unusualPattern = await this.detectUnusualAccessPattern(accessEvent);
+    if (unusualPattern) {
+      alerts.push(unusualPattern);
+    }
+
+    // Check for large data exports
+    const largeExport = await this.detectLargeDataExport(accessEvent);
+    if (largeExport) {
+      alerts.push(largeExport);
+    }
+
+    // Check for failed authentication attempts
+    const failedAuth = await this.detectFailedAuthAttempts(accessEvent);
+    if (failedAuth) {
+      alerts.push(failedAuth);
+    }
+
+    // Check for access outside business hours
+    const afterHoursAccess = await this.detectAfterHoursAccess(accessEvent);
+    if (afterHoursAccess) {
+      alerts.push(afterHoursAccess);
+    }
+
+    return alerts;
+  }
+
+  private async detectUnusualAccessPattern(event: DataAccessEvent): Promise<BreachAlert | null> {
+    const recentAccess = await this.getRecentAccessEvents(event.userId, 3600); // 1 hour
+
+    if (recentAccess.length > this.alertThresholds.unusualAccessPattern) {
+      return {
+        type: 'UNUSUAL_ACCESS_PATTERN',
+        severity: 'MEDIUM',
+        description: `User ${event.userId} accessed data ${recentAccess.length} times in the last hour`,
+        timestamp: new Date().toISOString(),
+        requiresInvestigation: true,
+      };
+    }
+
+    return null;
+  }
+
+  private async detectLargeDataExport(event: DataAccessEvent): Promise<BreachAlert | null> {
+    if (event.operation === 'export' && event.recordCount > this.alertThresholds.dataExportVolume) {
+      return {
+        type: 'LARGE_DATA_EXPORT',
+        severity: 'HIGH',
+        description: `Large data export of ${event.recordCount} records by user ${event.userId}`,
+        timestamp: new Date().toISOString(),
+        requiresInvestigation: true,
+        requiresBreachNotification: true,
+      };
+    }
+
+    return null;
+  }
+}
+```
+
+---
+
+## Advanced Privacy Patterns
+
+### 1. Privacy-Enhancing Technologies (PETs)
+
+#### Differential Privacy
+
+```typescript
+// Differential privacy implementation for statistical analysis
+class DifferentialPrivacy {
+  private readonly epsilon: number; // Privacy budget
+  private readonly sensitivity: number;
+
+  constructor(epsilon: number = 1.0, sensitivity: number = 1.0) {
+    this.epsilon = epsilon;
+    this.sensitivity = sensitivity;
+  }
+
+  // Add Laplace noise for differential privacy
+  addLaplaceNoise(value: number): number {
+    const scale = this.sensitivity / this.epsilon;
+    const noise = this.generateLaplaceNoise(scale);
+    return value + noise;
+  }
+
+  // Private histogram with differential privacy
+  createPrivateHistogram(data: number[], bins: number): PrivateHistogram {
+    const histogram = new Array(bins).fill(0);
+    const binSize = Math.ceil(data.length / bins);
+
+    // Count data points in each bin
+    for (let i = 0; i < data.length; i++) {
+      const binIndex = Math.floor(i / binSize);
+      histogram[binIndex]++;
+    }
+
+    // Add noise to each bin
+    const privateHistogram = histogram.map((count) => Math.max(0, this.addLaplaceNoise(count)));
+
+    return {
+      bins: privateHistogram,
+      epsilon: this.epsilon,
+      sensitivity: this.sensitivity,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  private generateLaplaceNoise(scale: number): number {
+    const u = Math.random() - 0.5;
+    return -scale * Math.sign(u) * Math.log(1 - 2 * Math.abs(u));
+  }
+}
+```
+
+#### Homomorphic Encryption
+
+```typescript
+// Basic homomorphic encryption for secure computation
+class HomomorphicEncryption {
+  private readonly publicKey: CryptoKey;
+  private readonly privateKey: CryptoKey;
+
+  async generateKeyPair(): Promise<void> {
+    const keyPair = await crypto.subtle.generateKey(
+      {
+        name: 'RSA-OAEP',
+        modulusLength: 2048,
+        publicExponent: new Uint8Array([1, 0, 1]),
+        hash: { name: 'SHA-256' },
+      },
+      true,
+      ['encrypt', 'decrypt']
+    );
+
+    this.publicKey = keyPair.publicKey;
+    this.privateKey = keyPair.privateKey;
+  }
+
+  // Encrypt data for homomorphic operations
+  async encryptForComputation(data: number): Promise<EncryptedNumber> {
+    const encoded = new TextEncoder().encode(data.toString());
+    const encrypted = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, this.publicKey, encoded);
+
+    return {
+      value: Buffer.from(encrypted).toString('base64'),
+      operation: 'encrypted',
+    };
+  }
+
+  // Secure aggregation without decrypting individual values
+  async secureSum(encryptedValues: EncryptedNumber[]): Promise<EncryptedNumber> {
+    // Simplified homomorphic addition (real implementation requires proper HE scheme)
+    const sum = await this.performHomomorphicAddition(encryptedValues);
+
+    return {
+      value: sum,
+      operation: 'homomorphic_sum',
+      inputCount: encryptedValues.length,
+    };
+  }
+
+  private async performHomomorphicAddition(values: EncryptedNumber[]): Promise<string> {
+    // This is a simplified representation
+    // Real homomorphic encryption requires specialized libraries
+    return values.map((v) => v.value).join('+');
+  }
+}
+```
+
+### 2. Federated Learning for Privacy
+
+#### Privacy-Preserving Machine Learning
+
+```typescript
+// Federated learning implementation for privacy-preserving ML
+class FederatedLearningPrivacy {
+  private readonly participants: Map<string, Participant> = new Map();
+  private readonly globalModel: MLModel;
+
+  constructor() {
+    this.globalModel = new MLModel();
+  }
+
+  // Train model locally without sharing raw data
+  async trainLocally(participantId: string, localData: PersonalData[]): Promise<LocalModelUpdate> {
+    const participant = this.participants.get(participantId);
+
+    if (!participant) {
+      throw new Error('Participant not found');
+    }
+
+    // Apply differential privacy to local training
+    const privateUpdate = await this.trainWithDifferentialPrivacy(
+      localData,
+      participant.privacyBudget
+    );
+
+    // Only share model updates, not raw data
+    return {
+      participantId,
+      modelWeights: privateUpdate.weights,
+      updateSize: privateUpdate.size,
+      privacyBudgetUsed: privateUpdate.epsilonUsed,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // Aggregate model updates securely
+  async aggregateUpdates(updates: LocalModelUpdate[]): Promise<GlobalModelUpdate> {
+    // Apply secure aggregation with privacy guarantees
+    const aggregatedWeights = await this.secureAggregation(updates.map((u) => u.modelWeights));
+
+    // Update global model
+    this.globalModel.updateWeights(aggregatedWeights);
+
+    return {
+      globalWeights: aggregatedWeights,
+      participantCount: updates.length,
+      totalPrivacyBudget: updates.reduce((sum, u) => sum + u.privacyBudgetUsed, 0),
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  private async trainWithDifferentialPrivacy(
+    data: PersonalData[],
+    privacyBudget: number
+  ): Promise<PrivateModelUpdate> {
+    const dp = new DifferentialPrivacy(privacyBudget);
+
+    // Train model with privacy guarantees
+    const weights = await this.trainModel(data);
+
+    // Add noise to model weights
+    const privateWeights = weights.map((w) => dp.addLaplaceNoise(w));
+
+    return {
+      weights: privateWeights,
+      size: privateWeights.length,
+      epsilonUsed: privacyBudget,
+    };
+  }
+}
+```
+
+### 3. Zero-Knowledge Proofs
+
+#### Privacy-Preserving Verification
+
+```typescript
+// Zero-knowledge proof implementation for privacy-preserving verification
+class ZeroKnowledgeProof {
+  // Prove knowledge without revealing the knowledge
+  async proveAge(age: number, minimumAge: number): Promise<ZKProof> {
+    if (age < minimumAge) {
+      throw new Error('Age requirement not met');
+    }
+
+    // Generate commitment
+    const commitment = await this.generateCommitment(age);
+
+    // Generate proof
+    const proof = await this.generateProof(age, minimumAge, commitment);
+
+    return {
+      commitment,
+      proof,
+      minimumAge,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // Verify proof without learning the actual age
+  async verifyAgeProof(proof: ZKProof): Promise<boolean> {
+    // Verify the proof without learning the actual age
+    const isValid = await this.verifyProof(proof.proof, proof.commitment, proof.minimumAge);
+
+    return isValid;
+  }
+
+  private async generateCommitment(value: number): Promise<string> {
+    // Generate cryptographic commitment
+    const encoded = new TextEncoder().encode(value.toString());
+    const hash = await crypto.subtle.digest('SHA-256', encoded);
+    return Buffer.from(hash).toString('base64');
+  }
+
+  private async generateProof(
+    value: number,
+    constraint: number,
+    commitment: string
+  ): Promise<string> {
+    // Simplified zero-knowledge proof generation
+    // Real implementation requires sophisticated cryptographic protocols
+    const proofData = {
+      value: value,
+      constraint: constraint,
+      commitment: commitment,
+      random: crypto.getRandomValues(new Uint8Array(32)),
+    };
+
+    const encoded = new TextEncoder().encode(JSON.stringify(proofData));
+    const hash = await crypto.subtle.digest('SHA-256', encoded);
+    return Buffer.from(hash).toString('base64');
+  }
+
+  private async verifyProof(
+    proof: string,
+    commitment: string,
+    constraint: number
+  ): Promise<boolean> {
+    // Simplified verification
+    // Real implementation would verify mathematical properties
+    return proof.length > 0 && commitment.length > 0;
+  }
+}
+```
+
+---
+
 ## References
+
+### Official GDPR Documentation
 
 - [GDPR Official Text](https://gdpr-info.eu/)
 - [European Data Protection Board](https://edpb.europa.eu/)
 - [UK ICO GDPR Guidance](https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-gdpr/)
-- [GDPR Enforcement Tracker](https://enforcementtracker.com/)
 - [European Commission GDPR Guidelines](https://ec.europa.eu/info/law/law-topic/data-protection/data-protection-en)
+
+### Security and Privacy Frameworks
+
 - [NIST Privacy Framework](https://www.nist.gov/privacy-framework)
+- [ISO/IEC 27701 Privacy Information Management](https://www.iso.org/isoiec-27001-information-security-cybersecurity-and-privacy-protection.html)
+- [OWASP Privacy Risks](https://owasp.org/www-project-top-ten/2021/A02_2021-Cryptographic_Failures/)
+- [ENISA Data Protection Guidelines](https://www.enisa.europa.eu/topics/data-protection)
+
+### Advanced Privacy Technologies
+
+- [Differential Privacy Book](https://www.cis.upenn.edu/~aaroth/Papers/privacybook.pdf)
+- [Homomorphic Encryption Standards](https://homomorphicencryption.org/)
+- [Zero-Knowledge Proofs](https://zkproof.org/)
+- [Federated Learning Research](https://federated-learning.org/)
+
+### Compliance and Enforcement
+
+- [GDPR Enforcement Tracker](https://enforcementtracker.com/)
+- [EDPB Guidelines on DPIA](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-03-2021/)
+- [Data Breach Notification Guidelines](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-04-2021/)
+- [International Data Transfer Guidelines](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-02-2021/)
