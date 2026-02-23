@@ -62,3 +62,6 @@ export function trackFormSubmission(formName: string, success = true) {
 export function trackCTAClick(ctaText: string) {
   trackEvent({ action: 'cta_click', category: 'engagement', label: ctaText });
 }
+
+export { createCwvCollector } from './cwv-collector';
+export type { CoreWebVitalMetric, CoreWebVitalName, CwvCollectorOptions } from './cwv-collector';

@@ -25,3 +25,12 @@
 - [x] DOMAIN-4-004 · Implement RLS isolation test suite
 - [x] DOMAIN-4-005 · Implement per-tenant secrets management
 - [x] DOMAIN-4-006 · Implement post-quantum cryptography abstraction
+- [x] DOMAIN-5-001 · Complete next.config.ts performance baseline
+- [x] DOMAIN-5-002 · Define four-mode rendering decision matrix
+- [x] DOMAIN-5-003 · Implement per-tenant use cache patterns
+- [x] DOMAIN-5-004 · Create PPR marketing page template
+- [x] DOMAIN-5-005 · Document React compiler rollout strategy
+- [x] DOMAIN-5-006 · Implement LCP/INP/CLS optimization baseline
+- [x] DOMAIN-5-007 · Implement Core Web Vitals Tinybird pipeline
+- [x] DOMAIN-5-008 · Enforce bundle size budgets
+- [x] DOMAIN-5-009 · Configure Lighthouse CI thresholds
