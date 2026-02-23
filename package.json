@@ -80,7 +80,8 @@
     "generate-component": "npx tsx tooling/generate-component/src/index.ts",
     "validate-config": "npx tsx tooling/validation/src/validate-site-config.ts",
     "validate:configs": "pnpm --filter @repo/config-schema validate:configs && npx tsx scripts/check-config-conflicts.ts",
-    "create-site": "pnpm create-client"
+    "create-site": "pnpm create-client",
+    "lint:fsd": "pnpm dlx steiger --config steiger.config.ts"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
