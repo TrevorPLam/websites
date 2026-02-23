@@ -14,17 +14,205 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Move and clean docs/guides files
+        run: |
+          cd docs/guides
 
-      - name: Run reorganization script
-        run: node scripts/reorganize-docs.mjs
+          # Create subdirectories
+          mkdir -p ai-automation architecture backend-data best-practices build-monorepo
+          mkdir -p cms-content email frontend infrastructure-devops linting
+          mkdir -p observability payments-billing scheduling security seo-metadata
+          mkdir -p standards-specs testing uncategorized
 
-      - name: Commit and push changes
+          # Delete junk/placeholder files
+          rm -f ADDTHESE.md 000.md 0000.md configuration-migration-guide.md
+
+          # Helper: move file if it exists at root
+          move() { [ -f "$1" ] && mv "$1" "$2/" || true; }
+
+          # ai-automation
+          move agents-md-patterns.md ai-automation
+          move per-package-agents-stubs.md ai-automation
+          move root-agents-master.md ai-automation
+          move ai-agent-cold-start-checklist.md ai-automation
+          move claude-code-integration.md ai-automation
+          move claude-sub-agent-definitions.md ai-automation
+          move autonomous-janitor-design.md ai-automation
+          move ai-context-json-proposal.md ai-automation
+          move ai-context-management.md ai-automation
+
+          # architecture
+          move architecture-decision-record-template.md architecture
+          move 000-use-adrs.md architecture
+          move 0000-use-adrs.md architecture
+          move white-label-portal-architecture.md architecture
+          move client-portal-configuration.md architecture
+          move monorepo-context-protocol-proposal.md architecture
+          move realtime-lead-feed-implementation.md architecture
+          move report-generation-engine.md architecture
+          move site-config-schema-documentation.md architecture
+
+          # backend-data
+          move aws-rds-proxy-documentation.md backend-data
+          move postgresql-pg-stat-statements.md backend-data
+          move postgresql-rls-documentation.md backend-data
+          move pglite-documentation.md backend-data
+          move clickhouse-documentation.md backend-data
+          move electricsql-docs.md backend-data
+          move upstash-redis-documentation.md backend-data
+          move upstash-ratelimit-documentation.md backend-data
+          move supabase-auth-docs.md backend-data
+          move tinybird-documentation.md backend-data
+          move multi-layer-rate-limiting.md backend-data
+          move hubspot-documentation.md backend-data
+
+          # best-practices
+          move thin-vertical-slice-guide.md best-practices
+          move feature-sliced-design-docs.md best-practices
+          move reversibility-principles.md best-practices
+          move prioritization-framework.md best-practices
+          move quality-assurance-checklist.md best-practices
+          move independent-release-patterns.md best-practices
+          move internal-developer-portal-patterns.md best-practices
+          move cli-scaffold-design.md best-practices
+
+          # build-monorepo
+          move pnpm-vs-yarn-vs-npm-benchmarks.md build-monorepo
+          move pnpm-workspaces-documentation.md build-monorepo
+          move nx-affected-documentation.md build-monorepo
+          move nx-core-team-whitepaper.md build-monorepo
+          move turborepo-documentation.md build-monorepo
+          move turborepo-remote-caching.md build-monorepo
+          move turbo-json-configuration.md build-monorepo
+          move changesets-documentation.md build-monorepo
+
+          # cms-content
+          move sanity-documentation.md cms-content
+          move storyblok-documentation.md cms-content
+          move blog-content-architecture.md cms-content
+          move sanity-cms-draft-mode-2026.md cms-content
+
+          # email
+          move resend-documentation.md email
+          move postmark-documentation.md email
+          move email-package-structure.md email
+          move multi-tenant-email-routing.md email
+          move unified-email-send.md email
+          move lead-notification-template.md email
+
+          # frontend
+          move nextjs-16-documentation.md frontend
+          move nextjs-middleware-documentation.md frontend
+          move react-19-documentation.md frontend
+          move react-compiler-docs.md frontend
+          move react-hook-form-documentation.md frontend
+          move tailwindcss-v4-documentation.md frontend
+          move css-variables-guide.md frontend
+          move turbopack-documentation.md frontend
+          move storybook-documentation.md frontend
+          move offline-first-forms-pwa.md frontend
+          move core-web-vitals-optimization.md frontend
+          move performance-budgeting.md frontend
+
+          # infrastructure-devops
+          move deployment-runbook.md infrastructure-devops
+          move github-actions-docs.md infrastructure-devops
+          move pnpm-deploy-documentation.md infrastructure-devops
+          move terraform-aws-provider-docs.md infrastructure-devops
+          move terraform-supabase-provider-docs.md infrastructure-devops
+          move terraform-vercel-provider-docs.md infrastructure-devops
+          move opentofu-documentation.md infrastructure-devops
+          move nx-cloud-documentation.md infrastructure-devops
+          move vercel-domains-api-docs.md infrastructure-devops
+          move vercel-for-platforms-docs.md infrastructure-devops
+          move launchdarkly-documentation.md infrastructure-devops
+
+          # linting
+          move eslint-9-documentation.md linting
+          move prettier-documentation.md linting
+          move steiger-documentation.md linting
+          move steiger-linting-configuration.md linting
+
+          # observability
+          move opentelemetry-documentation.md observability
+          move opentelemetry-instrumentation.md observability
+          move opentelemetry-nextjs-instrumentation.md observability
+          move vercel-otel-documentation.md observability
+          move sentry-documentation.md observability
+
+          # payments-billing
+          move billing-page-components.md payments-billing
+          move stripe-checkout-sessions.md payments-billing
+          move stripe-customer-portal.md payments-billing
+          move stripe-documentation.md payments-billing
+
+          # scheduling
+          move acuity-scheduling-documentation.md scheduling
+          move calendly-documentation.md scheduling
+          move calcom-embed-widget.md scheduling
+          move calcom-webhook-handler.md scheduling
+
+          # security
+          move pqc-migration-strategy.md security
+          move nist-fips-203-204-205.md security
+          move nist-report-on-hqc.md security
+          move noble-post-quantum-documentation.md security
+          move github-signing-commits-docs.md security
+          move security-headers-system.md security
+          move security-middleware-implementation.md security
+          move server-action-security-wrapper.md security
+          move secrets-manager.md security
+
+          # seo-metadata
+          move schema-org-documentation.md seo-metadata
+          move dynamic-og-images.md seo-metadata
+          move dynamic-sitemap-generation.md seo-metadata
+          move metadata-generation-system.md seo-metadata
+          move structured-data-system.md seo-metadata
+          move llms-txt-spec.md seo-metadata
+          move generative-engine-optimization-2026.md seo-metadata
+          move seo-validation-ci-pipeline-2026.md seo-metadata
+          move edge-ab-testing-zero-cls-2026.md seo-metadata
+          move tenant-metadata-factory.md seo-metadata
+          move service-area-pages-engine.md seo-metadata
+
+          # standards-specs
+          move semver-spec.md standards-specs
+          move cyclonedx-spec.md standards-specs
+          move spdx-spec.md standards-specs
+          move slsa-provenance-spec.md standards-specs
+          move green-software-foundation-sci-spec.md standards-specs
+          move sci-calculation-examples.md standards-specs
+          move design-tokens-w3c-cg-report.md standards-specs
+          move style-dictionary-documentation.md standards-specs
+
+          # testing
+          move playwright-best-practices.md testing
+          move playwright-documentation.md testing
+          move testing-library-documentation.md testing
+          move vitest-documentation.md testing
+          move e2e-testing-suite-patterns.md testing
+          move axe-core-documentation.md testing
+
+          # accessibility-legal -> put in the accessibility-legal subdir
+          mkdir -p accessibility-legal
+          move ada-title-ii-final-rule.md accessibility-legal
+          move wcag-2.2-criteria.md accessibility-legal
+          move hhs-section-504-docs.md accessibility-legal
+          move gdpr-guide.md accessibility-legal
+
+          # Any remaining .md files go to uncategorized
+          for f in *.md; do
+            [ -f "$f" ] && mv "$f" uncategorized/ || true
+          done
+
+          echo "Done moving files."
+          ls -la
+
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A docs/guides/
-          git diff --cached --quiet || git commit -m "reorg: reorganize docs/guides into topic subdirectories"
+          git diff --cached --quiet && echo "Nothing to commit" || git commit -m "reorg: reorganize docs/guides into topic subdirectories"
           git push
