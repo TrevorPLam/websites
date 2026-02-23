@@ -1,8 +1,45 @@
+<!--
+/**
+ * @file gdpr-guide.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for gdpr guide.
+ * @entrypoints docs/guides/gdpr-guide.md
+ * @exports gdpr guide
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # gdpr-guide.md
 
 > **Version Reference:** GDPR (General Data Protection Regulation) 2016/679 | Last Updated: 2026-02-23
 > **Purpose:** Comprehensive GDPR compliance guide with 2026 best practices, implementation strategies, and advanced privacy patterns
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Key GDPR Principles](#key-gdpr-principles)
+3. [Legal Bases for Processing](#legal-bases-for-processing)
+4. [Data Subject Rights](#data-subject-rights)
+5. [Data Protection Impact Assessments](#data-protection-impact-assessments)
+6. [Data Breach Management](#data-breach-management)
+7. [International Data Transfers](#international-data-transfers)
+8. [Privacy by Design and Default](#privacy-by-design-and-default)
+9. [Technical Implementation](#technical-implementation)
+10. [Compliance Monitoring](#compliance-monitoring)
+11. [Security Considerations](#security-considerations)
+12. [Advanced Privacy Patterns](#advanced-privacy-patterns)
+13. [References](#references)
+
+---
 
 ## Overview
 

@@ -1,5 +1,36 @@
+<!--
+/**
+ * @file ai-context-management.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for ai context management.
+ * @entrypoints docs/guides/ai-context-management.md
+ * @exports ai context management
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # ai-context-management.md
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Code Examples](#code-examples)
+- [Security Considerations](#security-considerations)
+- [Performance Optimization](#performance-optimization)
+- [2026 Standards Compliance](#2026-standards-compliance)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
 
 # AI Context Management and Hierarchy Strategies
 
@@ -746,7 +777,7 @@ class MemoryEfficientContextManager {
     let optimized = content.replace(/\s+/g, ' ').trim();
 
     // Remove comments
-    optimized = optimized.replace(//gs, '');
+    optimized = optimized.replace(/<!--.*?-->/gs, '');
 
     // Compress long sections
     if (optimized.length > this.maxContextSize) {

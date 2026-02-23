@@ -1,4 +1,32 @@
+<!--
+/**
+ * @file wcag-2.2-criteria.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for wcag 2.2 criteria.
+ * @entrypoints docs/guides/wcag-2.2-criteria.md
+ * @exports wcag 2.2 criteria
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # wcag-2.2-criteria.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
 
 
 ## Overview
@@ -46,7 +74,7 @@ function testFocusNotObscured(element) {
 **Example Implementation**:
 
 ```html
-
+<!-- Drag alternative with click interface -->
 <div class="sortable-item" tabindex="0" role="button">
   <div class="drag-handle">⋮⋮</div>
   <div class="item-content">Item content</div>
@@ -119,7 +147,7 @@ function testFocusNotObscured(element) {
 **Example Implementation**:
 
 ```html
-
+<!-- Password manager friendly form -->
 <form action="/login" method="post">
   <label for="username">Username</label>
   <input type="text" id="username" name="username" autocomplete="username" required />
@@ -127,11 +155,11 @@ function testFocusNotObscured(element) {
   <label for="password">Password</label>
   <input type="password" id="password" name="password" autocomplete="current-password" required />
 
-  
+  <!-- Enable password manager support -->
   <button type="submit">Sign In</button>
 </form>
 
-
+<!-- Alternative authentication methods -->
 <div class="auth-alternatives">
   <button type="button" id="biometric-auth">Use Biometrics</button>
   <button type="button" id="passkey-auth">Use Passkey</button>

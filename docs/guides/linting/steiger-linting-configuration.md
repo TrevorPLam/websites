@@ -1,4 +1,32 @@
+<!--
+/**
+ * @file steiger-linting-configuration.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for steiger linting configuration.
+ * @entrypoints docs/guides/steiger-linting-configuration.md
+ * @exports steiger linting configuration
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # steiger-linting-configuration.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
 
 
 ## Overview
@@ -224,14 +252,194 @@ export default defineConfig([
         severity: 'error',
         options: {
           allowedPatterns: ['@shared/*', '@features/*'],
-          forbiddenPatterns: ['**/processes*.{js,ts,jsx,tsx}'], // Include all source files
+          forbiddenPatterns: ['**/processes/**'],
+        },
+      },
+    },
+  },
+]);
+```
+
+### File Patterns
+
+```typescript
+export default defineConfig([
+  {
+    files: ['src/**/*.{js,ts,jsx,tsx}'], // Include all source files
     exclude: ['**/*.test.*', '**/*.stories.*'], // Exclude tests and stories
     rules: {
       'fsd/no-processes': 'error',
     },
   },
   {
-    files: ['packages*.{js,ts,jsx,tsx}'],
+    files: ['packages/**/*.{js,ts,jsx,tsx}'], // Different rules for packages
+    rules: {
+      'fsd/no-shared-ui': 'warn',
+    },
+  },
+]);
+```
+
+## Integration with Development Tools
+
+### VS Code Integration
+
+```json
+// .vscode/settings.json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.steiger": "explicit"
+  },
+  "steiger.enable": true,
+  "steiger.trace.server": "verbose"
+}
+```
+
+### ESLint Integration
+
+```json
+// .eslintrc.json
+{
+  "extends": ["@repo/eslint-config"],
+  "plugins": ["steiger"],
+  "rules": {
+    "steiger/no-processes": "error",
+    "steiger/no-shared-ui": "warn"
+  }
+}
+```
+
+### Pre-commit Hooks
+
+```json
+// .lintstagedrc.json
+{
+  "*.{js,ts,jsx,tsx}": ["steiger --fix", "eslint --fix"]
+}
+```
+
+## Advanced Configuration
+
+### Custom Rules
+
+```typescript
+// steiger.config.ts
+import { defineConfig } from 'steiger';
+import { createRule } from 'steiger';
+
+const customRule = createRule({
+  name: 'custom/no-direct-state-imports',
+  meta: {
+    type: 'problem',
+    docs: {
+      description: 'Prevent direct imports from state management',
+    },
+  },
+  create(context) {
+    return {
+      ImportDeclaration(node) {
+        if (node.source.value.includes('store') || node.source.value.includes('state')) {
+          context.report({
+            node,
+            message: 'Direct state imports are not allowed',
+          });
+        }
+      },
+    };
+  },
+});
+
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    rules: {
+      'custom/no-direct-state-imports': 'error',
+    },
+  },
+]);
+```
+
+### Environment-specific Configuration
+
+```typescript
+// steiger.config.ts
+import { defineConfig } from 'steiger';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    rules: {
+      'fsd/no-shared-ui': isDevelopment ? 'warn' : 'error',
+      'fsd/naming-convention': {
+        severity: 'error',
+        options: {
+          strict: !isDevelopment,
+        },
+      },
+    },
+  },
+]);
+```
+
+## Migration from 0.4.0
+
+### Breaking Changes
+
+Version 0.5.0 introduced a new configuration format:
+
+```typescript
+// Before 0.4.0
+module.exports = {
+  extends: ['@feature-sliced/steiger-plugin/recommended'],
+  rules: {
+    'no-processes': 'error',
+  },
+};
+
+// After 0.5.0
+import { defineConfig } from 'steiger';
+import fsd from '@feature-sliced/steiger-plugin';
+
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    rules: {
+      'fsd/no-processes': 'error',
+    },
+  },
+]);
+```
+
+### Automated Migration
+
+```bash
+# Run the automated migration
+npx @feature-sliced/steiger-plugin migrate
+
+# Or manually update configuration
+npm install --save-dev @feature-sliced/steiger-plugin@latest
+```
+
+## Best Practices
+
+### Configuration Management
+
+1. **Start with Recommended**: Use `fsd.configs.recommended` as baseline
+2. **Gradual Adoption**: Enable rules incrementally
+3. **Team Alignment**: Ensure team agrees on rule severity
+4. **Documentation**: Document custom rules and exceptions
+5. **Regular Updates**: Keep Steiger and plugins updated
+
+### Rule Selection
+
+```typescript
+// Recommended starting configuration
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    files: ['src/**/*.{js,ts,jsx,tsx}'],
     rules: {
       // Critical architecture rules (error)
       'fsd/no-processes': 'error',
@@ -259,7 +467,163 @@ export default defineConfig([
 ```typescript
 export default defineConfig([
   {
-    files: ['src*.test.*', '**/*.stories.*', '**/node_modules*.{js,ts,jsx,tsx}', 'packages/features*.test.*', '**/*.stories.*', '**/node_modules*.{js,ts,jsx,tsx}'],
+    files: ['src/**/*.{js,ts,jsx,tsx}'],
+    exclude: ['**/*.test.*', '**/*.stories.*', '**/node_modules/**'],
+    rules: {
+      'fsd/no-processes': 'error',
+    },
+  },
+]);
+```
+
+## CI/CD Integration
+
+### GitHub Actions
+
+```yaml
+# .github/workflows/architecture-lint.yml
+name: Architecture Lint
+
+on: [push, pull_request]
+
+jobs:
+  steiger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run architecture linting
+        run: pnpm lint:arch
+```
+
+### Pre-commit Integration
+
+```yaml
+# .husky/pre-commit
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx steiger ./src --max-warnings=0
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Configuration Not Found**: Ensure `steiger.config.ts` is in project root
+2. **Plugin Not Found**: Install `@feature-sliced/steiger-plugin`
+3. **Rule Conflicts**: Check for conflicting ESLint rules
+4. **Performance Issues**: Exclude unnecessary files and use caching
+
+### Debug Commands
+
+```bash
+# Check configuration
+npx steiger --print-config
+
+# Run with verbose output
+npx steiger ./src --verbose
+
+# Test specific rules
+npx steiger ./src --rule=fsd/no-processes
+
+# Generate configuration documentation
+npx steiger --help
+```
+
+### Performance Issues
+
+```bash
+# Profile Steiger performance
+time npx steiger ./src
+
+# Use file system cache
+npx steiger ./src --cache
+
+# Limit file scope
+npx steiger ./src --max-files=1000
+```
+
+## Integration with This Monorepo
+
+### Current State
+
+Steiger is not currently implemented in this marketing websites monorepo. The project uses:
+
+- ESLint for code quality
+- TypeScript for type safety
+- Custom architecture patterns
+
+### Future Implementation Plan
+
+```typescript
+// Proposed steiger.config.ts for this monorepo
+import { defineConfig } from 'steiger';
+import fsd from '@feature-sliced/steiger-plugin';
+
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    files: ['clients/**/*.{js,ts,jsx,tsx}', 'packages/features/**/*.{js,ts,jsx,tsx}'],
+    exclude: ['**/*.test.*', '**/*.stories.*', '**/node_modules/**'],
+    rules: {
+      // Core FSD rules
+      'fsd/no-processes': 'error',
+      'fsd/no-app-in-slices': 'error',
+      'fsd/no-public-api-in-slices': 'error',
+
+      // Import rules
+      'fsd/import-sources': 'error',
+      'fsd/layers-import': 'error',
+
+      // Naming conventions
+      'fsd/naming-convention': 'warn',
+    },
+  },
+]);
+```
+
+### Migration Steps
+
+1. **Install Dependencies**:
+
+   ```bash
+   pnpm add -D steiger @feature-sliced/steiger-plugin
+   ```
+
+2. **Create Configuration**: Add `steiger.config.ts` to root
+
+3. **Update Scripts**: Add linting scripts to package.json
+
+4. **CI Integration**: Add architecture linting to GitHub Actions
+
+5. **Team Training**: Document FSD patterns and rules
+
+## References
+
+- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+
+- [Steiger GitHub Repository](https://github.com/feature-sliced/steiger)
+- [Feature-Sliced Design Documentation](https://feature-sliced.design/)
+- [Steiger Configuration Guide](https://github.com/feature-sliced/steiger/blob/master/README.md)
+- [FSD Rules Reference](https://github.com/feature-sliced/steiger/blob/master/docs/rules.md)
+- [Migration Guide](https://github.com/feature-sliced/steiger/discussions/53)
+
+## Core Configuration
+
+### Basic Configuration Structure
+
+```typescript
+import { defineConfig } from 'steiger';
+
+export default defineConfig([
+  // Global configuration
+  {
+    files: ['**/*.{js,ts,jsx,tsx}'],
     rules: {
       // Rule configurations
     },
@@ -267,7 +631,30 @@ export default defineConfig([
 
   // File-specific configurations
   {
-    files: ['src*.{js,ts,jsx,tsx}'],
+    files: ['src/**/*.test.{js,ts,jsx,tsx}'],
+    rules: {
+      // Test-specific rules
+    },
+  },
+]);
+```
+
+### Plugin Integration
+
+```typescript
+import { defineConfig } from 'steiger';
+import fsd from '@feature-sliced/steiger-plugin';
+
+export default defineConfig([
+  // Recommended FSD configuration
+  fsd.configs.recommended,
+
+  // Strict FSD configuration
+  fsd.configs.strict,
+
+  // Custom configuration
+  {
+    files: ['**/*.{js,ts,jsx,tsx}'],
     rules: {
       'fsd/no-processes': 'error',
       'fsd/no-shared-ui': 'warn',
@@ -424,7 +811,8 @@ export default defineConfig([
 
   {
     // Apply only to source files (exclude tests)
-    files: ['src*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
     rules: {
       'fsd/no-shared-ui': 'error',
     },
@@ -432,10 +820,75 @@ export default defineConfig([
 
   {
     // Apply to specific directories
-    files: ['src/features*.{ts,tsx}'],
+    files: ['src/features/**/*.{ts,tsx}'],
+    rules: {
+      'fsd/slice-naming': [
+        'error',
+        {
+          caseStyle: 'kebab-case',
+          minLength: 3,
+        },
+      ],
+    },
+  },
+
+  {
+    // Exclude certain patterns
+    files: ['**/*.{ts,tsx}'],
     ignores: [
-      'src/shared/ui*.stories.{ts,tsx}', // Ignore Storybook files
-      'src*.{ts,tsx}'],
+      'src/shared/ui/**', // Allow shared UI in specific location
+      'src/**/*.stories.{ts,tsx}', // Ignore Storybook files
+      'src/**/*.mock.{ts,tsx}', // Ignore mock files
+    ],
+    rules: {
+      'fsd/no-shared-ui': 'off',
+    },
+  },
+]);
+```
+
+### Custom Rules
+
+```typescript
+// custom-rules.ts
+import { Rule } from 'steiger';
+
+export const noIndexFiles: Rule = {
+  meta: {
+    name: 'no-index-files',
+    description: 'Prevents index.ts files in slices',
+  },
+
+  create(context) {
+    return {
+      visitFile(node) {
+        if (node.filename.endsWith('index.ts')) {
+          const pathParts = node.filename.split('/');
+          const sliceIndex = pathParts.findIndex((part) =>
+            ['features', 'pages', 'widgets', 'entities'].includes(part)
+          );
+
+          if (sliceIndex !== -1) {
+            context.report({
+              node,
+              message: 'Index files are not allowed in slices',
+            });
+          }
+        }
+      },
+    };
+  },
+};
+
+// steiger.config.ts
+import { defineConfig } from 'steiger';
+import fsd from '@feature-sliced/steiger-plugin';
+import { noIndexFiles } from './custom-rules';
+
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    files: ['**/*.{ts,tsx}'],
     rules: {
       'no-index-files': 'error',
     },
@@ -609,18 +1062,95 @@ src/
 export default defineConfig([
   fsd.configs.recommended,
   {
-    files: ['src*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'fsd/no-processes': 'error',
+      'fsd/no-shared-ui': 'error',
+      'fsd/no-app-in-slices': 'error',
+      'fsd/layer-naming': [
+        'error',
+        {
+          allowedLayers: [
+            'app',
+            'processes',
+            'shared',
+            'pages',
+            'widgets',
+            'features',
+            'entities',
+            'segments',
+          ],
+        },
+      ],
+      'fsd/slice-naming': [
+        'error',
+        {
+          caseStyle: 'kebab-case',
+          minLength: 3,
+        },
+      ],
+    },
+  },
+]);
+```
+
+### Handling Exceptions
+
+```typescript
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    files: ['src/**/*.{ts,tsx}'],
     rules: {
       'fsd/no-shared-ui': 'error',
     },
     // Allow exceptions for specific cases
     ignores: [
-      'src/shared/ui/theme*.stories.{ts,tsx}', // Ignore Storybook files
+      'src/shared/ui/theme/**', // Allow theme components in shared
+      'src/shared/ui/icons/**', // Allow icon components in shared
+      'src/**/*.stories.{ts,tsx}', // Ignore Storybook files
     ],
   },
   {
     // More lenient rules for test files
-    files: ['src*.{js,ts,jsx,tsx}'],
+    files: ['src/**/*.test.{ts,tsx}'],
+    rules: {
+      'fsd/no-shared-ui': 'off',
+      'fsd/no-app-in-slices': 'off',
+    },
+  },
+]);
+```
+
+## Migration Guide
+
+### Migrating from v0.4 to v0.5
+
+```bash
+# Install codemod
+npm install -g @feature-sliced/steiger-codemod
+
+# Run automatic migration
+steiger-codemod --config ./steiger.config.js
+```
+
+### Manual Migration Steps
+
+```typescript
+// Old format (v0.4)
+module.exports = {
+  rules: {
+    'no-processes': 'error',
+    'no-shared-ui': 'warn',
+  },
+};
+
+// New format (v0.5)
+import { defineConfig } from 'steiger';
+
+export default defineConfig([
+  {
+    files: ['**/*.{js,ts,jsx,tsx}'],
     rules: {
       'fsd/no-processes': 'error',
       'fsd/no-shared-ui': 'warn',
@@ -774,7 +1304,25 @@ CMD ["npm", "start"]
 export default defineConfig([
   fsd.configs.recommended,
   {
-    files: ['src*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'fsd/no-shared-ui': 'error',
+    },
+    ignores: [
+      'src/shared/ui/theme/**', // Known exception
+      'src/shared/ui/icons/**', // Known exception
+    ],
+  },
+]);
+```
+
+#### Performance Issues
+
+```typescript
+// Optimize for large codebases
+export default defineConfig([
+  {
+    files: ['src/**/*.{ts,tsx}'],
     rules: {
       'fsd/no-processes': 'error',
     },
@@ -819,7 +1367,33 @@ export const baseConfig = {
 
 // configs/steiger/strict.ts
 export const strictConfig = {
-  files: ['src*.{ts,tsx}'],
+  files: ['src/**/*.{ts,tsx}'],
+  rules: {
+    'fsd/no-shared-ui': 'error',
+    'fsd/layer-naming': 'error',
+    'fsd/slice-naming': 'error',
+  },
+};
+
+// steiger.config.ts
+import { defineConfig } from 'steiger';
+import fsd from '@feature-sliced/steiger-plugin';
+import { baseConfig, strictConfig } from './configs/steiger';
+
+export default defineConfig([fsd.configs.recommended, baseConfig, strictConfig]);
+```
+
+### Team Configuration
+
+```typescript
+// steiger.config.ts
+import { defineConfig } from 'steiger';
+import fsd from '@feature-sliced/steiger-plugin';
+
+export default defineConfig([
+  fsd.configs.recommended,
+  {
+    files: ['src/**/*.{ts,tsx}'],
     rules: {
       // Team-agreed rules
       'fsd/no-processes': 'error',

@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file nextjs-16-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for nextjs 16 documentation.
+ * @entrypoints docs/guides/nextjs-16-documentation.md
+ * @exports nextjs 16 documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # Next.js 16 — Official Reference Documentation
 
 > **Version Reference:** Next.js 16.1 (stable) | Released: October 21, 2025 / Updated: December 18, 2025
@@ -6,6 +26,27 @@
 
 ---
 
+## Table of Contents
+
+1. [What's New in Next.js 16](#whats-new-in-nextjs-16)
+2. [Installation & Upgrade](#installation--upgrade)
+3. [Version Requirements](#version-requirements)
+4. [Turbopack (Stable Default)](#turbopack-stable-default)
+5. [Cache Components & "use cache"](#cache-components--use-cache)
+6. [Caching APIs](#caching-apis)
+7. [App Router Routing & Navigation](#app-router-routing--navigation)
+8. [proxy.ts (Replaces middleware.ts)](#proxyts-replaces-middlewarets)
+9. [React Compiler Integration](#react-compiler-integration)
+10. [React 19.2 Features in Next.js 16](#react-192-features-in-nextjs-16)
+11. [OpenTelemetry Instrumentation](#opentelemetry-instrumentation)
+12. [after() API](#after-api)
+13. [Build Adapters API (Alpha)](#build-adapters-api-alpha)
+14. [DevTools MCP Integration](#devtools-mcp-integration)
+15. [Breaking Changes](#breaking-changes)
+16. [Deprecations](#deprecations)
+17. [Best Practices](#best-practices)
+
+---
 
 ## What's New in Next.js 16
 
@@ -1265,7 +1306,7 @@ export class SmartCacheManager {
 
 ```typescript
 // next.config.ts - React Compiler configuration
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     reactCompiler: {

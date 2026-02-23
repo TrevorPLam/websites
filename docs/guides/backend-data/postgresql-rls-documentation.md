@@ -1,3 +1,23 @@
+<!--
+/**
+ * @file postgresql-rls-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for postgresql rls documentation.
+ * @entrypoints docs/guides/postgresql-rls-documentation.md
+ * @exports postgresql rls documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # PostgreSQL Row Level Security (RLS) — Official Reference Documentation
 
 > **Version Reference:** PostgreSQL 15+ | Last Updated: 2026-02-23
@@ -5,6 +25,23 @@
 
 ---
 
+## Table of Contents
+
+1. [What is Row Level Security?](#what-is-rls)
+2. [Core Concepts](#core-concepts)
+3. [Enabling RLS](#enabling-rls)
+4. [Policy Types & Commands](#policy-types--commands)
+5. [Policy USING vs WITH CHECK](#using-vs-with-check)
+6. [Multi-Tenant Patterns](#multi-tenant-patterns)
+7. [Role-Based Access Control (RBAC) with RLS](#rbac-with-rls)
+8. [Permissive vs Restrictive Policies](#permissive-vs-restrictive-policies)
+9. [Performance Considerations](#performance-considerations)
+10. [Security Definer Functions](#security-definer-functions)
+11. [Common Pitfalls](#common-pitfalls)
+12. [Testing RLS Policies](#testing-rls-policies)
+13. [Best Practices](#best-practices)
+
+---
 
 ## What is Row Level Security?
 

@@ -1,4 +1,32 @@
+<!--
+/**
+ * @file e2e-testing-suite-patterns.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for e2e testing suite patterns.
+ * @entrypoints docs/guides/e2e-testing-suite-patterns.md
+ * @exports e2e testing suite patterns
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # e2e-testing-suite-patterns.md
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
 
 
 ## Overview

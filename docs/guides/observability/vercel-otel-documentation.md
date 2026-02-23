@@ -1,5 +1,35 @@
+<!--
+/**
+ * @file vercel-otel-documentation.md
+ * @role Technical Documentation Guide
+ * @summary Documentation and implementation guide for vercel otel documentation.
+ * @entrypoints docs/guides/vercel-otel-documentation.md
+ * @exports vercel otel documentation
+ * @depends_on [List dependencies here]
+ * @used_by [List consumers here]
+ * @runtime Multi-agent / Node.js 20+
+ * @data_flow Documentation -> Agentic Context
+ * @invariants Standard Markdown format, 2026 technical writing standards
+ * @gotchas Missing references in some legacy versions
+ * @issues Needs TOC and Reference section standardization
+ * @opportunities Automate with multi-agent refinement loop
+ * @verification validate-documentation.js
+ * @status DRAFT
+ */
+-->
+
 # vercel-otel-documentation.md
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Implementation](#implementation)
+- [Best Practices](#best-practices)
+- [Testing](#testing)
+- [References](#references)
+
+
+Vercel provides built-in support for OpenTelemetry instrumentation through the `@vercel/otel` package, which simplifies observability integration for Next.js applications and Vercel Functions. This package offers a zero-config approach that works out of the box on Vercel's platform while remaining compatible with self-hosted deployments.
 
 ## Overview
 
