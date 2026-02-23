@@ -13,9 +13,7 @@ import '@testing-library/jest-dom';
 import { toHaveNoViolations } from 'jest-axe';
 
 // Extend Vitest's expect with jest-axe matchers
-expect.extend({
-  toHaveNoViolations,
-});
+expect.extend({ toHaveNoViolations } as any);
 
 // Set critical environment variables BEFORE any module imports
 process.env.JWT_SECRET = 'test-secret-for-vitest';

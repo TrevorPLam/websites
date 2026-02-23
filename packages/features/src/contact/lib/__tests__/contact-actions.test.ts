@@ -23,7 +23,7 @@ vi.mock('@repo/infra/context/request-context.server', () => ({
   runWithRequestId: vi.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 
-vi.mock('@repo/infra/security/request-validation', () => ({
+vi.mock('@repo/infra/security', () => ({
   getValidatedClientIp: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 

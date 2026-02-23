@@ -8,7 +8,7 @@ import { ContactForm, createContactConfig } from '@repo/features/client';
 import { registerSection } from '../../registry';
 import type { SectionProps } from '../../types';
 import { getSiteConfig } from './shared';
-import { createContactHandler } from '@repo/features/contact';
+import { createContactHandler } from '@repo/features/core';
 
 async function ContactFormAdapter(props: SectionProps) {
   const config = getSiteConfig(props);

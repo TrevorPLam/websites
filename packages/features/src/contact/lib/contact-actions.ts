@@ -32,8 +32,8 @@
 import { headers } from 'next/headers';
 import { z } from 'zod';
 import { checkRateLimit, hashIp, logError, withServerSpan } from '@repo/infra';
-import { runWithRequestId } from '@repo/infra/context/request-context.server';
-import { getValidatedClientIp } from '@repo/infra/security/request-validation';
+import { runWithRequestId } from '@repo/infra/context/server';
+import { getValidatedClientIp } from '@repo/infra/security';
 import type { ContactFormData } from './contact-schema';
 import { validateContactSecurity } from './contact-schema';
 import { SupabaseContactRepository } from './supabase-contact-repository';

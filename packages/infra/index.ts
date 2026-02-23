@@ -28,53 +28,57 @@
 // [TRACE:BLOCK=packages.infra.exports.security]
 // [FEAT:SECURITY]
 // NOTE: Security module exports - CSP, headers, sanitization, rate limiting, and request validation.
-// CSP Module (Task 1.1.2 - COMPLETED)
-export * from './security/csp';
+export * from './src/security';
 
-// Security Headers Module (Task 1.1.3 - COMPLETED)
-export * from './security/security-headers';
+// [TRACE:BLOCK=packages.infra.exports.auth]
+// [FEAT:AUTH]
+// NOTE: Authentication module exports - OAuth 2.1, tenant context, and middleware.
+export * from './src/auth';
 
-// Sanitize Module (Task 1.1.4 - COMPLETED)
-export * from './security/sanitize';
+// [TRACE:BLOCK=packages.infra.exports.design]
+// [FEAT:DESIGN]
+// NOTE: Design system exports - spacing, typography, color, border, shadow utilities.
+export * from './src/design';
 
-// Rate Limit Module (Task 1.1.5 - COMPLETED)
-export * from './security/rate-limit';
-export * from './security/secure-action';
-export type { Result, ActionError } from './security/secure-action';
+// [TRACE:BLOCK=packages.infra.exports.monitoring]
+// [FEAT:MONITORING]
+// NOTE: Monitoring module exports - Sentry error tracking and data sanitization.
+export * from './src/monitoring';
 
-// Request Validation Module (Task 1.1.6 - COMPLETED)
-export * from './security/request-validation';
+// [TRACE:BLOCK=packages.infra.exports.composition]
+// [FEAT:COMPOSITION]
+// NOTE: Composition pattern exports - slots, context, providers, HOCs.
+export * from './src/composition';
 
-// Tenant Context Module (Task security-2 - COMPLETED)
-export * from './src/auth/tenant-context';
+// [TRACE:BLOCK=packages.infra.exports.accessibility]
+// [FEAT:ACCESSIBILITY]
+// NOTE: Accessibility exports - ARIA, keyboard, screen reader, hooks.
+export * from './src/accessibility';
 
-// Database Booking Helpers (Task security-1 - COMPLETED)
-export * from './src/database-booking';
+// [TRACE:BLOCK=packages.infra.exports.variants]
+// [FEAT:VARIANTS]
+// NOTE: Variant system exports - CVA, types, composition, utils.
+export * from './src/variants';
 
 // [TRACE:BLOCK=packages.infra.exports.middleware]
 // [FEAT:MIDDLEWARE]
 // NOTE: Middleware module exports - middleware factory for request processing.
-// Middleware Factory (Task 1.1.7 - COMPLETED)
 export * from './middleware/create-middleware';
 
 // [TRACE:BLOCK=packages.infra.exports.context]
 // [FEAT:INFRASTRUCTURE]
 // NOTE: Context module exports - request context safe for all environments.
-// Request context (stub — safe for all environments)
 export * from './context/request-context';
 
 // [TRACE:BLOCK=packages.infra.exports.logging]
 // [FEAT:LOGGING]
 // NOTE: Logging module exports - structured logging with request context integration.
-// Logger (server-only; uses request-context.server internally)
 export * from './logger';
 
-// [TRACE:BLOCK=packages.infra.exports.monitoring]
-// [FEAT:MONITORING]
-// NOTE: Monitoring module exports - Sentry error tracking and data sanitization.
-// Sentry server and sanitize (server-only)
-export * from './sentry/server';
-export * from './sentry/sanitize';
+// [TRACE:BLOCK=packages.infra.exports.env]
+// [FEAT:ENV]
+// NOTE: Environment validation exports - schema validation and configuration.
+export * from './env';
 
 // [TRACE:CONST=packages.infra.version]
 // [FEAT:INFRASTRUCTURE]

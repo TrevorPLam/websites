@@ -6,6 +6,7 @@
  */
 
 // tenant-context uses 'server-only' — mocked via jest.config.js moduleNameMapper
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import {
   runWithTenantId,
   getRequestTenantId,
@@ -61,15 +62,20 @@ describe('runWithTenantId / getRequestTenantId', () => {
     await Promise.all([
       new Promise<void>((resolve) => {
         runWithTenantId('tenant-x', async () => {
-          await new Promise((r) => setTimeout(r, 10));
+          // Use vi.useFakeTimers for deterministic timing
+          vi.useFakeTimers();
+          await vi.advanceTimersByTimeAsync(10);
           results.push(getRequestTenantId() ?? 'null');
+          vi.useRealTimers();
           resolve();
         });
       }),
       new Promise<void>((resolve) => {
         runWithTenantId('tenant-y', async () => {
-          await new Promise((r) => setTimeout(r, 5));
+          vi.useFakeTimers();
+          await vi.advanceTimersByTimeAsync(5);
           results.push(getRequestTenantId() ?? 'null');
+          vi.useRealTimers();
           resolve();
         });
       }),
@@ -162,11 +168,13 @@ describe('createTenantScopedClient', () => {
 
 describe('getTenantIdFromHeaders (deprecated)', () => {
   it('always returns null regardless of header value', () => {
-    const headers = new Headers({ 'x-tenant-id': VALID_UUID });
+    const headers = new Headers();
+    headers.set('x-tenant-id', VALID_UUID);
     expect(getTenantIdFromHeaders(headers)).toBeNull();
   });
 
   it('returns null for empty headers', () => {
-    expect(getTenantIdFromHeaders(new Headers())).toBeNull();
+    const headers = new Headers();
+    expect(getTenantIdFromHeaders(headers)).toBeNull();
   });
 });

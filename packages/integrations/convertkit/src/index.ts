@@ -15,8 +15,8 @@
  * - Added fallback mechanisms for service outages
  */
 import type { EmailAdapter, EmailSubscriber } from '../../email/contract';
-import { createHttpClient, createApiKeyAuth } from '../shared';
-import type { IntegrationConfig, ApiKeyAuth } from '../shared';
+import { createHttpClient, createApiKeyAuth } from '@repo/integrations-shared';
+import type { IntegrationConfig, ApiKeyAuth } from '@repo/integrations-shared';
 
 // Secure logging utility that redacts sensitive information
 const secureLog = (message: string, data?: any) => {

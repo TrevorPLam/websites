@@ -8,24 +8,14 @@
  */
 import 'server-only';
 
-export * from './booking';
-export * from './contact';
+// Consolidated feature exports for better organization
+export * from './core';
+export * from './content';
+export * from './business';
+export * from './advanced';
+export * from './utilities';
+
+// Individual exports for commonly used features
 export * from './blog';
-export * from './services';
-export * from './search';
-export * from './localization';
-export * from './team';
-export * from './testimonials';
-export * from './gallery';
-export * from './pricing';
-export * from './newsletter';
-export * from './social-media';
-export * from './reviews';
-export * from './analytics';
-export * from './ab-testing';
-export * from './chat';
-export * from './ecommerce';
-export * from './authentication';
-export * from './payment';
 export * from './content-management';
 export * from './notification';

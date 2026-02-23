@@ -88,7 +88,7 @@ vi.mock('@repo/infra', () => ({
   validateEnv: vi.fn(() => ({ NODE_ENV: 'test' })),
 }));
 
-vi.mock('@repo/infra/security/request-validation', () => ({
+vi.mock('@repo/infra/security', () => ({
   getValidatedClientIp: vi.fn().mockReturnValue('192.168.1.1'),
 }));
 

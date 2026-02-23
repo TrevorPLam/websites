@@ -26,8 +26,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
-import { authService } from './core';
-import { runWithTenantId, extractTenantIdFromJwt } from './tenant-context';
+import { runWithTenantId } from './tenant-context';
 import { auditLogger } from '../../security/audit-logger';
 
 // ─── Configuration ─────────────────────────────────────────────────────────────
@@ -173,7 +172,7 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
  */
 export async function authMiddleware(request: NextRequest): Promise<NextResponse> {
   const correlationId = crypto.randomUUID();
-  const clientIP = request.ip || request.headers.get('x-forwarded-for') || 'unknown';
+  const clientIP = (request as any).ip || request.headers.get('x-forwarded-for') || 'unknown';
   const pathname = request.nextUrl.pathname;
 
   // Log request start

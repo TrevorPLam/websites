@@ -6,7 +6,15 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./layout": "./src/layout/index.ts",
+    "./primitives": "./src/primitives/index.ts",
+    "./overlays": "./src/overlays/index.ts",
+    "./navigation": "./src/navigation/index.ts",
+    "./forms": "./src/forms/index.ts",
+    "./feedback": "./src/feedback/index.ts",
+    "./advanced": "./src/advanced/index.ts",
+    "./misc": "./src/misc/index.ts"
   },
   "scripts": {
     "lint": "eslint src",

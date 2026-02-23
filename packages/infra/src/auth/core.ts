@@ -560,6 +560,7 @@ export class AuthService {
 
     // TODO: Implement OAuth provider-specific URLs
     // This would build the proper OAuth 2.1 authorization URL
+    console.log('Generated PKCE for OAuth:', pkce); // Use pkce to avoid unused variable warning
     throw new Error(`OAuth provider ${provider} not implemented`);
   }
 

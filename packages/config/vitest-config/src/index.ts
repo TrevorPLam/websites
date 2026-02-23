@@ -46,7 +46,13 @@ export const jsdomConfig = {
 };
 
 // Re-export utilities for easy access
-export * from './mocks';
-export * from './env-helpers';
+export {
+  createMockFn,
+  createMockModule,
+  mockNextHeaders,
+  mockNextCookies,
+  mockNextCache,
+} from './mocks';
+export { withEnv, createEnvTest } from './env-helpers';
 
 export default defineConfig(sharedConfig);

@@ -51,7 +51,7 @@ import {
 import { getBookingProviders } from './booking-providers';
 import type { BookingProviderResponse } from './booking-provider-adapter';
 import { checkRateLimit, hashIp } from '@repo/infra';
-import { getValidatedClientIp } from '@repo/infra/security/request-validation';
+import { getValidatedClientIp } from '@repo/infra/security';
 import type { BookingFeatureConfig } from './booking-config';
 import { getBookingRepository } from './booking-repository';
 import { validateEnv } from '@repo/infra/env';

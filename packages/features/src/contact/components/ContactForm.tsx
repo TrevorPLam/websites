@@ -33,7 +33,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Input, Select, Textarea, Button } from '@repo/ui';
 import { setSentryContext, setSentryUser, withSentrySpan } from '@repo/infra/client';
-import { sanitizeHtml } from '@repo/infra/security/sanitize';
+import { sanitizeHtml } from '@repo/infra/security/client';
 import {
   createContactFormSchema,
   createContactFormDefaults,

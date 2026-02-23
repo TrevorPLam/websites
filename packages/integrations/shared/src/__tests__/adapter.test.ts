@@ -16,7 +16,7 @@ import type { IntegrationConfig, IntegrationResult } from '../types/adapter';
 
 // Mock logger for testing
 vi.mock('../utils/logger');
-const mockLogger = createLogger as anyedFunction<typeof createLogger>;
+const mockLogger = createLogger as any;
 
 // Test implementation of BaseIntegrationAdapter
 class TestAdapter extends BaseIntegrationAdapter {
@@ -42,6 +42,8 @@ class TestAdapter extends BaseIntegrationAdapter {
       if (shouldFail) {
         throw new Error('Test operation failed');
       }
+      // Simulate realistic operation timing (100ms)
+      await new Promise((resolve) => setTimeout(resolve, 100));
       return 'success';
     }, 'test-operation');
   }
@@ -261,16 +263,7 @@ describe('BaseIntegrationAdapter', () => {
     });
 
     it('should calculate average response time', async () => {
-      // Mock a delay
-      const originalExecute = (adapter as any).executeOperation;
-      (adapter as any).executeOperation = vi
-        .fn()
-        .mockImplementation(async (operation, operationName) => {
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          return originalExecute.call(adapter, operation, operationName);
-        });
-
-      await adapter.testOperation(false);
+      await adapter.testOperation(false); // Now has built-in 100ms delay
 
       const metrics = adapter.getMetrics();
       expect(metrics.success).toBe(true);

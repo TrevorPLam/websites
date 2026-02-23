@@ -10,17 +10,17 @@ const path = require('path');
 
 function setupReactTesting() {
   console.log('🔧 Setting up React Testing Library for Vitest...');
-  
+
   // Update vitest config to include jest-dom
   const vitestConfigPath = path.join(process.cwd(), 'vitest.config.ts');
-  
+
   if (!fs.existsSync(vitestConfigPath)) {
     console.log('❌ vitest.config.ts not found');
     return false;
   }
-  
+
   let content = fs.readFileSync(vitestConfigPath, 'utf8');
-  
+
   // Add jest-dom to setupFiles if not present
   if (!content.includes('jest-dom')) {
     const setupFilesMatch = content.match(/setupFiles:\s*\[([^\]]+)\]/);
@@ -35,23 +35,23 @@ function setupReactTesting() {
       }
     } else {
       content = content.replace(
-        /test:\s*\{[^}]*setupFiles:[^}]*\}/s*/,
+        /test:\s*\{[^}]*setupFiles:[^}]*\}/gs,
         `test: {\n    setupFiles: ['./packages/config/vitest-config/src/setup.ts']\n  }`
       );
     }
   }
-  
+
   // Write back vitest config
   fs.writeFileSync(vitestConfigPath, content, 'utf8');
   console.log('✅ Updated vitest.config.ts');
-  
+
   return true;
 }
 
 // Create axe-core-vitest adapter for accessibility testing
 function createAxeAdapter() {
   console.log('🔧 Creating axe-core-vitest adapter...');
-  
+
   const adapterContent = `/**
  * axe-core-vitest adapter
  * Provides jest-axe compatibility for Vitest
@@ -70,7 +70,7 @@ export const jestAxe = vi.mocked('jest-axe');
 // Export the actual axe-core function if available
 export const axe = vi.importActual('axe-core');
 `;
-  
+
   const adapterPath = path.join(process.cwd(), 'scripts/axe-vitest-adapter.js');
   fs.writeFileSync(adapterPath, adapterContent, 'utf8');
   console.log('✅ Created axe-vitest-adapter.js');
@@ -78,10 +78,10 @@ export const axe = vi.importActual('axe-core');
 
 function main() {
   console.log('🚀 Setting up React Testing Library for Vitest...\n');
-  
+
   const setupSuccess = setupReactTesting();
   createAxeAdapter();
-  
+
   if (setupSuccess) {
     console.log('\n🎯 React Testing Library setup complete!');
     console.log('\n📋 Next steps:');
