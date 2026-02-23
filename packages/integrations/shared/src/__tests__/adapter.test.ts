@@ -9,13 +9,14 @@
  * Standards: Comprehensive testing, security validation, performance testing
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { BaseIntegrationAdapter, DEFAULT_INTEGRATION_CONFIG } from '../types/adapter';
 import { createLogger } from '../utils/logger';
 import type { IntegrationConfig, IntegrationResult } from '../types/adapter';
 
 // Mock logger for testing
-jest.mock('../utils/logger');
-const mockLogger = createLogger as jest.MockedFunction<typeof createLogger>;
+vi.mock('../utils/logger');
+const mockLogger = createLogger as anyedFunction<typeof createLogger>;
 
 // Test implementation of BaseIntegrationAdapter
 class TestAdapter extends BaseIntegrationAdapter {
@@ -75,17 +76,17 @@ describe('BaseIntegrationAdapter', () => {
     } as IntegrationConfig;
 
     mockLogger.mockReturnValue({
-      debug: jest.fn(),
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-      startOperation: jest.fn(() => () => {}),
-      logApiCall: jest.fn(),
+      debug: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      startOperation: vi.fn(() => () => {}),
+      logApiCall: vi.fn(),
     } as any);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Initialization', () => {
@@ -149,14 +150,14 @@ describe('BaseIntegrationAdapter', () => {
       }
 
       // Fast-forward time
-      jest.useFakeTimers();
-      jest.advanceTimersByTime(config.circuitBreaker.resetTimeout + 1000);
+      vi.useFakeTimers();
+      vi.advanceTimersByTime(config.circuitBreaker.resetTimeout + 1000);
 
       // Next operation should transition to half-open
       await adapter.testOperation(false);
       expect(adapter.getCircuitBreakerState()).toBe('half-open');
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it('should close circuit on successful operation in half-open state', async () => {
@@ -166,14 +167,14 @@ describe('BaseIntegrationAdapter', () => {
       }
 
       // Fast-forward time and attempt successful operation
-      jest.useFakeTimers();
-      jest.advanceTimersByTime(config.circuitBreaker.resetTimeout + 1000);
+      vi.useFakeTimers();
+      vi.advanceTimersByTime(config.circuitBreaker.resetTimeout + 1000);
 
       const result = await adapter.testOperation(false);
       expect(result.success).toBe(true);
       expect(adapter.getCircuitBreakerState()).toBe('closed');
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
   });
 
@@ -184,7 +185,7 @@ describe('BaseIntegrationAdapter', () => {
 
     it('should retry retryable errors', async () => {
       let attemptCount = 0;
-      const mockOperation = jest.fn().mockImplementation(() => {
+      const mockOperation = vi.fn().mockImplementation(() => {
         attemptCount++;
         if (attemptCount < 3) {
           const error = new Error('Network error');
@@ -202,7 +203,7 @@ describe('BaseIntegrationAdapter', () => {
     });
 
     it('should not retry non-retryable errors', async () => {
-      const mockOperation = jest.fn().mockImplementation(() => {
+      const mockOperation = vi.fn().mockImplementation(() => {
         const error = new Error('Bad request');
         (error as any).status = 400;
         throw error;
@@ -218,7 +219,7 @@ describe('BaseIntegrationAdapter', () => {
     });
 
     it('should respect max retry attempts', async () => {
-      const mockOperation = jest.fn().mockImplementation(() => {
+      const mockOperation = vi.fn().mockImplementation(() => {
         const error = new Error('Server error');
         (error as any).status = 500;
         throw error;
@@ -262,7 +263,7 @@ describe('BaseIntegrationAdapter', () => {
     it('should calculate average response time', async () => {
       // Mock a delay
       const originalExecute = (adapter as any).executeOperation;
-      (adapter as any).executeOperation = jest
+      (adapter as any).executeOperation = vi
         .fn()
         .mockImplementation(async (operation, operationName) => {
           await new Promise((resolve) => setTimeout(resolve, 100));

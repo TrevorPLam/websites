@@ -123,4 +123,63 @@ RUN pnpm run build
 # ... rest of the Dockerfile
 ```
 
+## 5. Advanced Deployment Patterns
+
+### 5.1 BuildKit Cache Mount Integration
+
+For optimal Docker layer caching, pnpm deploy integrates with Docker BuildKit cache mounts:
+
+```dockerfile
+# syntax=docker/dockerfile:1.4
+FROM node:20-slim AS base
+RUN corepack enable
+WORKDIR /app
+
+# Use BuildKit cache mount for pnpm store
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    --mount=type=cache,target=/root/.cache/pnpm \
+    pnpm install --frozen-lockfile
+
+COPY . .
+RUN pnpm run build
+
+# Deploy with cache mount optimization
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm deploy --filter=app1 --prod /prod/app1
+```
+
+### 5.2 Multi-Platform Deployment
+
+For teams targeting multiple platforms (linux/amd64, linux/arm64), pnpm deploy ensures consistent dependency resolution:
+
+```bash
+# Build for multiple platforms
+docker buildx build --platform linux/amd64,linux/arm64 -t myapp:latest .
+```
+
+### 5.3 Security Hardening
+
+Production deployments benefit from pnpm deploy's security advantages:
+
+- **Minimal attack surface**: Only production dependencies included
+- **No development tools**: Build tools and devDependencies excluded
+- **Deterministic output**: Same hash across builds for security scanning
+- **Dependency transparency**: Clear view of production dependencies
+
+## 6. Performance Optimization
+
+### 6.1 Cache Strategies
+
+- **Local caching**: Leverage pnpm's content-addressable store
+- **Remote caching**: Use pnpm's store server for team sharing
+- **Layer caching**: Optimize Docker layers for CI/CD efficiency
+
+### 6.2 Size Optimization
+
+Typical size reductions with pnpm deploy:
+
+- **Node.js applications**: 40-70% size reduction
+- **Docker images**: 200MB+ savings per image
+- **CI artifacts**: Faster upload/download times
+
 By combining `pnpm deploy` and `pnpm fetch`, teams can create highly optimized, fast, and secure deployment pipelines for their pnpm-based monorepos.

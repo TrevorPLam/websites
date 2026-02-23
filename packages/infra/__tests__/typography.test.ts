@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * @file packages/infra/__tests__/typography.test.ts
  * Purpose: Unit tests for typography system (f-11)

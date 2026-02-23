@@ -3,6 +3,7 @@
  * Verifies rendering, basic form behavior, and accessibility with mocked submission.
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -10,14 +11,14 @@ import { axe } from 'jest-axe';
 import ContactForm from '../ContactForm';
 import type { ContactFeatureConfig, ContactSubmissionHandler } from '../../lib/contact-config';
 
-jest.mock('@repo/infra/client', () => ({
-  setSentryContext: jest.fn().mockResolvedValue(undefined),
-  setSentryUser: jest.fn().mockResolvedValue(undefined),
-  withSentrySpan: jest.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
+vi.mock('@repo/infra/client', () => ({
+  setSentryContext: vi.fn().mockResolvedValue(undefined),
+  setSentryUser: vi.fn().mockResolvedValue(undefined),
+  withSentrySpan: vi.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 
-jest.mock('../../lib/contact-actions', () => ({
-  submitContactForm: jest.fn().mockResolvedValue({ success: true, message: 'Thank you!' }),
+vi.mock('../../lib/contact-actions', () => ({
+  submitContactForm: vi.fn().mockResolvedValue({ success: true, message: 'Thank you!' }),
 }));
 
 const minimalConfig: ContactFeatureConfig = {
@@ -31,13 +32,13 @@ const minimalConfig: ContactFeatureConfig = {
 };
 
 describe('ContactForm', () => {
-  const mockOnSubmit: ContactSubmissionHandler = jest.fn().mockResolvedValue({
+  const mockOnSubmit: ContactSubmissionHandler = vi.fn().mockResolvedValue({
     success: true,
     message: 'Received',
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('has no accessibility violations', async () => {

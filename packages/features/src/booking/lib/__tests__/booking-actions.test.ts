@@ -4,6 +4,8 @@
  * with IDOR prevention (verification required for mutations).
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+
 import {
   submitBookingRequest,
   confirmBooking,
@@ -15,19 +17,19 @@ import type { BookingFeatureConfig } from '../booking-config';
 // Shared mock state for testing
 const mockBookings = new Map();
 
-jest.mock('next/headers', () => ({
-  headers: jest.fn().mockResolvedValue({
-    get: jest.fn((name: string) => (name === 'x-forwarded-for' ? '192.168.1.1' : undefined)),
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue({
+    get: vi.fn((name: string) => (name === 'x-forwarded-for' ? '192.168.1.1' : undefined)),
   }),
 }));
 
-jest.mock('@repo/infra', () => ({
+vi.mock('@repo/infra', () => ({
   /**
    * secureAction mock: validates via schema then calls handler with (ctx, validatedInput).
    * The function signatures in booking-actions expect { bookingId, confirmationNumber, email }
    * as the input object, so we pass the raw input directly through schema.safeParse-style.
    */
-  secureAction: jest.fn(
+  secureAction: vi.fn(
     async (
       input,
       _schema,
@@ -60,45 +62,43 @@ jest.mock('@repo/infra', () => ({
       }
     }
   ),
-  checkRateLimit: jest.fn().mockResolvedValue(true),
-  hashIp: jest.fn((ip: string) => ip),
-  getBookingForTenant: jest.fn().mockImplementation(({ bookingId }) => {
+  checkRateLimit: vi.fn().mockResolvedValue(true),
+  hashIp: vi.fn((ip: string) => ip),
+  getBookingForTenant: vi.fn().mockImplementation(({ bookingId }) => {
     return Promise.resolve(mockBookings.get(bookingId));
   }),
-  updateBookingStatus: jest.fn().mockImplementation(({ bookingId, status }) => {
+  updateBookingStatus: vi.fn().mockImplementation(({ bookingId, status }) => {
     const booking = mockBookings.get(bookingId);
     if (booking) {
       const updated = { ...booking, status };
       mockBookings.set(bookingId, updated);
-      return Promise.resolve(updated);
+      return updated;
     }
     return Promise.resolve(null);
   }),
-  getBookingByConfirmationForTenant: jest
-    .fn()
-    .mockImplementation(({ confirmationNumber, email }) => {
-      for (const booking of mockBookings.values()) {
-        if (booking.confirmationNumber === confirmationNumber && booking.data.email === email) {
-          return Promise.resolve(booking);
-        }
+  getBookingByConfirmationForTenant: vi.fn().mockImplementation(({ confirmationNumber, email }) => {
+    for (const booking of mockBookings.values()) {
+      if (booking.confirmationNumber === confirmationNumber && booking.data.email === email) {
+        return Promise.resolve(booking);
       }
-      return Promise.resolve(null);
-    }),
-  resolveTenantId: jest.fn(() => 'test-tenant'),
-  validateEnv: jest.fn(() => ({ NODE_ENV: 'test' })),
+    }
+    return Promise.resolve(null);
+  }),
+  resolveTenantId: vi.fn(() => 'test-tenant'),
+  validateEnv: vi.fn(() => ({ NODE_ENV: 'test' })),
 }));
 
-jest.mock('@repo/infra/security/request-validation', () => ({
-  getValidatedClientIp: jest.fn().mockReturnValue('192.168.1.1'),
+vi.mock('@repo/infra/security/request-validation', () => ({
+  getValidatedClientIp: vi.fn().mockReturnValue('192.168.1.1'),
 }));
 
-jest.mock('next/cache', () => ({
-  revalidatePath: jest.fn(),
+vi.mock('next/cache', () => ({
+  revalidatePath: vi.fn(),
 }));
 
-jest.mock('../booking-repository', () => ({
-  getBookingRepository: jest.fn(() => ({
-    create: jest.fn().mockImplementation(({ data, confirmationNumber }) => {
+vi.mock('../booking-repository', () => ({
+  getBookingRepository: vi.fn(() => ({
+    create: vi.fn().mockImplementation(({ data, confirmationNumber }) => {
       const booking = {
         id: 'test-booking-id',
         confirmationNumber,
@@ -111,9 +111,9 @@ jest.mock('../booking-repository', () => ({
   })),
 }));
 
-jest.mock('../booking-providers', () => ({
-  getBookingProviders: jest.fn().mockReturnValue({
-    createBookingWithAllProviders: jest.fn().mockResolvedValue([]),
+vi.mock('../booking-providers', () => ({
+  getBookingProviders: vi.fn().mockReturnValue({
+    createBookingWithAllProviders: vi.fn().mockResolvedValue([]),
   }),
 }));
 

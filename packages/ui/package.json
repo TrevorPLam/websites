@@ -11,8 +11,9 @@
   "scripts": {
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:ui": "vitest --ui"
   },
   "peerDependencies": {
     "react": "catalog:",
@@ -20,11 +21,15 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/react-window": "^1.8.8",
     "eslint": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "vitest": "catalog:"
   },
   "dependencies": {
     "@repo/infra": "workspace:*",

@@ -15,13 +15,14 @@
     "@repo/typescript-config": "workspace:*",
     "typescript": "catalog:",
     "jsdom": "catalog:",
-    "@testing-library/jest-dom": "catalog:"
+    "@testing-library/jest-dom": "catalog:",
+    "jest-axe": "catalog:"
   },
   "files": [
     "dist",
     "src"
   ],
   "publishConfig": {
-    "access": "internal"
+    "access": "restricted"
   }
 }

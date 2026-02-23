@@ -3,6 +3,7 @@
  * Verifies rendering, checked state, and accessibility.
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -26,7 +27,7 @@ describe('Checkbox', () => {
   });
 
   it('calls onCheckedChange when clicked', async () => {
-    const onCheckedChange = jest.fn();
+    const onCheckedChange = vi.fn();
     const user = userEvent.setup();
     render(<Checkbox onCheckedChange={onCheckedChange} />);
     await user.click(screen.getByRole('checkbox'));

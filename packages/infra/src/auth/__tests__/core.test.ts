@@ -3,42 +3,39 @@
  * @summary Tests for 2026-compliant authentication core
  */
 
-// Set JWT_SECRET BEFORE importing the module — auth/core.ts instantiates
-// a default AuthService at module load time (line 629) and throws if missing.
-process.env.JWT_SECRET = 'test-secret-for-jest';
-
-// Uses Jest (project-wide test framework) — NOT vitest
+// Uses Vitest (project-wide test framework)
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { AuthService, TokenValidator, SessionManager, PKCEManager } from '../core';
 import { auditLogger } from '../../../security/audit-logger';
 
 // Mock dependencies
-jest.mock('next/headers', () => ({
-  cookies: jest.fn(),
+vi.mock('next/headers', () => ({
+  cookies: vi.fn(),
 }));
 
-jest.mock('jose', () => ({
-  jwtVerify: jest.fn(),
-  SignJWT: jest.fn(),
+vi.mock('jose', () => ({
+  jwtVerify: vi.fn(),
+  SignJWT: vi.fn(),
 }));
 
 const mockCookies = {
-  get: jest.fn(),
-  set: jest.fn(),
-  delete: jest.fn(),
+  get: vi.fn(),
+  set: vi.fn(),
+  delete: vi.fn(),
 };
 
 describe('TokenValidator', () => {
   let tokenValidator: TokenValidator;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     process.env.JWT_SECRET = 'test-secret';
     tokenValidator = new TokenValidator();
   });
 
   it('should validate JWT token successfully', async () => {
     const { jwtVerify } = await import('jose');
-    (jwtVerify as jest.Mock).mockResolvedValue({
+    (jwtVerify as any).mockResolvedValue({
       payload: {
         sub: '123e4567-e89b-12d3-a456-426614174000',
         email: 'test@example.com',
@@ -65,7 +62,7 @@ describe('TokenValidator', () => {
 
   it('should return null for invalid token', async () => {
     const { jwtVerify } = await import('jose');
-    (jwtVerify as jest.Mock).mockRejectedValue(new Error('Invalid token'));
+    (jwtVerify as any).mockRejectedValue(new Error('Invalid token'));
 
     const result = await tokenValidator.validate('invalid-token');
     expect(result).toBeNull();
@@ -74,15 +71,15 @@ describe('TokenValidator', () => {
   it('should generate JWT token', async () => {
     const { SignJWT } = await import('jose');
     const mockSignJWT = {
-      setProtectedHeader: jest.fn().mockReturnThis(),
-      setIssuedAt: jest.fn().mockReturnThis(),
-      setExpirationTime: jest.fn().mockReturnThis(),
-      setIssuer: jest.fn().mockReturnThis(),
-      setAudience: jest.fn().mockReturnThis(),
-      setJti: jest.fn().mockReturnThis(),
-      sign: jest.fn().mockResolvedValue('generated-token'),
+      setProtectedHeader: vi.fn().mockReturnThis(),
+      setIssuedAt: vi.fn().mockReturnThis(),
+      setExpirationTime: vi.fn().mockReturnThis(),
+      setIssuer: vi.fn().mockReturnThis(),
+      setAudience: vi.fn().mockReturnThis(),
+      setJti: vi.fn().mockReturnThis(),
+      sign: vi.fn().mockResolvedValue('generated-token'),
     };
-    (SignJWT as jest.Mock).mockImplementation(() => mockSignJWT);
+    (SignJWT as any).mockImplementation(() => mockSignJWT);
 
     const token = await tokenValidator.generate({
       userId: '123e4567-e89b-12d3-a456-426614174000',
@@ -100,10 +97,10 @@ describe('TokenValidator', () => {
 describe('SessionManager', () => {
   let sessionManager: SessionManager;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    const { cookies } = jest.requireMock('next/headers');
-    (cookies as jest.Mock).mockReturnValue(mockCookies);
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const { cookies } = vi.mocked(await import('next/headers'));
+    (cookies as any).mockReturnValue(mockCookies);
     sessionManager = new SessionManager();
   });
 
@@ -134,7 +131,7 @@ describe('SessionManager', () => {
     mockCookies.get.mockReturnValue({ value: mockToken });
 
     // Mock TokenValidator.prototype.validate so it affects all instances
-    jest.spyOn(TokenValidator.prototype, 'validate').mockResolvedValue({
+    vi.spyOn(TokenValidator.prototype, 'validate').mockResolvedValue({
       sub: '123e4567-e89b-12d3-a456-426614174000',
       email: 'test@example.com',
       roles: ['user'],
@@ -195,16 +192,16 @@ describe('PKCEManager', () => {
 describe('AuthService', () => {
   let authService: AuthService;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    const { cookies } = jest.requireMock('next/headers');
-    (cookies as jest.Mock).mockReturnValue(mockCookies);
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const { cookies } = vi.mocked(await import('next/headers'));
+    (cookies as any).mockReturnValue(mockCookies);
     authService = new AuthService();
   });
 
   it('should verify authentication successfully', async () => {
     // Mock successful session validation
-    jest.spyOn(authService.session, 'validateSession').mockResolvedValue({
+    vi.spyOn(authService.session, 'validateSession').mockResolvedValue({
       userId: '123e4567-e89b-12d3-a456-426614174000',
       email: 'test@example.com',
       roles: ['user'],
@@ -228,7 +225,7 @@ describe('AuthService', () => {
   });
 
   it('should require MFA when specified', async () => {
-    jest.spyOn(authService.session, 'validateSession').mockResolvedValue({
+    vi.spyOn(authService.session, 'validateSession').mockResolvedValue({
       userId: '123e4567-e89b-12d3-a456-426614174000',
       email: 'test@example.com',
       roles: ['user'],
@@ -244,7 +241,7 @@ describe('AuthService', () => {
   });
 
   it('should require specific roles', async () => {
-    jest.spyOn(authService.session, 'validateSession').mockResolvedValue({
+    vi.spyOn(authService.session, 'validateSession').mockResolvedValue({
       userId: '123e4567-e89b-12d3-a456-426614174000',
       email: 'test@example.com',
       roles: ['user'], // Missing 'admin' role
@@ -260,9 +257,9 @@ describe('AuthService', () => {
   });
 
   it('should execute callback with auth context', async () => {
-    const mockCallback = jest.fn().mockResolvedValue('success');
+    const mockCallback = vi.fn().mockResolvedValue('success');
 
-    jest.spyOn(authService.session, 'validateSession').mockResolvedValue({
+    vi.spyOn(authService.session, 'validateSession').mockResolvedValue({
       userId: '123e4567-e89b-12d3-a456-426614174000',
       email: 'test@example.com',
       roles: ['user'],
@@ -287,9 +284,9 @@ describe('AuthService', () => {
   });
 
   it('should return null for unauthenticated callback', async () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
 
-    jest.spyOn(authService.session, 'validateSession').mockResolvedValue(null);
+    vi.spyOn(authService.session, 'validateSession').mockResolvedValue(null);
 
     const result = await authService.withAuth(mockCallback);
 
@@ -300,7 +297,7 @@ describe('AuthService', () => {
 
 describe('Audit Logging Integration', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     auditLogger.clear();
   });
 
@@ -308,7 +305,7 @@ describe('Audit Logging Integration', () => {
     mockCookies.get.mockReturnValue({ value: 'some-token' });
 
     // Mock successful validation which should trigger a log entry
-    jest.spyOn(TokenValidator.prototype, 'validate').mockResolvedValue({
+    vi.spyOn(TokenValidator.prototype, 'validate').mockResolvedValue({
       sub: '123e4567-e89b-12d3-a456-426614174000',
       email: 'test@example.com',
       roles: ['user'],

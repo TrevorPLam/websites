@@ -4,6 +4,7 @@
  * @summary Tests for FilterBar component
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -30,7 +31,7 @@ describe('FilterBar', () => {
   });
 
   it('calls onSelect when option clicked', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     const user = userEvent.setup();
     render(<FilterBar options={options} onSelect={onSelect} />);
     await user.click(screen.getByRole('button', { name: /featured/i }));

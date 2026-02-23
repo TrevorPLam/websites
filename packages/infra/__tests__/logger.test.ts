@@ -3,6 +3,7 @@
  * Verifies production JSON output (Vercel Log Drain compatible) and sanitization.
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { logInfo, logError, logWarn, sanitizeLogContext } from '../logger';
 
 describe('Logger Module', () => {
@@ -10,7 +11,7 @@ describe('Logger Module', () => {
 
   afterEach(() => {
     process.env.NODE_ENV = originalEnv;
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('production mode — JSON format', () => {
@@ -19,7 +20,7 @@ describe('Logger Module', () => {
     });
 
     it('logs info as single-line JSON with timestamp, level, message', () => {
-      const spy = jest.spyOn(console, 'info').mockImplementation(() => {});
+      const spy = vi.spyOn(console, 'info').mockImplementation(() => {});
       logInfo('test message');
       expect(spy).toHaveBeenCalledTimes(1);
       const payload = spy.mock.calls[0][0];
@@ -34,7 +35,7 @@ describe('Logger Module', () => {
     });
 
     it('logs error as single-line JSON with timestamp, level, message, error', () => {
-      const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const err = new Error('test error');
       logError('failed', err);
       expect(spy).toHaveBeenCalledTimes(1);
@@ -50,7 +51,7 @@ describe('Logger Module', () => {
     });
 
     it('logs warn as single-line JSON', () => {
-      const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       logWarn('warning');
       expect(spy).toHaveBeenCalledTimes(1);
       const payload = spy.mock.calls[0][0];

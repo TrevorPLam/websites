@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * Tabs component tests.
  * Verifies CVA variant/size resolution, context propagation, rendering, and accessibility.

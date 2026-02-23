@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * @file packages/infra/__tests__/border.test.ts
  * Purpose: Unit tests for border system (f-14)

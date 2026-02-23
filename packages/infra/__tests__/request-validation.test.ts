@@ -7,6 +7,8 @@
  * - Defense in depth following OWASP guidelines
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+
 import {
   validateOrigin,
   getValidatedClientIp,
@@ -15,7 +17,7 @@ import {
   TRUSTED_IP_HEADERS,
 } from '../security/request-validation';
 
-// Define types inline for Jest compatibility
+// Define types inline for Vitest compatibility
 type Logger = {
   info?: (message: string, context?: Record<string, unknown>) => void;
   warn?: (message: string, context?: Record<string, unknown>) => void;
@@ -24,14 +26,14 @@ type Logger = {
 
 // Mock logger for testing
 const mockLogger: Logger = {
-  info: jest.fn(),
-  warn: jest.fn(),
-  error: jest.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
 };
 
 describe('Request Validation', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('validateOrigin', () => {

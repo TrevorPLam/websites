@@ -51,6 +51,7 @@ export default defineConfig({
             'packages/infra/composition/**', // React HOC tests run in jsdom
           ],
           setupFiles: ['./packages/config/vitest-config/src/setup.ts'],
+          globals: true,
         },
       },
       // jsdom environment: React components, UI library
@@ -70,6 +71,7 @@ export default defineConfig({
           ],
           exclude: ['**/node_modules/**', '**/dist/**', '**/*.config.*'],
           setupFiles: ['./packages/config/vitest-config/src/setup.ts'],
+          globals: true,
         },
       },
     ],

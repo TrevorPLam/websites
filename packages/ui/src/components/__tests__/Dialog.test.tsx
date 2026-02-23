@@ -17,6 +17,7 @@
 // - [FEAT:ACCESSIBILITY] ARIA attribute verification
 // - [FEAT:TYPE_SAFETY] TypeScript prop validation
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -77,7 +78,7 @@ describe('Dialog Components', () => {
     });
 
     it('handles onOpenChange when trigger clicked', async () => {
-      const mockOnOpenChange = jest.fn();
+      const mockOnOpenChange = vi.fn();
       const user = userEvent.setup();
       render(
         <Dialog open={false} onOpenChange={mockOnOpenChange}>

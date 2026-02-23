@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * Alert component tests.
  * Verifies rendering, variants, and accessibility (role="alert").

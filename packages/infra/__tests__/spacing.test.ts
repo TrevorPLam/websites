@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * @file packages/infra/__tests__/spacing.test.ts
  * Purpose: Unit tests for spacing system (f-10)

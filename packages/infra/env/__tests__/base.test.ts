@@ -3,13 +3,14 @@
  * Tests 2026 best practices implementation
  */
 
+import { vi, beforeAll, afterEach, beforeEach, describe, it, expect } from 'vitest';
 import { baseEnvSchema, validateBaseEnv, safeValidateBaseEnv, type BaseEnv } from '../schemas/base';
 
 describe('Base Environment Schema', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
     process.env = { ...originalEnv };
   });
 

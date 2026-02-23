@@ -107,5 +107,56 @@ pnpm provides CLI commands to manage catalog entries:
 - **Updating catalog dependencies:**
   The `pnpm update` command now supports updating dependencies defined with the `catalog:` protocol, automatically writing the new specifier to the workspace file .
 
+## 4. Advanced Catalog Management (2026 Enhancements)
+
+### 4.1 CLI Improvements
+
+pnpm 10.12+ introduced enhanced catalog management commands:
+
+- **Smart catalog updates**: `pnpm update` now supports updating `catalog:` protocol dependencies
+- **Interactive catalog management**: New CLI options for saving dependencies to specific catalogs
+- **Version conflict detection**: Automatic detection and resolution of catalog version conflicts
+
+```bash
+# Enhanced catalog commands
+pnpm add lodash --save-catalog          # Add to default catalog
+pnpm add react --save-catalog-name frontend # Add to named catalog
+pnpm update --catalog                    # Update all catalog dependencies
+```
+
+### 4.2 Catalog Validation
+
+New validation features ensure catalog integrity:
+
+- **Version range enforcement**: Prevents adding dependencies outside catalog ranges
+- **Circular dependency detection**: Identifies circular references in catalogs
+- **Unused dependency detection**: Flags catalog entries not used by any workspace package
+
+### 4.3 Publishing with Catalogs
+
+Enhanced publishing workflow for catalog-based workspaces:
+
+- **Automatic version resolution**: `catalog:` references replaced with concrete versions during publish
+- **Scoped publishing**: Support for publishing packages with catalog dependencies to private registries
+- **Dependency manifest generation**: Automatic generation of dependency manifests for compliance
+
+## 5. Performance Optimizations
+
+### 5.1 Global Virtual Store Performance
+
+The global virtual store provides significant performance benefits:
+
+- **Installation speed**: 3-5x faster installations for large monorepos
+- **Disk space savings**: 60-80% reduction in disk usage across multiple projects
+- **Cache efficiency**: Shared cache across all projects on the same machine
+
+### 5.2 CI/CD Optimizations
+
+pnpm automatically optimizes for CI environments:
+
+- **Automatic cache disabling**: Global virtual store disabled in CI for predictable builds
+- **Deterministic installations**: Same dependency tree across different CI machines
+- **Faster CI restores**: Optimized cache restore patterns for CI/CD pipelines
+
 The `catalog:` protocol streamlines monorepo maintenance by providing a single source of truth for dependency versions, ensuring all your projects use consistent, compatible versions of shared libraries.
 ````

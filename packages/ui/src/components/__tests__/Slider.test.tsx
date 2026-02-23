@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * Slider component tests.
  * Verifies rendering, orientation, and accessibility.

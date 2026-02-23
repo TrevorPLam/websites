@@ -8,31 +8,32 @@
  * Standards: 2026 testing best practices with Jest and mocking
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 
 // Mock the logger to avoid dependency issues
-jest.mock('../utils/logger', () => ({
+vi.mock('../utils/logger', () => ({
   createLogger: () => ({
-    debug: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    logApiCall: jest.fn(),
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    logApiCall: vi.fn(),
   }),
   IntegrationMetrics: {
-    recordRequest: jest.fn(),
+    recordRequest: vi.fn(),
   },
 }));
 
 import { createHttpClient } from '../utils/http-client';
 
 // Mock fetch for testing
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 describe('Circuit Breaker Pattern - Basic Tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Basic Circuit Breaker Functionality', () => {

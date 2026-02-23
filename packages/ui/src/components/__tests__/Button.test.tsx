@@ -3,6 +3,7 @@
  * Verifies rendering, variants, sizes, user interactions, and accessibility.
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -21,7 +22,7 @@ describe('Button', () => {
   });
 
   it('handles click events', async () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const user = userEvent.setup();
 
     render(<Button onClick={handleClick}>Click me</Button>);

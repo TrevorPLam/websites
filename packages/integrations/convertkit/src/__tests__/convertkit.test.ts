@@ -9,14 +9,15 @@
  * - Two-step subscription process
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ConvertKitAdapter } from '../index';
 
 // Mock fetch to test API calls
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 // Mock console.log for secure logging testing
-const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
+const mockConsoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 // Set NODE_ENV to 'development' for logging tests
 const originalNodeEnv = process.env.NODE_ENV;
@@ -35,7 +36,7 @@ describe('ConvertKitAdapter Security Tests', () => {
   const testFormId = '123456';
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     adapter = new ConvertKitAdapter(testApiKey);
   });
 

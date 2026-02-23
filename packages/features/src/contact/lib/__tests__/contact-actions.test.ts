@@ -3,27 +3,28 @@
  * Mocks Next.js headers and @repo/infra for isolated testing.
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { submitContactForm } from '../contact-actions';
 import type { ContactFormData, ContactSubmissionHandler } from '../contact-schema';
 
-jest.mock('next/headers', () => ({
-  headers: jest.fn().mockResolvedValue({
-    get: jest.fn((name: string) => (name === 'user-agent' ? 'test-agent' : undefined)),
+vi.mock('next/headers', () => ({
+  headers: vi.fn().mockResolvedValue({
+    get: vi.fn((name: string) => (name === 'user-agent' ? 'test-agent' : undefined)),
   }),
 }));
 
-jest.mock('@repo/infra', () => ({
-  checkRateLimit: jest.fn().mockResolvedValue(true),
-  logError: jest.fn(),
-  withServerSpan: jest.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
+vi.mock('@repo/infra', () => ({
+  checkRateLimit: vi.fn().mockResolvedValue(true),
+  logError: vi.fn(),
+  withServerSpan: vi.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 
-jest.mock('@repo/infra/context/request-context.server', () => ({
-  runWithRequestId: jest.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
+vi.mock('@repo/infra/context/request-context.server', () => ({
+  runWithRequestId: vi.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 
-jest.mock('@repo/infra/security/request-validation', () => ({
-  getValidatedClientIp: jest.fn().mockReturnValue('127.0.0.1'),
+vi.mock('@repo/infra/security/request-validation', () => ({
+  getValidatedClientIp: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
 describe('submitContactForm', () => {
@@ -33,15 +34,15 @@ describe('submitContactForm', () => {
     message: 'Hello, I have a question.',
   };
 
-  const mockHandler: ContactSubmissionHandler = jest.fn().mockResolvedValue({
+  const mockHandler: ContactSubmissionHandler = vi.fn().mockResolvedValue({
     success: true,
     message: 'Received',
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     const { checkRateLimit } = require('@repo/infra');
-    (checkRateLimit as jest.Mock).mockResolvedValue(true);
+    (checkRateLimit as any).mockResolvedValue(true);
   });
 
   it('returns success when handler succeeds', async () => {
@@ -62,7 +63,7 @@ describe('submitContactForm', () => {
   });
 
   it('returns custom success message when handler does not provide message', async () => {
-    const handlerNoMessage: ContactSubmissionHandler = jest.fn().mockResolvedValue({
+    const handlerNoMessage: ContactSubmissionHandler = vi.fn().mockResolvedValue({
       success: true,
     });
     const result = await submitContactForm(validData, handlerNoMessage, {
@@ -73,7 +74,7 @@ describe('submitContactForm', () => {
   });
 
   it('returns failure when handler returns success: false', async () => {
-    const failHandler: ContactSubmissionHandler = jest.fn().mockResolvedValue({
+    const failHandler: ContactSubmissionHandler = vi.fn().mockResolvedValue({
       success: false,
       message: 'Database error',
     });
@@ -84,7 +85,7 @@ describe('submitContactForm', () => {
 
   it('returns rate limit message when checkRateLimit returns false', async () => {
     const { checkRateLimit } = require('@repo/infra');
-    (checkRateLimit as jest.Mock).mockResolvedValue(false);
+    (checkRateLimit as any).mockResolvedValue(false);
     const result = await submitContactForm(validData, mockHandler);
     expect(result.success).toBe(false);
     expect(result.message).toContain('Too many submissions');

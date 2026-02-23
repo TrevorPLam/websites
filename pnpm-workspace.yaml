@@ -18,12 +18,15 @@ blockExoticSubdeps: true
 catalog:
   '@sentry/nextjs': 10.38.0
   '@testing-library/jest-dom': ^6.9.1
+  '@testing-library/react': ^16.3.2
+  '@testing-library/user-event': ^14.6.1
   '@types/jest': ^30.0.0
   '@types/node': ^22.19.11
   '@types/react': ^19.0.2
   '@types/react-dom': ^19.0.2
   eslint: ^9.18.0
   jest: ^30.2.0
+  jest-axe: ^10.0.0
   jsdom: ^25.0.0
   lucide-react: ^0.344.0
   next: 16.1.5

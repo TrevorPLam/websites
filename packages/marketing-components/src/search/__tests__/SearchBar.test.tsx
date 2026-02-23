@@ -4,6 +4,7 @@
  * @summary Tests for SearchBar component
  */
 
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -29,7 +30,7 @@ describe('SearchBar', () => {
   });
 
   it('calls onChange when typing', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const user = userEvent.setup();
     render(<SearchBar onChange={onChange} />);
     await user.type(screen.getByRole('searchbox'), 'test');

@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * Middleware factory tests
  * Covers createMiddleware: header stripping (CVE-2025-29927), allowedOrigins, CSP and security headers

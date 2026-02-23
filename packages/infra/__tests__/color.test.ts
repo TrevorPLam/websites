@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * @file packages/infra/__tests__/color.test.ts
  * Purpose: Unit tests for color system (f-12) — HSL parsing, WCAG contrast

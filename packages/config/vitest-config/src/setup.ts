@@ -4,7 +4,25 @@
  */
 
 // Import Vitest globals
-import { beforeAll, afterAll, expect } from 'vitest';
+import { beforeAll, afterAll, expect, describe, it, vi } from 'vitest';
+
+// Import jest-dom matchers for React Testing Library compatibility
+import '@testing-library/jest-dom';
+
+// Import jest-axe for accessibility testing
+import { toHaveNoViolations } from 'jest-axe';
+
+// Extend Vitest's expect with jest-axe matchers
+expect.extend({
+  toHaveNoViolations,
+});
+
+// Set critical environment variables BEFORE any module imports
+process.env.JWT_SECRET = 'test-secret-for-vitest';
+process.env.NODE_ENV = 'test';
+
+// Mock server-only module for tests
+vi.mock('server-only', () => ({}));
 
 // Mock ResizeObserver for jsdom environment (required by Radix components)
 if (typeof globalThis.ResizeObserver === 'undefined') {
@@ -49,4 +67,4 @@ afterAll(() => {
 });
 
 // Export globals for use in test files
-export { expect, beforeAll, afterAll };
+export { expect, beforeAll, afterAll, describe, it, vi };

@@ -4,7 +4,8 @@
  * Tests client/server separation, RLS enforcement, and tenant isolation.
  */
 
-import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import {
   createSupabaseClient,
   createSupabaseServerClient,
@@ -17,7 +18,7 @@ import {
 import type { SupabaseClientConfig, SupabaseServerConfig, SupabaseLeadRow } from '../types';
 
 // Mock fetch for testing
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 // Mock environment variables
@@ -25,7 +26,7 @@ const originalEnv = process.env;
 
 describe('Supabase Security Tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     process.env = { ...originalEnv };
   });
 

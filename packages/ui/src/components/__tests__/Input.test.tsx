@@ -1,3 +1,4 @@
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 /**
  * Input component tests.
  * Verifies rendering, label, error state, and accessibility.

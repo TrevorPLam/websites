@@ -9,17 +9,17 @@
  * Standards: 2026 testing best practices with Jest and mocking
  */
 
-import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { createHttpClient } from '../utils/http-client';
 import type { HttpClientConfig } from '../utils/http-client';
 
 // Mock fetch for testing
-const mockFetch = jest.fn();
+const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 describe('Circuit Breaker Pattern', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Basic Circuit Breaker Functionality', () => {
