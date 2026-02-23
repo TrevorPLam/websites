@@ -13,6 +13,8 @@ export * from '../../security/rate-limit';
 export * from '../../security/secure-action';
 export * from '../../security/audit-logger';
 export * from '../../security/request-validation';
+export * from '../../security/tenant-secrets';
+export * from '../../security/crypto-provider';
 
 // Database booking helpers (tenant-scoped operations)
 export * from '../database-booking';
