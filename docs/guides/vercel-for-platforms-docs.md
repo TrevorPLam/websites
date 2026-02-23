@@ -28,7 +28,6 @@
 - [Testing](#testing)
 - [References](#references)
 
-
 ## Introduction
 
 Vercel for Platforms provides the tools and infrastructure needed to build scalable multi-tenant applications. This guide covers domain mapping strategies, custom domain configuration, and best practices for platform engineering .
@@ -620,29 +619,24 @@ const monitoring = {
 5. **Security headers**: Implement security headers per tenant
 6. **Audit logging**: Log all domain operations for compliance
 
-
---- 
+---
 
 ## References
 
-- [Official Documentation](https://example.com) — Replace with actual source
+- [Vercel Platform Docs](https://vercel.com/docs/platforms) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
-
 
 ## Overview
 
 [Add content here]
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

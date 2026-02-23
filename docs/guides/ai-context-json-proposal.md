@@ -24,10 +24,13 @@
 
 - [Overview](#overview)
 - [Implementation](#implementation)
+- [Code Examples](#code-examples)
+- [Security Considerations](#security-considerations)
+- [Performance Optimization](#performance-optimization)
+- [2026 Standards Compliance](#2026-standards-compliance)
 - [Best Practices](#best-practices)
 - [Testing](#testing)
 - [References](#references)
-
 
 # AI Context JSON Proposal
 
@@ -408,7 +411,337 @@ The `.well-known/ai-context.json` file specifically addresses:
 - **Validation Tools**: Tools to validate context file compliance
 - **Documentation**: Comprehensive implementation guides
 
-## Validation and Testing
+## Code Examples
+
+### Complete AI Context JSON Example
+
+```json
+{
+  "version": "1.0.0",
+  "identity": {
+    "name": "Project Management Platform",
+    "description": "AI-powered project management and collaboration platform",
+    "url": "https://app.example.com",
+    "type": "web_application",
+    "owner": {
+      "name": "Example Corp",
+      "contact": "ai-support@example.com",
+      "website": "https://example.com"
+    },
+    "version": "2.4.1",
+    "last_updated": "2026-02-23T10:00:00Z"
+  },
+  "capabilities": {
+    "ai_optimized": true,
+    "supported_interactions": [
+      "data_retrieval",
+      "content_creation",
+      "task_management",
+      "user_assistance"
+    ],
+    "authentication_methods": ["oauth2", "api_key", "session_based"],
+    "data_formats": ["json", "markdown", "html", "plain_text"],
+    "rate_limits": {
+      "requests_per_minute": 100,
+      "requests_per_hour": 1000,
+      "burst_limit": 200
+    },
+    "features": {
+      "natural_language_queries": true,
+      "bulk_operations": true,
+      "real_time_updates": false,
+      "file_uploads": true,
+      "export_capabilities": ["json", "csv", "pdf"]
+    }
+  },
+  "constraints": {
+    "scope": {
+      "allowed_operations": ["read", "create", "update", "delete"],
+      "restricted_areas": ["/admin", "/billing", "/user/settings/security"],
+      "data_sensitivity": "mixed",
+      "compliance_frameworks": ["GDPR", "CCPA", "SOC2"]
+    },
+    "privacy": {
+      "data_retention": "30_days",
+      "data_usage": "improvement_only",
+      "third_party_sharing": false,
+      "anonymization": true,
+      "user_consent_required": true
+    },
+    "technical": {
+      "max_payload_size": "10MB",
+      "timeout": "30s",
+      "concurrent_requests": 5,
+      "supported_http_methods": ["GET", "POST", "PUT", "PATCH"],
+      "authentication_required": true
+    }
+  }
+}
+```
+
+### Implementation Examples
+
+#### Node.js/Express Server
+
+```javascript
+// server.js
+const express = require('express');
+const path = require('path');
+
+const app = express();
+
+// Serve AI context file
+app.get('/.well-known/ai-context.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'ai-context.json'));
+});
+
+// Validate AI context requests
+app.use('/api/ai/*', (req, res, next) => {
+  const userAgent = req.get('User-Agent');
+  if (!isValidAI(userAgent)) {
+    return res.status(403).json({ error: 'AI agent not authorized' });
+  }
+  next();
+});
+
+function isValidAI(userAgent) {
+  const aiAgents = ['claude', 'gpt', 'gemini', 'cursor', 'copilot'];
+  return aiAgents.some((agent) => userAgent.toLowerCase().includes(agent));
+}
+```
+
+#### Next.js API Route
+
+```typescript
+// pages/api/ai-context.ts
+import { NextApiRequest, NextApiResponse } from 'next';
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const aiContext = await import('../../../ai-context.json');
+    res.status(200).json(aiContext.default);
+  } catch (error) {
+    res.status(500).json({ error: 'AI context not available' });
+  }
+}
+```
+
+#### Client-side Usage
+
+```typescript
+// ai-context-client.ts
+interface AIContext {
+  version: string;
+  identity: {
+    name: string;
+    description: string;
+    url: string;
+    type: string;
+  };
+  capabilities: {
+    ai_optimized: boolean;
+    supported_interactions: string[];
+    authentication_methods: string[];
+  };
+  constraints: {
+    scope: {
+      allowed_operations: string[];
+      restricted_areas: string[];
+    };
+  };
+}
+
+class AIContextManager {
+  private context: AIContext | null = null;
+  private contextUrl: string;
+
+  constructor(baseUrl: string) {
+    this.contextUrl = `${baseUrl}/.well-known/ai-context.json`;
+  }
+
+  async loadContext(): Promise<AIContext> {
+    if (this.context) return this.context;
+
+    const response = await fetch(this.contextUrl);
+    if (!response.ok) {
+      throw new Error('Failed to load AI context');
+    }
+
+    this.context = await response.json();
+    return this.context;
+  }
+
+  isOperationAllowed(operation: string): boolean {
+    if (!this.context) return false;
+    return this.context.constraints.scope.allowed_operations.includes(operation);
+  }
+
+  isAreaRestricted(area: string): boolean {
+    if (!this.context) return true;
+    return this.context.constraints.scope.restricted_areas.includes(area);
+  }
+}
+
+// Usage
+const aiManager = new AIContextManager('https://app.example.com');
+const context = await aiManager.loadContext();
+```
+
+## Performance Optimization
+
+### Caching Strategies
+
+Implement efficient caching for AI context files:
+
+```typescript
+// ai-context-cache.ts
+class AIContextCache {
+  private cache = new Map<string, { data: AIContext; timestamp: number }>();
+  private readonly CACHE_TTL = 300000; // 5 minutes
+
+  async getContext(url: string): Promise<AIContext> {
+    const cached = this.cache.get(url);
+    const now = Date.now();
+
+    if (cached && now - cached.timestamp < this.CACHE_TTL) {
+      return cached.data;
+    }
+
+    const response = await fetch(url);
+    const context = await response.json();
+
+    this.cache.set(url, { data: context, timestamp: now });
+    return context;
+  }
+
+  clearCache(): void {
+    this.cache.clear();
+  }
+}
+```
+
+### Content Delivery Optimization
+
+```javascript
+// CDN configuration for AI context
+const aiContextConfig = {
+  '/.well-known/ai-context.json': {
+    cacheControl: 'public, max-age=300', // 5 minutes
+    edgeCache: true,
+    compression: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    },
+  },
+};
+```
+
+### Bundle Size Optimization
+
+```typescript
+// Minimal AI context client
+interface MinimalAIContext {
+  version: string;
+  ai_optimized: boolean;
+  supported_interactions: string[];
+  rate_limits: {
+    requests_per_minute: number;
+  };
+}
+
+class LightweightAIManager {
+  async getMinimalContext(url: string): Promise<MinimalAIContext> {
+    const response = await fetch(`${url}?minimal=true`);
+    return response.json();
+  }
+}
+```
+
+## 2026 Standards Compliance
+
+### AI Integration Patterns
+
+#### Multi-Agent Support
+
+```json
+{
+  "ai_integration": {
+    "supported_agents": [
+      {
+        "name": "Claude",
+        "version": "3.5+",
+        "capabilities": ["text_generation", "code_analysis", "file_operations"],
+        "context_format": "json"
+      },
+      {
+        "name": "GPT-4",
+        "version": "turbo",
+        "capabilities": ["text_generation", "function_calling", "web_browsing"],
+        "context_format": "json"
+      }
+    ],
+    "fallback_agent": "claude"
+  }
+}
+```
+
+#### Context Management
+
+```json
+{
+  "context_management": {
+    "hierarchical_loading": true,
+    "priority_sections": ["identity", "capabilities", "constraints"],
+    "optional_sections": ["extensions", "monitoring"],
+    "compression": "gzip",
+    "max_size": "50KB"
+  }
+}
+```
+
+### Multi-tenant Architecture
+
+#### Tenant-Specific Context
+
+```json
+{
+  "multi_tenant": {
+    "supported": true,
+    "tenant_context": {
+      "enabled": true,
+      "override_patterns": [
+        "capabilities.rate_limits",
+        "constraints.scope.restricted_areas",
+        "privacy.data_retention"
+      ],
+      "tenant_identification": {
+        "method": "subdomain",
+        "fallback": "header"
+      }
+    }
+  }
+}
+```
+
+#### Isolation Patterns
+
+```json
+{
+  "isolation": {
+    "data_separation": true,
+    "context_isolation": true,
+    "rate_limiting_per_tenant": true,
+    "audit_trail_per_tenant": true
+  }
+}
+```
+
+## Security Considerations
 
 ### Schema Validation
 
@@ -454,12 +787,16 @@ Use JSON Schema validation to ensure compliance:
 
 ## References
 
-- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
-
-- [context.json Open Standard](https://github.com/davidkimai/context.json)
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [Well-Known URIs (RFC 8615)](https://tools.ietf.org/html/rfc8615)
-- [JSON Schema Specification](https://json-schema.org/)
-- [robots.txt Standard](https://www.robotstxt.org/)
-- [llms.txt Specification](https://llmstxt.org/)
-- [security.txt](https://securitytxt.org/)
+- [AI Context JSON Specification](https://github.com/davidkimai/context.json) - Official specification and examples
+- [Model Context Protocol](https://modelcontextprotocol.io/) - AI context management standards
+- [Well-Known URIs (RFC 8615)](https://tools.ietf.org/html/rfc8615) - Standard for well-known URI paths
+- [JSON Schema Specification](https://json-schema.org/) - Schema validation and structure
+- [robots.txt Standard](https://www.robotstxt.org/) - Web crawler exclusion standard
+- [llms.txt Specification](https://llmstxt.org/) - Large language model context standard
+- [security.txt](https://securitytxt.org/) - Security information standard
+- [OAuth 2.1 Specification](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-01) - Authentication framework
+- [GDPR Compliance](https://gdpr.eu/) - Data protection regulations
+- [WCAG 2.2 Guidelines](https://www.w3.org/TR/WCAG22/) - Web accessibility standards
+- [AI Integration Best Practices](https://github.com/openai/openai-cookbook) - OpenAI integration patterns
+- [Multi-tenant Architecture Patterns](https://docs.microsoft.com/en-us/azure/architecture/patterns/) - Microsoft patterns
+- [Performance Optimization](https://web.dev/performance/) - Web performance best practices

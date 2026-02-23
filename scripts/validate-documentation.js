@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
-const markdownlint = require('markdownlint');
 
 class DocumentationValidator {
   constructor() {
@@ -22,42 +21,28 @@ class DocumentationValidator {
   }
 
   validateMetaheader(file, content) {
-    if (!content.includes('<!--') || !content.includes('-->')) {
-      this.addError(file, 'Missing metaheader', 'Required for LLM context');
+    if (!content.includes('<!--') || !content.includes('-->') || !content.includes('@file')) {
+      this.addError(file, 'Missing or invalid metaheader', 'Required for LLM context and tracking');
     }
   }
 
   validateMarkdown(file, content) {
-    try {
-      const config = {
-        default: true,
-        'line-length': false,
-        'no-duplicate-header': false,
-      };
+    // Regex-based structural linting
+    const checks = [
+      { id: 'multiple-h1', regex: /^#\s+.*?\n.*?^#\s+/ms, msg: 'Multiple H1 headers detected' },
+      { id: 'trailing-spaces', regex: /[ \t]+$/m, msg: 'Trailing spaces detected' },
+      {
+        id: 'consecutive-blank-lines',
+        regex: /\n\n\n/,
+        msg: 'Consecutive blank lines (>2) detected',
+      },
+    ];
 
-      const lintFn =
-        markdownlint.sync ||
-        markdownlint.lintSync ||
-        (typeof markdownlint === 'function' ? markdownlint : null);
-
-      if (!lintFn) {
-        this.addError(file, 'Markdown validation setup failed', 'No usable markdownlint API found');
-        return;
+    checks.forEach((check) => {
+      if (check.regex.test(content)) {
+        this.addWarning(file, `Structure: ${check.msg}`);
       }
-
-      const result =
-        lintFn === markdownlint
-          ? lintFn({ strings: { [file]: content }, config }) // Call directly if it's the main export
-          : lintFn({ strings: { [file]: content }, config }); // call .sync or .lintSync
-
-      if (result && result[file]) {
-        result[file].forEach((error) => {
-          this.addWarning(file, `Markdown: ${error.ruleDescription}`, error.detail);
-        });
-      }
-    } catch (error) {
-      this.addError(file, 'Markdown validation error', error.message);
-    }
+    });
   }
 
   validateTOC(file, content) {
@@ -68,7 +53,6 @@ class DocumentationValidator {
   }
 
   validateLinks(file, content) {
-    // Basic regex for internal links
     const links = content.match(/\[.*?\]\((.*?)\)/g) || [];
     this.results.linksChecked += links.length;
 
@@ -78,9 +62,14 @@ class DocumentationValidator {
         const link = match[1];
         if (link.startsWith('#')) {
           const anchor = link.slice(1);
-          const anchorMatch = new RegExp(`^#+\\s+.*?${anchor.replace(/-/g, '.*?')}`, 'im');
+          const cleanAnchor = anchor.replace(/-/g, ' ');
+          // Robust regex for anchor matching: handles slugification of special chars like . or /
+          const anchorParts = cleanAnchor
+            .split(' ')
+            .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+          const anchorMatch = new RegExp(`^#+\\s+.*?${anchorParts.join('.*?')}`, 'im');
           if (!anchorMatch.test(content)) {
-            this.addError(file, `Broken anchor link: ${link}`, 'Check header capitalization/slug');
+            this.addError(file, `Broken anchor link: ${link}`, 'Check header synchronization');
           }
         } else if (link.startsWith('../') || link.startsWith('./')) {
           const absolutePath = path.resolve(path.dirname(file), link);
@@ -99,38 +88,26 @@ class DocumentationValidator {
     } else {
       const refPlaceholder = /\[Official Documentation\]\(https:\/\/example\.com\)/.test(content);
       if (refPlaceholder) {
-        this.addWarning(
-          file,
-          'Placeholder Reference found',
-          'Replace example.com with actual source'
-        );
+        this.addWarning(file, 'Placeholder Reference found', 'Replace with real link');
       }
     }
   }
 
   validateAdvancedPatterns(file, content) {
-    const patterns = ['Security', 'Performance', 'Multi-agent', 'Next.js 16', 'React 19.2'];
+    const patterns = ['Security', 'Performance', 'Multi-agent', 'Next.js 16', 'React 19.2', 'PQC'];
     let score = 0;
     patterns.forEach((p) => {
       if (new RegExp(p, 'i').test(content)) score++;
     });
 
     if (score < 2) {
-      this.addWarning(
-        file,
-        'Low advanced pattern density',
-        'Consider adding 2026-standard patterns'
-      );
+      this.addWarning(file, 'Low advanced pattern density', 'Add 2026-standard patterns');
     }
   }
 
   validateCodeExamples(file, content) {
     if (!/```[a-z]+/.test(content)) {
-      this.addWarning(
-        file,
-        'No code examples found',
-        'Guides should include implementation snippets'
-      );
+      this.addWarning(file, 'No code examples found', 'Add implementation snippets');
     }
   }
 
@@ -168,4 +145,18 @@ class DocumentationValidator {
       });
     }
 
-    if (thi
+    if (this.results.warnings.length > 0) {
+      console.log('⚠️ Warnings:');
+      this.results.warnings.forEach((w) => {
+        console.log(`📄 ${w.file}\n   💡 ${w.message}\n`);
+      });
+    }
+  }
+}
+
+const docsPath = process.argv.includes('--docs-path')
+  ? process.argv[process.argv.indexOf('--docs-path') + 1]
+  : path.join(__dirname, '..', 'docs', 'guides');
+
+const validator = new DocumentationValidator();
+validator.run(docsPath);

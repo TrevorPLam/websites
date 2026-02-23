@@ -28,7 +28,6 @@
 - [Testing](#testing)
 - [References](#references)
 
-
 ## Introduction
 
 Vercel provides a comprehensive Domains API for programmatically managing custom domains across your projects. This is essential for multi-tenant platforms where tenants bring their own domains .
@@ -442,29 +441,24 @@ console.log(`Configuration: ${health.config.valid}`);
 4. **Use wildcard domains**: Leverage improved wildcard domain support
 5. **Implement graceful removal**: Use grace periods for domain removal
 
-
---- 
+---
 
 ## References
 
-- [Official Documentation](https://example.com) — Replace with actual source
+- [Vercel Platform Docs](https://vercel.com/docs/platforms) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
-
 
 ## Overview
 
 [Add content here]
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

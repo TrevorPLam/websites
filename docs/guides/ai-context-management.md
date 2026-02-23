@@ -24,10 +24,13 @@
 
 - [Overview](#overview)
 - [Implementation](#implementation)
+- [Code Examples](#code-examples)
+- [Security Considerations](#security-considerations)
+- [Performance Optimization](#performance-optimization)
+- [2026 Standards Compliance](#2026-standards-compliance)
 - [Best Practices](#best-practices)
 - [Testing](#testing)
 - [References](#references)
-
 
 # AI Context Management and Hierarchy Strategies
 
@@ -431,7 +434,566 @@ Test context effectiveness:
 - [ ] Remove unused context sections
 - [ ] Monitor agent performance metrics
 
-## Common Anti-Patterns
+## Code Examples
+
+### Complete Context Management System
+
+```typescript
+// context-manager.ts
+interface ContextFile {
+  path: string;
+  content: string;
+  priority: number;
+  type: 'root' | 'package' | 'module' | 'file';
+}
+
+class AIContextManager {
+  private contexts: Map<string, ContextFile> = new Map();
+  private hierarchy: string[] = [];
+
+  constructor(private rootPath: string) {
+    this.loadContextHierarchy();
+  }
+
+  private async loadContextHierarchy(): Promise<void> {
+    // Load root context first
+    await this.loadContext('AGENTS.md', 'root', 1);
+
+    // Load package contexts
+    const packages = await this.findPackages();
+    for (const pkg of packages) {
+      await this.loadContext(`${pkg}/AGENTS.md`, 'package', 2);
+    }
+
+    // Load module contexts
+    const modules = await this.findModules();
+    for (const module of modules) {
+      await this.loadContext(`${module}/AGENTS.md`, 'module', 3);
+    }
+  }
+
+  private async loadContext(path: string, type: string, priority: number): Promise<void> {
+    try {
+      const fullPath = `${this.rootPath}/${path}`;
+      const content = await fs.readFile(fullPath, 'utf-8');
+      this.contexts.set(path, {
+        path,
+        content,
+        priority,
+        type: type as any,
+      });
+    } catch (error) {
+      // Context file doesn't exist, skip
+    }
+  }
+
+  getContextForAgent(agentType: string): string[] {
+    return this.hierarchy
+      .map((path) => this.contexts.get(path))
+      .filter((ctx) => ctx !== undefined)
+      .map((ctx) => ctx!.content);
+  }
+
+  private async findPackages(): Promise<string[]> {
+    // Find all packages in monorepo
+    return ['packages/ui', 'packages/auth', 'packages/api'];
+  }
+
+  private async findModules(): Promise<string[]> {
+    // Find all modules with context files
+    return ['clients/web', 'clients/mobile'];
+  }
+}
+```
+
+### Multi-Agent Context Loader
+
+```typescript
+// multi-agent-loader.ts
+interface AgentConfig {
+  name: string;
+  capabilities: string[];
+  contextRequirements: string[];
+  prioritySections: string[];
+}
+
+class MultiAgentContextLoader {
+  private agentConfigs: Map<string, AgentConfig> = new Map();
+
+  constructor() {
+    this.initializeAgentConfigs();
+  }
+
+  private initializeAgentConfigs(): void {
+    this.agentConfigs.set('claude', {
+      name: 'Claude',
+      capabilities: ['code_generation', 'analysis', 'refactoring'],
+      contextRequirements: ['architecture', 'patterns', 'commands'],
+      prioritySections: ['quick_start', 'commands', 'patterns'],
+    });
+
+    this.agentConfigs.set('cursor', {
+      name: 'Cursor',
+      capabilities: ['code_completion', 'navigation', 'debugging'],
+      contextRequirements: ['file_structure', 'commands', 'debug_patterns'],
+      prioritySections: ['file_structure', 'commands', 'debugging'],
+    });
+
+    this.agentConfigs.set('github-copilot', {
+      name: 'GitHub Copilot',
+      capabilities: ['code_suggestions', 'documentation', 'testing'],
+      contextRequirements: ['patterns', 'testing', 'documentation'],
+      prioritySections: ['patterns', 'testing', 'docs'],
+    });
+  }
+
+  async loadContextForAgent(agentName: string): Promise<string> {
+    const config = this.agentConfigs.get(agentName);
+    if (!config) {
+      throw new Error(`Unknown agent: ${agentName}`);
+    }
+
+    const contextManager = new AIContextManager(process.cwd());
+    const allContext = contextManager.getContextForAgent(agentName);
+
+    // Filter and prioritize based on agent requirements
+    return this.prioritizeContext(allContext, config.prioritySections);
+  }
+
+  private prioritizeContext(context: string[], prioritySections: string[]): string {
+    // Implement context prioritization logic
+    return context.join('\n\n');
+  }
+}
+```
+
+### Context Validation System
+
+```typescript
+// context-validator.ts
+interface ValidationResult {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+  score: number;
+}
+
+class ContextValidator {
+  validateContext(content: string, contextType: string): ValidationResult {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    let score = 100;
+
+    // Check for required sections
+    const requiredSections = this.getRequiredSections(contextType);
+    for (const section of requiredSections) {
+      if (!content.includes(section)) {
+        errors.push(`Missing required section: ${section}`);
+        score -= 20;
+      }
+    }
+
+    // Check for security issues
+    if (this.containsSensitiveData(content)) {
+      errors.push('Context contains sensitive data');
+      score -= 30;
+    }
+
+    // Check for performance issues
+    if (content.length > 10000) {
+      warnings.push('Context is too long, consider splitting');
+      score -= 10;
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings,
+      score: Math.max(0, score),
+    };
+  }
+
+  private getRequiredSections(contextType: string): string[] {
+    const sections = {
+      root: ['## Project Overview', '## Commands', '## Architecture'],
+      package: ['## Package Overview', '## Commands', '## Patterns'],
+      module: ['## Module Purpose', '## Usage', '## Dependencies'],
+    };
+    return sections[contextType] || [];
+  }
+
+  private containsSensitiveData(content: string): boolean {
+    const sensitivePatterns = [
+      /sk-[a-zA-Z0-9]{48}/, // OpenAI API keys
+      /password\s*[:=]\s*['"][^'"]+['"]/, // Passwords
+      /secret\s*[:=]\s*['"][^'"]+['"]/, // Secrets
+    ];
+
+    return sensitivePatterns.some((pattern) => pattern.test(content));
+  }
+}
+```
+
+## Performance Optimization
+
+### Context Caching Strategies
+
+```typescript
+// context-cache.ts
+class ContextCache {
+  private cache = new Map<string, { content: string; timestamp: number; hits: number }>();
+  private readonly TTL = 300000; // 5 minutes
+
+  async getContext(path: string, loader: () => Promise<string>): Promise<string> {
+    const cached = this.cache.get(path);
+    const now = Date.now();
+
+    if (cached && now - cached.timestamp < this.TTL) {
+      cached.hits++;
+      return cached.content;
+    }
+
+    const content = await loader();
+    this.cache.set(path, { content, timestamp: now, hits: 0 });
+    return content;
+  }
+
+  getCacheStats(): { size: number; hits: number; avgHits: number } {
+    const entries = Array.from(this.cache.values());
+    const totalHits = entries.reduce((sum, entry) => sum + entry.hits, 0);
+    const avgHits = entries.length > 0 ? totalHits / entries.length : 0;
+
+    return {
+      size: this.cache.size,
+      hits: totalHits,
+      avgHits,
+    };
+  }
+
+  clearExpired(): void {
+    const now = Date.now();
+    for (const [key, value] of this.cache.entries()) {
+      if (now - value.timestamp > this.TTL) {
+        this.cache.delete(key);
+      }
+    }
+  }
+}
+```
+
+### Hierarchical Loading Optimization
+
+```typescript
+// hierarchical-loader.ts
+interface ContextNode {
+  path: string;
+  priority: number;
+  dependencies: string[];
+  loaded: boolean;
+  content?: string;
+}
+
+class HierarchicalContextLoader {
+  private nodes = new Map<string, ContextNode>();
+  private loadingPromises = new Map<string, Promise<string>>();
+
+  constructor(private contextGraph: ContextNode[]) {
+    this.buildDependencyGraph();
+  }
+
+  private buildDependencyGraph(): void {
+    for (const node of this.contextGraph) {
+      this.nodes.set(node.path, node);
+    }
+  }
+
+  async loadContext(path: string): Promise<string> {
+    const node = this.nodes.get(path);
+    if (!node) {
+      throw new Error(`Context not found: ${path}`);
+    }
+
+    if (node.loaded && node.content) {
+      return node.content;
+    }
+
+    // Check if already loading
+    if (this.loadingPromises.has(path)) {
+      return this.loadingPromises.get(path)!;
+    }
+
+    // Load dependencies first
+    const loadingPromise = this.loadDependencies(node)
+      .then(() => this.loadNodeContent(node))
+      .then((content) => {
+        node.loaded = true;
+        node.content = content;
+        this.loadingPromises.delete(path);
+        return content;
+      });
+
+    this.loadingPromises.set(path, loadingPromise);
+    return loadingPromise;
+  }
+
+  private async loadDependencies(node: ContextNode): Promise<void> {
+    for (const depPath of node.dependencies) {
+      await this.loadContext(depPath);
+    }
+  }
+
+  private async loadNodeContent(node: ContextNode): Promise<string> {
+    // Implement actual file loading
+    return fs.readFile(node.path, 'utf-8');
+  }
+
+  async loadAllContexts(): Promise<Map<string, string>> {
+    const results = new Map<string, string>();
+
+    // Load in priority order
+    const sortedNodes = Array.from(this.nodes.values()).sort((a, b) => a.priority - b.priority);
+
+    for (const node of sortedNodes) {
+      const content = await this.loadContext(node.path);
+      results.set(node.path, content);
+    }
+
+    return results;
+  }
+}
+```
+
+### Memory-Efficient Context Management
+
+````typescript
+// memory-efficient-manager.ts
+class MemoryEfficientContextManager {
+  private maxContextSize = 50000; // 50KB per context
+  private maxTotalSize = 500000; // 500KB total
+  private currentSize = 0;
+
+  async optimizeContext(content: string): Promise<string> {
+    // Remove excessive whitespace
+    let optimized = content.replace(/\s+/g, ' ').trim();
+
+    // Remove comments
+    optimized = optimized.replace(/<!--.*?-->/gs, '');
+
+    // Compress long sections
+    if (optimized.length > this.maxContextSize) {
+      optimized = this.compressLongSections(optimized);
+    }
+
+    return optimized;
+  }
+
+  private compressLongSections(content: string): string {
+    const sections = content.split('\n## ');
+    const compressed: string[] = [];
+
+    for (const section of sections) {
+      if (section.length > 10000) {
+        // Compress long sections by keeping only headers and key points
+        const lines = section.split('\n');
+        const compressedLines = lines.filter(
+          (line, index) =>
+            index === 0 || // Keep header
+            line.startsWith('###') || // Keep sub-headers
+            line.startsWith('-') || // Keep bullet points
+            line.includes('```') // Keep code blocks
+        );
+        compressed.push(compressedLines.join('\n'));
+      } else {
+        compressed.push(section);
+      }
+    }
+
+    return compressed.join('\n## ');
+  }
+
+  canAddContext(content: string): boolean {
+    return this.currentSize + content.length <= this.maxTotalSize;
+  }
+
+  addContext(content: string): void {
+    if (this.canAddContext(content)) {
+      this.currentSize += content.length;
+    } else {
+      throw new Error('Context size limit exceeded');
+    }
+  }
+
+  clearContext(): void {
+    this.currentSize = 0;
+  }
+}
+````
+
+## 2026 Standards Compliance
+
+### AI Integration Patterns
+
+#### Multi-Agent Context Sharing
+
+```typescript
+// multi-agent-context-sharing.ts
+interface SharedContext {
+  globalRules: string[];
+  projectStructure: string;
+  commonPatterns: string[];
+  securityGuidelines: string[];
+}
+
+class MultiAgentContextSharing {
+  private sharedContext: SharedContext;
+  private agentSpecificContext = new Map<string, string>();
+
+  constructor() {
+    this.sharedContext = {
+      globalRules: this.extractGlobalRules(),
+      projectStructure: this.getProjectStructure(),
+      commonPatterns: this.getCommonPatterns(),
+      securityGuidelines: this.getSecurityGuidelines(),
+    };
+  }
+
+  getContextForAgent(agentName: string): string {
+    const agentContext = this.agentSpecificContext.get(agentName) || '';
+    return [
+      this.sharedContext.globalRules.join('\n'),
+      this.sharedContext.projectStructure,
+      this.sharedContext.commonPatterns.join('\n'),
+      this.sharedContext.securityGuidelines,
+      agentContext,
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+  }
+
+  updateSharedContext(updates: Partial<SharedContext>): void {
+    this.sharedContext = { ...this.sharedContext, ...updates };
+  }
+
+  private extractGlobalRules(): string[] {
+    return [
+      'Always follow TypeScript best practices',
+      'Use functional components over class components',
+      'Implement proper error handling',
+      'Write tests for new features',
+    ];
+  }
+
+  private getProjectStructure(): string {
+    return `
+Project Structure:
+- packages/: Shared libraries
+- clients/: Application code
+- tools/: Build and development tools
+- docs/: Documentation
+`;
+  }
+
+  private getCommonPatterns(): string[] {
+    return [
+      'Use dependency injection for services',
+      'Implement proper logging',
+      'Follow naming conventions',
+      'Use environment variables for configuration',
+    ];
+  }
+
+  private getSecurityGuidelines(): string {
+    return `
+Security Guidelines:
+- Never commit secrets or API keys
+- Use HTTPS for all external requests
+- Validate all user inputs
+- Implement proper authentication and authorization
+`;
+  }
+}
+```
+
+### Multi-tenant Architecture
+
+#### Tenant-Specific Context Management
+
+```typescript
+// tenant-context-manager.ts
+interface TenantContext {
+  tenantId: string;
+  context: string;
+  restrictions: string[];
+  customRules: string[];
+}
+
+class TenantContextManager {
+  private tenantContexts = new Map<string, TenantContext>();
+  private baseContext: string;
+
+  constructor(baseContext: string) {
+    this.baseContext = baseContext;
+  }
+
+  async loadTenantContext(tenantId: string): Promise<string> {
+    let tenantContext = this.tenantContexts.get(tenantId);
+
+    if (!tenantContext) {
+      tenantContext = await this.createTenantContext(tenantId);
+      this.tenantContexts.set(tenantId, tenantContext);
+    }
+
+    return this.combineContexts(this.baseContext, tenantContext);
+  }
+
+  private async createTenantContext(tenantId: string): Promise<TenantContext> {
+    // Load tenant-specific configuration
+    const config = await this.loadTenantConfig(tenantId);
+
+    return {
+      tenantId,
+      context: config.context || '',
+      restrictions: config.restrictions || [],
+      customRules: config.customRules || [],
+    };
+  }
+
+  private combineContexts(base: string, tenant: TenantContext): string {
+    return [
+      base,
+      '',
+      `Tenant-Specific Context (${tenant.tenantId}):`,
+      tenant.context,
+      '',
+      'Tenant Restrictions:',
+      ...tenant.restrictions,
+      '',
+      'Tenant Custom Rules:',
+      ...tenant.customRules,
+    ]
+      .filter(Boolean)
+      .join('\n');
+  }
+
+  private async loadTenantConfig(tenantId: string): Promise<any> {
+    // Implement tenant configuration loading
+    return {
+      context: `Custom rules for ${tenantId}`,
+      restrictions: ['No access to billing module'],
+      customRules: ['Use tenant-specific database'],
+    };
+  }
+
+  updateTenantContext(tenantId: string, updates: Partial<TenantContext>): void {
+    const existing = this.tenantContexts.get(tenantId);
+    if (existing) {
+      this.tenantContexts.set(tenantId, { ...existing, ...updates });
+    }
+  }
+}
+```
+
+## Security Considerations
 
 ### 1. Context Overload
 
@@ -497,19 +1059,34 @@ Use interface Props = { children: React.ReactNode }
 
 ## References
 
-- [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
+- [AGENTS.md Specification](https://agents.md/) - Official specification and examples
+- [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices) - Anthropic's AI coding guidelines
+- [Nx AI Agent Skills](https://nx.dev/blog/nx-ai-agent-skills) - Nx monorepo AI integration
+- [Model Context Protocol](https://modelcontextprotocol.io/) - AI context management standards
+- [AI Integration Best Practices](https://github.com/openai/openai-cookbook) - OpenAI integration patterns
+- [Multi-tenant Architecture Patterns](https://docs.microsoft.com/en-us/azure/architecture/patterns/) - Microsoft patterns
+- [Performance Optimization](https://web.dev/performance/) - Web performance best practices
+- [Security Best Practices](https://owasp.org/www-project-top-ten/) - OWASP security guidelines
+- [2026 Web Standards](https://www.w3.org/standards/) - W3C current standards
+- [OAuth 2.1 Specification](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-01) - Authentication framework
+- [GDPR Compliance](https://gdpr.eu/) - Data protection regulations
+- [WCAG 2.2 Guidelines](https://www.w3.org/TR/WCAG22/) - Web accessibility standards
 
-- Anthropic. "Claude Code: Best practices for agentic coding." https://www.anthropic.com/engineering/claude-code-best-practices
-- Nrwl. "Teach Your AI Agent How to Work in a Monorepo." https://nx.dev/blog/nx-ai-agent-skills
-- AGENTS.md. "AGENTS.md — a simple, open format for guiding coding agents." https://agents.md/
-- Model Context Protocol. "MCP Specification." https://modelcontextprotocol.io/
-- OpenAI. "OpenAI Codex Integration Guide." https://openai.com/codex
+### MCP Servers
 
+- [@modelcontextprotocol/server-postgres](https://github.com/modelcontextprotocol/servers/tree/main/src/postgres) - PostgreSQL integration
+- [@modelcontextprotocol/server-filesystem](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) - File system operations
+- [@modelcontextprotocol/server-brave-search](https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search) - Web search integration
+
+### Community Resources
+
+- [AI Agent Context Files Collection](https://gist.github.com/0xdevalias/f40bc5a6f84c4c5ad862e314894b2fa6) - Community examples
+- [Agent Skills Registry](https://agentskills.io/) - Agent skill registry
+- [Monorepo Tools AI Integration](https://monorepo.tools/ai) - Monorepo AI tools
 
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

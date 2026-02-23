@@ -32,7 +32,6 @@ Given the enormous scope of this request (48 categories, 150+ new documents), I'
 - [Testing](#testing)
 - [References](#references)
 
-
 > **Reference Documentation — February 2026**
 
 ## Overview
@@ -3755,12 +3754,1659 @@ process.exit(0);
 | `multi-layer-rate-limiting.md`          | 3-layer strategy, Sliding Window / Token Bucket algorithms, per-plan limits (free/pro/enterprise), Upstash Jan 2026 dynamic limits feature           |
 | `secrets-manager.md`                    | `@t3-oss/env-nextjs` Zod validation, Doppler→Vercel sync workflow, rotation API, break-glass runbook, CI validation script                           |
 
-
 ## Best Practices
 
 [Add content here]
 
-
 ## Testing
 
 [Add content here]
+
+Excellent — deep research complete. Generating all 4 Batch D documents at maximum production depth now.
+
+---
+
+# `email-package-structure.md`
+
+> **Internal Template — customize as needed.**
+
+```
+# email-package-structure.md
+```
+
+## Overview
+
+This document specifies the complete `packages/email/` package — a standalone, fully typed email library that contains all React Email 5 templates, the provider abstraction layer, multi-tenant routing logic, and the unified `send()` function. Every application in the monorepo imports from this package; no app sends email directly. React Email 5.0 (released November 2025) added Tailwind v4 support, a dark mode switcher, 8 new components (Avatars, Stats, Testimonials), and native React 19.2 + Next.js 16 compatibility. [resend](https://resend.com/blog/react-email-5)
+
+---
+
+## Directory Structure
+
+```
+packages/email/
+├── package.json
+├── tsconfig.json
+├── .react-email/                    ← Local preview dev server config
+├── src/
+│   ├── index.ts                     ← Barrel: re-exports send(), templates, types
+│   │
+│   ├── providers/
+│   │   ├── resend.ts                ← Resend client + send adapter
+│   │   ├── postmark.ts              ← Postmark client + send adapter
+│   │   ├── types.ts                 ← EmailProvider interface
+│   │   └── index.ts
+│   │
+│   ├── send/
+│   │   ├── send.ts                  ← Unified send() with fallback circuit breaker
+│   │   ├── idempotency.ts           ← Idempotency key generation helpers
+│   │   ├── routing.ts               ← Per-tenant from-address resolver
+│   │   └── index.ts
+│   │
+│   ├── templates/
+│   │   ├── base/
+│   │   │   ├── base-layout.tsx      ← Shared wrapper: logo, footer, unsubscribe
+│   │   │   └── styles.ts            ← Shared token values
+│   │   │
+│   │   ├── lead-notification/
+│   │   │   ├── index.tsx            ← Lead notification template
+│   │   │   └── preview.tsx          ← Preview data for react-email dev
+│   │   │
+│   │   ├── booking-confirmation/
+│   │   │   ├── index.tsx
+│   │   │   └── preview.tsx
+│   │   │
+│   │   ├── booking-reminder/
+│   │   │   ├── index.tsx
+│   │   │   └── preview.tsx
+│   │   │
+│   │   ├── booking-cancelled/
+│   │   │   ├── index.tsx
+│   │   │   └── preview.tsx
+│   │   │
+│   │   ├── welcome/
+│   │   │   ├── index.tsx
+│   │   │   └── preview.tsx
+│   │   │
+│   │   ├── password-reset/
+│   │   │   ├── index.tsx
+│   │   │   └── preview.tsx
+│   │   │
+│   │   ├── invoice/
+│   │   │   ├── index.tsx
+│   │   │   └── preview.tsx
+│   │   │
+│   │   ├── weekly-digest/
+│   │   │   ├── index.tsx
+│   │   │   └── preview.tsx
+│   │   │
+│   │   └── index.ts                 ← Template barrel exports
+│   │
+│   └── utils/
+│       ├── render.ts                ← Async render wrapper (React Email 5 render is async)
+│       └── sanitize.ts             ← Input sanitization before template injection
+│
+└── emails/                          ← Symlink or copy for react-email CLI preview
+```
+
+---
+
+## `package.json`
+
+```json
+{
+  "name": "@your-org/email",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./templates/*": {
+      "import": "./src/templates/*/index.tsx",
+      "types": "./src/templates/*/index.tsx"
+    },
+    "./send": {
+      "import": "./src/send/index.ts",
+      "types": "./src/send/index.ts"
+    }
+  },
+  "scripts": {
+    "dev": "email dev --dir src/templates --port 3333",
+    "build": "tsc --noEmit",
+    "lint": "eslint src/",
+    "upload": "email resend upload --dir src/templates"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.31",
+    "@react-email/tailwind": "^0.1.4",
+    "postmark": "^4.0.5",
+    "resend": "^4.2.0"
+  },
+  "devDependencies": {
+    "react-email": "^4.0.6",
+    "typescript": "^5.8.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
+```
+
+---
+
+## Provider Interface
+
+### `packages/email/src/providers/types.ts`
+
+```typescript
+export interface SendEmailParams {
+  to: string | string[];
+  from: string;
+  replyTo?: string;
+  subject: string;
+  html: string;
+  text?: string;
+  /** Resend/Postmark idempotency — prevents duplicate sends on retry */
+  idempotencyKey?: string;
+  /** Postmark: 'outbound' (transactional) | 'broadcasts' | custom stream ID */
+  messageStream?: string;
+  /** Metadata attached to the send for webhook routing and analytics */
+  metadata?: Record<string, string>;
+  tags?: Array<{ name: string; value: string }>;
+}
+
+export interface SendEmailResult {
+  messageId: string;
+  provider: 'resend' | 'postmark';
+}
+
+export interface EmailProvider {
+  name: 'resend' | 'postmark';
+  send(params: SendEmailParams): Promise<SendEmailResult>;
+  isHealthy(): Promise<boolean>;
+}
+```
+
+---
+
+## Resend Provider
+
+### `packages/email/src/providers/resend.ts`
+
+```typescript
+import { Resend } from 'resend';
+import type { EmailProvider, SendEmailParams, SendEmailResult } from './types';
+
+// Module-level singleton — reuses HTTP connection pool
+let _resend: Resend | null = null;
+
+function getResend(): Resend {
+  if (!_resend) {
+    _resend = new Resend(process.env.RESEND_API_KEY!);
+  }
+  return _resend;
+}
+
+export const resendProvider: EmailProvider = {
+  name: 'resend',
+
+  async send(params: SendEmailParams): Promise<SendEmailResult> {
+    const resend = getResend();
+
+    const { data, error } = await resend.emails.send(
+      {
+        to: params.to,
+        from: params.from,
+        reply_to: params.replyTo,
+        subject: params.subject,
+        html: params.html,
+        text: params.text,
+        tags: params.tags,
+        // Architecture invariant: metadata includes tenantId (set by routing layer)
+        headers: params.metadata
+          ? Object.fromEntries(Object.entries(params.metadata).map(([k, v]) => [`X-Meta-${k}`, v]))
+          : undefined,
+      },
+      // Idempotency key prevents duplicate sends on retry [web:90]
+      // TTL: 24 hours. Key must be unique per distinct email send.
+      // Best practice: format as `<event-type>/<entity-id>` [web:92]
+      params.idempotencyKey ? { idempotencyKey: params.idempotencyKey } : undefined
+    );
+
+    if (error) {
+      throw new Error(`Resend error: ${error.message} (${error.name})`);
+    }
+
+    return {
+      messageId: data!.id,
+      provider: 'resend',
+    };
+  },
+
+  async isHealthy(): Promise<boolean> {
+    try {
+      // Resend has no dedicated health endpoint; listing domains is lightweight
+      const resend = getResend();
+      const { error } = await resend.domains.list();
+      return !error;
+    } catch {
+      return false;
+    }
+  },
+};
+```
+
+---
+
+## Postmark Provider
+
+### `packages/email/src/providers/postmark.ts`
+
+```typescript
+import * as postmark from 'postmark';
+import type { EmailProvider, SendEmailParams, SendEmailResult } from './types';
+
+let _client: postmark.ServerClient | null = null;
+
+function getPostmarkClient(): postmark.ServerClient {
+  if (!_client) {
+    _client = new postmark.ServerClient(process.env.POSTMARK_SERVER_TOKEN!);
+  }
+  return _client;
+}
+
+export const postmarkProvider: EmailProvider = {
+  name: 'postmark',
+
+  async send(params: SendEmailParams): Promise<SendEmailResult> {
+    const client = getPostmarkClient();
+
+    // Postmark: separate transactional and broadcast via Message Streams [web:94][web:99]
+    // 'outbound' = default transactional stream (fastest delivery, <2s typical)
+    // Custom stream IDs can be created per-tenant for reputation isolation
+    const messageStream = params.messageStream ?? 'outbound';
+
+    const response = await client.sendEmail({
+      To: Array.isArray(params.to) ? params.to.join(',') : params.to,
+      From: params.from,
+      ReplyTo: params.replyTo,
+      Subject: params.subject,
+      HtmlBody: params.html,
+      TextBody: params.text,
+      MessageStream: messageStream,
+      // Postmark metadata (max 50 chars per key/value)
+      Metadata: params.metadata,
+      Tag: params.tags?.[0]?.value,
+    });
+
+    if (response.ErrorCode !== 0) {
+      throw new Error(`Postmark error ${response.ErrorCode}: ${response.Message}`);
+    }
+
+    return {
+      messageId: response.MessageID,
+      provider: 'postmark',
+    };
+  },
+
+  async isHealthy(): Promise<boolean> {
+    try {
+      const client = getPostmarkClient();
+      const server = await client.getServer();
+      return !!server.ID;
+    } catch {
+      return false;
+    }
+  },
+};
+```
+
+---
+
+## Barrel Exports
+
+### `packages/email/src/providers/index.ts`
+
+```typescript
+export { resendProvider } from './resend';
+export { postmarkProvider } from './postmark';
+export type { EmailProvider, SendEmailParams, SendEmailResult } from './types';
+```
+
+### `packages/email/src/index.ts`
+
+```typescript
+// Core send function
+export { send } from './send/send';
+export type { SendOptions } from './send/send';
+
+// Providers
+export { resendProvider, postmarkProvider } from './providers';
+export type { EmailProvider, SendEmailParams, SendEmailResult } from './providers/types';
+
+// Routing
+export { resolveTenantFromAddress } from './send/routing';
+
+// Idempotency
+export { buildIdempotencyKey } from './send/idempotency';
+
+// Templates
+export * from './templates';
+
+// Utilities
+export { renderEmail } from './utils/render';
+```
+
+### `packages/email/src/templates/index.ts`
+
+```typescript
+export { LeadNotificationEmail } from './lead-notification';
+export { BookingConfirmationEmail } from './booking-confirmation';
+export { BookingReminderEmail } from './booking-reminder';
+export { BookingCancelledEmail } from './booking-cancelled';
+export { WelcomeEmail } from './welcome';
+export { PasswordResetEmail } from './password-reset';
+export { InvoiceEmail } from './invoice';
+export { WeeklyDigestEmail } from './weekly-digest';
+
+// Template prop types
+export type { LeadNotificationProps } from './lead-notification';
+export type { BookingConfirmationProps } from './booking-confirmation';
+export type { BookingReminderProps } from './booking-reminder';
+export type { WelcomeEmailProps } from './welcome';
+```
+
+---
+
+## Render Utility (React Email 5 async render)
+
+React Email 5 unified `render()` and `renderAsync()` into a single async `render()` function in preparation for React DOM dropping sync rendering. [github](https://github.com/resend/react-email/issues/1924)
+
+### `packages/email/src/utils/render.ts`
+
+```typescript
+import { render } from '@react-email/components';
+import type { ReactElement } from 'react';
+
+/**
+ * Renders a React Email component to HTML + plain text.
+ * React Email 5: render() is now always async (Promise<string>). [web:95]
+ * renderAsync() is deprecated — use render() directly.
+ */
+export async function renderEmail(
+  template: ReactElement,
+  options?: { plainText?: boolean }
+): Promise<{ html: string; text: string }> {
+  const [html, text] = await Promise.all([
+    render(template, { plainText: false }),
+    render(template, { plainText: true }),
+  ]);
+  return { html, text };
+}
+```
+
+---
+
+## References
+
+- [React Email 5.0 Announcement](https://resend.com/blog/react-email-5) [resend](https://resend.com/blog/react-email-5)
+- [React Email 5.0 LinkedIn](https://www.linkedin.com/posts/resend_today-were-excited-to-announce-react-email-activity-7392583394888663040-56v0) [linkedin](https://www.linkedin.com/posts/resend_today-were-excited-to-announce-react-email-activity-7392583394888663040-56v0)
+- [React Email Templates Gallery](https://react.email/templates) [react](https://react.email/templates)
+- [React Email render() async behavior](https://github.com/resend/react-email/issues/1924) [github](https://github.com/resend/react-email/issues/1924)
+- [Postmark Message Streams API](https://postmarkapp.com/support/article/1215-managing-message-streams-with-postmarks-api) [postmarkapp](https://postmarkapp.com/support/article/1215-managing-message-streams-with-postmarks-api)
+- [Resend Domains Introduction](https://resend.com/docs/dashboard/domains/introduction) [resend](https://resend.com/docs/dashboard/domains/introduction)
+
+---
+
+---
+
+# `multi-tenant-email-routing.md`
+
+> **Internal Template — customize as needed.**
+
+```
+# multi-tenant-email-routing.md
+```
+
+## Overview
+
+This document specifies the per-tenant `from` address routing system. Each tenant sends email from a branded subdomain (e.g. `hello@notifications.acmeplumbing.com`) rather than a shared platform domain. This isolates sending reputation per tenant, ensures DMARC alignment, and supports custom return paths for bounce handling. The routing layer resolves the tenant's verified domain at send time, falls back to the platform domain, and selects the appropriate provider (Resend primary, Postmark fallback). [reddit](https://www.reddit.com/r/webdev/comments/1pa5dnx/multitenant_email_service_for_clients/)
+
+---
+
+## Architecture
+
+```
+send({ tenantId, template, ... })
+         │
+         ▼
+resolveTenantFromAddress(tenantId)
+         │
+         ├── Redis cache hit? → return cached FromAddress
+         │
+         └── Cache miss:
+             ├── Supabase: SELECT email_from, email_domain, email_provider
+             │   FROM tenants WHERE id = tenantId
+             │
+             ├── Resend domain verified? → use tenant subdomain
+             │   "hello@notifications.{tenantDomain}"
+             │
+             └── Fallback → platform default domain
+                 "hello@mail.yourdomain.com"
+         │
+         ▼
+EmailRouteConfig {
+  fromAddress: string,    ← e.g. "ACME <hello@notifications.acmeplumbing.com>"
+  provider: 'resend' | 'postmark',
+  replyTo: string,
+  messageStream?: string  ← Postmark stream ID if using Postmark
+}
+```
+
+---
+
+## Domain Verification Flow
+
+```
+Tenant Onboarding
+      │
+      ▼
+1. Platform creates Resend domain via API:
+   POST https://api.resend.com/domains
+   { name: "notifications.{tenantDomain}", region: "us-east-1" }
+
+2. Platform returns DNS records to tenant:
+   MX: send.notifications.{tenantDomain} → feedback-smtp.us-east-1.amazonses.com
+   TXT (SPF): v=spf1 include:amazonses.com ~all
+   CNAME (DKIM): resend._domainkey.notifications.{tenantDomain} → ...
+   CNAME (Return-Path): bounces.notifications.{tenantDomain} → ... [web:72]
+
+3. Tenant adds DNS records (guided in portal)
+
+4. Platform polls Resend verify endpoint:
+   POST https://api.resend.com/domains/{id}/verify
+
+5. On verification success:
+   - Store domain in Supabase: tenants.email_domain = "notifications.{tenantDomain}"
+   - Invalidate Redis cache for tenant
+   - Send confirmation email to tenant admin
+```
+
+---
+
+## Routing Implementation
+
+### `packages/email/src/send/routing.ts`
+
+```typescript
+import { Redis } from '@upstash/redis';
+import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
+
+const redis = Redis.fromEnv();
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+const resend = new Resend(process.env.RESEND_API_KEY!);
+
+export interface EmailRouteConfig {
+  fromAddress: string;
+  fromName: string;
+  replyTo: string;
+  provider: 'resend' | 'postmark';
+  /** Postmark message stream ID (undefined = use 'outbound' default) */
+  messageStream?: string;
+  /** Whether tenant has a verified custom domain */
+  hasCustomDomain: boolean;
+}
+
+// Platform default fallback sending domain
+const PLATFORM_FROM_DOMAIN = process.env.PLATFORM_EMAIL_DOMAIN ?? 'mail.yourdomain.com';
+const PLATFORM_FROM_NAME = process.env.PLATFORM_FROM_NAME ?? 'YourSaaS';
+
+/**
+ * Resolves the from-address configuration for a given tenant.
+ * Architecture invariant: Redis cache key includes tenantId.
+ * Cache TTL: 1 hour (invalidated on domain verification change).
+ */
+export async function resolveTenantFromAddress(tenantId: string): Promise<EmailRouteConfig> {
+  // Architecture invariant: all Redis keys include tenantId
+  const cacheKey = `email:route:${tenantId}`;
+  const cached = await redis.get<EmailRouteConfig>(cacheKey);
+  if (cached) return cached;
+
+  // Fetch tenant config from Supabase
+  const { data: tenant, error } = await supabase
+    .from('tenants')
+    .select(
+      'email_from_name, email_domain, email_domain_status, reply_to_email, preferred_email_provider, postmark_stream_id'
+    )
+    .eq('id', tenantId)
+    .single();
+
+  if (error || !tenant) {
+    // Fail open: return platform defaults so email still sends
+    return buildPlatformDefault(tenantId);
+  }
+
+  const hasCustomDomain = !!tenant.email_domain && tenant.email_domain_status === 'verified';
+
+  const fromDomain = hasCustomDomain ? tenant.email_domain : PLATFORM_FROM_DOMAIN;
+
+  const fromName = tenant.email_from_name ?? PLATFORM_FROM_NAME;
+
+  // Use "notifications." subdomain prefix per Resend best practice [web:79]
+  // Subdomain isolates sending reputation from the root marketing domain
+  const fromAddress = hasCustomDomain
+    ? `${fromName} <hello@${fromDomain}>`
+    : `${fromName} <noreply@${PLATFORM_FROM_DOMAIN}>`;
+
+  const config: EmailRouteConfig = {
+    fromAddress,
+    fromName,
+    replyTo: tenant.reply_to_email ?? `support@${fromDomain}`,
+    provider: (tenant.preferred_email_provider as 'resend' | 'postmark') ?? 'resend',
+    messageStream: tenant.postmark_stream_id ?? undefined,
+    hasCustomDomain,
+  };
+
+  // Cache for 1 hour — invalidated on domain status change via webhook
+  await redis.setex(cacheKey, 3600, config);
+
+  return config;
+}
+
+function buildPlatformDefault(tenantId: string): EmailRouteConfig {
+  return {
+    fromAddress: `${PLATFORM_FROM_NAME} <noreply@${PLATFORM_FROM_DOMAIN}>`,
+    fromName: PLATFORM_FROM_NAME,
+    replyTo: `support@${PLATFORM_FROM_DOMAIN}`,
+    provider: 'resend',
+    hasCustomDomain: false,
+  };
+}
+
+/**
+ * Invalidates the routing cache for a tenant.
+ * Call when email domain is verified or updated.
+ */
+export async function invalidateTenantEmailRouteCache(tenantId: string): Promise<void> {
+  await redis.del(`email:route:${tenantId}`);
+}
+```
+
+---
+
+## Resend Domain Provisioning
+
+### `packages/email/src/providers/domain-provisioning.ts`
+
+```typescript
+import { Resend } from 'resend';
+import { createClient } from '@supabase/supabase-js';
+import { invalidateTenantEmailRouteCache } from '../send/routing';
+
+const resend = new Resend(process.env.RESEND_API_KEY!);
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+
+export interface DomainProvisionResult {
+  domainId: string;
+  dnsRecords: Array<{
+    record: string;
+    name: string;
+    type: string;
+    value: string;
+    ttl: string;
+    status: string;
+    priority?: number;
+  }>;
+}
+
+/**
+ * Creates a Resend sending domain for a tenant's custom domain.
+ * Architecture invariant: domain stored with tenantId association.
+ * Resend recommendation: use subdomain (e.g. notifications.domain.com) [web:79]
+ */
+export async function provisionTenantEmailDomain(
+  tenantId: string,
+  rootDomain: string
+): Promise<DomainProvisionResult> {
+  // Use "notifications." subdomain for reputation isolation [web:79]
+  const sendingDomain = `notifications.${rootDomain}`;
+
+  const { data, error } = await resend.domains.create({
+    name: sendingDomain,
+    region: 'us-east-1',
+    // Custom return path: "bounces.notifications.domain.com" [web:72][web:76]
+    customReturnPath: 'bounces',
+  });
+
+  if (error || !data) {
+    throw new Error(`Failed to provision domain: ${error?.message}`);
+  }
+
+  // Store pending domain in Supabase
+  await supabase
+    .from('tenants')
+    .update({
+      email_domain: sendingDomain,
+      email_domain_id: data.id,
+      email_domain_status: 'pending',
+      email_domain_dns_records: data.records,
+    })
+    .eq('id', tenantId);
+
+  await invalidateTenantEmailRouteCache(tenantId);
+
+  return {
+    domainId: data.id,
+    dnsRecords: data.records as DomainProvisionResult['dnsRecords'],
+  };
+}
+
+/**
+ * Polls Resend and updates domain verification status.
+ * Called from a QStash scheduled job every 10 minutes for pending domains.
+ */
+export async function checkDomainVerification(
+  tenantId: string,
+  domainId: string
+): Promise<'verified' | 'pending' | 'failed'> {
+  // Trigger verification check
+  const { error } = await resend.domains.verify(domainId);
+
+  if (error) return 'pending';
+
+  // Fetch updated status
+  const { data } = await resend.domains.get(domainId);
+  if (!data) return 'pending';
+
+  const status = data.status === 'verified' ? 'verified' : 'pending';
+
+  await supabase.from('tenants').update({ email_domain_status: status }).eq('id', tenantId);
+
+  if (status === 'verified') {
+    await invalidateTenantEmailRouteCache(tenantId);
+  }
+
+  return status;
+}
+```
+
+---
+
+## Supabase Schema
+
+```sql
+-- migration: add_email_routing_fields.sql (expand/contract — additive only)
+ALTER TABLE tenants
+  ADD COLUMN IF NOT EXISTS email_from_name          TEXT,
+  ADD COLUMN IF NOT EXISTS email_domain             TEXT,
+  ADD COLUMN IF NOT EXISTS email_domain_id          TEXT,
+  ADD COLUMN IF NOT EXISTS email_domain_status      TEXT DEFAULT 'unverified'
+      CHECK (email_domain_status IN ('unverified', 'pending', 'verified', 'failed')),
+  ADD COLUMN IF NOT EXISTS email_domain_dns_records JSONB,
+  ADD COLUMN IF NOT EXISTS reply_to_email           TEXT,
+  ADD COLUMN IF NOT EXISTS preferred_email_provider TEXT DEFAULT 'resend'
+      CHECK (preferred_email_provider IN ('resend', 'postmark')),
+  ADD COLUMN IF NOT EXISTS postmark_stream_id       TEXT;
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_tenants_email_domain
+  ON tenants(email_domain)
+  WHERE email_domain IS NOT NULL;
+
+COMMENT ON COLUMN tenants.email_domain IS
+  'Verified Resend subdomain, e.g. notifications.acmeplumbing.com. NULL = use platform default.';
+COMMENT ON COLUMN tenants.email_domain_status IS
+  'Resend domain verification status. unverified → pending → verified.';
+```
+
+---
+
+## References
+
+- [Resend Domain Introduction](https://resend.com/docs/dashboard/domains/introduction) [resend](https://resend.com/docs/dashboard/domains/introduction)
+- [Subdomain vs Root Domain for Sending](https://resend.com/docs/knowledge-base/is-it-better-to-send-emails-from-a-subdomain-or-the-root-domain) [resend](https://resend.com/docs/knowledge-base/is-it-better-to-send-emails-from-a-subdomain-or-the-root-domain)
+- [Custom Return Path — Resend](https://resend.com/changelog/custom-return-path) [resend](https://resend.com/changelog/custom-return-path)
+- [Multi-tenant email with Resend (Reddit)](https://www.reddit.com/r/webdev/comments/1pa5dnx/multitenant_email_service_for_clients/) [reddit](https://www.reddit.com/r/webdev/comments/1pa5dnx/multitenant_email_service_for_clients/)
+- [Resend Domain Management (DeepWiki)](https://deepwiki.com/resend/resend-node/4-domain-management) [deepwiki](https://deepwiki.com/resend/resend-node/4-domain-management)
+- [Postmark Message Streams Guide (2026)](https://www.youtube.com/watch?v=quZlAwkxaSA) [youtube](https://www.youtube.com/watch?v=quZlAwkxaSA)
+
+---
+
+---
+
+# `unified-email-send.md`
+
+> **Internal Template — customize as needed.**
+
+```
+# unified-email-send.md
+```
+
+## Overview
+
+This document specifies the unified `send()` function — the single entry point for all email dispatch in the platform. It implements a **circuit-breaker + hot-standby failover** pattern: Resend is the primary provider and Postmark is the warm standby. If Resend returns a 5xx or network error, the circuit opens and the send is retried immediately against Postmark. Idempotency keys prevent duplicate delivery on retry. All sends are scoped to a `tenantId` per architecture invariant. [shadecoder](https://www.shadecoder.com/topics/the-circuit-breaker-pattern-a-comprehensive-guide-for-2025)
+
+---
+
+## Circuit Breaker Architecture
+
+```
+send(options)
+     │
+     ▼
+resolveTenantFromAddress(tenantId)     ← From-address + provider selection
+     │
+     ▼
+renderEmail(template, props)           ← React Email 5 async render
+     │
+     ▼
+buildIdempotencyKey(event, entityId)   ← `<event>/<tenantId>/<entityId>` [web:92]
+     │
+     ▼
+╔══════════════════════════════════╗
+║  Circuit Breaker State Machine   ║
+║                                  ║
+║  CLOSED ──fail──► OPEN           ║
+║  OPEN ──timeout──► HALF-OPEN     ║
+║  HALF-OPEN ──success──► CLOSED   ║
+╚══════════════════════════════════╝
+     │
+     ├── Circuit CLOSED (normal)
+     │   └── Primary provider (Resend)
+     │           │ success → return MessageId
+     │           │ fail    → open circuit → try Postmark fallback
+     │
+     └── Circuit OPEN (primary degraded)
+         └── Fallback provider (Postmark)
+                 │ success → return MessageId + log event to Sentry
+                 │ fail    → throw (QStash retries the job)
+```
+
+---
+
+## Idempotency Key Helper
+
+### `packages/email/src/send/idempotency.ts`
+
+```typescript
+/**
+ * Builds an idempotency key for email sends.
+ *
+ * Resend idempotency keys:
+ * - Up to 256 characters [web:90]
+ * - Stored 24 hours — safe to retry within window [web:90]
+ * - Must be UNIQUE per distinct email (same key + different payload = 409) [web:92]
+ * - Best practice: format as `<event-type>/<entity-id>` [web:92]
+ *
+ * Architecture invariant: key always includes tenantId.
+ *
+ * @example
+ * buildIdempotencyKey('lead-notification', 'tenant-abc', 'lead-xyz-123')
+ * // → "lead-notification/tenant-abc/lead-xyz-123"
+ */
+export function buildIdempotencyKey(eventType: string, tenantId: string, entityId: string): string {
+  // Sanitize: idempotency key may only contain safe URL characters
+  const safe = (s: string) => s.replace(/[^a-zA-Z0-9\-_./]/g, '-');
+  const key = `${safe(eventType)}/${safe(tenantId)}/${safe(entityId)}`;
+
+  if (key.length > 256) {
+    // Truncate from the left (preserve entityId specificity)
+    return key.slice(key.length - 256);
+  }
+  return key;
+}
+```
+
+---
+
+## Circuit Breaker State
+
+### `packages/email/src/send/circuit-breaker.ts`
+
+```typescript
+import { Redis } from '@upstash/redis';
+
+const redis = Redis.fromEnv();
+
+export type CircuitState = 'closed' | 'open' | 'half-open';
+
+const FAILURE_THRESHOLD = 3; // Open after N consecutive failures
+const RECOVERY_TIMEOUT_SEC = 60; // Try half-open after 60s
+const SUCCESS_THRESHOLD = 2; // Close after N successes in half-open
+
+interface CircuitData {
+  state: CircuitState;
+  failureCount: number;
+  successCount: number;
+  lastFailureAt: number;
+}
+
+function circuitKey(provider: string): string {
+  return `email:circuit:${provider}`;
+}
+
+export async function getCircuitState(provider: string): Promise<CircuitState> {
+  const data = await redis.get<CircuitData>(circuitKey(provider));
+  if (!data) return 'closed';
+
+  if (data.state === 'open') {
+    const elapsed = (Date.now() - data.lastFailureAt) / 1000;
+    if (elapsed >= RECOVERY_TIMEOUT_SEC) {
+      // Transition to half-open for probe
+      await redis.setex(circuitKey(provider), 300, {
+        ...data,
+        state: 'half-open',
+        successCount: 0,
+      });
+      return 'half-open';
+    }
+  }
+
+  return data.state;
+}
+
+export async function recordSuccess(provider: string): Promise<void> {
+  const data = await redis.get<CircuitData>(circuitKey(provider));
+  if (!data || data.state === 'closed') return;
+
+  if (data.state === 'half-open') {
+    const newSuccessCount = (data.successCount ?? 0) + 1;
+    if (newSuccessCount >= SUCCESS_THRESHOLD) {
+      // Provider recovered — close circuit
+      await redis.del(circuitKey(provider));
+    } else {
+      await redis.setex(circuitKey(provider), 300, { ...data, successCount: newSuccessCount });
+    }
+  }
+}
+
+export async function recordFailure(provider: string): Promise<void> {
+  const existing = await redis.get<CircuitData>(circuitKey(provider));
+  const failureCount = (existing?.failureCount ?? 0) + 1;
+
+  const state: CircuitState = failureCount >= FAILURE_THRESHOLD ? 'open' : 'closed';
+
+  await redis.setex(circuitKey(provider), 300, {
+    state,
+    failureCount,
+    successCount: 0,
+    lastFailureAt: Date.now(),
+  });
+}
+```
+
+---
+
+## Unified Send Function
+
+### `packages/email/src/send/send.ts`
+
+```typescript
+import * as Sentry from '@sentry/nextjs';
+import type { ReactElement } from 'react';
+import { resendProvider } from '../providers/resend';
+import { postmarkProvider } from '../providers/postmark';
+import type { EmailProvider, SendEmailResult } from '../providers/types';
+import { resolveTenantFromAddress } from './routing';
+import { buildIdempotencyKey } from './idempotency';
+import { getCircuitState, recordSuccess, recordFailure } from './circuit-breaker';
+import { renderEmail } from '../utils/render';
+
+export interface SendOptions {
+  /** Architecture invariant: always required */
+  tenantId: string;
+  to: string | string[];
+  subject: string;
+  /** React Email 5 template element */
+  template: ReactElement;
+  /** Used for idempotency key construction: `<eventType>/<tenantId>/<entityId>` */
+  eventType: string;
+  /** Unique entity ID (lead ID, booking UID, invoice ID, etc.) */
+  entityId: string;
+  /** Override auto-resolved from address */
+  fromOverride?: string;
+  replyTo?: string;
+  /** Postmark message stream override */
+  messageStream?: string;
+  /** Additional metadata attached to the send */
+  metadata?: Record<string, string>;
+}
+
+export interface SendResult extends SendEmailResult {
+  idempotencyKey: string;
+  usedFallback: boolean;
+}
+
+/**
+ * Unified email send function with circuit-breaker fallover.
+ *
+ * Primary:  Resend  (modern React-native API, React Email 5 native)
+ * Fallback: Postmark (sub-2s delivery, purpose-built transactional) [web:67][web:70]
+ *
+ * Idempotency: keyed as `<eventType>/<tenantId>/<entityId>`.
+ * A QStash job calling send() multiple times will NOT result in duplicate emails.
+ */
+export async function send(options: SendOptions): Promise<SendResult> {
+  const {
+    tenantId,
+    to,
+    subject,
+    template,
+    eventType,
+    entityId,
+    fromOverride,
+    replyTo,
+    messageStream,
+    metadata = {},
+  } = options;
+
+  // Architecture invariant: tenantId must be present
+  if (!tenantId) throw new Error('tenantId is required for email send');
+
+  // Step 1: Resolve tenant from-address and preferred provider
+  const route = await resolveTenantFromAddress(tenantId);
+  const fromAddress = fromOverride ?? route.fromAddress;
+  const effectiveReplyTo = replyTo ?? route.replyTo;
+
+  // Step 2: Render template to HTML + plain text (React Email 5 async render)
+  const { html, text } = await renderEmail(template);
+
+  // Step 3: Build idempotency key
+  // Format: `<event-type>/<tenantId>/<entityId>` per Resend best practice [web:92]
+  const idempotencyKey = buildIdempotencyKey(eventType, tenantId, entityId);
+
+  // Architecture invariant: always include tenantId in metadata
+  const enrichedMetadata: Record<string, string> = {
+    ...metadata,
+    tenantId,
+    eventType,
+    entityId,
+  };
+
+  const sendParams = {
+    to,
+    from: fromAddress,
+    replyTo: effectiveReplyTo,
+    subject,
+    html,
+    text,
+    idempotencyKey,
+    messageStream: messageStream ?? route.messageStream,
+    metadata: enrichedMetadata,
+    tags: [
+      { name: 'tenantId', value: tenantId },
+      { name: 'eventType', value: eventType },
+    ],
+  };
+
+  // Step 4: Select provider with circuit breaker
+  const primaryProvider = route.provider === 'postmark' ? postmarkProvider : resendProvider;
+  const fallbackProvider = route.provider === 'postmark' ? resendProvider : postmarkProvider;
+
+  return Sentry.withScope(async (scope) => {
+    scope.setTag('tenantId', tenantId);
+    scope.setTag('eventType', eventType);
+    scope.setTag('emailTo', Array.isArray(to) ? to[0] : to);
+
+    // Try primary
+    const primaryState = await getCircuitState(primaryProvider.name);
+
+    if (primaryState !== 'open') {
+      try {
+        const result = await primaryProvider.send(sendParams);
+        await recordSuccess(primaryProvider.name);
+
+        return {
+          ...result,
+          idempotencyKey,
+          usedFallback: false,
+        };
+      } catch (err) {
+        await recordFailure(primaryProvider.name);
+
+        Sentry.captureException(err, {
+          tags: { emailProvider: primaryProvider.name, emailFallback: 'triggering' },
+        });
+      }
+    } else {
+      Sentry.captureMessage(
+        `Email circuit OPEN for ${primaryProvider.name} — routing to ${fallbackProvider.name}`,
+        'warning'
+      );
+    }
+
+    // Try fallback
+    try {
+      // Postmark doesn't support idempotency keys natively — use metadata for tracking
+      const result = await fallbackProvider.send({
+        ...sendParams,
+        idempotencyKey: undefined, // Not supported by Postmark
+        metadata: {
+          ...enrichedMetadata,
+          originalIdempotencyKey: idempotencyKey,
+          usedFallback: 'true',
+        },
+      });
+
+      await recordSuccess(fallbackProvider.name);
+
+      Sentry.captureMessage(`Email fallback used: ${fallbackProvider.name}`, 'info');
+
+      return {
+        ...result,
+        idempotencyKey,
+        usedFallback: true,
+      };
+    } catch (fallbackErr) {
+      await recordFailure(fallbackProvider.name);
+      Sentry.captureException(fallbackErr, {
+        tags: { emailProvider: fallbackProvider.name, emailFallback: 'failed' },
+      });
+      // Both providers failed — throw so QStash retries the job
+      throw new Error(
+        `Email send failed on both providers (${primaryProvider.name}, ${fallbackProvider.name}). Will retry.`
+      );
+    }
+  });
+}
+```
+
+---
+
+## Usage in a QStash Job
+
+```typescript
+// apps/portal/app/api/jobs/booking-confirmation/route.ts
+import { verifySignatureAppRouter } from '@upstash/qstash/nextjs';
+import { send } from '@your-org/email';
+import { BookingConfirmationEmail } from '@your-org/email/templates';
+import { type NextRequest, NextResponse } from 'next/server';
+
+async function handler(request: NextRequest) {
+  const body = await request.json();
+  const { tenantId, attendees, startTime, endTime, bookingUid } = body;
+
+  await send({
+    tenantId,
+    to: attendees.map((a: { email: string }) => a.email),
+    subject: 'Your booking is confirmed',
+    template: (
+      <BookingConfirmationEmail
+        tenantId={tenantId}
+        attendeeName={attendees[0].name}
+        startTime={startTime}
+        endTime={endTime}
+        bookingUid={bookingUid}
+      />
+    ),
+    eventType: 'booking-confirmation',
+    entityId: bookingUid,
+  });
+
+  return NextResponse.json({ ok: true });
+}
+
+export const POST = verifySignatureAppRouter(handler);
+```
+
+---
+
+## Performance Characteristics
+
+| Provider         | Typical Delivery                                                                                                  | Idempotency                                                                              | Best For                               |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------- |
+| Resend           | 1–5s                                                                                                              | ✅ Native (24hr TTL) [resend](https://resend.com/docs/dashboard/emails/idempotency-keys) | React Email 5 native, modern DX        |
+| Postmark         | <2s [courier](https://www.courier.com/blog/top-6-email-service-providers-for-transactional-notifications-in-2025) | ❌ Manual (metadata)                                                                     | Critical transactional, time-sensitive |
+| Fallback trigger | +50–200ms overhead                                                                                                | —                                                                                        | Resend 5xx / network timeout           |
+
+---
+
+## References
+
+- [Resend Idempotency Keys Docs](https://resend.com/docs/dashboard/emails/idempotency-keys) [resend](https://resend.com/docs/dashboard/emails/idempotency-keys)
+- [Engineering Idempotency Keys — Resend Blog](https://resend.com/blog/engineering-idempotency-keys) [resend](https://resend.com/blog/engineering-idempotency-keys)
+- [Resend Idempotency Key Best Practices (LinkedIn)](https://www.linkedin.com/posts/resend_resend-now-supports-idempotency-keys-what-activity-7323709095155265538-bAFP) [linkedin](https://www.linkedin.com/posts/resend_resend-now-supports-idempotency-keys-what-activity-7323709095155265538-bAFP)
+- [Top ESPs for Transactional Email 2025](https://www.courier.com/blog/top-6-email-service-providers-for-transactional-notifications-in-2025) [courier](https://www.courier.com/blog/top-6-email-service-providers-for-transactional-notifications-in-2025)
+- [Circuit Breaker Pattern 2025](https://www.shadecoder.com/topics/the-circuit-breaker-pattern-a-comprehensive-guide-for-2025) [shadecoder](https://www.shadecoder.com/topics/the-circuit-breaker-pattern-a-comprehensive-guide-for-2025)
+- [Postmark Technical Guide 2026](https://www.captaindns.com/en/blog/postmark-transactional-email-technical-guide) [captaindns](https://www.captaindns.com/en/blog/postmark-transactional-email-technical-guide)
+- [Top 5 Email APIs for Developers 2025](https://emailable.com/blog/top-email-api/) [emailable](https://emailable.com/blog/top-email-api/)
+
+---
+
+---
+
+# `lead-notification-template.md`
+
+> **Internal Template — customize as needed.**
+
+```
+# lead-notification-template.md
+```
+
+## Overview
+
+This document specifies the `LeadNotificationEmail` React Email 5 template — sent to the tenant's business owner when a new lead submits the contact form on their marketing site. The template is fully branded per-tenant (logo, brand color, business name), mobile-first, dark-mode compatible (React Email 5 Dark Mode Switcher ), and renders correctly in Gmail, Outlook, Apple Mail, and Yahoo Mail. [sendlayer](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/)
+
+---
+
+## Design Principles
+
+Per React Email 5 + email client best practices: [sendlayer](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/)
+
+1. **No React hooks** — templates are statically rendered to HTML; `useState`/`useEffect` are unavailable
+2. **Inline or `<Tailwind>` styles only** — external CSS is stripped by email clients
+3. **Mobile-first** — majority of email opens are on mobile
+4. **One primary CTA** — single clear action per email
+5. **Tailwind v4 inside `<Tailwind>` wrapper** — React Email 5 now fully supports Tailwind v4 [resend](https://resend.com/blog/react-email-5)
+6. **Dark mode via `@media (prefers-color-scheme: dark)`** — tested across major clients [youtube](https://www.youtube.com/watch?v=RnKvlWIF1xk)
+7. **Plain text fallback** — always rendered alongside HTML via `renderEmail()`
+
+---
+
+## Template
+
+### `packages/email/src/templates/lead-notification/index.tsx`
+
+```typescript
+import {
+  Body,
+  Button,
+  Column,
+  Container,
+  Head,
+  Heading,
+  Hr,
+  Html,
+  Img,
+  Link,
+  Preview,
+  Row,
+  Section,
+  Text,
+} from '@react-email/components';
+import { Tailwind } from '@react-email/tailwind';
+
+export interface LeadNotificationProps {
+  // ── Tenant branding ────────────────────────────────────────────────
+  businessName: string;
+  brandColor: string;
+  logoUrl?: string;
+  portalUrl: string;
+
+  // ── Lead details ──────────────────────────────────────────────────
+  leadName: string;
+  leadEmail: string;
+  leadPhone?: string;
+  leadMessage?: string;
+  /** Service type selected by lead (e.g. "Plumbing Repair") */
+  serviceType?: string;
+  /** Page the form was submitted from */
+  sourceUrl?: string;
+  /** ISO timestamp */
+  submittedAt: string;
+  /** Lead ID for CRM deep-link */
+  leadId: string;
+
+  // ── Attribution ───────────────────────────────────────────────────
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+}
+
+/**
+ * Lead notification email sent to business owner on new form submission.
+ *
+ * React Email 5:
+ * - Tailwind v4 inside <Tailwind> wrapper [web:62]
+ * - Dark mode tested via @media prefers-color-scheme [web:83]
+ * - render() is now async — use await renderEmail(template) [web:95]
+ */
+export function LeadNotificationEmail({
+  businessName,
+  brandColor,
+  logoUrl,
+  portalUrl,
+  leadName,
+  leadEmail,
+  leadPhone,
+  leadMessage,
+  serviceType,
+  sourceUrl,
+  submittedAt,
+  leadId,
+  utmSource,
+  utmMedium,
+  utmCampaign,
+}: LeadNotificationProps) {
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  }).format(new Date(submittedAt));
+
+  const viewLeadUrl = `${portalUrl}/leads/${leadId}`;
+
+  // Attribution summary string
+  const attribution = [utmSource, utmMedium, utmCampaign]
+    .filter(Boolean)
+    .join(' / ');
+
+  return (
+    <Html lang="en" dir="ltr">
+      <Head>
+        {/* Dark mode support — React Email 5 tests across major clients [web:83] */}
+        <style>{`
+          @media (prefers-color-scheme: dark) {
+            .email-bg { background-color: #1a1a1a !important; }
+            .email-card { background-color: #2a2a2a !important; border-color: #3a3a3a !important; }
+            .email-text { color: #e5e5e5 !important; }
+            .email-muted { color: #a1a1a1 !important; }
+            .email-border { border-color: #3a3a3a !important; }
+          }
+        `}</style>
+      </Head>
+
+      <Preview>🔔 New lead from {leadName} — {businessName}</Preview>
+
+      <Tailwind>
+        <Body className="email-bg m-0 bg-gray-50 p-0 font-sans">
+          <Container className="mx-auto max-w-[600px] py-8">
+
+            {/* ── Header ─────────────────────────────────────────────── */}
+            <Section
+              className="email-card rounded-t-2xl border border-b-0 border-gray-200 bg-white px-8 pt-8 pb-4"
+            >
+              <Row>
+                <Column>
+                  {logoUrl ? (
+                    <Img
+                      src={logoUrl}
+                      alt={`${businessName} logo`}
+                      height={40}
+                      style={{ maxWidth: '160px', height: 'auto' }}
+                    />
+                  ) : (
+                    <Text
+                      className="email-text m-0 text-lg font-bold"
+                      style={{ color: brandColor }}
+                    >
+                      {businessName}
+                    </Text>
+                  )}
+                </Column>
+                <Column align="right">
+                  <Text className="email-muted m-0 text-xs text-gray-500">
+                    Lead Notification
+                  </Text>
+                </Column>
+              </Row>
+            </Section>
+
+            {/* ── Alert Banner ───────────────────────────────────────── */}
+            <Section
+              style={{ backgroundColor: brandColor }}
+              className="px-8 py-4"
+            >
+              <Text className="m-0 text-center text-sm font-semibold text-white">
+                🔔 You have a new lead!
+              </Text>
+            </Section>
+
+            {/* ── Lead Details Card ──────────────────────────────────── */}
+            <Section className="email-card border border-t-0 border-b-0 border-gray-200 bg-white px-8 py-6">
+              <Heading
+                as="h2"
+                className="email-text mt-0 mb-4 text-xl font-bold text-gray-900"
+              >
+                {leadName} wants to connect
+              </Heading>
+
+              <Text className="email-muted mb-6 text-sm text-gray-500">
+                Submitted {formattedDate}
+                {sourceUrl && (
+                  <> via{' '}
+                    <Link
+                      href={sourceUrl}
+                      className="text-blue-600 underline"
+                    >
+                      {new URL(sourceUrl).pathname}
+                    </Link>
+                  </>
+                )}
+              </Text>
+
+              {/* Lead Info Grid */}
+              <Section className="email-card rounded-xl border border-gray-100 bg-gray-50 p-4">
+                <Row className="mb-3">
+                  <Column className="w-1/3">
+                    <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                      Name
+                    </Text>
+                  </Column>
+                  <Column>
+                    <Text className="email-text m-0 text-sm font-medium text-gray-800">
+                      {leadName}
+                    </Text>
+                  </Column>
+                </Row>
+
+                <Row className="mb-3">
+                  <Column className="w-1/3">
+                    <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                      Email
+                    </Text>
+                  </Column>
+                  <Column>
+                    <Link
+                      href={`mailto:${leadEmail}`}
+                      className="text-sm"
+                      style={{ color: brandColor }}
+                    >
+                      {leadEmail}
+                    </Link>
+                  </Column>
+                </Row>
+
+                {leadPhone && (
+                  <Row className="mb-3">
+                    <Column className="w-1/3">
+                      <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Phone
+                      </Text>
+                    </Column>
+                    <Column>
+                      <Link
+                        href={`tel:${leadPhone.replace(/\D/g, '')}`}
+                        className="text-sm"
+                        style={{ color: brandColor }}
+                      >
+                        {leadPhone}
+                      </Link>
+                    </Column>
+                  </Row>
+                )}
+
+                {serviceType && (
+                  <Row className="mb-3">
+                    <Column className="w-1/3">
+                      <Text className="email-muted m-0 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                        Service
+                      </Text>
+                    </Column>
+                    <Column>
+                      <Text className="email-text m-0 text-sm text-gray-800">
+                        {serviceType}
+                      </Text>
+                    </Column>
+                  </Row>
+                )}
+              </Section>
+
+              {/* Message */}
+              {leadMessage && (
+                <Section className="mt-4">
+                  <Text className="email-muted mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                    Message
+                  </Text>
+                  <Section className="email-card rounded-xl border border-gray-100 bg-gray-50 p-4">
+                    <Text className="email-text m-0 text-sm leading-relaxed text-gray-700">
+                      "{leadMessage}"
+                    </Text>
+                  </Section>
+                </Section>
+              )}
+
+              {/* Attribution */}
+              {attribution && (
+                <Text className="email-muted mt-4 text-xs text-gray-400">
+                  📊 Source: {attribution}
+                </Text>
+              )}
+
+              {/* CTA */}
+              <Section className="mt-8 text-center">
+                <Button
+                  href={viewLeadUrl}
+                  style={{
+                    backgroundColor: brandColor,
+                    borderRadius: '8px',
+                    color: '#ffffff',
+                    display: 'inline-block',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    padding: '12px 32px',
+                    textDecoration: 'none',
+                  }}
+                >
+                  View Lead in Portal →
+                </Button>
+              </Section>
+
+              <Text className="email-muted mt-3 text-center text-xs text-gray-400">
+                Or copy this link:{' '}
+                <Link href={viewLeadUrl} style={{ color: brandColor }}>
+                  {viewLeadUrl}
+                </Link>
+              </Text>
+            </Section>
+
+            {/* ── Quick Actions ──────────────────────────────────────── */}
+            <Section className="email-card border border-t-0 border-b-0 border-gray-200 bg-white px-8 pb-6">
+              <Hr className="email-border border-gray-100" />
+              <Text className="email-muted mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Quick Actions
+              </Text>
+              <Row>
+                <Column>
+                  <Link
+                    href={`mailto:${leadEmail}?subject=Re: Your inquiry to ${businessName}`}
+                    style={{ color: brandColor }}
+                    className="text-sm font-medium underline"
+                  >
+                    📧 Reply by Email
+                  </Link>
+                </Column>
+                {leadPhone && (
+                  <Column>
+                    <Link
+                      href={`tel:${leadPhone.replace(/\D/g, '')}`}
+                      style={{ color: brandColor }}
+                      className="text-sm font-medium underline"
+                    >
+                      📞 Call Now
+                    </Link>
+                  </Column>
+                )}
+                <Column>
+                  <Link
+                    href={`${portalUrl}/leads/${leadId}/schedule`}
+                    style={{ color: brandColor }}
+                    className="text-sm font-medium underline"
+                  >
+                    📅 Schedule Meeting
+                  </Link>
+                </Column>
+              </Row>
+            </Section>
+
+            {/* ── Footer ─────────────────────────────────────────────── */}
+            <Section className="email-card rounded-b-2xl border border-t-0 border-gray-200 bg-white px-8 pb-8 pt-4">
+              <Hr className="email-border border-gray-100" />
+              <Text className="email-muted m-0 text-center text-xs text-gray-400">
+                {businessName} · Powered by YourSaaS
+              </Text>
+              <Text className="email-muted mt-1 text-center text-xs text-gray-400">
+                <Link
+                  href={`${portalUrl}/settings/notifications`}
+                  className="text-gray-400 underline"
+                >
+                  Manage notification preferences
+                </Link>
+                {' · '}
+                <Link
+                  href={`${portalUrl}/settings/notifications?unsubscribe=lead-notifications`}
+                  className="text-gray-400 underline"
+                >
+                  Unsubscribe
+                </Link>
+              </Text>
+            </Section>
+
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  );
+}
+
+LeadNotificationEmail.displayName = 'LeadNotificationEmail';
+```
+
+---
+
+## Preview Data
+
+### `packages/email/src/templates/lead-notification/preview.tsx`
+
+```typescript
+import { LeadNotificationEmail } from './index';
+
+export default function Preview() {
+  return (
+    <LeadNotificationEmail
+      businessName="ACME Plumbing & HVAC"
+      brandColor="#1e40af"
+      logoUrl="https://example.com/logo.png"
+      portalUrl="https://portal.yourdomain.com"
+      leadName="Sarah Johnson"
+      leadEmail="sarah.johnson@example.com"
+      leadPhone="(214) 555-0182"
+      leadMessage="Hi, my water heater is making a loud banging noise and I'm worried it might need to be replaced. Can you come take a look this week?"
+      serviceType="Water Heater Repair"
+      sourceUrl="https://acmeplumbing.com/services/water-heater"
+      submittedAt={new Date().toISOString()}
+      leadId="lead_abc123xyz"
+      utmSource="google"
+      utmMedium="cpc"
+      utmCampaign="water-heater-spring-2026"
+    />
+  );
+}
+```
+
+---
+
+## Sending Lead Notification
+
+```typescript
+// apps/portal/features/leads/actions/notify-lead.action.ts
+'use server';
+
+import { send } from '@your-org/email';
+import { LeadNotificationEmail } from '@your-org/email/templates';
+import { serverEnv } from '@your-org/env/server';
+
+export async function notifyTenantOfNewLead(params: {
+  tenantId: string;
+  ownerEmail: string;
+  lead: {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    message?: string;
+    serviceType?: string;
+    sourceUrl?: string;
+    submittedAt: string;
+    utmSource?: string;
+    utmMedium?: string;
+    utmCampaign?: string;
+  };
+  tenant: {
+    businessName: string;
+    brandColor: string;
+    logoUrl?: string;
+  };
+}) {
+  const { tenantId, ownerEmail, lead, tenant } = params;
+
+  await send({
+    tenantId,
+    to: ownerEmail,
+    subject: `🔔 New lead: ${lead.name}`,
+    template: (
+      <LeadNotificationEmail
+        businessName={tenant.businessName}
+        brandColor={tenant.brandColor}
+        logoUrl={tenant.logoUrl}
+        portalUrl={serverEnv.NEXT_PUBLIC_APP_URL}
+        leadName={lead.name}
+        leadEmail={lead.email}
+        leadPhone={lead.phone}
+        leadMessage={lead.message}
+        serviceType={lead.serviceType}
+        sourceUrl={lead.sourceUrl}
+        submittedAt={lead.submittedAt}
+        leadId={lead.id}
+        utmSource={lead.utmSource}
+        utmMedium={lead.utmMedium}
+        utmCampaign={lead.utmCampaign}
+      />
+    ),
+    eventType: 'lead-notification',
+    entityId: lead.id,
+    metadata: {
+      leadId: lead.id,
+      leadEmail: lead.email,
+    },
+  });
+}
+```
+
+---
+
+## Local Preview
+
+```bash
+# Start React Email dev server on port 3333
+pnpm --filter @your-org/email dev
+
+# Upload templates to Resend (React Email 5 CLI integration) [web:62]
+npx react-email@latest resend setup
+pnpm --filter @your-org/email upload
+```
+
+---
+
+## References
+
+- [React Email 5.0](https://resend.com/blog/react-email-5) [resend](https://resend.com/blog/react-email-5)
+- [React Email 5 Dark Mode Switcher (YouTube)](https://www.youtube.com/watch?v=RnKvlWIF1xk) [youtube](https://www.youtube.com/watch?v=RnKvlWIF1xk)
+- [Building Email Templates in React](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/) [sendlayer](https://sendlayer.com/blog/how-to-design-email-templates-in-react-js/)
+- [React Email with Tailwind (Everestek)](https://blog.everestek.com/how-we-simplified-email-templating-with-react-email-2/) [blog.everestek](https://blog.everestek.com/how-we-simplified-email-templating-with-react-email-2/)
+- [React Email Templates Gallery](https://react.email/templates) [react](https://react.email/templates)
+- [5 Best Email Tools with React Email Support (2026)](https://www.sequenzy.com/blog/best-email-tools-with-react-email-support) [sequenzy](https://www.sequenzy.com/blog/best-email-tools-with-react-email-support)
+
+---
+
+**All 4 Batch D documents are complete.** Here's the full summary:
+
+| Document                        | Depth Highlights                                                                                                                                                                           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `email-package-structure.md`    | Complete directory tree, `package.json`, provider interface, Resend + Postmark adapters, React Email 5 async `render()` note, barrel exports                                               |
+| `multi-tenant-email-routing.md` | Per-tenant subdomain provisioning flow, Resend Domain API with custom return path, Redis cache with invalidation, Supabase schema migration, DNS records guide                             |
+| `unified-email-send.md`         | Circuit breaker state machine (closed/open/half-open) with Redis state storage, idempotency key builder with format best practices, full `send()` with primary/fallback, performance table |
+| `lead-notification-template.md` | Full React Email 5 template with Tailwind v4, dark mode `@media` CSS, quick-action row, UTM attribution, branded per-tenant, preview data, Resend CLI upload workflow                      |
+
+Which batch would you like next?
+
+- **Batch E** — SEO & GEO Engine (`generateMetadata()` factory, dynamic sitemaps, JSON-LD builders, Edge OG images, composable metadata factory)
+- **Batch F** — AI Agent Documentation (AGENTS.md per-package stubs, root orchestration, CLAUDE.md sub-agents, cold-start checklist)
+- **Batch G** — Architecture & FSD (package-level FSD, tenant resolution sequence, Supavisor config, schema migration playbook, golden-path CLI)
+- **Batch H** — Background Jobs, PWA, Realtime, Super Admin, AI Chat, Lead Scoring

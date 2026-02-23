@@ -431,20 +431,21 @@ WHERE tablename = 'documents';
 11. **Audit policies quarterly** — revoke stale policies as access requirements change
 12. **Use `pg_policies` view** to document and monitor all active policies
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
 
-
 ## Implementation
+
+[Add content here]
+
+## Policy USING vs WITH CHECK
 
 [Add content here]

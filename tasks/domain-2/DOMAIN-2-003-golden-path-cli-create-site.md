@@ -38,17 +38,30 @@ Implement the golden path CLI tool `pnpm create-site` that guides users through 
 
 ## Tech Stack
 
-| Layer              | Technology                           |
+<<<<<<< Updated upstream
+| Layer | Technology |
 | ------------------ | ------------------------------------ |
-| CLI Framework      | Inquirer.js for interactive prompts  |
-| Validation         | Zod schema validation for inputs     |
-| File Operations    | fs-extra for robust file handling    |
-| Templates          | Handlebars or similar for templating |
-| Package Management | pnpm workspace integration           |
+| CLI Framework | Inquirer.js for interactive prompts |
+| Validation | Zod schema validation for inputs |
+| File Operations | fs-extra for robust file handling |
+| Templates | Handlebars or similar for templating |
+| Package Management | pnpm workspace integration |
+=======
+| Layer | Technology |
+| --------- | ----------------------------------- |
+| CLI Framework | Inquirer.js for interactive prompts |
+| Validation | Zod schema validation for inputs |
+| File Operations | fs-extra for robust file handling |
+| Templates | Handlebars or similar for templating |
+| Package Management | pnpm workspace integration |
+
+> > > > > > > Stashed changes
 
 ---
 
 ## Acceptance Criteria
+
+<<<<<<< Updated upstream
 
 - [x] **[Agent]** Create comprehensive interactive CLI with all prompts from section 2.4
 - [x] **[Agent]** Implement identity collection (tenant slug, site name, business info, contact)
@@ -60,12 +73,26 @@ Implement the golden path CLI tool `pnpm create-site` that guides users through 
 - [x] **[Agent]** Add conflict detection for duplicate tenantIds and domains
 - [x] **[Agent]** Integrate with pnpm workspace (add to pnpm-workspace.yaml)
 - [x] **[Agent]** Add proper error handling and validation
-- [x] **[Agent]** Test CLI with various input scenarios
+- [x] # **[Agent]** Test CLI with various input scenarios
+- [ ] **[Agent]** Create comprehensive interactive CLI with all prompts from section 2.4
+- [ ] **[Agent]** Implement identity collection (tenant slug, site name, business info, contact)
+- [ ] **[Agent]** Add domain strategy selection (subdomain vs custom domain)
+- [ ] **[Agent]** Include billing tier selection with proper limits
+- [ ] **[Agent]** Add theme customization (colors, fonts, branding)
+- [ ] **[Agent]** Generate complete site.config.ts file with all sections
+- [ ] **[Agent]** Create site directory structure with proper files
+- [ ] **[Agent]** Add conflict detection for duplicate tenantIds and domains
+- [ ] **[Agent]** Integrate with pnpm workspace (add to pnpm-workspace.yaml)
+- [ ] **[Agent]** Add proper error handling and validation
+- [ ] **[Agent]** Test CLI with various input scenarios
+  > > > > > > > Stashed changes
 - [ ] **[Human]** Verify CLI creates functional site configurations
 
 ---
 
 ## Implementation Plan
+
+<<<<<<< Updated upstream
 
 - [x] **[Agent]** **Update/create CLI package** — Enhance existing tooling/create-client or create new packages/create-site
 - [x] **[Agent]** **Implement interactive prompts** — Add all prompts from section 2.4 specification
@@ -75,7 +102,17 @@ Implement the golden path CLI tool `pnpm create-site` that guides users through 
 - [x] **[Agent]** **Integrate workspace** — Update pnpm-workspace.yaml automatically
 - [x] **[Agent]** **Add error handling** — Graceful error handling with helpful messages
 - [x] **[Agent]** **Create documentation** — Document CLI usage and examples
-- [x] **[Agent]** **Test thoroughly** — Test various scenarios and edge cases
+- [x] # **[Agent]** **Test thoroughly** — Test various scenarios and edge cases
+- [ ] **[Agent]** **Update/create CLI package** — Enhance existing tooling/create-client or create new packages/create-site
+- [ ] **[Agent]** **Implement interactive prompts** — Add all prompts from section 2.4 specification
+- [ ] **[Agent]** **Add input validation** — Validate all user inputs with Zod schemas
+- [ ] **[Agent]** **Create site templates** — Generate site.config.ts and basic site structure
+- [ ] **[Agent]** **Add conflict detection** — Check for duplicate tenantIds and domain conflicts
+- [ ] **[Agent]** **Integrate workspace** — Update pnpm-workspace.yaml automatically
+- [ ] **[Agent]** **Add error handling** — Graceful error handling with helpful messages
+- [ ] **[Agent]** **Create documentation** — Document CLI usage and examples
+- [ ] **[Agent]** **Test thoroughly** — Test various scenarios and edge cases
+  > > > > > > > Stashed changes
 
 > ⚠️ **Agent Question**: Ask human before deciding between enhancing existing tooling/create-client vs creating new packages/create-site.
 
@@ -197,7 +234,11 @@ async function createSite() {
 
   // Create site
   await createSiteStructure(tenantSlug, config);
+<<<<<<< Updated upstream
 
+=======
+
+>>>>>>> Stashed changes
   console.log(chalk.green(`\n✅ Site "${tenantSlug}" created successfully!`));
   console.log(chalk.gray(`📁 Location: sites/${tenantSlug}`));
   console.log(chalk.gray(`⚙️  Config: sites/${tenantSlug}/site.config.ts`));
@@ -216,15 +257,26 @@ async function createSite() {
 
 ## Boundaries
 
-| Tier             | Scope                                                                                                                              |
+<<<<<<< Updated upstream
+| Tier | Scope |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| ✅ **Always**    | Implement all prompts from section 2.4; generate complete site.config.ts; follow CLI best practices; integrate with pnpm workspace |
-| ⚠️ **Ask first** | Modifying existing tooling/create-client structure; changing pnpm workspace integration; updating site template structure          |
-| 🚫 **Never**     | Skip input validation; generate incomplete configurations; ignore conflict detection; break existing workspace structure           |
+| ✅ **Always** | Implement all prompts from section 2.4; generate complete site.config.ts; follow CLI best practices; integrate with pnpm workspace |
+| ⚠️ **Ask first** | Modifying existing tooling/create-client structure; changing pnpm workspace integration; updating site template structure |
+| 🚫 **Never** | Skip input validation; generate incomplete configurations; ignore conflict detection; break existing workspace structure |
+=======
+| Tier | Scope |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| ✅ **Always** | Implement all prompts from section 2.4; generate complete site.config.ts; follow CLI best practices; integrate with pnpm workspace |
+| ⚠️ **Ask first** | Modifying existing tooling/create-client structure; changing pnpm workspace integration; updating site template structure |
+| 🚫 **Never** | Skip input validation; generate incomplete configurations; ignore conflict detection; break existing workspace structure |
+
+> > > > > > > Stashed changes
 
 ---
 
 ## Success Verification
+
+<<<<<<< Updated upstream
 
 - [x] **[Agent]** Run `pnpm create-site` — CLI launches and prompts for all required information
 - [x] **[Agent]** Test with valid inputs — Creates complete site structure and configuration
@@ -233,6 +285,19 @@ async function createSite() {
 - [x] **[Agent]** Test workspace integration — New site recognized by pnpm workspace
 - [ ] **[Human]** Test CLI interactively — User experience is intuitive and helpful
 - [x] **[Agent]** Self-audit: re-read Acceptance Criteria above and check each box
+
+---
+
+=======
+
+- [ ] **[Agent]** Run `pnpm create-site` — CLI launches and prompts for all required information
+- [ ] **[Agent]** Test with valid inputs — Creates complete site structure and configuration
+- [ ] **[Agent]** Test conflict detection — Rejects duplicate tenantIds and domains
+- [ ] **[Agent]** Validate generated config — Generated site.config.ts passes validation
+- [ ] **[Agent]** Test workspace integration — New site recognized by pnpm workspace
+- [ ] **[Human]** Test CLI interactively — User experience is intuitive and helpful
+- [ ] **[Agent]** Self-audit: re-read Acceptance Criteria above and check each box
+  > > > > > > > Stashed changes
 
 ---
 
@@ -261,8 +326,10 @@ async function createSite() {
 - [Inquirer.js Documentation](https://www.npmjs.com/package/inquirer)
 - [Zod Validation Documentation](https://zod.dev/)
 - [pnpm Workspaces Documentation](https://pnpm.io/workspaces)
+  <<<<<<< Updated upstream
 
 ## QA Evidence
 
 - [x] Parent task QA executed after implementation updates.
-- [x] Commands run: `pnpm --filter @repo/config-schema build`, `pnpm --filter @repo/config-schema test`, `pnpm validate:configs`, `pnpm create-site domain-2-demo --industry=restaurant --dry-run`.
+- [x] # Commands run: `pnpm --filter @repo/config-schema build`, `pnpm --filter @repo/config-schema test`, `pnpm validate:configs`, `pnpm create-site domain-2-demo --industry=restaurant --dry-run`.
+  > > > > > > > Stashed changes

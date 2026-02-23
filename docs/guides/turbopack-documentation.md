@@ -137,30 +137,77 @@ entire application.
 
 | Feature | Next.js 15 | Next.js 16 |
 
-
---- 
+---
 
 ## References
 
 - [Official Documentation](https://example.com) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
 
-
 ## Overview
 
 [Add content here]
-
 
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
 
-
 ## Testing
+
+[Add content here]
+
+## Configuration
+
+[Add content here]
+
+## Filesystem Caching
+
+[Add content here]
+
+## Aliases & Module Resolution
+
+[Add content here]
+
+## Loaders
+
+[Add content here]
+
+## Environment Variables
+
+[Add content here]
+
+## Tree Shaking & Code Splitting
+
+[Add content here]
+
+## Source Maps
+
+[Add content here]
+
+## Migrating from Webpack
+
+[Add content here]
+
+## Babel Config Detection
+
+[Add content here]
+
+## Bundle Analyzer (16.1)
+
+[Add content here]
+
+## serverExternalPackages & Transitive Deps
+
+[Add content here]
+
+## Debugging with --inspect
+
+[Add content here]
+
+## Known Limitations
 
 [Add content here]

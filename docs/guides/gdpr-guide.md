@@ -1754,12 +1754,18 @@ class ZeroKnowledgeProof {
 - [Data Breach Notification Guidelines](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-04-2021/)
 - [International Data Transfer Guidelines](https://edpb.europa.eu/about-edpb/board-edpb/edpb-plenary/edpb-plenary-item-02-2021/)
 
-
 ## Best Practices
 
 [Add content here]
 
-
 ## Testing
+
+[Add content here]
+
+## Data Protection Impact Assessments
+
+[Add content here]
+
+## Technical Implementation
 
 [Add content here]

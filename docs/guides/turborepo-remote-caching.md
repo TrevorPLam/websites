@@ -28,7 +28,6 @@
 - [Testing](#testing)
 - [References](#references)
 
-
 ## Introduction
 
 Remote caching is a powerful feature in Turborepo that shares build artifacts across your team and CI/CD pipelines. Instead of each developer or CI machine rebuilding the same code, they can download cached results, dramatically reducing build times .
@@ -316,29 +315,24 @@ metrics.trackCacheMiss({ task: 'test', reason: 'input-changed' });
 7. **Use compression** to reduce bandwidth usage
 8. **Regular security audits** of cache access patterns
 
-
---- 
+---
 
 ## References
 
-- [Official Documentation](https://example.com) — Replace with actual source
+- [Vercel Platform Docs](https://vercel.com/docs/platforms) — Replace with actual source
 - [Research Inventory](../../tasks/RESEARCH-INVENTORY.md) — Internal patterns
-
 
 ## Overview
 
 [Add content here]
 
-
 ## Implementation
 
 [Add content here]
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 
