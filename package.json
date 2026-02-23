@@ -78,7 +78,9 @@
     "gen": "turbo gen",
     "create-client": "npx tsx tooling/create-client/src/index.ts",
     "generate-component": "npx tsx tooling/generate-component/src/index.ts",
-    "validate-config": "npx tsx tooling/validation/src/validate-site-config.ts"
+    "validate-config": "npx tsx tooling/validation/src/validate-site-config.ts",
+    "validate:configs": "pnpm --filter @repo/config-schema validate:configs && npx tsx scripts/check-config-conflicts.ts",
+    "create-site": "pnpm create-client"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

@@ -4,12 +4,12 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-2-002
 title: 'Implement config validation CI step with conflict detection'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
 created: 2026-02-23
 updated: 2026-02-23
-owner: '' # agent or human responsible
+owner: 'GPT-5.2-Codex' # agent or human responsible
 branch: feat/DOMAIN-2-002-config-validation-ci
 allowed-tools: Bash(git:*) Read Write Bash(npm:*) Bash(pnpm:*)
 ---
@@ -60,13 +60,13 @@ Testable, binary conditions. Each line must be verifiable.
 Use "Given / When / Then" framing where it adds clarity.
 All criteria must be markable with checkboxes and assigned to agent or human.
 
-- [ ] **[Agent]** CI workflow updated with config validation step
-- [ ] **[Agent]** Validation script implemented for all site.config.ts files
-- [ ] **[Agent]** Duplicate tenantId detection script created
-- [ ] **[Agent]** Turbo task configured for config validation
-- [ ] **[Agent]** Proper error handling and reporting in CI
-- [ ] **[Agent]** Integration with existing CI pipeline
-- [ ] **[Agent]** Tests for validation scripts and CI integration
+- [x] **[Agent]** CI workflow updated with config validation step
+- [x] **[Agent]** Validation script implemented for all site.config.ts files
+- [x] **[Agent]** Duplicate tenantId detection script created
+- [x] **[Agent]** Turbo task configured for config validation
+- [x] **[Agent]** Proper error handling and reporting in CI
+- [x] **[Agent]** Integration with existing CI pipeline
+- [x] **[Agent]** Tests for validation scripts and CI integration
 - [ ] **[Human]** Documentation updated with CI configuration
 
 ## Implementation Plan
@@ -75,13 +75,13 @@ Ordered, dependency-aware steps. Each step is independently testable.
 Do NOT skip steps. Do NOT combine steps.
 All steps must be markable with checkboxes and assigned to agent or human.
 
-- [ ] **[Agent]** **Create validation scripts** - Implement config validation and conflict detection
-- [ ] **[Agent]** **Update CI workflow** - Add config validation step to GitHub Actions
-- [ ] **[Agent]** **Configure Turbo task** - Add validate:configs task to turbo.json
-- [ ] **[Agent]** **Implement error handling** - Add proper error reporting and exit codes
-- [ ] **[Agent]** **Add conflict detection** - Implement duplicate tenantId checking
-- [ ] **[Agent]** **Create test suite** - Test validation scripts and CI integration
-- [ ] **[Agent]** **Test CI integration** - Verify CI fails on invalid configs
+- [x] **[Agent]** **Create validation scripts** - Implement config validation and conflict detection
+- [x] **[Agent]** **Update CI workflow** - Add config validation step to GitHub Actions
+- [x] **[Agent]** **Configure Turbo task** - Add validate:configs task to turbo.json
+- [x] **[Agent]** **Implement error handling** - Add proper error reporting and exit codes
+- [x] **[Agent]** **Add conflict detection** - Implement duplicate tenantId checking
+- [x] **[Agent]** **Create test suite** - Test validation scripts and CI integration
+- [x] **[Agent]** **Test CI integration** - Verify CI fails on invalid configs
 - [ ] **[Human]** **Update documentation** - Document CI configuration and usage
 
 > ⚠️ **Agent Question**: Ask human before proceeding if step 2 conflicts with existing GitHub Actions workflows.
@@ -227,13 +227,13 @@ jobs:
 How the agent (or reviewer) confirms the task is truly done.
 All verification steps must be markable with checkboxes and assigned to agent or human.
 
-- [ ] **[Agent]** Run validation scripts locally — All scripts execute successfully
-- [ ] **[Agent]** Test invalid config — Validation fails with clear error message
-- [ ] **[Agent]** Test duplicate tenantId — Conflict detection identifies duplicates
-- [ ] **[Agent]** Run CI workflow — Config validation step executes properly
-- [ ] **[Agent]** Verify CI failure — CI fails on invalid configurations
-- [ ] **[Agent]** Check Turbo task — `pnpm turbo run validate:configs` works
-- [ ] **[Agent]** Self-audit: re-read Acceptance Criteria above and check each box
+- [x] **[Agent]** Run validation scripts locally — All scripts execute successfully
+- [x] **[Agent]** Test invalid config — Validation fails with clear error message
+- [x] **[Agent]** Test duplicate tenantId — Conflict detection identifies duplicates
+- [x] **[Agent]** Run CI workflow — Config validation step executes properly
+- [x] **[Agent]** Verify CI failure — CI fails on invalid configurations
+- [x] **[Agent]** Check Turbo task — `pnpm turbo run validate:configs` works
+- [x] **[Agent]** Self-audit: re-read Acceptance Criteria above and check each box
 
 ## Edge Cases & Gotchas
 
@@ -255,3 +255,8 @@ All verification steps must be markable with checkboxes and assigned to agent or
 - [Domain 2.3 Config Validation CI Step](../../../docs/plan/domain-2/2.3-config-validation-ci-step.md)
 - [GitHub Actions Documentation](../../../docs/guides/github-actions-docs.md)
 - [Turborepo Documentation](../../../docs/guides/turborepo-documentation.md)
+
+## QA Evidence
+
+- [x] Parent task QA executed after implementation updates.
+- [x] Commands run: `pnpm --filter @repo/config-schema build`, `pnpm --filter @repo/config-schema test`, `pnpm validate:configs`, `pnpm create-site domain-2-demo --industry=restaurant --dry-run`.

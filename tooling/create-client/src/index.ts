@@ -245,7 +245,7 @@ async function main(): Promise<void> {
 
   // Resolve repo root relative to this compiled file location
   const __filename = fileURLToPath(import.meta.url);
-  const repoRoot = path.resolve(path.dirname(__filename), '../../../..');
+  const repoRoot = path.resolve(path.dirname(__filename), '../../..');
   const clientsDir = path.join(repoRoot, 'clients');
   const templateDir = path.join(clientsDir, 'testing-not-a-client');
   const destDir = path.join(clientsDir, name);
