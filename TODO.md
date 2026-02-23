@@ -19,3 +19,9 @@
 - [x] DOMAIN-3-008 · Create root AGENTS.md master context
 - [x] DOMAIN-3-009 · Create CLAUDE.md sub-agent definitions
 - [x] DOMAIN-3-010 · Create AI agent cold-start checklist + MCP config
+- [x] DOMAIN-4-001 · Complete middleware.ts with all security layers
+- [x] DOMAIN-4-002 · Implement createServerAction() security wrapper
+- [x] DOMAIN-4-003 · Complete Supabase RLS implementation
+- [x] DOMAIN-4-004 · Implement RLS isolation test suite
+- [x] DOMAIN-4-005 · Implement per-tenant secrets management
+- [x] DOMAIN-4-006 · Implement post-quantum cryptography abstraction
