@@ -1,8 +1,5 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "extends": [],
-  "ui": "stream",
-  "experimentalUI": true,
   "cacheDir": ".turbo",
   "globalEnv": [
     "NODE_ENV",
@@ -17,7 +14,14 @@
     "NEXT_PUBLIC_GA_MEASUREMENT_ID"
   ],
   "globalPassThroughEnv": ["NODE_OPTIONS", "AWS_*", "VERCEL_*", "OTEL_*", "SENTRY_AUTH_TOKEN"],
-  "globalDependencies": [".env", ".env.*", "tsconfig.json", "pnpm-workspace.yaml", "package.json", "pnpm-lock.yaml"],
+  "globalDependencies": [
+    ".env",
+    ".env.*",
+    "tsconfig.json",
+    "pnpm-workspace.yaml",
+    "package.json",
+    "pnpm-lock.yaml"
+  ],
   "remoteCache": {
     "enabled": true,
     "signature": true
@@ -28,7 +32,14 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "build/**", "out/**"],
       "env": ["NEXT_PUBLIC_*", "DATABASE_URL", "SANITY_*", "STRIPE_*", "POSTMARK_*"],
       "cache": true,
-      "inputs": ["src/**", "public/**", "package.json", "tsconfig.json", "next.config.*", "tailwind.config.*"]
+      "inputs": [
+        "src/**",
+        "public/**",
+        "package.json",
+        "tsconfig.json",
+        "next.config.*",
+        "tailwind.config.*"
+      ]
     },
     "typecheck": {
       "dependsOn": ["^build"],
@@ -46,14 +57,28 @@
       "dependsOn": [],
       "cache": true,
       "outputs": [],
-      "inputs": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "eslint.config.*", ".eslintrc.*", ".eslintignore"]
+      "inputs": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx",
+        "eslint.config.*",
+        ".eslintrc.*",
+        ".eslintignore"
+      ]
     },
     "test": {
       "dependsOn": ["^build"],
       "cache": true,
       "outputs": ["coverage/**"],
       "env": ["NODE_ENV"],
-      "inputs": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**", "vitest.config.*", "jest.config.*"]
+      "inputs": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__tests__/**",
+        "vitest.config.*",
+        "jest.config.*"
+      ]
     },
     "test:e2e": {
       "dependsOn": ["build"],
@@ -64,8 +89,7 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^build"],
-      "ui": "tui"
+      "dependsOn": ["^build"]
     },
     "clean": {
       "cache": false,

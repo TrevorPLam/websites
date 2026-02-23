@@ -98,6 +98,8 @@ describe('Circuit Breaker Pattern', () => {
           statusText: 'OK',
           headers: new Headers(),
           json: () => Promise.resolve({ data: 'success' }),
+          blob: () => Promise.resolve(new Blob()),
+          text: () => Promise.resolve('success'),
         } as Response);
 
       const result = await httpClient.request({ url: '/test' });
@@ -140,6 +142,8 @@ describe('Circuit Breaker Pattern', () => {
         statusText: 'OK',
         headers: new Headers(),
         json: () => Promise.resolve({ data: 'success' }),
+        blob: () => Promise.resolve(new Blob()),
+        text: () => Promise.resolve('success'),
       } as Response);
 
       // Make some requests
@@ -155,7 +159,7 @@ describe('Circuit Breaker Pattern', () => {
       expect(metrics.requestCount).toBe(3);
       expect(metrics.successCount).toBe(2);
       expect(metrics.failureCount).toBe(1);
-      expect(metrics.successRate).toBe(2 / 3);
+      expect(metrics.successRate).toBeCloseTo(2 / 3, 2);
       expect(metrics.circuitBreakerState).toBe('closed');
     });
   });

@@ -24,6 +24,17 @@ Implement Core Web Vitals analytics pipeline following section 5.7 specification
 
 ## Context
 
+**Documentation Reference:**
+
+- Nextjs 16 Documentation: `docs/guides/frontend/nextjs-16-documentation.md` ✅ COMPLETED
+- React 19 Documentation: `docs/guides/frontend/react-19-documentation.md` ✅ COMPLETED
+- Core Web Vitals Optimization: `docs/guides/frontend/core-web-vitals-optimization.md` ✅ COMPLETED
+- Performance Budgeting: `docs/guides/frontend/performance-budgeting.md` ✅ COMPLETED
+- Bundle Size Budgets: `docs/guides/frontend/bundle-size-budgets.md` ✅ COMPLETED
+- Rendering Decision Matrix: `docs/guides/frontend/rendering-decision-matrix.md` ✅ COMPLETED
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** Analytics pipeline — Core Web Vitals monitoring
 
 **Related files:** Analytics package, Tinybird configuration, monitoring dashboard

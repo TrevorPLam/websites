@@ -156,6 +156,8 @@ export abstract class BaseIntegrationAdapter implements StandardAdapter {
 
   getMetrics(): IntegrationResult<{
     requestCount: number;
+    successCount: number;
+    failureCount: number;
     successRate: number;
     averageResponseTime: number;
     errorRate: number;
@@ -176,6 +178,8 @@ export abstract class BaseIntegrationAdapter implements StandardAdapter {
       success: overallSuccess,
       data: {
         requestCount: this.metrics.requestCount,
+        successCount: this.metrics.successCount,
+        failureCount: this.metrics.errorCount,
         successRate,
         averageResponseTime,
         errorRate,

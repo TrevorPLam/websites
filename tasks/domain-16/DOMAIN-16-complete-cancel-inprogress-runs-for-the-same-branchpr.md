@@ -19,6 +19,13 @@ Implement cancel in-progress runs for the same branch/pr for Domain 16 following
 
 ## Context
 
+**Documentation Reference:**
+
+- Contract Testing Patterns: `docs/guides/testing/contract-testing-patterns.md` ❌ MISSING (P2)
+- Performance Testing Automation: `docs/guides/testing/performance-testing-automation.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 16
 **Section:** complete
 **Files:** 16.2-complete-github-actions-workflow.md

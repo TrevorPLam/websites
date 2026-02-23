@@ -1,5 +1,12 @@
 packages:
-  - 'apps/*'
+  - 'packages/*'
+  - 'packages/config/*'
+  - 'packages/integrations/*'
+  - 'packages/features/*'
+  - 'packages/ai-platform/*'
+  - 'packages/content-platform/*'
+  - 'packages/marketing-ops/*'
+  - 'packages/infrastructure/*'
   - 'clients/*'
   - 'tooling/*'
   - 'e2e/*'

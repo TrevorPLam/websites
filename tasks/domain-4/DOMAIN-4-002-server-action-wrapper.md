@@ -24,6 +24,17 @@ Enhance the existing secureAction wrapper to follow section 4.3 specification wi
 
 ## Context
 
+**Documentation Reference:**
+
+- Security Middleware Implementation: `docs/guides/security/security-middleware-implementation.md` ✅ COMPLETED
+- Server Action Security Wrapper: `docs/guides/security/server-action-security-wrapper.md` ✅ COMPLETED
+- Security Headers System: `docs/guides/security/security-headers-system.md` ✅ COMPLETED
+- Multi Layer Rate Limiting: `docs/guides/security/multi-layer-rate-limiting.md` ✅ COMPLETED
+- Secrets Manager: `docs/guides/security/secrets-manager.md` ✅ COMPLETED
+- Supabase Auth Docs: `docs/guides/security/supabase-auth-docs.md` ✅ COMPLETED
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** `packages/infra/security/secure-action.ts` — Server Action security wrapper
 
 **Related files:** Existing secure-action.ts, tenant context, audit logger, Zod validation

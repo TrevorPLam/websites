@@ -19,6 +19,14 @@ Implement section philosophy.md for Domain 22 following the specifications in th
 
 ## Context
 
+**Documentation Reference:**
+
+- Asset Optimization Patterns: `docs/guides/frontend/asset-optimization-patterns.md` ❌ MISSING (P2)
+- Cdn Configuration Strategies: `docs/guides/infrastructure-devops/cdn-configuration-strategies.md` ❌ MISSING (P2)
+- Image Compression Pipeline: `docs/guides/frontend/image-compression-pipeline.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 22
 **Section:** philosophy.md
 **Files:** 22.1-philosophy.md

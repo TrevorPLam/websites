@@ -19,6 +19,20 @@ Implement for Domain 14 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Wcag 2.2 Criteria: `docs/guides/accessibility-legal/wcag-2.2-criteria.md` ✅ COMPLETED
+- Ada Title Ii Final Rule: `docs/guides/accessibility-legal/ada-title-ii-final-rule.md` ✅ COMPLETED
+- Hhs Section 504 Docs: `docs/guides/accessibility-legal/hhs-section-504-docs.md` ✅ COMPLETED
+- Axe Core Documentation: `docs/guides/accessibility-legal/axe-core-documentation.md` ✅ COMPLETED
+- Accessibility P0 Rationale: `docs/guides/accessibility-legal/accessibility-p0-rationale.md` ❌ MISSING (P1)
+- Accessibility Component Library: `docs/guides/accessibility-legal/accessibility-component-library.md` ❌ MISSING (P1)
+- Accessible Form Components: `docs/guides/accessibility-legal/accessible-form-components.md` ❌ MISSING (P1)
+- Wcag Compliance Checklist: `docs/guides/accessibility-legal/wcag-compliance-checklist.md` ❌ MISSING (P1)
+- Automated Accessibility Testing: `docs/guides/accessibility-legal/automated-accessibility-testing.md` ❌ MISSING (P1)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 14
 **Section:** accessibility
 **Files:** 14.2-accessibility-component-library.md

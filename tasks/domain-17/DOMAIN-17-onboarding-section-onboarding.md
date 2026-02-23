@@ -19,6 +19,15 @@ Implement section onboarding for Domain 17 following the specifications in the d
 
 ## Context
 
+**Documentation Reference:**
+
+- Stripe Documentation: `docs/guides/payments-billing/stripe-documentation.md` ✅ COMPLETED
+- Stripe Checkout Sessions: `docs/guides/payments-billing/stripe-checkout-sessions.md` ✅ COMPLETED
+- Stripe Customer Portal: `docs/guides/payments-billing/stripe-customer-portal.md` ✅ COMPLETED
+- Stripe Webhook Handler: `docs/guides/payments-billing/stripe-webhook-handler.md` ✅ COMPLETED
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 17
 **Section:** onboarding
 **Files:** 17.4-onboarding-wizard-ui.md

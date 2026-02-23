@@ -48,11 +48,11 @@ describe('readSiteConfigFeatureFlags', () => {
   it('parses site config feature flags', () => {
     const flags = readSiteConfigFeatureFlags({
       featureFlags: {
-        featureA: { enabled: true, rollout: 20 }
-      }
+        featureA: { enabled: true, rollout: 20 },
+      },
     });
 
-    expect(flags.featureA.enabled).toBe(true);
-    expect(flags.featureA.rollout).toBe(20);
+    expect(flags.featureA?.enabled).toBe(true);
+    expect(flags.featureA?.rollout).toBe(20);
   });
 });

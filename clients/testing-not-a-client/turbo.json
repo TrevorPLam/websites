@@ -1,13 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "extends": ["$TURBO_EXTENDS$"],
+  "extends": ["//"],
   "tasks": {
-    "build": {
-      "env": ["$TURBO_EXTENDS$", "TINYBIRD_TOKEN", "POSTMARK_API_KEY"],
-      "outputs": ["$TURBO_EXTENDS$", "public/static/**"]
-    },
-    "prebuild": {
-      "outputs": ["generated/**"]
-    }
+    "build": { "env": ["TINYBIRD_TOKEN", "POSTMARK_API_KEY"], "outputs": ["public/static/**"] },
+    "prebuild": { "outputs": ["generated/**"] }
   }
 }

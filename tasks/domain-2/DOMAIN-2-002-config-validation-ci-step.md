@@ -24,6 +24,15 @@ Implement comprehensive config validation CI step that validates all site.config
 
 ## Context
 
+**Documentation Reference:**
+
+- Site Config Schema Documentation: `docs/guides/architecture/site-config-schema-documentation.md` ✅ COMPLETED
+- Zod Documentation: `docs/guides/standards-specs/zod-documentation.md` ✅ COMPLETED
+- Config Validation Ci Pipeline: `docs/guides/standards-specs/config-validation-ci-pipeline.md` ❌ MISSING (P0)
+- Golden Path Cli Documentation: `docs/guides/standards-specs/golden-path-cli-documentation.md` ❌ MISSING (P0)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** `.github/workflows/` and validation scripts — CI/CD integration
 
 **Related files:** `packages/config-schema/src/validation.ts`, `turbo.json`, all site.config.ts files

@@ -24,6 +24,15 @@ Implement PGlite WASM pattern for on-device state management following section 6
 
 ## Context
 
+**Documentation Reference:**
+
+- Postgresql Rls Documentation: `docs/guides/backend-data/postgresql-rls-documentation.md` ✅ COMPLETED
+- Aws Rds Proxy Documentation: `docs/guides/backend-data/aws-rds-proxy-documentation.md` ✅ COMPLETED
+- Pgbouncer Supavisor Configuration: `docs/guides/backend-data/pgbouncer-supavisor-configuration.md` ❌ MISSING (P1)
+- Schema Migration Safety: `docs/guides/backend-data/schema-migration-safety.md` ❌ MISSING (P1)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** Client-side state management — PGlite WASM integration
 
 **Related files:** Analytics components, dashboard filters, search functionality, session management

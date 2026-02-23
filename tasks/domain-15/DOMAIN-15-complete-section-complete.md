@@ -19,6 +19,13 @@ Implement section complete for Domain 15 following the specifications in the dom
 
 ## Context
 
+**Documentation Reference:**
+
+- Sustainability Measurement Patterns: `docs/guides/standards-specs/sustainability-measurement-patterns.md` ❌ MISSING (P3)
+- Carbon Footprint Optimization: `docs/guides/standards-specs/carbon-footprint-optimization.md` ❌ MISSING (P3)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 15
 **Section:** complete
 **Files:** 15.4-complete-middleware.md

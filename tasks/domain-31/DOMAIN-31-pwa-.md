@@ -19,6 +19,16 @@ Implement for Domain 31 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Settings Server Actions: `docs/guides/architecture/settings-server-actions.md` ❌ MISSING (P2)
+- Deep Merge Config Sql: `docs/guides/architecture/deep-merge-config-sql.md` ❌ MISSING (P2)
+- Settings Form Complex: `docs/guides/architecture/settings-form-complex.md` ❌ MISSING (P2)
+- Pdf Report Template: `docs/guides/architecture/pdf-report-template.md` ❌ MISSING (P2)
+- Report Generation Job: `docs/guides/architecture/report-generation-job.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 31
 **Section:** pwa
 **Files:** 31.4-pwa-manifest-nextjs-integration.md

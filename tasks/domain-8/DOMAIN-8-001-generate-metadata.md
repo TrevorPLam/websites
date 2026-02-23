@@ -24,6 +24,17 @@ Implement complete generateMetadata system following section 8.2 specification w
 
 ## Context
 
+**Documentation Reference:**
+
+- Sanity Documentation: `docs/guides/cms-content/sanity-documentation.md` ✅ COMPLETED
+- Sanity Cms Draft Mode 2026: `docs/guides/cms-content/sanity-cms-draft-mode-2026.md` ✅ COMPLETED
+- Sanity Schema Definition: `docs/guides/cms-content/sanity-schema-definition.md` ❌ MISSING (P1)
+- Sanity Client Groq: `docs/guides/cms-content/sanity-client-groq.md` ❌ MISSING (P1)
+- Blog Post Page Isr: `docs/guides/cms-content/blog-post-page-isr.md` ❌ MISSING (P1)
+- Sanity Webhook Isr: `docs/guides/cms-content/sanity-webhook-isr.md` ❌ MISSING (P1)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** SEO metadata generation — Type-safe metadata factory
 
 **Related files:** Metadata generation, SEO utilities, tenant configuration

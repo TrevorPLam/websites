@@ -19,6 +19,18 @@ Implement for Domain 35 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Production Deployment Strategies: `docs/guides/infrastructure-devops/production-deployment-strategies.md` ❌ MISSING (P2)
+- Operational Excellence Patterns: `docs/guides/infrastructure-devops/operational-excellence-patterns.md` ❌ MISSING (P2)
+- Environment Architecture: `docs/guides/infrastructure-devops/environment-architecture.md` ❌ MISSING (P2)
+- Full Cicd Pipeline: `docs/guides/infrastructure-devops/full-cicd-pipeline.md` ❌ MISSING (P2)
+- Zero Downtime Migration: `docs/guides/infrastructure-devops/zero-downtime-migration.md` ❌ MISSING (P2)
+- Rollback Procedure: `docs/guides/infrastructure-devops/rollback-procedure.md` ❌ MISSING (P2)
+- Fresh Environment Setup: `docs/guides/infrastructure-devops/fresh-environment-setup.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 35
 **Section:** philosophy.md
 **Files:** 35.1-philosophy.md

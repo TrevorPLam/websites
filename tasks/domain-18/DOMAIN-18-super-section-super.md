@@ -19,6 +19,14 @@ Implement section super for Domain 18 following the specifications in the domain
 
 ## Context
 
+**Documentation Reference:**
+
+- Ai Content Generation Patterns: `docs/guides/ai-automation/ai-content-generation-patterns.md` ❌ MISSING (P2)
+- Automation Workflow Design: `docs/guides/ai-automation/automation-workflow-design.md` ❌ MISSING (P2)
+- Ai Chat Api Streaming: `docs/guides/ai-automation/ai-chat-api-streaming.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 18
 **Section:** super
 **Files:** 18.2-super-admin-dashboard.md

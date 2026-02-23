@@ -28,6 +28,15 @@ Implement the complete Zod schema for `site.config.ts` matching section 2.2 spec
 
 **Related files:** `packages/config-schema/src/index.ts`, `packages/config-schema/src/validation.ts`, all site.config.ts files
 
+**Documentation Reference:**
+
+- Complete Schema Guide: `docs/guides/architecture/site-config-schema-documentation.md` ✅ **COMPLETED**
+- Zod Validation: `docs/guides/standards-specs/zod-documentation.md` ✅ **COMPLETED**
+- CI Validation: `docs/guides/standards-specs/config-validation-ci-pipeline.md` ❌ **MISSING** (P0)
+- CLI Tool: `docs/guides/standards-specs/golden-path-cli-documentation.md` ❌ **MISSING** (P0)
+
+**Current Status:** Schema documentation exists. Missing CI validation pipeline and CLI documentation for complete developer experience.
+
 **Dependencies:** Zod v3.24.0+, TypeScript 5.7.2+, existing partial schema
 
 **Prior work:** Basic schema exists with identity and theme sections only

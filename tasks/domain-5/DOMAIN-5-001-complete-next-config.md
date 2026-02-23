@@ -24,6 +24,17 @@ Implement complete next.config.ts following section 5.1 specification with Next.
 
 ## Context
 
+**Documentation Reference:**
+
+- Nextjs 16 Documentation: `docs/guides/frontend/nextjs-16-documentation.md` ✅ COMPLETED
+- React 19 Documentation: `docs/guides/frontend/react-19-documentation.md` ✅ COMPLETED
+- Core Web Vitals Optimization: `docs/guides/frontend/core-web-vitals-optimization.md` ✅ COMPLETED
+- Performance Budgeting: `docs/guides/frontend/performance-budgeting.md` ✅ COMPLETED
+- Bundle Size Budgets: `docs/guides/frontend/bundle-size-budgets.md` ✅ COMPLETED
+- Rendering Decision Matrix: `docs/guides/frontend/rendering-decision-matrix.md` ✅ COMPLETED
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** `sites/*/next.config.ts` and `apps/*/next.config.ts` — Next.js configuration
 
 **Related files:** Existing Next.js configurations, image optimization, deployment infrastructure

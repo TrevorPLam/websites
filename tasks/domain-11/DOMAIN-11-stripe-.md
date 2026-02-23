@@ -19,6 +19,19 @@ Implement for Domain 11 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Qstash Client Setup: `docs/guides/backend-data/qstash-client-setup.md` ✅ COMPLETED
+- Queue Management Patterns: `docs/guides/backend-data/queue-management-patterns.md` ❌ MISSING (P2)
+- Scheduled Tasks Automation: `docs/guides/backend-data/scheduled-tasks-automation.md` ❌ MISSING (P2)
+- Qstash Request Verification: `docs/guides/backend-data/qstash-request-verification.md` ❌ MISSING (P2)
+- Email Digest Job: `docs/guides/backend-data/email-digest-job.md` ❌ MISSING (P2)
+- Crm Sync Job: `docs/guides/backend-data/crm-sync-job.md` ❌ MISSING (P2)
+- Booking Reminder Job: `docs/guides/backend-data/booking-reminder-job.md` ❌ MISSING (P2)
+- Gdpr Tenant Deletion Job: `docs/guides/backend-data/gdpr-tenant-deletion-job.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 11
 **Section:** stripe
 **Files:** 11.4-stripe-customer-portal-self-service-billing.md

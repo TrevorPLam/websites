@@ -28,6 +28,15 @@ Implement complete PgBouncer/Supavisor connection pooling configuration followin
 
 **Related files:** Supabase client configuration, database operations, query optimization
 
+**Documentation Reference:**
+
+- RLS Documentation: `docs/guides/backend-data/postgresql-rls-documentation.md` ✅ **COMPLETED**
+- RDS Proxy: `docs/guides/backend-data/aws-rds-proxy-documentation.md` ✅ **COMPLETED**
+- Connection Pooling: `docs/guides/backend-data/pgbouncer-supavisor-configuration.md` ❌ **MISSING** (P1)
+- Migration Safety: `docs/guides/backend-data/schema-migration-safety.md` ❌ **MISSING** (P1)
+
+**Current Status:** Basic database docs exist. Missing specific connection pooling and migration safety documentation for production-ready implementation.
+
 **Dependencies:** Supabase, existing database integration, connection pooling infrastructure
 
 **Prior work:** Basic Supabase client exists but lacks comprehensive connection pooling and query governance

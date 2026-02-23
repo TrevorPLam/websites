@@ -19,6 +19,14 @@ Implement for Domain 10 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Supabase Storage Configuration: `docs/guides/backend-data/supabase-storage-configuration.md` ❌ MISSING (P2)
+- Supabase Image Loader: `docs/guides/backend-data/supabase-image-loader.md` ❌ MISSING (P2)
+- Upload Server Action: `docs/guides/backend-data/upload-server-action.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 10
 **Section:** supabase
 **Files:** 10.1-supabase-realtime-for-portal-lead-feed.md

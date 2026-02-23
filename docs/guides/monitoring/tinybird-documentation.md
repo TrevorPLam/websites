@@ -1,6 +1,5 @@
 # tinybird-documentation.md
 
-
 # Tinybird Official Documentation: Real-Time Analytics & Core Web Vitals
 
 ## Overview
@@ -76,11 +75,9 @@ Tinybird uses **Pipes** to define data transformations in SQL. These pipes are b
 - [Tracking Core Web Vitals with Tinybird](https://www.tinybird.co/docs/guides/web-analytics-starter-kit.html)
 - [Tinybird Events API Reference](https://www.tinybird.co/docs/api-reference/events-api.html)
 
-
 ## Best Practices
 
 [Add content here]
-
 
 ## Testing
 

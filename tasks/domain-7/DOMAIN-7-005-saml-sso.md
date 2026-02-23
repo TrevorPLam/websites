@@ -24,6 +24,21 @@ Implement multi-tenant SAML 2.0 enterprise SSO system following section 7.7 spec
 
 ## Context
 
+**Documentation Reference:**
+
+- Tenant Resolution Implementation: `docs/guides/multi-tenant/tenant-resolution-implementation.md` ✅ COMPLETED
+- Billing Status Validation: `docs/guides/multi-tenant/billing-status-validation.md` ✅ COMPLETED
+- Tenant Suspension Patterns: `docs/guides/multi-tenant/tenant-suspension-patterns.md` ✅ COMPLETED
+- Noisy Neighbor Prevention: `docs/guides/multi-tenant/noisy-neighbor-prevention.md` ✅ COMPLETED
+- Domain Lifecycle Management: `docs/guides/multi-tenant/domain-lifecycle-management.md` ✅ COMPLETED
+- Enterprise Sso Integration: `docs/guides/multi-tenant/enterprise-sso-integration.md` ✅ COMPLETED
+- Routing Strategy Comparison: `docs/guides/multi-tenant/routing-strategy-comparison.md` ✅ COMPLETED
+- Tenant Metadata Factory: `docs/guides/multi-tenant/tenant-metadata-factory.md` ✅ COMPLETED
+- Tenant Resolution Sequence Diagram: `docs/guides/multi-tenant/tenant-resolution-sequence-diagram.md` ❌ MISSING (P0)
+- Tenant Data Flow Patterns: `docs/guides/multi-tenant/tenant-data-flow-patterns.md` ❌ MISSING (P0)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** Multi-tenant authentication — Enterprise SSO integration
 
 **Related files:** SAML provider registration, authentication flows, RLS policies

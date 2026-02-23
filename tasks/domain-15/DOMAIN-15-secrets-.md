@@ -19,6 +19,13 @@ Implement for Domain 15 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Sustainability Measurement Patterns: `docs/guides/standards-specs/sustainability-measurement-patterns.md` ❌ MISSING (P3)
+- Carbon Footprint Optimization: `docs/guides/standards-specs/carbon-footprint-optimization.md` ❌ MISSING (P3)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 15
 **Section:** secrets
 **Files:** 15.5-secrets-manager.md

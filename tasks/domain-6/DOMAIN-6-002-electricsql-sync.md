@@ -24,6 +24,15 @@ Implement ElectricSQL local-first sync pattern following section 6.4 specificati
 
 ## Context
 
+**Documentation Reference:**
+
+- Postgresql Rls Documentation: `docs/guides/backend-data/postgresql-rls-documentation.md` ✅ COMPLETED
+- Aws Rds Proxy Documentation: `docs/guides/backend-data/aws-rds-proxy-documentation.md` ✅ COMPLETED
+- Pgbouncer Supavisor Configuration: `docs/guides/backend-data/pgbouncer-supavisor-configuration.md` ❌ MISSING (P1)
+- Schema Migration Safety: `docs/guides/backend-data/schema-migration-safety.md` ❌ MISSING (P1)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** Offline-capable forms and local state management — ElectricSQL integration
 
 **Related files:** Marketing site components, database operations, sync infrastructure

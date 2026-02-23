@@ -24,6 +24,15 @@ Implement the golden path CLI tool `pnpm create-site` that guides users through 
 
 ## Context
 
+**Documentation Reference:**
+
+- Site Config Schema Documentation: `docs/guides/architecture/site-config-schema-documentation.md` ✅ COMPLETED
+- Zod Documentation: `docs/guides/standards-specs/zod-documentation.md` ✅ COMPLETED
+- Config Validation Ci Pipeline: `docs/guides/standards-specs/config-validation-ci-pipeline.md` ❌ MISSING (P0)
+- Golden Path Cli Documentation: `docs/guides/standards-specs/golden-path-cli-documentation.md` ❌ MISSING (P0)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Codebase area:** `tooling/create-client/` or new `packages/create-site/` — interactive CLI tool
 
 **Related files:** `packages/config-schema/`, `sites/` directory, pnpm-workspace.yaml, site.config.ts templates

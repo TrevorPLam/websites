@@ -19,6 +19,14 @@ Implement for Domain 22 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Asset Optimization Patterns: `docs/guides/frontend/asset-optimization-patterns.md` ❌ MISSING (P2)
+- Cdn Configuration Strategies: `docs/guides/infrastructure-devops/cdn-configuration-strategies.md` ❌ MISSING (P2)
+- Image Compression Pipeline: `docs/guides/frontend/image-compression-pipeline.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 22
 **Section:** rag
 **Files:** 22.4-rag-site-content-embedding-job.md

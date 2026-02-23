@@ -19,6 +19,16 @@ Implement section booking for Domain 12 following the specifications in the doma
 
 ## Context
 
+**Documentation Reference:**
+
+- Service Area Pages Engine: `docs/guides/seo-metadata/service-area-pages-engine.md` ✅ COMPLETED
+- Blog Content Architecture: `docs/guides/cms-content/blog-content-architecture.md` ✅ COMPLETED
+- Service Area Route: `docs/guides/seo-metadata/service-area-route.md` ❌ MISSING (P2)
+- Service Area Hero Component: `docs/guides/seo-metadata/service-area-hero-component.md` ❌ MISSING (P2)
+- Service Area Cache Invalidation: `docs/guides/seo-metadata/service-area-cache-invalidation.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 12
 **Section:** booking
 **Files:** 12.6-booking-reminder-job.md

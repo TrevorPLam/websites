@@ -1,6 +1,5 @@
 # Tenant Metadata Factory
 
-
 ## Overview
 
 Tenant-specific metadata factory for SEO optimization. [nextjs.org](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)

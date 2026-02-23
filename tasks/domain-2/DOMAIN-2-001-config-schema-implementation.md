@@ -22,6 +22,15 @@ Implement the complete Zod schema for `site.config.ts` with all configuration op
 
 ## Context
 
+**Documentation Reference:**
+
+- Site Config Schema Documentation: `docs/guides/architecture/site-config-schema-documentation.md` ✅ COMPLETED
+- Zod Documentation: `docs/guides/standards-specs/zod-documentation.md` ✅ COMPLETED
+- Config Validation Ci Pipeline: `docs/guides/standards-specs/config-validation-ci-pipeline.md` ❌ MISSING (P0)
+- Golden Path Cli Documentation: `docs/guides/standards-specs/golden-path-cli-documentation.md` ❌ MISSING (P0)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Current State Analysis:**
 
 - Repository lacks comprehensive config schema validation

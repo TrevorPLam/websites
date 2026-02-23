@@ -19,6 +19,16 @@ Implement ============================================================ for Domai
 
 ## Context
 
+**Documentation Reference:**
+
+- Axe Core Documentation: `docs/guides/accessibility-legal/axe-core-documentation.md` ✅ COMPLETED
+- Playwright Config E2e: `docs/guides/testing/playwright-config-e2e.md` ❌ MISSING (P2)
+- Auth Setup Testing: `docs/guides/testing/auth-setup-testing.md` ❌ MISSING (P2)
+- Test Fixtures E2e: `docs/guides/testing/test-fixtures-e2e.md` ❌ MISSING (P2)
+- Critical Test Suites: `docs/guides/testing/critical-test-suites.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 36
 **Section:** fresh
 **Files:** 36.6-fresh-environment-setup.md

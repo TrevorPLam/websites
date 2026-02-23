@@ -19,6 +19,13 @@ Implement section philosophy.md for Domain 20 following the specifications in th
 
 ## Context
 
+**Documentation Reference:**
+
+- Ai Search Optimization Patterns: `docs/guides/seo-metadata/ai-search-optimization-patterns.md` ❌ MISSING (P2)
+- Content Embedding Strategies: `docs/guides/seo-metadata/content-embedding-strategies.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 20
 **Section:** philosophy.md
 **Files:** 20.1-philosophy.md

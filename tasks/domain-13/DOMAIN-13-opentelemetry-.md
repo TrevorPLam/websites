@@ -19,6 +19,18 @@ Implement for Domain 13 following the specifications in the domain plan. This ta
 
 ## Context
 
+**Documentation Reference:**
+
+- Realtime Lead Feed Implementation: `docs/guides/architecture/realtime-lead-feed-implementation.md` ✅ COMPLETED
+- Webhook Architecture Patterns: `docs/guides/backend-data/webhook-architecture-patterns.md` ❌ MISSING (P2)
+- Realtime Integration Patterns: `docs/guides/backend-data/realtime-integration-patterns.md` ❌ MISSING (P2)
+- Realtime Dashboard Implementation: `docs/guides/backend-data/realtime-dashboard-implementation.md` ❌ MISSING (P2)
+- Realtime Supabase Setup: `docs/guides/backend-data/realtime-supabase-setup.md` ❌ MISSING (P2)
+- Realtime Hook Implementation: `docs/guides/backend-data/realtime-hook-implementation.md` ❌ MISSING (P2)
+- Realtime Lead Feed Ui: `docs/guides/backend-data/realtime-lead-feed-ui.md` ❌ MISSING (P2)
+
+**Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
+
 **Domain:** Domain 13
 **Section:** opentelemetry
 **Files:** 13.2-opentelemetry-instrumentation.md
