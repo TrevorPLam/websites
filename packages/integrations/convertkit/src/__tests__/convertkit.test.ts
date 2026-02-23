@@ -9,12 +9,79 @@
  * - Two-step subscription process
  */
 
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { ConvertKitAdapter } from '../index';
 
-// Mock fetch to test API calls
+// Mock fetch for testing
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
+
+// Mock Headers constructor
+global.Headers = vi.fn((init?: HeadersInit) => {
+  const map = new Map<string, string>();
+  if (init) {
+    if (Array.isArray(init)) {
+      init.forEach(([key, value]) => map.set(key, value));
+    } else if (typeof init === 'object') {
+      Object.entries(init).forEach(([key, value]) => map.set(key, value));
+    }
+  }
+  return {
+    get: (key: string) => map.get(key) || null,
+    set: (key: string, value: string) => map.set(key, value),
+    has: (key: string) => map.has(key),
+    delete: (key: string) => map.delete(key),
+    entries: () => map.entries(),
+    values: () => map.values(),
+    keys: () => map.keys(),
+    forEach: (callback: (value: string, key: string) => void) => {
+      map.forEach(callback);
+    },
+    append: (key: string, value: string) => map.set(key, value),
+    getSetCookie: () => '',
+    [Symbol.iterator]: () => map.entries(),
+  };
+}) as any;
+
+// Helper function to create complete mock Response
+function createMockResponse(data: any, options: Partial<Response> = {}): Response {
+  return {
+    ok: true,
+    status: 200,
+    statusText: 'OK',
+    headers: new Headers({ 'Content-Type': 'application/json' }),
+    json: async () => data,
+    text: async () => JSON.stringify(data),
+    blob: async () => new Blob(),
+    arrayBuffer: async () => new ArrayBuffer(0),
+    body: null,
+    bodyUsed: false,
+    redirected: false,
+    type: 'basic',
+    url: '',
+    clone: () => ({}) as Response,
+    ...options,
+  } as Response;
+}
+
+function createMockErrorResponse(status: number, error: any): Response {
+  return {
+    ok: false,
+    status,
+    statusText: 'Error',
+    headers: new Headers(),
+    json: async () => error,
+    text: async () => JSON.stringify(error),
+    blob: async () => new Blob(),
+    arrayBuffer: async () => new ArrayBuffer(0),
+    body: null,
+    bodyUsed: false,
+    redirected: false,
+    type: 'basic',
+    url: '',
+    clone: () => ({}) as Response,
+  } as Response;
+}
 
 // Mock console.log for secure logging testing
 const mockConsoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -61,11 +128,20 @@ describe('ConvertKitAdapter Security Tests', () => {
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
           json: async () => ({ id: 'sub_123' }),
-        })
+          text: async () => JSON.stringify({ id: 'sub_123' }),
+        } as Response)
         .mockResolvedValueOnce({
           ok: true,
-        });
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers(),
+          json: async () => ({}),
+          text: async () => JSON.stringify({}),
+        } as Response);
 
       await adapter.subscribe({ email: 'test@example.com', firstName: 'John' }, testFormId);
 
@@ -114,13 +190,8 @@ describe('ConvertKitAdapter Security Tests', () => {
   describe('API Version Security - v4 Usage', () => {
     it('should use ConvertKit v4 API endpoints', async () => {
       mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ id: 'sub_123' }),
-        })
-        .mockResolvedValueOnce({
-          ok: true,
-        });
+        .mockResolvedValueOnce(createMockResponse({ id: 'sub_123' }))
+        .mockResolvedValueOnce(createMockResponse({}));
 
       await adapter.subscribe({ email: 'test@example.com', firstName: 'John' }, testFormId);
 
@@ -149,11 +220,20 @@ describe('ConvertKitAdapter Security Tests', () => {
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
           json: async () => ({ id: 'sub_123' }),
-        })
+          text: async () => JSON.stringify({ id: 'sub_123' }),
+        } as Response)
         .mockResolvedValueOnce({
           ok: true,
-        });
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers(),
+          json: async () => ({}),
+          text: async () => JSON.stringify({}),
+        } as Response);
 
       await adapter.subscribe({ email: 'test@example.com', firstName: 'John' }, testFormId);
 
@@ -174,11 +254,20 @@ describe('ConvertKitAdapter Security Tests', () => {
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
           json: async () => ({ id: 'sub_123' }),
-        })
+          text: async () => JSON.stringify({ id: 'sub_123' }),
+        } as Response)
         .mockResolvedValueOnce({
           ok: true,
-        });
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers(),
+          json: async () => ({}),
+          text: async () => JSON.stringify({}),
+        } as Response);
 
       const result = await adapter.subscribe(
         { email: 'test@example.com', firstName: 'John' },
@@ -228,11 +317,20 @@ describe('ConvertKitAdapter Security Tests', () => {
       mockFetch
         .mockResolvedValueOnce({
           ok: true,
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
           json: async () => ({ id: 'sub_123' }),
-        })
+          text: async () => JSON.stringify({ id: 'sub_123' }),
+        } as Response)
         .mockResolvedValueOnce({
           ok: false,
-        });
+          status: 400,
+          statusText: 'Bad Request',
+          headers: new Headers(),
+          json: async () => ({ error: 'Invalid form' }),
+          text: async () => JSON.stringify({ error: 'Invalid form' }),
+        } as Response);
 
       const result = await adapter.subscribe(
         { email: 'test@example.com', firstName: 'John' },

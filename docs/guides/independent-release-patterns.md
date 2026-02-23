@@ -8,11 +8,11 @@ Modern monorepos often require multiple release channels to serve different audi
 
 Most organizations adopt a three-channel release strategy:
 
-| Channel | Audience | Version Format | Trigger |
-|---------|----------|----------------|---------|
-| **Stable** | Production users | Standard SemVer (e.g., `5.111.0`) | Merging Version Packages PR |
-| **Canary** | Early adopters, integration testing | `0.0.0-canary-YYYYMMDDHHMMSS` | Every push to main |
-| **Snapshot** | PR testing | `0.0.0-snapshot-feature-name` | Comment on PR (`!snapshot name`) |
+| Channel      | Audience                            | Version Format                    | Trigger                          |
+| ------------ | ----------------------------------- | --------------------------------- | -------------------------------- |
+| **Stable**   | Production users                    | Standard SemVer (e.g., `5.111.0`) | Merging Version Packages PR      |
+| **Canary**   | Early adopters, integration testing | `0.0.0-canary-YYYYMMDDHHMMSS`     | Every push to main               |
+| **Snapshot** | PR testing                          | `0.0.0-snapshot-feature-name`     | Comment on PR (`!snapshot name`) |
 
 ## 2. Stable Releases
 
@@ -50,10 +50,11 @@ Stable releases follow the standard Changesets workflow :
 ```
 
 The `changeset publish` command:
+
 - Publishes packages with the `latest` dist-tag
 - Creates git tags for new versions
 - Pushes tags to GitHub
-- Uses npm provenance for secure publishing 
+- Uses npm provenance for secure publishing
 
 ## 3. Canary Releases
 
@@ -67,7 +68,7 @@ Canary versions use timestamp-based identifiers:
 0.0.0-canary-YYYYMMDDHHMMSS
 ```
 
-Example: `@clerk/clerk-js@0.0.0-canary-20250115123456` 
+Example: `@clerk/clerk-js@0.0.0-canary-20250115123456`
 
 ### 3.2 Configuration
 
@@ -83,12 +84,14 @@ In `.changeset/config.json`, configure snapshot settings:
 ```
 
 The `prereleaseTemplate` determines the format:
-- `alpha-{commit}`: `3.0.0-alpha-a1b2c3d` 
-- `canary-{timestamp}`: `3.0.0-canary-20250115123456` 
+
+- `alpha-{commit}`: `3.0.0-alpha-a1b2c3d`
+- `canary-{timestamp}`: `3.0.0-canary-20250115123456`
 
 ### 3.3 2026 Canary Enhancements
 
 **Advanced Canary Features:**
+
 ```json
 {
   "snapshot": {
@@ -101,6 +104,7 @@ The `prereleaseTemplate` determines the format:
 ```
 
 **New 2026 Capabilities:**
+
 - **Intelligent version calculation**: Better dependency resolution for snapshots
 - **Custom templates**: Enhanced template variables and formatting
 - **Selective publishing**: Configure which packages get canary releases
@@ -124,10 +128,10 @@ jobs:
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
-      
+
       - run: npm ci
       - run: npm run build
-      
+
       - name: Canary Release
         run: |
           npx changeset version --snapshot canary
@@ -139,8 +143,8 @@ jobs:
 ### 3.5 Key Differences from Stable
 
 - **`--snapshot` flag**: Generates snapshot version numbers based on the template
-- **`--tag canary`**: Publishes with the `canary` dist-tag instead of `latest` 
-- **No Version Packages PR**: Canary releases happen immediately on push 
+- **`--tag canary`**: Publishes with the `canary` dist-tag instead of `latest`
+- **No Version Packages PR**: Canary releases happen immediately on push
 
 ## 4. Snapshot Releases
 
@@ -157,6 +161,7 @@ Snapshot releases are triggered by commenting on a PR:
 ### 4.2 2026 Snapshot Enhancements
 
 **Enhanced Trigger Options:**
+
 ```bash
 !snapshot feature-name          # Basic snapshot
 !snapshot feature-name --force  # Force override existing
@@ -164,6 +169,7 @@ Snapshot releases are triggered by commenting on a PR:
 ```
 
 **Advanced Features:**
+
 - **Custom version templates**: Per-PR version formatting
 - **Dependency validation**: Ensure snapshot dependencies are valid
 - **Artifact retention**: Configurable retention periods for snapshots
@@ -192,7 +198,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
-      
+
       - name: Parse snapshot name
         id: parse
         run: |
@@ -201,20 +207,20 @@ jobs:
           FLAGS=$(echo "$COMMENT" | cut -d' ' -f3-)
           echo "name=$NAME" >> $GITHUB_OUTPUT
           echo "flags=$FLAGS" >> $GITHUB_OUTPUT
-      
+
       - name: Check permissions
         if: |
           !(github.event.comment.author_association == 'MEMBER' || 
             github.event.comment.author_association == 'OWNER')
         run: exit 1
-      
+
       - name: Create snapshot release
         run: |
           npx changeset version --snapshot ${{ steps.parse.outputs.name }}
           npx changeset publish --tag snapshot ${{ steps.parse.outputs.flags }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+
       - name: Update PR comment
         uses: actions/github-script@v7
         with:
@@ -261,16 +267,17 @@ When a changeset affects a package, Changesets automatically determines which de
 
 **Dependency Resolution Rules:**
 
-| Rule | Description |
-|------|-------------|
-| Direct Dependencies | Package bumped at level X causes direct dependents to bump at level X or higher |
-| Transitive Dependencies | Changes propagate through the dependency tree |
-| Workspace Protocol | Internal dependencies use `workspace:^` in package.json |
-| Version Alignment | All packages maintain compatible version constraints  |
+| Rule                    | Description                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------- |
+| Direct Dependencies     | Package bumped at level X causes direct dependents to bump at level X or higher |
+| Transitive Dependencies | Changes propagate through the dependency tree                                   |
+| Workspace Protocol      | Internal dependencies use `workspace:^` in package.json                         |
+| Version Alignment       | All packages maintain compatible version constraints                            |
 
 ### 5.2 2026 Dependency Enhancements
 
 **Advanced Dependency Management:**
+
 ```json
 {
   "updateInternalDependencies": "patch",
@@ -281,6 +288,7 @@ When a changeset affects a package, Changesets automatically determines which de
 ```
 
 **New Features:**
+
 - **Workspace-only updates**: Restrict internal dependency updates to workspace protocol
 - **Linked packages**: Groups of packages that should always version together
 - **Fixed packages**: Packages that maintain the same version across releases
@@ -304,21 +312,22 @@ The `updateInternalDependencies` setting in `.changeset/config.json` controls th
 
 - `"patch"` (default): Update internal dependencies when the bumped version is at least patch
 - `"minor"`: Update internal dependencies only when the bumped version is at least minor
-- `"major"`: Update internal dependencies only when the bumped version is major 
+- `"major"`: Update internal dependencies only when the bumped version is major
 
 ## 6. 2026 Release Automation Enhancements
 
 ### 6.1 Advanced GitHub Actions Integration
 
 **Enhanced Workflow Features:**
+
 ```yaml
 - name: Enhanced Release
   uses: changesets/action@v1
   with:
     publish: npx changeset publish
     version: npx changeset version
-    commit: "chore: release packages"
-    title: "Version Packages"
+    commit: 'chore: release packages'
+    title: 'Version Packages'
     createGithubReleases: true
     generateReleaseNotes: true
   env:
@@ -327,6 +336,7 @@ The `updateInternalDependencies` setting in `.changeset/config.json` controls th
 ```
 
 **New Capabilities:**
+
 - **Automatic GitHub Releases**: Create GitHub releases with changelogs
 - **Release Notes Generation**: Automated release notes from changesets
 - **Custom Commit Messages**: Configurable commit message formats
@@ -335,15 +345,16 @@ The `updateInternalDependencies` setting in `.changeset/config.json` controls th
 ### 6.2 Multi-Registry Support
 
 **Publish to Multiple Registries:**
+
 ```yaml
 - name: Multi-Registry Publish
   run: |
     # Publish to npm
     npx changeset publish --registry https://registry.npmjs.org
-    
+
     # Publish to GitHub Packages
     npx changeset publish --registry https://npm.pkg.github.com
-    
+
     # Publish to private registry
     npx changeset publish --registry https://npm.company.com
 ```
@@ -351,18 +362,19 @@ The `updateInternalDependencies` setting in `.changeset/config.json` controls th
 ### 6.3 Release Validation
 
 **Enhanced Validation Pipeline:**
+
 ```yaml
 - name: Validate Release
   run: |
     # Check package integrity
     npx changeset pre-enter
-    
+
     # Validate version consistency
     npx changeset status --output=json
-    
+
     # Check for breaking changes
     npx changeset detect-breaking
-    
+
     # Validate dependencies
     npx changeset validate-dependencies
 ```
@@ -371,29 +383,30 @@ The `updateInternalDependencies` setting in `.changeset/config.json` controls th
 
 ### 7.1 Version Strategy
 
-1. **Start with 0.1.0**: Begin initial development at `0.1.0` and increment minor for each release 
-2. **Release 1.0.0 when stable**: If software is in production, it should be `1.0.0` 
-3. **Use pre-release identifiers**: For unstable versions, use `-alpha`, `-beta`, `-rc` suffixes 
+1. **Start with 0.1.0**: Begin initial development at `0.1.0` and increment minor for each release
+2. **Release 1.0.0 when stable**: If software is in production, it should be `1.0.0`
+3. **Use pre-release identifiers**: For unstable versions, use `-alpha`, `-beta`, `-rc` suffixes
 4. **Semantic versioning**: Follow SemVer 2.0.0 specification strictly
 
 ### 7.2 Release Channel Hygiene
 
-| Channel | When to Use | Retention |
-|---------|-------------|-----------|
-| Stable | Merged, reviewed, ready for production | Permanent |
-| Canary | Every commit to main | Overwrite previous |
-| Snapshot | PR testing, on-demand | Ephemeral |
+| Channel  | When to Use                            | Retention          |
+| -------- | -------------------------------------- | ------------------ |
+| Stable   | Merged, reviewed, ready for production | Permanent          |
+| Canary   | Every commit to main                   | Overwrite previous |
+| Snapshot | PR testing, on-demand                  | Ephemeral          |
 
 ### 7.3 Changelog Management
 
 - Group changes by type (Major/Minor/Patch)
 - Link to PRs and commits
 - Credit contributors
-- Include migration notes for breaking changes 
+- Include migration notes for breaking changes
 
 ### 7.4 2026 Best Practices
 
 **Modern Release Management:**
+
 1. **Automated validation**: Use enhanced CI validation for all releases
 2. **Multi-registry support**: Publish to multiple registries when needed
 3. **Security scanning**: Integrate security scans into release pipeline
@@ -415,20 +428,22 @@ This ensures only one release process runs at a time per branch .
 ### 7.6 Monitoring and Observability
 
 **Release Metrics Tracking:**
+
 ```yaml
 - name: Track Release Metrics
   run: |
     # Track release success rates
     npx changeset metrics --output=json
-    
+
     # Monitor package downloads
     npx changeset analytics --period=24h
-    
+
     # Check dependency health
     npx changeset health-check
 ```
 
 **Key Metrics to Monitor:**
+
 - Release success/failure rates
 - Time to publish after version bump
 - Package download rates by channel

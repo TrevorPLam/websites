@@ -37,7 +37,8 @@ with high connection churn — particularly serverless functions, microservices,
 architectures.
 
 **Problems RDS Proxy Solves:**
-- Hundreds of Lambda functions opening/closing connections simultaneously overwhelming `max_connections` 
+
+- Hundreds of Lambda functions opening/closing connections simultaneously overwhelming `max_connections`
 - Connection overhead (TLS handshake, authentication) on short-lived workloads
 - Database failover causing application errors (proxy absorbs failover internally)
 - Secret rotation requiring application restarts (proxy handles transparently)
@@ -78,28 +79,28 @@ architectures.
 
 ## Supported Engines
 
-| Engine | Versions Supported |
-|---|---|
+| Engine                    | Versions Supported     |
+| ------------------------- | ---------------------- |
 | Amazon RDS for PostgreSQL | 13.x, 14.x, 15.x, 16.x |
-| Amazon Aurora PostgreSQL | 13.x, 14.x, 15.x, 16.x |
-| Amazon RDS for MySQL | 5.7.x, 8.0.x |
-| Amazon Aurora MySQL | 5.7.x, 8.0.x |
-| Amazon RDS for MariaDB | 10.5.x, 10.6.x |
+| Amazon Aurora PostgreSQL  | 13.x, 14.x, 15.x, 16.x |
+| Amazon RDS for MySQL      | 5.7.x, 8.0.x           |
+| Amazon Aurora MySQL       | 5.7.x, 8.0.x           |
+| Amazon RDS for MariaDB    | 10.5.x, 10.6.x         |
 
 ---
 
 ## Core Concepts
 
-| Concept | Description |
-|---|---|
-| **Client Connection** | Connection from application to RDS Proxy |
-| **Database Connection** | Connection from RDS Proxy to the actual RDS instance |
-| **Multiplexing** | Multiple client connections share a single database connection |
-| **Connection Pinning** | Client connection bound 1:1 to a DB connection (disables multiplexing) |
-| **Borrow Timeout** | How long a client waits for a DB connection from the pool |
-| **Connection Pool** | The set of pre-established connections to the DB instance |
-| **Target Group** | Configuration for database connections (pool size, timeouts) |
-| **Proxy Endpoint** | The DNS endpoint applications connect to |
+| Concept                 | Description                                                            |
+| ----------------------- | ---------------------------------------------------------------------- |
+| **Client Connection**   | Connection from application to RDS Proxy                               |
+| **Database Connection** | Connection from RDS Proxy to the actual RDS instance                   |
+| **Multiplexing**        | Multiple client connections share a single database connection         |
+| **Connection Pinning**  | Client connection bound 1:1 to a DB connection (disables multiplexing) |
+| **Borrow Timeout**      | How long a client waits for a DB connection from the pool              |
+| **Connection Pool**     | The set of pre-established connections to the DB instance              |
+| **Target Group**        | Configuration for database connections (pool size, timeouts)           |
+| **Proxy Endpoint**      | The DNS endpoint applications connect to                               |
 
 ---
 
@@ -266,11 +267,11 @@ const pool = new Pool({
   port: 5432,
   database: 'production',
   user: 'app_user',
-  password: getIAMToken,  // Function that returns fresh IAM token
-  max: 20,                 // Max client connections (not DB connections)
-  idleTimeoutMillis: 1500000,  // MUST be less than RDS Proxy idle timeout (1800000ms default)
+  password: getIAMToken, // Function that returns fresh IAM token
+  max: 20, // Max client connections (not DB connections)
+  idleTimeoutMillis: 1500000, // MUST be less than RDS Proxy idle timeout (1800000ms default)
   connectionTimeoutMillis: 5000,
-  maxUses: 7500,           // Rotate connections before proxy's 24-hour limit
+  maxUses: 7500, // Rotate connections before proxy's 24-hour limit
 });
 ```
 
@@ -493,7 +494,7 @@ aws cloudwatch get-metric-statistics \
 RDS Proxy provides automatic failover handling:
 
 Primary fails → RDS Proxy detects within seconds
-             → Redirects to new primary automatically  
+             → Redirects to new primary automatically
              → Client connections experience brief pause (~30s), NOT errors
              → No application-level reconnection logic needed
 
@@ -554,17 +555,17 @@ def execute_query(sql: str, params=None, write: bool = False):
 
 ### Essential CloudWatch Metrics
 
-| Metric | Description | Healthy Threshold |
-|---|---|---|
-| `ClientConnections` | Active client-to-proxy connections | < 80% of max |
-| `DatabaseConnections` | Proxy-to-DB connections in use | < `MaxConnectionsPercent` |
-| `MaxDatabaseConnectionsAllowed` | Maximum allowed DB connections | Monitor for changes |
-| `DatabaseConnectionsCurrentlySessionPinned` | Pinned connections | < 10% of total |
-| `QueryDatabaseResponseLatency` | DB response time (ms) | < 100ms p99 |
-| `QueryResponseLatency` | End-to-end proxy response time | < 200ms p99 |
-| `ConnectionBorrowLatency` | Time to get DB connection from pool | < 50ms p95 |
-| `DatabaseConnectionRequests` | Connection requests per second | Trend monitoring |
-| `SQLStatementExecutionTime` | Statement execution time distribution | Set SLA-based alert |
+| Metric                                      | Description                           | Healthy Threshold         |
+| ------------------------------------------- | ------------------------------------- | ------------------------- |
+| `ClientConnections`                         | Active client-to-proxy connections    | < 80% of max              |
+| `DatabaseConnections`                       | Proxy-to-DB connections in use        | < `MaxConnectionsPercent` |
+| `MaxDatabaseConnectionsAllowed`             | Maximum allowed DB connections        | Monitor for changes       |
+| `DatabaseConnectionsCurrentlySessionPinned` | Pinned connections                    | < 10% of total            |
+| `QueryDatabaseResponseLatency`              | DB response time (ms)                 | < 100ms p99               |
+| `QueryResponseLatency`                      | End-to-end proxy response time        | < 200ms p99               |
+| `ConnectionBorrowLatency`                   | Time to get DB connection from pool   | < 50ms p95                |
+| `DatabaseConnectionRequests`                | Connection requests per second        | Trend monitoring          |
+| `SQLStatementExecutionTime`                 | Statement execution time distribution | Set SLA-based alert       |
 
 ### CloudWatch Dashboard Query (boto3)
 
@@ -752,13 +753,13 @@ SET lock_timeout = '2000';        -- Don't wait forever for locks
 
 ## Troubleshooting
 
-| Symptom | Likely Cause | Diagnosis | Fix |
-|---|---|---|---|
-| High `ConnectionBorrowLatency` | Pool exhausted | Check `DatabaseConnections` vs `MaxConnectionsPercent` | Increase `MaxConnectionsPercent` by 20% |
-| `DatabaseConnectionsCurrentlySessionPinned` > 20% | Pinning from SET/temp tables | Review app code for SET commands | Remove SET; use schema-qualified names |
-| `Too many connections` errors | MaxConnectionsPercent too low | CloudWatch: `MaxDatabaseConnectionsAllowed` | Increase `MaxConnectionsPercent` |
-| Intermittent connection drops | Client pool idle timeout > proxy idle timeout | Check pool `idleTimeoutMillis` vs proxy setting | Set client idle < proxy idle - 30s |
-| `SSL required` errors | TLS not configured in client | Check `sslmode` in connection string | Add `sslmode=require` |
-| IAM token expiry errors | Token not refreshed (15min TTL) | Check token generation timestamp | Generate fresh token per connection |
-| Failover taking > 60s | Connection not going through proxy | Verify endpoint is proxy, not direct RDS | Update connection string to proxy endpoint |
-| Borrow timeout on Lambda bursts | Concurrency exceeds pool | Check Lambda concurrency limits | Reduce Lambda reserved concurrency or increase pool |
+| Symptom                                           | Likely Cause                                  | Diagnosis                                              | Fix                                                 |
+| ------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| High `ConnectionBorrowLatency`                    | Pool exhausted                                | Check `DatabaseConnections` vs `MaxConnectionsPercent` | Increase `MaxConnectionsPercent` by 20%             |
+| `DatabaseConnectionsCurrentlySessionPinned` > 20% | Pinning from SET/temp tables                  | Review app code for SET commands                       | Remove SET; use schema-qualified names              |
+| `Too many connections` errors                     | MaxConnectionsPercent too low                 | CloudWatch: `MaxDatabaseConnectionsAllowed`            | Increase `MaxConnectionsPercent`                    |
+| Intermittent connection drops                     | Client pool idle timeout > proxy idle timeout | Check pool `idleTimeoutMillis` vs proxy setting        | Set client idle < proxy idle - 30s                  |
+| `SSL required` errors                             | TLS not configured in client                  | Check `sslmode` in connection string                   | Add `sslmode=require`                               |
+| IAM token expiry errors                           | Token not refreshed (15min TTL)               | Check token generation timestamp                       | Generate fresh token per connection                 |
+| Failover taking > 60s                             | Connection not going through proxy            | Verify endpoint is proxy, not direct RDS               | Update connection string to proxy endpoint          |
+| Borrow timeout on Lambda bursts                   | Concurrency exceeds pool                      | Check Lambda concurrency limits                        | Reduce Lambda reserved concurrency or increase pool |

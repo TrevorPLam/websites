@@ -19,7 +19,7 @@ vi.mock('@repo/infra', () => ({
   withServerSpan: vi.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 
-vi.mock('@repo/infra/context/request-context.server', () => ({
+vi.mock('@repo/infra/context/server', () => ({
   runWithRequestId: vi.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 

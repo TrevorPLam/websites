@@ -1,0 +1,4 @@
+{
+  "extends": "../packages/config/typescript-config/base.json",
+  "compilerOptions": { "outDir": "dist", "rootDir": "src" }
+}

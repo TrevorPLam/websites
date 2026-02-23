@@ -9,8 +9,8 @@ Vercel provides a comprehensive Domains API for programmatically managing custom
 ### 1.1 Using the Vercel SDK
 
 ```typescript
-import { VercelCore as Vercel } from "@vercel/sdk/core.js";
-import { projectsAddProjectDomain } from "@vercel/sdk/funcs/projectsAddProjectDomain.js";
+import { VercelCore as Vercel } from '@vercel/sdk/core.js';
+import { projectsAddProjectDomain } from '@vercel/sdk/funcs/projectsAddProjectDomain.js';
 
 const vercel = new Vercel({
   bearerToken: process.env.VERCEL_TOKEN,
@@ -18,11 +18,11 @@ const vercel = new Vercel({
 
 // The 'idOrName' is your project name in Vercel, for example: 'multi-tenant-app'
 await projectsAddProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
-  teamId: "team_1234",
+  idOrName: 'my-multi-tenant-app',
+  teamId: 'team_1234',
   requestBody: {
     // The tenant's custom domain
-    name: "customacmesite.com",
+    name: 'customacmesite.com',
   },
 });
 ```
@@ -45,18 +45,18 @@ curl -X POST "https://api.vercel.com/v9/projects/my-multi-tenant-app/domains?tea
 ### 2.1 Checking Verification Status
 
 ```typescript
-import { VercelCore as Vercel } from "@vercel/sdk/core.js";
-import { projectsGetProjectDomain } from "@vercel/sdk/funcs/projectsGetProjectDomain.js";
+import { VercelCore as Vercel } from '@vercel/sdk/core.js';
+import { projectsGetProjectDomain } from '@vercel/sdk/funcs/projectsGetProjectDomain.js';
 
 const vercel = new Vercel({
   bearerToken: process.env.VERCEL_TOKEN,
 });
 
-const domain = "customacmesite.com";
+const domain = 'customacmesite.com';
 
 const [domainResponse] = await projectsGetProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
-  teamId: "team_1234",
+  idOrName: 'my-multi-tenant-app',
+  teamId: 'team_1234',
   domain,
 });
 
@@ -71,18 +71,18 @@ if (!verified) {
 ### 2.2 Triggering Manual Verification
 
 ```typescript
-import { VercelCore as Vercel } from "@vercel/sdk/core.js";
-import { projectsVerifyProjectDomain } from "@vercel/sdk/funcs/projectsVerifyProjectDomain.js";
+import { VercelCore as Vercel } from '@vercel/sdk/core.js';
+import { projectsVerifyProjectDomain } from '@vercel/sdk/funcs/projectsVerifyProjectDomain.js';
 
 const vercel = new Vercel({
   bearerToken: process.env.VERCEL_TOKEN,
 });
 
-const domain = "customacmesite.com";
+const domain = 'customacmesite.com';
 
 const [verifyResponse] = await projectsVerifyProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
-  teamId: "team_1234",
+  idOrName: 'my-multi-tenant-app',
+  teamId: 'team_1234',
   domain,
 });
 
@@ -103,20 +103,22 @@ New features in the 2026 Vercel Domains API:
 ```typescript
 // Enhanced domain addition with options
 await projectsAddProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
-  teamId: "team_1234",
+  idOrName: 'my-multi-tenant-app',
+  teamId: 'team_1234',
   requestBody: {
-    name: "customacmesite.com",
-    redirect: "www.customacmesite.com", // Automatic redirect
-    gitBranch: "main", // Branch-specific domains
-    rewrites: [ // Custom rewrites
-      { source: "/old-path", destination: "/new-path" }
-    ]
-  }
+    name: 'customacmesite.com',
+    redirect: 'www.customacmesite.com', // Automatic redirect
+    gitBranch: 'main', // Branch-specific domains
+    rewrites: [
+      // Custom rewrites
+      { source: '/old-path', destination: '/new-path' },
+    ],
+  },
 });
 ```
 
 **New Capabilities:**
+
 - **Automatic redirects**: Configure redirects during domain addition
 - **Branch-specific domains**: Associate domains with specific git branches
 - **Custom rewrites**: Define URL rewriting rules per domain
@@ -125,20 +127,22 @@ await projectsAddProjectDomain(vercel, {
 ### 3.2 Enhanced SSL Management
 
 **Advanced SSL Configuration:**
+
 ```typescript
 // Custom SSL certificate upload
 await projectsUploadProjectCertificate(vercel, {
-  idOrName: "my-multi-tenant-app",
-  domain: "customacmesite.com",
+  idOrName: 'my-multi-tenant-app',
+  domain: 'customacmesite.com',
   requestBody: {
-    cert: "-----BEGIN CERTIFICATE-----\n...",
-    key: "-----BEGIN PRIVATE KEY-----\n...",
-    ca: "-----BEGIN CERTIFICATE-----\n..." // Optional CA bundle
-  }
+    cert: '-----BEGIN CERTIFICATE-----\n...',
+    key: '-----BEGIN PRIVATE KEY-----\n...',
+    ca: '-----BEGIN CERTIFICATE-----\n...', // Optional CA bundle
+  },
 });
 ```
 
 **2026 SSL Features:**
+
 - **Custom certificate upload**: Upload your own SSL certificates
 - **Wildcard certificate support**: Enhanced wildcard SSL management
 - **Automatic renewal**: Improved automatic certificate renewal
@@ -147,12 +151,13 @@ await projectsUploadProjectCertificate(vercel, {
 ### 3.3 Domain Analytics
 
 **Domain Usage Analytics:**
+
 ```typescript
 // Get domain analytics
 const [analytics] = await projectsGetProjectDomainAnalytics(vercel, {
-  idOrName: "my-multi-tenant-app",
-  domain: "customacmesite.com",
-  period: "30d" // 30 days
+  idOrName: 'my-multi-tenant-app',
+  domain: 'customacmesite.com',
+  period: '30d', // 30 days
 });
 
 console.log(`Requests: ${analytics.requests}`);
@@ -167,39 +172,41 @@ console.log(`Unique visitors: ${analytics.uniqueVisitors}`);
 For wildcard domains like `*.acme.com`, Vercel requires using Vercel nameservers to manage DNS challenges for SSL certificates :
 
 1. **Point your domain to Vercel's nameservers**:
-   - `ns1.vercel-dns.com` 
-   - `ns2.vercel-dns.com` 
+   - `ns1.vercel-dns.com`
+   - `ns2.vercel-dns.com`
 
-2. **Add the apex domain** in project settings: `acme.com` 
+2. **Add the apex domain** in project settings: `acme.com`
 
-3. **Add the wildcard domain**: `.acme.com` 
+3. **Add the wildcard domain**: `.acme.com`
 
 Now any `tenant.acme.com` automatically resolves to your Vercel deployment. Vercel issues individual certificates for each subdomain on the fly .
 
 ### 4.2 2026 Wildcard Enhancements
 
 **Advanced Wildcard Features:**
+
 ```typescript
 // Enhanced wildcard configuration
 await projectsAddProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
+  idOrName: 'my-multi-tenant-app',
   requestBody: {
-    name: ".acme.com",
+    name: '.acme.com',
     wildcard: {
-      ssl: "automatic", // or "manual" for custom certificates
-      dns: "managed", // or "delegated" for partial delegation
+      ssl: 'automatic', // or "manual" for custom certificates
+      dns: 'managed', // or "delegated" for partial delegation
       rateLimit: {
         requests: 1000, // Rate limit per subdomain
-        window: "60s"
-      }
-    }
-  }
+        window: '60s',
+      },
+    },
+  },
 });
 ```
 
 **New Capabilities:**
+
 - **Per-subdomain rate limiting**: Configure rate limits for individual subdomains
-- **Partial DNS delegation**: Delegate only _acme-challenge subdomain
+- **Partial DNS delegation**: Delegate only \_acme-challenge subdomain
 - **Custom SSL for wildcards**: Upload custom certificates for wildcard domains
 - **Automatic DNS management**: Enhanced DNS record management
 
@@ -207,16 +214,16 @@ await projectsAddProjectDomain(vercel, {
 
 If you cannot change your apex domain's nameservers, you can delegate only the `_acme-challenge` subdomain :
 
-| Record Type | Name | Value |
-|-------------|------|-------|
-| NS | `_acme-challenge` | `ns1.vercel-dns.com.` |
-| NS | `_acme-challenge` | `ns2.vercel-dns.com.` |
+| Record Type | Name              | Value                 |
+| ----------- | ----------------- | --------------------- |
+| NS          | `_acme-challenge` | `ns1.vercel-dns.com.` |
+| NS          | `_acme-challenge` | `ns2.vercel-dns.com.` |
 
 Then point the wildcard traffic to Vercel with a CNAME record:
 
-| Record Type | Name | Value |
-|-------------|------|-------|
-| CNAME | `*.app.example.com` | `cname.vercel-dns-0.com`  |
+| Record Type | Name                | Value                    |
+| ----------- | ------------------- | ------------------------ |
+| CNAME       | `*.app.example.com` | `cname.vercel-dns-0.com` |
 
 **Important**: This method may prevent other hosting providers from issuing certificates for their service and should only be used if you cannot change your nameservers .
 
@@ -224,15 +231,16 @@ Then point the wildcard traffic to Vercel with a CNAME record:
 
 Vercel automatically provisions and renews SSL certificates for custom domains. The process varies by configuration:
 
-| Configuration | SSL Approach |
-|---------------|--------------|
-| Apex domain with Vercel nameservers | Automatic wildcard certificate |
-| Domain with verification | Domain-specific certificate after verification |
-| Wildcard without full nameservers | Requires `_acme-challenge` delegation |
+| Configuration                       | SSL Approach                                   |
+| ----------------------------------- | ---------------------------------------------- |
+| Apex domain with Vercel nameservers | Automatic wildcard certificate                 |
+| Domain with verification            | Domain-specific certificate after verification |
+| Wildcard without full nameservers   | Requires `_acme-challenge` delegation          |
 
 ### 5.1 2026 SSL Enhancements
 
 **Advanced SSL Features:**
+
 - **Certificate transparency**: Automatic logging to certificate transparency logs
 - **OCSP stapling**: Enhanced OCSP stapling for better performance
 - **HSTS enforcement**: Automatic HSTS header configuration
@@ -243,9 +251,9 @@ Vercel automatically provisions and renews SSL certificates for custom domains. 
 When a tenant cancels or no longer needs their custom domain, remove it from your Vercel account :
 
 ```typescript
-import { VercelCore as Vercel } from "@vercel/sdk/core.js";
-import { projectsRemoveProjectDomain } from "@vercel/sdk/funcs/projectsRemoveProjectDomain.js";
-import { domainsDeleteDomain } from "@vercel/sdk/funcs/domainsDeleteDomain.js";
+import { VercelCore as Vercel } from '@vercel/sdk/core.js';
+import { projectsRemoveProjectDomain } from '@vercel/sdk/funcs/projectsRemoveProjectDomain.js';
+import { domainsDeleteDomain } from '@vercel/sdk/funcs/domainsDeleteDomain.js';
 
 const vercel = new Vercel({
   bearerToken: process.env.VERCEL_TOKEN,
@@ -253,12 +261,12 @@ const vercel = new Vercel({
 
 await Promise.all([
   projectsRemoveProjectDomain(vercel, {
-    idOrName: "my-multi-tenant-app",
-    teamId: "team_1234",
-    domain: "customacmesite.com",
+    idOrName: 'my-multi-tenant-app',
+    teamId: 'team_1234',
+    domain: 'customacmesite.com',
   }),
   domainsDeleteDomain(vercel, {
-    domain: "customacmesite.com",
+    domain: 'customacmesite.com',
   }),
 ]);
 ```
@@ -268,16 +276,17 @@ The first call disassociates the domain from your project, and the second remove
 ### 6.2 2026 Removal Enhancements
 
 **Graceful Domain Removal:**
+
 ```typescript
 // Graceful domain removal with redirect
 await projectsRemoveProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
-  teamId: "team_1234",
-  domain: "customacmesite.com",
+  idOrName: 'my-multi-tenant-app',
+  teamId: 'team_1234',
+  domain: 'customacmesite.com',
   requestBody: {
-    redirect: "platform.default.com", // Temporary redirect
-    gracePeriod: "30d" // 30-day grace period
-  }
+    redirect: 'platform.default.com', // Temporary redirect
+    gracePeriod: '30d', // 30-day grace period
+  },
 });
 ```
 
@@ -288,37 +297,38 @@ await projectsRemoveProjectDomain(vercel, {
 Some tenants want `www.customacmesite.com` to redirect to the apex domain:
 
 1. Add both `customacmesite.com` and `www.customacmesite.com` to your Vercel project
-2. Configure a redirect for `www.customacmesite.com` to the apex domain through the API or Vercel dashboard 
+2. Configure a redirect for `www.customacmesite.com` to the apex domain through the API or Vercel dashboard
 
 ### 7.2 API Configuration
 
 ```typescript
 await projectsAddProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
-  teamId: "team_1234",
+  idOrName: 'my-multi-tenant-app',
+  teamId: 'team_1234',
   requestBody: {
-    name: "www.customacmesite.com",
-    redirect: "customacmesite.com"
-  }
+    name: 'www.customacmesite.com',
+    redirect: 'customacmesite.com',
+  },
 });
 ```
 
 ### 7.3 2026 Redirect Enhancements
 
 **Advanced Redirect Configuration:**
+
 ```typescript
 // Advanced redirect with conditions
 await projectsAddProjectDomain(vercel, {
-  idOrName: "my-multi-tenant-app",
+  idOrName: 'my-multi-tenant-app',
   requestBody: {
-    name: "old.customacmesite.com",
+    name: 'old.customacmesite.com',
     redirect: {
-      destination: "new.customacmesite.com",
+      destination: 'new.customacmesite.com',
       statusCode: 301, // or 302 for temporary
       preservePath: true, // Preserve URL path
-      preserveQuery: true // Preserve query parameters
-    }
-  }
+      preserveQuery: true, // Preserve query parameters
+    },
+  },
 });
 ```
 
@@ -326,22 +336,23 @@ await projectsAddProjectDomain(vercel, {
 
 ### 8.1 Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| DNS propagation delays | Changes can take 24-48 hours; use [WhatsMyDNS](https://whatsmydns.com) to check  |
-| Domain not verified | Add TXT record or switch to Vercel nameservers  |
-| Wildcard SSL not working | Must use Vercel nameservers or delegate `_acme-challenge`  |
-| Subdomain length exceeded | Each DNS label has a 63-character limit; keep branch names concise  |
-| Duplicate content SEO issues | Use canonical tags or redirect to primary domain  |
+| Issue                        | Solution                                                                        |
+| ---------------------------- | ------------------------------------------------------------------------------- |
+| DNS propagation delays       | Changes can take 24-48 hours; use [WhatsMyDNS](https://whatsmydns.com) to check |
+| Domain not verified          | Add TXT record or switch to Vercel nameservers                                  |
+| Wildcard SSL not working     | Must use Vercel nameservers or delegate `_acme-challenge`                       |
+| Subdomain length exceeded    | Each DNS label has a 63-character limit; keep branch names concise              |
+| Duplicate content SEO issues | Use canonical tags or redirect to primary domain                                |
 
 ### 8.2 2026 Troubleshooting Tools
 
 **Enhanced Diagnostics:**
+
 ```typescript
 // Domain health check
 const [health] = await projectsGetProjectDomainHealth(vercel, {
-  idOrName: "my-multi-tenant-app",
-  domain: "customacmesite.com"
+  idOrName: 'my-multi-tenant-app',
+  domain: 'customacmesite.com',
 });
 
 console.log(`DNS Status: ${health.dns.status}`);
@@ -350,6 +361,7 @@ console.log(`Configuration: ${health.config.valid}`);
 ```
 
 **New Diagnostic Features:**
+
 - **Real-time DNS checking**: Instant DNS status verification
 - **SSL certificate validation**: Enhanced certificate validation
 - **Configuration validation**: Automatic configuration error detection
@@ -357,13 +369,13 @@ console.log(`Configuration: ${health.config.valid}`);
 
 ### 8.3 Verification Status Codes
 
-| Status | Description |
-|--------|-------------|
-| `pending` | Domain added, awaiting verification |
-| `verified` | Domain successfully verified |
-| `failed` | Verification failed |
-| `expired` | Certificate expired |
-| `revoked` | Certificate revoked |
+| Status     | Description                         |
+| ---------- | ----------------------------------- |
+| `pending`  | Domain added, awaiting verification |
+| `verified` | Domain successfully verified        |
+| `failed`   | Verification failed                 |
+| `expired`  | Certificate expired                 |
+| `revoked`  | Certificate revoked                 |
 
 ## 9. Best Practices
 
@@ -394,6 +406,7 @@ console.log(`Configuration: ${health.config.valid}`);
 ### 9.4 2026 Best Practices
 
 **Modern Domain Management:**
+
 1. **Use enhanced SDK**: Leverage new SDK features for better functionality
 2. **Implement monitoring**: Use built-in analytics and monitoring
 3. **Automate SSL**: Take advantage of enhanced SSL automation

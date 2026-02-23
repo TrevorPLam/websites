@@ -1,23 +1,22 @@
 {
-  "name": "@repo/vitest-config",
+  "name": "@repo/config-schema",
   "version": "0.0.0",
-  "description": "Shared Vitest configuration for the monorepo",
+  "description": "Zod schemas for site.config.ts validation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "validate:configs": "tsx src/validation.ts"
   },
   "dependencies": {
-    "vitest": "^3.0.0"
+    "zod": "catalog:",
+    "glob": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/jest-axe": "catalog:",
-    "typescript": "catalog:",
-    "jsdom": "catalog:",
-    "@testing-library/jest-dom": "catalog:",
-    "jest-axe": "catalog:"
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   },
   "files": [
     "dist",

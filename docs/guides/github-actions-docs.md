@@ -13,7 +13,7 @@ When workflows run on GitHub-hosted runners, each job starts in a clean virtual 
 ```yaml
 steps:
   - uses: actions/checkout@v4
-  
+
   - name: Cache NPM dependencies
     uses: actions/cache@v4
     with:
@@ -25,32 +25,35 @@ steps:
 
 ### 1.2 Cache Parameters
 
-| Parameter | Description | Required |
-|-----------|-------------|----------|
-| `key` | Unique identifier created when saving and searching for a cache | Yes  |
-| `path` | File path on the runner to cache or search | Yes  |
-| `restore-keys` | Alternative keys to try if the exact key isn't found | No  |
+| Parameter      | Description                                                     | Required |
+| -------------- | --------------------------------------------------------------- | -------- |
+| `key`          | Unique identifier created when saving and searching for a cache | Yes      |
+| `path`         | File path on the runner to cache or search                      | Yes      |
+| `restore-keys` | Alternative keys to try if the exact key isn't found            | No       |
 
 ### 1.3 Cache Key Strategies
 
 **Using hashFiles for lockfile-based keys:**
+
 ```yaml
 key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
 ```
 
 **Including OS and dependency manager:**
+
 ```yaml
 key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 ```
 
 **Multiple fallback keys:**
+
 ```yaml
 restore-keys: |
   ${{ runner.os }}-node-
   ${{ runner.os }}-
 ```
 
-### 1.4 Built-in Caching in setup-* Actions
+### 1.4 Built-in Caching in setup-\* Actions
 
 Many official setup actions include caching options :
 
@@ -58,7 +61,7 @@ Many official setup actions include caching options :
 - uses: actions/setup-node@v4
   with:
     node-version: 20
-    cache: 'npm'  # Automatically caches ~/.npm
+    cache: 'npm' # Automatically caches ~/.npm
 ```
 
 ## 2. 2026 Cache Service Enhancements
@@ -75,22 +78,25 @@ GitHub Actions has completely rewritten the cache backend service for improved p
 ### 2.2 Version Requirements
 
 **Important changes:**
+
 - `actions/cache@v5` requires Node.js 24 runtime and Actions Runner 2.327.1+
 - Legacy service sunset on February 1, 2025
 - Upgrade to v4.2.0 or v3.4.0 for pinned SHAs
 
 **Migration example:**
+
 ```yaml
 # Before
 - uses: actions/cache@v3
 
-# After  
+# After
 - uses: actions/cache@v5
 ```
 
 ### 2.3 Enhanced Cache Features
 
 **Granular cache control:**
+
 ```yaml
 # Separate restore and save actions
 - uses: actions/cache/restore@v4
@@ -108,21 +114,23 @@ GitHub Actions has completely rewritten the cache backend service for improved p
 ```
 
 **Cross-OS caching:**
+
 ```yaml
 - uses: actions/cache@v4
   with:
     path: ~/.npm
     key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-    enableCrossOs: true  # Opt-in feature for cross-OS sharing
+    enableCrossOs: true # Opt-in feature for cross-OS sharing
 ```
 
 **Fail on cache miss:**
+
 ```yaml
 - uses: actions/cache/restore@v4
   with:
     path: ~/.npm
     key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-    fail-on-cache-miss: true  # Exit workflow if cache miss occurs
+    fail-on-cache-miss: true # Exit workflow if cache miss occurs
 ```
 
 ## 3. Passing Artifacts Between Jobs
@@ -137,13 +145,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Hello World" > file.txt
-      
+
       - uses: actions/upload-artifact@v4
         with:
           name: my-artifact
           path: file.txt
-          retention-days: 5  # Optional: days to keep artifact
-          compression-level: 6  # Optional: compression level (0-9)
+          retention-days: 5 # Optional: days to keep artifact
+          compression-level: 6 # Optional: compression level (0-9)
 ```
 
 ### 3.2 Downloading Artifacts in Dependent Jobs
@@ -161,39 +169,41 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: build  # Waits for build job to complete
+    needs: build # Waits for build job to complete
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: file
-      
+
       - run: cat file.txt
 ```
 
 ### 3.3 Advanced Artifact Patterns
 
 **Download multiple artifacts with pattern matching:**
+
 ```yaml
 - uses: actions/download-artifact@v4
   with:
     path: artifacts/
-    pattern: test-results-*  # Download all matching artifacts
-    merge-multiple: true      # Merge into one directory
+    pattern: test-results-* # Download all matching artifacts
+    merge-multiple: true # Merge into one directory
 ```
 
 **Artifact expiration and cleanup:**
+
 ```yaml
 - uses: actions/upload-artifact@v4
   with:
     name: build-results
     path: dist/
-    retention-days: 30  # Custom retention period
-    if-no-files-found: warn  # Behavior when no files found
+    retention-days: 30 # Custom retention period
+    if-no-files-found: warn # Behavior when no files found
 ```
 
 ### 3.4 Artifact Lifecycle
 
-- Artifacts are **tied to a specific workflow run** 
+- Artifacts are **tied to a specific workflow run**
 - Visible in the GitHub Actions UI under the run summary
 - Can be downloaded manually by users
 - Automatically expire after retention period (default: 90 days)
@@ -204,10 +214,10 @@ jobs:
 
 Set repository secrets to enable detailed logging :
 
-| Secret | Purpose |
-|--------|---------|
+| Secret                 | Purpose                          |
+| ---------------------- | -------------------------------- |
 | `ACTIONS_RUNNER_DEBUG` | Enable runner diagnostic logging |
-| `ACTIONS_STEP_DEBUG` | Enable step diagnostic logging |
+| `ACTIONS_STEP_DEBUG`   | Enable step diagnostic logging   |
 
 Both secrets require `true` as their value and need admin access to set.
 
@@ -217,7 +227,7 @@ Both secrets require `true` as their value and need admin access to set.
 2. Select the workflow
 3. Choose the specific workflow run
 4. Click on a job to view its logs
-5. Expand individual steps for detailed output 
+5. Expand individual steps for detailed output
 
 **Filtering failed runs:**
 Use the Status filter after selecting a workflow to show only failed runs .
@@ -234,6 +244,7 @@ Anyone with read access can use this endpoint. For private repositories, use a t
 ### 4.4 Advanced Debugging Features
 
 **Workflow timing visualization:**
+
 ```yaml
 # Enable timing information
 name: CI with Timing
@@ -250,13 +261,14 @@ jobs:
 ```
 
 **Step-level debugging:**
+
 ```yaml
 - name: Debug step
   run: |
     echo "Runner OS: ${{ runner.os }}"
     echo "Runner Arch: ${{ runner.arch }}"
     echo "Workspace: ${{ github.workspace }}"
-  if: always()  # Run even if previous steps fail
+  if: always() # Run even if previous steps fail
 ```
 
 ## 5. GitHub App Authentication
@@ -281,6 +293,7 @@ git clone https://x-access-token:TOKEN@github.com/owner/repo.git
 ```
 
 Requirements:
+
 - App must have `Contents` repository permission
 - Token replaces password in HTTPS URL
 
@@ -297,6 +310,7 @@ GitHub Actions' pricing changes in 2026 make caching crucial for cost management
 ### 6.2 Cost Optimization Strategies
 
 **Effective caching:**
+
 ```yaml
 - name: Cache dependencies
   uses: actions/cache@v5
@@ -310,16 +324,18 @@ GitHub Actions' pricing changes in 2026 make caching crucial for cost management
 ```
 
 **Artifact optimization:**
+
 ```yaml
 - uses: actions/upload-artifact@v4
   with:
     name: build-artifacts
     path: dist/
-    retention-days: 7  # Shorter retention to reduce costs
-    compression-level: 9  # Maximum compression
+    retention-days: 7 # Shorter retention to reduce costs
+    compression-level: 9 # Maximum compression
 ```
 
 **Parallel job optimization:**
+
 ```yaml
 jobs:
   test:
@@ -339,7 +355,7 @@ jobs:
 1. **Use specific keys**: Include lockfile hashes to invalidate cache on dependency changes
 2. **Provide restore-keys**: Allow partial cache matches when exact key misses
 3. **Cache only what's necessary**: Avoid caching large, frequently changing files
-4. **Leverage built-in caching**: Use `cache` parameter in setup actions when available 
+4. **Leverage built-in caching**: Use `cache` parameter in setup actions when available
 5. **Upgrade to v5**: Use latest cache action for improved performance
 
 ### 7.2 Artifact Management
@@ -347,7 +363,7 @@ jobs:
 1. **Set retention periods**: Use `retention-days` to automatically clean up old artifacts
 2. **Use meaningful names**: Artifact names should clearly identify their content
 3. **Consider storage limits**: GitHub provides limited artifact storage; clean up when possible
-4. **Use needs for dependencies**: Ensure jobs requiring artifacts wait for upload jobs 
+4. **Use needs for dependencies**: Ensure jobs requiring artifacts wait for upload jobs
 5. **Optimize compression**: Use appropriate compression levels for different artifact types
 
 ### 7.3 Debugging Strategy

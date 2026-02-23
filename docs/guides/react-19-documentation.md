@@ -51,9 +51,10 @@ updates. They replace the need for manual `isPending`, `isError`, `isSuccess` st
 ### What Makes a Function an "Action"
 
 Any function passed to `startTransition` is an Action. Actions:
+
 - Run in a transition (non-blocking)
 - Automatically manage pending state
-- Support async operations including `fetch()` 
+- Support async operations including `fetch()`
 - Integrate with form elements natively
 
 ### startTransition with Async Actions
@@ -296,13 +297,13 @@ export async function createPost(formData: FormData) {
 
 ### Directives
 
-| Directive | File/Function | Meaning |
-|---|---|---|
-| `'use client'` | Top of file | Everything below runs on client |
-| `'use server'` | Top of file or function | Server Action — callable from client |
-| `'use cache'` | Top of file or function | Cache this component/function (Next.js 16) |
-| `'use memo'` | Top of function | Opt into React Compiler (annotation mode) |
-| `'use no memo'` | Top of function | Opt out of React Compiler |
+| Directive       | File/Function           | Meaning                                    |
+| --------------- | ----------------------- | ------------------------------------------ |
+| `'use client'`  | Top of file             | Everything below runs on client            |
+| `'use server'`  | Top of file or function | Server Action — callable from client       |
+| `'use cache'`   | Top of file or function | Cache this component/function (Next.js 16) |
+| `'use memo'`    | Top of function         | Opt into React Compiler (annotation mode)  |
+| `'use no memo'` | Top of function         | Opt out of React Compiler                  |
 
 ---
 
@@ -429,6 +430,7 @@ function App() {
 ## React 19.1 (June 2025)
 
 Key additions in React 19.1:
+
 - **Owner Stacks** — Improved error reporting with component owner information in stack traces
 - Improved hot reload stability
 - Performance improvements for concurrent features
@@ -439,17 +441,17 @@ Key additions in React 19.1:
 
 ### Summary of New Features
 
-| Feature | Category | Description |
-|---|---|---|
-| `<Activity>` | Core | Control visibility and priority of UI subtrees |
-| `useEffectEvent` | Core | Extract non-reactive logic from Effects |
-| `cacheSignal` | RSC | Abort signals for `cache()` function cleanup |
-| View Transitions | DOM | Animate route/state transitions declaratively |
-| Performance Tracks | DevTools | Chrome DevTools React scheduler + component tracks |
-| Partial Pre-rendering | DOM | `prerender`/`resume`/`resumeAndPrerender` APIs |
-| Web Streams for Node | DOM | `renderToReadableStream` available on Node.js |
-| `eslint-plugin-react-hooks@6` | Tooling | Flat config default; compiler rules in `recommended` |
-| `useId` prefix change | Core | Updated to `_r_` for View Transition compatibility |
+| Feature                       | Category | Description                                          |
+| ----------------------------- | -------- | ---------------------------------------------------- |
+| `<Activity>`                  | Core     | Control visibility and priority of UI subtrees       |
+| `useEffectEvent`              | Core     | Extract non-reactive logic from Effects              |
+| `cacheSignal`                 | RSC      | Abort signals for `cache()` function cleanup         |
+| View Transitions              | DOM      | Animate route/state transitions declaratively        |
+| Performance Tracks            | DevTools | Chrome DevTools React scheduler + component tracks   |
+| Partial Pre-rendering         | DOM      | `prerender`/`resume`/`resumeAndPrerender` APIs       |
+| Web Streams for Node          | DOM      | `renderToReadableStream` available on Node.js        |
+| `eslint-plugin-react-hooks@6` | Tooling  | Flat config default; compiler rules in `recommended` |
+| `useId` prefix change         | Core     | Updated to `_r_` for View Transition compatibility   |
 
 ---
 
@@ -481,6 +483,7 @@ function TabLayout({ activeTab }: { activeTab: 'feed' | 'profile' | 'notificatio
 ```
 
 **`hidden` mode behavior:**
+
 - Hides children (`display: none`)
 - Unmounts effects
 - Defers all updates until React is idle
@@ -488,6 +491,7 @@ function TabLayout({ activeTab }: { activeTab: 'feed' | 'profile' | 'notificatio
 - **State is preserved** — navigating back restores previous state
 
 **`visible` mode behavior:**
+
 - Shows children normally
 - Mounts effects
 - Processes updates with normal priority
@@ -504,17 +508,18 @@ import { useEffect, useEffectEvent } from 'react';
 function AnalyticsTracker({ page, userId }: { page: string; userId: string }) {
   // Effect Event: always reads latest userId, but never re-triggers the Effect
   const onPageView = useEffectEvent(() => {
-    analytics.track('page_view', { page, userId });  // Latest userId always
+    analytics.track('page_view', { page, userId }); // Latest userId always
   });
 
   useEffect(() => {
     // Only runs when 'page' changes — not when 'userId' changes
     onPageView();
-  }, [page]);  // ✅ No need to include userId as dependency
+  }, [page]); // ✅ No need to include userId as dependency
 }
 ```
 
 **Rules for useEffectEvent:**
+
 - Cannot be passed to other components or hooks
 - Can only be called from within an Effect
 - Must not appear in the dependency array
@@ -571,7 +576,8 @@ React 19.2 adds custom tracks to **Chrome DevTools Performance** panel:
 ### Scheduler Track (⚛)
 
 Shows:
-- Work by priority: `blocking` (user interactions), `transition` (startTransition), `idle` 
+
+- Work by priority: `blocking` (user interactions), `transition` (startTransition), `idle`
 - Event that scheduled an update
 - When render happened
 - When an update was blocked waiting for a different priority
@@ -580,6 +586,7 @@ Shows:
 ### Components Track (⚛)
 
 Shows:
+
 - Component tree being rendered
 - `Mount` labels when children mount or effects fire
 - `Blocked` labels when rendering yields to other work
@@ -679,12 +686,12 @@ export default defineConfig([
 
 ### New Compiler-Powered Lint Rules (in `recommended`)
 
-| Rule | What it catches |
-|---|---|
+| Rule                                             | What it catches                                |
+| ------------------------------------------------ | ---------------------------------------------- |
 | `react-hooks/react-compiler/set-state-in-render` | `setState` called during render (causes loops) |
-| `react-hooks/react-compiler/set-state-in-effect` | Expensive synchronous work inside effects |
-| `react-hooks/react-compiler/refs` | Unsafe ref access during render |
-| `react-hooks/exhaustive-deps` | Missing or extra Effect dependencies |
+| `react-hooks/react-compiler/set-state-in-effect` | Expensive synchronous work inside effects      |
+| `react-hooks/react-compiler/refs`                | Unsafe ref access during render                |
+| `react-hooks/exhaustive-deps`                    | Missing or extra Effect dependencies           |
 
 ### Removing eslint-plugin-react-compiler
 
@@ -710,15 +717,15 @@ npm install --save-dev @types/react@latest @types/react-dom@latest
 
 ### Breaking Changes from React 18 → 19
 
-| Change | Migration |
-|---|---|
-| `ReactDOM.render()` removed | Use `ReactDOM.createRoot()` |
-| `ReactDOM.hydrate()` removed | Use `ReactDOM.hydrateRoot()` |
-| Legacy Context API removed | Use `React.createContext()` |
-| `act()` no longer exported from `react-dom/test-utils` | Import from `react` directly |
-| `ref` as a prop (forwardRef) | Still works; forwardRef deprecated but not removed |
-| `useDeferredValue` initial value | Now required as second parameter |
-| Strict Mode double-invoking | Now also double-invokes ref callbacks |
+| Change                                                 | Migration                                          |
+| ------------------------------------------------------ | -------------------------------------------------- |
+| `ReactDOM.render()` removed                            | Use `ReactDOM.createRoot()`                        |
+| `ReactDOM.hydrate()` removed                           | Use `ReactDOM.hydrateRoot()`                       |
+| Legacy Context API removed                             | Use `React.createContext()`                        |
+| `act()` no longer exported from `react-dom/test-utils` | Import from `react` directly                       |
+| `ref` as a prop (forwardRef)                           | Still works; forwardRef deprecated but not removed |
+| `useDeferredValue` initial value                       | Now required as second parameter                   |
+| Strict Mode double-invoking                            | Now also double-invokes ref callbacks              |
 
 ---
 
@@ -741,8 +748,8 @@ npm install --save-dev @types/react@latest @types/react-dom@latest
 
 ### Effects
 
-10. **Use `useEffectEvent` to silence lint warnings correctly** — never suppress `exhaustive-deps` 
-11. **Never suppress `exhaustive-deps` manually** — it indicates a missing `useEffectEvent` 
+10. **Use `useEffectEvent` to silence lint warnings correctly** — never suppress `exhaustive-deps`
+11. **Never suppress `exhaustive-deps` manually** — it indicates a missing `useEffectEvent`
 12. **View Transitions for navigation** — use `addTransitionType` for directional animations
 
 ### Performance

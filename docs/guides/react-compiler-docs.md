@@ -36,6 +36,7 @@ calls by analyzing your component's data flow and generating precisely scoped me
 compile time.
 
 **Key characteristics:**
+
 - Zero runtime overhead — memoization decisions made at build time
 - Compatible with React 17, 18, and 19+
 - Works with React Native
@@ -44,6 +45,7 @@ compile time.
 - Stable v1.0 released October 7, 2025 alongside React Conf 2025
 
 **What the compiler does NOT do:**
+
 - It does not run your components at build time
 - It does not replace Suspense, Server Components, or Actions
 - It does not change how you write React — you write the same idiomatic code
@@ -129,6 +131,7 @@ npx react-compiler-healthcheck@latest
 ```
 
 This tool checks:
+
 - Whether your codebase is compatible
 - How many components can be compiled
 - Whether you're on a supported React version
@@ -147,7 +150,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   // OR for incremental adoption:
   reactCompiler: {
-    compilationMode: 'annotation',  // Only compile files with 'use memo'
+    compilationMode: 'annotation', // Only compile files with 'use memo'
   },
 };
 
@@ -174,9 +177,12 @@ export default defineConfig({
     react({
       babel: {
         plugins: [
-          ['babel-plugin-react-compiler', {
-            target: '19',  // '17' | '18' | '19'
-          }],
+          [
+            'babel-plugin-react-compiler',
+            {
+              target: '19', // '17' | '18' | '19'
+            },
+          ],
         ],
       },
     }),
@@ -203,9 +209,7 @@ export default defineConfig({
       filter: /\.[jt]sx?$/,
       babelConfig: {
         presets: ['@babel/preset-typescript'],
-        plugins: [
-          ['babel-plugin-react-compiler', { target: '19' }],
-        ],
+        plugins: [['babel-plugin-react-compiler', { target: '19' }]],
       },
     }),
   ],
@@ -228,9 +232,7 @@ module.exports = function (api) {
   api.cache(true);
   return {
     presets: ['babel-preset-expo'],
-    plugins: [
-      ['babel-plugin-react-compiler', { target: '18' }],
-    ],
+    plugins: [['babel-plugin-react-compiler', { target: '18' }]],
   };
 };
 ```
@@ -244,13 +246,13 @@ npm install --save-dev babel-plugin-react-compiler@latest
 ```javascript
 // babel.config.js
 const ReactCompilerConfig = {
-  target: '19',  // '17' | '18' | '19'
+  target: '19', // '17' | '18' | '19'
 };
 
 module.exports = function () {
   return {
     plugins: [
-      ['babel-plugin-react-compiler', ReactCompilerConfig],  // MUST RUN FIRST
+      ['babel-plugin-react-compiler', ReactCompilerConfig], // MUST RUN FIRST
       // ... other plugins after
     ],
   };
@@ -384,11 +386,11 @@ const nextConfig = {
 
 ## Compilation Modes
 
-| Mode | Config | Behavior |
-|---|---|---|
-| **off** | `reactCompiler: false` or omitted | Compiler disabled |
-| **global** | `reactCompiler: true` | All components compiled |
-| **annotation** | `compilationMode: 'annotation'` | Only files/functions with `'use memo'` compiled |
+| Mode           | Config                            | Behavior                                        |
+| -------------- | --------------------------------- | ----------------------------------------------- |
+| **off**        | `reactCompiler: false` or omitted | Compiler disabled                               |
+| **global**     | `reactCompiler: true`             | All components compiled                         |
+| **annotation** | `compilationMode: 'annotation'`   | Only files/functions with `'use memo'` compiled |
 
 ```typescript
 // Annotation mode configuration
@@ -472,7 +474,7 @@ const ReactCompilerConfig = {
 
   // Enable strict mode (errors instead of skipping problematic code)
   // Default: false
-  panicThreshold: 'NONE',  // 'NONE' | 'CRITICAL_ERRORS' | 'ALL_ERRORS'
+  panicThreshold: 'NONE', // 'NONE' | 'CRITICAL_ERRORS' | 'ALL_ERRORS'
 
   // Runtime import (for React <19 compatibility)
   // Required when target is '17' or '18'
@@ -487,10 +489,7 @@ const ReactCompilerConfig = {
 const ReactCompilerConfig = {
   sources: (filename) => {
     // Only compile packages that have been audited
-    return (
-      filename.includes('/packages/ui/') ||
-      filename.includes('/packages/features/')
-    );
+    return filename.includes('/packages/ui/') || filename.includes('/packages/features/');
   },
 };
 ```
@@ -508,7 +507,7 @@ npm install react-compiler-runtime
 ```typescript
 // babel.config.js
 const ReactCompilerConfig = {
-  target: '18',  // or '17'
+  target: '18', // or '17'
   // runtimeModule auto-detected from react-compiler-runtime
 };
 ```
@@ -526,27 +525,24 @@ compiler's generated memoization code.
 
 ### Detailed Guidance
 
-| Code | Recommendation |
-|---|---|
-| `useMemo` for complex computation | **Compiler takes over.** Can remove after validating with tests. |
-| `useCallback` for stable callbacks | **Compiler takes over.** Can remove after validating. |
-| `React.memo` on components | **Compiler takes over.** Can remove after validating. |
-| `useMemo` for `useEffect` dependency stability | **Keep as escape hatch** — compiler may or may not memoize the same way |
-| Manual memoization of third-party library inputs | **Keep** — third-party libraries may depend on reference equality |
+| Code                                             | Recommendation                                                          |
+| ------------------------------------------------ | ----------------------------------------------------------------------- |
+| `useMemo` for complex computation                | **Compiler takes over.** Can remove after validating with tests.        |
+| `useCallback` for stable callbacks               | **Compiler takes over.** Can remove after validating.                   |
+| `React.memo` on components                       | **Compiler takes over.** Can remove after validating.                   |
+| `useMemo` for `useEffect` dependency stability   | **Keep as escape hatch** — compiler may or may not memoize the same way |
+| Manual memoization of third-party library inputs | **Keep** — third-party libraries may depend on reference equality       |
 
 ```typescript
 // BEFORE compiler
-const filteredItems = useMemo(
-  () => items.filter((item) => item.active),
-  [items]
-);
+const filteredItems = useMemo(() => items.filter((item) => item.active), [items]);
 const handleClick = useCallback(() => onSelect(id), [onSelect, id]);
 const MemoizedCard = React.memo(Card);
 
 // AFTER compiler (compiler handles above automatically)
 // These are now redundant but still work — remove gradually with testing
-const filteredItems = items.filter((item) => item.active);  // Compiler memoizes this
-const handleClick = () => onSelect(id);                      // Compiler memoizes this
+const filteredItems = items.filter((item) => item.active); // Compiler memoizes this
+const handleClick = () => onSelect(id); // Compiler memoizes this
 // React.memo wrapper can be removed; component is auto-memoized
 ```
 
@@ -564,6 +560,7 @@ npx react-compiler-healthcheck@latest
 ```
 
 Output includes:
+
 - Number of components that can be compiled out of total
 - Violations of Rules of React found
 - Recommended next steps
@@ -574,6 +571,7 @@ Address all errors from `eslint-plugin-react-hooks` `recommended` preset before 
 compiler. The compiler cannot correctly optimize code that breaks the Rules of React.
 
 Key rules to verify:
+
 - `react-hooks/rules-of-hooks` — Hooks called at top level only
 - `react-hooks/exhaustive-deps` — All effect dependencies declared
 - `react-hooks/react-compiler/set-state-in-render` — No setState during render
@@ -583,7 +581,9 @@ Key rules to verify:
 
 ```typescript
 // next.config.ts or babel.config.js
-reactCompiler: { compilationMode: 'annotation' }
+reactCompiler: {
+  compilationMode: 'annotation';
+}
 ```
 
 Start with the most performance-critical, well-tested components. Add `'use memo'` progressively.
@@ -592,6 +592,7 @@ Start with the most performance-critical, well-tested components. Add `'use memo
 
 Before going global, run your test suite with annotation mode enabled on your entire component
 library. Watch for:
+
 - `useEffect` firing more or fewer times than expected
 - Values that were previously stable references becoming unstable
 - Third-party components that expect reference equality
@@ -599,7 +600,7 @@ library. Watch for:
 ### Step 5: Enable Globally
 
 ```typescript
-reactCompiler: true
+reactCompiler: true;
 ```
 
 ### Step 6: Monitor in Production
@@ -622,6 +623,7 @@ npm install next@latest  # 15.3.1+ includes improved swc integration
 ```
 
 When the SWC plugin stabilizes, migration will be:
+
 ```javascript
 // Future: vite.config.ts with oxc/rolldown
 import reactCompiler from '@react-compiler/plugin-oxc';
@@ -653,3 +655,4 @@ import reactHooks from 'eslint-plugin-react-hooks';
 
 export defaul
 
+```

@@ -31,6 +31,7 @@ text by replacing literal values with placeholders, enabling teams to identify s
 patterns rather than one-off outliers.
 
 **What it tracks:**
+
 - Total and mean execution time (planning + execution)
 - Call count per query pattern
 - Row counts returned/affected
@@ -102,30 +103,30 @@ GRANT EXECUTE ON FUNCTION pg_stat_statements_reset() TO dba_role;
 
 Key columns in `pg_stat_statements` (PostgreSQL 14+):
 
-| Column | Type | Description |
-|---|---|---|
-| `userid` | OID | User who executed the query |
-| `dbid` | OID | Database where query was executed |
-| `queryid` | BIGINT | Stable hash identifier for query pattern |
-| `query` | TEXT | Normalized query text (literals replaced with $1, $2...) |
-| `calls` | BIGINT | Number of times query was executed |
-| `total_exec_time` | FLOAT8 | Total execution time (ms) |
-| `mean_exec_time` | FLOAT8 | Average execution time (ms) |
-| `stddev_exec_time` | FLOAT8 | Standard deviation of execution time |
-| `min_exec_time` | FLOAT8 | Minimum execution time (ms) |
-| `max_exec_time` | FLOAT8 | Maximum execution time (ms) |
-| `total_plan_time` | FLOAT8 | Total planning time (ms) — PG13+ |
-| `rows` | BIGINT | Total rows retrieved or affected |
-| `shared_blks_hit` | BIGINT | Shared buffer cache hits |
-| `shared_blks_read` | BIGINT | Blocks read from disk |
-| `shared_blks_written` | BIGINT | Blocks written |
-| `temp_blks_read` | BIGINT | Temp block reads (indicates sort/hash spills) |
-| `temp_blks_written` | BIGINT | Temp block writes |
-| `blk_read_time` | FLOAT8 | Time spent reading blocks (ms) — requires `track_io_timing` |
-| `blk_write_time` | FLOAT8 | Time spent writing blocks (ms) |
-| `wal_records` | BIGINT | WAL records generated — PG13+ |
-| `wal_bytes` | BIGINT | WAL bytes generated — PG13+ |
-| `jit_functions` | BIGINT | JIT compiled functions — PG15+ |
+| Column                | Type   | Description                                                 |
+| --------------------- | ------ | ----------------------------------------------------------- |
+| `userid`              | OID    | User who executed the query                                 |
+| `dbid`                | OID    | Database where query was executed                           |
+| `queryid`             | BIGINT | Stable hash identifier for query pattern                    |
+| `query`               | TEXT   | Normalized query text (literals replaced with $1, $2...)    |
+| `calls`               | BIGINT | Number of times query was executed                          |
+| `total_exec_time`     | FLOAT8 | Total execution time (ms)                                   |
+| `mean_exec_time`      | FLOAT8 | Average execution time (ms)                                 |
+| `stddev_exec_time`    | FLOAT8 | Standard deviation of execution time                        |
+| `min_exec_time`       | FLOAT8 | Minimum execution time (ms)                                 |
+| `max_exec_time`       | FLOAT8 | Maximum execution time (ms)                                 |
+| `total_plan_time`     | FLOAT8 | Total planning time (ms) — PG13+                            |
+| `rows`                | BIGINT | Total rows retrieved or affected                            |
+| `shared_blks_hit`     | BIGINT | Shared buffer cache hits                                    |
+| `shared_blks_read`    | BIGINT | Blocks read from disk                                       |
+| `shared_blks_written` | BIGINT | Blocks written                                              |
+| `temp_blks_read`      | BIGINT | Temp block reads (indicates sort/hash spills)               |
+| `temp_blks_written`   | BIGINT | Temp block writes                                           |
+| `blk_read_time`       | FLOAT8 | Time spent reading blocks (ms) — requires `track_io_timing` |
+| `blk_write_time`      | FLOAT8 | Time spent writing blocks (ms)                              |
+| `wal_records`         | BIGINT | WAL records generated — PG13+                               |
+| `wal_bytes`           | BIGINT | WAL bytes generated — PG13+                                 |
+| `jit_functions`       | BIGINT | JIT compiled functions — PG15+                              |
 
 ---
 
@@ -493,18 +494,18 @@ ORDER BY regression_ms DESC;
 
 ## pg_stat_statements vs pg_stat_monitor
 
-| Feature | pg_stat_statements | pg_stat_monitor (PGDG) |
-|---|---|---|
-| Basic query stats | ✅ | ✅ |
-| Planning time tracking | ✅ (PG13+) | ✅ |
-| Histogram of response times | ❌ | ✅ |
-| Per-bucket time windows | ❌ | ✅ |
-| Query plan details | ❌ | ✅ |
-| Tables accessed per query | ❌ | ✅ |
-| Caller info (application name) | ❌ | ✅ |
-| JIT stats | ✅ (PG15+) | ✅ |
-| Setup complexity | Low | Medium |
-| Overhead | Minimal | Low |
+| Feature                        | pg_stat_statements | pg_stat_monitor (PGDG) |
+| ------------------------------ | ------------------ | ---------------------- |
+| Basic query stats              | ✅                 | ✅                     |
+| Planning time tracking         | ✅ (PG13+)         | ✅                     |
+| Histogram of response times    | ❌                 | ✅                     |
+| Per-bucket time windows        | ❌                 | ✅                     |
+| Query plan details             | ❌                 | ✅                     |
+| Tables accessed per query      | ❌                 | ✅                     |
+| Caller info (application name) | ❌                 | ✅                     |
+| JIT stats                      | ✅ (PG15+)         | ✅                     |
+| Setup complexity               | Low                | Medium                 |
+| Overhead                       | Minimal            | Low                    |
 
 > **Recommendation:** Use `pg_stat_statements` as baseline; add `pg_stat_monitor` for
 > production multi-tenant environments requiring histogram and per-tenant bucket analysis.

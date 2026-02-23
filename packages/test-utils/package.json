@@ -1,23 +1,23 @@
 {
-  "name": "@repo/vitest-config",
+  "name": "@repo/test-utils",
   "version": "0.0.0",
-  "description": "Shared Vitest configuration for the monorepo",
+  "description": "Shared test utilities for the monorepo",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "vitest run"
   },
   "dependencies": {
-    "vitest": "^3.0.0"
+    "vitest": "catalog:",
+    "msw": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/jest-dom": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/jest-axe": "catalog:",
-    "typescript": "catalog:",
-    "jsdom": "catalog:",
-    "@testing-library/jest-dom": "catalog:",
-    "jest-axe": "catalog:"
+    "typescript": "catalog:"
   },
   "files": [
     "dist",

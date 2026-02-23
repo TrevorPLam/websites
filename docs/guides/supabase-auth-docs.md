@@ -75,6 +75,7 @@ Every Supabase Auth JWT contains:
 ```
 
 **OAuth-specific additional claims:**
+
 ```json
 {
   "client_id": "9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d"
@@ -176,14 +177,14 @@ const { data, error } = await supabase.auth.signUp({
   email: 'user@example.com',
   password: 'secure-password',
   options: {
-    data: { full_name: 'Jane Doe' }  // Stored in user_metadata
-  }
+    data: { full_name: 'Jane Doe' }, // Stored in user_metadata
+  },
 });
 
 // Sign in
 const { data, error } = await supabase.auth.signInWithPassword({
   email: 'user@example.com',
-  password: 'secure-password'
+  password: 'secure-password',
 });
 ```
 
@@ -205,8 +206,8 @@ await supabase.auth.signInWithOAuth({
   provider: 'google',
   options: {
     redirectTo: 'https://yourapp.com/auth/callback',
-    scopes: 'openid profile email'
-  }
+    scopes: 'openid profile email',
+  },
 });
 ```
 
@@ -214,14 +215,24 @@ await supabase.auth.signInWithOAuth({
 
 ```typescript
 // Get current session
-const { data: { session } } = await supabase.auth.getSession();
+const {
+  data: { session },
+} = await supabase.auth.getSession();
 
 // Subscribe to auth state changes
 supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN') { /* handle login */ }
-  if (event === 'SIGNED_OUT') { /* handle logout */ }
-  if (event === 'TOKEN_REFRESHED') { /* token rotated */ }
-  if (event === 'USER_UPDATED') { /* profile changed */ }
+  if (event === 'SIGNED_IN') {
+    /* handle login */
+  }
+  if (event === 'SIGNED_OUT') {
+    /* handle logout */
+  }
+  if (event === 'TOKEN_REFRESHED') {
+    /* token rotated */
+  }
+  if (event === 'USER_UPDATED') {
+    /* profile changed */
+  }
 });
 
 // Sign out
@@ -232,12 +243,12 @@ await supabase.auth.signOut();
 
 ## Role Hierarchy in Supabase
 
-| Role | Description | Use Case |
-|---|---|---|
-| `anon` | Unauthenticated visitors | Public content, sign-up forms |
-| `authenticated` | Logged-in users | All user-facing features |
-| `service_role` | Bypasses RLS entirely | Server-side admin operations only |
-| Custom DB roles | Named PostgreSQL roles | Fine-grained RBAC patterns |
+| Role            | Description              | Use Case                          |
+| --------------- | ------------------------ | --------------------------------- |
+| `anon`          | Unauthenticated visitors | Public content, sign-up forms     |
+| `authenticated` | Logged-in users          | All user-facing features          |
+| `service_role`  | Bypasses RLS entirely    | Server-side admin operations only |
+| Custom DB roles | Named PostgreSQL roles   | Fine-grained RBAC patterns        |
 
 ```sql
 -- Grant table access by role
@@ -412,31 +423,34 @@ CREATE POLICY admin_full_access ON admin_resources FOR ALL
 
 ```typescript
 // Edge Function hook
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 serve(async (req) => {
-  const { user, claims } = await req.json()
+  const { user, claims } = await req.json();
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SECRET_KEY')!
-  )
+  );
 
   const { data: membership } = await supabase
     .from('organization_members')
     .select('organization_id, role')
     .eq('user_id', user.id)
     .eq('status', 'active')
-    .single()
+    .single();
 
-  return new Response(JSON.stringify({
-    claims: {
-      ...claims,
-      org_id: membership?.organization_id,
-      org_role: membership?.role,
-    }
-  }), { headers: { 'Content-Type': 'application/json' } })
-})
+  return new Response(
+    JSON.stringify({
+      claims: {
+        ...claims,
+        org_id: membership?.organization_id,
+        org_role: membership?.role,
+      },
+    }),
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+});
 ```
 
 ---
@@ -579,13 +593,13 @@ user's authenticated JWT. Use `SELECT auth.jwt();` to inspect what the token loo
 
 ## Common Mistakes
 
-| Mistake | Impact | Fix |
-|---|---|---|
-| Using `service_role` in browser | Full RLS bypass | Always use `anon` key client-side |
-| Missing RLS on junction tables | Cross-tenant data leak | Enable RLS on ALL tables including pivots |
-| Storing roles in `user_metadata` | Users can self-elevate roles | Use `app_metadata` for permissions |
-| Forgetting `WITH CHECK` on INSERT | Users insert rows they can't see | Add explicit `WITH CHECK` clause |
-| Single policy covering all ops | Hard to audit | Separate SELECT/INSERT/UPDATE/DELETE |
-| Calling DB functions in policy | N+1 per row performance | Use JWT claims or `current_setting()` |
-| No `ON DELETE CASCADE` on user_id FK | Orphaned rows after user deletion | Always add `ON DELETE CASCADE` |
-| Mixing OAuth and user policies | Unintended access grants | Separate policies for direct users vs OAuth clients |
+| Mistake                              | Impact                            | Fix                                                 |
+| ------------------------------------ | --------------------------------- | --------------------------------------------------- |
+| Using `service_role` in browser      | Full RLS bypass                   | Always use `anon` key client-side                   |
+| Missing RLS on junction tables       | Cross-tenant data leak            | Enable RLS on ALL tables including pivots           |
+| Storing roles in `user_metadata`     | Users can self-elevate roles      | Use `app_metadata` for permissions                  |
+| Forgetting `WITH CHECK` on INSERT    | Users insert rows they can't see  | Add explicit `WITH CHECK` clause                    |
+| Single policy covering all ops       | Hard to audit                     | Separate SELECT/INSERT/UPDATE/DELETE                |
+| Calling DB functions in policy       | N+1 per row performance           | Use JWT claims or `current_setting()`               |
+| No `ON DELETE CASCADE` on user_id FK | Orphaned rows after user deletion | Always add `ON DELETE CASCADE`                      |
+| Mixing OAuth and user policies       | Unintended access grants          | Separate policies for direct users vs OAuth clients |

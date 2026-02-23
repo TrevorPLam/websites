@@ -7,6 +7,7 @@ Remote caching is a powerful feature in Turborepo that shares build artifacts ac
 ## 1. Core Concept
 
 Turborepo's remote cache works by:
+
 1. Computing a hash for each task based on its inputs (source files, dependencies, environment variables)
 2. Storing task outputs (build artifacts, logs) in a remote server
 3. Retrieving cached results when the same hash is encountered on any machine
@@ -20,20 +21,25 @@ Vercel provides a hosted remote cache that's free for all plans .
 ### 2.1 Setup
 
 **Step 1: Authenticate with Vercel**
+
 ```bash
 npx turbo login
 ```
+
 This authenticates the Turborepo CLI with your Vercel account .
 
 **Step 2: Link to Remote Cache**
+
 ```bash
 npx turbo link
 ```
+
 This connects your local repository to a Vercel project and enables remote caching .
 
 ### 2.2 Verification
 
 After setup, run any build command:
+
 ```bash
 turbo build
 ```
@@ -48,43 +54,46 @@ Turborepo follows an open specification, allowing teams to implement their own r
 
 A compatible remote cache server must implement the following endpoints :
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/v8/artifacts/{hash}` | GET | Download cached artifact |
-| `/v8/artifacts/{hash}` | PUT | Upload artifact to cache |
-| `/v8/artifacts/{hash}` | HEAD | Check if artifact exists |
-| `/v8/artifacts` | POST | Query artifact information |
-| `/v8/artifacts/events` | POST | Record usage events |
-| `/v8/artifacts/status` | GET | Service health check |
-| `/v8/openapi` | GET | OpenAPI specification |
+| Endpoint               | Method | Purpose                    |
+| ---------------------- | ------ | -------------------------- |
+| `/v8/artifacts/{hash}` | GET    | Download cached artifact   |
+| `/v8/artifacts/{hash}` | PUT    | Upload artifact to cache   |
+| `/v8/artifacts/{hash}` | HEAD   | Check if artifact exists   |
+| `/v8/artifacts`        | POST   | Query artifact information |
+| `/v8/artifacts/events` | POST   | Record usage events        |
+| `/v8/artifacts/status` | GET    | Service health check       |
+| `/v8/openapi`          | GET    | OpenAPI specification      |
 
 ### 3.2 Azure Functions Implementation Example
 
 The `@azure-utils/turborepo-cache` package provides a ready-to-deploy implementation using Azure Functions .
 
 **Installation:**
+
 ```bash
 npm i -D @azure-utils/turborepo-cache
 ```
 
 **Basic Setup:**
+
 ```typescript
 // src/index.ts
-import { registerCacheRouter } from "@azure-utils/turborepo-cache";
+import { registerCacheRouter } from '@azure-utils/turborepo-cache';
 
 registerCacheRouter({
   // Token for authentication (defaults to env['TURBO_TOKEN'])
-  turboToken: "",
+  turboToken: '',
   // Azure Storage connection (defaults to env['AzureWebJobsStorage'])
-  connectionString: "",
+  connectionString: '',
   // Container name (defaults to env['CONTAINER_NAME'] or 'turborepocache')
-  containerName: "",
+  containerName: '',
   // Enable health check endpoint
   healthCheck: true,
 });
 ```
 
 **Configure `host.json`:**
+
 ```json
 {
   "extensions": {
@@ -94,11 +103,13 @@ registerCacheRouter({
   }
 }
 ```
+
 This removes the `/api` prefix that would otherwise break compatibility .
 
 ### 3.3 S3-Compatible Implementations
 
 For AWS environments, you can implement the cache server using:
+
 - **AWS Lambda** with API Gateway
 - **S3** as the storage backend
 - **DynamoDB** for metadata tracking
@@ -153,15 +164,15 @@ Global cache distribution for distributed teams:
 
 ### 5.1 Environment Variables
 
-| Variable | Purpose |
-|----------|---------|
-| `TURBO_TOKEN` | Authentication token for remote cache |
-| `TURBO_TEAM` | Team identifier for Vercel cache |
-| `TURBO_API` | Custom API endpoint (for self-hosted) |
-| `TURBO_REMOTE_CACHE_TIMEOUT` | Timeout in milliseconds |
-| `TURBO_OIDC_PROVIDER` | OIDC provider for authentication |
-| `TURBO_CACHE_COMPRESSION` | Compression level (1-9) |
-| `TURBO_PREDICTIVE_CACHE` | Enable AI-powered predictive caching |
+| Variable                     | Purpose                               |
+| ---------------------------- | ------------------------------------- |
+| `TURBO_TOKEN`                | Authentication token for remote cache |
+| `TURBO_TEAM`                 | Team identifier for Vercel cache      |
+| `TURBO_API`                  | Custom API endpoint (for self-hosted) |
+| `TURBO_REMOTE_CACHE_TIMEOUT` | Timeout in milliseconds               |
+| `TURBO_OIDC_PROVIDER`        | OIDC provider for authentication      |
+| `TURBO_CACHE_COMPRESSION`    | Compression level (1-9)               |
+| `TURBO_PREDICTIVE_CACHE`     | Enable AI-powered predictive caching  |
 
 ### 5.2 Using Custom Cache in CI
 
@@ -178,13 +189,13 @@ jobs:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
       TURBO_OIDC_PROVIDER: ${{ secrets.OIDC_PROVIDER }}
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build with remote cache
         run: npx turbo build --predictive-cache
 ```
@@ -192,6 +203,7 @@ jobs:
 ## 6. Cache Invalidation and Keys
 
 Turborepo automatically generates cache keys based on:
+
 - Source files (contents, not timestamps)
 - Environment variables
 - Lockfile changes
@@ -214,7 +226,7 @@ New analytics capabilities for cache optimization:
 
 ```typescript
 // Custom metrics integration
-import { CacheMetrics } from "@turbo/cache-analytics";
+import { CacheMetrics } from '@turbo/cache-analytics';
 
 const metrics = new CacheMetrics({
   endpoint: process.env.CUSTOM_METRICS_ENDPOINT,
@@ -238,23 +250,27 @@ metrics.trackCacheMiss({ task: 'test', reason: 'input-changed' });
 ## 9. Troubleshooting
 
 **Cache misses when expected hits:**
+
 - Check that all inputs are properly considered
 - Verify environment variables are consistent
 - Ensure lockfile hasn't changed
 - Review predictive cache settings
 
 **Authentication errors:**
+
 - Verify `TURBO_TOKEN` is set correctly
 - Check OIDC provider configuration
 - Validate token permissions
 
 **Performance issues:**
+
 - Consider geographic proximity to cache server
 - Monitor network latency
 - Implement regional cache replication for global teams
 - Check compression settings
 
 **High storage costs:**
+
 - Review retention policies
 - Implement automatic cleanup
 - Use compression optimization

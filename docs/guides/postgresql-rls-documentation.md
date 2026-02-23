@@ -31,6 +31,7 @@ automatically filtered according to those policies. RLS operates at the storage 
 application layer — providing a true defense-in-depth security posture.
 
 **Key Properties:**
+
 - Enforced on all connections (application, REST API, direct DB, replication consumers)
 - Transparent to the calling application
 - Survives application-layer bugs or missing WHERE clauses
@@ -41,15 +42,15 @@ application layer — providing a true defense-in-depth security posture.
 
 ## Core Concepts
 
-| Concept | Description |
-|---|---|
-| **Policy** | A SQL expression attached to a table that filters or blocks row access |
-| **USING clause** | Filters rows on SELECT, UPDATE, DELETE — determines which rows are *visible* |
-| **WITH CHECK clause** | Validates rows on INSERT, UPDATE — determines which rows can be *written* |
-| **Permissive Policy** | Default. Multiple permissive policies are OR'd together |
-| **Restrictive Policy** | AND'd against all permissive policies — always applied |
-| **Row Owner** | The application-level concept of which user "owns" a row |
-| **current_setting()** | Session-local variable used to pass authenticated user context to policies |
+| Concept                | Description                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| **Policy**             | A SQL expression attached to a table that filters or blocks row access       |
+| **USING clause**       | Filters rows on SELECT, UPDATE, DELETE — determines which rows are _visible_ |
+| **WITH CHECK clause**  | Validates rows on INSERT, UPDATE — determines which rows can be _written_    |
+| **Permissive Policy**  | Default. Multiple permissive policies are OR'd together                      |
+| **Restrictive Policy** | AND'd against all permissive policies — always applied                       |
+| **Row Owner**          | The application-level concept of which user "owns" a row                     |
+| **current_setting()**  | Session-local variable used to pass authenticated user context to policies   |
 
 ---
 
@@ -142,11 +143,11 @@ CREATE POLICY user_all_operations
 
 ## USING vs WITH CHECK
 
-| Clause | Applies To | Controls |
-|---|---|---|
-| `USING` | SELECT, UPDATE, DELETE | Which rows are **visible/accessible** |
-| `WITH CHECK` | INSERT, UPDATE | Which rows can be **written** |
-| Both | UPDATE | Rows must be visible AND new values must pass check |
+| Clause       | Applies To             | Controls                                            |
+| ------------ | ---------------------- | --------------------------------------------------- |
+| `USING`      | SELECT, UPDATE, DELETE | Which rows are **visible/accessible**               |
+| `WITH CHECK` | INSERT, UPDATE         | Which rows can be **written**                       |
+| Both         | UPDATE                 | Rows must be visible AND new values must pass check |
 
 ```sql
 -- UPDATE example: user must own the existing row AND the new data must preserve ownership
@@ -357,15 +358,15 @@ CREATE POLICY user_access ON documents FOR ALL
 
 ## Common Pitfalls
 
-| Pitfall | Problem | Solution |
-|---|---|---|
-| No policies after enabling RLS | Blocks ALL access | Add at least one policy immediately |
-| Not using `FORCE ROW LEVEL SECURITY` | Table owner bypasses all policies | Always set `FORCE ROW LEVEL SECURITY` |
-| Missing `WITH CHECK` on INSERT | Users can insert rows they can't see | Add `WITH CHECK` to INSERT/UPDATE policies |
-| Calling DB functions in USING | N+1 performance per row | Use `current_setting()` or session variables |
-| Single `FOR ALL` without explicit ops | Hard to audit security surface | Define separate policies per operation |
-| Missing indexes on policy columns | Full table scans on every query | Index all columns referenced in USING clauses |
-| Superuser bypass in production | RLS policies ignored | Never use superuser role in application connections |
+| Pitfall                               | Problem                              | Solution                                            |
+| ------------------------------------- | ------------------------------------ | --------------------------------------------------- |
+| No policies after enabling RLS        | Blocks ALL access                    | Add at least one policy immediately                 |
+| Not using `FORCE ROW LEVEL SECURITY`  | Table owner bypasses all policies    | Always set `FORCE ROW LEVEL SECURITY`               |
+| Missing `WITH CHECK` on INSERT        | Users can insert rows they can't see | Add `WITH CHECK` to INSERT/UPDATE policies          |
+| Calling DB functions in USING         | N+1 performance per row              | Use `current_setting()` or session variables        |
+| Single `FOR ALL` without explicit ops | Hard to audit security surface       | Define separate policies per operation              |
+| Missing indexes on policy columns     | Full table scans on every query      | Index all columns referenced in USING clauses       |
+| Superuser bypass in production        | RLS policies ignored                 | Never use superuser role in application connections |
 
 ---
 

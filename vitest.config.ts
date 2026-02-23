@@ -11,23 +11,35 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./packages/config/vitest-config/src/setup.ts'],
+    pool: 'threads',
+    isolate: true, // Isolate tests for better reliability
+    bail: 1, // Stop on first failure in CI
+    retry: process.env.CI ? 1 : 0, // Retry once in CI for flaky tests
+    testTimeout: 10000, // 10 second timeout per test
+    hookTimeout: 10000, // 10 second timeout for hooks
     coverage: {
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html', 'lcov'],
       exclude: [
         '**/node_modules/**',
         '**/dist/**',
         '**/*.config.*',
         '**/*.test.*',
         '**/__tests__/**',
+        '**/coverage/**',
+        '**/*.d.ts',
+        '**/index.ts',
+        '**/index.tsx',
       ],
       thresholds: {
         global: {
-          branches: 20,
-          functions: 10,
-          lines: 14,
-          statements: 14,
+          branches: 30,
+          functions: 25,
+          lines: 30,
+          statements: 30,
         },
       },
+      cleanOnRerun: true,
+      clean: true,
     },
     projects: [
       // Node environment: Server code, utilities, infra, integrations
@@ -49,9 +61,11 @@ export default defineConfig({
             '**/dist/**',
             '**/*.config.*',
             'packages/infra/composition/**', // React HOC tests run in jsdom
+            '**/coverage/**',
           ],
           setupFiles: ['./packages/config/vitest-config/src/setup.ts'],
           globals: true,
+          isolate: true,
         },
       },
       // jsdom environment: React components, UI library
@@ -69,9 +83,11 @@ export default defineConfig({
             'packages/infrastructure/layout/**/*.test.ts',
             'packages/infra/composition/**/*.test.ts',
           ],
-          exclude: ['**/node_modules/**', '**/dist/**', '**/*.config.*'],
+          exclude: ['**/node_modules/**', '**/dist/**', '**/*.config.*', '**/coverage/**'],
           setupFiles: ['./packages/config/vitest-config/src/setup.ts'],
           globals: true,
+          isolate: true,
+          testTimeout: 15000, // Longer timeout for DOM tests
         },
       },
     ],

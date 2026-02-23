@@ -132,9 +132,16 @@ jobs:
             pnpm turbo run build
           fi
 
-      # Root jest runs full monorepo test suite (jest.config.js discovers all __tests__)
+      # Optimized test execution with parallelization and caching
       - name: Test
-        run: pnpm test:coverage
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # Run tests in parallel for PRs with affected packages only
+            pnpm turbo run test --filter="...[origin/main]" --parallel
+          else
+            # Full test suite with parallel execution and coverage
+            pnpm test:coverage --reporter=verbose
+          fi
 
       # [SECURITY] Automated vulnerability scanning - FAIL on high/critical vulnerabilities
       # This implements 2026 security best practices for supply chain security

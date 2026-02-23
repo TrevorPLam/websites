@@ -327,6 +327,7 @@ export class HttpClient {
       // Network errors and timeouts are retryable
       if (
         error.name === 'TimeoutError' ||
+        error.message === 'TimeoutError' ||
         error.name === 'AbortError' ||
         error.message.includes('timeout') ||
         error.message.includes('ECONNRESET') ||

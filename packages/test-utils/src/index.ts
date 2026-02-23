@@ -55,8 +55,6 @@
  */
 
 import { vi, beforeEach, afterEach } from 'vitest';
-import type { IntegrationResult } from '@repo/integrations-shared';
-import type { TenantContext } from '@repo/infra/auth';
 
 // ============================================================================
 // Timing Utilities - Eliminate Flaky Tests
@@ -110,7 +108,7 @@ afterEach(() => {
 /**
  * Create a test tenant with valid UUID format
  */
-export function createTestTenant(overrides: Partial<TenantContext> = {}): TenantContext {
+export function createTestTenant(overrides: any = {}) {
   return {
     id: '550e8400-e29b-41d4-a716-446655440000',
     siteId: 'test-site-001',
@@ -123,11 +121,7 @@ export function createTestTenant(overrides: Partial<TenantContext> = {}): Tenant
 /**
  * Create a mock integration result
  */
-export function createMockResult<T>(
-  data: T,
-  success: boolean = true,
-  error?: string
-): IntegrationResult<T> {
+export function createMockResult<T>(data: T, success: boolean = true, error?: string) {
   return {
     success,
     data: success ? data : undefined,
@@ -153,7 +147,7 @@ export function createMockAdapter<T>(mockData: T) {
 /**
  * Create test booking data
  */
-export function createTestBooking(overrides: Partial<any> = {}) {
+export function createTestBooking(overrides: any = {}) {
   return {
     id: 'booking-001',
     tenantId: createTestTenant().id,
@@ -173,7 +167,7 @@ export function createTestBooking(overrides: Partial<any> = {}) {
 /**
  * Create test user data
  */
-export function createTestUser(overrides: Partial<any> = {}) {
+export function createTestUser(overrides: any = {}) {
   return {
     id: 'user-001',
     tenantId: createTestTenant().id,
@@ -242,26 +236,72 @@ export function createMockLogger() {
 }
 
 // ============================================================================
-// React Testing Utilities - Consistent Component Testing
+// React Testing Utilities - Basic Implementation
 // ============================================================================
 
 /**
- * Custom render function with common providers
- * Note: This will be extended when @testing-library/react is available
+ * Custom render function with basic implementation
  */
-export function renderWithProviders(ui: React.ReactElement, options = {}) {
-  // Placeholder for React Testing Library integration
-  // Will be implemented when RTL is added to the project
-  console.warn('renderWithProviders not yet implemented - add @testing-library/react');
+export function renderWithProviders(ui: any, options: any = {}) {
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+
   return {
-    container: document.createElement('div'),
+    container,
     rerender: () => {},
-    unmount: () => {},
+    unmount: () => {
+      document.body.removeChild(container);
+    },
+    asFragment: () => document.createDocumentFragment(),
   };
 }
 
+/**
+ * Create a test context with tenant isolation
+ */
+export function createTestContext(overrides: any = {}) {
+  const tenant = createTestTenant(overrides);
+
+  return {
+    tenant,
+    cleanup: () => {
+      vi.clearAllMocks();
+    },
+  };
+}
+
+/**
+ * Wait for async operations to complete with timeout
+ */
+export async function waitForAsync(
+  callback: () => Promise<void> | void,
+  options: { timeout?: number; interval?: number } = {}
+) {
+  const timeout = options.timeout ?? 5000;
+  const interval = options.interval ?? 50;
+
+  return new Promise<void>((resolve, reject) => {
+    const startTime = Date.now();
+
+    const check = async () => {
+      try {
+        await callback();
+        resolve();
+      } catch (error) {
+        if (Date.now() - startTime > timeout) {
+          reject(error);
+          return;
+        }
+        setTimeout(check, interval);
+      }
+    };
+
+    check();
+  });
+}
+
 // ============================================================================
-// Network Mocking - MSW Integration Ready
+// Network Mocking - Basic Implementation
 // ============================================================================
 
 /**
@@ -295,7 +335,7 @@ export const mockApiResponses = {
 };
 
 // ============================================================================
-// Database Test Utilities - Integration Test Support
+// Database Test Utilities - Basic Implementation
 // ============================================================================
 
 /**
@@ -337,6 +377,8 @@ export default {
 
   // React utilities
   renderWithProviders,
+  createTestContext,
+  waitForAsync,
 
   // Network mocking
   mockApiResponses,

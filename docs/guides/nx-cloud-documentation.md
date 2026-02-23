@@ -8,13 +8,13 @@ Nx Cloud is a comprehensive CI optimization platform that connects directly to y
 
 Nx Cloud provides several key capabilities for optimizing CI pipelines:
 
-| Feature | Description |
-|---------|-------------|
-| **Remote Caching** | Share build artifacts across team members and CI machines |
-| **Distributed Task Execution** | Run tasks across multiple machines in parallel |
-| **Flaky Task Analytics** | Detect and analyze unreliable tests and tasks |
-| **Task Distribution Intelligence** | Automatically optimize task allocation |
-| **AI-Powered Insights** | Conversational analytics via MCP integration |
+| Feature                            | Description                                               |
+| ---------------------------------- | --------------------------------------------------------- |
+| **Remote Caching**                 | Share build artifacts across team members and CI machines |
+| **Distributed Task Execution**     | Run tasks across multiple machines in parallel            |
+| **Flaky Task Analytics**           | Detect and analyze unreliable tests and tasks             |
+| **Task Distribution Intelligence** | Automatically optimize task allocation                    |
+| **AI-Powered Insights**            | Conversational analytics via MCP integration              |
 
 ## 2. Getting Started
 
@@ -29,6 +29,7 @@ This command walks you through connecting your existing Nx workspace to an Nx Cl
 ### 2.2 Manual Configuration
 
 In `nx.json`:
+
 ```json
 {
   "nxCloudAccessToken": "your-token-here"
@@ -59,13 +60,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      
+
       - run: npm ci
-      
+
       - name: Start Nx Agents
         run: npx nx-cloud start-agent
 ```
@@ -73,11 +74,13 @@ jobs:
 ### 3.3 2026 Agent Enhancements
 
 **Self-Healing CI:**
+
 - **Automatic failure detection**: Agents automatically detect and retry failed tasks
 - **Intelligent task redistribution**: Failed tasks automatically reassigned to healthy agents
 - **Root cause analysis**: AI-powered analysis of common failure patterns
 
 **Resource Optimization:**
+
 - **Dynamic scaling**: Automatically scale agent fleet based on workload
 - **Cost-aware scheduling**: Optimize task distribution for cost efficiency
 - **Resource monitoring**: Real-time tracking of agent resource utilization
@@ -95,14 +98,16 @@ jobs:
 ### 4.1 How It Works
 
 Nx Cloud remote cache stores task outputs and shares them across:
+
 - Different branches
 - Different developers
 - CI and local environments
-- Different machines 
+- Different machines
 
 ### 4.2 Cache Statistics
 
 Organizations typically see:
+
 - **93%+ cache hit rates** in production
 - **Thousands of compute hours saved** weekly
 - **Near-instant PR feedback** for unchanged code
@@ -110,6 +115,7 @@ Organizations typically see:
 ### 4.3 2026 Cache Enhancements
 
 **Predictive Caching:**
+
 ```bash
 # Enable AI-powered predictive caching
 npx nx build --predictive-cache
@@ -120,6 +126,7 @@ npx nx build --predictive-cache
 - **Usage pattern analysis**: Learns from team behavior patterns
 
 **Intelligent Cache Compression:**
+
 - **Adaptive compression**: Automatically selects optimal compression based on artifact type
 - **Delta compression**: Only stores changes between similar artifacts
 - **Bandwidth optimization**: Up to 60% reduction in data transfer
@@ -127,6 +134,7 @@ npx nx build --predictive-cache
 ### 4.4 Cache Configuration
 
 In `nx.json`:
+
 ```json
 {
   "tasksRunnerOptions": {
@@ -174,6 +182,7 @@ With the Nx MCP (Model Context Protocol) integration, you can analyze flaky task
 ```
 
 **Example queries** :
+
 - "Show me all failed builds from the last 28 days and identify the most common failure patterns"
 - "Which tests are consistently flaky and costing us the most time?"
 - "How do our cache hit rates compare between PR branches and main?"
@@ -181,17 +190,20 @@ With the Nx MCP (Model Context Protocol) integration, you can analyze flaky task
 ### 5.3 2026 Analytics Enhancements
 
 **Advanced Pattern Recognition:**
+
 - **Machine learning models**: Identify subtle patterns in task failures
 - **Root cause correlation**: Link failures to specific code changes
 - **Predictive failure detection**: Flag potentially flaky tasks before they fail
 
 **Real-time Alerting:**
+
 ```yaml
 # Configure real-time alerts
 npx nx-cloud configure --alerts flaky-tasks --threshold 5%
 ```
 
 **Custom Dashboards:**
+
 - **Team-specific views**: Tailored analytics for different teams
 - **Project-level insights**: Deep dive into specific project performance
 - **Trend analysis**: Historical performance trends and predictions
@@ -199,6 +211,7 @@ npx nx-cloud configure --alerts flaky-tasks --threshold 5%
 ### 5.4 Task-Level Metrics
 
 For each task, Nx Cloud provides:
+
 - Success/failure rates
 - Cache hit patterns (remote vs local)
 - Execution durations
@@ -211,6 +224,7 @@ For each task, Nx Cloud provides:
 ### 6.1 Pipeline Insights
 
 The dashboard provides visibility into :
+
 - **Pipeline execution history** with branch context
 - **Commit authors** and timing
 - **Success/failure status** trends
@@ -233,11 +247,13 @@ The dashboard provides visibility into :
 ### 6.4 2026 Dashboard Features
 
 **Interactive Visualizations:**
+
 - **Real-time updates**: Live streaming of CI execution data
 - **Drill-down capabilities**: Deep dive into specific metrics
 - **Custom views**: Tailored dashboards for different stakeholders
 
 **Advanced Analytics:**
+
 - **Predictive insights**: AI-powered predictions for future performance
 - **Anomaly detection**: Automatic identification of unusual patterns
 - **Benchmarking**: Compare performance against industry standards
@@ -247,6 +263,7 @@ The dashboard provides visibility into :
 ### 7.1 Available Data Sources
 
 Through MCP, AI assistants can access :
+
 - Pipeline execution history
 - Task-level performance metrics
 - Caching intelligence (miss patterns, effectiveness)
@@ -257,11 +274,13 @@ Through MCP, AI assistants can access :
 ### 7.2 2026 MCP Enhancements
 
 **Expanded Data Access:**
+
 - **Real-time data**: Access to live CI execution data
 - **Historical context**: Extended historical data for trend analysis
 - **Cross-repository insights**: Analytics across multiple workspaces
 
 **Advanced Query Capabilities:**
+
 ```bash
 # Example advanced queries
 "Analyze the correlation between code review time and build success rates"
@@ -272,11 +291,13 @@ Through MCP, AI assistants can access :
 ### 7.3 Practical Analysis Examples
 
 **Identifying failure patterns:**
+
 ```
 User: "Extract all runs from these pipeline executions. I'm mostly interested in the failed ones. I'd like to better understand whether there are some patterns of why certain tasks fail."
 ```
 
 **Contextual analysis:**
+
 ```
 User: "I see there are 18% failures in the Native build system. Is this because there is more activity happening on that project?"
 ```
@@ -290,7 +311,7 @@ The AI can correlate failure rates with activity levels to distinguish between g
 
 - **DPE (Developer Productivity Engineering)** team access
 - **Bespoke metric reports**
-- **Strategic guidance** for optimization 
+- **Strategic guidance** for optimization
 
 ### 8.2 Advanced Security
 
@@ -311,11 +332,13 @@ The AI can correlate failure rates with activity levels to distinguish between g
 ### 8.4 2026 Enterprise Enhancements
 
 **Advanced Compliance:**
+
 - **GDPR compliance**: Enhanced data protection for European teams
 - **HIPAA compliance**: Healthcare industry compliance features
 - **SOX compliance**: Financial industry audit requirements
 
 **Custom Analytics:**
+
 - **White-label dashboards**: Branded analytics portals
 - **Custom metrics**: Organization-specific KPIs
 - **Integration with BI tools**: Direct data export to analytics platforms
@@ -334,24 +357,28 @@ The AI can correlate failure rates with activity levels to distinguish between g
 ## 10. Troubleshooting
 
 **Low cache hit rates:**
+
 - Check task inputs for unnecessary variability
 - Ensure consistent environment variables
 - Verify lockfile stability
 - Enable predictive caching
 
 **Agent performance issues:**
+
 - Adjust parallelization settings
 - Monitor network latency
 - Check agent resource allocation
 - Use self-healing features
 
 **Authentication problems:**
+
 - Verify access tokens
 - Check workspace permissions
 - Confirm network access to Nx Cloud
 - Configure OIDC if using enterprise authentication
 
 **Analytics not showing data:**
+
 - Check MCP configuration
 - Verify workspace connection
 - Ensure proper data collection permissions
@@ -388,6 +415,7 @@ npx nx-cloud configure --alerts flaky-tasks --threshold 5%
 ## 12. Success Metrics
 
 Teams using Nx Cloud typically achieve:
+
 - **90%+ reduction** in CI execution time
 - **85%+ cache hit rates** across all tasks
 - **70%+ reduction** in flaky test failures
