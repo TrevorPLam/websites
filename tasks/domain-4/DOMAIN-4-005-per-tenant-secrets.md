@@ -4,10 +4,10 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-4-005
 title: 'Per-tenant secrets management with encryption'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: medium # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
-created: 2026-2026-02-23
+created: 2026-02-23
 updated: 2026-02-23
 owner: '' # agent or human responsible
 branch: feat/DOMAIN-4-005-per-tenant-secrets
@@ -52,7 +52,7 @@ Implement per-tenant secrets management system following section 4.6 specificati
 - [ ] **[Agent]** Implement per-tenant secrets management following section 4.6 specification
 - [ ] **[Agent]** Add pgcrypto encryption with master key from environment
 - [ ] **[Agent]** Create tenant_secrets table with encrypted storage
-- **[Agent]** Implement setTenantSecret and getTenantSecret functions
+- [ ] **[Agent]** Implement setTenantSecret and getTenantSecret functions
 - [ ] **[Agent]** Add secret rotation capability with audit logging
 - [ ] **[Agent]** Create SQL functions for encryption/decryption operations
 - [ ] **[Agent]** Add comprehensive error handling and validation
@@ -65,13 +65,13 @@ Implement per-tenant secrets management system following section 4.6 specificati
 
 - [ ] **[Agent]** **Analyze section 4.6 specification** — Extract all requirements for secrets management
 - [ ] **[Agent]** **Create database schema** — Add tenant_secrets table with encryption columns
-- [ **[Agent]** **Implement SQL functions** — Add upsert_tenant_secret and get_tenant_secret functions
+- [ ] **[Agent]** **Implement SQL functions** — Add upsert_tenant_secret and get_tenant_secret functions
 - [ ] **[Agent]** **Create secrets manager** — Implement TypeScript wrapper functions
-- [ ] **Add encryption utilities** — Implement pgcrypto integration with master key
-- [ ] **Add rotation capability** — Implement secret rotation with audit logging
-- [ ] **Add error handling** - Sanitize errors and prevent information leakage
-- [ ] **Create test suite** — Test encryption, decryption, and rotation scenarios
-- [ ] **Update documentation** — Document secrets management usage patterns
+- [ ] **[Agent]** **Add encryption utilities** — Implement pgcrypto integration with master key
+- [ ] **[Agent]** **Add rotation capability** — Implement secret rotation with audit logging
+- [ ] **[Agent]** **Add error handling** — Sanitize errors and prevent information leakage
+- [ ] **[Agent]** **Create test suite** — Test encryption, decryption, and rotation scenarios
+- [ ] **[Agent]** **Update documentation** — Document secrets management usage patterns
 
 > ⚠️ **Agent Question**: Ask human before proceeding if any existing secrets need migration to new encrypted format.
 

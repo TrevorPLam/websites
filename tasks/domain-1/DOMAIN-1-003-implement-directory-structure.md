@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-1-003
 title: 'Implement complete directory structure for monorepo'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
 created: 2026-02-23

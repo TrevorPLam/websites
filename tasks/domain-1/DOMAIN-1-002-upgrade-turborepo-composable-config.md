@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-1-002
 title: 'Upgrade Turborepo to 2.7 composable configuration'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
 created: 2026-02-23

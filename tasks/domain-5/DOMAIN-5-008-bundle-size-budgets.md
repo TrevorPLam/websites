@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-5-008
 title: 'Bundle size budgets with CI enforcement'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: medium # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
 created: 2026-02-23

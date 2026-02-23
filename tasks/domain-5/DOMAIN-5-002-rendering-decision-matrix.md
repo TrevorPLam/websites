@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-5-002
 title: 'Four-mode rendering decision matrix implementation'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
 created: 2026-02-23

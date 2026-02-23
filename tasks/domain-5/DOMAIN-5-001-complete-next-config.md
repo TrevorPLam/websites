@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-5-001
 title: 'Complete next.config.ts with Next.js 16 optimization'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
 created: 2026-02-23

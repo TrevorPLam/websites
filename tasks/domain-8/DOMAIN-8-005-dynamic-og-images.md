@@ -38,12 +38,12 @@ Implement dynamic OG images system following section 8.6 specification with edge
 
 ## Tech Stack
 
-| Layer     | Technology                          |
-| --------- | ----------------------------------- |
-| OG Images | Next.js ImageResponse API |
+| Layer     | Technology                           |
+| --------- | ------------------------------------ |
+| OG Images | Next.js ImageResponse API            |
 | Runtime   | Edge runtime for global distribution |
-| Branding  | Tenant-specific colors and logos |
-| Caching   | Aggressive caching (24 hours) |
+| Branding  | Tenant-specific colors and logos     |
+| Caching   | Aggressive caching (24 hours)        |
 
 ---
 
@@ -748,21 +748,21 @@ export function createOGImageUrl(
   }
 ): string {
   const url = new URL('/og', baseUrl);
-  
+
   url.searchParams.set('title', params.title);
-  
+
   if (params.subtitle) {
     url.searchParams.set('subtitle', params.subtitle);
   }
-  
+
   if (params.tenant) {
     url.searchParams.set('tenant', params.tenant);
   }
-  
+
   if (params.type) {
     url.searchParams.set('type', params.type);
   }
-  
+
   return url.toString();
 }
 
@@ -868,7 +868,7 @@ export function expectValidOGImageParams(params: {
 export function expectValidOGImageUrl(url: string) {
   expect(url).toMatch(/^https?:\/\/.*\/og\?/);
   expect(url).toContain('title=');
-  
+
   const urlObj = new URL(url);
   expect(urlObj.searchParams.has('title')).toBe(true);
 }
@@ -889,11 +889,11 @@ export function expectValidOGImageUrl(url: string) {
 
 ## Boundaries
 
-| Tier             | Scope                                                                                                                                        |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| ✅ **Always**    | Follow section 8.6 specification; implement edge runtime; add tenant branding; include page type badges; optimize for performance                              |
-| ⚠️ **Ask first** | Changing existing OG image patterns; modifying edge runtime; updating tenant branding                                                    |
-| 🚫 **Never**     | Skip edge runtime; ignore tenant branding; bypass caching; omit page type badges                              |
+| Tier             | Scope                                                                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| ✅ **Always**    | Follow section 8.6 specification; implement edge runtime; add tenant branding; include page type badges; optimize for performance |
+| ⚠️ **Ask first** | Changing existing OG image patterns; modifying edge runtime; updating tenant branding                                             |
+| 🚫 **Never**     | Skip edge runtime; ignore tenant branding; bypass caching; omit page type badges                                                  |
 
 ---
 

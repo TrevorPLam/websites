@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-4-004
 title: 'RLS isolation test suite with comprehensive security validation'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: test # feature | fix | refactor | test | docs | chore
 created: 2026-02-23

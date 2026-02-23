@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-5-009
 title: 'Lighthouse CI configuration with performance gates'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: medium # critical | high | medium | low
 type: feature # feature | fix | refactor | test | docs | chore
 created: 2026-02-23
@@ -129,7 +129,7 @@ module.exports = {
         // Performance (Core Web Vitals composite)
         'categories:performance': ['error', { minScore: 0.85 }],
 
-        // Accessibility (WCAG 2.2 AA requirement by April 2026)
+        // Accessibility (WCAG 2.2 AA requirement by April 2026 for ADA Title II)
         'categories:accessibility': ['error', { minScore: 0.95 }],
 
         // Best Practices
@@ -145,13 +145,17 @@ module.exports = {
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }], // CLS < 0.1
         interactive: ['warn', { maxNumericValue: 3800 }], // TTI < 3.8s
 
-        // Critical a11y checks (WCAG 2.2 AA)
+        // Critical a11y checks (WCAG 2.2 AA + ADA Title II compliance)
         'color-contrast': ['error', { minScore: 1 }],
         'document-title': ['error', { minScore: 1 }],
         'html-has-lang': ['error', { minScore: 1 }],
         'image-alt': ['error', { minScore: 1 }],
         'link-name': ['error', { minScore: 1 }],
         'button-name': ['error', { minScore: 1 }],
+        'focus-indicators': ['error', { minScore: 1 }], // ADA Title II focus visibility
+        'keyboard-navigation': ['error', { minScore: 1 }], // ADA Title II keyboard access
+        'aria-input-field-name': ['error', { minScore: 1 }], // Screen reader compatibility
+        'label-title-only': ['error', { minScore: 1 }], // Form labeling compliance
 
         // SEO
         'meta-description': ['error', { minScore: 1 }],
@@ -362,7 +366,7 @@ export function LighthouseDashboard({ tenantId }: { tenantId: string }) {
         <p className={`text-2xl font-bold ${getScoreColor(results.categories.accessibility.score)}`}>
           {(results.categories.accessibility.score * 100).toFixed(0)}
         </p>
-        <p className="text-sm text-gray-600 mt-2">WCAG 2.2 AA compliance</p>
+        <p className="text-sm text-gray-600 mt-2">WCAG 2.2 AA + ADA Title II compliance</p>
       </div>
 
       <div className="p-4 border rounded-lg">
@@ -392,7 +396,7 @@ export function LighthouseDashboard({ tenantId }: { tenantId: string }) {
 - **Multi-client coverage**: Test all client archetypes for consistency
 - **Automated enforcement**: CI blocks deployments that fail thresholds
 - **Performance monitoring**: Real-time dashboards for performance tracking
-- **Accessibility compliance**: WCAG 2.2 AA requirements for legal compliance
+- **Accessibility compliance**: WCAG 2.2 AA + ADA Title II requirements for legal compliance
 
 ---
 
@@ -411,7 +415,7 @@ export function LighthouseDashboard({ tenantId }: { tenantId: string }) {
 - [ ] **[Agent]** Test Lighthouse CI locally — All tests pass with current configuration
 - [ ] **[Agent]** Verify CI integration — GitHub Actions workflow works correctly
 - [ ] **[Agent]** Test performance thresholds — 2026 standards are enforced
-- [ ] **[Agent]** Verify accessibility testing — WCAG 2.2 AA compliance checked
+- [ ] **[Agent]** Verify accessibility testing — WCAG 2.2 AA + ADA Title II compliance checked
 - [ ] **[Agent]** Test multi-client coverage — All client archetypes tested
 - [ ] **[Agent]** Verify reporting — Results uploaded and commented correctly
 - [ ] **[Human]** Test with real PR workflow — CI comments work in production
@@ -441,9 +445,9 @@ export function LighthouseDashboard({ tenantId }: { tenantId: string }) {
 
 ## References
 
-- [Section 5.9 Lighthouse CI Configuration](docs/plan/domain-5/5.9-lighthouse-ci-configuration.md)
-- [Section 5.6 LCP, INP, CLS Optimization](docs/plan/domain-5/5.6-lcp-inp-cls-optimization.md)
-- [Section 5.1 Complete next.config.ts](docs/plan/domain-5/5.1-complete-nextconfigts.md)
+- [Section 5.9 Lighthouse CI Configuration](../../../docs/plan/domain-5/5.9-lighthouse-ci-configuration.md)
+- [Section 5.6 LCP, INP, CLS Optimization](../../../docs/plan/domain-5/5.6-lcp-inp-cls-optimization.md)
+- [Section 5.1 Complete next.config.ts](../../../docs/plan/domain-5/5.1-complete-nextconfigts.md)
 - [Lighthouse CI Documentation](https://github.com/GoogleChrome/lighthouse-ci)
 - [Core Web Vitals Documentation](https://web.dev/vitals/)
 - [WCAG 2.2 Documentation](https://www.w3.org/WAI/WCAG21/quickref/)
