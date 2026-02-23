@@ -4,12 +4,12 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-1-001
 title: 'Upgrade pnpm workspace to catalog strict mode'
-status: pending # pending | in-progress | blocked | review | done
+status: blocked # pending | in-progress | blocked | review | done
 priority: high # critical | high | medium | low
 type: refactor # feature | fix | refactor | test | docs | chore
 created: 2026-02-23
 updated: 2026-02-23
-owner: '' # agent or human responsible
+owner: 'codex' # agent or human responsible
 branch: feat/DOMAIN-1-001-pnpm-catalog-strict
 allowed-tools: Bash(git:*) Read Write Bash(npm:*) Bash(pnpm:*)
 ---
@@ -58,14 +58,14 @@ Testable, binary conditions. Each line must be verifiable.
 Use "Given / When / Then" framing where it adds clarity.
 All criteria must be markable with checkboxes and assigned to agent or human.
 
-- [ ] **[Agent]** `pnpm-workspace.yaml` updated with catalog strict mode and proper workspace globs
-- [ ] **[Agent]** All dependencies migrated to use `catalog:` protocol in package.json files
-- [ ] **[Agent]** `catalog-strict: true` enforced to prevent catalog overrides
-- [ ] **[Agent]** Workspace globs match domain-1 specification (`apps/*`, `sites/*`, `e2e/*`)
+- [x] **[Agent]** `pnpm-workspace.yaml` updated with catalog strict mode and proper workspace globs
+- [x] **[Agent]** All dependencies migrated to use `catalog:` protocol in package.json files
+- [x] **[Agent]** `catalog-strict: true` enforced to prevent catalog overrides
+- [x] **[Agent]** Workspace globs match domain-1 specification (`apps/*`, `sites/*`, `e2e/*`)
 - [ ] **[Agent]** All packages install successfully with `pnpm install`
 - [ ] **[Agent]** `pnpm audit --catalog-strict` passes with zero violations
 - [ ] **[Human]** All existing build/test workflows continue to function
-- [ ] **[Agent]** Documentation updated in root README.md
+- [ ] **[Agent]** Documentation updated in root README.md (blocked: repository has no root README.md)
 
 ## Implementation Plan
 
@@ -73,10 +73,10 @@ Ordered, dependency-aware steps. Each step is independently testable.
 Do NOT skip steps. Do NOT combine steps.
 All steps must be markable with checkboxes and assigned to agent or human.
 
-- [ ] **[Agent]** **Backup current configuration** - Save existing `pnpm-workspace.yaml`
-- [ ] **[Agent]** **Update workspace globs** - Add missing `apps/*`, `sites/*`, `e2e/*` patterns
-- [ ] **[Agent]** **Enable catalog strict mode** - Add `catalog-strict: true` and related settings
-- [ ] **[Agent]** **Migrate dependencies** - Convert all package.json deps to `catalog:` protocol
+- [x] **[Agent]** **Backup current configuration** - Save existing `pnpm-workspace.yaml`
+- [x] **[Agent]** **Update workspace globs** - Add missing `apps/*`, `sites/*`, `e2e/*` patterns
+- [x] **[Agent]** **Enable catalog strict mode** - Add `catalog-strict: true` and related settings
+- [x] **[Agent]** **Migrate dependencies** - Convert all package.json deps to `catalog:` protocol
 - [ ] **[Agent]** **Validate installation** - Run `pnpm install` and resolve any conflicts
 - [ ] **[Agent]** **Test workflows** - Verify build, test, and dev commands work
 - [ ] **[Human]** **Update documentation** - Document catalog usage in README
@@ -155,7 +155,7 @@ All verification steps must be markable with checkboxes and assigned to agent or
 - [ ] **[Agent]** Run `pnpm -r build` — all packages build without errors
 - [ ] **[Agent]** Run `pnpm -r test` — all tests pass
 - [ ] **[Agent]** Verify workspace structure: `pnpm list --depth=0` shows all packages
-- [ ] **[Agent]** Check catalog usage: All package.json files use `catalog:` protocol
+- [x] **[Agent]** Check catalog usage: All package.json files use `catalog:` protocol
 - [ ] **[Agent]** Self-audit: re-read Acceptance Criteria above and check each box
 
 ## Edge Cases & Gotchas
@@ -179,3 +179,9 @@ All verification steps must be markable with checkboxes and assigned to agent or
 - [pnpm Catalog Protocol Guide](https://pnpm.io/catalogs)
 - [Domain 1.2 Complete pnpm Workspace Configuration](../docs/plan/domain-1/1.2-complete-pnpm-workspace-configuration.md)
 - [pnpm 10.x Release Notes](https://github.com/pnpm/pnpm/releases/tag/v10.0.0)
+
+
+## Execution Notes
+
+- Blocked on network registry access for install/audit validation: `ERR_PNPM_FETCH_403` when fetching npm packages in this environment.
+- Root `README.md` referenced by task does not exist in this repository; documentation target needs clarification.

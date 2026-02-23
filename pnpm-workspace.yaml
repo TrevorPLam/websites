@@ -1,11 +1,18 @@
 packages:
-  - packages/*
-  - packages/config/*
-  - packages/integrations/*
-  - packages/features/*
-  - packages/infrastructure/*
-  - clients/*
-  - tooling/*
+  - 'apps/*'
+  - 'sites/*'
+  - 'packages/*'
+  - 'packages/config/*'
+  - 'packages/integrations/*'
+  - 'packages/features/*'
+  - 'packages/ai-platform/*'
+  - 'packages/content-platform/*'
+  - 'packages/marketing-ops/*'
+  - 'packages/infrastructure/*'
+  - 'clients/*'
+  - 'tooling/*'
+  - 'e2e/*'
+  - 'docs'
 
 allowBuilds:
   '@sentry/cli': true
@@ -15,27 +22,84 @@ allowBuilds:
 
 blockExoticSubdeps: true
 
+catalog-strict: true
+auto-install-peers: true
+strict-peer-dependencies: false
+node-linker: isolated
+
 catalog:
+  '@changesets/cli': ^2.27.8
+  '@dnd-kit/core': ^6.1.0
+  '@dnd-kit/sortable': ^8.0.0
+  '@dnd-kit/utilities': ^3.2.2
+  '@eslint/js': ^9.18.0
+  '@hookform/resolvers': 3.9.1
+  '@next/bundle-analyzer': ^16.1.6
+  '@playwright/test': ^1.58.2
   '@sentry/nextjs': 10.38.0
+  '@supabase/supabase-js': ^2.97.0
   '@testing-library/jest-dom': ^6.9.1
   '@testing-library/react': ^16.3.2
   '@testing-library/user-event': ^14.6.1
   '@types/jest': ^30.0.0
+  '@types/jest-axe': ^3.5.9
+  '@types/next': ^9.0.0
   '@types/node': ^22.19.11
   '@types/react': ^19.0.2
   '@types/react-dom': ^19.0.2
+  '@types/react-window': ^1.8.8
+  '@typescript-eslint/eslint-plugin': 8.56.0
+  '@typescript-eslint/parser': 8.56.0
+  '@upstash/ratelimit': ^2.0.5
+  '@upstash/redis': ^1.34.3
+  '@vitest/coverage-v8': 3.2.4
+  '@vitest/ui': ^4.0.18
+  axe-playwright: ^2.2.2
+  clsx: 2.1.1
+  cmdk: ^1.0.0
+  cross-env: ^10.1.0
+  date-fns: ^4.1.0
+  embla-carousel-react: ^8.3.0
   eslint: ^9.18.0
+  eslint-plugin-jsx-a11y: ^6.10.2
+  eslint-plugin-react-hooks: ^7.0.1
+  glob: ^13.0.6
+  gray-matter: 4.0.3
+  husky: ^9.1.7
   jest: ^30.2.0
   jest-axe: ^10.0.0
+  jest-environment-jsdom: ^30.2.0
+  jose: ^5.10.0
   jsdom: ^25.0.0
+  knip: ^5.85.0
+  lint-staged: ^16.2.7
   lucide-react: ^0.344.0
+  madge: ^8.0.0
+  markdownlint: ^0.40.0
+  msw: ^2.11.2
   next: 16.1.5
   next-intl: ^3.25.0
+  next-mdx-remote: 5.0.0
+  prettier: ^3.3.3
   radix-ui: ^1.0.0
   react: 19.0.0
   react-dom: 19.0.0
+  react-hook-form: 7.55.0
+  react-window: ^1.8.10
+  reading-time: ^1.5.0
+  rehype-pretty-code: ^0.14.1
+  rehype-slug: ^6.0.0
+  remark-gfm: ^4.0.0
+  server-only: ^0.0.1
   sonner: ^2.0.7
+  syncpack: 14.0.0
+  tailwind-merge: 2.6.1
+  tailwindcss: ^4.1.0
+  ts-jest: ^29.4.6
+  turbo: 2.8.10
+  tsx: ^4.21.0
   typescript: 5.9.3
+  typescript-eslint: 8.56.0
   vitest: ^3.2.4
   zod: ^3.25.76
 

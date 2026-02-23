@@ -20,11 +20,11 @@
   "dependencies": {
     "@repo/infra": "workspace:*",
     "@repo/utils": "workspace:*",
-    "server-only": "^0.0.1"
+    "server-only": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "eslint": "^9.18.0",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
     "typescript": "catalog:",
     "zod": "catalog:",
     "@repo/eslint-config": "workspace:*"

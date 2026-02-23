@@ -18,7 +18,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "catalog:",
     "@repo/infra": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
@@ -27,7 +27,7 @@
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-hook-form": "^7.71.2",
+    "react-hook-form": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
