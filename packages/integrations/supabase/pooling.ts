@@ -320,16 +320,6 @@ export async function createRLSClient(
       persistSession: false,
       autoRefreshToken: false,
     },
-    cookies: {
-      getAll() {
-        return cookieStore.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          cookieStore.set(name, value, options);
-        });
-      },
-    },
     global: {
       headers: options?.tenantId ? { 'X-Tenant-Id': options.tenantId } : undefined,
     },

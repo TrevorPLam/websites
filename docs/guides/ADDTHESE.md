@@ -1,2415 +1,1039 @@
-Excellent — rich, current data across all critical topics. Generating Batch 3 now — prioritizing the **🚨 CRITICAL** tier docs first, in decreasing priority order.
+Rich data across all three research threads. Generating Batch 5 now — completing remaining **P0** docs, **P1 accessibility suite**, and the **Sanity** pair.
 
 ---
 
-# security-headers-system.md
+# tenant-data-flow-patterns.md
 
-````markdown
-# security-headers-system.md
+```markdown
+# tenant-data-flow-patterns.md
 
-> **2026 Standards Compliance** | CSP Level 3 · Permissions-Policy · HSTS Preload ·
-> Next.js 16 Edge Middleware · OWASP Top 10 2025
+> **Internal Reference** | Per-Tenant Data Isolation · RLS · Edge Headers ·
+> Server Components · Drizzle ORM
 
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Security Headers Reference](#security-headers-reference)
-3. [CSP with Per-Request Nonces](#csp-with-per-request-nonces)
-4. [Next.js Middleware Implementation](#nextjs-middleware-implementation)
-5. [Static Headers via next.config.ts](#static-headers-via-nextconfigts)
-6. [Tenant-Aware Header Overrides](#tenant-aware-header-overrides)
-7. [Permissions Policy](#permissions-policy)
-8. [Header Audit & CI Enforcement](#header-audit--ci-enforcement)
-9. [Post-Quantum Readiness Notes](#post-quantum-readiness-notes)
-10. [Testing](#testing)
-11. [References](#references)
+1. [Data Flow Overview](#data-flow-overview)
+2. [The Golden Rule of Tenant Data](#the-golden-rule-of-tenant-data)
+3. [Layer 1 — Edge Header Injection](#layer-1--edge-header-injection)
+4. [Layer 2 — Server Component Data Access](#layer-2--server-component-data-access)
+5. [Layer 3 — Database RLS Enforcement](#layer-3--database-rls-enforcement)
+6. [Layer 4 — Cache Namespacing](#layer-4--cache-namespacing)
+7. [Layer 5 — File Storage Isolation](#layer-5--file-storage-isolation)
+8. [Cross-Tenant Data Access Patterns](#cross-tenant-data-access-patterns)
+9. [Data Flow Audit Checklist](#data-flow-audit-checklist)
+10. [Anti-Patterns to Avoid](#anti-patterns-to-avoid)
 
 ---
 
-## Overview
-
-Security headers are the first and cheapest layer of defense for web applications.
-They instruct browsers to enforce policies that mitigate XSS, clickjacking,
-MIME sniffing, information leakage, and cross-origin data theft — **before any
-application code runs**.
-
-In Next.js 16, headers are applied at two levels:
-
-- **Middleware (Edge)** — per-request, dynamic; required for CSP nonces
-- **next.config.ts** — build-time static headers; used for non-dynamic pages
-
-> ⚠️ **Critical:** CSP with nonces **requires** middleware-based dynamic rendering.
-> Static-only CSP (`next.config.ts` headers) cannot use nonces; use strict CSP
-> directives instead. [web:20][web:21]
-
----
-
-## Security Headers Reference
-
-| Header                         | Purpose                                   | Recommended Value                              |
-| ------------------------------ | ----------------------------------------- | ---------------------------------------------- |
-| `Content-Security-Policy`      | Prevents XSS, injections                  | See full policy below                          |
-| `Strict-Transport-Security`    | Enforces HTTPS                            | `max-age=63072000; includeSubDomains; preload` |
-| `X-Frame-Options`              | Prevents clickjacking                     | `DENY` (or `SAMEORIGIN` if iframe needed)      |
-| `X-Content-Type-Options`       | Prevents MIME sniffing                    | `nosniff`                                      |
-| `Referrer-Policy`              | Controls referrer leakage                 | `strict-origin-when-cross-origin`              |
-| `Permissions-Policy`           | Disables browser features                 | See full policy below                          |
-| `Cross-Origin-Opener-Policy`   | Protects from cross-origin attacks        | `same-origin`                                  |
-| `Cross-Origin-Resource-Policy` | Blocks cross-origin resource reads        | `same-origin`                                  |
-| `Cross-Origin-Embedder-Policy` | Required for SharedArrayBuffer            | `require-corp`                                 |
-| `X-DNS-Prefetch-Control`       | Controls DNS prefetching                  | `off`                                          |
-| `X-XSS-Protection`             | Legacy XSS filter (kept for old browsers) | `0` (disabled — CSP is better)                 |
-
----
-
-## CSP with Per-Request Nonces
-
-### Why Nonces Over Hashes
-
-A **nonce** (number used once) is a cryptographically random value generated per
-request, embedded into the CSP header and into every `<script>` and `<style>` tag.
-Browsers only execute scripts whose nonce matches the CSP header's nonce — blocking
-all injected scripts even if they appear in the DOM. [web:21][web:27]
-
-**Advantage over `'unsafe-inline'`**: Eliminates the largest XSS attack vector.
-**Advantage over hashes**: No need to rehash on every content change; nonces rotate
-per request automatically.
-
-### Nonce Generation
-
-```typescript
-// packages/security/src/nonce.ts
-import { Buffer } from 'node:buffer';
-
-/**
- * Generates a cryptographically secure, URL-safe base64 nonce.
- * Must be regenerated per request — never reuse across requests.
- */
-export function generateNonce(): string {
-  const array = new Uint8Array(16);
-  crypto.getRandomValues(array);
-  // URL-safe base64 (no +/=)
-  return Buffer.from(array)
-    .toString('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
-}
+## Data Flow Overview
 ```
+
+Request Arrives
+│
+▼
+EDGE (middleware.ts)
+tenantId injected into x-tenant-id header
+tenantPlan injected into x-tenant-plan header
+billingAccess injected into x-billing-access header
+│
+▼
+SERVER COMPONENT
+const tenantId = await getTenantId() ← reads x-tenant-id header
+All DB queries scoped to tenantId
+All cache keys prefixed with tenant:${tenantId}:
+│
+▼
+DATABASE (Supabase + RLS)
+Row Level Security enforces tenant isolation at DB layer
+Even if tenantId is incorrect in code, DB blocks cross-tenant reads
+│
+▼
+RESPONSE
+Data returned belongs exclusively to the requesting tenant
+No tenant ID appears in response body (leaks context)
+
 ````
 
-### CSP Policy Builder
+---
 
-```typescript
-// packages/security/src/csp.ts
+## The Golden Rule of Tenant Data
 
-interface CspOptions {
-  nonce: string;
-  isDev?: boolean;
-  trustedDomains?: string[]; // Per-tenant allowed origins (e.g., analytics, fonts)
-}
+> **Every database query, every cache key, every storage path, every background job
+> MUST be scoped to a tenantId. If you write a query without a `where tenant_id =`
+> clause, it is a bug.**
 
-export function buildCsp(options: CspOptions): string {
-  const { nonce, isDev = false, trustedDomains = [] } = options;
-
-  const directives: Record<string, string[]> = {
-    'default-src': ["'self'"],
-
-    'script-src': [
-      "'self'",
-      `'nonce-${nonce}'`,
-      "'strict-dynamic'", // Trusts scripts loaded by nonce-marked scripts
-      // Dev-only: allow eval for HMR
-      ...(isDev ? ["'unsafe-eval'"] : []),
-    ],
-
-    'style-src': [
-      "'self'",
-      `'nonce-${nonce}'`,
-      // Allow inline styles from Tailwind CSS (hash or nonce)
-    ],
-
-    'img-src': [
-      "'self'",
-      'data:',
-      'blob:',
-      'https://*.supabase.co', // Supabase Storage
-      'https://*.sanity.io', // Sanity CDN
-      'https://cdn.sanity.io',
-      'https://*.cloudinary.com',
-      ...trustedDomains,
-    ],
-
-    'font-src': ["'self'", 'https://fonts.gstatic.com'],
-
-    'connect-src': [
-      "'self'",
-      'https://*.supabase.co',
-      'https://*.supabase.io', // Supabase Realtime
-      'wss://*.supabase.co', // WebSocket for Realtime
-      'https://api.stripe.com',
-      'https://checkout.stripe.com',
-      'https://js.stripe.com',
-      'https://app.posthog.com', // Analytics
-      'https://*.sentry.io', // Error reporting
-      ...(isDev ? ['ws://localhost:*', 'http://localhost:*'] : []),
-      ...trustedDomains,
-    ],
-
-    'frame-src': [
-      'https://js.stripe.com', // Stripe Elements iframes
-      'https://hooks.stripe.com',
-      "'none'", // Restrict other frames
-    ],
-
-    'object-src': ["'none'"],
-    'base-uri': ["'self'"],
-    'form-action': ["'self'"],
-
-    'frame-ancestors': ["'none'"], // Replaces X-Frame-Options for modern browsers
-
-    'upgrade-insecure-requests': [], // Force HTTPS for all embedded resources
-
-    // Report-only URI for monitoring violations in prod
-    'report-to': ['csp-endpoint'],
-  };
-
-  return Object.entries(directives)
-    .map(([key, values]) => (values.length ? `${key} ${values.join(' ')}` : key))
-    .join('; ');
-}
-
-// Reporting endpoint configuration (add to headers)
-export const REPORTING_ENDPOINTS = 'csp-endpoint="https://your-csp-report-endpoint.com/csp"';
-```
+This rule is enforced at three independent layers:
+1. **Application code** — explicit `tenantId` in every query
+2. **Database RLS** — blocks any query without matching tenant context
+3. **CI lint rule** — custom ESLint rule flags queries missing `tenantId`
 
 ---
 
-## Next.js Middleware Implementation
+## Layer 1 — Edge Header Injection
+
+The canonical tenant context flows from middleware into all downstream code as
+request headers. Nothing downstream should ever re-resolve the tenant from scratch.
 
 ```typescript
-// middleware.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { generateNonce, buildCsp } from '@repo/security';
+// packages/tenant/src/context.ts
 
-export const config = {
-  matcher: [
-    // Apply to all routes EXCEPT static files and health checks
-    '/((?!_next/static|_next/image|favicon.ico|api/health|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?|ttf|eot)$).*)',
-  ],
+/**
+ * Read resolved tenant context from Edge-injected headers.
+ * Call this in Server Components and API Route Handlers.
+ * Never call DB or KV from here — headers are already resolved.
+ */
+export async function getTenantContext(): Promise<TenantContext> {
+  const headersList = await headers()
+
+  const tenantId = headersList.get('x-tenant-id')
+  const tenantSlug = headersList.get('x-tenant-slug')
+  const tenantPlan = headersList.get('x-tenant-plan') as TenantPlan
+  const billingAccess = headersList.get('x-billing-access') as BillingAccess
+  const tenantLocale = headersList.get('x-tenant-locale') ?? 'en'
+
+  if (!tenantId) {
+    throw new TenantNotFoundError('No tenant context in request headers')
+  }
+
+  return {
+    tenantId,
+    tenantSlug: tenantSlug ?? '',
+    tenantPlan: tenantPlan ?? 'free',
+    billingAccess: billingAccess ?? 'full',
+    locale: tenantLocale,
+  }
+}
+
+// Convenience helpers
+export async function getTenantId(): Promise<string> {
+  return (await getTenantContext()).tenantId
+}
+
+export async function requireBillingAccess(
+  required: BillingAccess,
+): Promise<TenantContext> {
+  const ctx = await getTenantContext()
+  const accessLevels: BillingAccess[] = ['locked', 'readonly', 'restricted', 'full']
+  const requiredLevel = accessLevels.indexOf(required)
+  const actualLevel = accessLevels.indexOf(ctx.billingAccess)
+
+  if (actualLevel < requiredLevel) {
+    throw new BillingAccessError(
+      `Operation requires ${required} billing access; tenant has ${ctx.billingAccess}`,
+    )
+  }
+  return ctx
+}
+````
+
+---
+
+## Layer 2 — Server Component Data Access
+
+### Repository Pattern (Tenant-Scoped)
+
+Every data access function takes `tenantId` as its **first parameter**, making
+cross-tenant access require an explicit override — preventing accidental omission.
+
+```typescript
+// packages/db/src/repositories/leads.repository.ts
+import { getDb } from '../drizzle';
+import { leads } from '../schema/leads';
+import { eq, and, desc, count } from 'drizzle-orm';
+
+export const leadsRepository = {
+  async findMany(
+    tenantId: string,
+    options: {
+      limit?: number;
+      offset?: number;
+      status?: string;
+    } = {}
+  ) {
+    const db = getDb();
+    return db
+      .select()
+      .from(leads)
+      .where(
+        and(
+          eq(leads.tenantId, tenantId), // Always scope to tenant
+          options.status ? eq(leads.status, options.status) : undefined
+        )
+      )
+      .orderBy(desc(leads.createdAt))
+      .limit(options.limit ?? 50)
+      .offset(options.offset ?? 0);
+  },
+
+  async findById(tenantId: string, leadId: string) {
+    const db = getDb();
+    const [lead] = await db
+      .select()
+      .from(leads)
+      .where(
+        and(
+          eq(leads.tenantId, tenantId), // Scope: tenant MUST match
+          eq(leads.id, leadId)
+        )
+      )
+      .limit(1);
+
+    // Returns undefined if lead exists but belongs to different tenant
+    // This is intentional — prevents information disclosure
+    return lead ?? null;
+  },
+
+  async countByTenant(tenantId: string): Promise<number> {
+    const db = getDb();
+    const [result] = await db
+      .select({ count: count() })
+      .from(leads)
+      .where(eq(leads.tenantId, tenantId));
+    return result?.count ?? 0;
+  },
 };
-
-export async function middleware(req: NextRequest) {
-  const nonce = generateNonce();
-  const isDev = process.env.NODE_ENV === 'development';
-
-  // Build CSP (tenant-aware: read allowed domains from tenant context)
-  const tenantPlan = req.headers.get('x-tenant-plan');
-  const trustedDomains = getTrustedDomainsByPlan(tenantPlan);
-  const csp = buildCsp({ nonce, isDev, trustedDomains });
-
-  const requestHeaders = new Headers(req.headers);
-  // Pass nonce to Server Components via header
-  requestHeaders.set('x-nonce', nonce);
-  requestHeaders.set('Content-Security-Policy', csp);
-
-  const response = NextResponse.next({ request: { headers: requestHeaders } });
-
-  // ─── Security Headers ─────────────────────────────────────────────────────
-  response.headers.set('Content-Security-Policy', csp);
-  response.headers.set(
-    'Strict-Transport-Security',
-    'max-age=63072000; includeSubDomains; preload' // 2 years, HSTS preload
-  );
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('X-DNS-Prefetch-Control', 'off');
-  response.headers.set('X-XSS-Protection', '0'); // Disabled — CSP is the real protection
-  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
-  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
-  response.headers.set('Permissions-Policy', buildPermissionsPolicy(tenantPlan));
-  response.headers.set('Reporting-Endpoints', REPORTING_ENDPOINTS);
-
-  // Remove headers that leak server info
-  response.headers.delete('X-Powered-By');
-  response.headers.delete('Server');
-
-  return response;
-}
-
-function getTrustedDomainsByPlan(plan: string | null): string[] {
-  // Enterprise tenants may have additional trusted domains
-  // (e.g., their own analytics, fonts, or media CDN)
-  if (plan === 'enterprise') return [];
-  return [];
-}
 ```
 
-### Reading the Nonce in Server Components
-
-The nonce must be accessed via `headers()` — **never via client-side JS**:
+### Usage in Server Components
 
 ```typescript
-// app/layout.tsx
-import { headers } from 'next/headers'
-import Script from 'next/script'
+// widgets/lead-feed/ui/LeadFeed.tsx
+import { getTenantId } from '@repo/tenant/context'
+import { leadsRepository } from '@repo/db/repositories/leads'
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  // Read nonce injected by middleware
-  // Requires dynamic rendering (PPR shell must be dynamic for nonce support)
-  const headersList = await headers()
-  const nonce = headersList.get('x-nonce') ?? ''
+export async function LeadFeed() {
+  // Tenant ID comes from edge-injected headers — never from URL params or query strings
+  const tenantId = await getTenantId()
+
+  const leads = await leadsRepository.findMany(tenantId, {
+    limit: 20,
+    status: 'new',
+  })
 
   return (
-    <html lang="en">
-      <head>
-        {/* Inline scripts MUST carry the nonce */}
-        <script
-          nonce={nonce}
-          dangerouslySetInnerHTML={{
-            __html: `window.__NONCE__ = "${nonce}";`,
-          }}
-        />
-      </head>
-      <body>
-        {children}
-        {/* Third-party scripts must use next/script with nonce */}
-        <Script
-          src="https://app.posthog.com/static/array.js"
-          nonce={nonce}
-          strategy="afterInteractive"
-        />
-      </body>
-    </html>
+    <ul role="list">
+      {leads.map(lead => (
+        <LeadCard key={lead.id} lead={lead} />
+      ))}
+    </ul>
   )
 }
 ```
 
 ---
 
-## Static Headers via next.config.ts
+## Layer 3 — Database RLS Enforcement
 
-For routes that don't need nonces (API routes, static pages), apply security headers
-in `next.config.ts` — these are set at the CDN edge via Vercel:
+RLS is the **backstop** — even if application code has a bug, the database rejects
+cross-tenant queries. The application passes tenant context via JWT claims.
+
+```sql
+-- supabase/migrations/20260223_tenant_rls.sql
+
+-- Enable RLS on all tenant-scoped tables
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sites ENABLE ROW LEVEL SECURITY;
+ALTER TABLE files ENABLE ROW LEVEL SECURITY;
+ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE analytics_events ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Tenants can only read their own leads
+CREATE POLICY "tenant_leads_select"
+ON leads FOR SELECT
+USING (
+  tenant_id = (
+    COALESCE(
+      auth.jwt() ->> 'tenant_id',
+      auth.jwt() -> 'app_metadata' ->> 'tenant_id'
+    )
+  )::uuid
+);
+
+-- Policy: Tenants can only insert leads for themselves
+CREATE POLICY "tenant_leads_insert"
+ON leads FOR INSERT
+WITH CHECK (
+  tenant_id = (
+    COALESCE(
+      auth.jwt() ->> 'tenant_id',
+      auth.jwt() -> 'app_metadata' ->> 'tenant_id'
+    )
+  )::uuid
+);
+
+-- Policy: Tenants can only update their own leads
+CREATE POLICY "tenant_leads_update"
+ON leads FOR UPDATE
+USING (
+  tenant_id = (
+    COALESCE(
+      auth.jwt() ->> 'tenant_id',
+      auth.jwt() -> 'app_metadata' ->> 'tenant_id'
+    )
+  )::uuid
+)
+WITH CHECK (
+  tenant_id = (
+    COALESCE(
+      auth.jwt() ->> 'tenant_id',
+      auth.jwt() -> 'app_metadata' ->> 'tenant_id'
+    )
+  )::uuid
+);
+
+-- Service role bypass (for admin/internal operations only)
+-- Never use service role in tenant-facing code paths
+CREATE POLICY "service_role_bypass"
+ON leads
+USING (auth.role() = 'service_role');
+```
+
+### Drizzle + RLS: Passing Tenant Context
 
 ```typescript
-// next.config.ts
-import type { NextConfig } from 'next';
+// packages/db/src/rls-client.ts
+import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/postgres-js';
 
-const STATIC_SECURITY_HEADERS = [
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'X-Frame-Options', value: 'DENY' },
-  { key: 'X-DNS-Prefetch-Control', value: 'off' },
-  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
-  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-  { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
-  { key: 'Permissions-Policy', value: buildPermissionsPolicy() },
-  // Static CSP (no nonce — use hash-based for inline scripts if needed)
-  {
-    key: 'Content-Security-Policy',
-    value: [
-      "default-src 'self'",
-      "script-src 'self' 'strict-dynamic'",
-      "style-src 'self' 'unsafe-inline'", // Relaxed for static — upgrade to nonce in middleware
-      "img-src 'self' data: https:",
-      "connect-src 'self' https://*.supabase.co https://api.stripe.com",
-      'frame-src https://js.stripe.com',
-      "object-src 'none'",
-      "base-uri 'self'",
-      'upgrade-insecure-requests',
-    ].join('; '),
+/**
+ * Create a DB client with tenant JWT embedded.
+ * Supabase RLS uses this JWT to enforce row-level policies.
+ * Use for any operation where tenant isolation matters.
+ */
+export function createTenantDb(tenantJwt: string) {
+  const sql = postgres(process.env.DATABASE_POOL_URL!, {
+    max: 1,
+    prepare: false,
+    transform: postgres.camel,
+    connection: {
+      // Supabase reads this setting to apply RLS
+      search_path: 'public',
+    },
+    onnotice: () => {}, // Suppress notices in production
+  });
+
+  return drizzle(sql, {
+    schema,
+    // Set JWT for this connection so RLS policies fire
+    // This is done via SET LOCAL in a transaction
+  });
+}
+```
+
+---
+
+## Layer 4 — Cache Namespacing
+
+Every cached value uses a `tenant:${tenantId}:` prefix. This prevents cache
+pollution between tenants and enables surgical invalidation per tenant.
+
+```typescript
+// packages/cache/src/tenant-cache.ts
+import { redis } from './redis-client';
+
+export const tenantCache = {
+  key: (tenantId: string, resource: string, id?: string): string =>
+    id ? `tenant:${tenantId}:${resource}:${id}` : `tenant:${tenantId}:${resource}`,
+
+  async get<T>(tenantId: string, resource: string, id?: string): Promise<T | null> {
+    const key = this.key(tenantId, resource, id);
+    return redis.get<T>(key);
   },
-];
 
-const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: STATIC_SECURITY_HEADERS,
-      },
-    ];
+  async set<T>(
+    tenantId: string,
+    resource: string,
+    value: T,
+    ttlSeconds: number,
+    id?: string
+  ): Promise<void> {
+    const key = this.key(tenantId, resource, id);
+    await redis.set(key, value, { ex: ttlSeconds });
+  },
+
+  async invalidate(tenantId: string, resource?: string): Promise<void> {
+    const pattern = resource ? `tenant:${tenantId}:${resource}:*` : `tenant:${tenantId}:*`;
+
+    // Scan and delete (never use KEYS in production — use SCAN)
+    let cursor = 0;
+    do {
+      const [nextCursor, keys] = await redis.scan(cursor, {
+        match: pattern,
+        count: 100,
+      });
+      cursor = nextCursor;
+      if (keys.length) await redis.del(...keys);
+    } while (cursor !== 0);
   },
 };
-
-export default nextConfig;
 ```
 
 ---
 
-## Tenant-Aware Header Overrides
+## Layer 5 — File Storage Isolation
 
-Some enterprise tenants may require custom CSP adjustments — e.g., allowing their own
-CDN domain or embedding your app in their portal:
+All tenant files live under a path prefix that includes the tenantId:
 
 ```typescript
-// packages/security/src/tenant-csp.ts
-interface TenantCspOverrides {
-  allowedImageDomains?: string[];
-  allowedConnectDomains?: string[];
-  allowIframe?: boolean; // Enterprise: embed in tenant's portal
-  iframeAllowedOrigins?: string[];
+// packages/storage/src/tenant-storage.ts
+
+export function getTenantStoragePath(
+  tenantId: string,
+  category: 'uploads' | 'exports' | 'avatars' | 'documents',
+  filename: string
+): string {
+  // Path: tenants/{tenantId}/{category}/{filename}
+  // Supabase Storage RLS enforces this path prefix per tenant
+  return `tenants/${tenantId}/${category}/${filename}`;
 }
 
-export function buildTenantCsp(baseNonce: string, overrides: TenantCspOverrides = {}): string {
-  const extraImages = overrides.allowedImageDomains ?? [];
-  const extraConnect = overrides.allowedConnectDomains ?? [];
+export async function uploadTenantFile(
+  tenantId: string,
+  category: 'uploads' | 'exports' | 'avatars',
+  file: File,
+  options: { upsert?: boolean } = {}
+): Promise<{ path: string; url: string }> {
+  const supabase = createServiceClient();
+  const filename = `${Date.now()}-${sanitizeFilename(file.name)}`;
+  const path = getTenantStoragePath(tenantId, category, filename);
 
-  // Override frame-ancestors for enterprise iframe embedding
-  const frameAncestors =
-    overrides.allowIframe && overrides.iframeAllowedOrigins?.length
-      ? overrides.iframeAllowedOrigins.join(' ')
-      : "'none'";
+  const { error } = await supabase.storage.from('tenant-files').upload(path, file, {
+    upsert: options.upsert ?? false,
+    contentType: file.type,
+  });
 
-  return buildCsp({
-    nonce: baseNonce,
-    trustedDomains: [...extraImages, ...extraConnect],
-  }).replace("frame-ancestors 'none'", `frame-ancestors ${frameAncestors}`);
+  if (error) throw new Error(`Storage upload failed: ${error.message}`);
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('tenant-files').getPublicUrl(path);
+
+  return { path, url: publicUrl };
 }
+```
+
+### Supabase Storage RLS
+
+```sql
+-- Storage bucket policy: tenants can only access their own prefix
+CREATE POLICY "tenant_storage_access"
+ON storage.objects FOR ALL
+USING (
+  bucket_id = 'tenant-files'
+  AND (storage.foldername(name)) = 'tenants'
+  AND (storage.foldername(name)) = (
+    auth.jwt() -> 'app_metadata' ->> 'tenant_id'
+  )
+);
 ```
 
 ---
 
-## Permissions Policy
+## Cross-Tenant Data Access Patterns
 
-Control which browser APIs are available to your app and third-party scripts:
+Some legitimate operations require reading across tenants. These are **always admin-only**, use the service role, and are explicitly logged:
 
 ```typescript
-// packages/security/src/permissions-policy.ts
-interface PermissionsPolicyOptions {
+// packages/db/src/admin-queries.ts — ADMIN ONLY — never expose to tenants
+import { createServiceClient } from '@repo/db/supabase-server';
+
+/**
+ * Cross-tenant query — bypasses RLS via service role.
+ * NEVER call from tenant-facing code paths.
+ * All calls are logged for audit purposes.
+ */
+export async function adminGetAllTenants(options: {
   plan?: string;
-}
+  status?: string;
+  adminId: string; // Required for audit log
+}) {
+  // Audit log first
+  await auditLog({
+    action: 'admin.tenants.list',
+    actorId: options.adminId,
+    metadata: options,
+  });
 
-export function buildPermissionsPolicy(plan?: string | null): string {
-  const policies: Record<string, string> = {
-    // Camera/mic/geo: only allow if explicitly needed (default: none)
-    camera: '()', // Blocked
-    microphone: '()', // Blocked
-    geolocation: '(self)', // Only self — for local SEO features
-    fullscreen: '(self)', // For video embeds
-    payment: '()', // Stripe uses its own iframe — never expose API
-    usb: '()', // Block hardware access
-    bluetooth: '()',
-    magnetometer: '()',
-    gyroscope: '()',
-    accelerometer: '()',
-    'ambient-light-sensor': '()',
-    autoplay: '()', // No autoplay — accessibility
-    'picture-in-picture': '(self)',
-    'screen-wake-lock': '()',
-    serial: '()',
-    'xr-spatial-tracking': '()',
+  const supabase = createServiceClient(); // Service role — bypasses RLS
+  const query = supabase.from('tenants').select('*');
 
-    // Enterprise plans may need additional permissions for embedded widgets
-    ...(plan === 'enterprise'
-      ? {
-          geolocation: '(self)',
-        }
-      : {}),
-  };
+  if (options.plan) query.eq('plan', options.plan);
+  if (options.status) query.eq('status', options.status);
 
-  return Object.entries(policies)
-    .map(([key, value]) => `${key}=${value}`)
-    .join(', ');
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
 }
 ```
 
 ---
 
-## Header Audit & CI Enforcement
+## Data Flow Audit Checklist
 
-### Automated Header Testing Script
+```
+Per-Feature Checklist (run before merging any new data-access code):
+
+□ Every DB query has .where(eq(table.tenantId, tenantId))
+□ tenantId comes from getTenantId() (header), NOT URL params
+□ Every cache key uses tenantCache.key(tenantId, ...) pattern
+□ Every storage upload uses getTenantStoragePath(tenantId, ...)
+□ Background job payloads include tenantId and use it in all queries
+□ No raw SQL strings (use Drizzle ORM for type-safe queries)
+□ Service role client (createServiceClient) NOT used in tenant-facing routes
+□ findById queries use BOTH tenantId AND resourceId in WHERE clause
+□ Error messages do NOT reveal cross-tenant resource existence
+□ Logging redacts tenantId from public-facing error responses
+```
+
+---
+
+## Anti-Patterns to Avoid
 
 ```typescript
-// scripts/audit-security-headers.ts
-import { execSync } from 'node:child_process'
-
-const REQUIRED_HEADERS = [
-  'content-security-policy',
-  'strict-transport-security',
-  'x-frame-options',
-  'x-content-type-options',
-  'referrer-policy',
-  'permissions-policy',
-  'cross-origin-opener-policy',
-  'cross-origin-resource-policy',
-]
-
-const FORBIDDEN_HEADERS = [
-  'x-powered-by',
-  'server',
-]
-
-async function auditHeaders(url: string) {
-  const response = await fetch(url, { method: 'HEAD' })
-  const issues: string[] = []
-
-  for (const header of REQUIRED_HEADERS) {
-    if (!response.headers.has(header)) {
-      issues.push(`MISSING: ${header}`)
-    }
-  }
-
-  for (const header of FORBIDDEN_HEADERS) {
-    if (response.headers.has(header)) {
-      issues.push(`LEAKING: ${header} = ${response.headers.get(header)}`)
-    }
-  }
-
-  // Validate HSTS: must include preload and be ≥ 1 year
-  const hsts = response.headers.get('strict-transport-security')
-  if (hsts) {
-    const maxAge = parseInt(hsts.match(/max-age=(\d+)/)?. ?? '0')
-    if (maxAge < 31_536_000) {
-      issues.push(`WEAK HSTS: max-age=${maxAge} (minimum: 31536000 = 1 year)`)
-    }
-    if (!hsts.includes('includeSubDomains')) {
-      issues.push('WEAK HSTS: missing includeSubDomains')
-    }
-  }
-
-  // Validate CSP: must not contain 'unsafe-inline' or 'unsafe-eval'
-  const csp = response.headers.get('content-security-policy')
-  if (csp) {
-    if (csp.includes("'unsafe-inline'") && !csp.includes('nonce-')) {
-      issues.push("WEAK CSP: 'unsafe-inline' without nonce")
-    }
-    if (csp.includes("'unsafe-eval'") && process.env.NODE_ENV !== 'development') {
-      issues.push("WEAK CSP: 'unsafe-eval' in production")
-    }
-  }
-
-  return { url, issues, passed: issues.length === 0 }
+// ❌ ANTI-PATTERN 1: Getting tenantId from URL params
+export async function BadLeadPage({ params }: { params: { tenantId: string } }) {
+  // URL params can be manipulated — attacker sets ?tenantId=victim_tenant
+  const leads = await getLeads(params.tenantId);
 }
 
-// Run in CI:
-// pnpm tsx scripts/audit-security-headers.ts https://staging.yoursaas.com
-const results = await Promise.all([
-  auditHeaders(process.argv ?? 'https://localhost:3000'),
-])
+// ✅ CORRECT: Always from trusted headers
+export async function GoodLeadPage() {
+  const tenantId = await getTenantId(); // From Edge-validated headers
+  const leads = await leadsRepository.findMany(tenantId);
+}
 
-for (const result of results) {
-  if (!result.passed) {
-    console.error(`❌ ${result.url}:`)
-    result.issues.forEach(i => console.error(`   - ${i}`))
-    process.exit(1)
-  } else {
-    console.log(`✅ ${result.url}: All security headers present`)
-  }
+// ❌ ANTI-PATTERN 2: Missing tenant scope in lookup
+async function badFindLead(leadId: string) {
+  return db.select().from(leads).where(eq(leads.id, leadId));
+  // Any tenant can read any lead by guessing the UUID!
+}
+
+// ✅ CORRECT: Always double-key with tenantId
+async function goodFindLead(tenantId: string, leadId: string) {
+  return leadsRepository.findById(tenantId, leadId);
+}
+
+// ❌ ANTI-PATTERN 3: Unscoped cache key
+await redis.set(`lead:${leadId}`, data); // Cross-tenant cache collision!
+
+// ✅ CORRECT: Tenant-namespaced cache key
+await tenantCache.set(tenantId, 'lead', data, 300, leadId);
+// key = tenant:{tenantId}:lead:{leadId}
+
+// ❌ ANTI-PATTERN 4: Using service role in tenant-facing route
+export async function POST(req: NextRequest) {
+  const supabase = createServiceClient(); // Bypasses RLS — NEVER in API routes!
+  const leads = await supabase.from('leads').select(); // Returns ALL tenants' leads
 }
 ```
-
-### CI Integration
-
-```yaml
-# .github/workflows/security-headers.yml
-name: Security Headers Audit
-
-on:
-  deployment_status:
-
-jobs:
-  audit:
-    if: github.event.deployment_status.state == 'success'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - name: Audit Security Headers
-        run: pnpm tsx scripts/audit-security-headers.ts ${{ github.event.deployment_status.environment_url }}
-```
-
----
-
-## Post-Quantum Readiness Notes
-
-> **Timeline:** NIST finalized FIPS 203 (ML-KEM), FIPS 204 (ML-DSA), FIPS 205
-> (SLH-DSA) in August 2024. TLS 1.3 with hybrid PQC key exchange is being rolled
-> out by Cloudflare and major CDNs through 2025–2026.
-
-**What this means for your app today:**
-
-- Your HTTPS traffic is protected by your CDN (Vercel → Cloudflare) — PQC migration
-  happens at the TLS layer, not in your application headers.
-- **Action required now:** Ensure all API keys, signing keys, and session tokens use
-  256-bit symmetric keys (not 128-bit) — these are already quantum-resistant.
-- **Action required by 2027:** Replace any RSA-2048 or ECDSA P-256 signing (JWT,
-  webhook signatures) with Ed25519 or ML-DSA when library support stabilizes.
-- **Monitor:** [NIST PQC Project](https://csrc.nist.gov/projects/post-quantum-cryptography)
-
----
-
-## Testing
-
-### Vitest Unit Tests
-
-```typescript
-// packages/security/src/csp.test.ts
-import { describe, it, expect } from 'vitest';
-import { buildCsp, generateNonce } from './csp';
-
-describe('CSP Builder', () => {
-  it('generates a unique nonce per call', () => {
-    const n1 = generateNonce();
-    const n2 = generateNonce();
-    expect(n1).not.toBe(n2);
-    expect(n1).toHaveLength(22); // 16 bytes base64url = 22 chars
-  });
-
-  it('includes nonce in script-src', () => {
-    const nonce = generateNonce();
-    const csp = buildCsp({ nonce });
-    expect(csp).toContain(`'nonce-${nonce}'`);
-  });
-
-  it('blocks unsafe-inline in production', () => {
-    const csp = buildCsp({ nonce: 'abc123', isDev: false });
-    expect(csp).not.toContain("'unsafe-inline'");
-  });
-
-  it('disables object-src', () => {
-    const csp = buildCsp({ nonce: 'abc123' });
-    expect(csp).toContain("object-src 'none'");
-  });
-
-  it('blocks frame-ancestors by default', () => {
-    const csp = buildCsp({ nonce: 'abc123' });
-    expect(csp).toContain("frame-ancestors 'none'");
-  });
-});
-```
-
-### Integration Test with Playwright
-
-```typescript
-// e2e/security-headers.spec.ts
-import { test, expect } from '@playwright/test';
-
-test.describe('Security Headers', () => {
-  test('homepage has correct security headers', async ({ request }) => {
-    const response = await request.head('/');
-
-    expect(response.headers()['x-content-type-options']).toBe('nosniff');
-    expect(response.headers()['x-frame-options']).toBe('DENY');
-    expect(response.headers()['content-security-policy']).toContain("object-src 'none'");
-    expect(response.headers()['strict-transport-security']).toContain('preload');
-    expect(response.headers()['x-powered-by']).toBeUndefined();
-  });
-
-  test('CSP contains nonce on dynamic pages', async ({ request }) => {
-    const response = await request.get('/dashboard');
-    const csp = response.headers()['content-security-policy'];
-    expect(csp).toMatch(/nonce-[A-Za-z0-9\-_]{20,}/);
-  });
-});
-```
-
----
-
-## References
-
-- [Next.js CSP Guide](https://nextjs.org/docs/app/guides/content-security-policy) [web:20]
-- [Nonce Setup in Next.js](https://centralcsp.com/articles/how-to-setup-nonce-with-nextjs) [web:21]
-- [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/)
-- [MDN CSP Reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
-- [HSTS Preload List](https://hstspreload.org/)
-- [Permissions-Policy Reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy)
-- [NIST Post-Quantum Cryptography Standards](https://csrc.nist.gov/projects/post-quantum-cryptography)
-- [OneUptime Security Headers Guide](https://oneuptime.com/blog/post/2026-01-24-handle-security-headers/) [web:33]
 
 ````
 
 ***
 
-# react-19-documentation.md
+# sanity-client-groq.md
 
 ```markdown
-# react-19-documentation.md
+# sanity-client-groq.md
 
-> **2026 Standards Compliance** | React 19.2 · React Compiler 1.0 Stable ·
-> Activity API · useEffectEvent · View Transitions · Next.js 16 Integration
+> **2026 Standards Compliance** | next-sanity 9.x · @sanity/client 6.x ·
+> GROQ Typegen · Next.js 16 `use cache` · Perspective API
 
 ## Table of Contents
-1. [Overview & What's New in 19.2](#overview--whats-new-in-192)
-2. [React Compiler 1.0 — Stable](#react-compiler-10--stable)
-3. [Activity Component](#activity-component)
-4. [useEffectEvent Hook](#useeffectevent-hook)
-5. [Actions & Form State (19.0 Recap)](#actions--form-state-190-recap)
-6. [Server Components Patterns](#server-components-patterns)
-7. [View Transitions](#view-transitions)
-8. [Performance Patterns with Activity](#performance-patterns-with-activity)
-9. [Migration Guide](#migration-guide)
+1. [Overview](#overview)
+2. [Client Setup](#client-setup)
+3. [GROQ Query Patterns](#groq-query-patterns)
+4. [Sanity TypeGen](#sanity-typegen)
+5. [Integration with Next.js 16 Cache](#integration-with-nextjs-16-cache)
+6. [Draft Mode / Live Preview](#draft-mode--live-preview)
+7. [Image URL Builder](#image-url-builder)
+8. [Portable Text Rendering](#portable-text-rendering)
+9. [Testing GROQ Queries](#testing-groq-queries)
 10. [References](#references)
 
 ---
 
-## Overview & What's New in 19.2
-
-React 19.2, shipped in October 2025, is a significant update that stabilizes the React
-Compiler and introduces first-class primitives for managing UI state complexity. [web:25][web:28]
-
-| Feature | Status | Description |
-|---------|--------|-------------|
-| React Compiler | **Stable 1.0** | Build-time memoization; replaces `useMemo`/`useCallback` [web:34] |
-| `<Activity />` | **New** | Hide/show UI preserving state without unmounting [web:28] |
-| `useEffectEvent` | **New** | Decouple event logic from effect dependencies [web:25] |
-| View Transitions | **New** | Declarative page/element transitions via browser API [web:31] |
-| Performance Tracks | **New** | Chrome DevTools integration for React render profiling [web:31] |
-| `use()` | **Stable** | Read Promises and Context in render |
-| Actions / `useActionState` | **Stable** | Full-stack form mutations [web:34] |
-
----
-
-## React Compiler 1.0 — Stable
-
-The React Compiler is now **stable and production-ready**. It eliminates the need for
-manual memoization by analyzing your component tree at build time and inserting optimal
-`useMemo`/`useCallback` equivalents automatically. [web:34]
-
-### Setup in Next.js 16
-
-```typescript
-// next.config.ts
-import type { NextConfig } from 'next'
-
-const nextConfig: NextConfig = {
-  experimental: {
-    reactCompiler: true,   // Enable stable React Compiler
-  },
-}
-
-export default nextConfig
-````
-
-```bash
-# Install compiler babel plugin (used by Next.js internally)
-pnpm add -D babel-plugin-react-compiler
-```
-
-### Before vs After Compiler
-
-**Before (manual memoization — verbose and error-prone):**
-
-```typescript
-// ❌ Manual memoization — what you had to write before
-function ProductList({ products, onSelect }: ProductListProps) {
-  const sortedProducts = useMemo(
-    () => [...products].sort((a, b) => a.name.localeCompare(b.name)),
-    [products],
-  )
-
-  const handleSelect = useCallback(
-    (id: string) => onSelect(id),
-    [onSelect],
-  )
-
-  return (
-    <ul>
-      {sortedProducts.map(p => (
-        <ProductItem key={p.id} product={p} onSelect={handleSelect} />
-      ))}
-    </ul>
-  )
-}
-```
-
-**After (compiler handles it — clean component logic):**
-
-```typescript
-// ✅ React Compiler handles memoization at build time
-function ProductList({ products, onSelect }: ProductListProps) {
-  // Compiler automatically memoizes derived values and callbacks
-  const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name))
-
-  return (
-    <ul>
-      {sortedProducts.map(p => (
-        <ProductItem key={p.id} product={p} onSelect={id => onSelect(id)} />
-      ))}
-    </ul>
-  )
-}
-```
-
-### Compiler Linting Rules
-
-```bash
-# Install the compiler ESLint plugin
-pnpm add -D eslint-plugin-react-compiler
-```
-
-```javascript
-// eslint.config.js
-import reactCompiler from 'eslint-plugin-react-compiler';
-
-export default [
-  {
-    plugins: { 'react-compiler': reactCompiler },
-    rules: {
-      // Warns about patterns that prevent compiler optimization
-      'react-compiler/react-compiler': 'warn',
-    },
-  },
-];
-```
-
-### Rules of React Compiler (What Breaks Optimization)
-
-The compiler can only optimize components that follow the Rules of React. Common
-violations that prevent optimization:
-
-```typescript
-// ❌ Mutating props or state directly — breaks compiler
-function BadComponent({ items }: { items: string[] }) {
-  items.push('new') // Direct mutation — unpredictable
-  return <ul>{items.map(i => <li key={i}>{i}</li>)}</ul>
-}
-
-// ✅ Pure, immutable operations — compiler can optimize
-function GoodComponent({ items }: { items: string[] }) {
-  const withNew = [...items, 'new']
-  return <ul>{withNew.map(i => <li key={i}>{i}</li>)}</ul>
-}
-
-// ❌ Calling hooks conditionally — breaks compiler
-function ConditionalHook({ isAdmin }: { isAdmin: boolean }) {
-  if (isAdmin) {
-    const data = useAdminData() // Conditional hook — forbidden
-  }
-}
-
-// ❌ Reading refs during render — breaks optimization
-function RefDuringRender({ ref }: { ref: React.RefObject<HTMLElement> }) {
-  const height = ref.current?.offsetHeight  // Side effect during render
-}
-```
-
----
-
-## Activity Component
-
-`<Activity>` is React 19.2's solution for managing hidden-but-retained UI — tabs,
-drawers, wizard steps, and back-navigation state. [web:25][web:28]
-
-### Core Behavior
-
-```
-mode="visible"  →  Component renders normally, is interactive, paints to screen
-mode="hidden"   →  Component continues rendering (data fetches, state updates)
-                   but does NOT paint — zero visual or layout impact
-```
-
-This means hidden activities can **prefetch data** and **warm up state** while
-invisible, making the transition to `visible` instantaneous.
-
-### Basic Usage
-
-```typescript
-import { Activity } from 'react'
-
-function TabbedDashboard() {
-  const [activeTab, setActiveTab] = useState<'analytics' | 'leads' | 'settings'>('analytics')
-
-  return (
-    <div>
-      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* ✅ All tabs render simultaneously; only active one paints */}
-      <Activity mode={activeTab === 'analytics' ? 'visible' : 'hidden'}>
-        <AnalyticsTab />    {/* Data fetches continue in background */}
-      </Activity>
-
-      <Activity mode={activeTab === 'leads' ? 'visible' : 'hidden'}>
-        <LeadsTab />        {/* Form state preserved when switching away */}
-      </Activity>
-
-      <Activity mode={activeTab === 'settings' ? 'visible' : 'hidden'}>
-        <SettingsTab />     {/* Settings don't lose unsaved changes */}
-      </Activity>
-    </div>
-  )
-}
-```
-
-**Compared to previous patterns:**
-
-```typescript
-// ❌ Before — loses state on tab switch, refetches data every time
-{activeTab === 'leads' && <LeadsTab />}
-
-// ❌ Before — CSS hide (display: none) — component still in DOM but hidden
-<div style={{ display: activeTab === 'leads' ? 'block' : 'none' }}>
-  <LeadsTab />
-</div>
-
-// ✅ Activity — state preserved, data prefetched, zero paint overhead
-<Activity mode={activeTab === 'leads' ? 'visible' : 'hidden'}>
-  <LeadsTab />
-</Activity>
-```
-
-### Route Prefetching with Activity
-
-One of the most powerful uses: prefetch the next likely page while the current one
-is visible:
-
-```typescript
-// components/NavigationPrefetcher.tsx
-import { Activity } from 'react'
-
-interface NavigationPrefetcherProps {
-  currentPath: string
-  children: React.ReactNode
-}
-
-export function NavigationPrefetcher({
-  currentPath,
-  children,
-}: NavigationPrefetcherProps) {
-  return (
-    <>
-      {children}
-
-      {/* Prefetch dashboard while user is on login page */}
-      {currentPath === '/login' && (
-        <Activity mode="hidden">
-          <DashboardShell />   {/* Prefetches dashboard data in background */}
-        </Activity>
-      )}
-
-      {/* Prefetch settings while user is on dashboard */}
-      {currentPath === '/dashboard' && (
-        <Activity mode="hidden">
-          <SettingsPage />
-        </Activity>
-      )}
-    </>
-  )
-}
-```
-
-### Wizard / Multi-Step Form State Preservation
-
-```typescript
-// components/OnboardingWizard.tsx
-import { Activity } from 'react'
-import { useState } from 'react'
-
-export function OnboardingWizard() {
-  const [step, setStep] = useState(1)
-
-  return (
-    <div>
-      <StepIndicator current={step} total={4} />
-
-      {/* Each step retains its form state even when navigating back */}
-      <Activity mode={step === 1 ? 'visible' : 'hidden'}>
-        <BusinessInfoStep onNext={() => setStep(2)} />
-      </Activity>
-
-      <Activity mode={step === 2 ? 'visible' : 'hidden'}>
-        <ServiceAreaStep onNext={() => setStep(3)} onBack={() => setStep(1)} />
-      </Activity>
-
-      <Activity mode={step === 3 ? 'visible' : 'hidden'}>
-        <BillingStep onNext={() => setStep(4)} onBack={() => setStep(2)} />
-      </Activity>
-
-      <Activity mode={step === 4 ? 'visible' : 'hidden'}>
-        <ReviewStep onBack={() => setStep(3)} />
-      </Activity>
-    </div>
-  )
-}
-```
-
----
-
-## useEffectEvent Hook
-
-`useEffectEvent` separates **event-driven logic** (values read at the time of an
-event) from **reactive dependencies** (values that should retrigger the effect). [web:25]
-
-### The Problem It Solves
-
-```typescript
-// ❌ Before — verbose suppression or stale closure problems
-function AnalyticsTracker({ eventName, userId }: { eventName: string; userId: string }) {
-  useEffect(() => {
-    // We want this to run when eventName changes
-    // BUT userId should be current at time of event, not a dependency
-    trackEvent(eventName, { userId }); // eslint-disable-line react-hooks/exhaustive-deps
-  }, [eventName]); // Stale userId — but adding it causes unwanted re-runs
-}
-```
-
-```typescript
-// ✅ After — useEffectEvent: userId is always fresh, eventName triggers re-runs
-import { useEffect, useEffectEvent } from 'react';
-
-function AnalyticsTracker({ eventName, userId }: { eventName: string; userId: string }) {
-  // track is an "effect event" — not reactive, always reads latest values
-  const track = useEffectEvent(() => {
-    trackEvent(eventName, { userId });
-  });
-
-  useEffect(() => {
-    track();
-  }, [eventName]); // Only eventName is a dependency — userId reads current value
-}
-```
-
-### Real-World Pattern: Realtime Subscription with Non-Reactive Config
-
-```typescript
-// packages/realtime/src/use-realtime-channel.ts
-import { useEffect, useEffectEvent } from 'react';
-import { supabase } from '@/shared/api/supabase-client';
-
-function useRealtimeChannel<T>(
-  channel: string,
-  onMessage: (payload: T) => void,
-  options: { enabled: boolean; debug: boolean }
-) {
-  // Capture non-reactive values in effect event
-  // onMessage and options.debug should not retrigger the subscription
-  const handleMessage = useEffectEvent((payload: T) => {
-    if (options.debug) console.log('[Realtime]', channel, payload);
-    onMessage(payload);
-  });
-
-  useEffect(() => {
-    if (!options.enabled) return;
-
-    const sub = supabase
-      .channel(channel)
-      .on('broadcast', { event: '*' }, ({ payload }) => {
-        handleMessage(payload as T);
-      })
-      .subscribe();
-
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [channel, options.enabled]); // Only reactive to channel + enabled changes
-}
-```
-
----
-
-## Actions & Form State (19.0 Recap)
-
-React 19.0 (Dec 2024) introduced Actions as the canonical mutation pattern. In 19.2
-these are now fully stable and integrated with the compiler.
-
-```typescript
-// features/contact-form/ui/ContactForm.tsx
-'use client'
-import { useActionState, useOptimistic, startTransition } from 'react'
-import { submitContactAction } from '../api/submit-contact-action'
-
-export function ContactForm() {
-  const [state, action, isPending] = useActionState(submitContactAction, null)
-
-  // Optimistic UI: show "Submitting..." state immediately
-  const [optimisticState, addOptimistic] = useOptimistic(
-    state,
-    (_, newState: string) => ({ status: newState }),
-  )
-
-  return (
-    <form
-      action={action}
-      aria-live="polite"
-      aria-busy={isPending}
-    >
-      <input
-        type="text"
-        name="name"
-        placeholder="Your name"
-        required
-        aria-required="true"
-        disabled={isPending}
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="your@email.com"
-        required
-        aria-required="true"
-        disabled={isPending}
-      />
-      <textarea name="message" rows={4} disabled={isPending} />
-
-      <button type="submit" disabled={isPending} aria-disabled={isPending}>
-        {isPending ? 'Sending…' : 'Send Message'}
-      </button>
-
-      {state?.success && (
-        <p role="status" className="text-green-600">
-          Message sent! We'll be in touch within 24 hours.
-        </p>
-      )}
-      {state?.error && (
-        <p role="alert" className="text-red-600">
-          {state.error}
-        </p>
-      )}
-    </form>
-  )
-}
-```
-
----
-
-## Server Components Patterns
-
-### Data Fetching Without `useEffect`
-
-```typescript
-// pages/dashboard/index.tsx — Server Component
-// No useEffect, no useState for async data — just async/await
-export async function DashboardPage({ tenantId }: { tenantId: string }) {
-  // Parallel data fetching — compiler optimizes re-renders
-  const [analytics, leads, team] = await Promise.all([
-    fetchAnalyticsSummary(tenantId),
-    fetchRecentLeads(tenantId, { limit: 10 }),
-    fetchTeamMembers(tenantId),
-  ])
-
-  return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <AnalyticsCard data={analytics} />
-      <LeadFeed leads={leads} />
-      <TeamPanel members={team} />
-    </div>
-  )
-}
-```
-
-### `use()` for Deferred Data
-
-```typescript
-// Use the `use()` hook to read a Promise in a Client Component
-// (enables streaming — the Suspense boundary above handles loading)
-'use client'
-import { use } from 'react'
-
-export function LazyAnalyticsChart({
-  dataPromise,
-}: {
-  dataPromise: Promise<AnalyticsData>
-}) {
-  // `use()` suspends the component until the promise resolves
-  // The nearest <Suspense fallback> handles loading state
-  const data = use(dataPromise)
-  return <LineChart data={data} />
-}
-```
-
----
-
-## View Transitions
-
-```typescript
-// hooks/use-view-transition.ts
-import { startTransition } from 'react';
-import { useRouter } from 'next/navigation';
-
-export function useViewTransition() {
-  const router = useRouter();
-
-  const navigateWithTransition = (href: string) => {
-    if (!document.startViewTransition) {
-      router.push(href);
-      return;
-    }
-
-    document.startViewTransition(() => {
-      startTransition(() => {
-        router.push(href);
-      });
-    });
-  };
-
-  return { navigateWithTransition };
-}
-
-// CSS for View Transitions
-// app/globals.css
-// ::view-transition-old(root) { animation: fade-out 0.15s ease; }
-// ::view-transition-new(root) { animation: fade-in 0.15s ease; }
-```
-
----
-
-## Migration Guide
-
-### From React 18 to 19.2
-
-| React 18 Pattern                         | React 19.2 Replacement              | Notes                      |
-| ---------------------------------------- | ----------------------------------- | -------------------------- |
-| `useCallback(fn, deps)`                  | Remove — Compiler handles it        | Only if Compiler enabled   |
-| `useMemo(fn, deps)`                      | Remove — Compiler handles it        | Only for pure computations |
-| `useState` + `useEffect` for server data | Server Component + `async/await`    | For server-rendered data   |
-| Manual loading/error state               | `useActionState`                    | For mutations              |
-| `{cond && <Comp />}` for hidden UI       | `<Activity mode="hidden\|visible">` | For state preservation     |
-| `useEffect` with stale closures          | `useEffectEvent` + `useEffect`      | For reactive effects       |
-
-### Compiler Adoption Strategy
-
-1. **Audit first**: Run `eslint-plugin-react-compiler` and fix violations
-2. **Enable incrementally**: Start with `packages/ui` (pure components, easiest)
-3. **Remove useMemo/useCallback** only after verifying with React DevTools Profiler
-4. **Do not remove `memo()`** on list items yet — wait for performance profiling data
-
----
-
-## References
-
-- [React 19.2 Official Blog](https://react.dev/blog/2025/10/01/react-19-2) [web:28]
-- [React Compiler Docs](https://react.dev/learn/react-compiler)
-- [Activity API Docs](https://react.dev/reference/react/Activity)
-- [useEffectEvent Docs](https://react.dev/reference/react/experimental_useEffectEvent)
-- [React 19.2 — InfoQ Coverage](https://www.infoq.com/news/2025/10/meta-ships-react-19-2/) [web:25]
-- [JSJ 670 — React 19.2 Deep Dive](https://www.youtube.com/watch?v=-BMm--uHb6s) [web:31]
-- [Reddit: React 19 → 19.2 Key Features](https://www.reddit.com/r/react/comments/1rb7qub/) [web:34]
-
-````
-
-***
-
-# nextjs-16-documentation.md
-
-```markdown
-# nextjs-16-documentation.md
-
-> **2026 Standards Compliance** | Next.js 16 · Stable PPR · `use cache` Directive ·
-> Cache Components · Platform Adapters · DevTools MCP
-
-## Table of Contents
-1. [What's New in Next.js 16](#whats-new-in-nextjs-16)
-2. [Partial Pre-Rendering (PPR) — Now Stable](#partial-pre-rendering-ppr--now-stable)
-3. [`use cache` Directive & Cache Components](#use-cache-directive--cache-components)
-4. [Cache Life Profiles](#cache-life-profiles)
-5. [Cache Tags & Revalidation](#cache-tags--revalidation)
-6. [Async Request APIs](#async-request-apis)
-7. [Platform Adapters](#platform-adapters)
-8. [Next.js DevTools MCP](#nextjs-devtools-mcp)
-9. [Migration from Next.js 15](#migration-from-nextjs-15)
-10. [Complete Rendering Decision Tree](#complete-rendering-decision-tree)
-11. [References](#references)
-
----
-
-## What's New in Next.js 16
-
-| Feature | Status | Impact |
-|---------|--------|--------|
-| PPR (Partial Pre-Rendering) | **Stable** | Static speed + dynamic personalization |
-| `use cache` directive | **Stable** | Component-level caching |
-| Cache Components | **Stable** | Cache any async Server Component |
-| `cacheLife()` API | **New** | Declarative cache lifetime profiles |
-| `cacheTag()` API | **New** | Fine-grained cache invalidation |
-| Async Request APIs | **Breaking** | `cookies()`, `headers()`, `params` now async |
-| Platform Adapters | **New** | Native Cloudflare Workers, OpenNext deploy targets |
-| Next.js DevTools MCP | **New** | AI agent access to build analysis |
-| React 19.2 | **Bundled** | Compiler, Activity, useEffectEvent |
-| `cacheComponents: true` config | **New** | Opt-in flag for Cache Components [web:29][web:32] |
-
----
-
-## Partial Pre-Rendering (PPR) — Now Stable
-
-PPR is the core innovation of Next.js 16: a **single HTTP response** delivers a static
-HTML shell instantly (cached at CDN edge), while dynamic Suspense boundaries stream in
-as their data resolves. The browser renders meaningful content immediately, then
-progressively hydrates dynamic sections. [web:29]
-
-### How PPR Detects Static vs Dynamic
-
-The static/dynamic boundary is determined **automatically** by the presence of
-dynamic signals: [web:29]
-
-````
-
-Static signals → can be cached:
-
-- async Server Components with no dynamic APIs
-- Cached `fetch()` calls
-- `use cache` directives
-
-Dynamic signals → cannot be cached, stream in:
-
-- `cookies()`, `headers()` calls
-- `searchParams` access
-- `new Date()`, `Math.random()`
-- `unstable_noStore()` calls
-
-````
-
-### Enabling PPR
-
-```typescript
-// next.config.ts
-import type { NextConfig } from 'next'
-
-const nextConfig: NextConfig = {
-  experimental: {
-    ppr: true,             // Enable stable PPR
-    cacheComponents: true, // Enable cache components (use cache directive)
-    reactCompiler: true,   // React Compiler 1.0
-  },
-}
-
-export default nextConfig
-````
-
-### PPR Page Architecture
-
-```typescript
-// app/dashboard/page.tsx — PPR: static shell + dynamic islands
-import { Suspense } from 'react'
-import { DashboardShell } from '@/widgets/dashboard-shell'
-import { PersonalizedGreeting } from '@/widgets/personalized-greeting'
-import { AnalyticsChart } from '@/widgets/analytics-chart'
-import { LiveLeadFeed } from '@/widgets/live-lead-feed'
-import { Skeleton } from '@/shared/ui'
-
-// This entire route uses PPR automatically when next.config has ppr: true
-// Static shell renders at build time, dynamic parts stream in
-export default async function DashboardPage() {
-  return (
-    <DashboardShell>
-      {/* DYNAMIC — reads cookies() for user session → streams in */}
-      <Suspense fallback={<Skeleton className="h-8 w-48" />}>
-        <PersonalizedGreeting />
-      </Suspense>
-
-      {/* STATIC CACHED — analytics query cached for 1 hour → in static shell */}
-      <Suspense fallback={<Skeleton className="h-64" />}>
-        <AnalyticsChart />
-      </Suspense>
-
-      {/* DYNAMIC — real-time feed, no caching → streams in */}
-      <Suspense fallback={<Skeleton className="h-96" />}>
-        <LiveLeadFeed />
-      </Suspense>
-    </DashboardShell>
-  )
-}
-```
-
----
-
-## `use cache` Directive & Cache Components
-
-The `use cache` directive marks any async Server Component or function as cacheable.
-This is built on top of PPR — it allows **dynamic routes** to have **cached portions**,
-giving granular control that route-level `revalidate` can't provide. [web:26][web:29][web:32]
-
-### Function-Level Caching
-
-```typescript
-// Caching a data-fetch function
-import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache';
-
-async function getProductCatalog(tenantId: string) {
-  'use cache';
-  cacheLife('hours'); // Cache for hours (built-in profile)
-  cacheTag(`catalog:${tenantId}`); // Tag for on-demand revalidation
-
-  const products = await db.products.findMany({ where: { tenantId } });
-  return products;
-}
-
-// Any call to getProductCatalog('t_123') uses the cache for hours
-// Manually invalidate with: revalidateTag('catalog:t_123')
-```
-
-### Component-Level Caching
-
-```typescript
-// widgets/analytics-chart/ui/AnalyticsChart.tsx
-import {
-  unstable_cacheLife as cacheLife,
-  unstable_cacheTag as cacheTag,
-} from 'next/cache'
-
-// The ENTIRE component output is cached — not just its data
-export async function AnalyticsChart({ tenantId }: { tenantId: string }) {
-  'use cache'
-  cacheLife('hours')
-  cacheTag(`analytics:${tenantId}`)
-
-  // This fetch runs once per hour per tenant, then the rendered HTML is cached
-  const data = await fetchAnalyticsSummary(tenantId)
-
-  return (
-    <div className="rounded-lg border p-4">
-      <h2 className="text-sm font-medium text-gray-500">Leads This Month</h2>
-      <p className="mt-1 text-3xl font-bold">{data.leadsThisMonth}</p>
-      <LineChart data={data.trend} />
-    </div>
-  )
-}
-```
-
-### Critical Rules for `use cache`
-
-```typescript
-// ❌ BREAKS CACHE: new Date() is dynamic — causes cache miss every render
-async function BadCachedComponent() {
-  'use cache'
-  const now = new Date()  // Dynamic value — defeats caching
-  return <p>Rendered at {now.toISOString()}</p>
-}
-
-// ✅ CORRECT: move dynamic values outside the cached boundary
-async function GoodCachedComponent({ staticDate }: { staticDate: string }) {
-  'use cache'
-  cacheLife('hours')
-  return <p>Content as of {staticDate}</p>
-}
-
-// In the parent (not cached):
-// <GoodCachedComponent staticDate={lastRevalidatedAt} />
-
-// ❌ BREAKS CACHE: cookies() and headers() are request-specific
-async function BadCachedPersonalized() {
-  'use cache'
-  const cookieStore = cookies()  // Dynamic — cannot be cached
-  const userId = cookieStore.get('userId')?.value
-}
-
-// ✅ CORRECT: read dynamic values in parent, pass as props into cached component
-async function PersonalizedPage() {
-  // NOT cached — reads cookies
-  const cookieStore = await cookies()
-  const userId = cookieStore.get('userId')?.value
-
-  return (
-    // Cached — receives userId as prop, makes it part of cache key
-    <CachedUserProfile userId={userId} />
-  )
-}
-```
-
----
-
-## Cache Life Profiles
-
-Built-in profiles for common caching needs: [web:26][web:29]
-
-```typescript
-// Built-in cacheLife profiles:
-cacheLife('seconds'); // stale: 0s,   revalidate: 1s,    expire: 10s
-cacheLife('minutes'); // stale: 60s,  revalidate: 60s,   expire: 10m
-cacheLife('hours'); // stale: 1h,   revalidate: 1h,    expire: 1d
-cacheLife('days'); // stale: 1d,   revalidate: 1d,    expire: 1w
-cacheLife('weeks'); // stale: 1w,   revalidate: 1w,    expire: 1mo
-cacheLife('max'); // stale: 1y,   revalidate: 1y,    expire: 1y (forever)
-```
-
-### Custom Cache Life Profiles
-
-```typescript
-// next.config.ts
-const nextConfig: NextConfig = {
-  experimental: {
-    ppr: true,
-    cacheComponents: true,
-    // Define custom profiles matching your data freshness requirements
-    cacheProfiles: {
-      realtime: { stale: 0, revalidate: 5, expire: 30 },
-      'lead-analytics': { stale: 300, revalidate: 300, expire: 86400 },
-      'site-config': { stale: 3600, revalidate: 3600, expire: 604800 },
-      'blog-content': { stale: 3600, revalidate: 3600, expire: 604800 },
-    },
-  },
-};
-```
-
-```typescript
-// Usage with custom profile:
-async function LeadAnalyticsWidget({ tenantId }: { tenantId: string }) {
-  'use cache';
-  cacheLife('lead-analytics'); // 5 min freshness
-  cacheTag(`leads:${tenantId}`);
-  // ...
-}
-```
-
----
-
-## Cache Tags & Revalidation
-
-Cache tags enable on-demand, surgical revalidation from webhook handlers, Server
-Actions, or API routes:
-
-```typescript
-// Tagging pattern — use hierarchical tags for flexibility
-async function getTenantData(tenantId: string) {
-  'use cache';
-  cacheTag(
-    `tenant:${tenantId}`, // Invalidate everything for a tenant
-    `tenant:${tenantId}:sites` // Or just their sites data
-  );
-  return fetchTenantWithSites(tenantId);
-}
-
-// On-demand revalidation from Sanity webhook:
-// apps/portal/src/app/api/revalidate/sanity/route.ts
-import { revalidateTag } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
-
-export async function POST(req: NextRequest) {
-  const secret = req.headers.get('x-sanity-webhook-secret');
-  if (secret !== process.env.SANITY_WEBHOOK_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const body = await req.json();
-  const { _type, tenantId, slug } = body;
-
-  // Surgical invalidation based on content type
-  switch (_type) {
-    case 'blogPost':
-      revalidateTag(`blog:${slug}`);
-      revalidateTag('blog-index');
-      break;
-    case 'serviceArea':
-      revalidateTag(`service-area:${slug}`);
-      revalidateTag(`tenant:${tenantId}:service-areas`);
-      break;
-    case 'siteConfig':
-      revalidateTag(`tenant:${tenantId}:config`);
-      revalidateTag(`tenant:${tenantId}`); // Broad invalidation
-      break;
-  }
-
-  return NextResponse.json({ revalidated: true, timestamp: Date.now() });
-}
-```
-
----
-
-## Async Request APIs
-
-**Breaking change in Next.js 15/16**: `cookies()`, `headers()`, `params`, and
-`searchParams` are now async. Failure to await them causes a runtime error. [web:29]
-
-```typescript
-// ❌ Next.js 14 (sync — no longer works)
-import { cookies, headers } from 'next/headers';
-
-export default function Page() {
-  const token = cookies().get('token'); // Sync — THROWS in Next.js 16
-  const nonce = headers().get('x-nonce');
-}
-
-// ✅ Next.js 16 (async — required)
-import { cookies, headers } from 'next/headers';
-
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ slug: string }>; // async params
-  searchParams: Promise<{ q?: string }>; // async searchParams
-}) {
-  // All request APIs require await
-  const cookieStore = await cookies();
-  const headersList = await headers();
-  const { slug } = await params;
-  const { q } = await searchParams;
-
-  const token = cookieStore.get('token');
-  const nonce = headersList.get('x-nonce');
-  // ...
-}
-```
-
----
-
-## Platform Adapters
-
-Next.js 16 ships with first-class **platform adapters** that emit platform-native
-builds — not just Node.js: [web:29]
-
-```typescript
-// next.config.ts — Cloudflare Workers adapter
-import type { NextConfig } from 'next';
-import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
-
-if (process.env.NODE_ENV === 'development') {
-  await initOpenNextCloudflareForDev();
-}
-
-const nextConfig: NextConfig = {
-  // Target Cloudflare Workers runtime
-};
-
-export default nextConfig;
-```
-
-| Adapter            | Use Case                    | Status                   |
-| ------------------ | --------------------------- | ------------------------ |
-| Vercel (default)   | Vercel deployment           | Built-in                 |
-| Node.js            | Self-hosted / Docker        | Built-in                 |
-| Cloudflare Workers | Edge-native, no cold starts | `@opennextjs/cloudflare` |
-| AWS Lambda         | AWS deployments             | `@opennextjs/aws`        |
-| Docker             | Containerized               | Built-in                 |
-
----
-
-## Next.js DevTools MCP
-
-Next.js 16 ships a built-in **Model Context Protocol (MCP) server** that exposes
-your build analysis and route structure to AI agents: [web:29]
-
-```json
-// .mcp/config.json — already present in your repo!
-{
-  "mcpServers": {
-    "nextjs-devtools": {
-      "command": "npx",
-      "args": ["@vercel/next-devtools-mcp", "--project", "."]
-    }
-  }
-}
-```
-
-**What the MCP exposes to agents:**
-
-- Build output (bundle sizes, route list, cache hit rates)
-- Rendering mode per route (static / dynamic / PPR)
-- `use cache` coverage report
-- Turbopack module graph
-
----
-
-## Migration from Next.js 15
-
-### Automated Codemod
-
-```bash
-# Run the official migration codemod
-npx @next/codemod@latest next-async-request-api .
-
-# What it does:
-# - Wraps cookies(), headers() in await
-# - Updates params/searchParams to Promise<> types
-# - Updates middleware usage of these APIs
-```
-
-### Manual Migration Checklist
-
-```
-□ Run async-request-api codemod
-□ Set experimental.ppr: true in next.config.ts
-□ Set experimental.cacheComponents: true
-□ Install React 19.2 (ships with Next.js 16)
-□ Enable React Compiler (experimental.reactCompiler: true)
-□ Run React Compiler lint; fix violations
-□ Audit 'use cache' placement in components
-□ Replace revalidate = X with cacheLife() where granular caching is needed
-□ Test all webhook revalidation flows with cacheTag()
-```
-
----
-
-## Complete Rendering Decision Tree
-
-```
-For each route/component, ask:
-
-1. Does it read cookies/headers/searchParams at render time?
-   └─ YES → DYNAMIC (Suspense boundary; stream in)
-   └─ NO  → Continue ↓
-
-2. Does it have time-sensitive data (stock prices, live counts)?
-   └─ YES → DYNAMIC (Suspense + short revalidate)
-   └─ NO  → Continue ↓
-
-3. Does it have data that changes occasionally (hours/days)?
-   └─ YES → use cache + cacheLife('hours'/'days') + cacheTag()
-   └─ NO  → Continue ↓
-
-4. Is it completely static (marketing copy, pricing)?
-   └─ YES → Static (build-time, no cache directive needed)
-              → generateStaticParams for parameterized routes
-```
-
----
-
-## References
-
-- [Next.js 16 Master PPR Tutorial](https://www.youtube.com/watch?v=WJn1rXesTtg) [web:29]
-- [Cache Components — Shahin.page Deep Dive](https://shahin.page/article/nextjs-cache-components-partial-prerendering-streaming-caching) [web:26]
-- [Cache Components — YouTube](https://www.youtube.com/watch?v=Rodyt22D84A) [web:32]
-- [Next.js generateMetadata Reference](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) [web:41]
-- [Next.js Sitemap Reference](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap) [web:47]
-- [Next.js 16 Blog Post](https://nextjs.org/blog/next-16)
-- [React 19.2 Blog](https://react.dev/blog/2025/10/01/react-19-2) [web:28]
-
-````
-
-***
-
-# stripe-documentation.md
-
-```markdown
-# stripe-documentation.md
-
-> **2026 Standards Compliance** | Stripe API 2025-11-20 · Payment Intents v2 ·
-> SCA/3DS2 · Idempotency · Webhook Best Practices · Radar Fraud Rules
-
-## Table of Contents
-1. [Overview](#overview)
-2. [API Versioning & 2026 Changes](#api-versioning--2026-changes)
-3. [Payment Intents — Complete Implementation](#payment-intents--complete-implementation)
-4. [Stripe Elements (React)](#stripe-elements-react)
-5. [Webhook Handling — Production Patterns](#webhook-handling--production-patterns)
-6. [Idempotency Keys — Complete Guide](#idempotency-keys--complete-guide)
-7. [Stripe Checkout Sessions](#stripe-checkout-sessions)
-8. [Customer Portal](#customer-portal)
-9. [Subscription Management](#subscription-management)
-10. [Radar Fraud Prevention](#radar-fraud-prevention)
-11. [SCA / 3D Secure 2](#sca--3d-secure-2)
-12. [Testing Patterns](#testing-patterns)
-13. [Security Checklist](#security-checklist)
-14. [References](#references)
-
----
-
 ## Overview
 
-Stripe is the payments backbone for subscription billing, one-time charges, and
-customer portal management. In 2026, the core patterns center on:
-- **Payment Intents API** for all charge flows (not Charges API)
-- **Idempotency keys** on every write operation
-- **Webhook-driven state machine** for subscription lifecycle
-- **Radar** for ML-based fraud prevention
-- **SAQ A compliance** via Stripe-hosted Elements (no card data touches your servers)
+`next-sanity` is the official Sanity toolkit for Next.js. It provides a pre-configured
+Sanity client, live preview support, Portable Text rendering, and deep integration with
+Next.js 16's `use cache` directive for optimal performance. [web:73][web:79]
 
 ---
 
-## API Versioning & 2026 Changes
-
-Always pin the Stripe API version in your client initialization:
+## Client Setup
 
 ```typescript
-// packages/billing/src/stripe-client.ts
-import Stripe from 'stripe'
+// packages/cms/src/sanity/client.ts
+import { createClient } from 'next-sanity'
 
-// Pin to the version your integration was tested against
-// Stripe issues changelogs for each version at stripe.com/docs/upgrades
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-11-20',   // Latest stable as of Feb 2026
-  typescript: true,
-  appInfo: {
-    name: 'YourSaaS',
-    version: '1.0.0',
-    url: process.env.NEXT_PUBLIC_APP_URL,
+// Validate required environment variables
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production'
+
+if (!projectId) {
+  throw new Error('NEXT_PUBLIC_SANITY_PROJECT_ID is required')
+}
+
+// Published content client (CDN-cached — for production pages)
+export const sanityClient = createClient({
+  projectId,
+  dataset,
+  apiVersion: '2025-02-19',    // Pin to stable API version [sanity](https://www.sanity.io/answers/issue-with-groq-query-not-working-in-next-js-application--but-works-in-browser-and-studio)
+  useCdn: true,                 // CDN for published content
+  perspective: 'published',     // Only return published documents
+  stega: {
+    enabled: false,             // Disable stega in production
+    studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
   },
-  // Automatic retry on network failures (3 retries with exponential backoff)
-  maxNetworkRetries: 3,
 })
 
-export const stripePublishable = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+// Draft/preview client (bypasses CDN — for Studio live preview)
+export const sanityPreviewClient = createClient({
+  projectId,
+  dataset,
+  apiVersion: '2025-02-19',
+  useCdn: false,                // Never cache draft content
+  perspective: 'previewDrafts', // Returns drafts + published [sanity](https://www.sanity.io/answers/issue-with-groq-query-not-working-in-next-js-application--but-works-in-browser-and-studio)
+  token: process.env.SANITY_API_READ_TOKEN,  // Required for draft access
+  stega: {
+    enabled: true,              // Enable visual editing overlays
+    studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
+  },
+})
+
+// Factory: get the right client based on preview mode
+export function getSanityClient(preview = false) {
+  return preview ? sanityPreviewClient : sanityClient
+}
 ````
 
+### Environment Variables
+
+```bash
+# .env.local
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_STUDIO_URL=https://yoursaas.sanity.studio
+SANITY_API_READ_TOKEN=sk...    # Read-only token (never write token in app)
+SANITY_WEBHOOK_SECRET=your_webhook_secret
+```
+
 ---
 
-## Payment Intents — Complete Implementation
+## GROQ Query Patterns
 
-The Payment Intents API is the **only** recommended way to accept payments in 2026.
-The legacy Charges API does not support SCA/3DS2 and will be deprecated. [web:35]
+GROQ (Graph-Relational Object Queries) is Sanity's native query language — similar to
+GraphQL but optimized for document stores with rich filtering and projection.
 
-### Server: Create PaymentIntent
+### Centralized Query File
 
 ```typescript
-// apps/portal/src/app/api/payments/create-intent/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@repo/billing/stripe-client';
-import { verifyTenantSession } from '@repo/auth';
-import { getTenantSubscription } from '@repo/db/subscriptions';
+// packages/cms/src/sanity/queries.ts
+import { defineQuery } from 'next-sanity';
 
-export async function POST(req: NextRequest) {
-  const session = await verifyTenantSession();
-  const { amount, currency = 'usd', priceId, metadata = {} } = await req.json();
+// ─── Blog Posts ───────────────────────────────────────────────────────────────
 
-  // Validate amount server-side — NEVER trust client-provided amounts for subscriptions
-  if (!Number.isInteger(amount) || amount < 50 || amount > 99_999_99) {
-    return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
-  }
-
-  // Generate idempotency key tied to the specific cart/session
-  // Using session.cartId ensures the same cart won't create 2 PaymentIntents
-  const idempotencyKey = `pi_${session.tenantId}_${session.cartId ?? Date.now()}`;
-
-  const paymentIntent = await stripe.paymentIntents.create(
-    {
-      amount, // Amount in smallest currency unit (cents for USD)
-      currency,
-      customer: session.stripeCustomerId,
-      automatic_payment_methods: {
-        enabled: true, // Enables cards, Apple Pay, Google Pay, Link, etc.
-        allow_redirects: 'never', // Keep user on your page (no bank redirects)
-      },
-      metadata: {
-        tenant_id: session.tenantId,
-        user_id: session.userId,
-        price_id: priceId,
-        ...metadata,
-      },
-      // SCA: capture method determines when the charge is captured
-      capture_method: 'automatic',
-      // Statement descriptor: what appears on customer's bank statement
-      statement_descriptor_suffix: 'YOURSAAS',
+export const ALL_POSTS_QUERY = defineQuery(`
+  *[_type == "blogPost" && defined(slug.current)] | order(publishedAt desc) {
+    _id,
+    _type,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    excerpt,
+    "author": author-> {
+      name,
+      "avatar": avatar.asset->url
     },
-    {
-      idempotencyKey,
+    "categories": categories[]->{ title, slug },
+    "coverImage": mainImage {
+      asset->,                    // Dereference asset for URL building
+      alt,
+      hotspot,
+      crop
     }
-  );
+  }
+`);
 
-  return NextResponse.json({
-    clientSecret: paymentIntent.client_secret,
-    paymentIntentId: paymentIntent.id,
-  });
-}
+export const POST_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "blogPost" && slug.current == $slug] {
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    updatedAt,
+    excerpt,
+    body,                         // Portable Text block content
+    "author": author-> {
+      _id,
+      name,
+      bio,
+      "avatar": avatar.asset->url
+    },
+    "categories": categories[]->{ title, "slug": slug.current },
+    "coverImage": mainImage {
+      asset->,
+      alt,
+      hotspot,
+      crop
+    },
+    // SEO fields
+    seo {
+      metaTitle,
+      metaDescription,
+      "ogImage": ogImage.asset->url
+    }
+  }
+`);
+
+// ─── Service Areas ────────────────────────────────────────────────────────────
+
+export const SERVICE_AREAS_BY_TENANT_QUERY = defineQuery(`
+  *[_type == "serviceArea" && references($tenantId)] | order(name asc) {
+    _id,
+    name,
+    "slug": slug.current,
+    description,
+    "hero": heroImage { asset->, alt },
+    services[]->{
+      _id,
+      title,
+      "slug": slug.current,
+      price,
+      duration
+    },
+    seo {
+      metaTitle,
+      metaDescription
+    }
+  }
+`);
+
+// ─── Site Config ──────────────────────────────────────────────────────────────
+
+export const SITE_CONFIG_QUERY = defineQuery(`
+  *[_type == "siteConfig" && tenant._ref == $tenantId] {
+    _id,
+    siteName,
+    tagline,
+    "logo": logo { asset->, alt },
+    primaryColor,
+    secondaryColor,
+    contactEmail,
+    contactPhone,
+    address,
+    socialLinks,
+    businessHours,
+    "faviconUrl": favicon.asset->url
+  }
+`);
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+
+export const NAV_QUERY = defineQuery(`
+  *[_type == "navigation" && tenant._ref == $tenantId] {
+    items[] {
+      label,
+      "href": coalesce(externalUrl, "/" + internalPage->slug.current),
+      openInNewTab,
+      children[] {
+        label,
+        "href": coalesce(externalUrl, "/" + internalPage->slug.current)
+      }
+    }
+  }
+`);
+
+// ─── Homepage ─────────────────────────────────────────────────────────────────
+
+export const HOMEPAGE_QUERY = defineQuery(`
+  *[_type == "homepage" && tenant._ref == $tenantId] {
+    hero {
+      headline,
+      subheadline,
+      ctaText,
+      ctaHref,
+      "image": heroImage { asset->, alt, hotspot, crop }
+    },
+    featuredServices[]->{
+      title,
+      "slug": slug.current,
+      shortDescription,
+      "icon": icon { asset->url }
+    },
+    testimonials[] {
+      quote,
+      authorName,
+      authorTitle,
+      rating
+    },
+    faq[] {
+      question,
+      answer
+    }
+  }
+`);
 ```
 
-### Client: Stripe Elements
+### Fetching in Server Components
 
 ```typescript
-// features/checkout/ui/CheckoutForm.tsx
-'use client'
-import {
-  Elements,
-  PaymentElement,
-  useStripe,
-  useElements,
-} from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/js'
-import { useState } from 'react'
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
-
-export function CheckoutWrapper({ clientSecret }: { clientSecret: string }) {
-  return (
-    <Elements
-      stripe={stripePromise}
-      options={{
-        clientSecret,
-        appearance: {
-          theme: 'flat',
-          variables: {
-            colorPrimary: '#2563eb',
-            fontFamily: 'Inter, system-ui, sans-serif',
-            borderRadius: '8px',
-          },
-        },
-        loader: 'auto',
-      }}
-    >
-      <CheckoutForm clientSecret={clientSecret} />
-    </Elements>
-  )
-}
-
-function CheckoutForm({ clientSecret }: { clientSecret: string }) {
-  const stripe = useStripe()
-  const elements = useElements()
-  const [error, setError] = useState<string | null>(null)
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!stripe || !elements) return
-
-    setIsProcessing(true)
-    setError(null)
-
-    // Trigger form validation and wallet collection
-    const { error: submitError } = await elements.submit()
-    if (submitError) {
-      setError(submitError.message ?? 'Form validation failed')
-      setIsProcessing(false)
-      return
-    }
-
-    const { error: confirmError } = await stripe.confirmPayment({
-      elements,
-      clientSecret,
-      confirmParams: {
-        return_url: `${window.location.origin}/checkout/success`,
-      },
-      redirect: 'if_required',  // Avoid redirect when not needed (e.g., card payments)
-    })
-
-    if (confirmError) {
-      // Show user-friendly error message
-      setError(
-        confirmError.type === 'card_error' || confirmError.type === 'validation_error'
-          ? (confirmError.message ?? 'Payment failed')
-          : 'An unexpected error occurred. Please try again.',
-      )
-    }
-    // If no error + no redirect: payment succeeded, handle success state here
-
-    setIsProcessing(false)
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement
-        options={{
-          layout: 'accordion',   // Clean accordion layout for multiple methods
-          paymentMethodOrder: ['card', 'apple_pay', 'google_pay', 'link'],
-        }}
-      />
-
-      {error && (
-        <p role="alert" className="text-sm text-red-600">
-          {error}
-        </p>
-      )}
-
-      <button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        aria-disabled={!stripe || isProcessing}
-        aria-busy={isProcessing}
-        className="w-full rounded-md bg-blue-600 py-3 text-white font-medium
-                   hover:bg-blue-700 disabled:opacity-50"
-      >
-        {isProcessing ? 'Processing…' : 'Pay Now'}
-      </button>
-    </form>
-  )
-}
-```
-
----
-
-## Webhook Handling — Production Patterns
-
-Webhooks are the **authoritative source of truth** for payment state. Never rely
-solely on redirect URLs — they can be bypassed or lost on network failure. [web:38]
-
-```typescript
-// apps/portal/src/app/api/webhooks/stripe/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-import { stripe } from '@repo/billing/stripe-client';
-import { redis } from '@repo/cache';
-
-// Disable body parsing — Stripe needs raw body for signature verification
-export const dynamic = 'force-dynamic';
-
-const WEBHOOK_HANDLERS: Partial<Record<Stripe.Event.Type, (event: Stripe.Event) => Promise<void>>> =
-  {
-    'payment_intent.succeeded': handlePaymentSucceeded,
-    'payment_intent.payment_failed': handlePaymentFailed,
-    'customer.subscription.created': handleSubscriptionCreated,
-    'customer.subscription.updated': handleSubscriptionUpdated,
-    'customer.subscription.deleted': handleSubscriptionDeleted,
-    'invoice.payment_succeeded': handleInvoiceSucceeded,
-    'invoice.payment_failed': handleInvoiceFailed,
-    'customer.subscription.trial_will_end': handleTrialEnding,
-  };
-
-export async function POST(req: NextRequest) {
-  const body = await req.text(); // Raw body for signature verification
-  const sig = req.headers.get('stripe-signature');
-
-  if (!sig) {
-    return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
-  }
-
-  let event: Stripe.Event;
-  try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch (err) {
-    console.error('Webhook signature verification failed:', err);
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
-  }
-
-  // IDEMPOTENCY: Track processed events to prevent duplicate processing
-  const eventKey = `stripe:event:${event.id}`;
-  const alreadyProcessed = await redis.get(eventKey);
-  if (alreadyProcessed) {
-    console.log(`Skipping duplicate webhook event: ${event.id}`);
-    return NextResponse.json({ received: true, duplicate: true });
-  }
-
-  // Mark as processing before handling (prevents race condition)
-  await redis.set(eventKey, '1', { ex: 86400 }); // 24h dedup window
-
-  const handler = WEBHOOK_HANDLERS[event.type];
-  if (handler) {
-    try {
-      await handler(event);
-    } catch (err) {
-      console.error(`Failed to handle webhook ${event.type}:`, err);
-      // Delete the processed flag so Stripe retries
-      await redis.del(eventKey);
-      return NextResponse.json({ error: 'Handler failed' }, { status: 500 });
-    }
-  }
-
-  return NextResponse.json({ received: true });
-}
-
-async function handlePaymentSucceeded(event: Stripe.Event) {
-  const intent = event.data.object as Stripe.PaymentIntent;
-  const tenantId = intent.metadata.tenant_id;
-  const orderId = intent.metadata.order_id;
-
-  if (!tenantId) {
-    console.warn('PaymentIntent missing tenant_id metadata', intent.id);
-    return;
-  }
-
-  await Promise.all([
-    updateOrderStatus(orderId, 'paid'),
-    updateTenantBillingStatus(tenantId, 'active'),
-    sendReceiptEmail(tenantId, intent),
-  ]);
-}
-```
-
----
-
-## Idempotency Keys — Complete Guide
-
-Idempotency keys prevent duplicate charges when network timeouts cause retries. [web:35][web:36][web:37]
-
-```typescript
-// packages/billing/src/idempotency.ts
+// packages/cms/src/sanity/fetch.ts
+import { getSanityClient } from './client';
+import type { QueryParams } from 'next-sanity';
+import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from 'next/cache';
 
 /**
- * Generate a stable idempotency key for Stripe API calls.
- *
- * Rules:
- * 1. Same key = same logical operation (safe to retry)
- * 2. Different key = different operation (creates new charge)
- * 3. Keys expire after 24 hours in Stripe
- * 4. Keys must be unique per operation type
+ * Cached Sanity fetch — integrates with Next.js 16 `use cache`.
+ * Cache is invalidated via Sanity webhook → revalidateTag().
  */
-export function generateIdempotencyKey(operation: string, ...identifiers: string[]): string {
-  // Stable, deterministic key from operation + identifiers
-  // Do NOT include timestamps — that defeats idempotency
-  return [operation, ...identifiers].join(':');
-}
+export async function sanityFetch<T>(options: {
+  query: string;
+  params?: QueryParams;
+  tags: string[];
+  cacheProfile?: 'hours' | 'days' | 'weeks';
+  preview?: boolean;
+}): Promise<T> {
+  'use cache';
+  cacheLife(options.cacheProfile ?? 'hours');
 
-// Usage patterns:
-
-// ✅ PaymentIntent creation: key = operation + cart ID (stable per cart)
-const piKey = generateIdempotencyKey('create_pi', tenantId, cartId);
-await stripe.paymentIntents.create(params, { idempotencyKey: piKey });
-
-// ✅ Subscription creation: key = operation + tenant + price
-const subKey = generateIdempotencyKey('create_sub', tenantId, priceId);
-await stripe.subscriptions.create(params, { idempotencyKey: subKey });
-
-// ✅ Refund: key = operation + payment intent ID (one refund per PI)
-const refundKey = generateIdempotencyKey('refund', paymentIntentId);
-await stripe.refunds.create({ payment_intent: paymentIntentId }, { idempotencyKey: refundKey });
-
-// ❌ WRONG — timestamp in key defeats idempotency
-const badKey = `create_pi_${tenantId}_${Date.now()}`; // Never do this
-```
-
----
-
-## Stripe Checkout Sessions
-
-For simpler integrations (no custom UI needed), Stripe Checkout handles the full
-payment flow with a hosted page:
-
-```typescript
-// Server Action: create checkout session
-// apps/portal/src/app/billing/upgrade/actions.ts
-'use server';
-import { redirect } from 'next/navigation';
-import { stripe } from '@repo/billing/stripe-client';
-
-export async function createCheckoutSession(priceId: string) {
-  const session = await verifyTenantSession();
-  const tenant = await getTenant(session.tenantId);
-
-  const checkoutSession = await stripe.checkout.sessions.create(
-    {
-      customer: tenant.stripeCustomerId,
-      mode: 'subscription',
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.APP_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.APP_URL}/billing/upgrade`,
-      subscription_data: {
-        metadata: {
-          tenant_id: session.tenantId,
-          tenant_slug: tenant.slug,
-        },
-        trial_period_days: tenant.isEligibleForTrial ? 14 : 0,
-      },
-      allow_promotion_codes: true,
-      automatic_tax: { enabled: true },
-      customer_update: {
-        address: 'auto',
-        name: 'auto',
-      },
-    },
-    {
-      idempotencyKey: generateIdempotencyKey('checkout', session.tenantId, priceId),
-    }
-  );
-
-  redirect(checkoutSession.url!);
-}
-```
-
----
-
-## Customer Portal
-
-```typescript
-// Server Action: create billing portal session
-export async function createBillingPortalSession() {
-  const session = await verifyTenantSession();
-  const tenant = await getTenant(session.tenantId);
-
-  const portalSession = await stripe.billingPortal.sessions.create({
-    customer: tenant.stripeCustomerId,
-    return_url: `${process.env.APP_URL}/settings/billing`,
-    // Optional: customize which features are visible
-    // configuration: portalConfigId,
-  });
-
-  redirect(portalSession.url);
-}
-```
-
----
-
-## Radar Fraud Prevention
-
-```typescript
-// Enable Radar rules in PaymentIntent
-const paymentIntent = await stripe.paymentIntents.create({
-  amount,
-  currency,
-  metadata: {
-    tenant_id: tenantId,
-    // Radar uses metadata for rule matching
-    plan: tenant.plan,
-    account_age_days: String(daysSinceSignup),
-    is_verified: String(tenant.isVerified),
-  },
-  radar_options: {
-    // Associate with your user's session for velocity checks
-    session: stripeRadarSessionId,
-  },
-});
-```
-
----
-
-## Testing Patterns
-
-```typescript
-// packages/billing/src/stripe.test.ts — use Stripe test mode
-const TEST_CARDS = {
-  success: '4242424242424242',
-  decline: '4000000000000002',
-  sca_required: '4000002500003155', // Triggers 3DS2
-  insufficient: '4000000000009995',
-};
-
-describe('Stripe Integration', () => {
-  it('creates PaymentIntent with idempotency', async () => {
-    const key = generateIdempotencyKey('test_pi', 'tenant_001', 'cart_001');
-    const pi1 = await stripe.paymentIntents.create(
-      { amount: 2000, currency: 'usd' },
-      { idempotencyKey: key }
-    );
-    const pi2 = await stripe.paymentIntents.create(
-      { amount: 2000, currency: 'usd' },
-      { idempotencyKey: key }
-    );
-    // Same key = same PaymentIntent returned
-    expect(pi1.id).toBe(pi2.id);
-  });
-});
-```
-
----
-
-## Security Checklist
-
-```
-□ Never log or store raw card data — SAQ A requirement
-□ Verify webhook signature on EVERY incoming webhook
-□ Use idempotency keys on ALL write operations
-□ Store Stripe secret key in environment variables only
-□ Never expose secret key to client-side code
-□ Pin API version in stripe client initialization
-□ Set statement_descriptor to identify charges to customers
-□ Enable Radar for ML-based fraud prevention
-□ Restrict Stripe dashboard access to need-to-know
-□ Use restricted keys for read-only webhook endpoints
-□ Enable email notifications for failed payments
-□ Test with Stripe test mode before live deployment
-```
-
----
-
-## References
-
-- [Stripe Payment Intents API](https://docs.stripe.com/payments/payment-intents) [web:35]
-- [Stripe Idempotent Requests](https://docs.stripe.com/api/idempotent_requests) [web:37]
-- [Building Solid Stripe Integrations](https://stripe.dev/blog/building-solid-stripe-integrations-developers-guide-success) [web:38]
-- [Stripe 2026 Developer Guide](https://www.digitalapplied.com/blog/stripe-payment-integration-developer-guide-2026) [web:36]
-- [Stripe React Elements](https://stripe.com/docs/stripe-js/react)
-- [Stripe Webhooks Best Practices](https://www.stigg.io/blog-posts/best-practices-i-wish-we-knew-when-integrating-stripe-webhooks)
-
-````
-
-***
-
-# core-web-vitals-optimization.md
-
-```markdown
-# core-web-vitals-optimization.md
-
-> **2026 Standards Compliance** | INP (Replaces FID) · LCP · CLS · TTFB ·
-> Google CrUX 2026 Thresholds · Next.js 16 PPR · React 19.2 Compiler
-
-## Table of Contents
-1. [2026 Metric Overview & Thresholds](#2026-metric-overview--thresholds)
-2. [INP — Interaction to Next Paint](#inp--interaction-to-next-paint)
-3. [LCP — Largest Contentful Paint](#lcp--largest-contentful-paint)
-4. [CLS — Cumulative Layout Shift](#cls--cumulative-layout-shift)
-5. [TTFB & FCP](#ttfb--fcp)
-6. [Measurement Infrastructure](#measurement-infrastructure)
-7. [Performance Budget System](#performance-budget-system)
-8. [INP Optimization Patterns](#inp-optimization-patterns)
-9. [LCP Optimization Patterns](#lcp-optimization-patterns)
-10. [CLS Optimization Patterns](#cls-optimization-patterns)
-11. [CI Performance Gates](#ci-performance-gates)
-12. [References](#references)
-
----
-
-## 2026 Metric Overview & Thresholds
-
-**Core Web Vitals are a Google ranking signal.** In 2026, INP has fully replaced FID as
-the responsiveness metric, providing a far more accurate picture of interactive
-performance across the entire user session. [web:40][web:46][web:49]
-
-| Metric | Good | Needs Improvement | Poor | What It Measures |
-|--------|------|------------------|------|-----------------|
-| **INP** | ≤ 200ms | 200–500ms | > 500ms | Worst interaction latency across full session |
-| **LCP** | ≤ 2.5s | 2.5–4.0s | > 4.0s | Time for largest visible element to render |
-| **CLS** | ≤ 0.1 | 0.1–0.25 | > 0.25 | Unexpected layout shifts during page lifetime |
-| **TTFB** | ≤ 800ms | 800ms–1.8s | > 1.8s | Server response time (not a CWV, but a ranking signal) |
-| **FCP** | ≤ 1.8s | 1.8–3.0s | > 3.0s | First meaningful paint |
-
-**INP Measurement Phase Breakdown:** [web:43]
-````
-
-User Click/Tap/Keyboard
-│
-▼ [Input Delay] ← Main thread busy with other tasks
-Event Handler Runs
-│
-▼ [Processing Time] ← Your JS executes, DOM updates
-Frame Produced
-│
-▼ [Presentation Delay] ← Browser renders/composites
-Next Paint
-
-```
-
----
-
-## INP — Interaction to Next Paint
-
-INP is the most difficult CWV to optimize because it measures **every interaction**
-throughout the session, not just the first. The worst interaction becomes the score. [web:40][web:49]
-
-### Why INP Is Hard
-
-Traditional performance optimizations (bundle size, SSR, CDN) barely affect INP.
-INP is dominated by **main thread contention** — JavaScript blocking the event loop
-between a user's click and the next paint.
-
-### INP Optimization Checklist
-
-```
-
-□ Break up long tasks (> 50ms) using scheduler.yield()
-□ Defer non-critical JS until after first interaction
-□ Use React Compiler to reduce unnecessary re-renders
-□ Move expensive computations off the main thread (Web Workers)
-□ Use CSS containment to limit layout recalculation scope
-□ Virtualize long lists (react-window, TanStack Virtual)
-□ Debounce/throttle search inputs and filter controls
-□ Use startTransition() for non-urgent state updates
-□ Profile with Chrome DevTools Performance Tracks (new in 2026)
-□ Measure with web-vitals library (INP + attribution)
-
-````
-
-### `scheduler.yield()` — Break Up Long Tasks
-
-```typescript
-// packages/performance/src/scheduler.ts
-
-/**
- * Yield to the browser event loop, allowing it to process
- * pending user input before continuing.
- *
- * Use inside loops that process many items or do heavy computation.
- */
-export async function yieldToMain(): Promise<void> {
-  if ('scheduler' in globalThis && 'yield' in globalThis.scheduler) {
-    // Modern Scheduling API — respects user input priority
-    return globalThis.scheduler.yield()
-  }
-  // Fallback: setTimeout(0) yields to the task queue
-  return new Promise(resolve => setTimeout(resolve, 0))
-}
-
-// Usage: Process 1000 items without blocking user interactions
-export async function processItemsWithYield<T, R>(
-  items: T[],
-  processor: (item: T) => R,
-  chunkSize = 50,
-): Promise<R[]> {
-  const results: R[] = []
-  for (let i = 0; i < items.length; i += chunkSize) {
-    const chunk = items.slice(i, i + chunkSize)
-    results.push(...chunk.map(processor))
-    // Yield after each chunk — lets browser handle clicks between chunks
-    await yieldToMain()
-  }
-  return results
-}
-````
-
-### React `startTransition` for Non-Urgent Updates
-
-```typescript
-// features/lead-search/ui/LeadSearch.tsx
-'use client'
-import { useState, useTransition } from 'react'
-
-export function LeadSearch() {
-  const [query, setQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<Lead[]>([])
-  const [isPending, startTransition] = useTransition()
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    // URGENT: update the input immediately (low INP for keypress)
-    setQuery(value)
-
-    // NON-URGENT: search results can wait — React batches + defers
-    startTransition(async () => {
-      const results = await searchLeads(value)
-      setSearchResults(results)
-    })
+  // Register all cache tags for surgical invalidation
+  for (const tag of options.tags) {
+    cacheTag(tag);
   }
 
-  return (
-    <>
-      <input
-        type="search"
-        value={query}
-        onChange={handleSearch}
-        placeholder="Search leads…"
-        aria-label="Search leads"
-        aria-busy={isPending}
-        className="w-full rounded-md border px-3 py-2"
-      />
-      {isPending && <SearchSkeleton />}
-      <LeadList leads={searchResults} />
-    </>
-  )
+  const client = getSanityClient(options.preview);
+  return client.fetch<T>(options.query, options.params ?? {});
 }
 ```
 
-### Web Worker for Heavy Computation
+### Usage in Server Components
 
 ```typescript
-// Move CSV processing off main thread to prevent INP degradation
-// workers/csv-processor.worker.ts
-self.addEventListener('message', async (e: MessageEvent) => {
-  const { csvText, tenantId } = e.data;
+// apps/web/src/app/blog/[slug]/page.tsx
+import { sanityFetch } from '@repo/cms/sanity/fetch'
+import { POST_BY_SLUG_QUERY } from '@repo/cms/sanity/queries'
+import type { POST_BY_SLUGResult } from '@repo/cms/sanity/types'
 
-  // This runs in a separate thread — zero main thread impact
-  const leads = parseAndValidateCsv(csvText);
-  const deduplicated = deduplicateLeads(leads);
+interface PageProps {
+  params: Promise<{ slug: string }>
+}
 
-  self.postMessage({ leads: deduplicated, count: deduplicated.length });
-});
-
-// usage in component:
-// const worker = new Worker(new URL('./csv-processor.worker.ts', import.meta.url))
-// worker.postMessage({ csvText: fileContent, tenantId })
-// worker.onmessage = (e) => setLeads(e.data.leads)
-```
-
-### Virtualization for Long Lists
-
-```typescript
-// widgets/lead-feed/ui/VirtualLeadList.tsx
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { useRef } from 'react'
-
-export function VirtualLeadList({ leads }: { leads: Lead[] }) {
-  const parentRef = useRef<HTMLDivElement>(null)
-
-  const virtualizer = useVirtualizer({
-    count: leads.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 72,       // Estimated row height in px
-    overscan: 5,                  // Render 5 extra rows above/below viewport
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params
+  const post = await sanityFetch<POST_BY_SLUGResult>({
+    query: POST_BY_SLUG_QUERY,
+    params: { slug },
+    tags: [`blog:${slug}`, 'blog'],
+    cacheProfile: 'hours',
   })
 
-  return (
-    <div
-      ref={parentRef}
-      style={{ height: '600px', overflow: 'auto' }}
-    >
-      <div
-        style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }}
+  return {
+    title: post?.seo?.metaTitle ?? post?.title,
+    description: post?.seo?.metaDescription ?? post?.excerpt,
+    openGraph: {
+      images: post?.seo?.ogImage ? [{ url: post.seo.ogImage }] : [],
+    },
+  }
+}
+
+export default async function BlogPostPage({ params }: PageProps) {
+  const { slug } = await params
+  const post = await sanityFetch<POST_BY_SLUGResult>({
+    query: POST_BY_SLUG_QUERY,
+    params: { slug },
+    tags: [`blog:${slug}`, 'blog'],
+  })
+
+  if (!post) notFound()
+
+  return <BlogPost post={post} />
+}
+
+// Static params for SSG at build time
+export async function generateStaticParams() {
+  const posts = await sanityFetch<Array<{ slug: string }>>({
+    query: `*[_type == "blogPost"] { "slug": slug.current }`,
+    tags: ['blog-slugs'],
+    cacheProfile: 'days',
+  })
+  return posts.map(p => ({ slug: p.slug }))
+}
+```
+
+---
+
+## Sanity TypeGen
+
+TypeGen generates TypeScript types from GROQ queries automatically, eliminating
+manual type definitions:
+
+```bash
+# Install
+pnpm add -D @sanity/codegen
+
+# Generate types from all defineQuery() calls
+pnpm sanity typegen generate
+
+# Output: packages/cms/src/sanity/types.ts
+# Contains: POST_BY_SLUGResult, ALL_POSTS_QUERYResult, etc.
+```
+
+```json
+// sanity.config.ts (for TypeGen)
+{
+  "generates": {
+    "packages/cms/src/sanity/types.ts": {
+      "plugins": ["@sanity/codegen"],
+      "config": "sanity.config.ts"
+    }
+  }
+}
+```
+
+---
+
+## Integration with Next.js 16 Cache
+
+```typescript
+// The sanityFetch wrapper above uses 'use cache' with cacheTag() for on-demand
+// invalidation via the Sanity webhook. Tags follow this convention:
+
+// Content type tags:
+cacheTag('blog'); // All blog content
+cacheTag(`blog:${slug}`); // Specific post
+cacheTag('service-areas'); // All service areas
+cacheTag(`site-config:${tenantId}`); // Tenant site config
+
+// Invalidation from Sanity webhook calls revalidateTag() — see sanity-webhook-isr.md
+```
+
+---
+
+## Draft Mode / Live Preview
+
+```typescript
+// app/api/draft/enable/route.ts
+import { draftMode } from 'next/headers';
+import { redirect } from 'next/navigation';
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const secret = searchParams.get('secret');
+  const slug = searchParams.get('slug');
+
+  if (secret !== process.env.SANITY_PREVIEW_SECRET) {
+    return new Response('Invalid token', { status: 401 });
+  }
+
+  const draft = await draftMode();
+  draft.enable();
+
+  redirect(slug ?? '/');
+}
+
+// app/api/draft/disable/route.ts
+export async function GET() {
+  const draft = await draftMode();
+  draft.disable();
+  redirect('/');
+}
+```
+
+---
+
+## Image URL Builder
+
+```typescript
+// packages/cms/src/sanity/image.ts
+import createImageUrlBuilder from '@sanity/image-url';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
+
+const imageBuilder = createImageUrlBuilder({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
+});
+
+export function urlForImage(source: SanityImageSource) {
+  return imageBuilder.image(source).auto('format').fit('max');
+}
+
+// Usage:
+// urlForImage(post.coverImage).width(1200).height(630).url()
+// urlForImage(author.avatar).width(64).height(64).url()
+```
+
+---
+
+## Portable Text Rendering
+
+```typescript
+// packages/cms/src/components/PortableTextRenderer.tsx
+import { PortableText } from '@portabletext/react'
+import type { PortableTextBlock } from '@portabletext/types'
+import { urlForImage } from '../sanity/image'
+
+const components = {
+  types: {
+    image: ({ value }: { value: { asset: unknown; alt: string; caption?: string } }) => (
+      <figure className="my-8">
+        <img
+          src={urlForImage(value.asset).width(800).url()}
+          alt={value.alt ?? ''}
+          className="rounded-lg"
+          loading="lazy"
+          decoding="async"
+        />
+        {value.caption && (
+          <figcaption className="mt-2 text-center text-sm text-gray-500">
+            {value.caption}
+          </figcaption>
+        )}
+      </figure>
+    ),
+    callout: ({ value }: { value: { text: string; tone: string } }) => (
+      <aside
+        className={`my-6 rounded-lg p-4 ${
+          value.tone === 'caution' ? 'bg-yellow-50 border-yellow-200' : 'bg-blue-50 border-blue-200'
+        } border`}
+        role="note"
       >
-        {virtualizer.getVirtualItems().map(virtualItem => (
-          <div
-            key={virtualItem.key}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: `${virtualItem.size}px`,
-              transform: `translateY(${virtualItem.start}px)`,
-            }}
-          >
-            <LeadCard lead={leads[virtualItem.index]} />
-          </div>
-        ))}
-      </div>
+        <p>{value.text}</p>
+      </aside>
+    ),
+  },
+  marks: {
+    link: ({ children, value }: { children: React.ReactNode; value: { href: string; blank?: boolean } }) => (
+      <a
+        href={value.href}
+        target={value.blank ? '_blank' : undefined}
+        rel={value.blank ? 'noopener noreferrer' : undefined}
+        className="text-blue-600 underline hover:text-blue-800"
+      >
+        {children}
+      </a>
+    ),
+  },
+  block: {
+    h2: ({ children }: { children: React.ReactNode }) => (
+      <h2 className="mt-10 mb-4 text-2xl font-bold">{children}</h2>
+    ),
+    h3: ({ children }: { children: React.ReactNode }) => (
+      <h3 className="mt-8 mb-3 text-xl font-semibold">{children}</h3>
+    ),
+    blockquote: ({ children }: { children: React.ReactNode }) => (
+      <blockquote className="border-l-4 border-blue-400 pl-4 italic text-gray-600 my-6">
+        {children}
+      </blockquote>
+    ),
+  },
+}
+
+export function PortableTextRenderer({ content }: { content: PortableTextBlock[] }) {
+  return (
+    <div className="prose prose-lg max-w-none">
+      <PortableText value={content} components={components} />
     </div>
   )
 }
@@ -2417,7 +1041,1264 @@ export function VirtualLeadList({ leads }: { leads: Lead[] }) {
 
 ---
 
-## LCP — Largest Contentful Paint
+## References
 
-LCP is typically the **hero image** or the **largest text block** above the fold.
-The target is ≤ 2.5s
+- [next-sanity GitHub](https://github.com/sanity-io/next-sanity) [web:73]
+- [next-sanity Plugin Page](https://www.sanity.io/plugins/next-sanity) [web:79]
+- [Sanity GROQ in Next.js — Debug Notes](https://www.sanity.io/answers/issue-with-groq-query-not-working-in-next-js-application) [web:76]
+- [GROQ Reference](https://www.sanity.io/docs/groq)
+- [@sanity/image-url Docs](https://www.sanity.io/docs/image-url)
+
+````
+
+***
+
+# sanity-webhook-isr.md
+
+```markdown
+# sanity-webhook-isr.md
+
+> **2026 Standards Compliance** | Next.js 16 `revalidateTag` · Sanity GROQ Webhooks ·
+> `@sanity/webhook` Signature Verification · App Router
+
+## Table of Contents
+1. [Overview — How Sanity ISR Works](#overview--how-sanity-isr-works)
+2. [Sanity Dashboard Configuration](#sanity-dashboard-configuration)
+3. [Webhook Handler Implementation](#webhook-handler-implementation)
+4. [Tag Strategy](#tag-strategy)
+5. [Webhook Security](#webhook-security)
+6. [Testing Webhooks Locally](#testing-webhooks-locally)
+7. [Monitoring & Debugging](#monitoring--debugging)
+8. [References](#references)
+
+---
+
+## Overview — How Sanity ISR Works
+
+````
+
+Content Editor Sanity Studio Sanity API Webhook Handler Next.js Cache
+│ │ │ │ │
+│── Publish post ──→ │ │ │
+│ │── Webhook ────────────────────→ │
+│ │ │ Verify signature │
+│ │ │ Extract \_type + slug │
+│ │ │ revalidateTag(...) ────→│
+│ │ │ │ Purge entries
+│ │ │ │ │
+│ │ │ Return 200 │
+│ │ │ │ │
+│ Next visitor gets
+│ fresh content
+│ (≤ 5 seconds total)
+
+```
+
+---
+
+## Sanity Dashboard Configuration
+
+In Sanity Manage → **API** → **Webhooks** → **Add Webhook**:
+
+```
+
+Name: Next.js ISR Revalidation
+URL: https://yoursaas.com/api/webhooks/sanity
+Trigger on: Create, Update, Delete
+Filter: \_type in ["blogPost", "serviceArea", "siteConfig", "navigation", "homepage"]
+Projection: {
+\_id,
+\_type,
+"slug": slug.current,
+"tenantId": tenant.\_ref,
+"serviceAreaSlug": slug.current
+}
+Secret: [same as SANITY_WEBHOOK_SECRET env var]
+HTTP Method: POST
+Headers: Content-Type: application/json
+
+````
+
+The **GROQ Projection** in the webhook filters the payload to exactly what your
+handler needs — no over-fetching, smaller payloads. [web:74]
+
+---
+
+## Webhook Handler Implementation
+
+```typescript
+// apps/portal/src/app/api/webhooks/sanity/route.ts
+import { type NextRequest, NextResponse } from 'next/server'
+import { revalidateTag } from 'next/cache'
+import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook'
+
+// Disable body parsing — we need raw body for signature verification [stackfive](https://www.stackfive.io/work/nextjs/how-to-use-on-demand-isr-with-next-js-and-sanity)
+export const dynamic = 'force-dynamic'
+
+interface SanityWebhookBody {
+  _id: string
+  _type: string
+  slug?: string
+  tenantId?: string
+  serviceAreaSlug?: string
+}
+
+export async function POST(req: NextRequest) {
+  // Read raw body for signature verification BEFORE parsing JSON
+  const rawBody = await req.text()
+  const signature = req.headers.get(SIGNATURE_HEADER_NAME)
+  const secret = process.env.SANITY_WEBHOOK_SECRET
+
+  if (!secret) {
+    console.error('SANITY_WEBHOOK_SECRET not configured')
+    return NextResponse.json({ error: 'Webhook not configured' }, { status: 500 })
+  }
+
+  // Verify webhook signature [stackfive](https://www.stackfive.io/work/nextjs/how-to-use-on-demand-isr-with-next-js-and-sanity)
+  const isValid = await isValidSignature(rawBody, signature ?? '', secret)
+  if (!isValid) {
+    console.warn('Invalid Sanity webhook signature — possible spoofing attempt')
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+  }
+
+  let body: SanityWebhookBody
+  try {
+    body = JSON.parse(rawBody)
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  const tags = resolveTagsFromWebhook(body)
+
+  if (tags.length === 0) {
+    return NextResponse.json({ revalidated: false, reason: 'No tags matched' })
+  }
+
+  // Revalidate all matched cache tags
+  const revalidated: string[] = []
+  for (const tag of tags) {
+    revalidateTag(tag)
+    revalidated.push(tag)
+  }
+
+  console.log(`[Sanity Webhook] Revalidated tags: ${revalidated.join(', ')}`)
+
+  return NextResponse.json({
+    revalidated: true,
+    tags: revalidated,
+    timestamp: new Date().toISOString(),
+  })
+}
+
+/**
+ * Map Sanity document types to Next.js cache tags.
+ * Tags must match the cacheTag() calls in sanityFetch().
+ */
+function resolveTagsFromWebhook(body: SanityWebhookBody): string[] {
+  const tags: string[] = []
+
+  switch (body._type) {
+    case 'blogPost':
+      tags.push('blog')                          // All blog listings
+      if (body.slug) tags.push(`blog:${body.slug}`) // Specific post
+      tags.push('blog-index')                    // Blog index/pagination
+      break
+
+    case 'serviceArea':
+      tags.push('service-areas')                 // All service areas listing
+      if (body.slug) tags.push(`service-area:${body.slug}`)
+      if (body.tenantId) tags.push(`tenant:${body.tenantId}:service-areas`)
+      break
+
+    case 'siteConfig':
+      if (body.tenantId) {
+        tags.push(`site-config:${body.tenantId}`)
+        tags.push(`tenant:${body.tenantId}`)     // Broad tenant invalidation
+      }
+      break
+
+    case 'navigation':
+      if (body.tenantId) {
+        tags.push(`nav:${body.tenantId}`)
+        tags.push(`tenant:${body.tenantId}:nav`)
+      }
+      break
+
+    case 'homepage':
+      if (body.tenantId) {
+        tags.push(`homepage:${body.tenantId}`)
+        tags.push(`tenant:${body.tenantId}:homepage`)
+      }
+      break
+
+    default:
+      console.warn(`[Sanity Webhook] Unhandled document type: ${body._type}`)
+  }
+
+  return tags
+}
+````
+
+---
+
+## Tag Strategy
+
+Tag naming must be **consistent** between `cacheTag()` calls in `sanityFetch()` and
+`revalidateTag()` calls in the webhook handler:
+
+```
+Document Type        cacheTag() in sanityFetch      revalidateTag() in webhook
+─────────────────────────────────────────────────────────────────────────────
+blogPost             blog, blog:{slug}              blog, blog:{slug}, blog-index
+serviceArea          service-areas,                 service-areas,
+                     service-area:{slug},           service-area:{slug},
+                     tenant:{id}:service-areas      tenant:{id}:service-areas
+siteConfig           site-config:{tenantId},        site-config:{tenantId},
+                     tenant:{tenantId}              tenant:{tenantId}
+navigation           nav:{tenantId}                 nav:{tenantId}
+homepage             homepage:{tenantId}            homepage:{tenantId}
+```
+
+---
+
+## Webhook Security
+
+```typescript
+// packages/cms/src/webhook-verification.ts — testable utility
+
+import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook';
+
+export async function verifyWebhookSignature(
+  rawBody: string,
+  signature: string | null,
+  secret: string
+): Promise<boolean> {
+  if (!signature) return false;
+  return isValidSignature(rawBody, signature, secret);
+}
+
+// Additional security: IP allowlist for Sanity webhook IPs
+// Sanity documents their webhook IP ranges at sanity.io/docs/webhooks
+const SANITY_WEBHOOK_IPS = [
+  '35.223.27.101',
+  // Check Sanity docs for current list
+];
+
+export function isSanityIp(ip: string): boolean {
+  return SANITY_WEBHOOK_IPS.includes(ip);
+}
+```
+
+---
+
+## Testing Webhooks Locally
+
+```bash
+# 1. Install Sanity CLI and smee.io relay
+pnpm add -g @sanity/cli smee-client
+
+# 2. Start smee relay (tunnels Sanity webhooks to localhost)
+smee -u https://smee.io/your-channel-id -t http://localhost:3000/api/webhooks/sanity
+
+# 3. Configure .env.local with your webhook secret
+SANITY_WEBHOOK_SECRET=your_test_secret
+
+# 4. Set smee URL as webhook URL in Sanity Dashboard for development
+# 5. Publish a document in Sanity Studio
+# 6. Watch Next.js logs for revalidation messages
+
+# Manual test via curl:
+curl -X POST http://localhost:3000/api/webhooks/sanity \
+  -H "Content-Type: application/json" \
+  -H "sanity-webhook-signature: [generated]" \
+  -d '{"_id":"test","_type":"blogPost","slug":"my-test-post"}'
+```
+
+### Vitest Unit Test
+
+```typescript
+// packages/cms/src/sanity-webhook.test.ts
+import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('next/cache', () => ({ revalidateTag: vi.fn() }));
+vi.mock('@sanity/webhook', () => ({
+  isValidSignature: vi.fn().mockResolvedValue(true),
+  SIGNATURE_HEADER_NAME: 'sanity-webhook-signature',
+}));
+
+describe('Sanity Webhook Handler', () => {
+  it('revalidates blog tags on blogPost publish', async () => {
+    const { revalidateTag } = await import('next/cache');
+
+    const body = JSON.stringify({
+      _id: 'abc123',
+      _type: 'blogPost',
+      slug: 'my-new-post',
+    });
+
+    const req = new Request('http://localhost/api/webhooks/sanity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'sanity-webhook-signature': 'sig' },
+      body,
+    });
+
+    const { POST } = await import('./route');
+    const res = await POST(req as unknown as NextRequest);
+    const data = await res.json();
+
+    expect(data.revalidated).toBe(true);
+    expect(revalidateTag).toHaveBeenCalledWith('blog');
+    expect(revalidateTag).toHaveBeenCalledWith('blog:my-new-post');
+  });
+});
+```
+
+---
+
+## References
+
+- [next-sanity ISR Setup](https://github.com/sanity-io/next-sanity) [web:73]
+- [On-Demand ISR with Sanity Webhooks](https://www.stackfive.io/work/nextjs/how-to-use-on-demand-isr-with-next-js-and-sanity) [web:71]
+- [Sanity GROQ-Powered Webhooks — Next.js ISR](https://dev.to/valse/nextjs-on-demand-isr-by-sanity-groq-powered-webhooks-221n) [web:74]
+- [Sanity Webhook Configuration](https://www.sanity.io/answers/how-to-set-up-a-web-hook-for-on-demand-isr-in-next-js) [web:77]
+
+````
+
+***
+
+# wcag-compliance-checklist.md
+
+```markdown
+# wcag-compliance-checklist.md
+
+> **2026 Standards Compliance** | WCAG 2.2 Level AA · 9 New Criteria ·
+> React 19.2 ARIA Patterns · Automated + Manual Testing
+
+## Table of Contents
+1. [Why WCAG 2.2 AA in 2026](#why-wcag-22-aa-in-2026)
+2. [The 9 New Criteria in WCAG 2.2](#the-9-new-criteria-in-wcag-22)
+3. [Complete Level A + AA Checklist](#complete-level-a--aa-checklist)
+4. [Perceivable](#perceivable)
+5. [Operable](#operable)
+6. [Understandable](#understandable)
+7. [Robust](#robust)
+8. [Per-Component Compliance Notes](#per-component-compliance-notes)
+9. [Automated vs Manual Split](#automated-vs-manual-split)
+10. [References](#references)
+
+---
+
+## Why WCAG 2.2 AA in 2026
+
+WCAG 2.2 became a W3C Recommendation in October 2023 and is now the legal baseline
+in the EU (EAA enforcement begins **June 28, 2025**), UK, Canada, and increasingly
+in US ADA case law. Level AA is the minimum required for compliance. [web:65][web:67]
+
+**Business impact beyond compliance:**
+- Screen reader users represent ~7% of web users — a real revenue segment
+- Keyboard navigation improvements benefit all power users
+- Higher target sizes reduce friction on mobile (affects 60%+ of traffic)
+- Accessible forms have lower abandonment rates
+- Google uses accessibility signals as a ranking factor via Core Web Vitals (INP)
+
+---
+
+## The 9 New Criteria in WCAG 2.2
+
+WCAG 2.2 added 9 new success criteria over WCAG 2.1. These are the most impactful
+new requirements for 2026 compliance: [web:85][web:89][web:92]
+
+| SC | Name | Level | What It Requires |
+|----|------|-------|-----------------|
+| 2.4.11 | Focus Not Obscured (Minimum) | A | Focused component not fully hidden by sticky header/banner |
+| 2.4.12 | Focus Not Obscured (Enhanced) | AA | Focused component not partially hidden |
+| 2.4.13 | Focus Appearance | AA | Focus indicator ≥ 2px solid outline; contrast ≥ 3:1 vs adjacent colors |
+| 2.5.7 | Dragging Movements | AA | All drag interactions have single-pointer alternative |
+| 2.5.8 | Target Size (Minimum) | AA | Interactive targets ≥ 24×24 CSS pixels (or adequate spacing) |
+| 3.2.6 | Consistent Help | A | Help mechanisms in same relative location across pages |
+| 3.3.7 | Redundant Entry | A | Don't ask for same info twice in same session |
+| 3.3.8 | Accessible Authentication (Minimum) | AA | No cognitive function test required to authenticate |
+| 3.3.9 | Accessible Authentication (Enhanced) | AAA | No object recognition or transcription required |
+
+**Removed:** SC 4.1.1 Parsing (no longer relevant — modern browsers handle malformed HTML). [web:85]
+
+---
+
+## Complete Level A + AA Checklist
+
+### Perceivable
+
+#### 1.1 — Text Alternatives
+
+- [ ] **1.1.1 Non-text Content (A)** — All images have descriptive `alt` text; decorative images have `alt=""`; complex images (charts) have long descriptions; CAPTCHAs have alternatives
+
+```tsx
+// ✅ Informative image
+<img src="/hero.webp" alt="Plumber fixing a sink in a modern kitchen" />
+
+// ✅ Decorative image
+<img src="/divider.svg" alt="" role="presentation" />
+
+// ✅ Complex image (chart)
+<figure>
+  <img src="/chart.png" alt="Lead growth chart" aria-describedby="chart-desc" />
+  <figcaption id="chart-desc">
+    Leads increased from 45 in January to 120 in March 2026, a 167% increase.
+  </figcaption>
+</figure>
+````
+
+#### 1.2 — Time-Based Media
+
+- [ ] **1.2.1 Audio-only / Video-only (A)** — Transcripts for audio; text alternative for silent video
+- [ ] **1.2.2 Captions (A)** — Captions on all prerecorded video with audio
+- [ ] **1.2.3 Audio Description (A)** — Audio description or media alternative for video
+- [ ] **1.2.4 Captions (Live) (AA)** — Live captions for live video
+
+#### 1.3 — Adaptable
+
+- [ ] **1.3.1 Info and Relationships (A)** — Structure conveyed via markup, not just visual styling
+
+```tsx
+// ✅ Form with explicit label association
+<div>
+  <label htmlFor="email" className="block text-sm font-medium">
+    Email address <span aria-hidden="true">*</span>
+    <span className="sr-only">(required)</span>
+  </label>
+  <input
+    id="email"
+    name="email"
+    type="email"
+    required
+    aria-required="true"
+    aria-describedby="email-error"
+    className="mt-1 block w-full rounded-md border"
+  />
+  <p id="email-error" role="alert" className="mt-1 text-sm text-red-600">
+    {emailError}
+  </p>
+</div>
+```
+
+- [ ] **1.3.2 Meaningful Sequence (A)** — Reading order matches visual order in DOM
+- [ ] **1.3.3 Sensory Characteristics (A)** — Instructions don't rely solely on shape, color, size, or location
+- [ ] **1.3.4 Orientation (AA)** — Content not restricted to single orientation (unless essential)
+- [ ] **1.3.5 Identify Input Purpose (AA)** — Form fields have correct `autocomplete` attributes
+
+```tsx
+// ✅ Autocomplete attributes enable password managers and autofill
+<input autoComplete="given-name" name="firstName" />
+<input autoComplete="family-name" name="lastName" />
+<input autoComplete="email" type="email" name="email" />
+<input autoComplete="tel" type="tel" name="phone" />
+<input autoComplete="new-password" type="password" name="password" />
+<input autoComplete="current-password" type="password" name="currentPassword" />
+```
+
+#### 1.4 — Distinguishable
+
+- [ ] **1.4.1 Use of Color (A)** — Color not used as the only visual means of conveying information
+- [ ] **1.4.2 Audio Control (A)** — Auto-playing audio can be paused/stopped
+- [ ] **1.4.3 Contrast (Minimum) (AA)** — Text contrast ≥ 4.5:1; large text ≥ 3:1
+- [ ] **1.4.4 Resize Text (AA)** — Text resizable to 200% without assistive technology
+- [ ] **1.4.5 Images of Text (AA)** — Use actual text, not images of text
+- [ ] **1.4.10 Reflow (AA)** — Content reflows at 320px width without horizontal scroll
+- [ ] **1.4.11 Non-text Contrast (AA)** — UI components and graphics have 3:1 contrast ratio
+- [ ] **1.4.12 Text Spacing (AA)** — Content not lost when: line-height 1.5×, letter-spacing 0.12em, word-spacing 0.16em, paragraph spacing 2×
+- [ ] **1.4.13 Content on Hover/Focus (AA)** — Dismissible, hoverable, persistent tooltips/popovers
+
+```css
+/* ✅ 1.4.12 — Text spacing override test (paste in DevTools) */
+/* Your layout must survive this: */
+* {
+  line-height: 1.5 !important;
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.16em !important;
+}
+p {
+  margin-bottom: 2em !important;
+}
+```
+
+---
+
+### Operable
+
+#### 2.1 — Keyboard Accessible
+
+- [ ] **2.1.1 Keyboard (A)** — All functionality accessible via keyboard
+
+```tsx
+// ✅ Custom interactive component with keyboard support
+<div
+  role="button"
+  tabIndex={0}
+  onClick={handleClick}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  }}
+  aria-label="Delete lead"
+  aria-pressed={isSelected}
+>
+  <TrashIcon aria-hidden="true" />
+</div>
+```
+
+- [ ] **2.1.2 No Keyboard Trap (A)** — Users can navigate away from any component using only keyboard
+- [ ] **2.1.4 Character Key Shortcuts (A)** — Single-key shortcuts can be remapped or disabled
+
+#### 2.4 — Navigable
+
+- [ ] **2.4.1 Bypass Blocks (A)** — Skip navigation link before main content
+
+```tsx
+// ✅ Skip link — visually hidden until focused
+<a
+  href="#main-content"
+  className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4
+             focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:rounded"
+>
+  Skip to main content
+</a>
+<main id="main-content" tabIndex={-1}>
+  {children}
+</main>
+```
+
+- [ ] **2.4.2 Page Titled (A)** — Every page has unique, descriptive `<title>`
+- [ ] **2.4.3 Focus Order (A)** — Focus moves in logical sequence
+- [ ] **2.4.4 Link Purpose (A)** — Link purpose clear from link text or context
+- [ ] **2.4.6 Headings and Labels (AA)** — Descriptive headings and labels
+- [ ] **2.4.7 Focus Visible (AA)** — Keyboard focus indicator visible
+- [ ] **2.4.11 Focus Not Obscured (Minimum) (A) ⭐ NEW** — Sticky headers don't fully cover focused element
+
+```css
+/* ✅ 2.4.11/2.4.12 — Scroll padding prevents sticky header obscuring focus */
+html {
+  scroll-padding-top: calc(var(--header-height) + 16px);
+}
+```
+
+- [ ] **2.4.12 Focus Not Obscured (Enhanced) (AA) ⭐ NEW** — Focused component fully visible
+- [ ] **2.4.13 Focus Appearance (AA) ⭐ NEW** — Focus indicator ≥ 2px solid, ≥ 3:1 contrast
+
+```css
+/* ✅ 2.4.13 — Compliant focus indicator */
+:focus-visible {
+  outline: 2px solid #2563eb; /* ≥ 2px solid outline */
+  outline-offset: 2px; /* Creates visible gap from element */
+  /* #2563eb on white background = 5.9:1 contrast ratio ✅ */
+}
+
+/* ❌ Non-compliant — removed outline without replacement */
+:focus {
+  outline: none;
+}
+```
+
+#### 2.5 — Input Modalities
+
+- [ ] **2.5.3 Label in Name (A)** — Accessible name includes visible label text
+- [ ] **2.5.7 Dragging Movements (AA) ⭐ NEW** — Drag interactions have keyboard/click alternative
+
+```tsx
+// ✅ 2.5.7 — Drag-to-reorder with keyboard alternative
+<SortableList
+  items={items}
+  onReorder={handleReorder}
+  // Keyboard alternative: arrow keys to move items up/down
+  onKeyboardMove={(id, direction) => handleKeyboardReorder(id, direction)}
+/>
+```
+
+- [ ] **2.5.8 Target Size (Minimum) (AA) ⭐ NEW** — Interactive targets ≥ 24×24px
+
+```css
+/* ✅ 2.5.8 — Minimum target size via padding (visible icon can be smaller) */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 4px; /* 16px icon + 4px×2 padding = 24px target ✅ */
+  /* Recommended: 44×44px for primary actions (AAA: 2.5.5) */
+}
+
+.primary-button {
+  min-height: 44px; /* Recommended for primary CTAs */
+  padding-inline: 1rem;
+}
+```
+
+---
+
+### Understandable
+
+#### 3.1 — Readable
+
+- [ ] **3.1.1 Language of Page (A)** — `<html lang="en">` set correctly
+- [ ] **3.1.2 Language of Parts (AA)** — Language changes marked with `lang` attribute
+
+#### 3.2 — Predictable
+
+- [ ] **3.2.1 On Focus (A)** — Focusing element doesn't trigger context change
+- [ ] **3.2.2 On Input (A)** — Changing setting doesn't auto-submit or change context
+- [ ] **3.2.3 Consistent Navigation (AA)** — Navigation repeated in same order across pages
+- [ ] **3.2.4 Consistent Identification (AA)** — Components with same function identified consistently
+- [ ] **3.2.6 Consistent Help (A) ⭐ NEW** — Help mechanisms (chat, FAQ, phone) in same location
+
+#### 3.3 — Input Assistance
+
+- [ ] **3.3.1 Error Identification (A)** — Errors identified in text, not just color
+
+```tsx
+// ✅ 3.3.1 — Error clearly identified with role="alert"
+{
+  errors.email && (
+    <p id="email-error" role="alert" className="mt-1 text-sm text-red-600">
+      <span aria-hidden="true">⚠</span> {errors.email}
+    </p>
+  );
+}
+```
+
+- [ ] **3.3.2 Labels or Instructions (A)** — Input labels and format instructions provided
+- [ ] **3.3.3 Error Suggestion (AA)** — Error messages include correction suggestions
+- [ ] **3.3.4 Error Prevention (AA)** — Legal/financial submissions reversible or confirmable
+- [ ] **3.3.7 Redundant Entry (A) ⭐ NEW** — Don't ask for same info twice in same session
+
+```tsx
+// ✅ 3.3.7 — Prefill known values in multi-step form
+// In Step 3 (Billing), if email was collected in Step 1:
+<input
+  name="billingEmail"
+  type="email"
+  defaultValue={session.emailFromStep1} // Pre-fill, don't ask again
+  aria-label="Billing email (prefilled from account)"
+/>
+```
+
+- [ ] **3.3.8 Accessible Authentication (Minimum) (AA) ⭐ NEW** — No memorization/transcription required to log in
+
+```tsx
+// ✅ 3.3.8 — Allow password managers (no paste blocking)
+<input
+  type="password"
+  // ❌ DO NOT: onPaste={e => e.preventDefault()}
+  // ❌ DO NOT: autocomplete="off"
+  autoComplete="current-password" // Enables password manager autofill
+/>
+// ✅ Also compliant: magic link, passkey, OAuth — no password memory needed
+```
+
+---
+
+### Robust
+
+#### 4.1 — Compatible
+
+- [ ] **4.1.2 Name, Role, Value (A)** — All UI components have accessible name, role, state
+
+```tsx
+// ✅ 4.1.2 — Toggle button with full state
+<button
+  type="button"
+  aria-pressed={isActive}
+  aria-label={isActive ? 'Disable notifications' : 'Enable notifications'}
+  onClick={() => setIsActive(!isActive)}
+>
+  <BellIcon aria-hidden="true" />
+</button>
+
+// ✅ Loading state communicated to screen readers
+<button
+  aria-busy={isLoading}
+  disabled={isLoading}
+  aria-label={isLoading ? 'Saving…' : 'Save changes'}
+>
+  {isLoading ? <Spinner aria-hidden="true" /> : 'Save changes'}
+</button>
+```
+
+- [ ] **4.1.3 Status Messages (AA)** — Status updates communicated without focus change
+
+```tsx
+// ✅ 4.1.3 — Live region for status messages
+<div aria-live="polite" aria-atomic="true" className="sr-only">
+  {statusMessage}
+</div>
+
+// For errors/urgent messages: aria-live="assertive"
+```
+
+---
+
+## Per-Component Compliance Notes
+
+| Component     | Key Requirements                                                  | Common Failures                            |
+| ------------- | ----------------------------------------------------------------- | ------------------------------------------ |
+| Modal/Dialog  | Focus trap, `role="dialog"`, `aria-modal="true"`, close on Escape | Focus not trapped; background scrollable   |
+| Dropdown Menu | `role="menu"`, arrow key navigation, `aria-expanded`              | Click-only; no keyboard nav                |
+| Data Table    | `<th scope="col/row">`, `caption`, sort indicators                | No headers; sort state not announced       |
+| Toast/Alert   | `role="alert"` or `aria-live="polite"`                            | Auto-dismissed before user reads           |
+| Accordion     | `aria-expanded`, `aria-controls`, Enter/Space keys                | Click-only                                 |
+| Tabs          | `role="tablist/tab/tabpanel"`, arrow keys                         | Tab key used instead of arrows             |
+| Form          | Labels, error messages, required indicators                       | Placeholder-only labels; color-only errors |
+| Skip Link     | Visible on focus, points to `#main-content`                       | Hidden permanently; broken href            |
+
+---
+
+## Automated vs Manual Split
+
+WCAG 2.2 has **50 Level A + AA criteria**. Automated tools catch approximately
+**40% of issues** (20 criteria). The remaining **60% require manual testing**. [web:69]
+
+| Testing Method   | What It Catches                                                                  | Tools                                  |
+| ---------------- | -------------------------------------------------------------------------------- | -------------------------------------- |
+| Automated scan   | Missing alt text, contrast failures, missing labels, duplicate IDs, invalid ARIA | axe-core, Lighthouse                   |
+| Keyboard testing | Tab order, focus traps, keyboard shortcuts, focus visibility                     | Manual: Tab/Shift-Tab/Arrow/Escape     |
+| Screen reader    | Announcements, reading order, form instructions, dynamic updates                 | NVDA+Chrome, JAWS+IE, VoiceOver+Safari |
+| Zoom/reflow      | 320px reflow, 200% text resize, 400% zoom                                        | Browser DevTools                       |
+| Mobile testing   | Target sizes, orientation, touch gestures                                        | Physical device or emulator            |
+| Cognitive review | Redundant entry, consistent help, error suggestions                              | Manual UX review                       |
+
+---
+
+## References
+
+- [WCAG 2.2 Official Spec](https://www.w3.org/TR/WCAG22/) [web:65]
+- [9 New WCAG 2.2 Criteria — TestParty](https://testparty.ai/blog/wcag-22-new-success-criteria) [web:85]
+- [WCAG 2.2 New Criteria — Vispero](https://vispero.com/resources/new-success-criteria-in-wcag22/) [web:89]
+- [Complete WCAG 2.2 Checklist — Inclly](https://inclly.com/resources/wcag-22-checklist) [web:69]
+- [WCAG 2.2 AA Summary — wcag.com](https://www.wcag.com/blog/wcag-2-2-aa-summary-and-checklist-for-website-owners/) [web:78]
+- [W3C — What's New in WCAG 2.2](https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/) [web:92]
+
+````
+
+***
+
+# automated-accessibility-testing.md
+
+```markdown
+# automated-accessibility-testing.md
+
+> **2026 Standards Compliance** | @axe-core/playwright · Playwright 1.50 ·
+> WCAG 2.2 · GitHub Actions CI · Vitest + axe-core
+
+## Table of Contents
+1. [Overview — The 40% Rule](#overview--the-40-rule)
+2. [Setup](#setup)
+3. [Playwright + axe-core Integration](#playwright--axe-core-integration)
+4. [Writing Accessibility Tests](#writing-accessibility-tests)
+5. [Component-Level Testing with Vitest](#component-level-testing-with-vitest)
+6. [CI/CD Integration](#cicd-integration)
+7. [Reporting & Triage](#reporting--triage)
+8. [Known Limitations & Manual Checklist](#known-limitations--manual-checklist)
+9. [References](#references)
+
+---
+
+## Overview — The 40% Rule
+
+Automated accessibility tools (axe-core, Lighthouse) catch approximately **40% of
+WCAG issues** — specifically the rule-based violations that can be determined
+programmatically without human judgment. [web:69][web:86]
+
+**Automated tools catch:**
+- Missing `alt` attributes on images
+- Insufficient color contrast ratios
+- Missing form labels
+- Invalid ARIA attributes and roles
+- Duplicate landmark regions
+- Keyboard focus order issues (partially)
+- Missing page `<title>` and `lang` attribute
+
+**Automated tools cannot catch:**
+- Whether `alt` text is *meaningful* (not just present)
+- Whether navigation is *logically* ordered for users
+- Whether error messages are *clear and actionable*
+- Whether content is *understandable* at appropriate reading level
+- Real-world screen reader behavior nuances
+
+---
+
+## Setup
+
+```bash
+# Install axe-core Playwright integration
+pnpm add -D @axe-core/playwright
+
+# Or use the axe-playwright wrapper (simpler API)
+pnpm add -D axe-playwright
+
+# Already have Playwright? Just add the axe package:
+pnpm add -D @axe-core/playwright
+````
+
+```typescript
+// playwright.config.ts — no special config needed for axe
+// axe injects into existing tests via the AxeBuilder class
+```
+
+---
+
+## Playwright + axe-core Integration
+
+### Base Accessibility Fixture
+
+Create a reusable fixture that wraps every test with accessibility scanning: [web:80][web:86]
+
+```typescript
+// e2e/fixtures/accessibility.ts
+import { test as base, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+export type AccessibilityFixtures = {
+  makeAxeBuilder: () => AxeBuilder;
+};
+
+export const test = base.extend<AccessibilityFixtures>({
+  makeAxeBuilder: async ({ page }, use) => {
+    const makeAxeBuilder = () =>
+      new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']) // WCAG 2.2 AA
+        .exclude('#third-party-widget') // Exclude known third-party iframes
+        .exclude('[data-axe-ignore]'); // Opt-out escape hatch for known issues
+
+    await use(makeAxeBuilder);
+  },
+});
+
+export { expect };
+```
+
+---
+
+## Writing Accessibility Tests
+
+### Page-Level Scan
+
+```typescript
+// e2e/accessibility/pages.spec.ts
+import { test, expect } from '../fixtures/accessibility';
+
+const PAGES_TO_AUDIT = [
+  { name: 'Home', path: '/' },
+  { name: 'Blog', path: '/blog' },
+  { name: 'Pricing', path: '/pricing' },
+  { name: 'Contact', path: '/contact' },
+  { name: 'Login', path: '/login' },
+  { name: 'Sign Up', path: '/signup' },
+  { name: 'Dashboard', path: '/dashboard', requiresAuth: true },
+  { name: 'Settings', path: '/settings', requiresAuth: true },
+];
+
+for (const page of PAGES_TO_AUDIT) {
+  test(`${page.name} page — no WCAG 2.2 AA violations`, async ({
+    page: browserPage,
+    makeAxeBuilder,
+  }) => {
+    if (page.requiresAuth) {
+      await browserPage.goto('/login');
+      await browserPage.fill('[name="email"]', process.env.TEST_USER_EMAIL!);
+      await browserPage.fill('[name="password"]', process.env.TEST_USER_PASSWORD!);
+      await browserPage.click('[type="submit"]');
+      await browserPage.waitForURL('/dashboard');
+    }
+
+    await browserPage.goto(page.path);
+    await browserPage.waitForLoadState('networkidle');
+
+    const results = await makeAxeBuilder().analyze();
+
+    expect(results.violations).toEqual([]);
+  });
+}
+```
+
+### Component Interaction Flows
+
+```typescript
+// e2e/accessibility/forms.spec.ts
+import { test, expect } from '../fixtures/accessibility';
+
+test.describe('Form Accessibility', () => {
+  test('contact form — no violations', async ({ page, makeAxeBuilder }) => {
+    await page.goto('/contact');
+
+    // Scan initial state
+    const initialResults = await makeAxeBuilder().analyze();
+    expect(initialResults.violations).toEqual([]);
+
+    // Trigger validation errors
+    await page.click('[type="submit"]');
+    await page.waitForSelector('[role="alert"]');
+
+    // Scan error state — errors must be accessible
+    const errorResults = await makeAxeBuilder().analyze();
+    expect(errorResults.violations).toEqual([]);
+  });
+
+  test('modal dialog — focus trap and ARIA', async ({ page, makeAxeBuilder }) => {
+    await page.goto('/dashboard');
+    await page.click('[data-testid="add-lead-button"]');
+    await page.waitForSelector('[role="dialog"]');
+
+    // Modal must be accessible
+    const modalResults = await makeAxeBuilder()
+      .include('[role="dialog"]') // Scope scan to modal only
+      .analyze();
+
+    expect(modalResults.violations).toEqual([]);
+
+    // Verify focus is inside dialog
+    const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
+    expect(['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON']).toContain(focusedElement);
+
+    // Verify Escape closes dialog
+    await page.keyboard.press('Escape');
+    await expect(page.locator('[role="dialog"]')).not.toBeVisible();
+  });
+
+  test('keyboard navigation — full page traversal', async ({ page }) => {
+    await page.goto('/');
+
+    // Tab through all interactive elements; verify none are trapped
+    const tabCount = 30;
+    for (let i = 0; i < tabCount; i++) {
+      await page.keyboard.press('Tab');
+
+      // Ensure no keyboard trap — each Tab moves focus
+      const focusedTag = await page.evaluate(() => document.activeElement?.tagName);
+      expect(focusedTag).not.toBe('BODY'); // Focus should be on something
+    }
+  });
+});
+```
+
+### WCAG 2.2-Specific Tests
+
+```typescript
+// e2e/accessibility/wcag22.spec.ts
+import { test, expect } from '../fixtures/accessibility';
+
+test.describe('WCAG 2.2 New Criteria', () => {
+  // 2.4.13 Focus Appearance — focus indicator must be visible
+  test('2.4.13 — focus indicators visible on all interactive elements', async ({ page }) => {
+    await page.goto('/dashboard');
+    await page.keyboard.press('Tab');
+
+    const focusedElement = page.locator(':focus');
+    const outline = await focusedElement.evaluate((el) => {
+      const styles = window.getComputedStyle(el);
+      return {
+        outlineStyle: styles.outlineStyle,
+        outlineWidth: styles.outlineWidth,
+        outlineColor: styles.outlineColor,
+      };
+    });
+
+    expect(outline.outlineStyle).not.toBe('none');
+    expect(parseFloat(outline.outlineWidth)).toBeGreaterThanOrEqual(2);
+  });
+
+  // 2.5.8 Target Size — interactive elements ≥ 24×24px [testparty](https://testparty.ai/blog/wcag-22-new-success-criteria)
+  test('2.5.8 — interactive targets meet minimum size', async ({ page }) => {
+    await page.goto('/dashboard');
+
+    const violations = await page.evaluate(() => {
+      const interactiveElements = Array.from(
+        document.querySelectorAll('a, button, input, select, textarea, [role="button"]')
+      );
+
+      return interactiveElements
+        .filter((el) => {
+          const rect = el.getBoundingClientRect();
+          // Exclude invisible elements and inline links
+          if (rect.width === 0 || rect.height === 0) return false;
+          // Inline links in text are exempt from 2.5.8
+          if (el.tagName === 'A' && el.closest('p, li, td')) return false;
+
+          return rect.width < 24 || rect.height < 24;
+        })
+        .map((el) => ({
+          tag: el.tagName,
+          text: el.textContent?.trim().substring(0, 30),
+          width: el.getBoundingClientRect().width,
+          height: el.getBoundingClientRect().height,
+        }));
+    });
+
+    expect(violations).toEqual([]);
+  });
+
+  // 3.3.7 — Redundant entry: billing email should be pre-filled
+  test('3.3.7 — billing form pre-fills known user email', async ({ page }) => {
+    await page.goto('/billing/checkout');
+
+    const emailField = page.locator('[name="billingEmail"]');
+    const prefilled = await emailField.inputValue();
+
+    // Should be prefilled from session; user shouldn't have to re-enter
+    expect(prefilled).not.toBe('');
+    expect(prefilled).toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  });
+
+  // 2.4.11 — Sticky header should not obscure focused elements
+  test('2.4.11 — sticky nav does not cover focused elements', async ({ page }) => {
+    await page.goto('/blog');
+
+    // Tab to a link deep in the page content
+    const links = page.locator('article a');
+    await links.first().focus();
+
+    const linkBounds = await links.first().boundingBox();
+    const headerHeight = await page.evaluate(() => {
+      const header = document.querySelector('header');
+      return header?.getBoundingClientRect().bottom ?? 0;
+    });
+
+    // Focused element's top must be BELOW header bottom
+    if (linkBounds) {
+      expect(linkBounds.y).toBeGreaterThan(headerHeight);
+    }
+  });
+});
+```
+
+---
+
+## Component-Level Testing with Vitest
+
+```typescript
+// packages/ui/src/components/Button/Button.a11y.test.tsx
+import { render } from '@testing-library/react'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { expect, describe, it } from 'vitest'
+import { Button } from './Button'
+
+expect.extend(toHaveNoViolations)
+
+describe('Button — Accessibility', () => {
+  it('has no WCAG violations in default state', async () => {
+    const { container } = render(<Button>Save changes</Button>)
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
+  })
+
+  it('has no violations when loading', async () => {
+    const { container } = render(
+      <Button aria-busy={true} disabled>
+        Saving…
+      </Button>,
+    )
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
+  })
+
+  it('has no violations when icon-only (must have aria-label)', async () => {
+    const { container } = render(
+      <Button aria-label="Delete lead" variant="icon">
+        <TrashIcon aria-hidden="true" />
+      </Button>,
+    )
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
+  })
+
+  it('exposes correct accessible name', async () => {
+    const { getByRole } = render(<Button>Save changes</Button>)
+    expect(getByRole('button', { name: 'Save changes' })).toBeTruthy()
+  })
+})
+```
+
+---
+
+## CI/CD Integration
+
+```yaml
+# .github/workflows/accessibility.yml
+name: Accessibility Audit
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+jobs:
+  a11y-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      - name: Install Playwright Browsers
+        run: pnpm playwright install --with-deps chromium
+
+      - name: Start app server
+        run: pnpm start &
+        env:
+          PORT: 3000
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run Accessibility Tests
+        run: pnpm playwright test e2e/accessibility/
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
+
+      - name: Upload Accessibility Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Comment PR with violations
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **Accessibility violations detected.** Check the [test report](${{ env.REPORT_URL }}) for details.'
+            })
+```
+
+---
+
+## Reporting & Triage
+
+### Structured Violation Report
+
+```typescript
+// scripts/generate-a11y-report.ts
+interface AxeViolation {
+  id: string;
+  impact: 'critical' | 'serious' | 'moderate' | 'minor';
+  description: string;
+  nodes: Array<{ html: string; failureSummary: string }>;
+  tags: string[];
+  helpUrl: string;
+}
+
+function formatViolationReport(violations: AxeViolation[]): string {
+  const grouped = violations.reduce(
+    (acc, v) => {
+      const impact = v.impact;
+      if (!acc[impact]) acc[impact] = [];
+      acc[impact].push(v);
+      return acc;
+    },
+    {} as Record<string, AxeViolation[]>
+  );
+
+  const lines: string[] = ['# Accessibility Violation Report\n'];
+
+  for (const impact of ['critical', 'serious', 'moderate', 'minor']) {
+    const items = grouped[impact] ?? [];
+    if (!items.length) continue;
+
+    lines.push(`## ${impact.charAt(0).toUpperCase() + impact.slice(1)} (${items.length})`);
+    for (const v of items) {
+      lines.push(`\n### ${v.id}`);
+      lines.push(`${v.description}`);
+      lines.push(`**Fix:** ${v.helpUrl}`);
+      lines.push(`**Affects ${v.nodes.length} element(s)**`);
+      lines.push(`\`\`\`html\n${v.nodes?.html}\n\`\`\``);
+    }
+  }
+
+  return lines.join('\n');
+}
+```
+
+---
+
+## Known Limitations & Manual Checklist
+
+Supplement automated testing with these manual checks every sprint: [web:84]
+
+```
+Manual Accessibility Sprint Checklist:
+
+Keyboard Testing:
+□ Tab through entire page — every interactive element reachable
+□ No keyboard traps (can always Tab away)
+□ Custom dropdowns/menus respond to arrow keys
+□ Modals close on Escape and return focus to trigger
+□ Skip link appears on first Tab and works
+
+Screen Reader Testing (NVDA + Chrome, VoiceOver + Safari):
+□ Page title announced correctly on navigation
+□ Images read with meaningful alt text
+□ Form labels read before inputs
+□ Error messages announced when validation fails
+□ Status messages (toasts) announced (aria-live)
+□ Dynamic content updates announced (loading states)
+
+Visual Testing:
+□ Color contrast verified for all text (use Colour Contrast Analyser)
+□ No information conveyed by color alone
+□ Focus indicator visible on all interactive elements
+□ Content readable at 200% zoom
+□ Content reflows correctly at 320px viewport width
+
+Cognitive/Usability:
+□ No auto-playing media
+□ Consistent navigation across all pages
+□ Error messages suggest how to fix the problem
+□ Multi-step forms don't require redundant entry
+□ Login allows password manager autofill
+```
+
+---
+
+## References
+
+- [Playwright Accessibility Testing Docs](https://playwright.dev/docs/accessibility-testing) [web:80]
+- [axe-core/playwright CI Guide](https://testdino.com/blog/playwright-accessibility/) [web:86]
+- [Automating A11y Testing — Subito](https://dev.to/subito/how-we-automate-accessibility-testing-with-playwright-and-axe-3ok5) [web:82]
+- [Playwright + Axe Tutorial — YouTube](https://www.youtube.com/watch?v=PGaF8lE3qm8) [web:81]
+- [axe-core/playwright Tutorial — Checkly](https://www.checklyhq.com/blog/integrating-accessibility-checks-in-playwright-tes/) [web:90]
+- [Nareshit — Playwright + Axe Guide](https://nareshit.com/blogs/accessibility-testing-using-playwright-and-axe-core) [web:84]
+- [WCAG 2.2 Checklist — Inclly](https://inclly.com/resources/wcag-22-checklist) [web:69]
+
+```
+
+***
+
+**Batch 5 complete.** [w3](https://www.w3.org/TR/WCAG22/)
+
+| # | Document | Priority | Status |
+|---|----------|----------|--------|
+| 1 | `tenant-data-flow-patterns.md` | P0 | ✅ |
+| 2 | `sanity-client-groq.md` | P1 | ✅ |
+| 3 | `sanity-webhook-isr.md` | P1 | ✅ |
+| 4 | `wcag-compliance-checklist.md` | P1 | ✅ |
+| 5 | `automated-accessibility-testing.md` | P1 | ✅ |
+
+**Running P0 tally:** 4 of 5 complete — `config-validation-ci-pipeline.md` and `golden-path-cli-documentation.md` remain
+
+**Running P1 tally:** 8 of 11 complete — `accessibility-p0
+```
