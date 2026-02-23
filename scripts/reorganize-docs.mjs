@@ -1,6 +1,4 @@
 import { Octokit } from "@octokit/rest";
-import fs from "fs";
-import path from "path";
 
 /**
  * Reorganization Script for docs/guides
@@ -14,6 +12,7 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const owner = "TrevorPLam";
 const repo = "websites";
 const baseDir = "docs/guides";
+const branch = "main";
 
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
@@ -115,7 +114,9 @@ const CATEGORIES = {
   ]
 };
 
-async function cleanContent(content) {
+const JUNK_FILES = ["ADDTHESE.md", "0000.md", "000.md"];
+
+function cleanContent(content) {
   // Remove JSDoc-style headers
   content = content.replace(/\/\*\*[\s\S]*?\*\/
 /g, "");
@@ -133,6 +134,16 @@ async function run() {
   for (const file of files) {
     if (file.type !== "file" || !file.name.endsWith(".md")) continue;
 
+    if (JUNK_FILES.includes(file.name)) {
+      console.log(`Deleting junk file: ${file.name}`);
+      await octokit.repos.deleteFile({
+        owner, repo, path: file.path,
+        message: `cleanup: remove junk file ${file.name}`,
+        sha: file.sha, branch
+      });
+      continue;
+    }
+
     let targetCategory = "uncategorized";
     for (const [category, names] of Object.entries(CATEGORIES)) {
       if (names.includes(file.name)) {
@@ -147,7 +158,7 @@ async function run() {
       owner, repo, path: file.path, mediaType: { format: "raw" }
     });
 
-    const cleaned = await cleanContent(contentData);
+    const cleaned = cleanContent(contentData);
     const newPath = `${baseDir}/${targetCategory}/${file.name}`;
 
     // Create new file in subfolder
@@ -162,8 +173,7 @@ async function run() {
     await octokit.repos.deleteFile({
       owner, repo, path: file.path,
       message: `reorg: remove legacy ${file.name}`,
-      sha: file.sha,
-      branch
+      sha: file.sha, branch
     });
   }
 }
