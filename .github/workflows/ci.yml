@@ -102,6 +102,10 @@ jobs:
       - name: Validate clients
         run: pnpm validate-all-clients
 
+      # [Task DOMAIN-2-002] Validate config schemas + detect duplicate tenant/domain conflicts
+      - name: Validate site configs
+        run: pnpm validate:configs
+
       # Circular dependency detection — blocks merge if cycles exist
       - name: Madge (circular deps)
         run: pnpm madge:circular
