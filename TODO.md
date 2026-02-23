@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-
 # TODO
 
 - [x] DOMAIN-1-001 · Upgrade pnpm workspace to catalog strict mode
