@@ -1,0 +1,14 @@
+# Default reviewers
+* @TrevorPLam
+
+# Platform/config ownership
+/.github/ @TrevorPLam
+/turbo.json @TrevorPLam
+/pnpm-workspace.yaml @TrevorPLam
+/renovate.json @TrevorPLam
+
+# Package ownership
+/packages/ @TrevorPLam
+/clients/ @TrevorPLam
+/tasks/ @TrevorPLam
+/docs/ @TrevorPLam

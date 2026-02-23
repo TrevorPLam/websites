@@ -1,0 +1,31 @@
+{
+  "name": "@repo/feature-flags",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tenant-aware feature flag evaluation utilities",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "eslint": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:"
+  }
+}
