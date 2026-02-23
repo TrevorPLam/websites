@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@repo/infra": "workspace:*",
-    "@repo/integrations-core": "workspace:*",
+    "@repo/integrations-shared": "workspace:*",
     "@repo/marketing-components": "workspace:*",
     "@repo/page-templates": "workspace:*",
     "@repo/types": "workspace:*",

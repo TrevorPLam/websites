@@ -8,10 +8,8 @@
     "typescript-config"
   ],
   "exports": {
-    "./tailwind-theme.css": "./tailwind-theme.css",
-    "./tokens/option-tokens.css": "./tokens/option-tokens.css",
-    "./tokens/decision-tokens.css": "./tokens/decision-tokens.css",
-    "./tokens/component-tokens.css": "./tokens/component-tokens.css"
+    "./eslint-config": "./eslint-config",
+    "./typescript-config": "./typescript-config"
   },
   "scripts": {
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",

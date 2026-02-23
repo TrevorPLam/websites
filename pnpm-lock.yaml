@@ -149,9 +149,9 @@ importers:
       '@repo/infra':
         specifier: workspace:*
         version: link:../../packages/infra
-      '@repo/integrations-core':
+      '@repo/integrations-shared':
         specifier: workspace:*
-        version: link:../../packages/integrations-core
+        version: link:../../packages/integrations/shared
       '@repo/marketing-components':
         specifier: workspace:*
         version: link:../../packages/marketing-components
@@ -190,42 +190,6 @@ importers:
         specifier: ^3.3.3
         version: 3.8.1
 
-  packages/ai-platform/agent-orchestration:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/ai-platform/content-engine:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/ai-platform/llm-gateway:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
   packages/config:
     devDependencies:
       tailwindcss:
@@ -255,30 +219,6 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
-
-  packages/content-platform/dam-core:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/content-platform/visual-editor:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
 
   packages/features:
     dependencies:
@@ -371,25 +311,6 @@ importers:
         specifier: 8.56.0
         version: 8.56.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
 
-  packages/industry-schemas:
-    dependencies:
-      '@repo/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../config/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../config/typescript-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
   packages/infra:
     dependencies:
       '@repo/utils':
@@ -439,123 +360,6 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
-  packages/infrastructure/layout:
-    dependencies:
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../utils
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../config/typescript-config
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.0.2
-      '@types/react-dom':
-        specifier: 'catalog:'
-        version: 19.0.2(@types/react@19.0.2)
-      react:
-        specifier: 'catalog:'
-        version: 19.0.0
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.0.0(react@19.0.0)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/infrastructure/tenant-core:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/infrastructure/theme:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../config/typescript-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/infrastructure/ui:
-    dependencies:
-      react:
-        specifier: 'catalog:'
-        version: 19.0.0
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.0.0(react@19.0.0)
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../config/typescript-config
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.0.2
-      '@types/react-dom':
-        specifier: 'catalog:'
-        version: 19.0.2(@types/react@19.0.2)
-      eslint:
-        specifier: 'catalog:'
-        version: 9.18.0(jiti@2.6.1)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations-core:
-    dependencies:
-      '@repo/infra':
-        specifier: workspace:*
-        version: link:../infra
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../utils
-      react:
-        specifier: 'catalog:'
-        version: 19.0.0
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../config/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../config/typescript-config
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/acuity:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
   packages/integrations/analytics:
     dependencies:
       '@repo/infra':
@@ -571,30 +375,6 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.18.0(jiti@2.6.1)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/calcom:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/calendly:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -662,52 +442,6 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
-  packages/integrations/hubspot:
-    dependencies:
-      '@repo/infra':
-        specifier: workspace:*
-        version: link:../../infra
-      '@repo/integrations-shared':
-        specifier: workspace:*
-        version: link:../shared
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      eslint:
-        specifier: 'catalog:'
-        version: 9.18.0(jiti@2.6.1)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/intercom:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/mailchimp:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
   packages/integrations/maps:
     devDependencies:
       '@repo/eslint-config':
@@ -733,18 +467,6 @@ importers:
         version: 5.9.3
 
   packages/integrations/scheduling:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/sendgrid:
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -806,42 +528,6 @@ importers:
         specifier: 'catalog:'
         version: 3.25.76
 
-  packages/integrations/tidio:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/trustpilot:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/integrations/yelp:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
   packages/marketing-components:
     dependencies:
       '@hookform/resolvers':
@@ -890,18 +576,6 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.0.2(@types/react@19.0.2)
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/marketing-ops/campaign-orchestration:
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../config/eslint-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.11
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
