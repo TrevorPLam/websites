@@ -65,15 +65,16 @@ Be version-specific. Vague stack descriptions produce vague code [web:2].
 
 Testable, binary conditions. Each line must be verifiable [page:1].
 Use "Given / When / Then" framing where it adds clarity.
+All criteria must be markable with checkboxes and assigned to agent or human.
 
-- [ ] `POST /auth/refresh` accepts a valid refresh token and returns a new
+- [ ] **[Agent]** `POST /auth/refresh` accepts a valid refresh token and returns a new
       access token + rotated refresh token
-- [ ] Used refresh tokens are invalidated immediately (single-use)
-- [ ] Expired or invalid refresh tokens return `401 Unauthorized` with
+- [ ] **[Agent]** Used refresh tokens are invalidated immediately (single-use)
+- [ ] **[Agent]** Expired or invalid refresh tokens return `401 Unauthorized` with
       message `"Invalid or expired refresh token"`
-- [ ] Rotation window is configurable via `REFRESH_TOKEN_TTL` env var
-- [ ] All existing auth tests continue to pass (`npm test -- --coverage`)
-- [ ] New endpoint has ≥ 90% branch coverage
+- [ ] **[Human]** Rotation window is configurable via `REFRESH_TOKEN_TTL` env var
+- [ ] **[Agent]** All existing auth tests continue to pass (`npm test -- --coverage`)
+- [ ] **[Agent]** New endpoint has ≥ 90% branch coverage
 
 ---
 
@@ -81,17 +82,18 @@ Use "Given / When / Then" framing where it adds clarity.
 
 Ordered, dependency-aware steps. Each step is independently testable [page:1].
 Do NOT skip steps. Do NOT combine steps.
+All steps must be markable with checkboxes and assigned to agent or human.
 
-1. **Schema** — Add `refreshTokens` table via Prisma migration
-   (`id`, `token_hash`, `user_id`, `expires_at`, `used_at`)
-2. **Service** — Implement `issueRefreshToken()` and `rotateRefreshToken()`
-   in `src/auth/tokenService.ts`
-3. **Route** — Add `POST /auth/refresh` in `src/routes/auth.ts`
-4. **Middleware** — Update `src/middleware/auth.ts` to reject used tokens
-5. **Tests** — Write unit tests for service layer; integration tests for route
-6. **Docs** — Update `docs/api/auth.md` with new endpoint spec
+- [ ] **[Agent]** **Schema** — Add `refreshTokens` table via Prisma migration
+      (`id`, `token_hash`, `user_id`, `expires_at`, `used_at`)
+- [ ] **[Agent]** **Service** — Implement `issueRefreshToken()` and `rotateRefreshToken()`
+      in `src/auth/tokenService.ts`
+- [ ] **[Agent]** **Route** — Add `POST /auth/refresh` in `src/routes/auth.ts`
+- [ ] **[Agent]** **Middleware** — Update `src/middleware/auth.ts` to reject used tokens
+- [ ] **[Agent]** **Tests** — Write unit tests for service layer; integration tests for route
+- [ ] **[Human]** **Docs** — Update `docs/api/auth.md` with new endpoint spec
 
-> ⚠️ Ask before proceeding if step 1 conflicts with existing migrations.
+> ⚠️ **Agent Question**: Ask human before proceeding if step 1 conflicts with existing migrations.
 
 ---
 
@@ -171,13 +173,14 @@ Three-tier system. Unambiguous. The agent must not proceed past a 🚫 [web:2][p
 ## Success Verification
 
 How the agent (or reviewer) confirms the task is truly done [page:1].
+All verification steps must be markable with checkboxes and assigned to agent or human.
 
-1. Run `npm test` — all tests green, coverage ≥ 90% on new files
-2. Run `npx tsc --noEmit` — zero type errors
-3. Run `npm run lint` — zero lint errors
-4. Manually test with `curl` or Postman against local dev server
-5. Confirm `prisma migrate status` shows no pending migrations
-6. Self-audit: re-read Acceptance Criteria above and check each box
+- [ ] **[Agent]** Run `npm test` — all tests green, coverage ≥ 90% on new files
+- [ ] **[Agent]** Run `npx tsc --noEmit` — zero type errors
+- [ ] **[Agent]** Run `npm run lint` — zero lint errors
+- [ ] **[Human]** Manually test with `curl` or Postman against local dev server
+- [ ] **[Agent]** Confirm `prisma migrate status` shows no pending migrations
+- [ ] **[Agent]** Self-audit: re-read Acceptance Criteria above and check each box
 
 ---
 
