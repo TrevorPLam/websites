@@ -6,7 +6,8 @@
     ":semanticCommits",
     ":automergeDigest",
     "group:recommended",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
+    "github>whitesource-renovate"
   ],
   "timezone": "UTC",
   "schedule": ["before 6am on monday"],
@@ -30,6 +31,32 @@
     "schedule": ["before 6am on the first day of the month"]
   },
   "packageRules": [
+    {
+      "description": "Catalog-aware dependency management for pnpm 10.x",
+      "matchManagers": ["pnpm"],
+      "matchDepTypes": ["dependencies", "devDependencies", "peerDependencies"],
+      "postUpdateOptions": ["pnpmDedupe", "pnpmAudit"]
+    },
+    {
+      "description": "Post-quantum cryptography dependency pinning (NIST PQC readiness)",
+      "matchPackagePatterns": ["*crypto*", "*pqc*", "*quantum*", "@openpgp/*", "@signalapp/*"],
+      "allowedVersions": "<=99.999.999",
+      "pinDigests": true,
+      "stabilityDays": 30
+    },
+    {
+      "description": "Design system coordination with team review",
+      "matchPackageNames": [
+        "@repo/ui",
+        "@repo/marketing-components",
+        "tailwindcss",
+        "lucide-react"
+      ],
+      "automerge": false,
+      "reviewers": ["TrevorPLam"],
+      "stabilityDays": 7,
+      "labels": ["design-system", "review-required"]
+    },
     {
       "description": "Auto-merge patch updates for dev dependencies",
       "matchDepTypes": ["devDependencies"],
@@ -63,7 +90,13 @@
     },
     {
       "description": "Group testing toolchain",
-      "matchPackagePatterns": ["^vitest$", "^jest$", "^@testing-library/", "^@playwright/test$", "^jsdom$"],
+      "matchPackagePatterns": [
+        "^vitest$",
+        "^jest$",
+        "^@testing-library/",
+        "^@playwright/test$",
+        "^jsdom$"
+      ],
       "groupName": "Testing toolchain",
       "automerge": false
     },
@@ -82,5 +115,7 @@
         "fileFilters": ["pnpm-lock.yaml", "pnpm-workspace.yaml"]
       }
     }
-  ]
+  ],
+  "postUpdateOptions": ["pnpmDedupe"],
+  "ignorePaths": ["**/node_modules/**", "**/dist/**", "**/build/**", "**/.next/**"]
 }

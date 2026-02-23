@@ -1,0 +1,35 @@
+{
+  "name": "@repo/create-site",
+  "version": "0.0.0",
+  "description": "Interactive CLI for creating new client sites",
+  "private": true,
+  "main": "dist/index.js",
+  "bin": {
+    "create-site": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/config-schema": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.7.2",
+    "vitest": "^1.0.0"
+  },
+  "keywords": [
+    "cli",
+    "site-creation",
+    "marketing",
+    "nextjs"
+  ],
+  "author": "Marketing Platform Team",
+  "license": "MIT"
+}
