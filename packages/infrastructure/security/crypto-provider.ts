@@ -18,6 +18,30 @@ export interface CryptoProvider {
   decrypt(ciphertext: string, aad?: string): Promise<string>;
 }
 
+// Base class for algorithm name compatibility
+abstract class BaseCryptoProvider implements CryptoProvider {
+  abstract readonly algorithmName: string;
+
+  async sign(payload: Uint8Array): Promise<Uint8Array> {
+    return signWithHmac(payload, this.getAlgorithmNamespace());
+  }
+
+  async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
+    const expected = await this.sign(payload);
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  }
+
+  async encrypt(plaintext: string, aad?: string): Promise<string> {
+    return encryptWithAesGcm(plaintext, aad);
+  }
+
+  async decrypt(ciphertext: string, aad?: string): Promise<string> {
+    return decryptWithAesGcm(ciphertext, aad);
+  }
+
+  protected abstract getAlgorithmNamespace(): string;
+}
+
 function getSymmetricKey(): Buffer {
   const configured = process.env.CRYPTO_SYMMETRIC_KEY;
   if (configured) {
@@ -64,33 +88,28 @@ function signWithHmac(payload: Uint8Array, namespace: string): Uint8Array {
   return new Uint8Array(mac);
 }
 
-export class RSACryptoProvider implements CryptoProvider {
+export class RSACryptoProvider extends BaseCryptoProvider {
   readonly algorithmName = 'RSA-2048/PSS (compat) + AES-256-GCM';
 
-  async sign(payload: Uint8Array): Promise<Uint8Array> {
-    return signWithHmac(payload, 'rsa');
-  }
-
-  async verify(payload: Uint8Array, signature: Uint8Array): Promise<boolean> {
-    const expected = await this.sign(payload);
-    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
-  }
-
-  async encrypt(plaintext: string, aad?: string): Promise<string> {
-    return encryptWithAesGcm(plaintext, aad);
-  }
-
-  async decrypt(ciphertext: string, aad?: string): Promise<string> {
-    return decryptWithAesGcm(ciphertext, aad);
+  protected getAlgorithmNamespace(): string {
+    return 'rsa';
   }
 }
 
-export class HybridCryptoProvider extends RSACryptoProvider {
+export class HybridCryptoProvider extends BaseCryptoProvider {
   readonly algorithmName = 'Hybrid RSA + PQC transition + AES-256-GCM';
+
+  protected getAlgorithmNamespace(): string {
+    return 'hybrid';
+  }
 }
 
-export class PQCCryptoProvider extends RSACryptoProvider {
+export class PQCCryptoProvider extends BaseCryptoProvider {
   readonly algorithmName = 'PQC-ready abstraction (ML-DSA boundary) + AES-256-GCM';
+
+  protected getAlgorithmNamespace(): string {
+    return 'pqc';
+  }
 }
 
 export function createCryptoProvider(phase: MigrationPhase): CryptoProvider {

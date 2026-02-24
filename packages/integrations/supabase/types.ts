@@ -169,3 +169,35 @@ export interface SupabaseApiResponse<T = unknown> {
     page?: number;
   };
 }
+
+/**
+ * Complete Supabase database schema definition.
+ * Used for TypeScript support with Supabase client.
+ */
+export interface Database {
+  public: {
+    Tables: {
+      leads: SupabaseLeadRow;
+      // Add other table definitions as needed
+    };
+    Functions: {
+      get_pool_health: {
+        Returns: PoolHealth;
+      };
+    };
+    Views: {
+      // Add view definitions as needed
+    };
+  };
+}
+
+/**
+ * Pool health interface for database function return type.
+ */
+export interface PoolHealth {
+  active_connections: number;
+  idle_connections: number;
+  total_connections: number;
+  max_connections: number;
+  waiting_clients: number;
+}

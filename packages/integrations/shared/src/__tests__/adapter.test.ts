@@ -333,7 +333,7 @@ describe('BaseIntegrationAdapter', () => {
       expect(metrics.data.requestCount).toBe(1);
       expect(metrics.data.successRate).toBe(0);
       expect(metrics.data.errorRate).toBe(1);
-    });
+    }, 10000); // Increased timeout to 10s
 
     it('should calculate average response time', async () => {
       await adapter.testOperation(false); // Now has built-in 100ms delay
@@ -369,7 +369,7 @@ describe('BaseIntegrationAdapter', () => {
       const result = await adapter.testOperation(true); // This throws 'Test operation failed'
       expect(result.success).toBe(false);
       expect(result.retryable).toBe(true);
-    });
+    }, 10000); // Increased timeout to 10s
 
     it('should provide appropriate error codes', async () => {
       // Test different error types

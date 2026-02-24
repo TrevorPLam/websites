@@ -8,6 +8,7 @@
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { logError, logInfo } from '@repo/infra';
+import { Config } from '@repo/infra/src/config';
 import type { Database } from './types';
 
 // ============================================================================
@@ -47,7 +48,7 @@ const TIMEOUT_MS: Record<TenantTier, number> = {
 export function getQueryTimeout(tenantId?: string): number {
   // TODO: In production, fetch tenant tier from database/cache
   // For now, default to professional tier
-  if (process.env.NODE_ENV === 'development') {
+  if (Config.development.isDevelopment) {
     return TIMEOUT_MS.professional;
   }
   return TIMEOUT_MS.professional;
@@ -64,9 +65,9 @@ export function getTierTimeout(tier: TenantTier): number {
 // SINGLETON CLIENT PATTERN - Prevents connection explosion in serverless
 // ============================================================================
 
-let _adminClient: SupabaseClient<Database> | null = null;
-let _replicaClient: SupabaseClient<Database> | null = null;
-let _sessionClient: SupabaseClient<Database> | null = null;
+let _adminClient: SupabaseClient<Database, 'public', 'public'> | null = null;
+let _replicaClient: SupabaseClient<Database, 'public', 'public'> | null = null;
+let _sessionClient: SupabaseClient<Database, 'public', 'public'> | null = null;
 
 /**
  * Creates a new Supabase client with transaction mode pooling
@@ -79,10 +80,10 @@ function createPooledClient(
     schema?: string;
     useSessionMode?: boolean;
   }
-): SupabaseClient<Database> {
-  return createClient<Database>(url, key, {
+): SupabaseClient<Database, 'public', 'public'> {
+  return createClient<Database, 'public', 'public'>(url, key, {
     db: {
-      schema: options?.schema ?? 'public',
+      schema: 'public',
     },
     auth: {
       persistSession: false,
@@ -103,25 +104,24 @@ function createPooledClient(
  * Uses transaction mode for serverless operations
  * NEVER expose this to the client side
  */
-export function getAdminClient(): SupabaseClient<Database> {
+export function getAdminClient(): SupabaseClient<Database, 'public', 'public'> {
   if (_adminClient) {
     return _adminClient;
   }
 
-  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseConfig = Config.supabase;
 
-  if (!url) {
-    throw new Error('SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL is required for admin client');
+  if (!supabaseConfig.url) {
+    throw new Error('Supabase URL is required for admin client');
   }
 
-  if (!key) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for admin client');
+  if (!supabaseConfig.serviceKey) {
+    throw new Error('Supabase service role key is required for admin client');
   }
 
-  logInfo('Creating pooled admin client', { url: url.replace(/\/\/.*@/, '//***@') });
+  logInfo('Creating pooled admin client', { url: supabaseConfig.url.replace(/\/\/.*@/, '//***@') });
 
-  _adminClient = createPooledClient(url, key);
+  _adminClient = createPooledClient(supabaseConfig.url, supabaseConfig.serviceKey);
   return _adminClient;
 }
 
@@ -130,28 +130,27 @@ export function getAdminClient(): SupabaseClient<Database> {
  * Falls back to primary if replica not configured
  * Route heavy analytics queries here to protect primary
  */
-export function getReplicaClient(): SupabaseClient<Database> {
+export function getReplicaClient(): SupabaseClient<Database, 'public', 'public'> {
   // Return cached instance
   if (_replicaClient) {
     return _replicaClient;
   }
 
-  const replicaUrl = process.env.SUPABASE_REPLICA_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseConfig = Config.supabase;
 
   // Graceful degradation: fall back to primary if no replica
-  if (!replicaUrl) {
+  if (!supabaseConfig.replicaUrl) {
     logInfo('No replica URL configured, falling back to primary');
     return getAdminClient();
   }
 
-  if (!key) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for replica client');
+  if (!supabaseConfig.serviceKey) {
+    throw new Error('Supabase service role key is required for replica client');
   }
 
   logInfo('Creating pooled replica client');
 
-  _replicaClient = createPooledClient(replicaUrl, key);
+  _replicaClient = createPooledClient(supabaseConfig.replicaUrl, supabaseConfig.serviceKey);
   return _replicaClient;
 }
 
@@ -160,25 +159,27 @@ export function getReplicaClient(): SupabaseClient<Database> {
  * Use sparingly - holds connection for session lifetime
  * For LISTEN/NOTIFY, SET commands, temporary tables
  */
-export function getSessionClient(): SupabaseClient<Database> {
+export function getSessionClient(): SupabaseClient<Database, 'public', 'public'> {
   if (_sessionClient) {
     return _sessionClient;
   }
 
-  const url = process.env.SUPABASE_SESSION_URL || process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseConfig = Config.supabase;
+  const sessionUrl = supabaseConfig.sessionUrl || supabaseConfig.url;
 
-  if (!url) {
-    throw new Error('SUPABASE_SESSION_URL or SUPABASE_URL is required for session client');
+  if (!sessionUrl) {
+    throw new Error('Supabase session URL or URL is required for session client');
   }
 
-  if (!key) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for session client');
+  if (!supabaseConfig.serviceKey) {
+    throw new Error('Supabase service role key is required for session client');
   }
 
   logInfo('Creating session-mode client (use sparingly)');
 
-  _sessionClient = createPooledClient(url, key, { useSessionMode: true });
+  _sessionClient = createPooledClient(sessionUrl, supabaseConfig.serviceKey, {
+    useSessionMode: true,
+  });
   return _sessionClient;
 }
 
@@ -239,14 +240,16 @@ export async function getPoolHealth(): Promise<PoolHealth> {
         healthy: true, // Assume healthy if we can query
       };
     } else {
+      // Type assertion for RPC response
+      const healthData = data as PoolHealth | null;
       _poolHealth = {
-        activeConnections: data?.active_connections || 0,
-        idleConnections: data?.idle_connections || 0,
-        totalConnections: data?.total_connections || 0,
-        maxConnections: data?.max_connections || 100,
-        waitingClients: data?.waiting_clients || 0,
+        activeConnections: healthData?.activeConnections || 0,
+        idleConnections: healthData?.idleConnections || 0,
+        totalConnections: healthData?.totalConnections || 0,
+        maxConnections: healthData?.maxConnections || 100,
+        waitingClients: healthData?.waitingClients || 0,
         lastChecked: new Date(),
-        healthy: (data?.total_connections || 0) < (data?.max_connections || 100) * 0.8,
+        healthy: (healthData?.totalConnections || 0) < (healthData?.maxConnections || 100) * 0.8,
       };
     }
 
@@ -300,19 +303,18 @@ export interface RLSClientOptions {
  */
 export async function createRLSClient(
   options?: RLSClientOptions
-): Promise<SupabaseClient<Database>> {
+): Promise<SupabaseClient<Database, 'public', 'public'>> {
   // Dynamic import to avoid client-side bundling
   const { cookies } = await import('next/headers');
   const cookieStore = await cookies();
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseConfig = Config.supabase;
 
-  if (!url || !key) {
+  if (!supabaseConfig.url || !supabaseConfig.anonKey) {
     throw new Error('Missing Supabase environment variables for RLS client');
   }
 
-  return createClient<Database>(url, key, {
+  return createClient<Database, 'public', 'public'>(supabaseConfig.url, supabaseConfig.anonKey, {
     db: {
       schema: 'public',
     },
@@ -348,7 +350,9 @@ export interface QueryOptions {
  * ```
  */
 export async function executeQuery<T>(
-  queryFn: (client: SupabaseClient<Database>) => Promise<{ data: T | null; error: Error | null }>,
+  queryFn: (
+    client: SupabaseClient<Database, 'public', 'public'>
+  ) => Promise<{ data: T | null; error: Error | null }>,
   options?: QueryOptions
 ): Promise<{ data: T | null; error: Error | null }> {
   const timeout = options?.timeout ?? getTierTimeout(options?.tier ?? 'professional');

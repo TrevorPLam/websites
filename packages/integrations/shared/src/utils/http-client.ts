@@ -14,6 +14,19 @@ import { createLogger, IntegrationMetrics } from './logger';
 
 const logger = createLogger('http-client');
 
+// Enhanced Error interface for HTTP errors
+interface HttpError extends Error {
+  status?: number;
+  data?: unknown;
+  name: string;
+}
+
+// Enhanced Error interface for API logging
+interface LoggableError extends Error {
+  status?: number;
+  name: string;
+}
+
 export interface HttpClientConfig {
   baseURL?: string;
   timeout: number;
@@ -95,7 +108,7 @@ export class HttpClient {
         {
           method: options.method || 'GET',
           url: options.url,
-          status: (error as any).status,
+          status: (error as LoggableError).status,
           duration,
           retryable,
         }
@@ -193,9 +206,9 @@ export class HttpClient {
 
       // Check for HTTP errors
       if (!response.ok) {
-        const error = new Error(`HTTP ${response.status}: ${response.statusText}`);
-        (error as any).status = response.status;
-        (error as any).data = data;
+        const error = new Error(`HTTP ${response.status}: ${response.statusText}`) as HttpError;
+        error.status = response.status;
+        error.data = data;
         throw error;
       }
 
@@ -218,10 +231,10 @@ export class HttpClient {
       const duration = Date.now() - startTime;
 
       // Log failed response
-      logger.logApiCall(method, fullUrl, (error as any).status, duration, {
+      logger.logApiCall(method, fullUrl, (error as LoggableError).status, duration, {
         requestId,
         success: false,
-        error: (error as any).name,
+        error: (error as LoggableError).name,
       });
 
       throw error;
@@ -339,7 +352,7 @@ export class HttpClient {
 
       // HTTP status codes that are retryable
       if ('status' in error) {
-        const status = Number((error as any).status);
+        const status = Number((error as LoggableError).status);
         return status >= 500 || status === 429 || status === 408;
       }
     }
@@ -355,7 +368,7 @@ export class HttpClient {
       if (error.name === 'TimeoutError' || error.name === 'AbortError') return 'TIMEOUT';
       if (error.message.includes('ECONNRESET')) return 'CONNECTION_RESET';
       if (error.message.includes('ENOTFOUND')) return 'DNS_ERROR';
-      if ('status' in error) return `HTTP_${(error as any).status}`;
+      if ('status' in error) return `HTTP_${(error as LoggableError).status}`;
     }
     return 'UNKNOWN_ERROR';
   }
