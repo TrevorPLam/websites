@@ -23,7 +23,7 @@
     "changeset": "changeset",
     "dev": "turbo run dev",
     "dev:workaround": "node scripts/turbo-workaround.js dev",
-    "build": "turbo run build",
+    "build": "pnpm validate:turbo-cache-env && turbo run build",
     "build:workaround": "node scripts/turbo-workaround.js build",
     "lint": "turbo run lint",
     "lint:workaround": "node scripts/turbo-workaround.js lint",
@@ -105,7 +105,8 @@
     "validate:fsd": "node scripts/validate-fsd-architecture.mjs",
     "ai:intelligent-rollback": "node scripts/ai/deploy-intelligent-rollback.mjs",
     "ai:predictive-maintenance": "node scripts/ai/enable-predictive-maintenance.mjs",
-    "ai:technical-debt": "node scripts/ai/automate-technical-debt-reduction.mjs"
+    "ai:technical-debt": "node scripts/ai/automate-technical-debt-reduction.mjs",
+    "validate:turbo-cache-env": "node scripts/validation/validate-turbo-cache-env.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

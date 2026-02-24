@@ -1,0 +1,11 @@
+export interface {{pascalCase name}}Feature {
+  id: string;
+  enabled: boolean;
+}
+
+export function create{{pascalCase name}}Feature(id: string): {{pascalCase name}}Feature {
+  return {
+    id,
+    enabled: true,
+  };
+}

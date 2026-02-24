@@ -4,6 +4,14 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ## Task Status Overview
 
+## Recent Progress (Wave 0 Task 1)
+
+- [x] Add Turbo remote cache signature env validation gate (`validate:turbo-cache-env`)
+- [x] Harden `steiger.config.ts` includes/excludes and tighten FSD rules
+- [x] Add custom FSD ESLint boundary rule at `tooling/eslint/rules/fsd-boundaries.js`
+- [x] Add `tooling/fsd-cli/src/commands/create-slice.ts` slice scaffolder
+- [x] Add FSD CLI templates (`component.tsx.hbs`, `feature.ts.hbs`)
+
 | Domain       | Total Tasks | Completed | In Progress | Pending |
 | ------------ | ----------- | --------- | ----------- | ------- |
 | Domain 0     | 6           | 6         | 0           | 0       |
