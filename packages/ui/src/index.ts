@@ -1,3 +1,10 @@
+/**
+ * @file packages/ui/src/index.ts
+ * @summary Public export barrel for @repo/ui package.
+ * @security Exposes safe component APIs and token aliases.
+ * @requirements PROD-UI-001
+ */
+
 'use client';
 
 // File: packages/ui/src/index.ts  [TRACE:FILE=packages.ui.index]
@@ -49,3 +56,5 @@ export * from './a11y';
 export * from './booking';
 
 export * from './privacy';
+
+export * from './design-tokens';

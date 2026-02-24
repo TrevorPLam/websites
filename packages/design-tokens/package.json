@@ -1,0 +1,19 @@
+{
+  "name": "@repo/design-tokens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Centralized design tokens for color, typography, spacing, radius, and shadows",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "generate": "node ../../scripts/generate-design-tokens.mjs"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

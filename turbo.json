@@ -115,6 +115,18 @@
     "format:check": {
       "cache": false,
       "inputs": ["src/**", "package.json", "*.{json,md,yml,yaml}"]
+    },
+    "tokens:generate": {
+      "dependsOn": [],
+      "cache": true,
+      "outputs": ["packages/design-tokens/generated/**"],
+      "inputs": ["packages/design-tokens/src/**", "scripts/generate-design-tokens.mjs"]
+    },
+    "validate:fsd": {
+      "dependsOn": [],
+      "cache": false,
+      "outputs": [],
+      "inputs": ["clients/**/src/**", "scripts/validate-fsd-architecture.mjs"]
     }
   }
 }
