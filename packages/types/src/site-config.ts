@@ -303,6 +303,14 @@ export interface SiteConfig {
   };
   /** Conversion flow config */
   conversionFlow: ConversionFlowConfig;
+  /** Programmatic SEO location pages (e.g. "Plano, TX") */
+  serviceAreas?: string[];
+  /** Optional service catalog used by service/service-area pages */
+  services?: Array<{
+    name: string;
+    description: string;
+    slug?: string;
+  }>;
   /** Consent management configuration for GDPR/CCPA compliance */
   consent?: {
     /** Consent Management Platform provider */

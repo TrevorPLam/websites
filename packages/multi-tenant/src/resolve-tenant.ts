@@ -1,5 +1,6 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { Redis } from '@upstash/redis';
 import type { SiteConfig } from '@repo/config-schema';
 
@@ -236,6 +237,21 @@ export async function invalidateTenantCacheById(tenantId: string): Promise<void>
   // This requires looking up the tenant's identifiers from the database
   // Placeholder implementation
   console.log(`Cache invalidation requested for tenant: ${tenantId}`);
+}
+
+export async function invalidateTenantServiceAreas(
+  tenantId: string,
+  changedSlugs?: string[]
+): Promise<void> {
+  if (changedSlugs?.length) {
+    for (const slug of changedSlugs) {
+      revalidateTag(`tenant:${tenantId}:service-area:${slug}`);
+    }
+  } else {
+    revalidateTag(`tenant:${tenantId}:service-area`);
+  }
+
+  revalidateTag(`tenant:${tenantId}:sitemap`);
 }
 
 // ============================================================================

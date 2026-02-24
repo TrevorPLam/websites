@@ -14,6 +14,7 @@ export {
   // Cache management
   invalidateTenantCache,
   invalidateTenantCacheById,
+  invalidateTenantServiceAreas,
 
   // Validation
   validateTenantConfig,
