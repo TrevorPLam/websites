@@ -1,0 +1,15 @@
+version: 1
+name: ai-agent-policy
+rules:
+  - id: human-approval-required
+    when:
+      risk: high
+    action: require_human_approval
+  - id: restricted-data-access
+    when:
+      data_classification: secret
+    action: deny_without_explicit_allowlist
+  - id: tenant-isolation-enforced
+    when:
+      operation: cross_tenant
+    action: deny

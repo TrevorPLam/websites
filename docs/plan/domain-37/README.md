@@ -36,6 +36,8 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - Added collaboration process simplification standard for knowledge management, onboarding, code review, and mentoring workflows.
 - Added parent task plan doc for collaboration process simplification with QA checkpoints.
 
+- Added AI-native autonomous practices baseline: NHI governance, prompts-as-code, policy-as-code, adversarial simulation, requirements synthesis/conflict checks, architecture proposal prompts, self-healing tests, and AI fuzzing.
+
 ## Artifacts
 
 - Added security finding ticketing workflow, severity/SLA matrix, and triage ownership model.

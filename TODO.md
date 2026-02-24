@@ -565,16 +565,16 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ### Part 5: AI-Native & Autonomous Practices (20 tasks)
 
-- [ ] DOMAIN-37-5-1-implement-nhi-governance - Implement Non-Human Identity governance
-- [ ] DOMAIN-37-5-2-treat-prompts-as-code - Treat prompts as code with version control
-- [ ] DOMAIN-37-5-3-log-composite-identity-actions - Log composite identity actions
-- [ ] DOMAIN-37-5-4-define-ai-policy-as-code - Define policy-as-code for AI agents
-- [ ] DOMAIN-37-5-5-conduct-adversarial-simulations - Conduct adversarial simulations
-- [ ] DOMAIN-37-5-6-automate-requirements-synthesis - Automate requirements synthesis
-- [ ] DOMAIN-37-5-7-ai-flag-conflicting-requirements - Use AI to flag conflicting requirements
-- [ ] DOMAIN-37-5-8-ai-propose-architecture-patterns - Let AI propose architectural patterns
-- [ ] DOMAIN-37-5-9-implement-self-healing-tests - Implement self-healing tests
-- [ ] DOMAIN-37-5-10-use-ai-fuzzing - Use AI fuzzing for edge cases
+- [x] DOMAIN-37-5-1-implement-nhi-governance - Implement Non-Human Identity governance - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-2-treat-prompts-as-code - Treat prompts as code with version control - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-3-log-composite-identity-actions - Log composite identity actions - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-4-define-ai-policy-as-code - Define policy-as-code for AI agents - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-5-conduct-adversarial-simulations - Conduct adversarial simulations - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-6-automate-requirements-synthesis - Automate requirements synthesis - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-7-ai-flag-conflicting-requirements - Use AI to flag conflicting requirements - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-8-ai-propose-architecture-patterns - Let AI propose architectural patterns - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-9-implement-self-healing-tests - Implement self-healing tests - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-10-use-ai-fuzzing - Use AI fuzzing for edge cases - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-5-11-deploy-intelligent-rollback - Deploy intelligent rollback agents
 - [ ] DOMAIN-37-5-12-enable-predictive-maintenance - Enable predictive maintenance
 - [ ] DOMAIN-37-5-13-automate-technical-debt-reduction - Automate technical debt reduction
