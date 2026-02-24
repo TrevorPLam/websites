@@ -35,6 +35,12 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 
 ## Artifacts
 
+- Added security finding ticketing workflow, severity/SLA matrix, and triage ownership model.
+- Added IDE SAST setup guidance and VS Code extension recommendations.
+- Added nightly SAST scheduling and manual dispatch support.
+- Added signed SBOM artifact generation (SPDX + CycloneDX with Cosign keyless signatures).
+- Strengthened dependency update cadence for regular security patching.
+
 - `docs/guides/best-practices/file-header-template.md`
 - `docs/guides/best-practices/conventional-comments.md`
 - `CONTRIBUTING.md`
@@ -76,3 +82,8 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - `docs/security/threat-models/auth-and-session-boundary.md`
 - `docs/security/threat-models/tenant-data-isolation.md`
 - `docs/security/threat-models/secrets-and-webhook-ingress.md`
+- `docs/security/security-findings-lifecycle.md`
+- `docs/security/sast-ide-setup.md`
+- `.github/ISSUE_TEMPLATE/security-finding.yml`
+- `.vscode/extensions.json`
+- `docs/plan/domain-37/37.4-static-application-security-testing.md`
