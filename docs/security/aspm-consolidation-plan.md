@@ -10,6 +10,7 @@ Unify SAST, SCA, DAST, secret scanning, and container/IaC findings into one norm
 
 - SAST: `.github/workflows/security-sast.yml`
 - SCA + dependency review: `.github/workflows/dependency-integrity.yml`
+- CNAPP export bridge: `.github/workflows/security-cnapp-export.yml`
 - Container/IaC: `.github/workflows/security-container-iac.yml`
 - DAST: `.github/workflows/security-dast.yml`
 - Secrets: `.github/workflows/secret-scan.yml`

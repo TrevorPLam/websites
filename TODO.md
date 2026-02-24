@@ -43,9 +43,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34    | 5           | 5         | 0           | 0       |
 | Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 6         | 0           | 0       |
-| Domain 37    | 156         | 40        | 0           | 116     |
+| Domain 37    | 156         | 45        | 0           | 111     |
 | Gap Analysis | 20          | 2         | 0           | 18      |
-| **Total**    | **467**     | **213**   | **0**       | **254** |
+| **Total**    | **467**     | **218**   | **0**       | **249** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -557,11 +557,11 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-37-4-10-establish-ai-code-review-policy - Establish AI code review policy - COMPLETED 2026-02-24
 - [x] DOMAIN-37-4-11-consolidate-security-tools - Consolidate tools into ASPM platform - COMPLETED 2026-02-24
 - [x] DOMAIN-37-4-12-enable-reachability-analysis - Enable reachability analysis - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-4-13-integrate-with-cnapp - Integrate with CNAPP
-- [ ] DOMAIN-37-4-14-require-signed-commits - Require signed commits and tags
-- [ ] DOMAIN-37-4-15-enable-dependency-review - Enable dependency review in PRs
-- [ ] DOMAIN-37-4-16-sign-container-images - Sign container images
-- [ ] DOMAIN-37-4-17-work-toward-slsa-level3 - Work toward SLSA Build Level 3
+- [x] DOMAIN-37-4-13-integrate-with-cnapp - Integrate with CNAPP - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-14-require-signed-commits - Require signed commits and tags - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-15-enable-dependency-review - Enable dependency review in PRs - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-16-sign-container-images - Sign container images - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-17-work-toward-slsa-level3 - Work toward SLSA Build Level 3 - COMPLETED 2026-02-24
 
 ### Part 5: AI-Native & Autonomous Practices (20 tasks)
 
