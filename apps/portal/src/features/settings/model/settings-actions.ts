@@ -78,6 +78,23 @@ const NotificationsSchema = z.object({
   missedCallAlerts: z.boolean().optional(),
 });
 
+
+
+const WhiteLabelSettingsSchema = z.object({
+  enabled: z.boolean(),
+  portalName: z.string().min(2).max(100),
+  portalLogoUrl: z.string().url().optional().or(z.literal('')),
+  portalFaviconUrl: z.string().url().optional().or(z.literal('')),
+  portalPrimaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
+  portalDomain: z.string().min(3).max(253).optional(),
+  hideAgencyBranding: z.boolean(),
+  hideSupportLink: z.boolean(),
+  privacyPolicyUrl: z.string().url().optional().or(z.literal('')),
+  termsOfServiceUrl: z.string().url().optional().or(z.literal('')),
+  supportEmail: z.string().email().optional().or(z.literal('')),
+  supportPhone: z.string().min(7).max(30).optional().or(z.literal('')),
+});
+
 type TenantConfigIdentityProjection = {
   identity?: {
     serviceAreas?: string[];
@@ -181,6 +198,38 @@ export const updateNotificationSettings = createServerAction(
       p_tenant_id: ctx.tenantId,
       p_path: '{notifications}',
       p_value: input,
+    });
+
+    revalidateTag(`tenant:${ctx.tenantId}`);
+
+    return { success: true };
+  }
+);
+
+
+export const updateWhiteLabelSettings = createServerAction(
+  WhiteLabelSettingsSchema,
+  async (input, ctx) => {
+    const { data: tenant } = await db.from('tenants').select('plan').eq('id', ctx.tenantId).single();
+
+    if (tenant?.plan !== 'enterprise') {
+      throw new Error('White-label settings are only available on the Enterprise plan.');
+    }
+
+    const normalized = {
+      ...input,
+      portalLogoUrl: input.portalLogoUrl || undefined,
+      portalFaviconUrl: input.portalFaviconUrl || undefined,
+      privacyPolicyUrl: input.privacyPolicyUrl || undefined,
+      termsOfServiceUrl: input.termsOfServiceUrl || undefined,
+      supportEmail: input.supportEmail || undefined,
+      supportPhone: input.supportPhone || undefined,
+    };
+
+    await db.rpc('deep_merge_config', {
+      p_tenant_id: ctx.tenantId,
+      p_path: '{whiteLabel}',
+      p_value: normalized,
     });
 
     revalidateTag(`tenant:${ctx.tenantId}`);
