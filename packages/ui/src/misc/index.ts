@@ -17,8 +17,10 @@ export type { ThemeInjectorProps, ThemeColors } from '../components/ThemeInjecto
 export { ConsentProvider, useConsentContext } from '../contexts/ConsentContext';
 export type { ConsentState } from '../contexts/ConsentContext';
 export { useConsent } from '../hooks/useConsent';
+export { useOfflineForm } from '../hooks/use-offline-form';
 export { ScriptManager } from '../components/ScriptManager';
 export type { ScriptConfig } from '../components/ScriptManager';
+export { OfflineBanner } from '../components/OfflineBanner';
 export { Accordion } from '../components/Accordion';
 export type { AccordionItem, AccordionProps } from '../components/Accordion';
 export { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../components/Collapsible';

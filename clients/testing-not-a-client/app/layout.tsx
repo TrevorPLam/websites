@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { buildHomepageMetadata } from '@repo/seo';
-import { ThemeInjector, Toaster } from '@repo/ui';
+import { OfflineBanner, ThemeInjector, Toaster } from '@repo/ui';
+import { ServiceWorkerRegistration } from '../components/ServiceWorkerRegistration';
 import siteConfig from '../site.config';
 import './globals.css';
 
@@ -17,6 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
+        <OfflineBanner />
+        <ServiceWorkerRegistration />
         <main id="main-content">{children}</main>
         <Toaster />
       </body>
