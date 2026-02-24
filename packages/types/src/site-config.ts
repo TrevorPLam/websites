@@ -176,6 +176,22 @@ export interface ThemeFonts {
   accent?: string;
 }
 
+/** Enterprise white-label portal overrides. Presentation-only customizations. */
+export interface WhiteLabelConfig {
+  enabled: boolean;
+  portalName: string;
+  portalLogoUrl?: string;
+  portalFaviconUrl?: string;
+  portalPrimaryColor: string;
+  portalDomain?: string;
+  hideAgencyBranding: boolean;
+  hideSupportLink: boolean;
+  privacyPolicyUrl?: string;
+  termsOfServiceUrl?: string;
+  supportEmail?: string;
+  supportPhone?: string;
+}
+
 // ---- Top-level SiteConfig ----
 
 export interface SiteConfig {
@@ -278,6 +294,9 @@ export interface SiteConfig {
       config?: Record<string, unknown>;
     };
   };
+
+  /** Enterprise plan: white-label portal branding and attribution controls. */
+  whiteLabel?: WhiteLabelConfig;
   /** Primary navigation links */
   navLinks: NavLink[];
   /** Social media profiles */

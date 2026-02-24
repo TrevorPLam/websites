@@ -34,6 +34,7 @@ export type {
   SeoDefaults,
   ThemeColors,
   ThemeFonts,
+  WhiteLabelConfig,
 } from './site-config';
 
 export { siteConfigSchema, DEFAULT_THEME_COLORS } from './site-config';

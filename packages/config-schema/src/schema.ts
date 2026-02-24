@@ -407,6 +407,28 @@ const complianceSchema = z.object({
   }),
 });
 
+
+// ============================================================================
+// WHITE-LABEL PORTAL
+// ============================================================================
+
+const whiteLabelSchema = z
+  .object({
+    enabled: z.boolean().default(false),
+    portalName: z.string().min(2).max(100),
+    portalLogoUrl: z.string().url().optional(),
+    portalFaviconUrl: z.string().url().optional(),
+    portalPrimaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#2563eb'),
+    portalDomain: z.string().min(3).max(253).optional(),
+    hideAgencyBranding: z.boolean().default(false),
+    hideSupportLink: z.boolean().default(false),
+    privacyPolicyUrl: z.string().url().optional(),
+    termsOfServiceUrl: z.string().url().optional(),
+    supportEmail: z.string().email().optional(),
+    supportPhone: z.string().min(7).max(30).optional(),
+  })
+  .optional();
+
 // ============================================================================
 // MAIN SITE CONFIG SCHEMA
 // ============================================================================
@@ -425,6 +447,7 @@ export const SiteConfigSchema = z.object({
   abTesting: abTestingSchema,
   cookieConsent: cookieConsentSchema,
   compliance: complianceSchema,
+  whiteLabel: whiteLabelSchema,
 });
 
 export type SiteConfig = z.infer<typeof SiteConfigSchema>;
