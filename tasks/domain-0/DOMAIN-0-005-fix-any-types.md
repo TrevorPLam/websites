@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-0-005
 title: 'Replace any types with proper TypeScript types'
-status: pending
+status: done
 priority: medium
 type: refactor
 created: 2026-02-23

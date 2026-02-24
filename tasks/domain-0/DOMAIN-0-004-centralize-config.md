@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-0-004
 title: 'Centralize environment variable configuration'
-status: pending
+status: done
 priority: medium
 type: refactor
 created: 2026-02-23

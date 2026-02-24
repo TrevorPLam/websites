@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-0-001
 title: 'Fix TypeScript compilation failures in Supabase integration'
-status: pending
+status: done
 priority: critical
 type: fix
 created: 2026-02-23

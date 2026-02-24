@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-0-006
 title: 'Upgrade Vitest to version 4.x for performance improvements'
-status: pending
+status: done
 priority: low
 type: refactor
 created: 2026-02-23

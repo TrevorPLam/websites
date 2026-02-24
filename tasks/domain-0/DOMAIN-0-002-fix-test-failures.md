@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-0-002
 title: 'Resolve test suite failures and timeouts'
-status: pending
+status: done
 priority: critical
 type: fix
 created: 2026-02-23

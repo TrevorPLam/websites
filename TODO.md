@@ -4,49 +4,60 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 
 ## Task Status Overview
 
-| Domain | Total Tasks | Completed | In Progress | Pending |
-| --------- | ----------- | --------- | ----------- | ------- || Domain 01 | 11 | 11 | 0 | 0 |
-| Domain 02 | 4 | 4 | 0 | 0 |
-| Domain 03 | 6 | 6 | 0 | 0 |
-| Domain 04 | 6 | 6 | 0 | 0 |
-| Domain 05 | 9 | 9 | 0 | 0 |
-| Domain 06 | 4 | 4 | 0 | 0 |
-| Domain 07 | 5 | 0 | 0 | 5 |
-| Domain 08 | 6 | 0 | 0 | 6 |
-| Domain 09 | 8 | 0 | 0 | 8 |
-| Domain 10 | 2 | 0 | 0 | 2 |
-| Domain 11 | 8 | 0 | 0 | 8 |
-| Domain 12 | 12 | 0 | 0 | 12 |
-| Domain 13 | 8 | 0 | 0 | 8 |
-| Domain 14 | 10 | 0 | 0 | 10 |
-| Domain 15 | 8 | 0 | 0 | 8 |
-| Domain 16 | 6 | 0 | 0 | 6 |
-| Domain 17 | 4 | 0 | 0 | 4 |
-| Domain 18 | 6 | 0 | 0 | 6 |
-| Domain 19 | 4 | 0 | 0 | 4 |
-| Domain 20 | 8 | 0 | 0 | 8 |
-| Domain 21 | 6 | 0 | 0 | 6 |
-| Domain 22 | 8 | 0 | 0 | 8 |
-| Domain 23 | 8 | 0 | 0 | 8 |
-| Domain 24 | 4 | 0 | 0 | 4 |
-| Domain 25 | 3 | 0 | 0 | 3 |
-| Domain 26 | 5 | 0 | 0 | 5 |
-| Domain 27 | 4 | 0 | 0 | 4 |
-| Domain 28 | 6 | 0 | 0 | 6 |
-| Domain 29 | 6 | 0 | 0 | 6 |
-| Domain 30 | 4 | 0 | 0 | 4 |
-| Domain 31 | 8 | 0 | 0 | 8 |
-| Domain 32 | 6 | 0 | 0 | 6 |
-| Domain 33 | 8 | 0 | 0 | 8 |
-| Domain 34 | 4 | 0 | 0 | 4 |
-| Domain 35 | 11 | 0 | 0 | 11 |
-| Domain 36 | 9 | 0 | 0 | 9 |
-| Domain 6 | 4 | 4 | 0 | 0 |
-| Domain 7 | 5 | 0 | 0 | 5 |
-| Domain 8 | 6 | 0 | 0 | 6 |
-| **Total** | **235** | **40** | **0** | **195** |
+| Domain    | Total Tasks | Completed | In Progress | Pending |
+| --------- | ----------- | --------- | ----------- | ------- |
+| Domain 0  | 6           | 6         | 0           | 0       |
+| Domain 01 | 11          | 11        | 0           | 0       |
+| Domain 02 | 4           | 4         | 0           | 0       |
+| Domain 03 | 6           | 6         | 0           | 0       |
+| Domain 04 | 6           | 6         | 0           | 0       |
+| Domain 05 | 9           | 9         | 0           | 0       |
+| Domain 06 | 4           | 4         | 0           | 0       |
+| Domain 07 | 5           | 0         | 0           | 5       |
+| Domain 08 | 6           | 0         | 0           | 6       |
+| Domain 09 | 8           | 0         | 0           | 8       |
+| Domain 10 | 2           | 0         | 0           | 2       |
+| Domain 11 | 8           | 0         | 0           | 8       |
+| Domain 12 | 12          | 0         | 0           | 12      |
+| Domain 13 | 8           | 0         | 0           | 8       |
+| Domain 14 | 10          | 0         | 0           | 10      |
+| Domain 15 | 8           | 0         | 0           | 8       |
+| Domain 16 | 6           | 0         | 0           | 6       |
+| Domain 17 | 4           | 0         | 0           | 4       |
+| Domain 18 | 6           | 0         | 0           | 6       |
+| Domain 19 | 4           | 0         | 0           | 4       |
+| Domain 20 | 8           | 0         | 0           | 8       |
+| Domain 21 | 6           | 0         | 0           | 6       |
+| Domain 22 | 8           | 0         | 0           | 8       |
+| Domain 23 | 8           | 0         | 0           | 8       |
+| Domain 24 | 4           | 0         | 0           | 4       |
+| Domain 25 | 3           | 0         | 0           | 3       |
+| Domain 26 | 5           | 0         | 0           | 5       |
+| Domain 27 | 4           | 0         | 0           | 4       |
+| Domain 28 | 6           | 0         | 0           | 6       |
+| Domain 29 | 6           | 0         | 0           | 6       |
+| Domain 30 | 4           | 0         | 0           | 4       |
+| Domain 31 | 8           | 0         | 0           | 8       |
+| Domain 32 | 6           | 0         | 0           | 6       |
+| Domain 33 | 8           | 0         | 0           | 8       |
+| Domain 34 | 4           | 0         | 0           | 4       |
+| Domain 35 | 11          | 0         | 0           | 11      |
+| Domain 36 | 9           | 0         | 0           | 9       |
+| Domain 6  | 4           | 4         | 0           | 0       |
+| Domain 7  | 5           | 0         | 0           | 5       |
+| Domain 8  | 6           | 0         | 0           | 6       |
+| **Total** | **241**     | **46**    | **0**       | **195** |
 
-## DOMAIN 1: ✅ COMPLETE
+## DOMAIN 0: COMPLETE
+
+- [x] [DOMAIN-0-001-fix-typescript-compilation](tasks/domain-0/DOMAIN-0-001-fix-typescript-compilation.md) - Fix TypeScript compilation failures in Supabase integration (completed 2026-02-23)
+- [x] [DOMAIN-0-002-fix-test-failures](tasks/domain-0/DOMAIN-0-002-fix-test-failures.md) - Resolve test suite failures and timeouts (completed 2026-02-23)
+- [x] [DOMAIN-0-003-fix-budget-validation](tasks/domain-0/DOMAIN-0-003-fix-budget-validation.md) - Fix performance budget validation system (completed 2026-02-23)
+- [x] [DOMAIN-0-004-centralize-config](tasks/domain-0/DOMAIN-0-004-centralize-config.md) - Centralize environment variable configuration (completed 2026-02-23)
+- [x] [DOMAIN-0-005-fix-any-types](tasks/domain-0/DOMAIN-0-005-fix-any-types.md) - Replace any types with proper TypeScript types (completed 2026-02-23)
+- [x] [DOMAIN-0-006-upgrade-vitest](tasks/domain-0/DOMAIN-0-006-upgrade-vitest.md) - Upgrade Vitest to version 4.x for performance improvements (completed 2026-02-23)
+
+## DOMAIN 1: COMPLETE
 
 - [x] [DOMAIN-1-DOMAIN-1-001-pnpm-workspace-catalog-strict](tasks/domain-1/DOMAIN-1-001-pnpm-workspace-catalog-strict.md) -
 - [x] [DOMAIN-1-DOMAIN-1-001-upgrade-pnpm-workspace-catalog-strict](tasks/domain-1/DOMAIN-1-001-upgrade-pnpm-workspace-catalog-strict.md) -
@@ -411,6 +422,6 @@ A task is considered **complete** when:
 ---
 
 _Last updated: 2026-02-23_
-_Total tasks:
-\_Completed: 0 (0%)_
-_Remaining: 235 (100%)_
+_Total tasks: 241_
+_Completed: 46 (19.1%)_
+_Remaining: 195 (80.9%)_

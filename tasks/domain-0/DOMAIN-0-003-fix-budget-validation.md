@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-0-003
 title: 'Fix performance budget validation system'
-status: pending
+status: done
 priority: high
 type: fix
 created: 2026-02-23
