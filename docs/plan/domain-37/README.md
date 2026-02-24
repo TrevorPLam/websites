@@ -15,6 +15,11 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 
 ## Additional completed tasks in this iteration
 
+- Enabled AI docstring suggestion guidance and editor instruction-file integration.
+- Added PR comment-quality blocking workflow and verification script.
+- Added code metrics tracking script, documentation, and CI artifact workflow.
+- Added security requirements baseline and standards mapping (OWASP/NIST/GDPR).
+- Added secure coding guidelines for repository-wide adoption.
 
 - Added docs governance and living documentation standards.
 - Added plain-text documentation format validation and static docs-site build script.
@@ -45,3 +50,15 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - `.github/release-drafter.yml`
 - `.github/workflows/release-drafter.yml`
 - `docs/plan/domain-37/37.2-docs-and-community-practices.md`
+
+- `scripts/verify-comment-quality.js`
+- `scripts/track-code-metrics.js`
+- `.github/workflows/pr-comment-quality.yml`
+- `.github/workflows/code-metrics.yml`
+- `.github/copilot-instructions.md`
+- `.vscode/settings.json`
+- `docs/quality/code-metrics-tracking.md`
+- `docs/security/security-requirements.md`
+- `docs/security/security-standards-mapping.md`
+- `docs/security/secure-coding-guidelines.md`
+- `docs/plan/domain-37/37.3-secure-software-development-lifecycle.md`

@@ -499,14 +499,14 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-37-1-8-enforce-docstrings-via-linter - Enforce docstrings via linter
 - [x] DOMAIN-37-1-9-document-comment-guidelines - Document comment guidelines in CONTRIBUTING.md - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-10-adopt-conventional-comments - Adopt Conventional Comments for reviews - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-1-11-enable-ai-docstring-suggestions - Enable AI docstring suggestions
-- [ ] DOMAIN-37-1-12-block-prs-on-comment-quality - Block PRs on comment quality issues
+- [x] DOMAIN-37-1-11-enable-ai-docstring-suggestions - Enable AI docstring suggestions - COMPLETED 2026-02-24
+- [x] DOMAIN-37-1-12-block-prs-on-comment-quality - Block PRs on comment quality issues - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-13-adopt-coding-style-guides - Adopt language-specific style guides - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-14-configure-auto-formatters - Configure auto-formatters - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-15-integrate-linting-into-ci - Integrate linting into CI pipeline - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-16-define-code-quality-gates - Define code quality gates - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-17-implement-code-coverage-requirements - Implement code coverage requirements - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-1-18-setup-code-metrics-tracking - Setup code metrics tracking
+- [x] DOMAIN-37-1-18-setup-code-metrics-tracking - Setup code metrics tracking - COMPLETED 2026-02-24
 
 ### Part 2: Documentation as Code (10 tasks)
 
@@ -523,12 +523,12 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ### Part 3: Secure Software Development Lifecycle (19 tasks)
 
-- [ ] DOMAIN-37-3-1-document-security-requirements - Document security and privacy requirements
-- [ ] DOMAIN-37-3-2-map-to-industry-standards - Map requirements to OWASP, NIST, GDPR
+- [x] DOMAIN-37-3-1-document-security-requirements - Document security and privacy requirements - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-2-map-to-industry-standards - Map requirements to OWASP, NIST, GDPR - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-3-3-perform-threat-modeling - Perform threat modeling for features
 - [ ] DOMAIN-37-3-4-store-threat-models - Store threat models in /docs/security
 - [ ] DOMAIN-37-3-5-review-threat-models-annually - Review threat models annually
-- [ ] DOMAIN-37-3-6-adopt-secure-coding-guidelines - Adopt secure coding guidelines
+- [x] DOMAIN-37-3-6-adopt-secure-coding-guidelines - Adopt secure coding guidelines - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-3-7-integrate-security-linting - Integrate security rules into linters
 - [ ] DOMAIN-37-3-8-implement-pre-commit-security - Implement pre-commit security scans
 - [ ] DOMAIN-37-3-9-scan-for-secrets - Scan for secrets in pre-commit

@@ -1,62 +1,10 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false
   },
-  "editor.rulers": [80, 100],
-  "editor.wordWrap": "on",
-  "editor.snippetSuggestions": "top",
-  "javascript.preferences.importModuleSpecifierFormat": "relative",
-  "typescript.preferences.importModuleSpecifierFormat": "relative",
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "search.exclude": {
-    "node_modules": true,
-    ".next": true,
-    ".turbo": true,
-    ".pnpm-store": true,
-    "dist": true,
-    "build": true
-  },
-  "files.exclude": {
-    "**/*.bak": true,
-    "**/__pycache__": true,
-    "**/node_modules": false
-  },
-  "javascript.tsserver.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsserver.enablePromptUseWorkspaceTsdk": true,
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.tsserver.pluginPaths": ["node_modules/@typescript-eslint"],
-  "prettier.printWidth": 100,
-  "prettier.singleQuote": true,
-  "prettier.trailingComma": "es5",
-  "prettier.semi": true,
-  "files.watcherExclude": {
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
-    "**/node_modules/**": true,
-    "**/.next/**": true,
-    "**/.turbo/**": true,
-    "**/.pnpm-store/**": true
-  },
-  "markdown.validate.enabled": true
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true
 }
