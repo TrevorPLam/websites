@@ -43,9 +43,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34    | 5           | 5         | 0           | 0       |
 | Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 6         | 0           | 0       |
-| Domain 37    | 156         | 3         | 0           | 153     |
+| Domain 37    | 156         | 13        | 0           | 143     |
 | Gap Analysis | 20          | 2         | 0           | 18      |
-| **Total**    | **467**     | **176**   | **0**       | **291** |
+| **Total**    | **467**     | **186**   | **0**       | **281** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -489,21 +489,21 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ### Part 1: Code-Level Practices (18 tasks)
 
-- [ ] DOMAIN-37-1-1-define-file-header-template - Define file header template with metadata
-- [ ] DOMAIN-37-1-2-implement-pre-commit-header-verification - Implement pre-commit hook for header verification
+- [x] DOMAIN-37-1-1-define-file-header-template - Define file header template with metadata - COMPLETED 2026-02-24
+- [x] DOMAIN-37-1-2-implement-pre-commit-header-verification - Implement pre-commit hook for header verification - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-1-3-configure-ide-header-snippets - Configure IDE snippets for auto-insertion
-- [ ] DOMAIN-37-1-4-add-code-review-header-guidelines - Add header review guidelines
-- [ ] DOMAIN-37-1-5-security-headers-requirements-linking - Link security headers to requirements
-- [ ] DOMAIN-37-1-6-link-headers-to-adrs - Link headers to Architecture Decision Records
+- [x] DOMAIN-37-1-4-add-code-review-header-guidelines - Add header review guidelines - COMPLETED 2026-02-24
+- [x] DOMAIN-37-1-5-security-headers-requirements-linking - Link security headers to requirements - COMPLETED 2026-02-24
+- [x] DOMAIN-37-1-6-link-headers-to-adrs - Link headers to Architecture Decision Records - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-1-7-select-docstring-standards - Select docstring standards per language
 - [ ] DOMAIN-37-1-8-enforce-docstrings-via-linter - Enforce docstrings via linter
-- [ ] DOMAIN-37-1-9-document-comment-guidelines - Document comment guidelines in CONTRIBUTING.md
-- [ ] DOMAIN-37-1-10-adopt-conventional-comments - Adopt Conventional Comments for reviews
+- [x] DOMAIN-37-1-9-document-comment-guidelines - Document comment guidelines in CONTRIBUTING.md - COMPLETED 2026-02-24
+- [x] DOMAIN-37-1-10-adopt-conventional-comments - Adopt Conventional Comments for reviews - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-1-11-enable-ai-docstring-suggestions - Enable AI docstring suggestions
 - [ ] DOMAIN-37-1-12-block-prs-on-comment-quality - Block PRs on comment quality issues
-- [ ] DOMAIN-37-1-13-adopt-coding-style-guides - Adopt language-specific style guides
-- [ ] DOMAIN-37-1-14-configure-auto-formatters - Configure auto-formatters
-- [ ] DOMAIN-37-1-15-integrate-linting-into-ci - Integrate linting into CI pipeline
+- [x] DOMAIN-37-1-13-adopt-coding-style-guides - Adopt language-specific style guides - COMPLETED 2026-02-24
+- [x] DOMAIN-37-1-14-configure-auto-formatters - Configure auto-formatters - COMPLETED 2026-02-24
+- [x] DOMAIN-37-1-15-integrate-linting-into-ci - Integrate linting into CI pipeline - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-1-16-define-code-quality-gates - Define code quality gates
 - [ ] DOMAIN-37-1-17-implement-code-coverage-requirements - Implement code coverage requirements
 - [ ] DOMAIN-37-1-18-setup-code-metrics-tracking - Setup code metrics tracking

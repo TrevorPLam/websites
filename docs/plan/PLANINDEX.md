@@ -4,7 +4,7 @@ This document provides a comprehensive inventory of all domains, files, and topi
 
 ## Quick Reference
 
-- **Total Domains:** 36
+- **Total Domains:** 37
 - **Total Files:** 285+ documentation files
 - **Implementation Phases:** 3 (Week 1-4)
 - **Priority Levels:** P0 (Foundation), P1 (Advanced), P2 (Enterprise)
@@ -12,6 +12,26 @@ This document provides a comprehensive inventory of all domains, files, and topi
 ---
 
 ## Phase 1: Foundation (Week 1) - P0 Domains
+
+### Domain 37: Repository Excellence & AI-Ready Practices
+
+**Path:** `domain-37/`  
+**Focus:** Code-level standards, docs-as-code, and security SDLC hygiene  
+**Priority:** P1-P2 (rolling)
+
+#### Files:
+
+- `37.1-code-level-practices.md` - Header standards, pre-commit checks, and review conventions
+- `README.md` - Domain overview
+
+#### Key Topics:
+
+- Metadata-rich file headers
+- Conventional Comments in code review
+- Header verification in local commit workflow
+- Contributor guidance for comments/docstrings
+
+---
 
 ### Domain 1: Monorepo Foundation
 
