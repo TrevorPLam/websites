@@ -13,10 +13,10 @@ packages:
   - 'e2e/*'
 
 allowBuilds:
-  '@sentry/cli': true
-  esbuild: true
-  sharp: true
-  unrs-resolver: true
+  - '@sentry/cli'
+  - esbuild
+  - sharp
+  - unrs-resolver
 
 blockExoticSubdeps: true
 
@@ -46,6 +46,8 @@ catalog:
   '@hookform/resolvers': 3.9.1
   '@next/bundle-analyzer': ^16.1.6
   '@playwright/test': ^1.58.2
+  '@react-email/components': ^0.0.25
+  '@react-email/render': ^1.0.1
   '@sentry/nextjs': 10.38.0
   '@sentry/opentelemetry': ^10.39.0
   '@supabase/supabase-js': ^2.97.0
@@ -68,6 +70,7 @@ catalog:
   '@vitest/coverage-v8': ^4.0.18
   '@vitest/ui': ^4.0.18
   axe-playwright: ^2.2.2
+  browser-image-compression: ^2.0.2
   clsx: 2.1.1
   cmdk: ^1.0.0
   cross-env: ^10.1.0
@@ -91,6 +94,7 @@ catalog:
   markdownlint: ^0.40.0
   msw: ^2.11.2
   next: 16.1.5
+  'next-sanity': ^10.0.0
   next-intl: ^3.25.0
   next-mdx-remote: 5.0.0
   prettier: ^3.3.3

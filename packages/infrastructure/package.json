@@ -33,7 +33,7 @@
     "./context/tenant": "./context/tenant-context.ts"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --config eslint.config.js",
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {

@@ -1,11 +1,1 @@
-{
-  "extends": "@repo/typescript-config/react.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
-    "declaration": true,
-    "declarationMap": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["dist", "node_modules"]
-}
+{"extends": "@repo/typescript-config/react.json", "compilerOptions": {"outDir": "dist", "rootDir": "src", "declaration": true, "declarationMap": true, "jsx": "react-jsx", "moduleResolution": "bundler", "allowImportingTsExtensions": false, "module": "ESNext"}, "include": ["src/**/*.ts", "src/**/*.tsx"], "exclude": ["dist", "node_modules"]}

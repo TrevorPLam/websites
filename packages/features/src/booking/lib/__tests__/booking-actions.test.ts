@@ -62,7 +62,7 @@ vi.mock('@repo/infra', () => ({
       }
     }
   ),
-  checkRateLimit: vi.fn().mockResolvedValue(true),
+  checkRateLimit: vi.fn().mockResolvedValue(undefined), // Return undefined to indicate no rate limit hit
   hashIp: vi.fn((ip: string) => ip),
   getBookingForTenant: vi.fn().mockImplementation(({ bookingId }) => {
     return Promise.resolve(mockBookings.get(bookingId));

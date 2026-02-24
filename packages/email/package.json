@@ -32,12 +32,12 @@
   },
   "dependencies": {
     "react": "^19.0.0",
-    "@react-email/components": "^0.0.25",
-    "@react-email/render": "^1.0.1",
+    "@react-email/components": "catalog:",
+    "@react-email/render": "catalog:",
     "resend": "^4.0.0",
     "@upstash/redis": "^1.34.0",
     "zod": "^3.22.4",
-    "nodemailer": "^6.9.0"
+    "nodemailer": "^6.9.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -48,6 +48,6 @@
     "@types/nodemailer": "^6.4.0",
     "eslint": "^9.0.0",
     "typescript": "^5.3.3",
-    "vitest": "^1.3.1"
+    "vitest": "catalog:"
   }
 }

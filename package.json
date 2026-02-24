@@ -119,6 +119,7 @@
     "@testing-library/user-event": "catalog:",
     "@types/jest": "catalog:",
     "@types/jest-axe": "catalog:",
+    "@types/node": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "@vitest/coverage-v8": "catalog:",
@@ -135,12 +136,12 @@
     "madge": "catalog:",
     "markdownlint": "catalog:",
     "prettier": "catalog:",
+    "steiger": "^0.5.11",
     "syncpack": "catalog:",
     "ts-jest": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:",
-    "@types/node": "catalog:"
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@10.29.2",
   "pnpm": {

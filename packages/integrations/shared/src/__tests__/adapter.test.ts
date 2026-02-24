@@ -289,15 +289,15 @@ describe('BaseIntegrationAdapter', () => {
         throw error;
       });
 
-      const resultPromise = (adapter as any).executeWithRetry(mockOperation, config.retry);
-
-      // Advance timers to trigger all retries
-      await vi.advanceTimersByTimeAsync(10000); // Advance enough time for all retries
-
+      // Use a try-catch block to handle the expected failure
       try {
-        await resultPromise;
+        await (adapter as any).executeWithRetry(mockOperation, config.retry);
+        // Should not reach here
+        expect(true).toBe(false);
       } catch (error) {
-        // Expected to fail
+        // Expected to fail after max attempts
+        expect(error).toBeInstanceOf(Error);
+        expect((error as Error).message).toBe('Server error');
       }
 
       expect(mockOperation).toHaveBeenCalledTimes(3); // maxAttempts is 3

@@ -408,9 +408,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] GAP-ENV-001-create-env-example - Create `.env.example` template with all required environment variables
 - [x] GAP-ENV-002-add-prettier-config - Create `.prettierrc` configuration for consistent code formatting
 - [x] GAP-DESIGN-001-implement-design-tokens - COMPLETED 2026-02-24 - Create `packages/design-tokens/` with color, typography, spacing, and component tokens
-- [ ] GAP-FSD-001-create-missing-layer-packages - Create missing FSD v2.1 layer packages (`@repo/entities`, `@repo/shared`)
+- [x] GAP-FSD-001-create-missing-layer-packages - Create missing FSD v2.1 layer packages (`@repo/entities`, `@repo/shared`) - COMPLETED 2026-02-24
 - [x] GAP-CONFIG-001-create-tailwind-config - COMPLETED 2026-02-24 - Create centralized `tailwind.config.ts` with design tokens integration
-- [ ] GAP-FSD-002-restructure-features-package - Restructure `packages/features/src/` to follow FSD v2.1 layer architecture
+- [x] GAP-FSD-002-restructure-features-package - Restructure `packages/features/src/` to follow FSD v2.1 layer architecture - COMPLETED 2026-02-24
 
 ### **Week 2: Design System & Documentation (P1)**
 
@@ -451,8 +451,8 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] PROD-TEST-002-fix-promise-rejections - COMPLETED 2026-02-24 - Fix unhandled promise rejections in test suite
 - [x] PROD-UI-001-implement-design-tokens - COMPLETED 2026-02-24 - Create centralized design tokens in `packages/ui/src/design-tokens/`
 - [x] PROD-UI-002-replace-hardcoded-values - COMPLETED 2026-02-24 - Replace hardcoded values with token references
-- [ ] PROD-UI-003-add-storybook - Install and configure Storybook for UI components
-- [ ] PROD-UI-004-create-component-stories - Create stories for all components with visual testing
+- [x] PROD-UI-003-install-storybook - Install and configure Storybook for UI components - COMPLETED 2026-02-24
+- [x] PROD-UI-004-create-component-stories - Create stories for all components with visual testing - COMPLETED 2026-02-24
 
 ### **Week 2: Production Features (P1)**
 

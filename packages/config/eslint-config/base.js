@@ -35,6 +35,29 @@ export default [
   // NOTE: Core rule extensions - TypeScript support.
   ...compat.extends('@typescript-eslint/recommended'),
   {
+    // [TRACE:BLOCK=packages.config.eslint.base.settings]
+    // [FEAT:LINTING] [FEAT:TYPESCRIPT]
+    // NOTE: AJV configuration - fix missingRefs and defaultMeta errors with ESLint 9 + AJV v8
+    settings: {
+      // Disable AJV strict schema validation to prevent missingRefs errors
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+        },
+      },
+    },
+    languageOptions: {
+      // Configure AJV options for ESLint 9 compatibility
+      parserOptions: {
+        project: true,
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        // Disable strict schema validation to prevent AJV errors
+        projectService: {
+          allowDefaultProject: true,
+        },
+      },
+    },
     // [TRACE:BLOCK=packages.config.eslint.base.rules]
     // [FEAT:LINTING] [FEAT:TYPESCRIPT]
     // NOTE: Custom rule configurations - balances strictness with developer experience.

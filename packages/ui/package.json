@@ -23,7 +23,9 @@
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "react": "catalog:",
@@ -32,22 +34,36 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
+    "@storybook/addon-controls": "^8.6.17",
+    "@storybook/addon-docs": "^8.6.17",
+    "@storybook/addon-essentials": "^8.6.17",
+    "@storybook/addon-interactions": "^8.6.17",
+    "@storybook/addon-links": "^8.6.17",
+    "@storybook/addon-viewport": "^8.6.17",
+    "@storybook/blocks": "^8.6.17",
+    "@storybook/react": "^8.6.17",
+    "@storybook/react-vite": "^8.6.17",
+    "@storybook/react-webpack5": "^8.6.17",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/react-window": "catalog:",
+    "@vitejs/plugin-react": "^5.1.4",
     "eslint": "catalog:",
+    "storybook": "^8.6.17",
     "typescript": "catalog:",
-    "@testing-library/react": "catalog:",
-    "@testing-library/user-event": "catalog:",
+    "vite": "^7.3.1",
     "vitest": "catalog:"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",
-    "@repo/infra": "workspace:*",
     "@dnd-kit/core": "catalog:",
     "@dnd-kit/sortable": "catalog:",
     "@dnd-kit/utilities": "catalog:",
     "@hookform/resolvers": "catalog:",
+    "@repo/design-tokens": "workspace:*",
+    "@repo/infra": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "cmdk": "catalog:",
@@ -57,7 +73,6 @@
     "react-hook-form": "catalog:",
     "react-window": "catalog:",
     "sonner": "catalog:",
-    "zod": "catalog:",
-    "@repo/design-tokens": "workspace:*"
+    "zod": "catalog:"
   }
 }

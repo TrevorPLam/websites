@@ -32,8 +32,10 @@
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:",
+    "@repo/entities": "workspace:*",
     "@repo/infra": "workspace:*",
     "@repo/marketing-components": "workspace:*",
+    "@repo/shared": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@supabase/supabase-js": "catalog:",
