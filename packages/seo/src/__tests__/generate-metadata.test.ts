@@ -1,72 +1,72 @@
-import { describe, it, expect } from 'vitest';
-import { generateTenantMetadata, validateTenantMetadata } from '../generate-metadata';
+import { describe, expect, it } from 'vitest';
+import type { SiteConfig } from '@repo/types';
+import { buildHomepageMetadata, buildMetadata } from '../metadata-factory';
+import { buildLocalBusinessSchema } from '../structured-data';
+import { buildRobots, buildSitemap } from '../crawl-directives';
 
-describe('SEO Metadata Factory', () => {
-  const mockTenantConfig = {
-    identity: {
-      siteName: 'Test Site',
-      siteUrl: 'https://example.com',
-      description: 'Test description',
-      contact: {
-        email: 'test@example.com',
-        phone: '+1234567890',
-        address: {
-          street: '123 Test St',
-          city: 'Test City',
-          state: 'TS',
-          zip: '12345',
-          country: 'US',
-        },
-      },
+const config: SiteConfig = {
+  id: 'tenant-1',
+  name: 'Acme Plumbing',
+  tagline: 'Fast local plumbing repairs',
+  description: 'Trusted local plumbing team for residential and commercial service.',
+  url: 'https://acme.example.com',
+  industry: 'construction',
+  features: {
+    hero: 'split',
+    services: 'grid',
+    team: 'grid',
+    testimonials: 'grid',
+    pricing: 'cards',
+    contact: 'simple',
+    gallery: 'grid',
+    blog: true,
+    booking: true,
+    faq: true,
+  },
+  integrations: {},
+  navLinks: [],
+  socialLinks: [{ platform: 'facebook', url: 'https://facebook.com/acme' }],
+  footer: { columns: [], legalLinks: [], copyrightTemplate: '© {year} Acme' },
+  contact: {
+    email: 'hello@acme.example.com',
+    phone: '+15555551234',
+    address: {
+      street: '100 Main',
+      city: 'Austin',
+      state: 'TX',
+      zip: '78701',
+      country: 'US',
     },
-    branding: {
-      primaryColor: '#000000',
-      secondaryColor: '#ffffff',
-      theme: 'light' as const,
-    },
-    seo: {
-      titleTemplate: '%s | Test Site',
-      description: 'SEO description',
-      keywords: ['test', 'seo'],
-      ogImage: 'https://example.com/og.jpg',
-      twitterCard: 'summary_large_image' as const,
-      favicon: 'https://example.com/favicon.ico',
-    },
-  };
+  },
+  seo: {
+    titleTemplate: '%s | Acme Plumbing',
+    defaultDescription: 'Emergency plumbing service in Austin.',
+    twitterHandle: '@acme',
+  },
+  theme: { colors: { primary: '174 85% 33%' } },
+  conversionFlow: { type: 'contact' },
+};
 
-  it('should generate basic metadata for home page', () => {
-    const metadata = generateTenantMetadata({
-      tenantConfig: mockTenantConfig,
-      page: 'home',
-    });
-
-    expect(metadata.title).toBe('Home | Test Site');
-    expect(metadata.description).toBe('SEO description');
-    expect(metadata.metadataBase?.href).toBe('https://example.com');
-    expect(metadata.openGraph?.title).toBe('Home | Test Site');
-    expect(metadata.twitter?.card).toBe('summary_large_image');
+describe('domain-23 seo utilities', () => {
+  it('builds page metadata with canonical and robots', () => {
+    const metadata = buildMetadata({ config, path: '/services/drain-cleaning' });
+    expect(metadata.alternates?.canonical).toBe('https://acme.example.com/services/drain-cleaning');
+    expect(metadata.robots).toBeTruthy();
   });
 
-  it('should validate tenant configuration', () => {
-    const validConfig = validateTenantMetadata(mockTenantConfig);
-    expect(validConfig).toEqual(mockTenantConfig);
-
-    expect(() => {
-      validateTenantMetadata({ invalid: 'config' } as any);
-    }).toThrow();
+  it('builds homepage metadata', () => {
+    const metadata = buildHomepageMetadata(config);
+    expect(metadata.openGraph?.siteName).toBe('Acme Plumbing');
   });
 
-  it('should handle page overrides', () => {
-    const metadata = generateTenantMetadata({
-      tenantConfig: mockTenantConfig,
-      page: 'about',
-      overrides: {
-        title: 'Custom About Title',
-        description: 'Custom description',
-      },
-    });
+  it('builds json-ld schema', () => {
+    const schema = buildLocalBusinessSchema(config);
+    expect(schema['@type']).toBe('LocalBusiness');
+    expect(schema.address?.addressLocality).toBe('Austin');
+  });
 
-    expect(metadata.title).toBe('Custom About Title');
-    expect(metadata.description).toBe('Custom description');
+  it('builds sitemap and robots directives', () => {
+    expect(buildSitemap(config)).toHaveLength(4);
+    expect(buildRobots(config).sitemap).toBe('https://acme.example.com/sitemap.xml');
   });
 });

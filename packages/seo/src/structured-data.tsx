@@ -1,10 +1,4 @@
-// ============================================================================
-// JSON-LD STRUCTURED DATA LIBRARY
-// All types derived from schema.org (validated via Google Rich Results Test)
-// GEO note: schema.org provides 3× likelihood of AI Overview citation [web:243]
-// ============================================================================
-
-import React from 'react';
+import type { SiteConfig } from '@repo/types';
 
 export type LocalBusinessSchema = {
   '@context': 'https://schema.org';
@@ -17,25 +11,17 @@ export type LocalBusinessSchema = {
   address?: {
     '@type': 'PostalAddress';
     streetAddress?: string;
-    addressLocality: string;
-    addressRegion: string;
+    addressLocality?: string;
+    addressRegion?: string;
     postalCode?: string;
-    addressCountry: string;
-  };
-  geo?: {
-    '@type': 'GeoCoordinates';
-    latitude: number;
-    longitude: number;
+    addressCountry?: string;
   };
   openingHoursSpecification?: Array<{
     '@type': 'OpeningHoursSpecification';
-    dayOfWeek: string[];
+    dayOfWeek: string;
     opens: string;
     closes: string;
   }>;
-  image?: string[];
-  priceRange?: string;
-  servesCuisine?: string; // Restaurant only
   hasOfferCatalog?: {
     '@type': 'OfferCatalog';
     name: string;
@@ -44,12 +30,7 @@ export type LocalBusinessSchema = {
       itemOffered: { '@type': 'Service'; name: string };
     }>;
   };
-  aggregateRating?: {
-    '@type': 'AggregateRating';
-    ratingValue: string;
-    reviewCount: string;
-  };
-  sameAs?: string[]; // Social profiles
+  sameAs?: string[];
 };
 
 export type FAQSchema = {
@@ -65,121 +46,40 @@ export type FAQSchema = {
   }>;
 };
 
-export type BreadcrumbSchema = {
-  '@context': 'https://schema.org';
-  '@type': 'BreadcrumbList';
-  itemListElement: Array<{
-    '@type': 'ListItem';
-    position: number;
-    name: string;
-    item: string;
-  }>;
-};
-
-export type ArticleSchema = {
-  '@context': 'https://schema.org';
-  '@type': 'Article';
-  headline: string;
-  description: string;
-  image: string;
-  author: { '@type': 'Person' | 'Organization'; name: string; url?: string };
-  publisher: {
-    '@type': 'Organization';
-    name: string;
-    logo: { '@type': 'ImageObject'; url: string };
-  };
-  datePublished: string;
-  dateModified: string;
-  mainEntityOfPage: { '@type': 'WebPage'; '@id': string };
-};
-
-// ============================================================================
-// FACTORIES
-// ============================================================================
-
-import type { SiteConfig } from '@repo/config-schema';
-
 export function buildLocalBusinessSchema(config: SiteConfig): LocalBusinessSchema {
-  const { identity, contact, assets } = config;
-  const industryTypeMap: Record<string, string | string[]> = {
-    law: 'LegalService',
-    hvac: ['HomeAndConstructionBusiness', 'Plumber'],
-    restaurant: 'Restaurant',
-    dental: 'Dentist',
-    medical: 'MedicalBusiness',
-    realEstate: 'RealEstateAgent',
-    accounting: 'AccountingService',
-    default: 'LocalBusiness',
-  };
-
-  const schemaType = industryTypeMap[identity.industry ?? 'default'] ?? 'LocalBusiness';
+  const address = config.contact.address;
 
   return {
     '@context': 'https://schema.org',
-    '@type': schemaType,
-    name: identity.siteName,
-    description: identity.tagline ?? '',
-    url: config.deployment.canonicalUrl,
-    telephone: identity.contact?.phone,
-    email: identity.contact?.email,
-
-    address: identity.address
+    '@type': config.seo.schemaType ?? 'LocalBusiness',
+    name: config.name,
+    description: config.description,
+    url: config.url,
+    telephone: config.contact.phone,
+    email: config.contact.email,
+    address: address
       ? {
           '@type': 'PostalAddress',
-          streetAddress: identity.address.street,
-          addressLocality: identity.address.city,
-          addressRegion: identity.address.state,
-          postalCode: identity.address.zip,
-          addressCountry: 'US',
+          streetAddress: address.street,
+          addressLocality: address.city,
+          addressRegion: address.state,
+          postalCode: address.zip,
+          addressCountry: address.country || 'US',
         }
       : undefined,
-
-    geo: identity.coordinates
-      ? {
-          '@type': 'GeoCoordinates',
-          latitude: identity.coordinates.lat,
-          longitude: identity.coordinates.lng,
-        }
-      : undefined,
-
-    openingHoursSpecification: identity.hours?.map((schedule) => ({
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: schedule.days,
-      opens: schedule.opens,
-      closes: schedule.closes,
-    })),
-
-    image: assets.galleryImages?.slice(0, 3) ?? [assets.ogImage ?? ''],
-
-    priceRange: identity.priceRange ?? undefined,
-
-    hasOfferCatalog: identity.services?.length
-      ? {
-          '@type': 'OfferCatalog',
-          name: `${identity.siteName} Services`,
-          itemListElement: identity.services.map((service) => ({
-            '@type': 'Offer',
-            itemOffered: { '@type': 'Service', name: service.name },
-          })),
-        }
-      : undefined,
-
-    aggregateRating:
-      identity.reviewSummary?.count && identity.reviewSummary.count > 0
-        ? {
-            '@type': 'AggregateRating',
-            ratingValue: String(identity.reviewSummary.average),
-            reviewCount: String(identity.reviewSummary.count),
-          }
-        : undefined,
-
-    sameAs: [
-      identity.social?.google,
-      identity.social?.facebook,
-      identity.social?.instagram,
-      identity.social?.linkedin,
-      identity.social?.yelp,
-    ].filter(Boolean) as string[],
+    openingHoursSpecification: config.contact.hours?.flatMap((entry) => {
+      const [opens, closes] = entry.hours.split('-').map((item) => item.trim());
+      if (!opens || !closes) return [];
+      return [
+        {
+          '@type': 'OpeningHoursSpecification' as const,
+          dayOfWeek: entry.label,
+          opens,
+          closes,
+        },
+      ];
+    }),
+    sameAs: config.socialLinks.map((item) => item.url),
   };
 }
 
@@ -192,78 +92,17 @@ export function buildFAQSchema(faqs: Array<{ question: string; answer: string }>
       name: faq.question,
       acceptedAnswer: {
         '@type': 'Answer',
-        // Text should be plain string — no HTML (Google strips it anyway)
         text: faq.answer,
       },
     })),
   };
 }
 
-export function buildBreadcrumbSchema(
-  crumbs: Array<{ name: string; url: string }>
-): BreadcrumbSchema {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: crumbs.map((crumb, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: crumb.name,
-      item: crumb.url,
-    })),
-  };
-}
-
-export function buildArticleSchema(
-  config: SiteConfig,
-  post: {
-    title: string;
-    excerpt: string;
-    coverImage: string;
-    publishedAt: string;
-    updatedAt: string;
-    author: { name: string; url?: string };
-    url: string;
-  }
-): ArticleSchema {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: post.excerpt,
-    image: post.coverImage,
-    author: {
-      '@type': 'Person',
-      name: post.author.name,
-      url: post.author.url ?? config.deployment.canonicalUrl,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: config.identity.siteName,
-      logo: {
-        '@type': 'ImageObject',
-        url: config.assets.logo ?? config.assets.ogImage ?? '',
-      },
-    },
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt,
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': post.url,
-    },
-  };
-}
-
-// ============================================================================
-// RENDERER COMPONENT
-// Usage: <JsonLd schema={buildLocalBusinessSchema(config)} />
-// ============================================================================
-
 export function JsonLd({ schema }: { schema: object }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema, null, 0) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   );
 }

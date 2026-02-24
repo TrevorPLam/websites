@@ -1,12 +1,10 @@
 import type { Metadata } from 'next';
+import { buildHomepageMetadata } from '@repo/seo';
 import { ThemeInjector, Toaster } from '@repo/ui';
 import siteConfig from '../site.config';
 import './globals.css';
 
-export const metadata: Metadata = {
-  title: { default: siteConfig.name, template: siteConfig.seo.titleTemplate },
-  description: siteConfig.seo.defaultDescription,
-};
+export const metadata: Metadata = buildHomepageMetadata(siteConfig);
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
