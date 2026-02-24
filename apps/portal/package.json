@@ -26,7 +26,9 @@
     "react-dom": "catalog:",
     "react-hook-form": "catalog:",
     "typescript": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@supabase/supabase-js": "catalog:",
+    "browser-image-compression": "catalog:"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
