@@ -3,4 +3,5 @@
 
 pnpm verify:file-headers
 pnpm verify:docstrings
+pnpm verify:comment-quality
 pnpm lint-staged --config .lintstagedrc.json
