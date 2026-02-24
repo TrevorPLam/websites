@@ -6,6 +6,13 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ## Recent Progress (Wave 0 Task 1)
 
+- [x] Complete Wave 0 Task 2: tenant/RLS SQL migrations, policy doc, typed infra DB client, and isolation test scaffold
+- [x] Complete Wave 0 Task 3: tenant AsyncLocalStorage context, AES-256-GCM helpers, tenant-prefixed Redis cache helpers, CSP nonce alias
+- [x] Complete Wave 0 Task 4: core domain package with Result/Option, Tenant/Lead entities, value objects, and Vitest coverage
+- [x] Expand pnpm workspace globs to include `apps/*` and align root package discovery
+- [x] Enforce strict hoisting and workspace resolution in `.npmrc`
+- [x] Add root `.nvmrc` pinned to `20.11.0` for consistent local runtime
+- [x] Add Syncpack lint/format scripts and align root runtime deps to `catalog:`
 - [x] Add Turbo remote cache signature env validation gate (`validate:turbo-cache-env`)
 - [x] Harden `steiger.config.ts` includes/excludes and tighten FSD rules
 - [x] Add custom FSD ESLint boundary rule at `tooling/eslint/rules/fsd-boundaries.js`

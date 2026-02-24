@@ -7,10 +7,10 @@ packages:
   - 'packages/content-platform/*'
   - 'packages/marketing-ops/*'
   - 'packages/infrastructure/*'
+  - 'apps/*'
   - 'clients/*'
   - 'tooling/*'
   - 'e2e/*'
-  - 'docs'
 
 allowBuilds:
   '@sentry/cli': true

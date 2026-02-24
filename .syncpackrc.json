@@ -23,6 +23,20 @@
       "label": "Use ^ for peer dependencies",
       "dependencyTypes": ["peer"],
       "range": "^"
+    },
+    {
+      "label": "Use ^ for prod/dev dependencies",
+      "dependencyTypes": ["dev", "prod"],
+      "range": "^",
+      "isIgnored": true
     }
+  ],
+  "source": [
+    "package.json",
+    "apps/*/package.json",
+    "clients/*/package.json",
+    "packages/*/package.json",
+    "packages/*/*/package.json",
+    "tooling/*/package.json"
   ]
 }
