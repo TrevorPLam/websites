@@ -43,9 +43,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34    | 5           | 5         | 0           | 0       |
 | Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 6         | 0           | 0       |
-| Domain 37    | 156         | 27        | 0           | 129     |
+| Domain 37    | 156         | 35        | 0           | 121     |
 | Gap Analysis | 20          | 2         | 0           | 18      |
-| **Total**    | **467**     | **200**   | **0**       | **267** |
+| **Total**    | **467**     | **208**   | **0**       | **259** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -537,21 +537,21 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-37-3-12-add-container-iac-scanning - Add container and IaC scanning - COMPLETED 2026-02-24
 - [x] DOMAIN-37-3-13-schedule-dast-scans - Schedule DAST scans - COMPLETED 2026-02-24
 - [x] DOMAIN-37-3-14-configure-ci-security-gates - Configure CI to fail on security findings - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-3-15-track-security-findings - Track findings in ticketing system
-- [ ] DOMAIN-37-3-16-define-security-slAs - Define security SLAs for remediation
-- [ ] DOMAIN-37-3-17-regular-dependency-updates - Regular dependency updates
-- [ ] DOMAIN-37-3-18-generate-sboms - Generate Software Bill of Materials
-- [ ] DOMAIN-37-3-19-sign-and-store-sboms - Sign and store SBOMs
+- [x] DOMAIN-37-3-15-track-security-findings - Track findings in ticketing system - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-16-define-security-slAs - Define security SLAs for remediation - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-17-regular-dependency-updates - Regular dependency updates - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-18-generate-sboms - Generate Software Bill of Materials - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-19-sign-and-store-sboms - Sign and store SBOMs - COMPLETED 2026-02-24
 
 ### Part 4: Static Application Security Testing (17 tasks)
 
 - [x] DOMAIN-37-4-1-select-sast-tool - Select SAST tool (SonarQube, Semgrep, etc.) - COMPLETED 2026-02-24
 - [x] DOMAIN-37-4-2-configure-sast-rules - Configure SAST rule set based on OWASP Top 10 - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-4-3-run-sast-in-ide - Run SAST in IDE plugins
+- [x] DOMAIN-37-4-3-run-sast-in-ide - Run SAST in IDE plugins - COMPLETED 2026-02-24
 - [x] DOMAIN-37-4-4-run-sast-on-prs - Run SAST on pull requests - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-4-5-schedule-nightly-sast - Schedule nightly full SAST scans
-- [ ] DOMAIN-37-4-6-establish-severity-matrix - Establish severity matrix for findings
-- [ ] DOMAIN-37-4-7-triage-findings - Triage findings with owners and tracking
+- [x] DOMAIN-37-4-5-schedule-nightly-sast - Schedule nightly full SAST scans - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-6-establish-severity-matrix - Establish severity matrix for findings - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-7-triage-findings - Triage findings with owners and tracking - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-4-8-evaluate-ai-driven-sast - Evaluate AI-augmented SAST tools
 - [ ] DOMAIN-37-4-9-implement-ai-code-security - Implement AI Code Security Assistants
 - [ ] DOMAIN-37-4-10-establish-ai-code-review-policy - Establish AI code review policy

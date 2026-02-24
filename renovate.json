@@ -10,7 +10,7 @@
     "github>whitesource-renovate"
   ],
   "timezone": "UTC",
-  "schedule": ["before 6am on monday"],
+  "schedule": ["before 6am every weekday"],
   "labels": ["dependencies", "renovate"],
   "assignees": ["TrevorPLam"],
   "reviewers": ["TrevorPLam"],
@@ -114,6 +114,14 @@
         "commands": ["pnpm install --lockfile-only"],
         "fileFilters": ["pnpm-lock.yaml", "pnpm-workspace.yaml"]
       }
+    },
+    {
+      "description": "Prioritize security updates with expedited review",
+      "matchManagers": ["npm", "pnpm"],
+      "matchDepTypes": ["dependencies", "devDependencies", "peerDependencies"],
+      "labels": ["dependencies", "security", "sla:72h"],
+      "prPriority": 10,
+      "dependencyDashboardApproval": false
     }
   ],
   "postUpdateOptions": ["pnpmDedupe"],
