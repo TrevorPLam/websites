@@ -1,0 +1,57 @@
+import type { MetadataRoute } from 'next';
+import config from '../../../../site.config';
+
+export default function robots(): MetadataRoute.Robots {
+  const baseUrl = config.deployment.canonicalUrl;
+  const isProduction = process.env.VERCEL_ENV === 'production';
+
+  // Non-production environments: block all crawlers
+  if (!isProduction) {
+    return {
+      rules: [{ userAgent: '*', disallow: '/' }],
+    };
+  }
+
+  return {
+    rules: [
+      // Default: allow all
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/admin/', '/portal/', '/api/', '/_next/', '/suspended', '/auth/'],
+      },
+
+      // Google: full access + extended snippet
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/admin/', '/portal/', '/api/', '/auth/'],
+      },
+
+      // AI crawlers: allow content, block private data
+      // Note: This does NOT stop AI training — use llms.txt for that
+      {
+        userAgent: 'GPTBot',
+        allow: ['/blog/', '/services/', '/about/'],
+        disallow: ['/admin/', '/portal/', '/api/', '/auth/'],
+      },
+      {
+        userAgent: 'PerplexityBot',
+        allow: ['/blog/', '/services/', '/about/'],
+        disallow: ['/admin/', '/portal/', '/api/', '/auth/'],
+      },
+      {
+        userAgent: 'ClaudeBot',
+        allow: ['/blog/', '/services/', '/about/'],
+        disallow: ['/admin/', '/portal/', '/api/', '/auth/'],
+      },
+      {
+        userAgent: 'Applebot',
+        allow: '/',
+        disallow: ['/admin/', '/portal/', '/api/'],
+      },
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
+  };
+}

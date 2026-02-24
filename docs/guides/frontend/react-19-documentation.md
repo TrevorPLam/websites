@@ -455,7 +455,9 @@ Key additions in React 19.1:
 
 ## Activity Component
 
-`<Activity>` lets you control the visibility and rendering priority of UI subtrees:
+`<Activity>` provides performance-aware conditional rendering that preserves state while managing
+side effects efficiently. It's designed for scenarios where you want to maintain component state
+without the performance cost of active rendering.
 
 ```typescript
 import { Activity } from 'react';
@@ -480,6 +482,52 @@ function TabLayout({ activeTab }: { activeTab: 'feed' | 'profile' | 'notificatio
 }
 ```
 
+**Key Benefits:**
+
+- **State Preservation**: Form inputs, scroll positions, and component state maintained
+- **Performance Optimization**: Hidden components don't process updates until needed
+- **Faster Navigation**: Pre-rendered content reduces Time to Interactive
+- **Memory Efficiency**: Effects are unmounted when hidden to prevent resource leaks
+
+**Common Use Cases:**
+
+```typescript
+// 1. Tab interfaces with state preservation
+function TabPanel({ activeTab, children }) {
+  return (
+    <Activity mode={activeTab ? 'visible' : 'hidden'}>
+      {children}
+    </Activity>
+  );
+}
+
+// 2. Pre-rendering likely next destinations
+function ProductPage({ productId, relatedProducts }) {
+  return (
+    <>
+      <ProductDetails productId={productId} />
+      <Activity mode="hidden">
+        <RelatedProducts products={relatedProducts} />
+      </Activity>
+    </>
+  );
+}
+
+// 3. Background rendering with priority control
+function Dashboard({ activeView }) {
+  return (
+    <>
+      <Activity mode={activeView === 'analytics' ? 'visible' : 'hidden'}>
+        <AnalyticsPanel />
+      </Activity>
+      <Activity mode={activeView === 'reports' ? 'visible' : 'hidden'}>
+        <ReportsPanel />
+      </Activity>
+    </>
+  );
+}
+```
+
 **`hidden` mode behavior:**
 
 - Hides children (`display: none`)
@@ -498,30 +546,109 @@ function TabLayout({ activeTab }: { activeTab: 'feed' | 'profile' | 'notificatio
 
 ## useEffectEvent
 
-Separates "event" logic from Effect synchronization logic, eliminating lint suppression hacks:
+Extracts non-reactive event logic from Effects, eliminating the common pattern where event handlers
+cause unnecessary effect re-runs. This solves a fundamental issue in React development.
+
+### Problem Solved
 
 ```typescript
-import { useEffect, useEffectEvent } from 'react';
+// BEFORE: Effect re-runs when theme changes (problematic)
+function ChatRoom({ roomId, theme }) {
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.on('connected', () => {
+      showNotification('Connected!', theme); // ❌ theme change triggers reconnect
+    });
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId, theme]); // theme shouldn't cause reconnection
+}
+```
 
+```typescript
+// AFTER: Event logic separated from effect logic
+function ChatRoom({ roomId, theme }) {
+  const onConnected = useEffectEvent(() => {
+    showNotification('Connected!', theme); // ✅ Always sees latest theme
+  });
+
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.on('connected', () => onConnected()); // ✅ Not a dependency
+    connection.connect();
+    return () => connection.disconnect();
+  }, [roomId]); // ✅ Only roomId triggers reconnect
+}
+```
+
+### Key Properties
+
+- **Always Sees Latest Values**: Like DOM events, Effect Events always access current props/state
+- **Not a Dependency**: Never included in useEffect dependency arrays
+- **Same Component Only**: Must be declared in the same component as the using Effect
+- **Lint Enforcement**: Requires eslint-plugin-react-hooks@latest for proper validation
+
+### Common Patterns
+
+```typescript
+// 1. Analytics tracking
 function AnalyticsTracker({ page, userId }: { page: string; userId: string }) {
-  // Effect Event: always reads latest userId, but never re-triggers the Effect
   const onPageView = useEffectEvent(() => {
     analytics.track('page_view', { page, userId }); // Latest userId always
   });
 
   useEffect(() => {
-    // Only runs when 'page' changes — not when 'userId' changes
-    onPageView();
-  }, [page]); // ✅ No need to include userId as dependency
+    onPageView(); // Only runs when page changes
+  }, [page]);
+}
+
+// 2. External system notifications
+function NotificationManager({ user, settings }) {
+  const notifyUser = useEffectEvent(() => {
+    if (settings.notifications) {
+      sendNotification(user.email, 'Update available');
+    }
+  });
+
+  useEffect(() => {
+    const subscription = subscribeToUpdates(() => {
+      notifyUser(); // Uses latest settings without re-subscribing
+    });
+    return () => subscription.unsubscribe();
+  }, [user.id]); // Only re-subscribe when user changes
+}
+
+// 3. Form validation feedback
+function FormValidator({ formData, validationRules }) {
+  const showErrors = useEffectEvent(() => {
+    const errors = validate(formData, validationRules);
+    setValidationErrors(errors);
+  });
+
+  useEffect(() => {
+    if (formData.isDirty) {
+      showErrors(); // Only runs when dirty state changes
+    }
+  }, [formData.isDirty]);
 }
 ```
 
-**Rules for useEffectEvent:**
+### Migration Guide
 
-- Cannot be passed to other components or hooks
-- Can only be called from within an Effect
-- Must not appear in the dependency array
-- `eslint-plugin-react-hooks@latest` enforces these rules
+Replace manual dependency exclusion with useEffectEvent:
+
+```typescript
+// OLD: Manual lint suppression
+useEffect(() => {
+  doSomething(value);
+}, [otherValue]); // eslint-disable-line react-hooks/exhaustive-deps
+
+// NEW: Clean separation with useEffectEvent
+const doSomethingEvent = useEffectEvent(() => doSomething(value));
+useEffect(() => {
+  doSomethingEvent();
+}, [otherValue]);
+```
 
 ---
 

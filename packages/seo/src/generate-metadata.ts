@@ -1,316 +1,203 @@
-/**
- * SEO Metadata Factory System
- * Type-safe metadata generation following Next.js 16 patterns
- */
+import type { Metadata } from 'next';
+import type { SiteConfig } from '@repo/config-schema';
 
-import { Metadata } from 'next';
-import { z } from 'zod';
+// ============================================================================
+// METADATA FACTORY
+// Generates type-safe Next.js 16 Metadata for every page type.
+// Usage: import { generateTenantMetadata } from '@repo/seo';
+// ============================================================================
 
-// Tenant configuration schema
-export const TenantConfigSchema = z.object({
-  identity: z.object({
-    siteName: z.string(),
-    siteUrl: z.string().url(),
-    logo: z.string().url().optional(),
-    description: z.string(),
-    contact: z.object({
-      email: z.string().email(),
-      phone: z.string().optional(),
-      address: z
-        .object({
-          street: z.string(),
-          city: z.string(),
-          state: z.string(),
-          zip: z.string(),
-          country: z.string(),
-        })
-        .optional(),
-    }),
-  }),
-  branding: z.object({
-    primaryColor: z.string(),
-    secondaryColor: z.string(),
-    theme: z.enum(['light', 'dark', 'auto']),
-  }),
-  seo: z.object({
-    titleTemplate: z.string().optional(),
-    description: z.string(),
-    keywords: z.array(z.string()).optional(),
-    ogImage: z.string().url().optional(),
-    twitterCard: z.enum(['summary', 'summary_large_image']).optional(),
-    favicon: z.string().url().optional(),
-  }),
-});
-
-export type TenantConfig = z.infer<typeof TenantConfigSchema>;
-
-// Page type definitions
-export type PageType =
-  | 'home'
-  | 'about'
-  | 'services'
-  | 'contact'
-  | 'blog'
-  | 'blog-post'
-  | 'service-area'
-  | 'privacy'
-  | 'terms';
-
-// Page-specific metadata defaults
-const pageDefaults: Record<PageType, Partial<Metadata>> = {
-  home: {
-    title: 'Home',
-    description: 'Welcome to our website',
-  },
-  about: {
-    title: 'About Us',
-    description: 'Learn more about our company and team',
-  },
-  services: {
-    title: 'Our Services',
-    description: 'Discover our comprehensive range of services',
-  },
-  contact: {
-    title: 'Contact Us',
-    description: 'Get in touch with our team',
-  },
-  blog: {
-    title: 'Blog',
-    description: 'Read our latest articles and insights',
-  },
-  'blog-post': {
-    title: 'Blog Post',
-    description: 'Read this article',
-  },
-  'service-area': {
-    title: 'Service Area',
-    description: 'Services available in your area',
-  },
-  privacy: {
-    title: 'Privacy Policy',
-    description: 'Our privacy policy and data protection practices',
-  },
-  terms: {
-    title: 'Terms of Service',
-    description: 'Our terms of service and usage policies',
-  },
-};
-
-/**
- * Generate tenant-aware metadata
- */
-export function generateTenantMetadata(options: {
-  tenantConfig: TenantConfig;
-  page: PageType;
-  overrides?: Partial<Metadata>;
-}): Metadata {
-  const { tenantConfig, page, overrides = {} } = options;
-
-  // Base metadata from tenant config
-  const baseMetadata: Metadata = {
-    title: tenantConfig.identity.siteName,
-    description: tenantConfig.seo.description,
-    metadataBase: new URL(tenantConfig.identity.siteUrl),
-    icons: {
-      icon: tenantConfig.seo.favicon || '/favicon.ico',
-    },
-  };
-
-  // Page-specific defaults
-  const pageMetadata = pageDefaults[page] || {};
-
-  // Open Graph metadata
-  const openGraph: Metadata['openGraph'] = {
-    type: 'website',
-    locale: 'en_US',
-    url: tenantConfig.identity.siteUrl,
-    siteName: tenantConfig.identity.siteName,
-    title: tenantConfig.seo.titleTemplate
-      ? tenantConfig.seo.titleTemplate.replace(/%s/g, (pageMetadata.title || 'Home') as string)
-      : pageMetadata.title || tenantConfig.identity.siteName,
-    description: pageMetadata.description || tenantConfig.seo.description,
-    images: tenantConfig.seo.ogImage
-      ? [
-          {
-            url: tenantConfig.seo.ogImage,
-            width: 1200,
-            height: 630,
-            alt: `${tenantConfig.identity.siteName} - ${pageMetadata.title || 'Home'}`,
-          },
-        ]
-      : [],
-  };
-
-  // Twitter Card metadata
-  const twitter: Metadata['twitter'] = {
-    card: tenantConfig.seo.twitterCard || 'summary',
-    title: pageMetadata.title || tenantConfig.identity.siteName,
-    description: pageMetadata.description || tenantConfig.seo.description,
-    images: tenantConfig.seo.ogImage ? [tenantConfig.seo.ogImage] : [],
-  };
-
-  // Robots metadata
-  const robots: Metadata['robots'] = {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  };
-
-  // Verification metadata
-  const verification: Metadata['verification'] = {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
-    yandex: process.env.YANDEX_VERIFICATION,
-  };
-
-  // Combine all metadata
-  return {
-    ...baseMetadata,
-    ...pageMetadata,
-    ...overrides,
-    openGraph: {
-      ...openGraph,
-      ...overrides.openGraph,
-    },
-    twitter: {
-      ...twitter,
-      ...overrides.twitter,
-    },
-    robots: {
-      ...robots,
-      ...(overrides.robots && typeof overrides.robots === 'object' ? overrides.robots : {}),
-    },
-    verification: {
-      ...verification,
-      ...overrides.verification,
-    },
-  };
-}
-
-/**
- * Generate metadata for blog posts
- */
-export function generateBlogPostMetadata(options: {
-  tenantConfig: TenantConfig;
-  post: {
+export type PageMetadataInput = {
+  tenantConfig: SiteConfig;
+  page: 'home' | 'about' | 'services' | 'contact' | 'blog' | 'blog-post' | 'service-detail';
+  override?: Partial<{
     title: string;
     description: string;
+    image: string;
+    canonical: string;
+    noIndex: boolean;
     publishedAt: string;
-    updatedAt?: string;
-    author?: string;
-    image?: string;
-    slug: string;
-  };
-  overrides?: Partial<Metadata>;
-}): Metadata {
-  const { tenantConfig, post, overrides = {} } = options;
+    updatedAt: string;
+    author: string;
+    keywords: string[];
+  }>;
+};
 
-  const baseMetadata = generateTenantMetadata({
-    tenantConfig,
-    page: 'blog-post',
-    overrides: {
-      title: post.title,
-      description: post.description,
+export function generateTenantMetadata(input: PageMetadataInput): Metadata {
+  const { tenantConfig, page, override = {} } = input;
+
+  const {
+    identity: { siteName, tagline, contact, address },
+    seo: seoConfig,
+    assets: { favicon, ogImage },
+  } = tenantConfig;
+
+  const baseUrl = tenantConfig.deployment.canonicalUrl;
+
+  // -------------------------------------------------------------------------
+  // Page-level defaults
+  // -------------------------------------------------------------------------
+  const defaults: Record<typeof page, { title: string; description: string; path: string }> = {
+    home: {
+      title: `${siteName} — ${tagline}`,
+      description:
+        seoConfig?.metaDescription ??
+        `${siteName}. ${tagline}. Serving ${address?.city}, ${address?.state}.`,
+      path: '/',
     },
-  });
+    about: {
+      title: `About Us — ${siteName}`,
+      description: `Learn about ${siteName}, our team, and our mission serving ${address?.city}.`,
+      path: '/about',
+    },
+    services: {
+      title: `Services — ${siteName}`,
+      description: `Explore the full range of services offered by ${siteName} in ${address?.city}, ${address?.state}.`,
+      path: '/services',
+    },
+    contact: {
+      title: `Contact ${siteName} — ${address?.city}, ${address?.state}`,
+      description: `Get in touch with ${siteName}. Call ${contact?.phone ?? ''} or fill out our contact form.`,
+      path: '/contact',
+    },
+    blog: {
+      title: `Blog & Resources — ${siteName}`,
+      description: `Expert tips and insights from ${siteName} in ${address?.city}.`,
+      path: '/blog',
+    },
+    'blog-post': {
+      title: override.title ?? siteName,
+      description: override.description ?? tagline,
+      path: override.canonical ?? '/blog',
+    },
+    'service-detail': {
+      title: override.title ?? `Services — ${siteName}`,
+      description: override.description ?? `Professional services from ${siteName}.`,
+      path: override.canonical ?? '/services',
+    },
+  };
+
+  const pageDefaults = defaults[page];
+  const title = override.title ?? pageDefaults.title;
+  const description = override.description ?? pageDefaults.description;
+  const canonicalUrl = override.canonical ?? `${baseUrl}${pageDefaults.path}`;
+  const ogImageUrl =
+    override.image ?? ogImage ?? `${baseUrl}/og?title=${encodeURIComponent(title)}`;
 
   return {
-    ...baseMetadata,
+    // -------------------------------------------------------------------------
+    // Core
+    // -------------------------------------------------------------------------
+    title,
+    description,
+
+    // Template: appended to all child pages automatically
+    // Only set at root layout level; override.title replaces entirely on specific pages
+    ...(page === 'home'
+      ? {
+          title: {
+            default: title,
+            template: `%s — ${siteName}`,
+          },
+        }
+      : { title }),
+
+    // -------------------------------------------------------------------------
+    // Canonical URL (critical for multi-tenant: prevents duplicate content)
+    // -------------------------------------------------------------------------
+    alternates: {
+      canonical: canonicalUrl,
+    },
+
+    // -------------------------------------------------------------------------
+    // Open Graph
+    // -------------------------------------------------------------------------
     openGraph: {
-      ...baseMetadata.openGraph,
-      type: 'article',
-      publishedTime: post.publishedAt,
-      modifiedTime: post.updatedAt || post.publishedAt,
-      authors: post.author ? [post.author] : [],
-      images: post.image
-        ? [
-            {
-              url: post.image,
-              width: 1200,
-              height: 630,
-              alt: post.title,
-            },
-          ]
-        : baseMetadata.openGraph?.images || [],
+      type: page === 'blog-post' ? 'article' : 'website',
+      title,
+      description,
+      url: canonicalUrl,
+      siteName,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${title} — ${siteName}`,
+        },
+      ],
+      locale: 'en_US',
+
+      // Article-specific (blog posts)
+      ...(page === 'blog-post' && override.publishedAt
+        ? {
+            publishedTime: override.publishedAt,
+            modifiedTime: override.updatedAt ?? override.publishedAt,
+            authors: override.author ? [override.author] : [siteName],
+          }
+        : {}),
     },
+
+    // -------------------------------------------------------------------------
+    // Twitter / X Card
+    // -------------------------------------------------------------------------
     twitter: {
-      ...baseMetadata.twitter,
-      title: post.title,
-      description: post.description,
-      images: post.image ? [post.image] : baseMetadata.twitter?.images || [],
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImageUrl],
+      creator: seoConfig?.twitterHandle ?? undefined,
+      site: seoConfig?.twitterHandle ?? undefined,
     },
-    ...overrides,
-  };
-}
 
-/**
- * Generate metadata for service area pages
- */
-export function generateServiceAreaMetadata(options: {
-  tenantConfig: TenantConfig;
-  serviceArea: {
-    name: string;
-    description: string;
-    location: string;
-    services: string[];
-  };
-  overrides?: Partial<Metadata>;
-}): Metadata {
-  const { tenantConfig, serviceArea, overrides = {} } = options;
+    // -------------------------------------------------------------------------
+    // Robots directive
+    // -------------------------------------------------------------------------
+    robots: override.noIndex
+      ? {
+          index: false,
+          follow: false,
+          googleBot: { index: false, follow: false },
+        }
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+          },
+        },
 
-  const locationKeywords = serviceArea.services
-    .map((service) => `${service} in ${serviceArea.location}`)
-    .join(', ');
-
-  return generateTenantMetadata({
-    tenantConfig,
-    page: 'service-area',
-    overrides: {
-      title: `${serviceArea.name} - ${serviceArea.location}`,
-      description: `${serviceArea.description}. Serving ${serviceArea.location} with ${serviceArea.services.join(', ')}.`,
-      keywords: locationKeywords,
+    // -------------------------------------------------------------------------
+    // Favicons & Icons
+    // -------------------------------------------------------------------------
+    icons: {
+      icon: favicon ?? '/favicon.ico',
+      shortcut: favicon ?? '/favicon.ico',
+      apple: tenantConfig.assets.appleTouchIcon ?? '/apple-touch-icon.png',
     },
-    ...overrides,
-  });
-}
 
-/**
- * Validate metadata configuration
- */
-export function validateTenantMetadata(config: unknown): TenantConfig {
-  return TenantConfigSchema.parse(config);
-}
+    // -------------------------------------------------------------------------
+    // Keywords (legacy but still used by Bing)
+    // -------------------------------------------------------------------------
+    keywords: override.keywords ?? seoConfig?.keywords ?? [],
 
-/**
- * Generate structured data (JSON-LD)
- */
-export function generateStructuredData(options: {
-  tenantConfig: TenantConfig;
-  page: PageType;
-  data?: Record<string, unknown>;
-}): string {
-  const { tenantConfig, page, data = {} } = options;
-
-  const baseStructuredData = {
-    '@context': 'https://schema.org',
-    '@type': page === 'home' ? 'Organization' : 'WebPage',
-    name: tenantConfig.identity.siteName,
-    url: tenantConfig.identity.siteUrl,
-    description: tenantConfig.seo.description,
-    logo: tenantConfig.identity.logo,
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: tenantConfig.identity.contact.phone,
-      contactType: 'customer service',
-      availableLanguage: 'English',
+    // -------------------------------------------------------------------------
+    // Verification tokens (per-tenant — stored in site.config.ts)
+    // -------------------------------------------------------------------------
+    verification: {
+      google: seoConfig?.googleVerification ?? undefined,
+      other: seoConfig?.bingVerification
+        ? { 'msvalidate.01': seoConfig.bingVerification }
+        : undefined,
     },
-    ...data,
-  };
 
-  return JSON.stringify(baseStructuredData, null, 2);
+    // -------------------------------------------------------------------------
+    // Category (helps AI categorize the page)
+    // -------------------------------------------------------------------------
+    category: tenantConfig.identity.industry ?? 'business',
+  };
 }
