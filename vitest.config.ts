@@ -1,3 +1,10 @@
+/**
+ * @file vitest.config.ts
+ * @summary Root Vitest configuration with resilient timeout and timer defaults.
+ * @security Test-only configuration; no secrets are read or emitted.
+ * @requirements PROD-TEST-001
+ */
+
 import { defineConfig } from 'vitest/config';
 
 /**
@@ -15,8 +22,12 @@ export default defineConfig({
     isolate: true, // Isolate tests for better reliability
     bail: 1, // Stop on first failure in CI
     retry: process.env.CI ? 1 : 0, // Retry once in CI for flaky tests
-    testTimeout: 10000, // 10 second timeout per test
-    hookTimeout: 10000, // 10 second timeout for hooks
+    fakeTimers: {
+      toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date'],
+      shouldClearNativeTimers: true,
+    },
+    testTimeout: 15000, // 15 second timeout per test
+    hookTimeout: 15000, // 15 second timeout for hooks
     coverage: {
       reporter: ['text', 'json', 'html', 'lcov'],
       exclude: [

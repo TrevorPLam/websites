@@ -1,4 +1,11 @@
 /**
+ * @file packages/config/vitest-config/src/setup.ts
+ * @summary Shared Vitest setup including matcher wiring and unhandled rejection guards.
+ * @security Test-only behavior; does not expose runtime secrets.
+ * @requirements PROD-TEST-002
+ */
+
+/**
  * Global Vitest setup file
  * Replaces jest.setup.js with modern Vitest equivalents
  */
@@ -16,8 +23,13 @@ import { toHaveNoViolations } from 'jest-axe';
 expect.extend({ toHaveNoViolations } as any);
 
 // Set critical environment variables BEFORE any module imports
-process.env.JWT_SECRET = 'test-secret-for-vitest';
 process.env.NODE_ENV = 'test';
+
+function failOnUnhandledRejection(reason: unknown) {
+  throw reason instanceof Error ? reason : new Error(String(reason));
+}
+
+process.on('unhandledRejection', failOnUnhandledRejection);
 
 // Mock server-only module for tests
 vi.mock('server-only', () => ({}));
@@ -62,6 +74,7 @@ beforeAll(() => {
 afterAll(() => {
   console.error = originalError;
   console.warn = originalWarn;
+  process.off('unhandledRejection', failOnUnhandledRejection);
 });
 
 // Export globals for use in test files

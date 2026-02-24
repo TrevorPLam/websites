@@ -100,7 +100,9 @@
     "ai:synthesize-requirements": "node scripts/ai/synthesize-requirements.mjs",
     "ai:flag-conflicts": "node scripts/ai/flag-requirement-conflicts.mjs",
     "test:self-healing": "node scripts/testing/self-healing-vitest.mjs",
-    "test:ai-fuzz": "node scripts/testing/ai-fuzz-inputs.mjs"
+    "test:ai-fuzz": "node scripts/testing/ai-fuzz-inputs.mjs",
+    "tokens:generate": "node scripts/generate-design-tokens.mjs",
+    "validate:fsd": "node scripts/validate-fsd-architecture.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
@@ -131,7 +133,8 @@
     "ts-jest": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@types/node": "catalog:"
   },
   "packageManager": "pnpm@10.29.2",
   "pnpm": {
@@ -143,7 +146,8 @@
       "prismjs@<1.30.0": ">=1.30.0",
       "nodemailer@<7.0.7": ">=7.0.7",
       "glob@>=10.2.0 <10.5.0": ">=10.5.0",
-      "nodemailer@<=7.0.10": ">=7.0.11"
+      "nodemailer@<=7.0.10": ">=7.0.11",
+      "vite@<7.1.11": ">=7.1.11"
     }
   },
   "dependencies": {
