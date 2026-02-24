@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { buildHomepageMetadata } from '@repo/seo';
 import { OfflineBanner, ThemeInjector, Toaster } from '@repo/ui';
 import { ServiceWorkerRegistration } from '../components/ServiceWorkerRegistration';
@@ -22,6 +23,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ServiceWorkerRegistration />
         <main id="main-content">{children}</main>
         <Toaster />
+        <Script src="/_vercel/speed-insights/script.js" strategy="afterInteractive" />
+        <Script src="/_vercel/insights/script.js" strategy="afterInteractive" />
       </body>
     </html>
   );

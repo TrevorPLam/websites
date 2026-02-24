@@ -1,0 +1,80 @@
+name: Bundle Size Check
+
+on:
+  pull_request:
+    branches: [main, staging]
+    paths:
+      - 'clients/testing-not-a-client/**'
+      - 'packages/**'
+      - '.size-limit.json'
+      - '.github/workflows/bundle-size.yml'
+
+jobs:
+  bundle-size:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build with bundle analysis
+        run: pnpm --filter @clients/testing-not-a-client build
+        env:
+          ANALYZE: 'true'
+          NODE_ENV: production
+
+      - name: Check bundle size limits
+        run: pnpm exec size-limit --json > size-report.json
+
+      - name: Parse size report
+        id: size
+        run: |
+          PASSED=$(jq '[.[] | select(.exceeded == false)] | length' size-report.json)
+          FAILED=$(jq '[.[] | select(.exceeded == true)] | length' size-report.json)
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+          echo "report=$(jq -c . size-report.json)" >> $GITHUB_OUTPUT
+
+      - name: Post bundle size comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const report = JSON.parse(process.env.REPORT);
+            const rows = report.map(r => {
+              const status = r.exceeded ? '❌' : '✅';
+              const delta = r.limit && r.size
+                ? (r.exceeded ? `+${(((r.size || 0) - (r.limit || 0)) / 1024).toFixed(1)} KB` : 'OK')
+                : 'n/a';
+              return `| ${status} | ${r.name} | ${r.size ? (r.size/1024).toFixed(1) : 'n/a'} KB | ${r.limit ? (r.limit/1024).toFixed(1) : 'n/a'} KB | ${delta} |`;
+            }).join('\n');
+
+            const body = `## Bundle Size Report\n\n| Status | Bundle | Size | Limit | Delta |\n|--------|--------|------|-------|-------|\n${rows}\n\n${Number(process.env.FAILED) > 0 ? '> ⚠️ **Bundle size limits exceeded. Fix before merging.**' : '> ✅ All bundle sizes within budget.'}`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+        env:
+          REPORT: ${{ steps.size.outputs.report }}
+          FAILED: ${{ steps.size.outputs.failed }}
+
+      - name: Fail if bundle exceeded
+        if: steps.size.outputs.failed != '0'
+        run: |
+          echo "Bundle size limits exceeded. See PR comment for details."
+          exit 1

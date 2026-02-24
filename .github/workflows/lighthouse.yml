@@ -1,0 +1,60 @@
+name: Performance Gate (Lighthouse CI)
+
+on:
+  pull_request:
+    branches: [main, staging]
+    paths:
+      - 'clients/testing-not-a-client/**'
+      - 'packages/**'
+      - '.lighthouserc.js'
+      - '.github/workflows/lighthouse.yml'
+
+jobs:
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Wait for Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: vercel-preview
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+          check_interval: 15
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Run Lighthouse CI
+        run: pnpm dlx @lhci/cli@0.14.x autorun --config=.lighthouserc.js
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_BASE_URL: ${{ steps.vercel-preview.outputs.url }}
+          LHCI_BUILD_CONTEXT__CURRENT_BRANCH: ${{ github.head_ref }}
+          LHCI_BUILD_CONTEXT__COMMIT: ${{ github.sha }}
+
+      - name: Upload Lighthouse Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report-${{ github.sha }}
+          path: .lighthouseci/
+          retention-days: 30

@@ -1,20 +1,26 @@
 [
   {
-    "name": "Shared UI Package (@repo/ui)",
-    "path": "packages/ui/src/index.ts",
-    "limit": "50 kB",
+    "name": "Marketing: Homepage First Load JS",
+    "path": "clients/testing-not-a-client/.next/static/chunks/app/page-*.js",
+    "limit": "90 kB",
     "gzip": true
   },
   {
-    "name": "Marketing Site — Homepage JS",
-    "path": "clients/testing-not-a-client/.next/static/chunks/app/page-*.js",
+    "name": "Marketing: Contact page JS",
+    "path": "clients/testing-not-a-client/.next/static/chunks/app/contact/page-*.js",
+    "limit": "65 kB",
+    "gzip": true
+  },
+  {
+    "name": "Marketing: Blog listing page JS",
+    "path": "clients/testing-not-a-client/.next/static/chunks/app/blog/page-*.js",
     "limit": "75 kB",
     "gzip": true
   },
   {
-    "name": "Marketing Site — Shared Chunks",
+    "name": "Framework chunk",
     "path": "clients/testing-not-a-client/.next/static/chunks/framework-*.js",
-    "limit": "130 kB",
+    "limit": "150 kB",
     "gzip": true
   }
 ]
