@@ -25,7 +25,8 @@
     "./tokens/option-tokens.css": "./tokens/option-tokens.css",
     "./tokens/decision-tokens.css": "./tokens/decision-tokens.css",
     "./tokens/component-tokens.css": "./tokens/component-tokens.css",
-    "./tailwind-theme.css": "./tailwind-theme.css"
+    "./tailwind-theme.css": "./tailwind-theme.css",
+    "./experiments": "./experiments/index.ts"
   },
   "scripts": {
     "lint": "eslint .",
@@ -52,6 +53,7 @@
     "@supabase/supabase-js": "catalog:",
     "jose": "catalog:",
     "server-only": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@vercel/edge-config": "catalog:"
   }
 }

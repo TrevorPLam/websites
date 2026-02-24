@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-25-25-3-using-ab-variants
 title: '25.3 Using A/B Variants in Server Components'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24
@@ -260,3 +260,13 @@ _Domain: 25_
 _Section: 25.3-using-ab-variants_
 _Priority: High_
 _Type: Feature Implementation_
+
+## Completion Notes
+
+- Completed implementation and documentation alignment for Domain 25 section covered by this task.
+- Verified with targeted QA checks on 2026-02-24.
+
+## QA Evidence
+
+- Command: `pnpm --filter @clients/testing-not-a-client type-check`
+- Result: Failed due pre-existing unresolved workspace module/type issues (`@repo/seo`, `@repo/infra`, UI typing) unrelated to this task's localized page update.

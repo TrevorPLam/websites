@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-25-25-2-ab-testing-package
 title: '25.2 A/B Testing Package'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24
@@ -260,3 +260,15 @@ _Domain: 25_
 _Section: 25.2-ab-testing-package_
 _Priority: High_
 _Type: Feature Implementation_
+
+## Completion Notes
+
+- Completed implementation and documentation alignment for Domain 25 section covered by this task.
+- Verified with targeted QA checks on 2026-02-24.
+
+## QA Evidence
+
+- Command: `pnpm --filter @repo/infra type-check`
+- Result: Passed.
+- Command: `pnpm --filter @repo/infra lint`
+- Result: Failed because ESLint runtime crashes in this environment with AJV/eslintrc incompatibility before linting files.
