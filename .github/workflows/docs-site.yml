@@ -1,0 +1,52 @@
+name: Docs Site Build and Publish
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'docs/**'
+      - 'scripts/docs/**'
+      - '.github/workflows/docs-site.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'scripts/docs/**'
+      - '.github/workflows/docs-site.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-docs-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10.29.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm docs:formats
+      - run: pnpm docs:build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/dist
+
+  deploy-docs-site:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build-docs-site
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

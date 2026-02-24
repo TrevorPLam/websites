@@ -1,0 +1,30 @@
+- name: type:feature
+  color: '0e8a16'
+  description: New feature work
+- name: type:bug
+  color: 'd73a4a'
+  description: Defect or regression
+- name: type:docs
+  color: '0075ca'
+  description: Documentation-only changes
+- name: priority:p0
+  color: 'b60205'
+  description: Critical priority
+- name: priority:p1
+  color: 'd93f0b'
+  description: High priority
+- name: priority:p2
+  color: 'fbca04'
+  description: Normal priority
+- name: area:frontend
+  color: '5319e7'
+  description: Frontend scope
+- name: area:backend
+  color: '1d76db'
+  description: Backend scope
+- name: area:devops
+  color: '0052cc'
+  description: CI/CD and infrastructure scope
+- name: status:blocked
+  color: '000000'
+  description: Work blocked pending dependency

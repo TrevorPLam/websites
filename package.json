@@ -86,7 +86,9 @@
     "verify:docstrings": "node scripts/verify-docstrings.js",
     "docs:links": "node scripts/docs/check-links.js",
     "docs:spelling": "node scripts/docs/check-spelling.js",
-    "docs:quality": "pnpm docs:links && pnpm docs:spelling"
+    "docs:quality": "pnpm docs:links && pnpm docs:spelling",
+    "docs:formats": "node scripts/docs/verify-doc-formats.js",
+    "docs:build": "node scripts/docs/build-docs-site.js"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

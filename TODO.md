@@ -510,15 +510,15 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ### Part 2: Documentation as Code (10 tasks)
 
-- [ ] DOMAIN-37-2-1-move-docs-to-version-control - Move all docs to version control
-- [ ] DOMAIN-37-2-2-use-plain-text-formats - Use plain text formats (Markdown, AsciiDoc)
-- [ ] DOMAIN-37-2-3-create-docs-folder-structure - Create organized /docs folder structure
+- [x] DOMAIN-37-2-1-move-docs-to-version-control - Move all docs to version control - COMPLETED 2026-02-24
+- [x] DOMAIN-37-2-2-use-plain-text-formats - Use plain text formats (Markdown, AsciiDoc) - COMPLETED 2026-02-24
+- [x] DOMAIN-37-2-3-create-docs-folder-structure - Create organized /docs folder structure - COMPLETED 2026-02-24
 - [x] DOMAIN-37-2-4-ensure-essential-docs-exist - Ensure essential docs (README, CONTRIBUTING, etc.) - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-2-5-commit-to-living-documentation - Commit to keeping docs updated
-- [ ] DOMAIN-37-2-6-setup-static-site-generator - Setup static site generator
-- [ ] DOMAIN-37-2-7-trigger-docs-rebuild-on-push - Trigger docs rebuild on push
+- [x] DOMAIN-37-2-5-commit-to-living-documentation - Commit to keeping docs updated - COMPLETED 2026-02-24
+- [x] DOMAIN-37-2-6-setup-static-site-generator - Setup static site generator - COMPLETED 2026-02-24
+- [x] DOMAIN-37-2-7-trigger-docs-rebuild-on-push - Trigger docs rebuild on push - COMPLETED 2026-02-24
 - [x] DOMAIN-37-2-8-add-ci-link-spelling-checks - Add broken link and spelling checks - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-2-9-auto-publish-documentation - Auto-publish documentation
+- [x] DOMAIN-37-2-9-auto-publish-documentation - Auto-publish documentation - COMPLETED 2026-02-24
 - [x] DOMAIN-37-2-10-create-ai-optimized-docs - Create llms.txt and MCP servers - COMPLETED 2026-02-24
 
 ### Part 3: Secure Software Development Lifecycle (19 tasks)
@@ -593,10 +593,10 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-37-6-3-write-comprehensive-contributing - Write comprehensive CONTRIBUTING.md - COMPLETED 2026-02-24
 - [x] DOMAIN-37-6-4-add-security-md - Add SECURITY.md with reporting channel - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-6-5-enable-branch-protection - Enable branch protection rules
-- [ ] DOMAIN-37-6-6-define-label-taxonomy - Define consistent label taxonomy
+- [x] DOMAIN-37-6-6-define-label-taxonomy - Define consistent label taxonomy - COMPLETED 2026-02-24
 - [x] DOMAIN-37-6-7-maintain-changelog - Maintain CHANGELOG.md - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-6-8-adopt-semantic-versioning - Adopt Semantic Versioning
-- [ ] DOMAIN-37-6-9-automate-release-notes - Automate release notes generation
+- [x] DOMAIN-37-6-8-adopt-semantic-versioning - Adopt Semantic Versioning - COMPLETED 2026-02-24
+- [x] DOMAIN-37-6-9-automate-release-notes - Automate release notes generation - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-6-10-provide-dev-environments - Provide consistent dev environments
 - [ ] DOMAIN-37-6-11-add-task-runner - Add task runner for common commands
 - [ ] DOMAIN-37-6-12-enhance-pre-commit-hooks - Enhance pre-commit hooks
