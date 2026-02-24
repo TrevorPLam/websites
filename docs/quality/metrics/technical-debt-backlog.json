@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-02-24T14:09:02.989Z",
+  "backlog": [
+    {
+      "target": "packages/features/src/lead-form.tsx",
+      "debtScore": 52,
+      "recommendation": "split-module-and-add-tests"
+    },
+    {
+      "target": "packages/ui/src/button.tsx",
+      "debtScore": 41,
+      "recommendation": "schedule-refactor-and-measure-again"
+    }
+  ]
+}

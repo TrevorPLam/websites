@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-02-24T14:09:00.091Z",
+  "alerts": [
+    {
+      "service": "web-runtime",
+      "riskScore": 56,
+      "severity": "medium",
+      "action": "monitor"
+    },
+    {
+      "service": "background-jobs",
+      "riskScore": 79,
+      "severity": "high",
+      "action": "schedule-maintenance-window"
+    }
+  ]
+}
