@@ -35,6 +35,10 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 
 - Added collaboration process simplification standard for knowledge management, onboarding, code review, and mentoring workflows.
 - Added parent task plan doc for collaboration process simplification with QA checkpoints.
+- Added strategy and innovation simplification standard for collaboration tooling, planning, architecture evolution, and innovation workflows.
+- Added parent task plan doc for strategy and innovation simplification with QA checkpoints.
+- Added research and delivery simplification standard for research, experimentation, POCs, prototypes, and MVP workflows.
+- Added parent task plan doc for research and delivery simplification with QA checkpoints.
 
 - Added AI-native autonomous practices baseline: NHI governance, prompts-as-code, policy-as-code, adversarial simulation, requirements synthesis/conflict checks, architecture proposal prompts, self-healing tests, and AI fuzzing.
 
@@ -106,3 +110,7 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - `docs/plan/domain-37/37.4-static-application-security-testing.md`
 - `docs/standards/collaboration-simplification-standard.md`
 - `docs/plan/domain-37/37.5-collaboration-process-simplification.md`
+- `docs/standards/strategy-and-innovation-simplification-standard.md`
+- `docs/plan/domain-37/37.7-strategy-and-innovation-simplification.md`
+- `docs/standards/research-and-delivery-simplification-standard.md`
+- `docs/plan/domain-37/37.8-research-and-delivery-simplification.md`
