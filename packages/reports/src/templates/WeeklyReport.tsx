@@ -1,4 +1,5 @@
 import { Document, Font, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
+import React from 'react';
 
 Font.register({
   family: 'Helvetica',
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export function WeeklyReportDocument(props: WeeklyReportProps) {
+export function WeeklyReportDocument(props: WeeklyReportProps): any {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -86,8 +87,8 @@ export function WeeklyReportDocument(props: WeeklyReportProps) {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Top Leads</Text>
-          {props.topLeads.slice(0, 8).map((lead) => (
-            <View key={`${lead.email}-${lead.date}`} style={styles.row}>
+          {props.topLeads.slice(0, 8).map((lead, index) => (
+            <View key={`lead-${index}`} style={styles.row}>
               <Text>{lead.name}</Text>
               <Text>{lead.score}</Text>
             </View>
@@ -96,8 +97,8 @@ export function WeeklyReportDocument(props: WeeklyReportProps) {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Source Breakdown</Text>
-          {props.sourceBreakdown.map((source) => (
-            <View key={source.source} style={styles.row}>
+          {props.sourceBreakdown.map((source, index) => (
+            <View key={`source-${index}`} style={styles.row}>
               <Text>{source.source}</Text>
               <Text>
                 {source.count} ({source.percentage}%)

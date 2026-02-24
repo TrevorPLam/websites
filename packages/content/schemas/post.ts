@@ -13,20 +13,20 @@ export const post = defineType({
       hidden: ({ currentUser }) => {
         return !currentUser?.roles?.some((role) => role.name === 'administrator');
       },
-      validation: (rule) => rule.required(),
+      validation: (rule: any) => rule.required(),
     }),
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: (rule) => rule.required().max(80),
+      validation: (rule: any) => rule.required().max(80),
     }),
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       options: { source: 'title', maxLength: 96 },
-      validation: (rule) => rule.required(),
+      validation: (rule: any) => rule.required(),
     }),
     defineField({
       name: 'author',
@@ -48,7 +48,7 @@ export const post = defineType({
           name: 'alt',
           type: 'string',
           title: 'Alt text',
-          validation: (rule) => rule.required(),
+          validation: (rule: any) => rule.required(),
         }),
         defineField({ name: 'caption', type: 'string', title: 'Caption' }),
       ],
@@ -72,7 +72,7 @@ export const post = defineType({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
-      validation: (rule) => rule.required(),
+      validation: (rule: any) => rule.required(),
     }),
     defineField({
       name: 'excerpt',
@@ -80,7 +80,7 @@ export const post = defineType({
       type: 'text',
       rows: 3,
       description: 'Used in post cards and meta description (max 160 chars)',
-      validation: (rule) => rule.max(160),
+      validation: (rule: any) => rule.max(160),
     }),
     defineField({
       name: 'body',
@@ -92,13 +92,13 @@ export const post = defineType({
           type: 'image',
           options: { hotspot: true },
           fields: [
-            {
+            defineField({
               name: 'alt',
               type: 'string',
               title: 'Alt text',
-              validation: (rule: { required: () => unknown }) => rule.required(),
-            },
-            { name: 'caption', type: 'string', title: 'Caption' },
+              validation: (rule: any) => rule.required(),
+            }),
+            defineField({ name: 'caption', type: 'string', title: 'Caption' }),
           ],
         },
         {

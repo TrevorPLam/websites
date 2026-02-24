@@ -73,9 +73,7 @@ const POST_PROJECTION = `{
 export async function getBlogPostsByTenant(tenantId: string, limit = 12): Promise<SanityPost[]> {
   const query = `*[_type == "post" && tenantId == $tenantId]|order(publishedAt desc)[0...$limit]${POST_PROJECTION}`;
   const params: QueryParams = { tenantId, limit };
-  return sanityClient.fetch<SanityPost[]>(query, params, {
-    next: { revalidate: 300, tags: [`tenant:${tenantId}:blog`] },
-  });
+  return sanityClient.fetch<SanityPost[]>(query, params);
 }
 
 export async function getBlogPostBySlug(
@@ -84,20 +82,17 @@ export async function getBlogPostBySlug(
 ): Promise<SanityPost | null> {
   const query = `*[_type == "post" && tenantId == $tenantId && slug.current == $slug][0]${POST_PROJECTION}`;
   const params: QueryParams = { tenantId, slug };
-  return sanityClient.fetch<SanityPost | null>(query, params, {
-    next: { revalidate: 300, tags: [`tenant:${tenantId}:blog:${slug}`] },
-  });
+  return sanityClient.fetch<SanityPost | null>(query, params);
+}
+
+export async function getBlogPostSlugs(tenantId: string): Promise<{ slug?: string }[]> {
+  const query = `*[_type == "post" && tenantId == $tenantId].slug.current`;
+  const params: QueryParams = { tenantId };
+  return sanityClient.fetch<{ slug?: string }[]>(query, params);
 }
 
 export async function getBlogSlugsByTenant(tenantId: string): Promise<string[]> {
   const query = `*[_type == "post" && tenantId == $tenantId && defined(slug.current)][]{"slug": slug.current}`;
-  const data = await sanityClient.fetch<Array<{ slug?: string }>>(
-    query,
-    { tenantId },
-    {
-      next: { revalidate: 300, tags: [`tenant:${tenantId}:blog`] },
-    }
-  );
-
-  return data.map((item) => item.slug).filter((slug): slug is string => Boolean(slug));
+  const data = await sanityClient.fetch<Array<{ slug?: string }>>(query, { tenantId });
+  return data.map((post) => post.slug || '').filter(Boolean);
 }

@@ -55,7 +55,7 @@ export const createMockObject = <T extends Record<string, any>>(methods: Partial
  * Mocks global fetch with implementation
  */
 export const mockFetch = (implementation: any) => {
-  const mockFn = vi.fn(implementation);
+  const mockFn = vi.fn(implementation) as any;
   global.fetch = mockFn;
   return mockFn;
 };
@@ -63,7 +63,7 @@ export const mockFetch = (implementation: any) => {
 /**
  * Creates a mock for Next.js headers
  */
-export const createMockHeaders = () => {
+export const createMockHeaders = (): any => {
   return createMockObject({
     get: vi.fn(),
     set: vi.fn(),
@@ -76,7 +76,7 @@ export const createMockHeaders = () => {
 /**
  * Creates a mock for Next.js cookies
  */
-export const createMockCookies = () => {
+export const createMockCookies = (): any => {
   return createMockObject({
     get: vi.fn(),
     set: vi.fn(),
@@ -88,7 +88,7 @@ export const createMockCookies = () => {
 /**
  * Mocks Next.js headers module
  */
-export const mockNextHeaders = () => {
+export const mockNextHeaders = (): any => {
   const mockHeaders = createMockHeaders();
   vi.mock('next/headers', () => ({
     headers: vi.fn(() => mockHeaders),
@@ -99,7 +99,7 @@ export const mockNextHeaders = () => {
 /**
  * Mocks Next.js cookies module
  */
-export const mockNextCookies = () => {
+export const mockNextCookies = (): any => {
   const mockCookies = createMockCookies();
   vi.mock('next/headers', () => ({
     cookies: vi.fn(() => mockCookies),

@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { render } from '@react-email/render';
+import { createElement } from 'react';
 import { getTenantEmailConfig } from './client';
 import type { ReactElement } from 'react';
 import type { SendEmailOptions, EmailType } from './types';
@@ -7,18 +8,8 @@ import type { SendEmailOptions, EmailType } from './types';
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export async function sendEmail(options: SendEmailOptions): Promise<void> {
-  const {
-    tenantId,
-    to,
-    toName,
-    template,
-    subject,
-    emailType,
-    idempotencyKey,
-    cc,
-    bcc,
-    attachments,
-  } = options;
+  const { tenantId, to, template, subject, emailType, idempotencyKey, cc, bcc, attachments } =
+    options;
 
   // Get tenant email configuration (with fallback to agency domain)
   const config = await getTenantEmailConfig(tenantId);
@@ -109,13 +100,17 @@ export async function sendLeadDigestEmail(
   const config = await getTenantEmailConfig(tenantId);
   if (!config.replyTo) return; // No owner email configured
 
-  const { LeadDigestEmail } = await import('./templates/LeadDigest');
+  const { LeadDigest } = await import('./templates/LeadDigest');
 
   await sendEmail({
     tenantId,
     to: config.replyTo,
     subject: `📊 ${leads.length} new lead${leads.length !== 1 ? 's' : ''} on ${date}`,
-    template: LeadDigestEmail({ leads, date, tenantName: config.fromName }),
+    template: createElement(LeadDigest, {
+      tenantName: config.fromName,
+      leads,
+      period: date,
+    }),
     emailType: 'lead_digest',
     idempotencyKey: `lead-digest-${tenantId}-${date}`,
   });
@@ -140,32 +135,90 @@ export async function sendBillingEmail(
 
   const templates: Record<string, () => Promise<ReactElement>> = {
     billing_receipt: async () => {
-      const { BillingReceiptEmail } = await import('./templates/BillingReceipt');
-      return BillingReceiptEmail({ tenantName: config.fromName, ...data });
+      const { BillingReceipt } = await import('./templates/BillingReceipt');
+      return createElement(BillingReceipt, {
+        tenantName: config.fromName,
+        customerName: (data.customerName as string) || 'John Doe',
+        amount: (data.amount as number) || 100,
+        currency: (data.currency as string) || 'USD',
+        planName: (data.planName as string) || 'Basic',
+        billingDate: (data.billingDate as string) || new Date().toISOString(),
+        nextBillingDate:
+          (data.nextBillingDate as string) ||
+          new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        invoiceNumber: (data.invoiceNumber as string) || 'INV-001',
+      });
     },
     billing_failed: async () => {
-      const { BillingFailedEmail } = await import('./templates/BillingFailed');
-      return BillingFailedEmail({ tenantName: config.fromName, ...data });
+      const { BillingFailed } = await import('./templates/BillingFailed');
+      return createElement(BillingFailed, {
+        tenantName: config.fromName,
+        customerName: (data.customerName as string) || 'John Doe',
+        amount: (data.amount as number) || 100,
+        currency: (data.currency as string) || 'USD',
+        planName: (data.planName as string) || 'Basic',
+        billingDate: (data.billingDate as string) || new Date().toISOString(),
+        errorMessage: (data.errorMessage as string) || 'Payment failed',
+      });
     },
     account_suspended: async () => {
-      const { AccountSuspendedEmail } = await import('./templates/AccountSuspended');
-      return AccountSuspendedEmail({ tenantName: config.fromName, ...data });
+      const { AccountSuspended } = await import('./templates/AccountSuspended');
+      return createElement(AccountSuspended, {
+        tenantName: config.fromName,
+        customerName: (data.customerName as string) || 'John Doe',
+        suspensionDate: (data.suspensionDate as string) || new Date().toISOString(),
+        reason: (data.reason as string) || 'Payment overdue',
+        outstandingAmount: data.outstandingAmount as number | undefined,
+        currency: data.currency as string | undefined,
+      });
     },
     subscription_started: async () => {
-      const { WelcomeClientEmail } = await import('./templates/WelcomeClient');
-      return WelcomeClientEmail({ tenantName: config.fromName });
+      const { WelcomeClient } = await import('./templates/WelcomeClient');
+      return createElement(WelcomeClient, {
+        tenantName: config.fromName,
+        clientName: (data.clientName as string) || 'John Doe',
+        planName: (data.planName as string) || 'Basic',
+        setupUrl: (data.setupUrl as string) || 'https://example.com/setup',
+        supportEmail: (data.supportEmail as string) || 'support@example.com',
+      });
     },
     subscription_cancelled: async () => {
-      const { BillingCancelledEmail } = await import('./templates/BillingCancelled');
-      return BillingCancelledEmail({ tenantName: config.fromName, ...data });
+      const { BillingCancelled } = await import('./templates/BillingCancelled');
+      return createElement(BillingCancelled, {
+        tenantName: config.fromName,
+        customerName: (data.customerName as string) || 'John Doe',
+        cancellationDate: (data.cancellationDate as string) || new Date().toISOString(),
+        planName: (data.planName as string) || 'Basic',
+        reason: data.reason as string | undefined,
+        refundAmount: data.refundAmount as number | undefined,
+        currency: data.currency as string | undefined,
+      });
     },
     plan_changed: async () => {
-      const { PlanChangedEmail } = await import('./templates/PlanChanged');
-      return PlanChangedEmail({ tenantName: config.fromName, ...data });
+      const { PlanChanged } = await import('./templates/PlanChanged');
+      return createElement(PlanChanged, {
+        tenantName: config.fromName,
+        customerName: (data.customerName as string) || 'John Doe',
+        oldPlanName: (data.oldPlanName as string) || 'Basic',
+        newPlanName: (data.newPlanName as string) || 'Pro',
+        effectiveDate: (data.effectiveDate as string) || new Date().toISOString(),
+        priceChange: data.priceChange as number | undefined,
+        currency: data.currency as string | undefined,
+        isUpgrade: (data.isUpgrade as boolean) || true,
+      });
     },
     upcoming_invoice: async () => {
-      const { UpcomingInvoiceEmail } = await import('./templates/UpcomingInvoice');
-      return UpcomingInvoiceEmail({ tenantName: config.fromName, ...data });
+      const { UpcomingInvoice } = await import('./templates/UpcomingInvoice');
+      return createElement(UpcomingInvoice, {
+        tenantName: config.fromName,
+        customerName: (data.customerName as string) || 'John Doe',
+        amount: (data.amount as number) || 100,
+        currency: (data.currency as string) || 'USD',
+        planName: (data.planName as string) || 'Basic',
+        billingDate: (data.billingDate as string) || new Date().toISOString(),
+        paymentMethod: (data.paymentMethod as string) || 'Credit Card',
+        invoiceUrl: (data.invoiceUrl as string) || 'https://example.com/invoice',
+      });
     },
   };
 
@@ -199,19 +252,26 @@ export async function sendBookingReminderEmail(options: {
   reminderType: '24h' | '1h';
 }): Promise<void> {
   const { tenantId, booking, reminderType } = options;
-  const { BookingReminderEmail } = await import('./templates/BookingReminder');
+  const { BookingReminder } = await import('./templates/BookingReminder');
 
   const config = await getTenantEmailConfig(tenantId);
 
   await sendEmail({
     tenantId,
     to: booking.attendee_email,
-    toName: booking.attendee_name,
-    subject:
-      reminderType === '24h'
-        ? `Reminder: Your appointment tomorrow with ${config.fromName}`
-        : `Your appointment is in 1 hour — ${config.fromName}`,
-    template: BookingReminderEmail({ booking, reminderType, businessName: config.fromName }),
+    subject: `📅 Reminder: ${reminderType === '24h' ? 'Tomorrow' : 'In 1 hour'} — ${booking.service_name}`,
+    template: createElement(BookingReminder, {
+      tenantName: config.fromName,
+      customerName: booking.attendee_name,
+      bookingDate: booking.date,
+      bookingTime: booking.time,
+      serviceType: booking.service_name,
+      location: booking.location,
+      staffName: booking.staff_name,
+      notes: booking.notes,
+      cancellationUrl: booking.cancellation_url,
+      rescheduleUrl: booking.reschedule_url,
+    }),
     emailType: `booking_reminder_${reminderType}` as EmailType,
     idempotencyKey: `booking-reminder-${booking.id}-${reminderType}`,
   });

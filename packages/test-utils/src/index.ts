@@ -200,13 +200,25 @@ export function createMockActionResult<T>(data: T, error?: string) {
 export function createMockFetch(responses: Array<{ status: number; body: any }>) {
   let callCount = 0;
   return vi.fn().mockImplementation(() => {
+    if (responses.length === 0) {
+      return Promise.resolve({
+        ok: false,
+        status: 500,
+        json: () => Promise.resolve({}),
+        text: () => Promise.resolve('{}'),
+      });
+    }
+
     const response = responses[Math.min(callCount, responses.length - 1)];
     callCount++;
+    const status = response?.status ?? 200;
+    const body = response?.body ?? {};
+
     return Promise.resolve({
-      ok: response.status >= 200 && response.status < 300,
-      status: response.status,
-      json: () => Promise.resolve(response.body),
-      text: () => Promise.resolve(JSON.stringify(response.body)),
+      ok: status >= 200 && status < 300,
+      status,
+      json: () => Promise.resolve(body),
+      text: () => Promise.resolve(JSON.stringify(body)),
     });
   });
 }
@@ -242,7 +254,7 @@ export function createMockLogger() {
 /**
  * Custom render function with basic implementation
  */
-export function renderWithProviders(ui: any, options: any = {}) {
+export function renderWithProviders(_ui: any, _options: any = {}) {
   const container = document.createElement('div');
   document.body.appendChild(container);
 

@@ -27,7 +27,6 @@
 
 import { setupServer } from 'msw/node';
 import { http } from 'msw';
-import { vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 
 // ============================================================================
 // MSW Server Setup
@@ -80,7 +79,7 @@ export const createApiHandlers = {
    * Success response handler
    */
   success: (url: string, data: any, status = 200) =>
-    http.get(url, ({ request }) => {
+    http.get(url, () => {
       return new Response(
         JSON.stringify({
           success: true,
@@ -95,7 +94,7 @@ export const createApiHandlers = {
    * Error response handler
    */
   error: (url: string, message: string, status = 400) =>
-    http.get(url, ({ request }) => {
+    http.get(url, () => {
       return new Response(
         JSON.stringify({
           success: false,
@@ -107,10 +106,40 @@ export const createApiHandlers = {
     }),
 
   /**
+   * Not Found handler
+   */
+  notFound: (url: string) =>
+    http.get(url, () => {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Not Found',
+          timestamp: new Date().toISOString(),
+        }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
+    }),
+
+  /**
+   * Forbidden handler
+   */
+  forbidden: (url: string) =>
+    http.get(url, () => {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Forbidden',
+          timestamp: new Date().toISOString(),
+        }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      );
+    }),
+
+  /**
    * Rate limit handler
    */
   rateLimit: (url: string) =>
-    http.get(url, ({ request }) => {
+    http.get(url, () => {
       return new Response(
         JSON.stringify({
           success: false,
@@ -131,7 +160,7 @@ export const createApiHandlers = {
    * Unauthorized handler
    */
   unauthorized: (url: string) =>
-    http.get(url, ({ request }) => {
+    http.get(url, () => {
       return new Response(
         JSON.stringify({
           success: false,
@@ -145,7 +174,7 @@ export const createApiHandlers = {
    * Server error handler
    */
   serverError: (url: string) =>
-    http.get(url, ({ request }) => {
+    http.get(url, () => {
       return new Response(
         JSON.stringify({
           success: false,
@@ -159,7 +188,7 @@ export const createApiHandlers = {
    * POST request handler
    */
   post: (url: string, responseData: any, status = 201) =>
-    http.post(url, ({ request }) => {
+    http.post(url, () => {
       return new Response(
         JSON.stringify({
           success: true,
@@ -174,7 +203,7 @@ export const createApiHandlers = {
    * PUT request handler
    */
   put: (url: string, responseData: any, status = 200) =>
-    http.put(url, ({ request }) => {
+    http.put(url, () => {
       return new Response(
         JSON.stringify({
           success: true,
@@ -189,7 +218,7 @@ export const createApiHandlers = {
    * DELETE request handler
    */
   delete: (url: string, status = 204) =>
-    http.delete(url, ({ request }) => {
+    http.delete(url, () => {
       return new Response(null, { status });
     }),
 };
@@ -207,7 +236,7 @@ export const integrationHandlers = {
    */
   convertkit: {
     subscriber: (subscriberData: any) =>
-      http.post('https://api.kit.com/v4/subscribers', ({ request }) => {
+      http.post('https://api.kit.com/v4/subscribers', () => {
         return new Response(
           JSON.stringify({
             subscriber: subscriberData,
@@ -217,7 +246,7 @@ export const integrationHandlers = {
       }),
 
     formSubscribe: (formData: any) =>
-      http.post('https://api.kit.com/v4/forms/:id/subscribe', ({ request }) => {
+      http.post('https://api.kit.com/v4/forms/:id/subscribe', () => {
         return new Response(
           JSON.stringify({
             subscription: formData,
@@ -232,7 +261,7 @@ export const integrationHandlers = {
    */
   googleMaps: {
     geocode: (location: any) =>
-      http.get('https://maps.googleapis.com/maps/api/geocode/json', ({ request }) => {
+      http.get('https://maps.googleapis.com/maps/api/geocode/json', () => {
         return new Response(
           JSON.stringify({
             results: [location],
@@ -243,7 +272,7 @@ export const integrationHandlers = {
       }),
 
     places: (places: any[]) =>
-      http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', ({ request }) => {
+      http.get('https://maps.googleapis.com/maps/api/place/textsearch/json', () => {
         return new Response(
           JSON.stringify({
             results: places,
@@ -259,7 +288,7 @@ export const integrationHandlers = {
    */
   supabase: {
     select: (table: string, data: any[]) =>
-      http.get(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+      http.get(`https://*.supabase.co/rest/v1/${table}`, () => {
         return new Response(JSON.stringify(data), {
           status: 200,
           headers: { 'Content-Type': 'application/json' },
@@ -267,7 +296,7 @@ export const integrationHandlers = {
       }),
 
     insert: (table: string, data: any) =>
-      http.post(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+      http.post(`https://*.supabase.co/rest/v1/${table}`, () => {
         return new Response(JSON.stringify([data]), {
           status: 201,
           headers: { 'Content-Type': 'application/json' },
@@ -275,7 +304,7 @@ export const integrationHandlers = {
       }),
 
     update: (table: string, data: any) =>
-      http.patch(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+      http.patch(`https://*.supabase.co/rest/v1/${table}`, () => {
         return new Response(JSON.stringify([data]), {
           status: 200,
           headers: { 'Content-Type': 'application/json' },
@@ -283,7 +312,7 @@ export const integrationHandlers = {
       }),
 
     delete: (table: string) =>
-      http.delete(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+      http.delete(`https://*.supabase.co/rest/v1/${table}`, () => {
         return new Response(null, { status: 204 });
       }),
   },
@@ -301,7 +330,7 @@ export function createMockApi(baseUrl: string, endpoints: Record<string, any>) {
     const url = `${baseUrl}${path}`;
 
     if (response.method === 'POST') {
-      return http.post(url, ({ request }) => {
+      return http.post(url, () => {
         return new Response(JSON.stringify(response.data), {
           status: response.status || 201,
           headers: { 'Content-Type': 'application/json' },
@@ -310,7 +339,7 @@ export function createMockApi(baseUrl: string, endpoints: Record<string, any>) {
     }
 
     if (response.method === 'PUT') {
-      return http.put(url, ({ request }) => {
+      return http.put(url, () => {
         return new Response(JSON.stringify(response.data), {
           status: response.status || 200,
           headers: { 'Content-Type': 'application/json' },
@@ -319,13 +348,13 @@ export function createMockApi(baseUrl: string, endpoints: Record<string, any>) {
     }
 
     if (response.method === 'DELETE') {
-      return http.delete(url, ({ request }) => {
+      return http.delete(url, () => {
         return new Response(null, { status: response.status || 204 });
       });
     }
 
     // Default to GET
-    return http.get(url, ({ request }) => {
+    return http.get(url, () => {
       return new Response(JSON.stringify(response.data), {
         status: response.status || 200,
         headers: { 'Content-Type': 'application/json' },
@@ -340,9 +369,9 @@ export function createMockApi(baseUrl: string, endpoints: Record<string, any>) {
  * Mock network delays for testing loading states
  */
 export function createDelayedHandler(handler: any, delayMs: number) {
-  return async (req: any, res: any, ctx: any) => {
-    await new Promise((resolve) => setTimeout(resolve, delayMs));
-    return handler(req, res, ctx);
+  return async (_req: any, _res: any, _ctx: any) => {
+    await new Promise((_resolve) => setTimeout(_resolve, delayMs));
+    return handler(_req, _res, _ctx);
   };
 }
 
@@ -363,7 +392,7 @@ export function createNetworkFailureHandler(url: string) {
  * Wait for network requests to complete
  */
 export function waitForNetworkRequest(url: string, timeout = 5000): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return new Promise((_resolve, reject) => {
     const startTime = Date.now();
 
     const checkRequest = () => {

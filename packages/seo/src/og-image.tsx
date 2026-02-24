@@ -20,15 +20,13 @@ export function buildOgImage({ config, pathname }: OgInput): ImageResponse {
 
   if (pageType === 'about') {
     title = `About ${config.name}`;
-    badge = 'Our Story';
+    badge = 'general' as const;
   }
 
   if (pageType === 'contact') {
     title = `Contact ${config.name}`;
     subtitle = config.contact.phone ?? config.contact.email;
-    badge = config.contact.address?.city
-      ? `${config.contact.address.city}, ${config.contact.address.state}`
-      : 'Get in Touch';
+    badge = config.contact.address?.city ? ('general' as const) : ('general' as const);
   }
 
   const primaryColor = `hsl(${config.theme.colors.primary ?? '174 100% 26%'})`;

@@ -1,5 +1,4 @@
 import { renderToBuffer } from '@react-pdf/renderer';
-import { createElement } from 'react';
 import { z } from 'zod';
 
 import { WeeklyReportDocument, type WeeklyReportProps } from '@repo/reports';
@@ -59,11 +58,14 @@ export interface ReportEmailGateway {
 const formatPeriod = (startIso: string, end: Date): string => {
   const start = new Date(startIso);
 
-  return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })}`;
+  return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString(
+    'en-US',
+    {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    }
+  )}`;
 };
 
 const getDayLabels = (): Array<{ day: string; dateString: string }> => {
@@ -108,7 +110,10 @@ export async function generateWeeklyReportForTenant(
   const qualified = leads.filter((lead) => lead.score >= 70);
   const warm = leads.filter((lead) => lead.score >= 40 && lead.score < 70);
   const cold = leads.filter((lead) => lead.score < 40);
-  const avgScore = leads.length > 0 ? Math.round(leads.reduce((sum, lead) => sum + lead.score, 0) / leads.length) : 0;
+  const avgScore =
+    leads.length > 0
+      ? Math.round(leads.reduce((sum, lead) => sum + lead.score, 0) / leads.length)
+      : 0;
 
   const sourceCounts: Record<string, number> = {};
   leads.forEach((lead) => {
@@ -127,17 +132,18 @@ export async function generateWeeklyReportForTenant(
   const dailyLabels = getDayLabels();
   const weeklyTrend: WeeklyReportProps['weeklyTrend'] = dailyLabels.map((label) => ({
     day: label.day,
-    count: leads.filter((lead) => new Date(lead.createdAt).toDateString() === label.dateString).length,
+    count: leads.filter((lead) => new Date(lead.createdAt).toDateString() === label.dateString)
+      .length,
   }));
 
   const reportPeriod = formatPeriod(weekAgo, now);
 
   const pdfBuffer = await renderToBuffer(
-    createElement(WeeklyReportDocument, {
+    WeeklyReportDocument({
       businessName: tenant.businessName,
       logoUrl: tenant.logoUrl,
       primaryColor: tenant.primaryColor,
-      reportPeriod,
+      reportPeriod: reportPeriod,
       stats: {
         totalLeads: leads.length,
         qualifiedLeads: qualified.length,
@@ -153,10 +159,10 @@ export async function generateWeeklyReportForTenant(
         email: lead.email,
         score: lead.score,
         source: lead.source ?? 'unknown',
-        date: new Date(lead.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        date: lead.createdAt,
       })),
-      sourceBreakdown,
-      weeklyTrend,
+      sourceBreakdown: sourceBreakdown,
+      weeklyTrend: weeklyTrend,
     })
   );
 

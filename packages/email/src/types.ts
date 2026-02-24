@@ -8,9 +8,8 @@ import type { ReactElement } from 'react';
 export interface TenantEmailConfig {
   fromEmail: string; // e.g. "leads@johnsplumbing.com"
   fromName: string; // e.g. "John's Plumbing"
-  replyTo?: string; // Owner's personal email
-  domainVerified: boolean;
-  resendDomainId?: string; // Resend domain ID if verified
+  replyTo: string | null; // Owner's personal email
+  resendApiKey: string; // Resend API key
 }
 
 export type EmailType =
