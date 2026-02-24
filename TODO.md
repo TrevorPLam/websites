@@ -43,9 +43,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34    | 5           | 5         | 0           | 0       |
 | Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 6         | 0           | 0       |
-| Domain 37    | 156         | 35        | 0           | 121     |
+| Domain 37    | 156         | 40        | 0           | 116     |
 | Gap Analysis | 20          | 2         | 0           | 18      |
-| **Total**    | **467**     | **208**   | **0**       | **259** |
+| **Total**    | **467**     | **213**   | **0**       | **254** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -552,11 +552,11 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-37-4-5-schedule-nightly-sast - Schedule nightly full SAST scans - COMPLETED 2026-02-24
 - [x] DOMAIN-37-4-6-establish-severity-matrix - Establish severity matrix for findings - COMPLETED 2026-02-24
 - [x] DOMAIN-37-4-7-triage-findings - Triage findings with owners and tracking - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-4-8-evaluate-ai-driven-sast - Evaluate AI-augmented SAST tools
-- [ ] DOMAIN-37-4-9-implement-ai-code-security - Implement AI Code Security Assistants
-- [ ] DOMAIN-37-4-10-establish-ai-code-review-policy - Establish AI code review policy
-- [ ] DOMAIN-37-4-11-consolidate-security-tools - Consolidate tools into ASPM platform
-- [ ] DOMAIN-37-4-12-enable-reachability-analysis - Enable reachability analysis
+- [x] DOMAIN-37-4-8-evaluate-ai-driven-sast - Evaluate AI-augmented SAST tools - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-9-implement-ai-code-security - Implement AI Code Security Assistants - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-10-establish-ai-code-review-policy - Establish AI code review policy - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-11-consolidate-security-tools - Consolidate tools into ASPM platform - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-12-enable-reachability-analysis - Enable reachability analysis - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-4-13-integrate-with-cnapp - Integrate with CNAPP
 - [ ] DOMAIN-37-4-14-require-signed-commits - Require signed commits and tags
 - [ ] DOMAIN-37-4-15-enable-dependency-review - Enable dependency review in PRs

@@ -41,6 +41,12 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - Added signed SBOM artifact generation (SPDX + CycloneDX with Cosign keyless signatures).
 - Strengthened dependency update cadence for regular security patching.
 
+- Evaluated AI-augmented SAST tooling and recorded governance-first adoption criteria.
+- Added AI code security assistant operating guide for remediation workflows.
+- Established AI-assisted security code review policy with mandatory human approvals.
+- Added ASPM consolidation plan for normalized multi-scanner posture management.
+- Enabled dependency reachability analysis with CI artifact reporting and blocking for reachable high/critical findings.
+
 - `docs/guides/best-practices/file-header-template.md`
 - `docs/guides/best-practices/conventional-comments.md`
 - `CONTRIBUTING.md`
@@ -84,6 +90,12 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - `docs/security/threat-models/secrets-and-webhook-ingress.md`
 - `docs/security/security-findings-lifecycle.md`
 - `docs/security/sast-ide-setup.md`
+- `docs/security/ai-sast-evaluation.md`
+- `docs/security/ai-code-security-assistants.md`
+- `docs/security/ai-code-review-policy.md`
+- `docs/security/aspm-consolidation-plan.md`
+- `docs/security/reachability-analysis.md`
+- `scripts/security/reachability-analysis.mjs`
 - `.github/ISSUE_TEMPLATE/security-finding.yml`
 - `.vscode/extensions.json`
 - `docs/plan/domain-37/37.4-static-application-security-testing.md`
