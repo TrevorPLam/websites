@@ -33,6 +33,9 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - Added repository label taxonomy and automated label synchronization workflow.
 - Added Changesets configuration and Release Drafter for SemVer + release notes automation.
 
+- Added collaboration process simplification standard for knowledge management, onboarding, code review, and mentoring workflows.
+- Added parent task plan doc for collaboration process simplification with QA checkpoints.
+
 ## Artifacts
 
 - Added security finding ticketing workflow, severity/SLA matrix, and triage ownership model.
@@ -99,3 +102,5 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - `.github/ISSUE_TEMPLATE/security-finding.yml`
 - `.vscode/extensions.json`
 - `docs/plan/domain-37/37.4-static-application-security-testing.md`
+- `docs/standards/collaboration-simplification-standard.md`
+- `docs/plan/domain-37/37.5-collaboration-process-simplification.md`
