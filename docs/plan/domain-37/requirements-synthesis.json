@@ -1,0 +1,42 @@
+[
+  {
+    "id": "DOMAIN-37-5-11-deploy-intelligent-rollback",
+    "description": "Deploy intelligent rollback agents"
+  },
+  {
+    "id": "DOMAIN-37-5-12-enable-predictive-maintenance",
+    "description": "Enable predictive maintenance"
+  },
+  {
+    "id": "DOMAIN-37-5-13-automate-technical-debt-reduction",
+    "description": "Automate technical debt reduction"
+  },
+  {
+    "id": "DOMAIN-37-5-14-aim-for-simultaneous-sdlc",
+    "description": "Aim for simultaneous SDLC"
+  },
+  {
+    "id": "DOMAIN-37-5-15-write-executable-specifications",
+    "description": "Write specifications as executable blueprints"
+  },
+  {
+    "id": "DOMAIN-37-5-16-break-specs-into-testable-tasks",
+    "description": "Break specs into testable tasks"
+  },
+  {
+    "id": "DOMAIN-37-5-17-treat-specs-as-living-docs",
+    "description": "Treat specifications as living documents"
+  },
+  {
+    "id": "DOMAIN-37-5-18-shift-review-to-specifications",
+    "description": "Shift code review to specifications"
+  },
+  {
+    "id": "DOMAIN-37-5-19-derive-docs-from-specs",
+    "description": "Derive documentation from specifications"
+  },
+  {
+    "id": "DOMAIN-37-5-20-implement-c2pa-standards",
+    "description": "Implement C2PA standards for content provenance"
+  }
+]
