@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed
 title: '10.1 Supabase Realtime for Portal Lead Feed'
-status: pending
+status: done # pending | in-progress | blocked | review | done
 priority: high
 type: feature
 created: 2026-02-24

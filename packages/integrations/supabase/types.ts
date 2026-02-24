@@ -29,6 +29,15 @@ export interface SupabaseLeadRow {
   /** Contact message - string */
   message?: string;
 
+  /** Lead score 0-100 - number */
+  score?: number;
+
+  /** UTM source - string */
+  utm_source?: string;
+
+  /** First UTM source - string */
+  utm_source_first?: string;
+
   /** Suspicion flag - boolean */
   is_suspicious?: boolean;
 
@@ -177,7 +186,11 @@ export interface SupabaseApiResponse<T = unknown> {
 export interface Database {
   public: {
     Tables: {
-      leads: SupabaseLeadRow;
+      leads: {
+        Row: SupabaseLeadRow;
+        Insert: SupabaseLeadInsert;
+        Update: SupabaseLeadUpdate;
+      };
       // Add other table definitions as needed
     };
     Functions: {

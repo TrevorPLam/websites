@@ -142,9 +142,9 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [x] [DOMAIN-9-4-phone-click-tracker](tasks/domain-9/DOMAIN-9-9-4-phone-click-tracker-server-action.md) - Phone Click Tracker for attribution (completed 2026-02-23)
 - [x] [DOMAIN-9-5-lead-notification-system](tasks/domain-9/DOMAIN-9-9-5-lead-notification-system.md) - Lead notification system (completed 2026-02-23)
 
-## DOMAIN 10: PENDING
+## DOMAIN 10: ✅ COMPLETE
 
-- [ ] [DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed](tasks/domain-10/DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed.md) - 10.1 Supabase Realtime for Portal Lead Feed
+- [x] [DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed](tasks/domain-10/DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed.md) - 10.1 Supabase Realtime for Portal Lead Feed (completed 2026-02-23)
 
 ## DOMAIN 11: ✅ COMPLETE
 

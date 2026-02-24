@@ -2,7 +2,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { useEffect, useState, useCallback } from 'react';
-import type { Database } from '@repo/db';
+import type { Database } from '@repo/integrations/supabase';
 import { classifyLead } from '@repo/lead-capture/scoring';
 
 type Lead = Database['public']['Tables']['leads']['Row'];

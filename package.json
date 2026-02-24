@@ -123,6 +123,8 @@
     }
   },
   "dependencies": {
+    "@sentry/opentelemetry": "^10.39.0",
+    "@vercel/otel": "^2.1.1",
     "server-only": "catalog:"
   }
 }

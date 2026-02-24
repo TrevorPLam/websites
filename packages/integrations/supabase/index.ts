@@ -29,7 +29,7 @@ export {
 } from './pooling';
 
 // Type exports
-export type { SupabaseClientConfig, SupabaseServerConfig } from './types';
+export type { SupabaseClientConfig, SupabaseServerConfig, Database } from './types';
 
 // Pooling type exports
 export type { PoolHealth, QueryOptions, RLSClientOptions, TenantTier } from './pooling';
