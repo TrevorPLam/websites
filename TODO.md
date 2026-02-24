@@ -413,17 +413,17 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [ ] [DOMAIN-31-service-](tasks\domain-31\DOMAIN-31-service-.md) - DOMAIN-31-service-
 - [ ] [DOMAIN-31-service-section-service](tasks\domain-31\DOMAIN-31-service-section-service.md) - Section service
 
-## DOMAIN 32: 🔄 PENDING
+## DOMAIN 32: ✅ COMPLETE
 
-- [ ] [DOMAIN-32-32-1-philosophy](tasks\domain-32\DOMAIN-32-32-1-philosophy.md) - 32.1-philosophy
-- [ ] [DOMAIN-32-32-2-pdf-report-template](tasks\domain-32\DOMAIN-32-32-2-pdf-report-template.md) - 32.2 PDF Report Template
-- [ ] [DOMAIN-32-32-3-report-generation-job](tasks\domain-32\DOMAIN-32-32-3-report-generation-job.md) - 32.3 Report Generation Job
-- [ ] [DOMAIN-32-pdf-](tasks\domain-32\DOMAIN-32-pdf-.md) - DOMAIN-32-pdf-
-- [ ] [DOMAIN-32-pdf-section-pdf](tasks\domain-32\DOMAIN-32-pdf-section-pdf.md) - Section pdf
-- [ ] [DOMAIN-32-philosophy-.md](tasks\domain-32\DOMAIN-32-philosophy.md-.md) - DOMAIN-32-philosophy-.md
-- [ ] [DOMAIN-32-philosophy-section-philosophymd.md](tasks\domain-32\DOMAIN-32-philosophy.md-section-philosophymd.md) - Section philosophy.md
-- [ ] [DOMAIN-32-report-](tasks\domain-32\DOMAIN-32-report-.md) - DOMAIN-32-report-
-- [ ] [DOMAIN-32-report-section-report](tasks\domain-32\DOMAIN-32-report-section-report.md) - Section report
+- [x] [DOMAIN-32-32-1-philosophy](tasks\domain-32\DOMAIN-32-32-1-philosophy.md) - 32.1-philosophy
+- [x] [DOMAIN-32-32-2-pdf-report-template](tasks\domain-32\DOMAIN-32-32-2-pdf-report-template.md) - 32.2 PDF Report Template
+- [x] [DOMAIN-32-32-3-report-generation-job](tasks\domain-32\DOMAIN-32-32-3-report-generation-job.md) - 32.3 Report Generation Job
+- [x] [DOMAIN-32-pdf-](tasks\domain-32\DOMAIN-32-pdf-.md) - DOMAIN-32-pdf-
+- [x] [DOMAIN-32-pdf-section-pdf](tasks\domain-32\DOMAIN-32-pdf-section-pdf.md) - Section pdf
+- [x] [DOMAIN-32-philosophy-.md](tasks\domain-32\DOMAIN-32-philosophy.md-.md) - DOMAIN-32-philosophy-.md
+- [x] [DOMAIN-32-philosophy-section-philosophymd.md](tasks\domain-32\DOMAIN-32-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [x] [DOMAIN-32-report-](tasks\domain-32\DOMAIN-32-report-.md) - DOMAIN-32-report-
+- [x] [DOMAIN-32-report-section-report](tasks\domain-32\DOMAIN-32-report-section-report.md) - Section report
 
 ## DOMAIN 33: 🔄 PENDING
 
@@ -716,14 +716,14 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [ ] [DOMAIN-31-DOMAIN-31-service-](tasks/domain-31/DOMAIN-31-service-.md) -
 - [ ] [DOMAIN-31-DOMAIN-31-service-section-service](tasks/domain-31/DOMAIN-31-service-section-service.md) -
 
-## DOMAIN 32: 🔄 PENDING
+## DOMAIN 32: ✅ COMPLETE
 
-- [ ] [DOMAIN-32-DOMAIN-32-pdf-](tasks/domain-32/DOMAIN-32-pdf-.md) -
-- [ ] [DOMAIN-32-DOMAIN-32-pdf-section-pdf](tasks/domain-32/DOMAIN-32-pdf-section-pdf.md) -
-- [ ] [DOMAIN-32-DOMAIN-32-philosophy.md-](tasks/domain-32/DOMAIN-32-philosophy.md-.md) -
-- [ ] [DOMAIN-32-DOMAIN-32-philosophy.md-section-philosophymd](tasks/domain-32/DOMAIN-32-philosophy.md-section-philosophymd.md) -
-- [ ] [DOMAIN-32-DOMAIN-32-report-](tasks/domain-32/DOMAIN-32-report-.md) -
-- [ ] [DOMAIN-32-DOMAIN-32-report-section-report](tasks/domain-32/DOMAIN-32-report-section-report.md) -
+- [x] [DOMAIN-32-DOMAIN-32-pdf-](tasks/domain-32/DOMAIN-32-pdf-.md) -
+- [x] [DOMAIN-32-DOMAIN-32-pdf-section-pdf](tasks/domain-32/DOMAIN-32-pdf-section-pdf.md) -
+- [x] [DOMAIN-32-DOMAIN-32-philosophy.md-](tasks/domain-32/DOMAIN-32-philosophy.md-.md) -
+- [x] [DOMAIN-32-DOMAIN-32-philosophy.md-section-philosophymd](tasks/domain-32/DOMAIN-32-philosophy.md-section-philosophymd.md) -
+- [x] [DOMAIN-32-DOMAIN-32-report-](tasks/domain-32/DOMAIN-32-report-.md) -
+- [x] [DOMAIN-32-DOMAIN-32-report-section-report](tasks/domain-32/DOMAIN-32-report-section-report.md) -
 
 ## DOMAIN 33: 🔄 PENDING
 
