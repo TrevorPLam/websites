@@ -35,6 +35,19 @@ jobs:
       - name: Vulnerability audit
         run: pnpm audit --audit-level high
 
+      - name: Generate audit JSON for reachability
+        run: pnpm audit --json > audit-results.json
+
+      - name: Reachability analysis (high+ blocking)
+        run: node scripts/security/reachability-analysis.mjs audit-results.json artifacts/security/reachability-report.md
+
+      - name: Upload reachability report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-reachability-report
+          path: artifacts/security/reachability-report.md
+
       - name: OSV scanner (SCA)
         uses: google/osv-scanner-action/osv-scanner-action@v2.2.2
         with:

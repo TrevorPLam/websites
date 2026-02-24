@@ -7,7 +7,7 @@ This document defines how security findings are tracked, triaged, and remediated
 Applies to findings emitted by:
 
 - `.github/workflows/security-sast.yml` (CodeQL + Semgrep)
-- `.github/workflows/dependency-integrity.yml` (pnpm audit + OSV + dependency review)
+- `.github/workflows/dependency-integrity.yml` (pnpm audit + OSV + dependency review + reachability enrichment)
 - `.github/workflows/security-container-iac.yml` (Trivy)
 - `.github/workflows/security-dast.yml` (OWASP ZAP)
 
@@ -58,3 +58,9 @@ Every security finding issue must include:
 - `docs/security/security-requirements.md`
 - `docs/security/security-standards-mapping.md`
 - `SECURITY.md`
+
+## Reachability-aware triage
+
+- Dependency findings should be enriched with reachability evidence from `artifacts/security/reachability-report.md`.
+- Reachable `high`/`critical` findings are treated as blocking and must be remediated within the standard SLA window for their severity.
+- Findings marked unknown/non-reachable still require owner assignment and periodic reevaluation when dependency trees change.
