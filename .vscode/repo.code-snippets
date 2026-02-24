@@ -1,0 +1,30 @@
+{
+  "Repository File Header": {
+    "scope": "typescript,typescriptreact,javascript,javascriptreact",
+    "prefix": "repo-header",
+    "body": [
+      "/**",
+      " * @file ${RELATIVE_FILEPATH}",
+      " * @summary ${1:One-sentence purpose of this file.}",
+      " * @description ${2:Optional implementation context.}",
+      " * @security ${3:none}",
+      " * @adr ${4:none}",
+      " * @requirements ${5:none}",
+      " */"
+    ],
+    "description": "Insert the repository-standard metadata header for JS/TS files"
+  },
+  "Repository Function Docstring": {
+    "scope": "typescript,typescriptreact,javascript,javascriptreact",
+    "prefix": "repo-doc",
+    "body": [
+      "/**",
+      " * ${1:Describe behavior and intent.}",
+      " *",
+      " * @param ${2:param} ${3:Parameter description.}",
+      " * @returns ${4:Return value description.}",
+      " */"
+    ],
+    "description": "Insert a standard JSDoc/TSDoc function docstring"
+  }
+}

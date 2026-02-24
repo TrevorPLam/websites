@@ -491,12 +491,12 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 - [x] DOMAIN-37-1-1-define-file-header-template - Define file header template with metadata - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-2-implement-pre-commit-header-verification - Implement pre-commit hook for header verification - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-1-3-configure-ide-header-snippets - Configure IDE snippets for auto-insertion
+- [x] DOMAIN-37-1-3-configure-ide-header-snippets - Configure IDE snippets for auto-insertion
 - [x] DOMAIN-37-1-4-add-code-review-header-guidelines - Add header review guidelines - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-5-security-headers-requirements-linking - Link security headers to requirements - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-6-link-headers-to-adrs - Link headers to Architecture Decision Records - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-1-7-select-docstring-standards - Select docstring standards per language
-- [ ] DOMAIN-37-1-8-enforce-docstrings-via-linter - Enforce docstrings via linter
+- [x] DOMAIN-37-1-7-select-docstring-standards - Select docstring standards per language
+- [x] DOMAIN-37-1-8-enforce-docstrings-via-linter - Enforce docstrings via linter
 - [x] DOMAIN-37-1-9-document-comment-guidelines - Document comment guidelines in CONTRIBUTING.md - COMPLETED 2026-02-24
 - [x] DOMAIN-37-1-10-adopt-conventional-comments - Adopt Conventional Comments for reviews - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-1-11-enable-ai-docstring-suggestions - Enable AI docstring suggestions

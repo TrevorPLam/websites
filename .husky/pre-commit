@@ -2,4 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 pnpm verify:file-headers
+pnpm verify:docstrings
 pnpm lint-staged --config .lintstagedrc.json
