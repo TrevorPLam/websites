@@ -89,3 +89,8 @@ export * from './src/config.js';
 // [FEAT:INFRASTRUCTURE]
 // NOTE: Package version constant - used for compatibility checks and debugging.
 export const INFRA_PACKAGE_VERSION = '1.0.0';
+
+// [TRACE:BLOCK=packages.infra.exports.experiments]
+// [FEAT:EXPERIMENTS]
+// NOTE: Experimentation exports - A/B testing engine and guardrails.
+export * from './experiments/index.js';
