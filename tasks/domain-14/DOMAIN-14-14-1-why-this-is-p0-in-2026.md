@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-14-14-1-why-this-is-p0-in-2026
 title: '14.1 Why This Is P0 in 2026'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

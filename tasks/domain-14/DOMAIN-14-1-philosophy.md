@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-14-1-philosophy
 title: '14.1 Philosophy'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: medium # critical | high | medium | low
 type: docs # feature | fix | refactor | test | docs | chore
 created: 2026-02-23

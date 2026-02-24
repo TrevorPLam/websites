@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-13-13-2-opentelemetry-instrumentation
 title: '13.2 OpenTelemetry Instrumentation'
-status: pending
+status: completed
 priority: high
 type: feature
 created: 2026-02-24

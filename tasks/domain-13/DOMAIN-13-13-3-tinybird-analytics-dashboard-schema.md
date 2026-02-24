@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-13-13-3-tinybird-analytics-dashboard-schema
 title: '13.3 Tinybird Analytics Dashboard Schema'
-status: pending
+status: completed
 priority: high
 type: feature
 created: 2026-02-24
