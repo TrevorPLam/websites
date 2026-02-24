@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-14-14-2-accessibility-component-library
 title: '14.2 Accessibility Component Library'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

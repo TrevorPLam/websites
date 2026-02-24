@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-14-14-3-accessible-form-components
 title: '14.3 Accessible Form Components'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

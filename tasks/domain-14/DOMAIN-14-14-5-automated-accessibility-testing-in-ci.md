@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-14-14-5-automated-accessibility-testing-in-ci
 title: '14.5 Automated Accessibility Testing in CI'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-14-14-4-wcag-22-compliance-checklist-per-site
 title: '14.4 WCAG 2.2 Compliance Checklist per Site'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24
