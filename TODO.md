@@ -853,12 +853,12 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] [DOMAIN-17-17-2-onboarding-state-machine](tasks\domain-17\DOMAIN-17-17-2-onboarding-state-machine.md) - 17.2 Onboarding State Machine - Implement onboarding state machine with step definitions and schemas (completed 2026-02-23)
 - [x] [DOMAIN-17-17-3-onboarding-server-actions](tasks\domain-17\DOMAIN-17-17-3-onboarding-server-actions.md) - 17.3 Onboarding Server Actions - Implement server actions for saving onboarding steps and completion (completed 2026-02-23)
 - [x] [DOMAIN-17-17-4-onboarding-wizard-ui](tasks\domain-17\DOMAIN-17-17-4-onboarding-wizard-ui.md) - 17.4 Onboarding Wizard UI - Implement onboarding wizard UI with step forms and navigation (completed 2026-02-23)
-- [ ] [DOMAIN-17-17-3-onboarding-server-actions](tasks\domain-17\DOMAIN-17-17-3-onboarding-server-actions.md) - 17.3 Onboarding Server Actions
-- [ ] [DOMAIN-17-17-4-onboarding-wizard-ui](tasks\domain-17\DOMAIN-17-17-4-onboarding-wizard-ui.md) - 17.4 Onboarding Wizard UI
-- [ ] [DOMAIN-17-onboarding-](tasks\domain-17\DOMAIN-17-onboarding-.md) - DOMAIN-17-onboarding-
-- [ ] [DOMAIN-17-onboarding-section-onboarding](tasks\domain-17\DOMAIN-17-onboarding-section-onboarding.md) - Section onboarding
-- [ ] [DOMAIN-17-philosophy-.md](tasks\domain-17\DOMAIN-17-philosophy.md-.md) - DOMAIN-17-philosophy-.md
-- [ ] [DOMAIN-17-philosophy-section-philosophymd.md](tasks\domain-17\DOMAIN-17-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [x] [DOMAIN-17-17-3-onboarding-server-actions](tasks\domain-17\DOMAIN-17-17-3-onboarding-server-actions.md) - 17.3 Onboarding Server Actions (completed 2026-02-24)
+- [x] [DOMAIN-17-17-4-onboarding-wizard-ui](tasks\domain-17\DOMAIN-17-17-4-onboarding-wizard-ui.md) - 17.4 Onboarding Wizard UI (completed 2026-02-24)
+- [x] [DOMAIN-17-onboarding-](tasks\domain-17\DOMAIN-17-onboarding-.md) - DOMAIN-17-onboarding- (completed 2026-02-24)
+- [x] [DOMAIN-17-onboarding-section-onboarding](tasks\domain-17\DOMAIN-17-onboarding-section-onboarding.md) - Section onboarding (completed 2026-02-24)
+- [x] [DOMAIN-17-philosophy-.md](tasks\domain-17\DOMAIN-17-philosophy.md-.md) - DOMAIN-17-philosophy-.md (completed 2026-02-24)
+- [x] [DOMAIN-17-philosophy-section-philosophymd.md](tasks\domain-17\DOMAIN-17-philosophy.md-section-philosophymd.md) - Section philosophy.md (completed 2026-02-24)
 
 ## DOMAIN 18: ✅ COMPLETE
 
@@ -1204,10 +1204,10 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ## DOMAIN 17: 🔄 PENDING
 
-- [ ] [DOMAIN-17-DOMAIN-17-onboarding-](tasks/domain-17/DOMAIN-17-onboarding-.md) -
-- [ ] [DOMAIN-17-DOMAIN-17-onboarding-section-onboarding](tasks/domain-17/DOMAIN-17-onboarding-section-onboarding.md) -
-- [ ] [DOMAIN-17-DOMAIN-17-philosophy.md-](tasks/domain-17/DOMAIN-17-philosophy.md-.md) -
-- [ ] [DOMAIN-17-DOMAIN-17-philosophy.md-section-philosophymd](tasks/domain-17/DOMAIN-17-philosophy.md-section-philosophymd.md) -
+- [x] [DOMAIN-17-DOMAIN-17-onboarding-](tasks/domain-17/DOMAIN-17-onboarding-.md) - (completed 2026-02-24)
+- [x] [DOMAIN-17-DOMAIN-17-onboarding-section-onboarding](tasks/domain-17/DOMAIN-17-onboarding-section-onboarding.md) - (completed 2026-02-24)
+- [x] [DOMAIN-17-DOMAIN-17-philosophy.md-](tasks/domain-17/DOMAIN-17-philosophy.md-.md) - (completed 2026-02-24)
+- [x] [DOMAIN-17-DOMAIN-17-philosophy.md-section-philosophymd](tasks/domain-17/DOMAIN-17-philosophy.md-section-philosophymd.md) - (completed 2026-02-24)
 
 ## DOMAIN 18: 🔄 PENDING
 
