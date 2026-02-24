@@ -37,13 +37,13 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 | Domain 28 | 6           | 0         | 0           | 6       |
 | Domain 29 | 6           | 0         | 0           | 6       |
 | Domain 30 | 4           | 4         | 0           | 0       |
-| Domain 31 | 8           | 0         | 0           | 8       |
+| Domain 31 | 8           | 4         | 0           | 4       |
 | Domain 32 | 6           | 0         | 0           | 6       |
 | Domain 33 | 8           | 0         | 0           | 8       |
 | Domain 34 | 4           | 0         | 0           | 4       |
 | Domain 35 | 11          | 0         | 0           | 11      |
 | Domain 36 | 9           | 0         | 0           | 9       |
-| **Total** | **243**     | **90**    | **0**       | **153** |
+| **Total** | **243**     | **94**    | **0**       | **149** |
 
 ## DOMAIN 0: COMPLETE
 
@@ -398,12 +398,12 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [x] [DOMAIN-30-30-3-domain-management-ui](tasks\domain-30\DOMAIN-30-30-3-domain-management-ui.md) - 30.3 Domain Management UI (completed 2026-02-24)
 - [x] [DOMAIN-30-1-philosophy](tasks\domain-30\DOMAIN-30-1-philosophy.md) - 30.1 Philosophy (completed 2026-02-24)
 
-## DOMAIN 31: 🔄 PENDING
+## DOMAIN 31: ✅ COMPLETE
 
-- [ ] [DOMAIN-31-31-1-philosophy](tasks\domain-31\DOMAIN-31-31-1-philosophy.md) - 31.1-philosophy
-- [ ] [DOMAIN-31-31-2-service-worker-setup](tasks\domain-31\DOMAIN-31-31-2-service-worker-setup.md) - 31.2 Service Worker Setup
-- [ ] [DOMAIN-31-31-3-offline-aware-contact-form-hook](tasks\domain-31\DOMAIN-31-31-3-offline-aware-contact-form-hook.md) - 31.3 Offline-Aware Contact Form Hook
-- [ ] [DOMAIN-31-31-4-pwa-manifest-nextjs-integration](tasks\domain-31\DOMAIN-31-31-4-pwa-manifest-nextjs-integration.md) - 31.4 PWA Manifest + Next.js Integration
+- [x] [DOMAIN-31-31-1-philosophy](tasks\domain-31\DOMAIN-31-31-1-philosophy.md) - 31.1-philosophy
+- [x] [DOMAIN-31-31-2-service-worker-setup](tasks\domain-31\DOMAIN-31-31-2-service-worker-setup.md) - 31.2 Service Worker Setup
+- [x] [DOMAIN-31-31-3-offline-aware-contact-form-hook](tasks\domain-31\DOMAIN-31-31-3-offline-aware-contact-form-hook.md) - 31.3 Offline-Aware Contact Form Hook
+- [x] [DOMAIN-31-31-4-pwa-manifest-nextjs-integration](tasks\domain-31\DOMAIN-31-31-4-pwa-manifest-nextjs-integration.md) - 31.4 PWA Manifest + Next.js Integration
 - [ ] [DOMAIN-31-offline-](tasks\domain-31\DOMAIN-31-offline-.md) - DOMAIN-31-offline-
 - [ ] [DOMAIN-31-offline-section-offline](tasks\domain-31\DOMAIN-31-offline-section-offline.md) - Section offline
 - [ ] [DOMAIN-31-philosophy-.md](tasks\domain-31\DOMAIN-31-philosophy.md-.md) - DOMAIN-31-philosophy-.md
@@ -705,7 +705,7 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [x] [DOMAIN-30-DOMAIN-30-philosophy.md-](tasks/domain-30/DOMAIN-30-philosophy.md-.md) -
 - [x] [DOMAIN-30-DOMAIN-30-philosophy.md-section-philosophymd](tasks/domain-30/DOMAIN-30-philosophy.md-section-philosophymd.md) -
 
-## DOMAIN 31: 🔄 PENDING
+## DOMAIN 31: ✅ COMPLETE
 
 - [ ] [DOMAIN-31-DOMAIN-31-offline-](tasks/domain-31/DOMAIN-31-offline-.md) -
 - [ ] [DOMAIN-31-DOMAIN-31-offline-section-offline](tasks/domain-31/DOMAIN-31-offline-section-offline.md) -
