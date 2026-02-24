@@ -15,7 +15,7 @@
 ## Comments and docstrings
 
 - Write comments that explain _why_, not obvious _what_.
-- Keep docstrings concise and maintainable.
+- Follow `docs/guides/best-practices/docstring-standards.md` for language-specific docstring conventions.
 - Ensure security-sensitive behavior is documented close to implementation.
 
 ## Code review comments
@@ -26,4 +26,4 @@
 ## Formatting and linting
 
 - Run formatters and linters before pushing.
-- CI and pre-commit hooks enforce formatting, linting, and header quality checks.
+- CI and pre-commit hooks enforce formatting, linting, header quality, and docstring quality checks.
