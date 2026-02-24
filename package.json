@@ -27,7 +27,7 @@
     "build:workaround": "node scripts/turbo-workaround.js build",
     "lint": "turbo run lint",
     "lint:workaround": "node scripts/turbo-workaround.js lint",
-    "type-check": "turbo run type-check",
+    "type-check": "turbo run typecheck",
     "type-check:workaround": "node scripts/turbo-workaround.js type-check",
     "type-check:simple": "node scripts/type-check-all.js",
     "test": "vitest run",

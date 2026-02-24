@@ -7,9 +7,13 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
   schedule:
     - cron: '0 8 * * 1' # Weekly Monday 8am
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   dependency-integrity:
@@ -30,6 +34,31 @@ jobs:
         run: pnpm syncpack:check
       - name: Vulnerability audit
         run: pnpm audit --audit-level high
+
+      - name: OSV scanner (SCA)
+        uses: google/osv-scanner-action/osv-scanner-action@v2.2.2
+        with:
+          scan-args: |-
+            --lockfile=pnpm-lock.yaml
+            --recursive
+            --format=sarif
+            --output=osv-results.sarif
+
+      - name: Upload OSV results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: osv-results.sarif
+
+  dependency-review:
+    name: Dependency review (PR)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
 
   # [SECURITY] Vulnerability alert notifications for high/critical findings
   vulnerability-alerts:

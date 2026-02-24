@@ -22,6 +22,10 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - Added secure coding guidelines for repository-wide adoption.
 
 - Added threat modeling methodology, stored threat model artifacts, annual review policy, and Semgrep-based security linting + pre-commit secret scanning.
+- Extended CI security gates with blocking Semgrep and dependency audit checks.
+- Added SCA scanning via OSV + dependency-review workflow checks.
+- Added Trivy filesystem/IaC scanning workflow with SARIF upload.
+- Added scheduled OWASP ZAP baseline DAST workflow.
 
 - Added docs governance and living documentation standards.
 - Added plain-text documentation format validation and static docs-site build script.
