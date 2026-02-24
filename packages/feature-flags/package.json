@@ -15,7 +15,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@vercel/edge-config": "catalog:",
+    "@upstash/redis": "catalog:"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

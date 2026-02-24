@@ -46,3 +46,4 @@ export * from './feedback';
 export * from './advanced';
 export * from './misc';
 export * from './a11y';
+export * from './booking';

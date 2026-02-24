@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-17-17-3-onboarding-server-actions
 title: '17.3 Onboarding Server Actions'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

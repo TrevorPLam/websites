@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-19-19-2-calcom-webhook-handler
 title: '19.2 Cal.com Webhook Handler'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

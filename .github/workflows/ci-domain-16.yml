@@ -1,0 +1,331 @@
+# CI — Marketing Website Monorepo
+#
+# DOMAIN-16-2: Complete GitHub Actions Workflow
+# Implements affected-package detection, Turborepo remote caching, and 2026 standards
+#
+# Key Features:
+# - Affected package detection for PRs (only build/test changed packages)
+# - Turborepo remote caching for faster builds
+# - Cancel in-progress runs for same branch/PR
+# - Multi-stage pipeline with proper job dependencies
+# - Security scanning and E2E testing
+# - Deployment integration with Vercel and Sentry
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+# Cancel in-progress runs for the same branch/PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Turborepo remote cache
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  # Node/pnpm versions
+  NODE_VERSION: '22'
+  PNPM_VERSION: '9'
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 1: Detect affected packages
+  # Outputs a JSON matrix of changed apps for downstream jobs
+  # ────────────────────────────────────────────────────────────────────────────
+  detect-changes:
+    name: Detect Changed Packages
+    runs-on: ubuntu-latest
+    outputs:
+      affected-apps: ${{ steps.turbo-affected.outputs.apps }}
+      has-shared-changes: ${{ steps.turbo-affected.outputs.has-shared }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history needed for turbo --since
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Detect affected apps
+        id: turbo-affected
+        run: |
+          # Get list of affected packages vs main branch
+          AFFECTED=$(pnpm turbo run build --dry=json --filter="...[origin/main]" 2>/dev/null | jq -r '.packages[]' | grep '^apps/' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "apps=$AFFECTED" >> $GITHUB_OUTPUT
+
+          # Check if any shared package changed (triggers all app rebuilds)
+          SHARED=$(pnpm turbo run build --dry=json --filter="...[origin/main]" 2>/dev/null | jq -r '.packages[]' | grep '^packages/')
+          if [ -n "$SHARED" ]; then
+            echo "has-shared=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-shared=false" >> $GITHUB_OUTPUT
+          fi
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 2: Type checking + linting (all packages)
+  # ────────────────────────────────────────────────────────────────────────────
+  typecheck-lint:
+    name: Typecheck & Lint
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript check (affected)
+        run: pnpm turbo run typecheck --filter="...[origin/main]" --output-logs=new-only
+
+      - name: ESLint (affected)
+        run: pnpm turbo run lint --filter="...[origin/main]" --output-logs=new-only
+
+      - name: Prettier check
+        run: pnpm prettier --check "**/*.{ts,tsx,json,md}" --ignore-path .gitignore
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 3: Unit + integration tests
+  # ────────────────────────────────────────────────────────────────────────────
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: typecheck-lint
+
+    services:
+      # Local Postgres for integration tests (avoids hitting Supabase)
+      postgres:
+        image: supabase/postgres:15.1.1.89
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # Test environment DB (isolated from production)
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.TEST_SUPABASE_SERVICE_ROLE_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run DB migrations (test DB)
+        run: pnpm --filter @repo/db run migrate
+
+      - name: Run unit tests (affected, with coverage)
+        run: |
+          pnpm turbo run test \
+            --filter="...[origin/main]" \
+            --output-logs=new-only \
+            -- --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 4: Build (affected apps only)
+  # ────────────────────────────────────────────────────────────────────────────
+  build:
+    name: Build ${{ matrix.app }}
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ needs.detect-changes.outputs.affected-apps != '[]' || needs.detect-changes.outputs.has-shared-changes == 'true' }}
+
+    strategy:
+      fail-fast: false # Let other apps continue building even if one fails
+      matrix:
+        app: ${{ fromJSON(needs.detect-changes.outputs.affected-apps || '["apps/portal", "apps/admin"]') }}
+
+    env:
+      # Build-time env vars per app
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build ${{ matrix.app }}
+        run: |
+          APP_NAME=$(echo "${{ matrix.app }}" | cut -d'/' -f2)
+          pnpm turbo run build --filter="$APP_NAME" --output-logs=new-only
+
+      - name: Check build output size
+        run: |
+          if [ -f "${{ matrix.app }}/.next/build-manifest.json" ]; then
+            echo "=== Bundle Size Report ==="
+            du -sh ${{ matrix.app }}/.next/
+            # Fail if total bundle > 50MB (red flag for accidental imports)
+            SIZE=$(du -sb ${{ matrix.app }}/.next/ | cut -f1)
+            if [ "$SIZE" -gt 52428800 ]; then
+              echo "❌ Bundle size exceeds 50MB limit: $SIZE bytes"
+              exit 1
+            fi
+          fi
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 5: E2E tests (Playwright) — runs on build artifacts
+  # ────────────────────────────────────────────────────────────────────────────
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 30
+
+    env:
+      PLAYWRIGHT_BASE_URL: http://localhost:3000
+      # Test tenant credentials
+      TEST_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
+      TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+      TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @repo/e2e exec playwright install --with-deps chromium
+
+      - name: Start app in background
+        run: |
+          pnpm --filter portal run start &
+          # Wait for server to be ready
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run E2E tests (including a11y)
+        run: pnpm --filter @repo/e2e run test
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: e2e/playwright-report/
+          retention-days: 7
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 6: Security audit
+  # ────────────────────────────────────────────────────────────────────────────
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    needs: detect-changes
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: pnpm audit (high + critical only)
+        run: pnpm audit --audit-level=high
+
+      - name: Check for hardcoded secrets (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB 7: Deploy preview (PRs) or production (main)
+  # Handled by Vercel's native GitHub integration — this job triggers it
+  # ────────────────────────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [e2e, security]
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (via CLI for monorepo control)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: apps/portal
+          vercel-args: ${{ github.ref == 'refs/heads/main' && '--prod' || '' }}
+
+      - name: Notify Sentry of new release
+        run: |
+          curl -sL https://sentry.io/api/0/organizations/${{ vars.SENTRY_ORG }}/releases/ \
+            -H "Authorization: Bearer ${{ secrets.SENTRY_AUTH_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "version": "${{ github.sha }}",
+              "refs": [{"repository": "${{ github.repository }}", "commit": "${{ github.sha }}"}],
+              "projects": ["marketing-platform"]
+            }'

@@ -1,0 +1,130 @@
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
+import { NextRequest, NextResponse } from 'next/server';
+
+// ============================================================================
+// RATE LIMITER INSTANCES
+// Each enforces a different sliding window — stacked for defense in depth.
+// Reference: https://upstash.com/blog/edge-rate-limiting
+// ============================================================================
+
+const redis = Redis.fromEnv();
+
+// Global per-IP (prevents volumetric attacks)
+const globalLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(200, '1 m'), // 200 req/min per IP
+  analytics: true,
+  prefix: 'rl:global',
+});
+
+// Form submission limiter (anti-spam for lead forms)
+const formLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, '10 m'), // 5 submissions per 10 min
+  analytics: true,
+  prefix: 'rl:form',
+});
+
+// Authentication limiter (brute force protection)
+const authLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(10, '15 m'), // 10 auth attempts per 15 min
+  analytics: true,
+  prefix: 'rl:auth',
+});
+
+// API limiter (per API key or IP for programmatic access)
+const apiLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(60, '1 m'), // 60 req/min
+  analytics: true,
+  prefix: 'rl:api',
+});
+
+// Webhook ingestion (Stripe, Zapier, etc.)
+const webhookLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(100, '1 m'), // 100/min (Stripe can burst)
+  analytics: true,
+  prefix: 'rl:webhook',
+});
+
+// ============================================================================
+// RATE LIMIT MIDDLEWARE
+// Returns a 429 response if limit exceeded; null if allowed.
+// ============================================================================
+
+export type RateLimitTier = 'global' | 'form' | 'auth' | 'api' | 'webhook';
+
+const LIMITERS: Record<RateLimitTier, Ratelimit> = {
+  global: globalLimiter,
+  form: formLimiter,
+  auth: authLimiter,
+  api: apiLimiter,
+  webhook: webhookLimiter,
+};
+
+// Canonical IP extraction (Vercel sets x-forwarded-for; trust leftmost)
+function getClientIP(request: NextRequest): string {
+  const xForwardedFor = request.headers.get('x-forwarded-for');
+  if (xForwardedFor) {
+    // Leftmost IP = true client (rightmost = Vercel's edge)
+    return xForwardedFor.split(',')[0].trim();
+  }
+  return request.headers.get('x-real-ip') ?? '127.0.0.1';
+}
+
+export async function checkRateLimit(
+  request: NextRequest,
+  tier: RateLimitTier,
+  identifier?: string // Override IP with user ID or API key for auth'd routes
+): Promise<NextResponse | null> {
+  const limiter = LIMITERS[tier];
+  const ip = getClientIP(request);
+  const key = identifier ?? ip;
+
+  const { success, limit, remaining, reset } = await limiter.limit(key);
+
+  if (!success) {
+    const resetDate = new Date(reset);
+    const retryAfterSeconds = Math.ceil((reset - Date.now()) / 1000);
+
+    return NextResponse.json(
+      {
+        error: 'Too many requests',
+        message: `Rate limit exceeded. Try again after ${resetDate.toISOString()}.`,
+        retryAfter: retryAfterSeconds,
+      },
+      {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': String(limit),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(reset),
+          'Retry-After': String(retryAfterSeconds),
+        },
+      }
+    );
+  }
+
+  // Return null (allowed) — caller attaches informational headers
+  return null;
+}
+
+// ============================================================================
+// CONVENIENCE: Wrap a Route Handler with rate limiting
+// Usage:
+//   export const POST = withRateLimit('form', async (req) => { ... });
+// ============================================================================
+
+export function withRateLimit(
+  tier: RateLimitTier,
+  handler: (req: NextRequest) => Promise<NextResponse>
+): (req: NextRequest) => Promise<NextResponse> {
+  return async (req: NextRequest) => {
+    const limitResponse = await checkRateLimit(req, tier);
+    if (limitResponse) return limitResponse;
+    return handler(req);
+  };
+}

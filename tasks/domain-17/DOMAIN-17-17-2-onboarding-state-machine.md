@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-17-17-2-onboarding-state-machine
 title: '17.2 Onboarding State Machine'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

@@ -1,2 +1,5 @@
 // Email Package Exports
-export * from './email-system';
+export * from './types';
+export * from './client';
+export * from './send';
+export * from './templates';

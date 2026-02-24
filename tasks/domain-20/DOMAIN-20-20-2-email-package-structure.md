@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-20-20-2-email-package-structure
 title: '20.2 Email Package Structure'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

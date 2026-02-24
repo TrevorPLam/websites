@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-19-19-4-calcom-managed-user-provisioning
 title: '19.4 Cal.com Managed User Provisioning'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

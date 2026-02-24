@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-20-20-4-unified-send-function
 title: '20.4 Unified Send Function'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

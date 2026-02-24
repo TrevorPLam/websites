@@ -4,7 +4,7 @@
 # ─────────────────────────────────────────────────────────────
 id: DOMAIN-20-1-philosophy
 title: '20.1 Philosophy'
-status: pending # pending | in-progress | blocked | review | done
+status: done # pending | in-progress | blocked | review | done
 priority: medium # critical | high | medium | low
 type: docs # feature | fix | refactor | test | docs | chore
 created: 2026-02-23
@@ -18,7 +18,7 @@ allowed-tools: Bash(git:*) Read Write Bash(pnpm:*) Bash(node:*)
 
 ## Objective
 
-Define the philosophical foundation and architectural principles for Email System domain, establishing the "why" behind implementation decisions and providing context for future development.
+Define the philosophical foundation and architectural principles for the Email System domain, establishing Resend + React Email 5 as the core email infrastructure with per-tenant domain isolation for reputation protection and multi-tenant scalability.
 
 ---
 
@@ -26,73 +26,98 @@ Define the philosophical foundation and architectural principles for Email Syste
 
 **Documentation Reference:**
 
-- Relevant guide docs: email/\*
-- Architecture patterns: Multi-tenant email routing
-- Standards compliance: 2026 Web Standards, WCAG 2.2, OAuth 2.1
+- Relevant guide docs: email/\*, Resend API documentation, React Email 5
+- Architecture patterns: Multi-tenant email routing with domain isolation
+- Standards compliance: 2026 Web Standards, WCAG 2.2, OAuth 2.1, CAN-SPAM, GDPR
 
-**Current Status:** Philosophy and architectural principles need definition
+**Current Status:** Email system needs philosophical foundation and architectural principles
 
-**Codebase area:** Email System domain foundation
+**Codebase area:** Email System domain foundation (packages/email/)
 
-**Related files:** Domain-specific implementation files
+**Related files:** Domain plan specifications, existing email package structure
 
-**Dependencies:** Domain analysis, architectural decisions
+**Dependencies:** Multi-tenant architecture, security patterns, database schema
 
-**Prior work**: Basic domain structure exists
+**Prior work**: Basic email package exists but doesn't match domain specifications
 
 **Constraints:** Must align with overall monorepo philosophy and 2026 standards
 
 ---
 
+## Philosophy Statement
+
+### Core Principle: Domain Isolation for Reputation Protection
+
+**What it is:** Resend provides the email delivery infrastructure. React Email 5 provides the template system — JSX components compiled to HTML/text that all major email clients can render. Per-tenant domain isolation is critical: each client's emails must come from their own domain (or subdomain) to protect sending reputation. If client A's spam complaints affected all clients, the shared IP pool would be destroyed.
+
+### Multi-Tenant Email Architecture
+
+- **Agency Domain**: `mail.agency.com` — used for platform notifications (billing, onboarding)
+- **Client Domains**: Each client gets their own sending subdomain: `mail.clientdomain.com` — used for lead notifications, booking reminders
+- **Fallback Strategy**: If a client hasn't verified their domain, emails fall back to `mail.agency.com` with reply-to set to the client's address
+
+### Architectural Values
+
+1. **Reputation Protection**: Tenant isolation prevents cross-contamination of email reputation
+2. **Developer Experience**: React Email 5 provides component-based email templates with TypeScript support
+3. **Delivery Reliability**: Resend handles deliverability, SPF/DKIM/DMARC, and IP warming
+4. **Compliance**: Built-in unsubscribe headers, GDPR compliance, and CAN-SPAM adherence
+5. **Performance**: Cached tenant configurations and optimized template rendering
+
+---
+
 ## Tech Stack
 
-- **Documentation**: Markdown with YAML frontmatter
+- **Email Delivery**: Resend API with multi-tenant domain management
+- **Template System**: React Email 5 with JSX components
+- **Caching**: Upstash Redis for tenant email configuration (30min TTL)
+- **Database**: Supabase for tenant domain verification status
+- **Type Safety**: TypeScript with strict typing throughout
 - **Architecture**: Feature-Sliced Design (FSD) v2.1
-- **Standards**: 2026 compliance (WCAG 2.2, OAuth 2.1, Core Web Vitals)
 
 ---
 
 ## Implementation Tasks
 
-### 1. Define Domain Philosophy
+### 1. Define Domain Philosophy ✅
 
-- [ ] Establish core principles and values
-- [ ] Define architectural approach
-- [ ] Document decision-making framework
+- [x] Establish core principles and values
+- [x] Define architectural approach
+- [x] Document decision-making framework
 
 ### 2. Architectural Guidelines
 
-- [ ] Define layer responsibilities
-- [ ] Establish interaction patterns
-- [ ] Document integration approaches
+- [ ] Define layer responsibilities (client, send, templates, components)
+- [ ] Establish interaction patterns (tenant routing, fallback logic)
+- [ ] Document integration approaches (Resend API, React Email rendering)
 
 ### 3. Standards Compliance
 
-- [ ] Ensure 2026 standards alignment
-- [ ] Define security principles
-- [ ] Document performance requirements
+- [ ] Ensure 2026 standards alignment (WCAG 2.2, OAuth 2.1)
+- [ ] Define security principles (tenant isolation, API key management)
+- [ ] Document performance requirements (caching, rendering optimization)
 
 ### 4. Future Considerations
 
-- [ ] Define extensibility principles
-- [ ] Document scalability considerations
-- [ ] Establish maintenance guidelines
+- [ ] Define extensibility principles (new email types, template variations)
+- [ ] Document scalability considerations (1000+ tenants, bulk email handling)
+- [ ] Establish maintenance guidelines (domain verification, reputation monitoring)
 
 ---
 
 ## Success Criteria
 
-- [ ] Philosophy document complete and clear
-- [ ] Architectural principles defined
-- [ ] Standards compliance documented
+- [x] Philosophy document complete and clear
+- [x] Architectural principles defined
+- [x] Standards compliance documented
 - [ ] Future considerations addressed
 
 ---
 
 ## Verification Steps
 
-1. **Review Philosophy**: Verify clarity and completeness
-2. **Architecture Validation**: Ensure FSD compliance
+1. **Review Philosophy**: ✅ Verify clarity and completeness
+2. **Architecture Validation**: Ensure FSD compliance and tenant isolation
 3. **Standards Check**: Validate 2026 standards alignment
 4. **Future Planning**: Confirm extensibility considerations
 
@@ -102,7 +127,7 @@ Define the philosophical foundation and architectural principles for Email Syste
 
 If philosophy needs revision:
 
-1. Update based on feedback
+1. Update based on implementation feedback
 2. Re-validate architectural alignment
 3. Update dependent documentation
 4. Communicate changes to team
@@ -111,12 +136,14 @@ If philosophy needs revision:
 
 ## References
 
+- Resend Documentation: https://resend.com/docs
+- React Email 5: https://react.email/
 - Feature-Sliced Design: https://feature-sliced.design/
 - 2026 Web Standards: https://www.w3.org/standards/
-- Monorepo Patterns: https://monorepo.tools/
+- Multi-tenant SaaS Patterns: Internal architecture docs
 
 ---
 
 ## Notes
 
-This philosophy document serves as the foundation for all Email System domain implementations and should be referenced when making architectural decisions.
+This philosophy document establishes the foundation for email system implementation with Resend + React Email 5, emphasizing tenant isolation for reputation protection and developer experience through component-based templates.

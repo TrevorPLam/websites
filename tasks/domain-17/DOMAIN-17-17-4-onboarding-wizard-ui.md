@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-17-17-4-onboarding-wizard-ui
 title: '17.4 Onboarding Wizard UI'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

@@ -54,6 +54,7 @@ export default defineConfig({
             'packages/integrations/**/__tests__/**/*.test.ts',
             'packages/industry-schemas/**/*.test.ts',
             'packages/page-templates/**/*.test.ts',
+            'packages/feature-flags/**/*.test.ts',
             'tooling/validation/**/*.test.ts',
           ],
           exclude: [

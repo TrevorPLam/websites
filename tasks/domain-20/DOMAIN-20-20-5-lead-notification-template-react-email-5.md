@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-20-20-5-lead-notification-template-react-email-5
 title: '20.5 Lead Notification Template (React Email 5)'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-20-20-3-email-client-multi-tenant-routing
 title: '20.3 Email Client & Multi-Tenant Routing'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

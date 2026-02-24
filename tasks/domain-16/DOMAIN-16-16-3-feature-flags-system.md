@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-16-16-3-feature-flags-system
 title: '16.3 Feature Flags System'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24

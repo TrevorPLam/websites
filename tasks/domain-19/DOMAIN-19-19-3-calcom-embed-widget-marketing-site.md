@@ -1,7 +1,7 @@
 ---
 id: DOMAIN-19-19-3-calcom-embed-widget-marketing-site
 title: '19.3 Cal.com Embed Widget (Marketing Site)'
-status: pending
+status: done
 priority: high
 type: feature
 created: 2026-02-24
