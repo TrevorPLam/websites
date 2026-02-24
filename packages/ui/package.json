@@ -51,6 +51,8 @@
     "@types/react-window": "catalog:",
     "@vitejs/plugin-react": "^5.1.4",
     "eslint": "catalog:",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "storybook": "^8.6.17",
     "typescript": "catalog:",
     "vite": "^7.3.1",

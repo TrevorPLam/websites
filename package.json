@@ -160,6 +160,8 @@
   "dependencies": {
     "@sentry/opentelemetry": "catalog:",
     "@vercel/otel": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "server-only": "catalog:"
   }
 }

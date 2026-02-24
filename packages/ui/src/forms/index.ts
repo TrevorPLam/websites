@@ -35,3 +35,88 @@ export { Rating } from '../components/Rating';
 export type { RatingProps } from '../components/Rating';
 export { Stepper } from '../components/Stepper';
 export type { StepperProps, StepperStep } from '../components/Stepper';
+
+// Form utilities
+export {
+  useFieldArrayEnhanced,
+  createRequiredField,
+  createEmailField,
+  createPasswordField,
+  createPhoneField,
+  createUrlField,
+  createDateField,
+  createNumberField,
+  createSelectField,
+  createCheckboxField,
+  getFormState,
+  hasFormErrors,
+  getFirstFormError,
+  scrollToFirstError,
+  handleSubmitWithValidation,
+  createFormFieldConfig,
+  getFormFieldError,
+  isFormFieldTouched,
+  isFormFieldDirty,
+  resetFormToDefaults,
+  resetFormExcept,
+  createBaseUserSchema,
+  createAddressSchema,
+  createContactFormSchema,
+  createNewsletterSchema,
+} from './form-utils';
+export type {
+  FieldArrayProps,
+  UseFieldArrayReturn,
+  FormState,
+  FormSubmissionOptions,
+  FormFieldConfig,
+} from './form-utils';
+
+// Field array components
+export {
+  FieldArrayItem,
+  FieldArrayControls,
+  DynamicFieldArray,
+  FormFieldHelper,
+} from './field-array';
+export type {
+  FieldArrayItemProps,
+  FieldArrayControlsProps,
+  DynamicFieldArrayProps,
+  FormFieldHelperProps,
+} from './field-array';
+
+// Validation helpers
+export {
+  validationPatterns,
+  createUserRegistrationSchema,
+  createContactFormSchema,
+  createAddressSchema,
+  createPaymentSchema,
+  createSurveySchema,
+  calculateFormProgress,
+  getFormCompletionPercentage,
+  validateField,
+  validateAllFields,
+  hasFieldError,
+  getFieldErrorMessage,
+  clearFieldError,
+  clearAllErrors,
+  submitForm,
+  saveFormData,
+  loadFormData,
+  clearFormData,
+  createFormAnalytics,
+  trackFieldInteraction,
+  trackFieldError,
+  trackSubmissionAttempt,
+  trackSuccessfulSubmission,
+  generateFormAriaLabels,
+  generateFormErrorIds,
+  validationRules,
+} from './validation-helpers';
+export type {
+  FormProgress,
+  FormSubmissionResult,
+  FormAnalytics,
+} from './validation-helpers';
