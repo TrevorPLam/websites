@@ -1,0 +1,69 @@
+name: Security CNAPP Export
+
+on:
+  workflow_run:
+    workflows:
+      - Security SAST
+      - Security Container and IaC Scan
+      - Dependency Integrity
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  export-findings:
+    name: Export security findings to CNAPP
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion != 'cancelled'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download SARIF artifacts from workflow run
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: cnapp-artifacts
+
+      - name: Create CNAPP payload
+        run: |
+          mkdir -p cnapp-payload
+          cat > cnapp-payload/metadata.json <<'JSON'
+          {
+            "repository": "${{ github.repository }}",
+            "event": "${{ github.event_name }}",
+            "workflow": "${{ github.event.workflow_run.name || github.workflow }}",
+            "run_id": "${{ github.event.workflow_run.id || github.run_id }}",
+            "run_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id || github.run_id }}"
+          }
+          JSON
+
+      - name: Export to CNAPP ingestion endpoint
+        env:
+          CNAPP_INGEST_URL: ${{ secrets.CNAPP_INGEST_URL }}
+          CNAPP_API_TOKEN: ${{ secrets.CNAPP_API_TOKEN }}
+        run: |
+          if [ -z "${CNAPP_INGEST_URL}" ] || [ -z "${CNAPP_API_TOKEN}" ]; then
+            echo "CNAPP secrets are not configured; skipping export."
+            exit 0
+          fi
+
+          tar -czf cnapp-export.tgz cnapp-artifacts cnapp-payload 2>/dev/null || tar -czf cnapp-export.tgz cnapp-payload
+
+          curl --fail --silent --show-error \
+            -X POST "${CNAPP_INGEST_URL}" \
+            -H "Authorization: Bearer ${CNAPP_API_TOKEN}" \
+            -H "Content-Type: application/gzip" \
+            --data-binary @cnapp-export.tgz
+
+      - name: Upload CNAPP export package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cnapp-export-package
+          path: |
+            cnapp-export.tgz
+            cnapp-payload/metadata.json
