@@ -373,6 +373,40 @@ importers:
         specifier: 'catalog:'
         version: 3.8.1
 
+  packages/billing:
+    dependencies:
+      stripe:
+        specifier: ^16.12.0
+        version: 16.12.0
+      zod:
+        specifier: ^3.22.4
+        version: 3.25.76
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../config/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../config/typescript-config
+      '@repo/vitest-config':
+        specifier: workspace:*
+        version: link:../config/vitest-config
+      '@types/node':
+        specifier: ^20.11.17
+        version: 20.19.33
+      '@types/stripe':
+        specifier: ^8.0.417
+        version: 8.0.417
+      eslint:
+        specifier: ^9.0.0
+        version: 9.18.0(jiti@2.6.1)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+      vitest:
+        specifier: ^1.3.1
+        version: 1.6.1(@types/node@20.19.33)(@vitest/ui@4.0.18)(jsdom@26.1.0)(terser@5.46.0)
+
   packages/config:
     devDependencies:
       tailwindcss:
@@ -838,6 +872,37 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 3.25.76
+
+  packages/jobs:
+    dependencies:
+      '@upstash/qstash':
+        specifier: ^2.7.0
+        version: 2.9.0
+      zod:
+        specifier: ^3.22.4
+        version: 3.25.76
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../config/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../config/typescript-config
+      '@repo/vitest-config':
+        specifier: workspace:*
+        version: link:../config/vitest-config
+      '@types/node':
+        specifier: ^20.11.17
+        version: 20.19.33
+      eslint:
+        specifier: ^9.0.0
+        version: 9.18.0(jiti@2.6.1)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+      vitest:
+        specifier: ^1.3.1
+        version: 1.6.1(@types/node@20.19.33)(@vitest/ui@4.0.18)(jsdom@26.1.0)(terser@5.46.0)
 
   packages/lead-management:
     dependencies:
@@ -4312,6 +4377,10 @@ packages:
   '@types/statuses@2.0.6':
     resolution: {integrity: sha512-xMAgYwceFhRA2zY+XbEA7mxYbA093wdiW8Vu6gZPGWy9cmOyU9XesH1tNcEWsKFd5Vzrqx5T3D38PWx1FIIXkA==}
 
+  '@types/stripe@8.0.417':
+    resolution: {integrity: sha512-PTuqskh9YKNENnOHGVJBm4sM0zE8B1jZw1JIskuGAPkMB+OH236QeN8scclhYGPA4nG6zTtPXgwpXdp+HPDTVw==}
+    deprecated: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+
   '@types/tedious@4.0.14':
     resolution: {integrity: sha512-KHPsfX/FoVbUGbyYvk1q9MMQHLPeRZhRJZdO45Q4YjvFkv4hMNghCWTvy7rdKessBsmtz4euWCWAB6/tVpI1Iw==}
 
@@ -4501,6 +4570,9 @@ packages:
   '@upstash/core-analytics@0.0.10':
     resolution: {integrity: sha512-7qJHGxpQgQr9/vmeS1PktEwvNAF7TI4iJDi8Pu2CFZ9YUGHZH4fOP5TfYlZ4aVxfopnELiE4BS4FBjyK7V1/xQ==}
     engines: {node: '>=16.0.0'}
+
+  '@upstash/qstash@2.9.0':
+    resolution: {integrity: sha512-RFvWB98ot5SXUZFIV/Av6hYdS+yu700kg+azUaJqV/fqgylUrWkYnCTOE4DJgdMHUEb0l7tH2Xhl70Zd4Q4zHw==}
 
   '@upstash/ratelimit@2.0.5':
     resolution: {integrity: sha512-1FRv0cs3ZlBjCNOCpCmKYmt9BYGIJf0J0R3pucOPE88R21rL7jNjXG+I+rN/BVOvYJhI9niRAS/JaSNjiSICxA==}
@@ -7035,6 +7107,10 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
+  neverthrow@7.2.0:
+    resolution: {integrity: sha512-iGBUfFB7yPczHHtA8dksKTJ9E8TESNTAx1UQWW6TzMF280vo9jdPYpLUXrMN1BCkPdHFdNG3fxOt2CUad8KhAw==}
+    engines: {node: '>=18'}
+
   next-mdx-remote@5.0.0:
     resolution: {integrity: sha512-RNNbqRpK9/dcIFZs/esQhuLA8jANqlH694yqoDBK8hkVdJUndzzGmnPHa2nyi90N4Z9VmzuSWNRpr5ItT3M7xQ==}
     engines: {node: '>=14', npm: '>=7'}
@@ -8064,6 +8140,10 @@ packages:
 
   strip-literal@2.1.1:
     resolution: {integrity: sha512-631UJ6O00eNGfMiWG78ck80dfBab8X6IVFB51jZK5Icd7XAs60Z5y7QdSd/wGIklnWvRbUNloVzhOKKmutxQ6Q==}
+
+  stripe@16.12.0:
+    resolution: {integrity: sha512-H7eFVLDxeTNNSn4JTRfL2//LzCbDrMSZ+2q1c7CanVWgK2qIW5TwS+0V7N9KcKZZNpYh/uCqK0PyZh/2UsaAtQ==}
+    engines: {node: '>=12.*'}
 
   style-to-js@1.1.21:
     resolution: {integrity: sha512-RjQetxJrrUJLQPHbLku6U/ocGtzyjbJMP9lCNK7Ag0CNh690nSH8woqWH9u16nMjYBAok+i7JO1NP2pOy8IsPQ==}
@@ -12030,6 +12110,10 @@ snapshots:
 
   '@types/statuses@2.0.6': {}
 
+  '@types/stripe@8.0.417':
+    dependencies:
+      stripe: 16.12.0
+
   '@types/tedious@4.0.14':
     dependencies:
       '@types/node': 20.19.33
@@ -12205,6 +12289,12 @@ snapshots:
   '@upstash/core-analytics@0.0.10':
     dependencies:
       '@upstash/redis': 1.34.3
+
+  '@upstash/qstash@2.9.0':
+    dependencies:
+      crypto-js: 4.2.0
+      jose: 5.10.0
+      neverthrow: 7.2.0
 
   '@upstash/ratelimit@2.0.5(@upstash/redis@1.34.3)':
     dependencies:
@@ -13436,8 +13526,8 @@ snapshots:
       '@babel/parser': 7.29.0
       eslint: 9.18.0(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.3.6
-      zod-validation-error: 4.0.2(zod@4.3.6)
+      zod: 3.25.76
+      zod-validation-error: 4.0.2(zod@3.25.76)
     transitivePeerDependencies:
       - supports-color
 
@@ -15716,6 +15806,8 @@ snapshots:
 
   neo-async@2.6.2: {}
 
+  neverthrow@7.2.0: {}
+
   next-mdx-remote@5.0.0(@types/react@19.0.2)(react@19.0.0):
     dependencies:
       '@babel/code-frame': 7.29.0
@@ -17049,6 +17141,11 @@ snapshots:
     dependencies:
       js-tokens: 9.0.1
 
+  stripe@16.12.0:
+    dependencies:
+      '@types/node': 20.19.33
+      qs: 6.15.0
+
   style-to-js@1.1.21:
     dependencies:
       style-to-object: 1.0.14
@@ -17959,9 +18056,9 @@ snapshots:
     dependencies:
       zod: 3.25.76
 
-  zod-validation-error@4.0.2(zod@4.3.6):
+  zod-validation-error@4.0.2(zod@3.25.76):
     dependencies:
-      zod: 4.3.6
+      zod: 3.25.76
 
   zod@3.25.76: {}
 

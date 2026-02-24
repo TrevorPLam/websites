@@ -317,6 +317,8 @@ export class UnifiedEmailSender {
       template: 'lead-notification',
       templateData: leadData,
       priority: 'high',
+      trackOpens: true,
+      trackClicks: true,
     };
 
     return this.client.sendEmail(message);
@@ -334,6 +336,8 @@ export class UnifiedEmailSender {
       template: 'welcome-email',
       templateData: { name: recipientName },
       priority: 'normal',
+      trackOpens: true,
+      trackClicks: true,
     };
 
     return this.client.sendEmail(message);
@@ -351,6 +355,8 @@ export class UnifiedEmailSender {
       subject,
       html: content,
       priority: 'low',
+      trackOpens: true,
+      trackClicks: true,
     };
 
     return this.client.sendEmail(message);
