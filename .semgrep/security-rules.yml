@@ -1,0 +1,30 @@
+rules:
+  - id: javascript.lang.security.detect-eval-with-expression
+    languages: [javascript, typescript]
+    message: Avoid eval with dynamic input.
+    severity: ERROR
+    patterns:
+      - pattern: eval($X)
+
+  - id: javascript.lang.security.audit.dangerously-set-inner-html
+    languages: [javascript, typescript]
+    message: Review dangerouslySetInnerHTML usage for XSS risk.
+    severity: WARNING
+    patterns:
+      - pattern: '<... dangerouslySetInnerHTML={{ __html: $HTML }} ...>'
+
+  - id: typescript.node.security.child-process-shell
+    languages: [typescript, javascript]
+    message: Avoid shell execution with dynamic user-controlled values.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: exec($CMD)
+          - pattern: execSync($CMD)
+
+  - id: repository.secrets.detect-hardcoded-token
+    languages: [javascript, typescript, yaml, json, markdown]
+    message: Possible hardcoded credential/token detected.
+    severity: ERROR
+    patterns:
+      - pattern-regex: "(?i)(api[_-]?key|secret|token|password)\\s*[:=]\\s*['\"`][A-Za-z0-9_\\-]{16,}['\"`]"

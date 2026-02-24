@@ -21,6 +21,8 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - Added security requirements baseline and standards mapping (OWASP/NIST/GDPR).
 - Added secure coding guidelines for repository-wide adoption.
 
+- Added threat modeling methodology, stored threat model artifacts, annual review policy, and Semgrep-based security linting + pre-commit secret scanning.
+
 - Added docs governance and living documentation standards.
 - Added plain-text documentation format validation and static docs-site build script.
 - Added docs site build/publish workflow for push/PR automation.
@@ -62,3 +64,11 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - `docs/security/security-standards-mapping.md`
 - `docs/security/secure-coding-guidelines.md`
 - `docs/plan/domain-37/37.3-secure-software-development-lifecycle.md`
+
+- `.semgrep/security-rules.yml`
+- `scripts/verify-staged-secrets.js`
+- `docs/security/threat-modeling-methodology.md`
+- `docs/security/threat-model-review-policy.md`
+- `docs/security/threat-models/auth-and-session-boundary.md`
+- `docs/security/threat-models/tenant-data-isolation.md`
+- `docs/security/threat-models/secrets-and-webhook-ingress.md`
