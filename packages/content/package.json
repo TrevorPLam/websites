@@ -1,0 +1,39 @@
+{
+  "name": "@repo/content",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sanity CMS schema and client utilities for tenant-isolated blog content",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schemas/post": {
+      "types": "./dist/schemas/post.d.ts",
+      "default": "./dist/schemas/post.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src schemas --max-warnings 0"
+  },
+  "dependencies": {
+    "@sanity/image-url": "^1.2.0",
+    "next-sanity": "^10.0.0",
+    "sanity": "^3.86.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "next": "catalog:"
+  }
+}

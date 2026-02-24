@@ -366,11 +366,11 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 
 ## DOMAIN 28: 🔄 PENDING
 
-- [ ] [DOMAIN-28-28-1-philosophy](tasks\domain-28\DOMAIN-28-28-1-philosophy.md) - 28.1-philosophy
-- [ ] [DOMAIN-28-28-2-sanity-schema](tasks\domain-28\DOMAIN-28-28-2-sanity-schema.md) - 28.2 Sanity Schema
-- [ ] [DOMAIN-28-28-3-sanity-client-groq-queries](tasks\domain-28\DOMAIN-28-28-3-sanity-client-groq-queries.md) - 28.3 Sanity Client + GROQ Queries
-- [ ] [DOMAIN-28-28-4-blog-post-page-isr-on-demand-revalidation](tasks\domain-28\DOMAIN-28-28-4-blog-post-page-isr-on-demand-revalidation.md) - 28.4 Blog Post Page (ISR + On-Demand Revalidation)
-- [ ] [DOMAIN-28-28-5-sanity-webhook-on-demand-isr](tasks\domain-28\DOMAIN-28-28-5-sanity-webhook-on-demand-isr.md) - 28.5 Sanity Webhook → On-Demand ISR
+- [x] [DOMAIN-28-28-1-philosophy](tasks\domain-28\DOMAIN-28-28-1-philosophy.md) - 28.1-philosophy (completed 2026-02-24)
+- [x] [DOMAIN-28-28-2-sanity-schema](tasks\domain-28\DOMAIN-28-28-2-sanity-schema.md) - 28.2 Sanity Schema (completed 2026-02-24)
+- [x] [DOMAIN-28-28-3-sanity-client-groq-queries](tasks\domain-28\DOMAIN-28-28-3-sanity-client-groq-queries.md) - 28.3 Sanity Client + GROQ Queries (completed 2026-02-24)
+- [x] [DOMAIN-28-28-4-blog-post-page-isr-on-demand-revalidation](tasks\domain-28\DOMAIN-28-28-4-blog-post-page-isr-on-demand-revalidation.md) - 28.4 Blog Post Page (ISR + On-Demand Revalidation) (completed 2026-02-24)
+- [x] [DOMAIN-28-28-5-sanity-webhook-on-demand-isr](tasks\domain-28\DOMAIN-28-28-5-sanity-webhook-on-demand-isr.md) - 28.5 Sanity Webhook → On-Demand ISR (completed 2026-02-24)
 - [ ] [DOMAIN-28-blog-](tasks\domain-28\DOMAIN-28-blog-.md) - DOMAIN-28-blog-
 - [ ] [DOMAIN-28-blog-section-blog](tasks\domain-28\DOMAIN-28-blog-section-blog.md) - Section blog
 - [ ] [DOMAIN-28-philosophy-.md](tasks\domain-28\DOMAIN-28-philosophy.md-.md) - DOMAIN-28-philosophy-.md
