@@ -4,47 +4,48 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ## Task Status Overview
 
-| Domain    | Total Tasks | Completed | In Progress | Pending |
-| --------- | ----------- | --------- | ----------- | ------- |
-| Domain 0  | 6           | 6         | 0           | 0       |
-| Domain 1  | 6           | 6         | 0           | 0       |
-| Domain 2  | 3           | 3         | 0           | 0       |
-| Domain 3  | 6           | 6         | 0           | 0       |
-| Domain 4  | 6           | 6         | 0           | 0       |
-| Domain 5  | 9           | 9         | 0           | 0       |
-| Domain 6  | 8           | 8         | 0           | 0       |
-| Domain 7  | 5           | 5         | 0           | 0       |
-| Domain 8  | 7           | 7         | 0           | 0       |
-| Domain 9  | 5           | 5         | 0           | 0       |
-| Domain 10 | 4           | 1         | 0           | 3       |
-| Domain 11 | 5           | 5         | 0           | 0       |
-| Domain 12 | 6           | 6         | 0           | 0       |
-| Domain 13 | 8           | 4         | 0           | 4       |
-| Domain 14 | 5           | 5         | 0           | 0       |
-| Domain 15 | 5           | 5         | 0           | 0       |
-| Domain 16 | 3           | 3         | 0           | 0       |
-| Domain 17 | 4           | 4         | 0           | 0       |
-| Domain 18 | 6           | 6         | 0           | 0       |
-| Domain 19 | 4           | 4         | 0           | 0       |
-| Domain 20 | 5           | 5         | 0           | 0       |
-| Domain 21 | 5           | 5         | 0           | 0       |
-| Domain 22 | 5           | 5         | 0           | 0       |
-| Domain 23 | 8           | 8         | 0           | 0       |
-| Domain 24 | 4           | 4         | 0           | 0       |
-| Domain 25 | 3           | 3         | 0           | 0       |
-| Domain 26 | 5           | 5         | 0           | 0       |
-| Domain 27 | 4           | 4         | 0           | 0       |
-| Domain 28 | 5           | 5         | 0           | 0       |
-| Domain 29 | 6           | 6         | 0           | 0       |
-| Domain 30 | 3           | 3         | 0           | 0       |
-| Domain 31 | 4           | 4         | 0           | 0       |
-| Domain 32 | 6           | 6         | 0           | 0       |
-| Domain 33 | 5           | 0         | 0           | 5       |
-| Domain 34 | 5           | 0         | 0           | 5       |
-| Domain 35 | 7           | 0         | 0           | 7       |
-| Domain 36 | 6           | 0         | 0           | 6       |
-| Domain 37 | 133         | 0         | 0           | 133     |
-| **Total** | **444**     | **149**   | **0**       | **295** |
+| Domain       | Total Tasks | Completed | In Progress | Pending |
+| ------------ | ----------- | --------- | ----------- | ------- |
+| Domain 0     | 6           | 6         | 0           | 0       |
+| Domain 1     | 6           | 6         | 0           | 0       |
+| Domain 2     | 3           | 3         | 0           | 0       |
+| Domain 3     | 6           | 6         | 0           | 0       |
+| Domain 4     | 6           | 6         | 0           | 0       |
+| Domain 5     | 9           | 9         | 0           | 0       |
+| Domain 6     | 8           | 8         | 0           | 0       |
+| Domain 7     | 5           | 5         | 0           | 0       |
+| Domain 8     | 7           | 7         | 0           | 0       |
+| Domain 9     | 5           | 5         | 0           | 0       |
+| Domain 10    | 4           | 4         | 0           | 0       |
+| Domain 11    | 5           | 5         | 0           | 0       |
+| Domain 12    | 6           | 6         | 0           | 0       |
+| Domain 13    | 8           | 8         | 0           | 0       |
+| Domain 14    | 5           | 5         | 0           | 0       |
+| Domain 15    | 5           | 5         | 0           | 0       |
+| Domain 16    | 3           | 3         | 0           | 0       |
+| Domain 17    | 4           | 4         | 0           | 0       |
+| Domain 18    | 6           | 6         | 0           | 0       |
+| Domain 19    | 4           | 4         | 0           | 0       |
+| Domain 20    | 5           | 5         | 0           | 0       |
+| Domain 21    | 5           | 5         | 0           | 0       |
+| Domain 22    | 5           | 5         | 0           | 0       |
+| Domain 23    | 8           | 8         | 0           | 0       |
+| Domain 24    | 4           | 4         | 0           | 0       |
+| Domain 25    | 3           | 3         | 0           | 0       |
+| Domain 26    | 5           | 5         | 0           | 0       |
+| Domain 27    | 4           | 4         | 0           | 0       |
+| Domain 28    | 5           | 5         | 0           | 0       |
+| Domain 29    | 6           | 6         | 0           | 0       |
+| Domain 30    | 3           | 3         | 0           | 0       |
+| Domain 31    | 4           | 4         | 0           | 0       |
+| Domain 32    | 6           | 6         | 0           | 0       |
+| Domain 33    | 5           | 0         | 0           | 5       |
+| Domain 34    | 5           | 0         | 0           | 5       |
+| Domain 35    | 7           | 0         | 0           | 7       |
+| Domain 36    | 6           | 0         | 0           | 6       |
+| Domain 37    | 156         | 3         | 0           | 153     |
+| Gap Analysis | 20          | 0         | 0           | 20      |
+| **Total**    | **467**     | **156**   | **0**       | **311** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -137,12 +138,12 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-9-4-phone-click-tracker - Phone Click Tracker for attribution
 - [x] DOMAIN-9-5-lead-notification-system - Lead notification system
 
-## DOMAIN 10: Real-time Features 🔄 PENDING
+## DOMAIN 10: Real-time Features ✅ COMPLETE
 
 - [x] DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed - Supabase Realtime for Portal Lead Feed
-- [ ] DOMAIN-10-2-realtime-lead-feed - Real-time lead feed implementation
-- [ ] DOMAIN-10-3-websocket-connection - WebSocket connection management
-- [ ] DOMAIN-10-4-realtime-notifications - Real-time notification system
+- [x] DOMAIN-10-2-realtime-lead-feed - Real-time lead feed implementation
+- [x] DOMAIN-10-3-websocket-connection - WebSocket connection management
+- [x] DOMAIN-10-4-realtime-notifications - Real-time notification system
 
 ## DOMAIN 11: Billing & Payments ✅ COMPLETE
 
@@ -161,16 +162,16 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-12-5-booking-reminder-job - Booking reminder job
 - [x] DOMAIN-12-6-gdpr-deletion-job - GDPR deletion job
 
-## DOMAIN 13: Observability & Error Tracking 🔄 PENDING
+## DOMAIN 13: Observability & Error Tracking ✅ COMPLETE
 
 - [x] DOMAIN-13-13-1-philosophy - Philosophy documentation and guiding principles
 - [x] DOMAIN-13-13-2-opentelemetry-instrumentation - OpenTelemetry instrumentation with Sentry integration
 - [x] DOMAIN-13-13-3-tinybird-analytics-dashboard-schema - Tinybird data sources and API endpoints
 - [x] DOMAIN-13-13-4-portal-analytics-dashboard-component - Portal analytics dashboard component
-- [ ] DOMAIN-13-13-5-error-tracking-setup - Error tracking setup and configuration
-- [ ] DOMAIN-13-13-6-performance-monitoring - Performance monitoring implementation
-- [ ] DOMAIN-13-13-7-alerting-system - Alerting system setup
-- [ ] DOMAIN-13-13-8-dashboard-creation - Analytics dashboard creation
+- [x] DOMAIN-13-13-5-error-tracking-setup - Error tracking setup and configuration
+- [x] DOMAIN-13-13-6-performance-monitoring - Performance monitoring implementation
+- [x] DOMAIN-13-13-7-alerting-system - Alerting system setup
+- [x] DOMAIN-13-13-8-dashboard-creation - Analytics dashboard creation
 
 ## DOMAIN 14: Accessibility & WCAG ✅ COMPLETE
 
@@ -385,6 +386,43 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [ ] DOMAIN-36-36-5-rollback-procedure - Rollback Procedure
 - [ ] DOMAIN-36-36-6-fresh-environment-setup - Fresh Environment Setup
 
+## GAP ANALYSIS TASKS 🕳️
+
+### **Week 1: Critical Issues Resolution (P0)**
+
+- [ ] GAP-ENV-001-create-env-example - Create `.env.example` template with all required environment variables
+- [ ] GAP-ENV-002-add-prettier-config - Create `.prettierrc` configuration for consistent code formatting
+- [ ] GAP-DESIGN-001-implement-design-tokens - Create `packages/design-tokens/` with color, typography, spacing, and component tokens
+- [ ] GAP-FSD-001-create-missing-layer-packages - Create missing FSD v2.1 layer packages (`@repo/entities`, `@repo/shared`)
+- [ ] GAP-CONFIG-001-create-tailwind-config - Create centralized `tailwind.config.ts` with design tokens integration
+- [ ] GAP-FSD-002-restructure-features-package - Restructure `packages/features/src/` to follow FSD v2.1 layer architecture
+
+### **Week 2: Design System & Documentation (P1)**
+
+- [ ] GAP-UI-001-expand-test-coverage - Create test files for all 60+ UI components, target 80% coverage
+- [ ] GAP-UI-002-add-storybook-stories - Add Storybook stories for all UI components for design system documentation
+- [ ] GAP-UI-003-implement-form-utilities - Add form validation utilities, field arrays, and form state management
+- [ ] GAP-UI-004-add-component-variants - Add variant systems for buttons, inputs, and other interactive components
+- [ ] GAP-CLEANUP-001-remove-bak-files - Remove all `.bak` files and verify test functionality
+
+### **Week 3: Testing & Integration (P1)**
+
+- [ ] GAP-TEST-001-add-e2e-multi-tenant - Add comprehensive E2E tests for tenant isolation, authentication flows, and core user journeys
+- [ ] GAP-TEST-002-add-integration-tests - Add integration tests for package interactions, especially `@repo/ui` → `@repo/features`
+- [ ] GAP-FEATURE-001-implement-compliance - Implement compliance features for GDPR, CCPA, and accessibility requirements
+- [ ] GAP-CONFIG-002-add-turbo-tasks - Add Turbo tasks for design token generation and FSD architecture validation
+- [ ] GAP-UI-005-optimize-bundle-exports - Audit exports and remove unused components to optimize bundle size
+
+### **Week 4: Advanced Features (P2)**
+
+- [ ] GAP-ADVANCED-001-implement-fsd-validation - Implement automated FSD architecture validation
+- [ ] GAP-ADVANCED-002-add-component-size-systems - Add comprehensive size and style systems for all interactive components
+- [ ] GAP-ADVANCED-003-replace-hardcoded-values - Replace hard-coded HSL values in `globals.css` with design token references
+- [ ] GAP-ADVANCED-004-create-theme-system - Create comprehensive theme system with preset support
+- [ ] GAP-ADVANCED-005-add-design-token-generation - Add automated design token generation and validation
+
+---
+
 ## CRITICAL PRODUCTION READINESS TASKS 🚨
 
 ### **Week 1: Critical Issues Resolution (P0)**
@@ -442,6 +480,12 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 ---
 
 ## DOMAIN 37: Repository Excellence & AI-Ready Practices 🔄 PENDING
+
+### New Technical Debt Management Tasks
+
+- [x] DOMAIN-37-001-large-files-components - Large files and components technical debt analysis
+- [x] DOMAIN-37-002-typescript-over-complexity - TypeScript over-complexity technical debt analysis
+- [x] DOMAIN-37-003-build-config-over-engineering - Build configuration over-engineering technical debt analysis
 
 ### Part 1: Code-Level Practices (18 tasks)
 
