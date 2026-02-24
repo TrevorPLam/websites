@@ -1,3 +1,16 @@
+/**
+ * @file packages/infrastructure/security/csp.ts
+ * @summary Content Security Policy utilities and nonce generation helpers.
+ * @exports createCspNonce, generateCSPNonce, buildContentSecurityPolicy, constants
+ * @invariants Nonces are cryptographically strong and policy generation remains deterministic.
+ * @security Internal-only foundation module; avoid exposing tenant internals.
+ * @gotchas Use middleware to inject nonce header before rendering server HTML.
+ 
+ * @description Wave 0 foundational implementation for platform baseline.
+ * @adr none
+ * @requirements TASKS.md Wave 0 Task 2/3/4
+ */
+
 // File: packages/infra/security/csp.ts  [TRACE:FILE=packages.infra.security.csp]
 // Purpose: Content Security Policy utilities implementing 2026 security best practices.
 //          Provides nonce-based CSP generation, policy building, and violation reporting.
@@ -83,6 +96,9 @@ function getCryptoProvider(): Crypto {
 // [TRACE:FUNC=packages.infra.security.csp.createCspNonce]
 // [FEAT:CRYPTOGRAPHY] [FEAT:SECURITY]
 // NOTE: Creates cryptographically secure CSP nonce using 128 bits of entropy for optimal security.
+/**
+ * export function createCspNonce(): string.
+ */
 export function createCspNonce(): string {
   const bytes = new Uint8Array(NONCE_BYTE_LENGTH);
   getCryptoProvider().getRandomValues(bytes);
@@ -92,6 +108,9 @@ export function createCspNonce(): string {
 // [TRACE:FUNC=packages.infra.security.csp.buildContentSecurityPolicy]
 // [FEAT:SECURITY] [FEAT:ENVIRONMENT] [FEAT:COMPLIANCE]
 // NOTE: Builds CSP header value with 2026 best practices - nonce-based, strict-dynamic, and reporting.
+/**
+ * export function buildContentSecurityPolicy(.
+ */
 export function buildContentSecurityPolicy({
   nonce,
   isDevelopment,
@@ -110,7 +129,7 @@ export function buildContentSecurityPolicy({
     scriptSources.push("'strict-dynamic'");
   }
 
-  // Development: allow unsafe-eval for Next.js HMR (temporary)
+  // In development we permit unsafe-eval solely for Next.js HMR/runtime transforms; production keeps this disabled to preserve XSS hardening.
   if (isDevelopment) {
     scriptSources.push("'unsafe-eval'");
   }
@@ -165,6 +184,9 @@ export function buildContentSecurityPolicy({
  * Creates a Report-To endpoint configuration for CSP violation reporting
  * Follows 2026 reporting API standards
  */
+/**
+ * export function buildReportToConfig(.
+ */
 export function buildReportToConfig({
   endpoint,
   groupName = 'csp-endpoint',
@@ -191,6 +213,9 @@ export function buildReportToConfig({
  * Validates a CSP nonce format and entropy
  * Ensures nonce meets security requirements
  */
+/**
+ * export function validateCspNonce(nonce: string): boolean.
+ */
 export function validateCspNonce(nonce: string): boolean {
   if (!nonce || typeof nonce !== 'string') {
     return false;
@@ -209,6 +234,9 @@ export function validateCspNonce(nonce: string): boolean {
 /**
  * Processes CSP violation reports for security monitoring
  * Implements 2026 observability patterns
+ */
+/**
+ * export function processCspViolationReport(report: CspViolationReport):.
  */
 export function processCspViolationReport(report: CspViolationReport): {
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -259,6 +287,9 @@ export function processCspViolationReport(report: CspViolationReport): {
  * Maintains backward compatibility while encouraging migration
  * @deprecated Use buildContentSecurityPolicy with full options
  */
+/**
+ * export function buildLegacyContentSecurityPolicy(.
+ */
 export function buildLegacyContentSecurityPolicy({
   nonce,
   isDevelopment,
@@ -271,4 +302,9 @@ export function buildLegacyContentSecurityPolicy({
     isDevelopment,
     enableStrictDynamic: !isDevelopment,
   });
+}
+
+/** Backward-compatible alias for middleware nonce generation. */
+export function generateCSPNonce(): string {
+  return createCspNonce();
 }

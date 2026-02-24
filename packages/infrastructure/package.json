@@ -26,7 +26,11 @@
     "./tokens/decision-tokens.css": "./tokens/decision-tokens.css",
     "./tokens/component-tokens.css": "./tokens/component-tokens.css",
     "./tailwind-theme.css": "./tailwind-theme.css",
-    "./experiments": "./experiments/index.ts"
+    "./experiments": "./experiments/index.ts",
+    "./database": "./database/server.ts",
+    "./database/types": "./database/types.ts",
+    "./cache": "./cache/redis.ts",
+    "./context/tenant": "./context/tenant-context.ts"
   },
   "scripts": {
     "lint": "eslint .",

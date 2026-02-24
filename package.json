@@ -43,8 +43,8 @@
     "verify:phase1": "pnpm install && pnpm build && pnpm test",
     "validate:workspaces": "node scripts/validate-workspaces.js",
     "knip": "knip",
-    "syncpack:check": "syncpack list-mismatches",
-    "syncpack:fix": "syncpack fix-mismatches",
+    "syncpack:check": "syncpack lint",
+    "syncpack:fix": "syncpack fix && syncpack format",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "validate-docs": "node scripts/validate-documentation.js",
@@ -106,7 +106,9 @@
     "ai:intelligent-rollback": "node scripts/ai/deploy-intelligent-rollback.mjs",
     "ai:predictive-maintenance": "node scripts/ai/enable-predictive-maintenance.mjs",
     "ai:technical-debt": "node scripts/ai/automate-technical-debt-reduction.mjs",
-    "validate:turbo-cache-env": "node scripts/validation/validate-turbo-cache-env.mjs"
+    "validate:turbo-cache-env": "node scripts/validation/validate-turbo-cache-env.mjs",
+    "syncpack:lint": "syncpack lint",
+    "syncpack:format": "syncpack format"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
@@ -155,8 +157,8 @@
     }
   },
   "dependencies": {
-    "@sentry/opentelemetry": "^10.39.0",
-    "@vercel/otel": "^2.1.1",
+    "@sentry/opentelemetry": "catalog:",
+    "@vercel/otel": "catalog:",
     "server-only": "catalog:"
   }
 }

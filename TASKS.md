@@ -1,38 +1,38 @@
 Strategic Implementation Roadmap: Wave 0 Vertical Slicing
 Reasoning: Based on the manifest, I have resequenced to prioritize Infrastructure Bedrock over Business Logic. The 1,124-file scope requires that FSD v2.1 enforcement (Steiger), Catalog Protocol dependency management, and RLS (Row Level Security) policies exist before any feature code. I have inserted explicit Batch identifiers (Wave.Batch notation) to support the automation scripting requested, and added Security Hardening (CVE-2025-29927 mitigation) as a explicit deliverable given the manifest's emphasis on zero-trust architecture. The sequencing follows: Tooling → Data Isolation → Domain Rules → Presentation → Integration → Protection.
-**[ ] Task 1: Initialize Monorepo Harness & Build Orchestration (Wave 0, Batch 0.1)**
+**[x] Task 1: Initialize Monorepo Harness & Build Orchestration (Wave 0, Batch 0.1)**
 Strategic Objective: Establish the "Factory Floor"—architectural enforcement, dependency management via Catalog Protocol, and CI/CD gates must exist before business logic to prevent FSD drift and version fragmentation across 15 packages.
 Targeted Files:
-• [ ] pnpm-workspace.yaml – Define workspaces, catalog versions (Next.js 16.1.5, React 19), and onlyBuiltDependencies for security
-• [ ] turbo.json – Configure topological build pipeline with remote caching and //# root script references
+• [x] pnpm-workspace.yaml – Define workspaces, catalog versions (Next.js 16.1.5, React 19), and onlyBuiltDependencies for security
+• [x] turbo.json – Configure topological build pipeline with remote caching and //# root script references
 • [x] steiger.config.ts – FSD v2.1 linter configuration with @x cross-import notation rules
 • [x] tooling/eslint/rules/fsd-boundaries.js – Custom ESLint rule preventing cross-layer imports (entities → widgets)
 • [x] tooling/fsd-cli/src/commands/create-slice.ts – Scaffolding automation for consistent slice generation
-• [ ] package.json – Root scripts using catalog: protocol references
+• [x] package.json – Root scripts using catalog: protocol references
 Relevant Context Files:
-• [ ] Manifest: Root configuration files (.npmrc strict mode, .nvmrc v20.11.0)
+• [x] Manifest: Root configuration files (.npmrc strict mode, .nvmrc v20.11.0)
 • [x] Manifest: tooling/fsd-cli/ templates (component.tsx.hbs, feature.ts.hbs)
 Dependencies: None (Ground Zero)
 Advanced Code Patterns:
 • Catalog Protocol Versioning: Centralize dependency versions in pnpm-workspace.yaml catalog, consume via "next": "catalog:" in package.json to enforce consistency across apps/web, apps/admin, and 15 packages
-• Turborepo Scoped Builds: Configure pipeline.build.inputs with "TURBO_DEFAULT", ".env" and outputs with [".next/", "!.next/cache/"] for cache granularity
+• Turborepo Scoped Builds: Configure pipeline.build.inputs with "TURBO*DEFAULT", ".env" and outputs with [".next/", "!.next/cache/"] for cache granularity
 • FSD Steiger Enforcement: Configure exclude: ['.config.', '/node_modules/'] and custom rules to enforce that widgets/ cannot import from features/ directly (must use public API)
 Sub-tasks:
-• [ ] Configure pnpm workspace with catalog versions (Next 16.1.5, React 19, TypeScript 5.9.3) and strict hoisting rules
+• [x] Configure pnpm workspace with catalog versions (Next 16.1.5, React 19, TypeScript 5.9.3) and strict hoisting rules
 • [x] Set up Turborepo remote caching with TURBO_REMOTE_CACHE_SIGNATURE_KEY environment validation
 • [x] Initialize Steiger FSD linter with rules for @x notation and layer boundaries
 • [x] Create FSD CLI scaffolding templates for create-slice command with proper segment generation (ui/, api/, model/, lib/)
-• [ ] Configure syncpack for dependency alignment across workspace packages
-**[ ] Task 2: Database Foundation with Tenant Isolation & RLS (Wave 0, Batch 0.2)**
+• [x] Configure syncpack for dependency alignment across workspace packages
+**[x] Task 2: Database Foundation with Tenant Isolation & RLS (Wave 0, Batch 0.2)**
 Strategic Objective: Establish the multi-tenant data layer with Row Level Security policies before application code. The manifest identifies RLS as "Critical P0" for tenant isolation—this must be immutable before Wave 1.
 Targeted Files:
-• [ ] database/migrations/00000000000000_init.sql – Extensions (uuid-ossp), base schemas
-• [ ] database/migrations/20240101000000_tenants.sql – Tenant table with slug, custom_domain, settings JSONB
-• [ ] database/migrations/20240103000000_leads.sql – Lead table with tenant_id FK and RLS policies
-• [ ] database/migrations/20240113000000_rls_policies.sql – Centralized RLS policy definitions using current_setting('app.current_tenant')
-• [ ] database/policies/tenant_isolation.md – Documentation of 3-layer defense strategy
-• [ ] packages/infrastructure/database/server.ts – PostgREST client with RLS context injection
-• [ ] packages/infrastructure/database/types.ts – Generated TypeScript types from Supabase schema
+• [x] database/migrations/00000000000000_init.sql – Extensions (uuid-ossp), base schemas
+• [x] database/migrations/20240101000000_tenants.sql – Tenant table with slug, custom_domain, settings JSONB
+• [x] database/migrations/20240103000000_leads.sql – Lead table with tenant_id FK and RLS policies
+• [x] database/migrations/20240113000000_rls_policies.sql – Centralized RLS policy definitions using current_setting('app.current_tenant')
+• [x] database/policies/tenant_isolation.md – Documentation of 3-layer defense strategy
+• [x] packages/infrastructure/database/server.ts – PostgREST client with RLS context injection
+• [x] packages/infrastructure/database/types.ts – Generated TypeScript types from Supabase schema
 Relevant Context Files:
 • [ ] Manifest: database/migrations/ (25 SQL files referenced)
 • [ ] Manifest: packages/infrastructure/database/ (RLS helpers, connection pooling)
@@ -42,20 +42,20 @@ Advanced Code Patterns:
 • Request Context Propagation: Node.js AsyncLocalStorage in packages/infrastructure/context/tenant-context.ts sets tenant ID per HTTP request; database client automatically applies set_config('app.current_tenant', tenantId, true) before queries
 • RLS Testing Harness: tests/integration/rls-bypass.spec.ts attempts cross-tenant SELECT operations and asserts zero-row returns with expect(results).toHaveLength(0) to prevent isolation breaches
 Sub-tasks:
-• [ ] Create tenants table with id (UUID PK), slug (unique), custom_domain (unique), settings (JSONB), created_at
-• [ ] Create leads table with id, tenant_id (FK), email, name, source, status, metadata (JSONB), created_at with RLS enabled
-• [ ] Write RLS policies: tenant_access_policy using USING (tenant_id = current_setting('app.current_tenant')::UUID) and WITH CHECK constraints
-• [ ] Generate TypeScript database types using Supabase CLI into packages/infrastructure/database/types.ts
-• [ ] Create tests/integration/tenant-isolation.spec.ts with test cases for cross-tenant data access attempts (must fail)
-**[ ] Task 3: Infrastructure Context Layer & Security Primitives (Wave 0, Batch 0.3)**
+• [x] Create tenants table with id (UUID PK), slug (unique), custom_domain (unique), settings (JSONB), created_at
+• [x] Create leads table with id, tenant_id (FK), email, name, source, status, metadata (JSONB), created_at with RLS enabled
+• [x] Write RLS policies: tenant_access_policy using USING (tenant_id = current_setting('app.current_tenant')::UUID) and WITH CHECK constraints
+• [x] Generate TypeScript database types using Supabase CLI into packages/infrastructure/database/types.ts
+• [x] Create tests/integration/tenant-isolation.spec.ts with test cases for cross-tenant data access attempts (must fail)
+**[x] Task 3: Infrastructure Context Layer & Security Primitives (Wave 0, Batch 0.3)**
 Strategic Objective: Build the "plumbing" that carries tenant identity, request tracing, and encryption capabilities through the stack without explicit parameter passing. Implements AES-256-GCM encryption for per-tenant secrets as specified in manifest security architecture.
 Targeted Files:
-• [ ] packages/infrastructure/context/tenant-context.ts – AsyncLocalStorage wrapper for implicit tenant propagation
-• [ ] packages/infrastructure/context/request-context.ts – Request ID generation for distributed tracing
-• [ ] packages/infrastructure/security/encryption.ts – AES-256-GCM implementation for CRM API keys and secrets
-• [ ] packages/infrastructure/security/audit-logger.ts – Structured audit trail for tenant-scoped actions
-• [ ] packages/infrastructure/cache/redis.ts – Upstash Redis client with tenant-aware key prefixing (tenant:{id}:_)
-• [ ] packages/infrastructure/security/csp.ts – CSP nonce generation for middleware injection
+• [x] packages/infrastructure/context/tenant-context.ts – AsyncLocalStorage wrapper for implicit tenant propagation
+• [x] packages/infrastructure/context/request-context.ts – Request ID generation for distributed tracing
+• [x] packages/infrastructure/security/encryption.ts – AES-256-GCM implementation for CRM API keys and secrets
+• [x] packages/infrastructure/security/audit-logger.ts – Structured audit trail for tenant-scoped actions
+• [x] packages/infrastructure/cache/redis.ts – Upstash Redis client with tenant-aware key prefixing (tenant:{id}:*)
+• [x] packages/infrastructure/security/csp.ts – CSP nonce generation for middleware injection
 Relevant Context Files:
 • [ ] Manifest: packages/infrastructure/context/ (AsyncLocalStorage pattern)
 • [ ] Manifest: packages/infrastructure/security/ (encryption, audit logging)
@@ -66,21 +66,21 @@ Advanced Code Patterns:
 • Repository Pattern with Context Injection: Database clients automatically append RLS context by reading from ALS, ensuring zero chance of developer forgetting to filter by tenant
 • AES-256-GCM with Per-Tenant Keys: Derive encryption keys via HKDF(masterKey, tenantId, 'aes-256-gcm'); store initialization vectors alongside ciphertext; cache decrypted keys in Redis with 5-minute TTL to prevent key derivation overhead
 Sub-tasks:
-• [ ] Implement TenantContext class using Node.js AsyncLocalStorage with run() method for context isolation
-• [ ] Create withTenant(tenantId, callback) helper that wraps execution contexts and guarantees cleanup
-• [ ] Implement encryption utilities using Node.js crypto module (AES-256-GCM) for storing sensitive integration credentials
-• [ ] Configure Redis client with automatic key namespacing (tenant:${tenantId}:cache_key) to prevent cache leakage
-• [ ] Create generateCSPNonce() utility for Content Security Policy headers with strict-dynamic support
-**[ ] Task 4: Domain Entity Foundation & Value Objects (Wave 0, Batch 1.1)**
+• [x] Implement TenantContext class using Node.js AsyncLocalStorage with run() method for context isolation
+• [x] Create withTenant(tenantId, callback) helper that wraps execution contexts and guarantees cleanup
+• [x] Implement encryption utilities using Node.js crypto module (AES-256-GCM) for storing sensitive integration credentials
+• [ ] Configure Redis client with automatic key namespacing (tenant:${tenantId}:cache*key) to prevent cache leakage
+• [x] Create generateCSPNonce() utility for Content Security Policy headers with strict-dynamic support
+**[x] Task 4: Domain Entity Foundation & Value Objects (Wave 0, Batch 1.1)**
 Strategic Objective: Define immutable business rules for Leads and Tenants using rich domain models in packages/core (zero external dependencies per manifest). Establishes the Result/Option pattern for functional error handling.
 Targeted Files:
-• [ ] packages/core/shared/Result.ts – Either monad implementation (Result<T, E>) for explicit error handling
-• [ ] packages/core/shared/Option.ts – Maybe type for nullable handling
-• [ ] packages/core/entities/tenant/Tenant.ts – Entity class with domain behavior
-• [ ] packages/core/entities/lead/Lead.ts – Lead entity with state machine (captured → qualified → converted)
-• [ ] packages/core/value-objects/Email.ts – Value object with RFC 5322 validation
-• [ ] packages/core/value-objects/TenantId.ts – Branded UUID type
-• [ ] packages/core/entities/tenant/errors.ts – Domain-specific error classes
+• [x] packages/core/shared/Result.ts – Either monad implementation (Result<T, E>) for explicit error handling
+• [x] packages/core/shared/Option.ts – Maybe type for nullable handling
+• [x] packages/core/entities/tenant/Tenant.ts – Entity class with domain behavior
+• [x] packages/core/entities/lead/Lead.ts – Lead entity with state machine (captured → qualified → converted)
+• [x] packages/core/value-objects/Email.ts – Value object with RFC 5322 validation
+• [x] packages/core/value-objects/TenantId.ts – Branded UUID type
+• [x] packages/core/entities/tenant/errors.ts – Domain-specific error classes
 Relevant Context Files:
 • [ ] Manifest: packages/core/ structure (zero-deps domain layer)
 • [ ] Manifest: packages/core/entities/tenant/ (business rules only)
@@ -91,12 +91,12 @@ Advanced Code Patterns:
 • Value Object Immutability: Email validation occurs in constructor; once instantiated, Email value object is frozen with Object.freeze(); modification requires creating new instance
 • Result Pattern Over Exceptions: Functions return Result<T, DomainError> instead of throwing; forces caller to handle error cases via match() or unwrap() pattern
 Sub-tasks:
-• [ ] Create Result<T, E> and Option<T> monad implementations with map, flatMap, match methods
-• [ ] Implement Tenant entity with create(), updateSettings(), and suspend() domain methods
-• [ ] Implement Lead entity with capture(), qualify(qualityScore), assignTo(userId), and convert() methods with validation rules
-• [ ] Create Email value object with regex validation and normalization (trim, lowercase)
-• [ ] Create TenantId branded type with UUID v4 validation and factory function
-• [ ] Write unit tests for domain logic using Vitest (zero DOM dependencies per manifest)
+• [x] Create Result<T, E> and Option<T> monad implementations with map, flatMap, match methods
+• [x] Implement Tenant entity with create(), updateSettings(), and suspend() domain methods
+• [x] Implement Lead entity with capture(), qualify(qualityScore), assignTo(userId), and convert() methods with validation rules
+• [x] Create Email value object with regex validation and normalization (trim, lowercase)
+• [x] Create TenantId branded type with UUID v4 validation and factory function
+• [x] Write unit tests for domain logic using Vitest (zero DOM dependencies per manifest)
 **[ ] Task 5: UI Primitive Design System & CVA Architecture (Wave 0, Batch 1.2)**
 Strategic Objective: Establish the atomic component library using CVA (class-variance-authority) for type-safe Tailwind variants. These primitives form the foundation for all marketing and dashboard UI.
 Targeted Files:
@@ -234,7 +234,7 @@ Advanced Code Patterns:
 • CVE-2025-29927 Mitigation: Explicitly check for x-middleware-subrequest header and return 403 if present to prevent middleware bypass attacks
 • JWT Tenant Claims Enrichment: Enrich Clerk JWT session with tenantId and role claims via auth() helper; verify in Server Actions using verifyToken() with JWKS
 • RBAC Bitwise Permissions: Define permissions as bitwise flags (Permissions.LEAD_READ = 1 << 0, LEAD_WRITE = 1 << 1, ADMIN = 1 << 7); check via hasPermission(user.role, Permissions.LEAD_WRITE) for efficient authorization
-• Route Protection Bypass: Ensure /api/webhooks/_ and /api/health routes skip auth middleware but retain tenant resolution and signature verification (HMAC)
+• Route Protection Bypass: Ensure /api/webhooks/* and /api/health routes skip auth middleware but retain tenant resolution and signature verification (HMAC)
 Sub-tasks:
 • [ ] Configure Clerk middleware with afterAuth hook to inject tenant context into AsyncLocalStorage
 • [ ] Implement CVE-2025-29927 protection by rejecting requests with x-middleware-subrequest header
@@ -430,8 +430,8 @@ Sub-tasks:
 **[ ] Task 17: Advanced Security, Audit Logging & Compliance (Wave 1, Batch 3.4)**
 Strategic Objective: Harden security for SOC 2 compliance with comprehensive audit logging, data encryption at rest, and automated security scanning. Prepares for enterprise sales.
 Targeted Files:
-• [ ] packages/infrastructure/security/audit-logger.ts – Structured audit log emitter
-• [ ] packages/infrastructure/security/encryption.ts – Field-level encryption for PII
+• [x] packages/infrastructure/security/audit-logger.ts – Structured audit log emitter
+• [x] packages/infrastructure/security/encryption.ts – Field-level encryption for PII
 • [ ] database/migrations/20240112000000_audit_logs.sql – Audit log table (immutable)
 • [ ] apps/web/middleware.ts – Security headers update (HSTS, CSP strict-dynamic)
 • [ ] scripts/security/verify-locks.sh – Dependency vulnerability scanning

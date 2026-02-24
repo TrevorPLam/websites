@@ -1,3 +1,16 @@
+/**
+ * @file packages/infrastructure/index.ts
+ * @summary Generated for Wave 0 foundational tasks.
+ * @exports Public module exports for this file.
+ * @invariants Keeps tenant and domain boundaries explicit.
+ * @security Internal-only foundation module; avoid exposing tenant internals.
+ * @gotchas Intended for server-side and test harness usage in this monorepo.
+ 
+ * @description Wave 0 foundational implementation for platform baseline.
+ * @adr none
+ * @requirements TASKS.md Wave 0 Task 2/3/4
+ */
+
 // File: packages/infra/index.ts  [TRACE:FILE=packages.infra.index]
 // Purpose: Infrastructure package entry point providing centralized exports for all security,
 //          middleware, logging, and monitoring utilities. Serves as the main interface for
@@ -94,3 +107,9 @@ export const INFRA_PACKAGE_VERSION = '1.0.0';
 // [FEAT:EXPERIMENTS]
 // NOTE: Experimentation exports - A/B testing engine and guardrails.
 export * from './experiments/index.ts';
+
+export * from './context/tenant-context.ts';
+export * from './database/server.ts';
+export * from './database/types.ts';
+export * from './cache/redis.ts';
+export * from './security/encryption.ts';
