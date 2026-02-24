@@ -10,7 +10,7 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 | Domain 03 | 6 | 6 | 0 | 0 |
 | Domain 04 | 6 | 6 | 0 | 0 |
 | Domain 05 | 9 | 9 | 0 | 0 |
-| Domain 06 | 4 | 0 | 0 | 4 |
+| Domain 06 | 4 | 4 | 0 | 0 |
 | Domain 07 | 5 | 0 | 0 | 5 |
 | Domain 08 | 6 | 0 | 0 | 6 |
 | Domain 09 | 8 | 0 | 0 | 8 |
@@ -41,10 +41,10 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 | Domain 34 | 4 | 0 | 0 | 4 |
 | Domain 35 | 11 | 0 | 0 | 11 |
 | Domain 36 | 9 | 0 | 0 | 9 |
-| Domain 6 | 4 | 0 | 0 | 4 |
+| Domain 6 | 4 | 4 | 0 | 0 |
 | Domain 7 | 5 | 0 | 0 | 5 |
 | Domain 8 | 6 | 0 | 0 | 6 |
-| **Total** | **235** | **36** | **0** | **199** |
+| **Total** | **235** | **40** | **0** | **195** |
 
 ## DOMAIN 1: ✅ COMPLETE
 
@@ -97,12 +97,12 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [x] [DOMAIN-5-DOMAIN-5-008-bundle-size-budgets](tasks/domain-5/DOMAIN-5-008-bundle-size-budgets.md) -
 - [x] [DOMAIN-5-DOMAIN-5-009-lighthouse-ci](tasks/domain-5/DOMAIN-5-009-lighthouse-ci.md) -
 
-## DOMAIN 6: 🔄 PENDING
+## DOMAIN 6: ✅ COMPLETE
 
-- [ ] [DOMAIN-6-DOMAIN-6-001-connection-pooling](tasks/domain-6/DOMAIN-6-001-connection-pooling.md) -
-- [ ] [DOMAIN-6-DOMAIN-6-002-electricsql-sync](tasks/domain-6/DOMAIN-6-002-electricsql-sync.md) -
-- [ ] [DOMAIN-6-DOMAIN-6-003-pglite-wasm](tasks/domain-6/DOMAIN-6-003-pglite-wasm.md) -
-- [ ] [DOMAIN-6-DOMAIN-6-004-schema-migration-safety](tasks/domain-6/DOMAIN-6-004-schema-migration-safety.md) -
+- [x] [DOMAIN-6-DOMAIN-6-001-connection-pooling](tasks/domain-6/DOMAIN-6-001-connection-pooling.md) -
+- [x] [DOMAIN-6-DOMAIN-6-002-electricsql-sync](tasks/domain-6/DOMAIN-6-002-electricsql-sync.md) -
+- [x] [DOMAIN-6-DOMAIN-6-003-pglite-wasm](tasks/domain-6/DOMAIN-6-003-pglite-wasm.md) -
+- [x] [DOMAIN-6-DOMAIN-6-004-schema-migration-safety](tasks/domain-6/DOMAIN-6-004-schema-migration-safety.md) -
 
 ## DOMAIN 7: 🔄 PENDING
 
