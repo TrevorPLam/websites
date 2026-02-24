@@ -43,9 +43,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34    | 5           | 5         | 0           | 0       |
 | Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 6         | 0           | 0       |
-| Domain 37    | 156         | 45        | 0           | 111     |
+| Domain 37    | 156         | 53        | 0           | 103     |
 | Gap Analysis | 20          | 2         | 0           | 18      |
-| **Total**    | **467**     | **218**   | **0**       | **249** |
+| **Total**    | **467**     | **226**   | **0**       | **241** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -1485,14 +1485,14 @@ A task is considered **complete** when:
 - [ ] DOMAIN-37-077-incident-analysis-simplification - Simplify complex incident analysis
 - [ ] DOMAIN-37-078-root-cause-analysis-cleanup - Reduce excessive root cause analysis procedures
 - [ ] DOMAIN-37-079-post-mortem-simplification - Simplify complex post-mortem processes
-- [ ] DOMAIN-37-080-knowledge-management-cleanup - Reduce excessive knowledge management systems
-- [ ] DOMAIN-37-081-documentation-maintenance-simplification - Simplify complex documentation maintenance
-- [ ] DOMAIN-37-082-training-complexity-reduction - Reduce over-engineered training and onboarding
-- [ ] DOMAIN-37-083-knowledge-transfer-cleanup - Simplify complex knowledge transfer processes
-- [ ] DOMAIN-37-084-onboarding-simplification - Simplify complex developer onboarding
-- [ ] DOMAIN-37-085-code-review-cleanup - Reduce excessive code review procedures
-- [ ] DOMAIN-37-086-pair-programming-simplification - Simplify complex pair programming patterns
-- [ ] DOMAIN-37-087-mentoring-complexity-reduction - Reduce over-engineered mentoring systems
+- [x] DOMAIN-37-080-knowledge-management-cleanup - Reduce excessive knowledge management systems
+- [x] DOMAIN-37-081-documentation-maintenance-simplification - Simplify complex documentation maintenance
+- [x] DOMAIN-37-082-training-complexity-reduction - Reduce over-engineered training and onboarding
+- [x] DOMAIN-37-083-knowledge-transfer-cleanup - Simplify complex knowledge transfer processes
+- [x] DOMAIN-37-084-onboarding-simplification - Simplify complex developer onboarding
+- [x] DOMAIN-37-085-code-review-cleanup - Reduce excessive code review procedures
+- [x] DOMAIN-37-086-pair-programming-simplification - Simplify complex pair programming patterns
+- [x] DOMAIN-37-087-mentoring-complexity-reduction - Reduce over-engineered mentoring systems
 - [ ] DOMAIN-37-088-collaboration-tools-cleanup - Simplify complex collaboration tooling
 - [ ] DOMAIN-37-089-communication-simplification - Simplify complex communication patterns
 - [ ] DOMAIN-37-090-meeting-overhead-reduction - Reduce excessive meeting and ceremony
