@@ -39,11 +39,11 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 | Domain 30 | 4           | 4         | 0           | 0       |
 | Domain 31 | 8           | 4         | 0           | 4       |
 | Domain 32 | 6           | 0         | 0           | 6       |
-| Domain 33 | 8           | 0         | 0           | 8       |
+| Domain 33 | 8           | 5         | 0           | 3       |
 | Domain 34 | 4           | 0         | 0           | 4       |
 | Domain 35 | 11          | 0         | 0           | 11      |
 | Domain 36 | 9           | 0         | 0           | 9       |
-| **Total** | **243**     | **94**    | **0**       | **149** |
+| **Total** | **243**     | **99**    | **0**       | **144** |
 
 ## DOMAIN 0: COMPLETE
 
@@ -425,13 +425,13 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [x] [DOMAIN-32-report-](tasks\domain-32\DOMAIN-32-report-.md) - DOMAIN-32-report-
 - [x] [DOMAIN-32-report-section-report](tasks\domain-32\DOMAIN-32-report-section-report.md) - Section report
 
-## DOMAIN 33: 🔄 PENDING
+## DOMAIN 33: 🟡 PARTIAL
 
-- [ ] [DOMAIN-33-33-1-philosophy](tasks\domain-33\DOMAIN-33-33-1-philosophy.md) - 33.1-philosophy
-- [ ] [DOMAIN-33-33-2-cookie-consent-system](tasks\domain-33\DOMAIN-33-33-2-cookie-consent-system.md) - 33.2 Cookie Consent System
-- [ ] [DOMAIN-33-33-3-cookie-consent-banner-component](tasks\domain-33\DOMAIN-33-33-3-cookie-consent-banner-component.md) - 33.3 Cookie Consent Banner Component
-- [ ] [DOMAIN-33-33-4-right-to-erasure-data-deletion-system](tasks\domain-33\DOMAIN-33-33-4-right-to-erasure-data-deletion-system.md) - 33.4 Right to Erasure — Data Deletion System
-- [ ] [DOMAIN-33-33-5-public-erasure-request-form](tasks\domain-33\DOMAIN-33-33-5-public-erasure-request-form.md) - 33.5 Public Erasure Request Form
+- [x] [DOMAIN-33-33-1-philosophy](tasks\domain-33\DOMAIN-33-33-1-philosophy.md) - 33.1-philosophy
+- [x] [DOMAIN-33-33-2-cookie-consent-system](tasks\domain-33\DOMAIN-33-33-2-cookie-consent-system.md) - 33.2 Cookie Consent System
+- [x] [DOMAIN-33-33-3-cookie-consent-banner-component](tasks\domain-33\DOMAIN-33-33-3-cookie-consent-banner-component.md) - 33.3 Cookie Consent Banner Component
+- [x] [DOMAIN-33-33-4-right-to-erasure-data-deletion-system](tasks\domain-33\DOMAIN-33-33-4-right-to-erasure-data-deletion-system.md) - 33.4 Right to Erasure — Data Deletion System
+- [x] [DOMAIN-33-33-5-public-erasure-request-form](tasks\domain-33\DOMAIN-33-33-5-public-erasure-request-form.md) - 33.5 Public Erasure Request Form
 - [ ] [DOMAIN-33-cookie-](tasks\domain-33\DOMAIN-33-cookie-.md) - DOMAIN-33-cookie-
 - [ ] [DOMAIN-33-cookie-section-cookie](tasks\domain-33\DOMAIN-33-cookie-section-cookie.md) - Section cookie
 - [ ] [DOMAIN-33-philosophy-.md](tasks\domain-33\DOMAIN-33-philosophy.md-.md) - DOMAIN-33-philosophy-.md
@@ -725,7 +725,7 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 - [x] [DOMAIN-32-DOMAIN-32-report-](tasks/domain-32/DOMAIN-32-report-.md) -
 - [x] [DOMAIN-32-DOMAIN-32-report-section-report](tasks/domain-32/DOMAIN-32-report-section-report.md) -
 
-## DOMAIN 33: 🔄 PENDING
+## DOMAIN 33: 🟡 PARTIAL
 
 - [ ] [DOMAIN-33-DOMAIN-33-cookie-](tasks/domain-33/DOMAIN-33-cookie-.md) -
 - [ ] [DOMAIN-33-DOMAIN-33-cookie-section-cookie](tasks/domain-33/DOMAIN-33-cookie-section-cookie.md) -
