@@ -1,1 +1,10 @@
-export * from "./Lead";
+/**
+ * @file packages/entities/src/lead/index.ts
+ * @summary Entity definition for index in FSD architecture.
+ * @description Core business entity with type definitions and business logic.
+ * @security Tenant isolation enforced via explicit tenantId boundaries.
+ * @adr none
+ * @requirements DOMAIN-4-003
+ */
+
+export * from './Lead';

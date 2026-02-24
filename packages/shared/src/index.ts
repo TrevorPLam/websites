@@ -1,3 +1,11 @@
-/**"shared" index file for FSD v2.1 layer architecture */
-export * from "./Result";
-export * from "./Option";
+/**
+ * @file packages/shared/src/index.ts
+ * @summary Shared utility: index for cross-package functionality.
+ * @description Reusable utility types and functions used across the monorepo.
+ * @security none
+ * @adr none
+ * @requirements none
+ */
+
+export * from './Result';
+export * from './Option';

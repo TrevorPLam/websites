@@ -1,6 +1,10 @@
 /**
- * Card component tests.
- * Verifies rendering, variants, accessibility, and proper structure.
+ * @file packages/ui/src/components/__tests__/Card.test.tsx
+ * @summary Unit tests for Card component/module.
+ * @description Test suite covering functionality, edge cases, and error scenarios.
+ * @security none
+ * @adr none
+ * @requirements none
  */
 
 import { vi, describe, it, expect } from 'vitest';
@@ -23,7 +27,14 @@ describe('Card', () => {
   it('applies default variant classes', () => {
     const { container } = render(<Card>Default card</Card>);
     const card = container.querySelector('div');
-    expect(card).toHaveClass('bg-card', 'text-card-foreground', 'rounded-xl', 'border', 'border-border', 'shadow-xs');
+    expect(card).toHaveClass(
+      'bg-card',
+      'text-card-foreground',
+      'rounded-xl',
+      'border',
+      'border-border',
+      'shadow-xs'
+    );
   });
 
   it('applies testimonial variant classes', () => {

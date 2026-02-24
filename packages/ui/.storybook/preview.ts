@@ -1,3 +1,12 @@
+/**
+ * @file packages/ui/.storybook/preview.ts
+ * @summary Storybook configuration: preview.
+ * @description Configuration for Storybook documentation and testing setup.
+ * @security none
+ * @adr none
+ * @requirements WCAG-2.2-AA
+ */
+
 import type { Preview } from '@storybook/react';
 import '../src/design-tokens/styles.css';
 

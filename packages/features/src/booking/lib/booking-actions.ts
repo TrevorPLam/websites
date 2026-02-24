@@ -1,3 +1,12 @@
+/**
+ * @file packages/features/src/booking/lib/booking-actions.ts
+ * @summary Feature implementation: booking-actions for business logic.
+ * @description Business logic and server actions for feature-specific functionality.
+ * @security Tenant isolation and authentication required.
+ * @adr none
+ * @requirements DOMAIN-4-002
+ */
+
 // File: packages/features/src/booking/lib/booking-actions.ts [TRACE:FILE=packages.features.booking.bookingActions]
 // Purpose: Booking action handlers providing appointment submission, validation, and provider
 //          integration. Now accepts BookingFeatureConfig for configurable validation.
@@ -79,9 +88,6 @@ const getBookingDetailsSchema = z.object({
   email: z.string().email(),
 });
 
-/**
- * Booking submission result interface
- */
 // [TRACE:INTERFACE=packages.features.booking.BookingSubmissionResult]
 // [FEAT:BOOKING] [FEAT:INTEGRATION]
 // NOTE: Result interface - provides comprehensive booking outcome with provider details and confirmation data.
@@ -94,19 +100,11 @@ export interface BookingSubmissionResult {
   requiresConfirmation?: boolean;
 }
 
-/**
- * Verification params for IDOR prevention — required for confirm, cancel, and getDetails.
- * Use same error as "not found" when verification fails to avoid enumeration.
- */
 export interface BookingVerification {
   confirmationNumber: string;
   email: string;
 }
 
-/**
- * Generate unique confirmation number
- * Uses crypto.getRandomValues for cryptographically secure randomness.
- */
 // [TRACE:FUNC=packages.features.booking.generateConfirmationNumber]
 // [FEAT:BOOKING] [FEAT:SECURITY]
 // NOTE: Confirmation generator - creates unique, traceable booking identifiers using timestamp and secure random data.
@@ -120,16 +118,6 @@ function generateConfirmationNumber(): string {
   return `BK-${timestamp}-${random}`.toUpperCase();
 }
 
-/**
- * Detect suspicious booking patterns (AI-powered fraud detection)
- *
- * FIX summary:
- * 1. Name casing false positive: Previous regex `/^[A-Z\s]+$/` flagged ALL uppercase names
- *    (e.g., "JANE DOE") as suspicious. Bot detection should instead look for length extremes
- *    or lack of word boundaries. Updated to check for numeric characters in names instead.
- * 2. `_ip` parameter: Renamed from `_ip` and used `void ip` to suppress lint warning while
- *    leaving placeholder for future correlation. Now used to log the IP of suspicious attempts.
- */
 // [TRACE:FUNC=packages.features.booking.detectSuspiciousActivity]
 // [FEAT:SECURITY] [FEAT:FRAUD_DETECTION]
 // NOTE: Fraud detection - analyzes booking patterns for suspicious activity using configurable rules.
@@ -155,13 +143,16 @@ function detectSuspiciousActivity(data: BookingFormData, ip: string): boolean {
   return isSuspicious;
 }
 
-/**
- * Submit booking request with comprehensive security and validation.
- * Now persists via BookingRepository (task 0-2, replaces internalBookings Map).
- */
 // [TRACE:FUNC=packages.features.booking.submitBookingRequest]
 // [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:VALIDATION] [FEAT:CONFIGURATION] [FEAT:PERSISTENCE]
 // NOTE: Booking submission - validates, stores via repository, and syncs with external providers.
+/**
+ * Submits a booking request with validation and external provider sync.
+ *
+ * @param formData Form data containing booking details.
+ * @param config Booking feature configuration.
+ * @returns Booking submission result with success/error status.
+ */
 export async function submitBookingRequest(
   formData: FormData,
   config: BookingFeatureConfig
@@ -256,13 +247,15 @@ export async function submitBookingRequest(
   }
 }
 
-/**
- * Confirm booking (typically after email verification).
- * Requires verification params for IDOR prevention.
- */
 // [TRACE:FUNC=packages.features.booking.confirmBooking]
 // [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
 // NOTE: Booking confirmation - retrieves via repository, verifies, then updates status.
+/**
+ * Confirms a booking using provided input data.
+ *
+ * @param input Booking confirmation input data.
+ * @returns Result containing booking confirmation details or error.
+ */
 export async function confirmBooking(input: unknown): Promise<Result<BookingSubmissionResult>> {
   return secureAction(
     input,
@@ -303,13 +296,15 @@ export async function confirmBooking(input: unknown): Promise<Result<BookingSubm
   );
 }
 
-/**
- * Cancel booking.
- * Requires verification params for IDOR prevention.
- */
 // [TRACE:FUNC=packages.features.booking.cancelBooking]
 // [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
 // NOTE: Booking cancellation - retrieves via repository, verifies, then updates status.
+/**
+ * Cancels a booking using provided input data.
+ *
+ * @param input Booking cancellation input data.
+ * @returns Result containing booking cancellation details or error.
+ */
 export async function cancelBooking(input: unknown): Promise<Result<BookingSubmissionResult>> {
   return secureAction(
     input,
@@ -350,13 +345,16 @@ export async function cancelBooking(input: unknown): Promise<Result<BookingSubmi
   );
 }
 
-/**
- * Get booking details for confirmation page.
- * Requires verification params for IDOR prevention.
- */
 // [TRACE:FUNC=packages.features.booking.getBookingDetails]
 // [FEAT:BOOKING] [FEAT:SECURITY] [FEAT:PERSISTENCE]
 // NOTE: Booking retrieval - fetches via repository, verifies, returns enriched details.
+/**
+ * Retrieves detailed booking information.
+ *
+ * @param tenantId Tenant identifier for data isolation.
+ * @param bookingId Unique booking identifier.
+ * @returns Detailed booking information or null if not found.
+ */
 export async function getBookingDetails(
   input: unknown,
   config: BookingFeatureConfig
@@ -375,9 +373,6 @@ export async function getBookingDetails(
   );
 }
 
-/**
- * Format booking date with locale awareness
- */
 function formatBookingDate(date: Date, locale: string = 'en-US'): string {
   return date.toLocaleDateString(locale, {
     weekday: 'long',
@@ -419,12 +414,14 @@ async function getBookingDetailsHandler(
   };
 }
 
-/**
- * Get provider status for admin dashboard
- */
 // [TRACE:FUNC=packages.features.booking.getBookingProviderStatus]
 // [FEAT:BOOKING] [FEAT:INTEGRATION]
 // NOTE: Provider status - returns status of all configured booking providers.
+/**
+ * Gets the current status of booking providers.
+ *
+ * @returns Status information for all configured booking providers.
+ */
 export async function getBookingProviderStatus() {
   const providers = getBookingProviders();
   return providers.getProviderStatus();

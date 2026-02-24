@@ -1,3 +1,12 @@
+/**
+ * @file packages/infrastructure/eslint.config.js
+ * @summary Infrastructure configuration: eslint.config.
+ * @description Configuration files and setup for development and build tools.
+ * @security none
+ * @adr none
+ * @requirements none
+ */
+
 import { FlatCompat } from '@eslint/eslintrc';
 import typescriptParser from '@typescript-eslint/parser';
 

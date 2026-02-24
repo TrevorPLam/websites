@@ -1,12 +1,10 @@
 /**
  * @file packages/integrations/shared/src/__tests__/adapter.test.ts
- * Task: Add comprehensive test suite for standardized patterns
- *
- * Purpose: Test suite for base integration adapter and standardized patterns.
- * Validates circuit breaker, retry logic, authentication, and monitoring.
- *
- * Created: 2026-02-21
- * Standards: Comprehensive testing, security validation, performance testing
+ * @summary Unit tests for adapter component/module.
+ * @description Test suite covering functionality, edge cases, and error scenarios.
+ * @security none
+ * @adr none
+ * @requirements none
  */
 
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';

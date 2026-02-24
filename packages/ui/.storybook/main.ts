@@ -1,5 +1,14 @@
+/**
+ * @file packages/ui/.storybook/main.ts
+ * @summary Storybook configuration: main.
+ * @description Configuration for Storybook documentation and testing setup.
+ * @security none
+ * @adr none
+ * @requirements WCAG-2.2-AA
+ */
+
 const config = {
-  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)', '../src/**/*.@(mdx)'],
+  stories: ['../src*.@(mdx)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',

@@ -1,6 +1,10 @@
 /**
- * Container component tests.
- * Verifies rendering, sizes, centering, and layout behavior.
+ * @file packages/ui/src/components/__tests__/Container.test.tsx
+ * @summary Unit tests for Container component/module.
+ * @description Test suite covering functionality, edge cases, and error scenarios.
+ * @security none
+ * @adr none
+ * @requirements none
  */
 
 import { vi, describe, it, expect } from 'vitest';
@@ -23,7 +27,14 @@ describe('Container', () => {
   it('applies default size classes', () => {
     const { container } = render(<Container>Default</Container>);
     const containerDiv = container.querySelector('div');
-    expect(containerDiv).toHaveClass('mx-auto', 'w-full', 'px-4', 'sm:px-6', 'lg:px-8', 'max-w-7xl');
+    expect(containerDiv).toHaveClass(
+      'mx-auto',
+      'w-full',
+      'px-4',
+      'sm:px-6',
+      'lg:px-8',
+      'max-w-7xl'
+    );
   });
 
   it('applies narrow size classes', () => {

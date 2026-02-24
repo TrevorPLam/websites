@@ -1,3 +1,12 @@
+/**
+ * @file packages/reports/src/templates/WeeklyReport.tsx
+ * @summary Configuration and implementation for WeeklyReport.
+ * @description Module providing specific functionality within the monorepo architecture.
+ * @security none
+ * @adr none
+ * @requirements none
+ */
+
 import React from 'react';
 import { Document, Font, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 
@@ -75,7 +84,11 @@ export const WeeklyReportDocument: React.FC<WeeklyReportProps> = (props) => {
         PDFView,
         { style: { borderLeft: 4, borderColor: props.primaryColor, paddingLeft: 10 } },
         React.createElement(PDFText, { style: styles.heading }, props.businessName),
-        React.createElement(PDFText, { style: styles.subtitle }, `Weekly Lead Report · ${props.reportPeriod}`)
+        React.createElement(
+          PDFText,
+          { style: styles.subtitle },
+          `Weekly Lead Report · ${props.reportPeriod}`
+        )
       ),
       React.createElement(
         PDFView,
@@ -87,19 +100,31 @@ export const WeeklyReportDocument: React.FC<WeeklyReportProps> = (props) => {
           React.createElement(
             PDFView,
             { style: styles.card },
-            React.createElement(PDFText, { style: styles.statValue }, props.stats.totalLeads.toString()),
+            React.createElement(
+              PDFText,
+              { style: styles.statValue },
+              props.stats.totalLeads.toString()
+            ),
             React.createElement(PDFText, { style: styles.statLabel }, 'Total leads')
           ),
           React.createElement(
             PDFView,
             { style: styles.card },
-            React.createElement(PDFText, { style: styles.statValue }, props.stats.totalBookings.toString()),
+            React.createElement(
+              PDFText,
+              { style: styles.statValue },
+              props.stats.totalBookings.toString()
+            ),
             React.createElement(PDFText, { style: styles.statLabel }, 'Total bookings')
           ),
           React.createElement(
             PDFView,
             { style: styles.card },
-            React.createElement(PDFText, { style: styles.statValue }, props.stats.avgScore.toString()),
+            React.createElement(
+              PDFText,
+              { style: styles.statValue },
+              props.stats.avgScore.toString()
+            ),
             React.createElement(PDFText, { style: styles.statLabel }, 'Average lead score')
           )
         )
@@ -108,14 +133,16 @@ export const WeeklyReportDocument: React.FC<WeeklyReportProps> = (props) => {
         PDFView,
         { style: styles.section },
         React.createElement(PDFText, { style: styles.sectionTitle }, 'Top Leads'),
-        ...props.topLeads.slice(0, 8).map((lead, index) =>
-          React.createElement(
-            PDFView,
-            { key: `lead-${index}`, style: styles.row },
-            React.createElement(PDFText, {}, lead.name),
-            React.createElement(PDFText, {}, lead.score.toString())
+        ...props.topLeads
+          .slice(0, 8)
+          .map((lead, index) =>
+            React.createElement(
+              PDFView,
+              { key: `lead-${index}`, style: styles.row },
+              React.createElement(PDFText, {}, lead.name),
+              React.createElement(PDFText, {}, lead.score.toString())
+            )
           )
-        )
       ),
       React.createElement(
         PDFView,

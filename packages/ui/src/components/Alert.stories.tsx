@@ -1,3 +1,12 @@
+/**
+ * @file packages/ui/src/components/Alert.stories.tsx
+ * @summary Storybook stories for Alert component.
+ * @description Component stories showcasing different states and variations for design system documentation.
+ * @security none
+ * @adr none
+ * @requirements WCAG-2.2-AA
+ */
+
 import type { Meta, StoryObj } from '@storybook/react';
 import { Alert, AlertDescription, AlertTitle } from './Alert';
 
@@ -34,9 +43,7 @@ export const Destructive: Story = {
   render: () => (
     <Alert variant="destructive">
       <AlertTitle>Error</AlertTitle>
-      <AlertDescription>
-        Something went wrong. Please try again later.
-      </AlertDescription>
+      <AlertDescription>Something went wrong. Please try again later.</AlertDescription>
     </Alert>
   ),
 };
@@ -45,9 +52,7 @@ export const Warning: Story = {
   render: () => (
     <Alert variant="warning">
       <AlertTitle>Warning</AlertTitle>
-      <AlertDescription>
-        Please review your input before proceeding.
-      </AlertDescription>
+      <AlertDescription>Please review your input before proceeding.</AlertDescription>
     </Alert>
   ),
 };
@@ -56,9 +61,7 @@ export const Success: Story = {
   render: () => (
     <Alert variant="success">
       <AlertTitle>Success</AlertTitle>
-      <AlertDescription>
-        Your changes have been saved successfully.
-      </AlertDescription>
+      <AlertDescription>Your changes have been saved successfully.</AlertDescription>
     </Alert>
   ),
 };
@@ -67,9 +70,7 @@ export const Info: Story = {
   render: () => (
     <Alert variant="info">
       <AlertTitle>Info</AlertTitle>
-      <AlertDescription>
-        Did you know? You can customize this alert message.
-      </AlertDescription>
+      <AlertDescription>Did you know? You can customize this alert message.</AlertDescription>
     </Alert>
   ),
 };
@@ -77,9 +78,7 @@ export const Info: Story = {
 export const Simple: Story = {
   render: () => (
     <Alert>
-      <AlertDescription>
-        Simple alert message without a title.
-      </AlertDescription>
+      <AlertDescription>Simple alert message without a title.</AlertDescription>
     </Alert>
   ),
 };
@@ -89,10 +88,9 @@ export const WithLongContent: Story = {
     <Alert variant="warning">
       <AlertTitle>Important Notice</AlertTitle>
       <AlertDescription>
-        This is a longer alert message that demonstrates how the component handles
-        text wrapping and maintains readability across multiple lines of content.
-        It's important to ensure that alert messages are clear and concise while
-        providing all necessary information to the user.
+        This is a longer alert message that demonstrates how the component handles text wrapping and
+        maintains readability across multiple lines of content. It's important to ensure that alert
+        messages are clear and concise while providing all necessary information to the user.
       </AlertDescription>
     </Alert>
   ),

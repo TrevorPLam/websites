@@ -1,6 +1,10 @@
 /**
- * Section component tests.
- * Verifies rendering, polymorphic behavior, and layout.
+ * @file packages/ui/src/components/__tests__/Section.test.tsx
+ * @summary Unit tests for Section component/module.
+ * @description Test suite covering functionality, edge cases, and error scenarios.
+ * @security none
+ * @adr none
+ * @requirements none
  */
 
 import { vi, describe, it, expect } from 'vitest';

@@ -1,6 +1,10 @@
 /**
- * Badge component tests.
- * Verifies rendering, variants, sizes, accessibility, and proper styling.
+ * @file packages/ui/src/components/__tests__/Badge.test.tsx
+ * @summary Unit tests for Badge component/module.
+ * @description Test suite covering functionality, edge cases, and error scenarios.
+ * @security none
+ * @adr none
+ * @requirements none
  */
 
 import { vi, describe, it, expect } from 'vitest';
@@ -23,7 +27,21 @@ describe('Badge', () => {
   it('applies default variant classes', () => {
     const { container } = render(<Badge>Default</Badge>);
     const badge = container.querySelector('span');
-    expect(badge).toHaveClass('inline-flex', 'items-center', 'rounded-full', 'border', 'px-2.5', 'py-0.5', 'text-xs', 'font-semibold', 'transition-colors', 'focus:outline-none', 'focus:ring-2', 'focus:ring-ring', 'focus:ring-offset-2');
+    expect(badge).toHaveClass(
+      'inline-flex',
+      'items-center',
+      'rounded-full',
+      'border',
+      'px-2.5',
+      'py-0.5',
+      'text-xs',
+      'font-semibold',
+      'transition-colors',
+      'focus:outline-none',
+      'focus:ring-2',
+      'focus:ring-ring',
+      'focus:ring-offset-2'
+    );
   });
 
   it('applies secondary variant classes', () => {
@@ -35,7 +53,11 @@ describe('Badge', () => {
   it('applies destructive variant classes', () => {
     const { container } = render(<Badge variant="destructive">Destructive</Badge>);
     const badge = container.querySelector('span');
-    expect(badge).toHaveClass('bg-destructive', 'text-destructive-foreground', 'hover:bg-destructive/80');
+    expect(badge).toHaveClass(
+      'bg-destructive',
+      'text-destructive-foreground',
+      'hover:bg-destructive/80'
+    );
   });
 
   it('applies outline variant classes', () => {
@@ -80,6 +102,13 @@ describe('Badge', () => {
       </Badge>
     );
     const badge = container.querySelector('span');
-    expect(badge).toHaveClass('bg-secondary', 'text-secondary-foreground', 'hover:bg-secondary/80', 'px-3', 'py-1', 'text-sm');
+    expect(badge).toHaveClass(
+      'bg-secondary',
+      'text-secondary-foreground',
+      'hover:bg-secondary/80',
+      'px-3',
+      'py-1',
+      'text-sm'
+    );
   });
 });

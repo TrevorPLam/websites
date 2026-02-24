@@ -1,9 +1,13 @@
+/**
+ * @file packages/config/eslint-config/base.js
+ * @summary Base ESLint configuration for all packages in the monorepo.
+ * @description Provides foundational linting rules and TypeScript support.
+ * @security none
+ * @adr none
+ * @requirements none
+ */
+
 // File: packages/config/eslint-config/base.js
-// Purpose: Base ESLint configuration for TypeScript projects providing TypeScript support,
-//          and compatibility with modern ESLint standards.
-//          Extends core TypeScript rules for consistent code quality.
-//
-// Exports / Entry: ESLint configuration array for TypeScript projects
 // Used by: Template ESLint configuration (.eslintrc.js files)
 //
 // Invariants:

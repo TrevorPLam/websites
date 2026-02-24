@@ -1,3 +1,12 @@
+/**
+ * @file packages/ui/src/components/Dialog.stories.tsx
+ * @summary Storybook stories for Dialog component.
+ * @description Component stories showcasing different states and variations for design system documentation.
+ * @security none
+ * @adr none
+ * @requirements WCAG-2.2-AA
+ */
+
 import type { Meta, StoryObj } from '@storybook/react';
 import {
   Dialog,
@@ -64,9 +73,7 @@ export const WithoutFooter: Story = {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Simple Dialog</DialogTitle>
-          <DialogDescription>
-            A dialog without footer buttons.
-          </DialogDescription>
+          <DialogDescription>A dialog without footer buttons.</DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <p>Content area with no footer actions.</p>
@@ -93,19 +100,33 @@ export const LongContent: Story = {
           <div className="space-y-4">
             <div>
               <h3 className="font-semibold mb-2">1. Acceptance of Terms</h3>
-              <p>By accessing and using this service, you accept and agree to be bound by the terms and provision of this agreement.</p>
+              <p>
+                By accessing and using this service, you accept and agree to be bound by the terms
+                and provision of this agreement.
+              </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">2. Use License</h3>
-              <p>Permission is granted to temporarily download one copy of the materials on our website for personal, non-commercial transitory viewing only.</p>
+              <p>
+                Permission is granted to temporarily download one copy of the materials on our
+                website for personal, non-commercial transitory viewing only.
+              </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">3. Disclaimer</h3>
-              <p>The materials on our website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim all other warranties.</p>
+              <p>
+                The materials on our website are provided on an 'as is' basis. We make no
+                warranties, expressed or implied, and hereby disclaim all other warranties.
+              </p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">4. Limitations</h3>
-              <p>In no event shall our company or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our website.</p>
+              <p>
+                In no event shall our company or its suppliers be liable for any damages (including,
+                without limitation, damages for loss of data or profit, or due to business
+                interruption) arising out of the use or inability to use the materials on our
+                website.
+              </p>
             </div>
           </div>
         </div>
@@ -133,7 +154,9 @@ export const FormDialog: Story = {
         </DialogHeader>
         <div className="py-4 space-y-4">
           <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium">Name</label>
+            <label htmlFor="name" className="text-sm font-medium">
+              Name
+            </label>
             <input
               id="name"
               className="w-full px-3 py-2 border rounded-md"
@@ -141,7 +164,9 @@ export const FormDialog: Story = {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">Email</label>
+            <label htmlFor="email" className="text-sm font-medium">
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -150,7 +175,9 @@ export const FormDialog: Story = {
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="role" className="text-sm font-medium">Role</label>
+            <label htmlFor="role" className="text-sm font-medium">
+              Role
+            </label>
             <select id="role" className="w-full px-3 py-2 border rounded-md">
               <option value="">Select role</option>
               <option value="admin">Admin</option>

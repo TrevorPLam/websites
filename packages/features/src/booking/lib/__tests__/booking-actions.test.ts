@@ -1,7 +1,10 @@
 /**
- * Booking actions unit tests.
- * Verifies submitBookingRequest, confirmBooking, cancelBooking, getBookingDetails
- * with IDOR prevention (verification required for mutations).
+ * @file packages/features/src/booking/lib/__tests__/booking-actions.test.ts
+ * @summary Unit tests for booking-actions component/module.
+ * @description Test suite covering functionality, edge cases, and error scenarios.
+ * @security none
+ * @adr none
+ * @requirements none
  */
 
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -24,11 +27,6 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('@repo/infra', () => ({
-  /**
-   * secureAction mock: validates via schema then calls handler with (ctx, validatedInput).
-   * The function signatures in booking-actions expect { bookingId, confirmationNumber, email }
-   * as the input object, so we pass the raw input directly through schema.safeParse-style.
-   */
   secureAction: vi.fn(
     async (
       input,

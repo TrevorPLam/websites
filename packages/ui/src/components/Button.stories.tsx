@@ -1,3 +1,12 @@
+/**
+ * @file packages/ui/src/components/Button.stories.tsx
+ * @summary Storybook stories for Button component.
+ * @description Component stories showcasing different states and variations for design system documentation.
+ * @security none
+ * @adr none
+ * @requirements WCAG-2.2-AA
+ */
+
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
