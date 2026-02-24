@@ -12,7 +12,14 @@ export function buildSitemap(config: SiteConfig): MetadataRoute.Sitemap {
     { url: `${siteUrl}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
   ];
 
-  return staticPages;
+  const serviceAreaPages: MetadataRoute.Sitemap = (config.serviceAreas ?? []).map((area) => ({
+    url: `${siteUrl}/service-area/${slugifyArea(area)}`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...serviceAreaPages];
 }
 
 export function buildRobots(config: SiteConfig): MetadataRoute.Robots {
@@ -33,4 +40,12 @@ export function buildRobots(config: SiteConfig): MetadataRoute.Robots {
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,
   };
+}
+
+function slugifyArea(area: string): string {
+  return area
+    .toLowerCase()
+    .replace(/,\s*/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
 }

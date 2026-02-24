@@ -64,6 +64,19 @@ const siteConfig: SiteConfig = {
     borderRadius: 'medium',
     shadows: 'medium',
   },
+  serviceAreas: ['Plano, TX', 'Frisco, TX', 'Allen, TX', 'McKinney, TX'],
+  services: [
+    {
+      name: 'Residential Service',
+      description: 'Fast, friendly in-home service from licensed professionals.',
+      slug: 'residential-service',
+    },
+    {
+      name: 'Commercial Service',
+      description: 'Reliable service plans tailored for local businesses.',
+      slug: 'commercial-service',
+    },
+  ],
   contact: {
     email: 'hello@example.com',
     phone: '',
