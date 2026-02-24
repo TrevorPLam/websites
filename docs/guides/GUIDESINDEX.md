@@ -6,9 +6,18 @@ This index provides a comprehensive overview of all documentation guides organiz
 
 ## 📚 Documentation Architecture
 
-### Strategic Nesting Philosophy
+### Strategic Deep Nesting Philosophy
 
-The documentation is organized following a **domain-driven architecture** that mirrors the actual codebase structure:
+The documentation is organized following a **hierarchical domain-driven architecture** that mirrors the actual codebase structure with multiple levels of categorization:
+
+- **Primary Categories** (Level 1): Major technical domains
+- **Subcategories** (Level 2): Specialized areas within domains
+- **Implementation Focus** (Level 3): Specific technologies and patterns
+
+**Dual Location Strategy**: Each document exists in both:
+
+1. **Nested Location**: Organized by technical specificity for deep discovery
+2. **Parent Location**: Flat structure for quick access and backward compatibility
 
 - **`backend-data/`** - Backend services, databases, and external integrations
 - **`frontend/`** - Client-side development, UI components, and user experience
@@ -25,6 +34,8 @@ The documentation is organized following a **domain-driven architecture** that m
 ### 🔧 Backend & Data Integration
 
 **Location**: `docs/guides/backend-data/`
+
+_Note: Documents exist in both nested subdirectories and parent directory for flexible access_
 
 | Document                                                                                    | Description                                 | Key Topics                                  | 2026 Standards            |
 | ------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------- | ------------------------- |

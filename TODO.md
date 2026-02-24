@@ -13,13 +13,13 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 | Domain 4  | 6           | 6         | 0           | 0       |
 | Domain 5  | 9           | 9         | 0           | 0       |
 | Domain 6  | 8           | 8         | 0           | 0       |
-| Domain 7  | 5           | 0         | 0           | 5       |
+| Domain 7  | 5           | 5         | 0           | 0       |
 | Domain 8  | 7           | 7         | 0           | 0       |
 | Domain 9  | 5           | 5         | 0           | 0       |
-| Domain 10 | 2           | 0         | 0           | 2       |
+| Domain 10 | 2           | 2         | 0           | 0       |
 | Domain 11 | 5           | 5         | 0           | 0       |
 | Domain 12 | 6           | 6         | 0           | 0       |
-| Domain 13 | 8           | 0         | 0           | 8       |
+| Domain 13 | 8           | 4         | 0           | 4       |
 | Domain 14 | 10          | 0         | 0           | 10      |
 | Domain 15 | 8           | 0         | 0           | 8       |
 | Domain 16 | 6           | 0         | 0           | 6       |
