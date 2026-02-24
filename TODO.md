@@ -403,7 +403,7 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [ ] GAP-UI-002-add-storybook-stories - Add Storybook stories for all UI components for design system documentation
 - [ ] GAP-UI-003-implement-form-utilities - Add form validation utilities, field arrays, and form state management
 - [ ] GAP-UI-004-add-component-variants - Add variant systems for buttons, inputs, and other interactive components
-- [ ] GAP-CLEANUP-001-remove-bak-files - Remove all `.bak` files and verify test functionality
+- [x] GAP-CLEANUP-001-remove-bak-files - Remove all `.bak` files and verify test functionality - COMPLETED 2026-02-24
 
 ### **Week 3: Testing & Integration (P1)**
 
@@ -427,9 +427,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ### **Week 1: Critical Issues Resolution (P0)**
 
-- [ ] PROD-SEC-001-fix-security-vulnerabilities - Fix security vulnerabilities (glob CLI command injection, Nodemailer DoS)
-- [ ] PROD-SEC-002-update-dependencies - Update glob package to >=10.5.0 and nodemailer to >=7.0.11
-- [ ] PROD-SEC-003-run-audit-fix - Run `pnpm audit --fix` and verify resolution
+- [x] PROD-SEC-001-fix-security-vulnerabilities - Fix security vulnerabilities (glob CLI command injection, Nodemailer DoS) - COMPLETED 2026-02-24
+- [x] PROD-SEC-002-update-dependencies - Update glob package to >=10.5.0 and nodemailer to >=7.0.11 - COMPLETED 2026-02-24
+- [x] PROD-SEC-003-run-audit-fix - Run `pnpm audit --fix` and verify resolution - COMPLETED 2026-02-24
 - [ ] PROD-BUILD-001-fix-typescript-compilation - Fix @repo/privacy package tsconfig.json format and missing dependencies
 - [ ] PROD-BUILD-002-add-missing-dependencies - Add missing @types/node dependencies and resolve Vite conflicts
 - [ ] PROD-TEST-001-fix-test-timeouts - Update Vitest fake timer configuration and increase async test timeouts
