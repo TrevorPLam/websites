@@ -10,17 +10,18 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/content": "workspace:*",
     "@repo/infra": "workspace:*",
     "@repo/integrations-shared": "workspace:*",
     "@repo/marketing-components": "workspace:*",
     "@repo/page-templates": "workspace:*",
+    "@repo/seo": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "typescript": "catalog:",
-    "@repo/seo": "workspace:*"
+    "typescript": "catalog:"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
