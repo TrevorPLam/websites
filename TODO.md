@@ -43,9 +43,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34    | 5           | 5         | 0           | 0       |
 | Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 6         | 0           | 0       |
-| Domain 37    | 156         | 13        | 0           | 143     |
+| Domain 37    | 156         | 21        | 0           | 135     |
 | Gap Analysis | 20          | 2         | 0           | 18      |
-| **Total**    | **467**     | **186**   | **0**       | **281** |
+| **Total**    | **467**     | **194**   | **0**       | **273** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -525,13 +525,13 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 - [x] DOMAIN-37-3-1-document-security-requirements - Document security and privacy requirements - COMPLETED 2026-02-24
 - [x] DOMAIN-37-3-2-map-to-industry-standards - Map requirements to OWASP, NIST, GDPR - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-3-3-perform-threat-modeling - Perform threat modeling for features
-- [ ] DOMAIN-37-3-4-store-threat-models - Store threat models in /docs/security
-- [ ] DOMAIN-37-3-5-review-threat-models-annually - Review threat models annually
+- [x] DOMAIN-37-3-3-perform-threat-modeling - Perform threat modeling for features - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-4-store-threat-models - Store threat models in /docs/security - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-5-review-threat-models-annually - Review threat models annually - COMPLETED 2026-02-24
 - [x] DOMAIN-37-3-6-adopt-secure-coding-guidelines - Adopt secure coding guidelines - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-3-7-integrate-security-linting - Integrate security rules into linters
-- [ ] DOMAIN-37-3-8-implement-pre-commit-security - Implement pre-commit security scans
-- [ ] DOMAIN-37-3-9-scan-for-secrets - Scan for secrets in pre-commit
+- [x] DOMAIN-37-3-7-integrate-security-linting - Integrate security rules into linters - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-8-implement-pre-commit-security - Implement pre-commit security scans - COMPLETED 2026-02-24
+- [x] DOMAIN-37-3-9-scan-for-secrets - Scan for secrets in pre-commit - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-3-10-integrate-sast-into-ci - Integrate SAST into CI pipeline
 - [ ] DOMAIN-37-3-11-implement-sca-scanning - Implement Software Composition Analysis
 - [ ] DOMAIN-37-3-12-add-container-iac-scanning - Add container and IaC scanning
@@ -545,8 +545,8 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ### Part 4: Static Application Security Testing (17 tasks)
 
-- [ ] DOMAIN-37-4-1-select-sast-tool - Select SAST tool (SonarQube, Semgrep, etc.)
-- [ ] DOMAIN-37-4-2-configure-sast-rules - Configure SAST rule set based on OWASP Top 10
+- [x] DOMAIN-37-4-1-select-sast-tool - Select SAST tool (SonarQube, Semgrep, etc.) - COMPLETED 2026-02-24
+- [x] DOMAIN-37-4-2-configure-sast-rules - Configure SAST rule set based on OWASP Top 10 - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-4-3-run-sast-in-ide - Run SAST in IDE plugins
 - [ ] DOMAIN-37-4-4-run-sast-on-prs - Run SAST on pull requests
 - [ ] DOMAIN-37-4-5-schedule-nightly-sast - Schedule nightly full SAST scans

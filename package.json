@@ -91,7 +91,9 @@
     "docs:spelling": "node scripts/docs/check-spelling.js",
     "docs:quality": "pnpm docs:links && pnpm docs:spelling",
     "docs:formats": "node scripts/docs/verify-doc-formats.js",
-    "docs:build": "node scripts/docs/build-docs-site.js"
+    "docs:build": "node scripts/docs/build-docs-site.js",
+    "verify:secrets": "node scripts/verify-staged-secrets.js",
+    "lint:security": "npx @semgrep/cli semgrep --config .semgrep/security-rules.yml --error"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

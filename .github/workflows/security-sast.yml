@@ -1,5 +1,5 @@
-# Task: [C.13] SAST scanning
-# CodeQL analysis for JavaScript/TypeScript — finds security vulnerabilities
+# Task: Domain 37 Secure SDLC / SAST
+# Multi-engine SAST analysis for JavaScript/TypeScript repositories.
 
 name: Security SAST
 
@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [main, develop]
   schedule:
-    - cron: '0 6 * * 1'  # Weekly Monday 6am
+    - cron: '0 6 * * 1' # Weekly Monday 6am
 
 permissions:
   security-events: write
@@ -17,7 +17,7 @@ permissions:
   actions: read
 
 jobs:
-  sast:
+  codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
     steps:
@@ -34,3 +34,22 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: '/language:javascript'
+
+  semgrep:
+    name: Semgrep OWASP Ruleset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: .semgrep/security-rules.yml
+          generateSarif: '1'
+
+      - name: Upload Semgrep SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
