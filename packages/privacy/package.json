@@ -1,0 +1,44 @@
+{
+  "name": "@repo/privacy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GDPR privacy tooling for consent and erasure workflows",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./consent": {
+      "types": "./dist/consent.d.ts",
+      "default": "./dist/consent.js"
+    },
+    "./erasure": {
+      "types": "./dist/erasure.d.ts",
+      "default": "./dist/erasure.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "lint": "eslint src --max-warnings 0",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "eslint": "catalog:",
+    "@types/node": "catalog:"
+  },
+  "peerDependencies": {
+    "next": "catalog:"
+  }
+}
