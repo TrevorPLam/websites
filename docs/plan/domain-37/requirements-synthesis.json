@@ -1,17 +1,5 @@
 [
   {
-    "id": "DOMAIN-37-5-11-deploy-intelligent-rollback",
-    "description": "Deploy intelligent rollback agents"
-  },
-  {
-    "id": "DOMAIN-37-5-12-enable-predictive-maintenance",
-    "description": "Enable predictive maintenance"
-  },
-  {
-    "id": "DOMAIN-37-5-13-automate-technical-debt-reduction",
-    "description": "Automate technical debt reduction"
-  },
-  {
     "id": "DOMAIN-37-5-14-aim-for-simultaneous-sdlc",
     "description": "Aim for simultaneous SDLC"
   },

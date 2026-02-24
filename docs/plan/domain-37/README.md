@@ -40,7 +40,7 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - Added research and delivery simplification standard for research, experimentation, POCs, prototypes, and MVP workflows.
 - Added parent task plan doc for research and delivery simplification with QA checkpoints.
 
-- Added AI-native autonomous practices baseline: NHI governance, prompts-as-code, policy-as-code, adversarial simulation, requirements synthesis/conflict checks, architecture proposal prompts, self-healing tests, and AI fuzzing.
+- Added AI-native autonomous practices baseline: NHI governance, prompts-as-code, policy-as-code, adversarial simulation, requirements synthesis/conflict checks, architecture proposal prompts, self-healing tests, AI-driven intelligent rollback decisions, predictive maintenance alerts, and automated technical debt backlog generation.
 
 ## Artifacts
 
@@ -114,3 +114,10 @@ This domain tracks repository-wide engineering hygiene improvements such as code
 - `docs/plan/domain-37/37.7-strategy-and-innovation-simplification.md`
 - `docs/standards/research-and-delivery-simplification-standard.md`
 - `docs/plan/domain-37/37.8-research-and-delivery-simplification.md`
+
+- `docs/ai/intelligent-rollback-agents.md`
+- `docs/ai/predictive-maintenance.md`
+- `docs/ai/technical-debt-automation.md`
+- `scripts/ai/deploy-intelligent-rollback.mjs`
+- `scripts/ai/enable-predictive-maintenance.mjs`
+- `scripts/ai/automate-technical-debt-reduction.mjs`

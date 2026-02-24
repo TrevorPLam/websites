@@ -43,9 +43,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34    | 5           | 5         | 0           | 0       |
 | Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 6         | 0           | 0       |
-| Domain 37    | 156         | 68        | 0           | 88      |
+| Domain 37    | 156         | 71        | 0           | 85      |
 | Gap Analysis | 20          | 2         | 0           | 18      |
-| **Total**    | **467**     | **241**   | **0**       | **226** |
+| **Total**    | **467**     | **244**   | **0**       | **223** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -575,9 +575,9 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [x] DOMAIN-37-5-8-ai-propose-architecture-patterns - Let AI propose architectural patterns - COMPLETED 2026-02-24
 - [x] DOMAIN-37-5-9-implement-self-healing-tests - Implement self-healing tests - COMPLETED 2026-02-24
 - [x] DOMAIN-37-5-10-use-ai-fuzzing - Use AI fuzzing for edge cases - COMPLETED 2026-02-24
-- [ ] DOMAIN-37-5-11-deploy-intelligent-rollback - Deploy intelligent rollback agents
-- [ ] DOMAIN-37-5-12-enable-predictive-maintenance - Enable predictive maintenance
-- [ ] DOMAIN-37-5-13-automate-technical-debt-reduction - Automate technical debt reduction
+- [x] DOMAIN-37-5-11-deploy-intelligent-rollback - Deploy intelligent rollback agents - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-12-enable-predictive-maintenance - Enable predictive maintenance - COMPLETED 2026-02-24
+- [x] DOMAIN-37-5-13-automate-technical-debt-reduction - Automate technical debt reduction - COMPLETED 2026-02-24
 - [ ] DOMAIN-37-5-14-aim-for-simultaneous-sdlc - Aim for simultaneous SDLC
 - [ ] DOMAIN-37-5-15-write-executable-specifications - Write specifications as executable blueprints
 - [ ] DOMAIN-37-5-16-break-specs-into-testable-tasks - Break specs into testable tasks

@@ -102,7 +102,10 @@
     "test:self-healing": "node scripts/testing/self-healing-vitest.mjs",
     "test:ai-fuzz": "node scripts/testing/ai-fuzz-inputs.mjs",
     "tokens:generate": "node scripts/generate-design-tokens.mjs",
-    "validate:fsd": "node scripts/validate-fsd-architecture.mjs"
+    "validate:fsd": "node scripts/validate-fsd-architecture.mjs",
+    "ai:intelligent-rollback": "node scripts/ai/deploy-intelligent-rollback.mjs",
+    "ai:predictive-maintenance": "node scripts/ai/enable-predictive-maintenance.mjs",
+    "ai:technical-debt": "node scripts/ai/automate-technical-debt-reduction.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
