@@ -1,0 +1,44 @@
+name: Feature Request
+description: Propose a new capability with business and technical context
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What user or business problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the expected behavior and API/UX.
+    validations:
+      required: true
+  - type: textarea
+    id: fsd
+    attributes:
+      label: FSD impact
+      description: Which layers/slices are affected?
+      placeholder: app/pages/widgets/features/entities/shared
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Provide testable bullet points.
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Validation
+      options:
+        - label: I checked existing tasks in TODO.md.
+          required: true
+        - label: I included dependencies and rollout risks.
+          required: true

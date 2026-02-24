@@ -83,7 +83,10 @@
     "create-site": "pnpm create-client",
     "lint:fsd": "pnpm dlx steiger --config steiger.config.ts",
     "verify:file-headers": "node scripts/verify-file-headers.js",
-    "verify:docstrings": "node scripts/verify-docstrings.js"
+    "verify:docstrings": "node scripts/verify-docstrings.js",
+    "docs:links": "node scripts/docs/check-links.js",
+    "docs:spelling": "node scripts/docs/check-spelling.js",
+    "docs:quality": "pnpm docs:links && pnpm docs:spelling"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

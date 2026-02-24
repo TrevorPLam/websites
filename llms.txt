@@ -1,0 +1,23 @@
+# Marketing Monorepo LLM Context
+
+Project: Multi-tenant, multi-site Next.js marketing monorepo.
+
+Primary docs:
+- README.md
+- DESIGN.md
+- CODEMAP.md
+- TODO.md
+- AGENTS.md
+
+Architecture:
+- Feature-Sliced Design v2.1
+- Layer order: app -> pages -> widgets -> features -> entities -> shared
+- Prefer package public exports (`index.ts`), avoid deep imports.
+
+Quality and security:
+- Run lint, type-check, tests, and docs validation before merge.
+- Keep tenant isolation explicit.
+- Never log or commit secrets.
+
+Task tracking:
+- Update TODO.md and task artifacts under tasks/ when tasks are completed.

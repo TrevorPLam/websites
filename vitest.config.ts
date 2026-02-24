@@ -32,10 +32,10 @@ export default defineConfig({
       ],
       thresholds: {
         global: {
-          branches: 30,
-          functions: 25,
-          lines: 30,
-          statements: 30,
+          branches: 35,
+          functions: 35,
+          lines: 35,
+          statements: 35,
         },
       },
       cleanOnRerun: true,
