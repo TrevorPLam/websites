@@ -26,8 +26,8 @@
  */
 
 import { setupServer } from 'msw/node';
-import { rest } from 'msw';
-import { vi, beforeEach, afterEach } from 'vitest';
+import { http } from 'msw';
+import { vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 
 // ============================================================================
 // MSW Server Setup
@@ -80,14 +80,14 @@ export const createApiHandlers = {
    * Success response handler
    */
   success: (url: string, data: any, status = 200) =>
-    rest.get(url, (req, res, ctx) => {
-      return res(
-        ctx.status(status),
-        ctx.json({
+    http.get(url, ({ request }) => {
+      return new Response(
+        JSON.stringify({
           success: true,
           data,
           timestamp: new Date().toISOString(),
-        })
+        }),
+        { status, headers: { 'Content-Type': 'application/json' } }
       );
     }),
 
@@ -95,14 +95,14 @@ export const createApiHandlers = {
    * Error response handler
    */
   error: (url: string, message: string, status = 400) =>
-    rest.get(url, (req, res, ctx) => {
-      return res(
-        ctx.status(status),
-        ctx.json({
+    http.get(url, ({ request }) => {
+      return new Response(
+        JSON.stringify({
           success: false,
           error: message,
           timestamp: new Date().toISOString(),
-        })
+        }),
+        { status, headers: { 'Content-Type': 'application/json' } }
       );
     }),
 
@@ -110,15 +110,20 @@ export const createApiHandlers = {
    * Rate limit handler
    */
   rateLimit: (url: string) =>
-    rest.get(url, (req, res, ctx) => {
-      return res(
-        ctx.status(429),
-        ctx.json({
+    http.get(url, ({ request }) => {
+      return new Response(
+        JSON.stringify({
           success: false,
           error: 'Rate limit exceeded',
           retryAfter: 60,
         }),
-        ctx.set('Retry-After', '60')
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            'Retry-After': '60',
+          },
+        }
       );
     }),
 
@@ -126,13 +131,13 @@ export const createApiHandlers = {
    * Unauthorized handler
    */
   unauthorized: (url: string) =>
-    rest.get(url, (req, res, ctx) => {
-      return res(
-        ctx.status(401),
-        ctx.json({
+    http.get(url, ({ request }) => {
+      return new Response(
+        JSON.stringify({
           success: false,
           error: 'Unauthorized',
-        })
+        }),
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
       );
     }),
 
@@ -140,13 +145,13 @@ export const createApiHandlers = {
    * Server error handler
    */
   serverError: (url: string) =>
-    rest.get(url, (req, res, ctx) => {
-      return res(
-        ctx.status(500),
-        ctx.json({
+    http.get(url, ({ request }) => {
+      return new Response(
+        JSON.stringify({
           success: false,
           error: 'Internal server error',
-        })
+        }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }),
 
@@ -154,14 +159,14 @@ export const createApiHandlers = {
    * POST request handler
    */
   post: (url: string, responseData: any, status = 201) =>
-    rest.post(url, (req, res, ctx) => {
-      return res(
-        ctx.status(status),
-        ctx.json({
+    http.post(url, ({ request }) => {
+      return new Response(
+        JSON.stringify({
           success: true,
           data: responseData,
           timestamp: new Date().toISOString(),
-        })
+        }),
+        { status, headers: { 'Content-Type': 'application/json' } }
       );
     }),
 
@@ -169,14 +174,14 @@ export const createApiHandlers = {
    * PUT request handler
    */
   put: (url: string, responseData: any, status = 200) =>
-    rest.put(url, (req, res, ctx) => {
-      return res(
-        ctx.status(status),
-        ctx.json({
+    http.put(url, ({ request }) => {
+      return new Response(
+        JSON.stringify({
           success: true,
           data: responseData,
           timestamp: new Date().toISOString(),
-        })
+        }),
+        { status, headers: { 'Content-Type': 'application/json' } }
       );
     }),
 
@@ -184,8 +189,8 @@ export const createApiHandlers = {
    * DELETE request handler
    */
   delete: (url: string, status = 204) =>
-    rest.delete(url, (req, res, ctx) => {
-      return res(ctx.status(status));
+    http.delete(url, ({ request }) => {
+      return new Response(null, { status });
     }),
 };
 
@@ -202,22 +207,22 @@ export const integrationHandlers = {
    */
   convertkit: {
     subscriber: (subscriberData: any) =>
-      rest.post('https://api.kit.com/v4/subscribers', (req, res, ctx) => {
-        return res(
-          ctx.status(201),
-          ctx.json({
+      http.post('https://api.kit.com/v4/subscribers', ({ request }) => {
+        return new Response(
+          JSON.stringify({
             subscriber: subscriberData,
-          })
+          }),
+          { status: 201, headers: { 'Content-Type': 'application/json' } }
         );
       }),
 
     formSubscribe: (formData: any) =>
-      rest.post('https://api.kit.com/v4/forms/:id/subscribe', (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json({
+      http.post('https://api.kit.com/v4/forms/:id/subscribe', ({ request }) => {
+        return new Response(
+          JSON.stringify({
             subscription: formData,
-          })
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
       }),
   },
@@ -227,24 +232,24 @@ export const integrationHandlers = {
    */
   googleMaps: {
     geocode: (location: any) =>
-      rest.get('https://maps.googleapis.com/maps/api/geocode/json', (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json({
+      http.get('https://maps.googleapis.com/maps/api/geocode/json', ({ request }) => {
+        return new Response(
+          JSON.stringify({
             results: [location],
             status: 'OK',
-          })
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
       }),
 
     places: (places: any[]) =>
-      rest.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json({
+      http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', ({ request }) => {
+        return new Response(
+          JSON.stringify({
             results: places,
             status: 'OK',
-          })
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
       }),
   },
@@ -254,23 +259,32 @@ export const integrationHandlers = {
    */
   supabase: {
     select: (table: string, data: any[]) =>
-      rest.get(`https://*.supabase.co/rest/v1/${table}`, (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(data));
+      http.get(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+        return new Response(JSON.stringify(data), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
       }),
 
     insert: (table: string, data: any) =>
-      rest.post(`https://*.supabase.co/rest/v1/${table}`, (req, res, ctx) => {
-        return res(ctx.status(201), ctx.json([data]));
+      http.post(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+        return new Response(JSON.stringify([data]), {
+          status: 201,
+          headers: { 'Content-Type': 'application/json' },
+        });
       }),
 
     update: (table: string, data: any) =>
-      rest.patch(`https://*.supabase.co/rest/v1/${table}`, (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json([data]));
+      http.patch(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+        return new Response(JSON.stringify([data]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
       }),
 
     delete: (table: string) =>
-      rest.delete(`https://*.supabase.co/rest/v1/${table}`, (req, res, ctx) => {
-        return res(ctx.status(204));
+      http.delete(`https://*.supabase.co/rest/v1/${table}`, ({ request }) => {
+        return new Response(null, { status: 204 });
       }),
   },
 };
@@ -287,26 +301,35 @@ export function createMockApi(baseUrl: string, endpoints: Record<string, any>) {
     const url = `${baseUrl}${path}`;
 
     if (response.method === 'POST') {
-      return rest.post(url, (req, res, ctx) => {
-        return res(ctx.status(response.status || 201), ctx.json(response.data));
+      return http.post(url, ({ request }) => {
+        return new Response(JSON.stringify(response.data), {
+          status: response.status || 201,
+          headers: { 'Content-Type': 'application/json' },
+        });
       });
     }
 
     if (response.method === 'PUT') {
-      return rest.put(url, (req, res, ctx) => {
-        return res(ctx.status(response.status || 200), ctx.json(response.data));
+      return http.put(url, ({ request }) => {
+        return new Response(JSON.stringify(response.data), {
+          status: response.status || 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
       });
     }
 
     if (response.method === 'DELETE') {
-      return rest.delete(url, (req, res, ctx) => {
-        return res(ctx.status(response.status || 204));
+      return http.delete(url, ({ request }) => {
+        return new Response(null, { status: response.status || 204 });
       });
     }
 
     // Default to GET
-    return rest.get(url, (req, res, ctx) => {
-      return res(ctx.status(response.status || 200), ctx.json(response.data));
+    return http.get(url, ({ request }) => {
+      return new Response(JSON.stringify(response.data), {
+        status: response.status || 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
     });
   });
 
@@ -327,7 +350,7 @@ export function createDelayedHandler(handler: any, delayMs: number) {
  * Mock network failures
  */
 export function createNetworkFailureHandler(url: string) {
-  return rest.get(url, () => {
+  return http.get(url, () => {
     throw new Error('Network error');
   });
 }

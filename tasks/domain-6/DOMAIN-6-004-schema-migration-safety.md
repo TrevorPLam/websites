@@ -28,8 +28,8 @@ Implement schema migration safety following section 6.6 specification with up/do
 
 - Postgresql Rls Documentation: `docs/guides/backend-data/postgresql-rls-documentation.md` ✅ COMPLETED
 - Aws Rds Proxy Documentation: `docs/guides/backend-data/aws-rds-proxy-documentation.md` ✅ COMPLETED
-- Pgbouncer Supavisor Configuration: `docs/guides/backend-data/pgbouncer-supavisor-configuration.md` ❌ MISSING (P1)
-- Schema Migration Safety: `docs/guides/backend-data/schema-migration-safety.md` ❌ MISSING (P1)
+- Pgbouncer Supavisor Configuration: `docs/guides/pgbouncer-supavisor-configuration.md` ✅ COMPLETED
+- Schema Migration Safety: `docs/guides/schema-migration-safety.md` ✅ COMPLETED
 
 **Current Status:** Documentation exists for core patterns. Missing some advanced implementation guides.
 

@@ -1,4 +1,9 @@
 {
-  "extends": "../packages/config/typescript-config/base.json",
-  "compilerOptions": { "outDir": "dist", "rootDir": "src" }
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "moduleResolution": "bundler",
+    "target": "ES2022"
+  }
 }
