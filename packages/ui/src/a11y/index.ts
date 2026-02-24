@@ -9,4 +9,4 @@ export { Modal } from './Modal';
 export type { ModalProps } from './Modal';
 
 export { FormField as AccessibleFormField } from './FormField';
-export type { FormFieldProps } from './FormField';
+export type { FormFieldProps as AccessibleFormFieldProps } from './FormField';

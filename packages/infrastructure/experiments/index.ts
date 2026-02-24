@@ -1,3 +1,3 @@
-export * from './ab-testing.js';
-export * from './feature-flags.js';
-export * from './guardrails.js';
+export * from './ab-testing.ts';
+export * from './feature-flags.ts';
+export * from './guardrails.ts';

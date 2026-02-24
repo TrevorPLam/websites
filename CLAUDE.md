@@ -28,3 +28,10 @@
 
 - Checks action and data flow changes for validation and isolation.
 - Flags risky patterns or missing safeguards.
+
+## Related Documentation
+
+- **[AGENTS.md](AGENTS.md)** - Master AI agent context
+- **[README.md](README.md)** - Project overview
+- **[TODO.md](TODO.md)** - Task tracking
+- **[ANALYSIS.md](ANALYSIS.md)** - Repository analysis

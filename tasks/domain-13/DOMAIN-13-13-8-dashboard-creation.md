@@ -1,32 +1,32 @@
 ---
-id: DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed
-title: '10.1 Supabase Realtime for Portal Lead Feed'
+id: DOMAIN-13-13-8-dashboard-creation
+title: '13.8 Analytics Dashboard Creation'
 status: completed
 priority: high
 type: feature
 created: 2026-02-24
 updated: 2026-02-24
 owner: 'ai-agent'
-branch: feat/DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed
+branch: feat/DOMAIN-13-13-8-dashboard-creation
 allowed-tools: Bash(git:*) Read Write Bash(npm:*) Read Write Bash(node:*) Read Write Bash(pnpm:*) Read Write
 ---
 
-# DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed
+# DOMAIN-13-13-8-dashboard-creation
 
 ## Objective
 
-Implement 10.1 supabase realtime for portal lead feed for domain following the specifications in the domain plan.
+Implement 13.8 analytics dashboard creation for domain following the specifications in the domain plan.
 
 ## Context
 
-**Domain:** 10
-**Section:** 10.1-supabase-realtime-for-portal-lead-feed
+**Domain:** 13
+**Section:** 13.8-dashboard-creation
 **Files:** Refer to domain plan documentation
 
 **Codebase Area:**
 
-- Location: `docs/plan/domain-10/`
-- Focus: 10.1-supabase-realtime-for-portal-lead-feed implementation
+- Location: `docs/plan/domain-13/`
+- Focus: 13.8-dashboard-creation implementation
 - Integration: Multi-tenant marketing platform
 
 **Dependencies:**
@@ -247,7 +247,7 @@ function badExample(x: any, y: any): any {
 
 ## References
 
-- Domain Plan: `docs/plan/domain-10/`
+- Domain Plan: `docs/plan/domain-13/`
 - Architecture Guide: `docs/architecture/`
 - Development Standards: `docs/standards/`
 - Multi-tenant Patterns: `docs/patterns/multi-tenant/`
@@ -256,7 +256,7 @@ function badExample(x: any, y: any): any {
 ---
 
 _Created: 2026-02-24_
-_Domain: 10_
-_Section: 10.1-supabase-realtime-for-portal-lead-feed_
+_Domain: 13_
+_Section: 13.8-dashboard-creation_
 _Priority: High_
 _Type: Feature Implementation_

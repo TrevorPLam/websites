@@ -46,7 +46,8 @@ async function getPendingCount(): Promise<number> {
     const countRequest = store.count();
 
     countRequest.onsuccess = () => resolve(countRequest.result);
-    countRequest.onerror = () => reject(countRequest.error ?? new Error('Failed to count pending items'));
+    countRequest.onerror = () =>
+      reject(countRequest.error ?? new Error('Failed to count pending items'));
   });
 }
 
@@ -82,13 +83,17 @@ export function useOfflineForm(apiUrl: string) {
     window.addEventListener('online', onOnline);
     window.addEventListener('offline', onOffline);
 
-    void getPendingCount().then(setPendingCount).catch(() => setPendingCount(0));
+    void getPendingCount()
+      .then(setPendingCount)
+      .catch(() => setPendingCount(0));
 
     if ('serviceWorker' in navigator) {
       const messageListener = (event: MessageEvent) => {
         if (event.data?.type === 'BACKGROUND_SYNC_COMPLETE') {
           setSyncedOfflineData(true);
-          void getPendingCount().then(setPendingCount).catch(() => setPendingCount(0));
+          void getPendingCount()
+            .then(setPendingCount)
+            .catch(() => setPendingCount(0));
         }
       };
 
@@ -142,7 +147,7 @@ export function useOfflineForm(apiUrl: string) {
         if ('serviceWorker' in navigator) {
           const registration = await navigator.serviceWorker.ready;
           if ('sync' in registration) {
-            await registration.sync.register('contact-form-queue');
+            await (registration as any).sync.register('contact-form-queue');
           }
         }
 

@@ -97,10 +97,12 @@ function decodeAssignmentsCookie(cookieValue?: string): Record<string, string> {
     }
 
     return Object.fromEntries(
-      Object.entries(parsed).filter(
-        ([experimentId, variantId]) =>
-          typeof experimentId === 'string' && typeof variantId === 'string'
-      )
+      Object.entries(parsed)
+        .filter(
+          ([experimentId, variantId]) =>
+            typeof experimentId === 'string' && typeof variantId === 'string'
+        )
+        .map(([experimentId, variantId]) => [experimentId, String(variantId)])
     );
   } catch {
     return {};

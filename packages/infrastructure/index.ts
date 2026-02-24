@@ -28,62 +28,62 @@
 // [TRACE:BLOCK=packages.infra.exports.security]
 // [FEAT:SECURITY]
 // NOTE: Security module exports - CSP, headers, sanitization, rate limiting, and request validation.
-export * from './src/security/index.js';
+export * from './src/security/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.auth]
 // [FEAT:AUTH]
 // NOTE: Authentication module exports - OAuth 2.1, tenant context, and middleware.
-export * from './src/auth/index.js';
+export * from './src/auth/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.design]
 // [FEAT:DESIGN]
 // NOTE: Design system exports - spacing, typography, color, border, shadow utilities.
-export * from './src/design/index.js';
+export * from './src/design/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.monitoring]
 // [FEAT:MONITORING]
 // NOTE: Monitoring module exports - Sentry error tracking and data sanitization.
-export * from './src/monitoring/index.js';
+export * from './src/monitoring/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.composition]
 // [FEAT:COMPOSITION]
 // NOTE: Composition pattern exports - slots, context, providers, HOCs.
-export * from './src/composition/index.js';
+export * from './src/composition/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.accessibility]
 // [FEAT:ACCESSIBILITY]
 // NOTE: Accessibility exports - ARIA, keyboard, screen reader, hooks.
-export * from './src/accessibility/index.js';
+export * from './src/accessibility/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.variants]
 // [FEAT:VARIANTS]
 // NOTE: Variant system exports - CVA, types, composition, utils.
-export * from './src/variants/index.js';
+export * from './src/variants/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.middleware]
 // [FEAT:MIDDLEWARE]
 // NOTE: Middleware module exports - middleware factory for request processing.
-export * from './middleware/create-middleware.js';
+export * from './middleware/create-middleware.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.context]
 // [FEAT:INFRASTRUCTURE]
 // NOTE: Context module exports - request context safe for all environments.
-export * from './context/request-context.js';
+export * from './context/request-context.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.logging]
 // [FEAT:LOGGING]
 // NOTE: Logging module exports - structured logging with request context integration.
-export * from './logger/index.js';
+export * from './logger/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.env]
 // [FEAT:ENV]
 // NOTE: Environment validation exports - schema validation and configuration.
-export * from './env/index.js';
+export * from './env/index.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.config]
 // [FEAT:CONFIG]
 // NOTE: Centralized configuration exports - type-safe environment variable access.
-export * from './src/config.js';
+export * from './src/config.ts';
 
 // [TRACE:CONST=packages.infra.version]
 // [FEAT:INFRASTRUCTURE]
@@ -93,4 +93,4 @@ export const INFRA_PACKAGE_VERSION = '1.0.0';
 // [TRACE:BLOCK=packages.infra.exports.experiments]
 // [FEAT:EXPERIMENTS]
 // NOTE: Experimentation exports - A/B testing engine and guardrails.
-export * from './experiments/index.js';
+export * from './experiments/index.ts';

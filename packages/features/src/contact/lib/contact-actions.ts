@@ -30,9 +30,10 @@
 'use server';
 
 import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { checkRateLimit, hashIp, logError, withServerSpan } from '@repo/infra';
-import { runWithRequestId } from '@repo/infra/context/server';
+import { checkRateLimit, hashIp } from '@repo/infra';
+import { logError, withServerSpan, runWithRequestId } from '@repo/infra';
 import { getValidatedClientIp } from '@repo/infra/security';
 import type { ContactFormData } from './contact-schema';
 import { validateContactSecurity } from './contact-schema';
@@ -168,6 +169,9 @@ export async function submitContactForm(
       },
       async () => {
         try {
+          // Get request headers first
+          const requestHeaders = await headers();
+
           // Get validated client IP
           const clientIp = getValidatedClientIp(requestHeaders, {
             environment:
@@ -198,13 +202,10 @@ export async function submitContactForm(
           }
 
           // Rate limiting check
-          const rateLimitPassed = await checkRateLimit({
-            email: typeof data.email === 'string' ? data.email : '',
-            clientIp,
-            hashIp,
-          });
+          const request = new NextRequest('http://localhost', { headers: requestHeaders });
+          const rateLimitResponse = await checkRateLimit(request, 'form', hashIp(clientIp));
 
-          if (!rateLimitPassed) {
+          if (rateLimitResponse) {
             return {
               success: false,
               message: 'Too many submissions. Please try again later.',

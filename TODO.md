@@ -44,7 +44,7 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 35 | 7           | 0         | 0           | 7       |
 | Domain 36 | 6           | 0         | 0           | 6       |
 | Domain 37 | 133         | 0         | 0           | 133     |
-| **Total** | **311**     | **149**   | **0**       | **162** |
+| **Total** | **444**     | **149**   | **0**       | **295** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -385,6 +385,62 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 - [ ] DOMAIN-36-36-5-rollback-procedure - Rollback Procedure
 - [ ] DOMAIN-36-36-6-fresh-environment-setup - Fresh Environment Setup
 
+## CRITICAL PRODUCTION READINESS TASKS 🚨
+
+### **Week 1: Critical Issues Resolution (P0)**
+
+- [ ] PROD-SEC-001-fix-security-vulnerabilities - Fix security vulnerabilities (glob CLI command injection, Nodemailer DoS)
+- [ ] PROD-SEC-002-update-dependencies - Update glob package to >=10.5.0 and nodemailer to >=7.0.11
+- [ ] PROD-SEC-003-run-audit-fix - Run `pnpm audit --fix` and verify resolution
+- [ ] PROD-BUILD-001-fix-typescript-compilation - Fix @repo/privacy package tsconfig.json format and missing dependencies
+- [ ] PROD-BUILD-002-add-missing-dependencies - Add missing @types/node dependencies and resolve Vite conflicts
+- [ ] PROD-TEST-001-fix-test-timeouts - Update Vitest fake timer configuration and increase async test timeouts
+- [ ] PROD-TEST-002-fix-promise-rejections - Fix unhandled promise rejections in test suite
+- [ ] PROD-UI-001-implement-design-tokens - Create centralized design tokens in `packages/ui/src/design-tokens/`
+- [ ] PROD-UI-002-replace-hardcoded-values - Replace hardcoded values with token references
+- [ ] PROD-UI-003-add-storybook - Install and configure Storybook for UI components
+- [ ] PROD-UI-004-create-component-stories - Create stories for all components with visual testing
+
+### **Week 2: Production Features (P1)**
+
+- [ ] PROD-I18N-001-add-next-intl - Add next-intl dependency for internationalization
+- [ ] PROD-I18N-002-implement-locale-detection - Create locale detection and switching system
+- [ ] PROD-I18N-003-add-rtl-support - Implement RTL support with logical CSS properties
+- [ ] PROD-I18N-004-add-pluralization - Add pluralization and date formatting
+- [ ] PROD-ANALYTICS-001-implement-ga4 - Implement Google Analytics 4 with proper consent
+- [ ] PROD-ANALYTICS-002-add-event-tracking - Add custom event tracking for key actions
+- [ ] PROD-ANALYTICS-003-integrate-consent - Integrate analytics with consent management
+- [ ] PROD-FF-001-add-vercel-edge-config - Add Vercel Edge Config for feature flags
+- [ ] PROD-FF-002-create-tenant-flags - Create tenant-scoped feature flags
+- [ ] PROD-FF-003-implement-ab-testing - Implement A/B testing framework with metrics
+- [ ] PROD-ERROR-001-add-error-boundaries - Add error boundaries at layout and feature levels
+- [ ] PROD-ERROR-002-integrate-sentry - Integrate error boundaries with Sentry error tracking
+- [ ] PROD-LOAD-001-implement-k6 - Implement k6 load testing suite
+- [ ] PROD-LOAD-002-create-performance-benchmarks - Create performance benchmarks and monitoring
+
+### **Week 3: Advanced Features (P2)**
+
+- [ ] PROD-CHAOS-001-implement-fault-injection - Implement fault injection testing for resilience
+- [ ] PROD-CHAOS-002-add-self-healing - Add self-healing mechanisms and recovery procedures
+- [ ] PROD-QUANTUM-001-implement-crypto-abstraction - Implement cryptography abstraction layer
+- [ ] PROD-QUANTUM-002-replace-hardcoded-algorithms - Replace hard-coded algorithms with agile patterns
+- [ ] PROD-RELEASE-001-automate-changelog - Add automated changelog generation
+- [ ] PROD-RELEASE-002-enforce-semver - Implement semantic versioning enforcement
+- [ ] PROD-RELEASE-003-automate-publishing - Add automated publishing pipeline
+- [ ] PROD-SECRETS-001-centralize-management - Add centralized secrets management system
+- [ ] PROD-SECRETS-002-implement-parity-validation - Implement environment parity validation
+- [ ] PROD-CACHE-001-monitor-hit-rates - Implement cache hit rate monitoring and optimization
+
+### **Week 4: Production Deployment**
+
+- [ ] PROD-QA-001-comprehensive-testing - Comprehensive testing and validation
+- [ ] PROD-QA-002-performance-tuning - Optimize for production load
+- [ ] PROD-QA-003-security-audit - Final security audit and penetration testing
+- [ ] PROD-QA-004-complete-documentation - Complete production documentation
+- [ ] PROD-QA-005-setup-monitoring - Production monitoring and alerting setup
+
+---
+
 ## DOMAIN 37: Repository Excellence & AI-Ready Practices 🔄 PENDING
 
 ### Part 1: Code-Level Practices (18 tasks)
@@ -557,7 +613,8 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 34 | 4 | 0 | 0 | 4 |
 | Domain 35 | 11 | 0 | 0 | 11 |
 | Domain 36 | 9 | 0 | 0 | 9 |
-| **Total** | **243** | **99** | **0** | **144** |
+| **PROD Tasks** | **33** | **0** | **0** | **33** |
+| **Total** | **276** | **99** | **0** | **177** |
 
 ## DOMAIN 0: COMPLETE
 
@@ -1303,9 +1360,145 @@ A task is considered **complete** when:
 - Documentation is updated
 - The task file status is set to done
 
+## DOMAIN 37: Code Complexity & Simplification
+
+- [ ] DOMAIN-37-001-large-files-components - Address large files and over-engineered components
+- [ ] DOMAIN-37-002-typescript-over-complexity - Simplify TypeScript type exports and complexity
+- [ ] DOMAIN-37-003-build-config-over-engineering - Simplify build configuration and remove redundancy
+- [ ] DOMAIN-37-004-ai-integration-simplification - Simplify AI agent context management
+- [ ] DOMAIN-37-005-documentation-consolidation - Consolidate excessive documentation
+- [ ] DOMAIN-37-006-package-consolidation - Merge redundant packages and simplify structure
+- [ ] DOMAIN-37-007-fsd-layer-simplification - Merge thin FSD layers and reduce indirection
+- [ ] DOMAIN-37-008-dependency-cleanup - Remove overlapping and unnecessary dependencies
+- [ ] DOMAIN-37-009-task-management-simplification - Reduce task granularity and complexity
+- [ ] DOMAIN-37-010-security-pattern-simplification - Simplify over-engineered security layers
+- [ ] DOMAIN-37-011-component-wrapper-simplification - Remove heavy component wrappers
+- [ ] DOMAIN-37-012-export-structure-cleanup - Simplify complex package export structures
+- [ ] DOMAIN-37-013-boilerplate-reduction - Reduce excessive code documentation and scaffolding
+- [ ] DOMAIN-37-014-circular-dependency-resolution - Resolve package interdependency complexity
+- [ ] DOMAIN-37-015-workspace-simplification - Consolidate workspace package categories
+- [ ] DOMAIN-37-016-testing-complexity-reduction - Simplify over-engineered test patterns
+- [ ] DOMAIN-37-017-monitoring-overhead-reduction - Reduce excessive monitoring and observability
+- [ ] DOMAIN-37-018-performance-optimization-cleanup - Simplify complex performance optimization
+- [ ] DOMAIN-37-019-multi-tenant-complexity-reduction - Simplify over-engineered multi-tenant patterns
+- [ ] DOMAIN-37-020-integration-pattern-simplification - Reduce complex third-party integration patterns
+- [ ] DOMAIN-37-021-configuration-complexity-cleanup - Simplify environment and configuration management
+- [ ] DOMAIN-37-022-build-pipeline-optimization - Streamline complex build and CI/CD pipelines
+- [ ] DOMAIN-37-023-deployment-complexity-reduction - Simplify over-engineered deployment patterns
+- [ ] DOMAIN-37-024-architecture-documentation-cleanup - Reduce excessive architecture documentation
+- [ ] DOMAIN-37-025-code-review-process-simplification - Streamline complex code review processes
+- [ ] DOMAIN-37-026-release-management-cleanup - Simplify complex release and version management
+- [ ] DOMAIN-37-027-quality-gates-optimization - Reduce excessive quality gates and checks
+- [ ] DOMAIN-37-028-error-handling-simplification - Simplify over-engineered error handling patterns
+- [ ] DOMAIN-37-029-logging-complexity-reduction - Reduce excessive logging and observability overhead
+- [ ] DOMAIN-37-030-caching-strategy-simplification - Simplify complex caching and state management
+- [ ] DOMAIN-37-031-api-design-cleanup - Reduce over-engineered API patterns and abstractions
+- [ ] DOMAIN-37-032-data-layer-simplification - Simplify complex data access patterns
+- [ ] DOMAIN-37-033-business-logic-decomposition - Break down complex business logic modules
+- [ ] DOMAIN-37-034-ui-pattern-simplification - Reduce complex UI component patterns and abstractions
+- [ ] DOMAIN-37-035-state-management-cleanup - Simplify over-engineered state management
+- [ ] DOMAIN-37-036-routing-complexity-reduction - Simplify complex routing and navigation patterns
+- [ ] DOMAIN-37-037-middleware-simplification - Reduce over-engineered middleware and interceptor patterns
+- [ ] DOMAIN-37-038-validation-cleanup - Simplify complex validation and schema patterns
+- [ ] DOMAIN-37-039-testing-framework-simplification - Reduce complex testing framework setup
+- [ ] DOMAIN-37-040-documentation-generation-cleanup - Simplify automated documentation generation
+- [ ] DOMAIN-37-041-code-generation-complexity - Reduce over-engineered code generation patterns
+- [ ] DOMAIN-37-042-tooling-simplification - Simplify complex development tooling and automation
+- [ ] DOMAIN-37-043-workflow-optimization - Streamline complex development workflows
+- [ ] DOMAIN-37-044-performance-monitoring-cleanup - Reduce excessive performance monitoring overhead
+- [ ] DOMAIN-37-045-security-complexity-reduction - Simplify over-engineered security implementations
+- [ ] DOMAIN-37-046-compliance-overhead-cleanup - Reduce excessive compliance and audit patterns
+- [ ] DOMAIN-37-047-scaling-pattern-simplification - Simplify complex scaling and load balancing patterns
+- [ ] DOMAIN-37-048-backup-strategy-cleanup - Simplify complex backup and recovery patterns
+- [ ] DOMAIN-37-049-disaster-recovery-simplification - Reduce over-engineered disaster recovery patterns
+- [ ] DOMAIN-37-050-monitoring-alert-cleanup - Simplify complex monitoring and alerting systems
+- [ ] DOMAIN-37-051-incident-response-simplification - Streamline complex incident response procedures
+- [ ] DOMAIN-37-052-maintenance-complexity-reduction - Reduce excessive maintenance procedures
+- [ ] DOMAIN-37-053-upgrade-strategy-cleanup - Simplify complex dependency upgrade strategies
+- [ ] DOMAIN-37-054-migration-pattern-simplification - Reduce complex data migration patterns
+- [ ] DOMAIN-37-055-feature-flag-complexity - Simplify over-engineered feature flag systems
+- [ ] DOMAIN-37-056-a-b-testing-cleanup - Reduce complex A/B testing and experimentation patterns
+- [ ] DOMAIN-37-057-personalization-complexity - Simplify over-engineered personalization systems
+- [ ] DOMAIN-37-058-search-optimization-cleanup - Reduce complex search and indexing patterns
+- [ ] DOMAIN-37-059-analytics-simplification - Simplify over-engineered analytics and reporting
+- [ ] DOMAIN-37-060-dashboard-complexity-reduction - Reduce complex dashboard and visualization patterns
+- [ ] DOMAIN-37-061-notification-system-cleanup - Simplify complex notification and messaging systems
+- [ ] DOMAIN-37-062-email-complexity-reduction - Reduce over-engineered email and communication patterns
+- [ ] DOMAIN-37-063-integration-testing-simplification - Simplify complex integration testing patterns
+- [ ] DOMAIN-37-064-e2e-testing-cleanup - Reduce over-engineered end-to-end testing
+- [ ] DOMAIN-37-065-performance-testing-simplification - Simplify complex performance testing patterns
+- [ ] DOMAIN-37-066-security-testing-cleanup - Reduce excessive security testing procedures
+- [ ] DOMAIN-37-067-accessibility-testing-simplification - Simplify complex accessibility testing
+- [ ] DOMAIN-37-068-ux-testing-cleanup - Reduce over-engineered UX testing patterns
+- [ ] DOMAIN-37-069-compatibility-testing-simplification - Simplify complex compatibility testing
+- [ ] DOMAIN-37-070-load-testing-cleanup - Reduce excessive load and stress testing
+- [ ] DOMAIN-37-071-chaos-engineering-simplification - Simplify complex chaos engineering patterns
+- [ ] DOMAIN-37-072-observability-cleanup - Reduce excessive observability and monitoring
+- [ ] DOMAIN-37-073-tracing-simplification - Simplify complex distributed tracing patterns
+- [ ] DOMAIN-37-074-metrics-collection-cleanup - Reduce excessive metrics collection
+- [ ] DOMAIN-37-075-log-analysis-simplification - Simplify complex log analysis patterns
+- [ ] DOMAIN-37-076-alert-management-cleanup - Reduce over-engineered alert management
+- [ ] DOMAIN-37-077-incident-analysis-simplification - Simplify complex incident analysis
+- [ ] DOMAIN-37-078-root-cause-analysis-cleanup - Reduce excessive root cause analysis procedures
+- [ ] DOMAIN-37-079-post-mortem-simplification - Simplify complex post-mortem processes
+- [ ] DOMAIN-37-080-knowledge-management-cleanup - Reduce excessive knowledge management systems
+- [ ] DOMAIN-37-081-documentation-maintenance-simplification - Simplify complex documentation maintenance
+- [ ] DOMAIN-37-082-training-complexity-reduction - Reduce over-engineered training and onboarding
+- [ ] DOMAIN-37-083-knowledge-transfer-cleanup - Simplify complex knowledge transfer processes
+- [ ] DOMAIN-37-084-onboarding-simplification - Simplify complex developer onboarding
+- [ ] DOMAIN-37-085-code-review-cleanup - Reduce excessive code review procedures
+- [ ] DOMAIN-37-086-pair-programming-simplification - Simplify complex pair programming patterns
+- [ ] DOMAIN-37-087-mentoring-complexity-reduction - Reduce over-engineered mentoring systems
+- [ ] DOMAIN-37-088-collaboration-tools-cleanup - Simplify complex collaboration tooling
+- [ ] DOMAIN-37-089-communication-simplification - Simplify complex communication patterns
+- [ ] DOMAIN-37-090-meeting-overhead-reduction - Reduce excessive meeting and ceremony
+- [ ] DOMAIN-37-091-planning-complexity-cleanup - Reduce over-engineered planning processes
+- [ ] DOMAIN-37-092-estimation-simplification - Simplify complex estimation techniques
+- [ ] DOMAIN-37-093-roadmapping-cleanup - Reduce excessive roadmapping procedures
+- [ ] DOMAIN-37-094-strategy-planning-simplification - Simplify complex strategic planning
+- [ ] DOMAIN-37-095-architecture-evolution-cleanup - Reduce excessive architecture evolution processes
+- [ ] DOMAIN-37-096-technology-assessment-simplification - Simplify complex technology assessments
+- [ ] DOMAIN-37-097-innovation-management-cleanup - Reduce excessive innovation management
+- [ ] DOMAIN-37-098-research-complexity-reduction - Reduce over-engineered research processes
+- [ ] DOMAIN-37-099-experimentation-simplification - Simplify complex experimentation frameworks
+- [ ] DOMAIN-37-100-proof-of-concept-cleanup - Reduce excessive proof-of-concept development
+- [ ] DOMAIN-37-101-prototype-simplification - Simplify complex prototyping patterns
+- [ ] DOMAIN-37-102-mvp-development-cleanup - Reduce over-engineered MVP development
+- [ ] DOMAIN-37-103-pilot-program-simplification - Simplify complex pilot programs
+- [ ] DOMAIN-37-104-beta-testing-cleanup - Reduce excessive beta testing procedures
+- [ ] DOMAIN-37-105-user-feedback-simplification - Simplify complex user feedback collection
+- [ ] DOMAIN-37-106-user-research-cleanup - Reduce excessive user research processes
+- [ ] DOMAIN-37-107-usability-testing-simplification - Simplify complex usability testing
+- [ ] DOMAIN-37-108-user-interview-cleanup - Reduce excessive user interview procedures
+- [ ] DOMAIN-37-109-surveys-simplification - Simplify complex survey and feedback systems
+- [ ] DOMAIN-37-110-analytics-research-cleanup - Reduce excessive analytics research
+- [ ] DOMAIN-37-111-market-research-simplification - Simplify complex market research processes
+- [ ] DOMAIN-37-112-competitive-analysis-cleanup - Reduce excessive competitive analysis
+- [ ] DOMAIN-37-113-trend-analysis-simplification - Simplify complex trend analysis
+- [ ] DOMAIN-37-114-industry-research-cleanup - Reduce excessive industry research
+- [ ] DOMAIN-37-115-technology-scanning-simplification - Simplify complex technology scanning
+- [ ] DOMAIN-37-116-partnership-evaluation-cleanup - Reduce excessive partnership evaluation
+- [ ] DOMAIN-37-117-vendor-assessment-simplification - Simplify complex vendor assessments
+- [ ] DOMAIN-37-118-procurement-complexity-reduction - Reduce over-engineered procurement processes
+- [ ] DOMAIN-37-119-contract-management-cleanup - Reduce excessive contract management
+- [ ] DOMAIN-37-120-sla-management-simplification - Simplify complex SLA management
+- [ ] DOMAIN-37-121-support-complexity-reduction - Reduce over-engineered support systems
+- [ ] DOMAIN-37-122-customer-success-cleanup - Reduce excessive customer success processes
+- [ ] DOMAIN-37-123-account-management-simplification - Simplify complex account management
+- [ ] DOMAIN-37-124-client-onboarding-cleanup - Reduce excessive client onboarding
+- [ ] DOMAIN-37-125-training-delivery-simplification - Simplify complex training delivery
+- [ ] DOMAIN-37-126-documentation-delivery-cleanup - Reduce excessive documentation delivery
+- [ ] DOMAIN-37-127-support-documentation-simplification - Simplify complex support documentation
+- [ ] DOMAIN-37-128-troubleshooting-cleanup - Reduce excessive troubleshooting procedures
+- [ ] DOMAIN-37-129-issue-resolution-simplification - Simplify complex issue resolution
+- [ ] DOMAIN-37-130-escalation-management-cleanup - Reduce excessive escalation management
+- [ ] DOMAIN-37-131-crisis-management-simplification - Simplify complex crisis management
+- [ ] DOMAIN-37-132-business-continuity-cleanup - Reduce excessive business continuity planning
+- [ ] DOMAIN-37-133-risk-management-simplification - Simplify complex risk management
+
 ---
 
 _Last updated: 2026-02-24_  
-_Total tasks: 311_  
-_Completed: 149 (47.9%)_  
-_Remaining: 162 (52.1%)_
+_Total tasks: 444_  
+_Completed: 149 (33.6%)_  
+_Remaining: 295 (66.4%)_

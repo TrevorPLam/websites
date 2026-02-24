@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Cal, { getCalApi } from '@calcom/embed-react';
 
 interface BookingEmbedProps {
@@ -22,8 +22,6 @@ export function BookingEmbedInline({
   prefillName,
   prefillEmail,
 }: BookingEmbedProps) {
-  const calRef = useRef<any>(null);
-
   useEffect(() => {
     (async () => {
       const cal = await getCalApi({ namespace: tenantId });
@@ -97,6 +95,7 @@ export function BookingEmbedPopup({
         hideEventTypeDetails: false,
         cssVarsPerTheme: {
           light: { 'cal-brand': 'var(--color-primary)' },
+          dark: { 'cal-brand': 'var(--color-primary)' },
         },
       });
     })();

@@ -33,6 +33,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { NextRequest } from 'next/server';
 import { headers } from 'next/headers';
 import {
   createBookingFormSchema,
@@ -190,13 +191,10 @@ export async function submitBookingRequest(
     const validatedData = validateBookingSecurity(rawFormData, schema);
 
     // Rate limiting check (2026 security pattern)
-    const rateLimitResult = await checkRateLimit({
-      email: validatedData.email,
-      clientIp,
-      hashIp,
-    });
+    const request = new NextRequest('http://localhost', { headers: headersList });
+    const rateLimitResponse = await checkRateLimit(request, 'form', hashIp(clientIp));
 
-    if (!rateLimitResult) {
+    if (rateLimitResponse) {
       return {
         success: false,
         error: 'Too many booking attempts. Please try again later.',

@@ -7,9 +7,15 @@
 
 ## Stack
 
-- Next.js 16, React 19, Tailwind CSS v4
-- Turborepo, pnpm, TypeScript
-- Supabase, Upstash, Tinybird
+- **Framework**: Next.js 16.1.5 with App Router
+- **UI**: React 19.0.0 with Server Components
+- **Language**: TypeScript 5.9.3 (strict mode)
+- **Styling**: Tailwind CSS v4
+- **Build**: Turborepo 2.8.10 + pnpm 10.29.2
+- **Database**: Supabase (PostgreSQL + Realtime)
+- **Cache**: Upstash Redis
+- **Analytics**: Tinybird
+- **Monitoring**: Sentry + OpenTelemetry
 
 ## Repository Map
 
@@ -50,3 +56,11 @@
 - `pnpm test`
 - `pnpm validate-docs`
 - `pnpm validate:configs`
+
+## Related Documentation
+
+- **[README.md](README.md)** - Project overview and quick start
+- **[INDEX.md](INDEX.md)** - Complete repository index
+- **[DESIGN.md](DESIGN.md)** - Design philosophy and architecture
+- **[CODEMAP.md](CODEMAP.md)** - Code navigation and diagrams
+- **[TODO.md](TODO.md)** - Task tracking and progress

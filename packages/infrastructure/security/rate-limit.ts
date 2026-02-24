@@ -1,6 +1,7 @@
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { NextRequest, NextResponse } from 'next/server';
+import { getClientIp } from './rate-limit/helpers';
 
 // ============================================================================
 // RATE LIMITER INSTANCES
@@ -65,26 +66,23 @@ const LIMITERS: Record<RateLimitTier, Ratelimit> = {
   webhook: webhookLimiter,
 };
 
-// Canonical IP extraction (Vercel sets x-forwarded-for; trust leftmost)
-function getClientIP(request: NextRequest): string {
-  const xForwardedFor = request.headers.get('x-forwarded-for');
-  if (xForwardedFor) {
-    // Leftmost IP = true client (rightmost = Vercel's edge)
-    return xForwardedFor.split(',')[0].trim();
-  }
-  return request.headers.get('x-real-ip') ?? '127.0.0.1';
-}
-
 export async function checkRateLimit(
   request: NextRequest,
   tier: RateLimitTier,
   identifier?: string // Override IP with user ID or API key for auth'd routes
 ): Promise<NextResponse | null> {
   const limiter = LIMITERS[tier];
-  const ip = getClientIP(request);
+
+  // Convert headers to Record<string, string> for getClientIp helper
+  const headersRecord: Record<string, string> = {};
+  request.headers.forEach((value, key) => {
+    headersRecord[key] = value;
+  });
+
+  const ip = getClientIp(headersRecord) ?? '127.0.0.1';
   const key = identifier ?? ip;
 
-  const { success, limit, remaining, reset } = await limiter.limit(key);
+  const { success, reset } = await limiter.limit(key);
 
   if (!success) {
     const resetDate = new Date(reset);
@@ -96,15 +94,7 @@ export async function checkRateLimit(
         message: `Rate limit exceeded. Try again after ${resetDate.toISOString()}.`,
         retryAfter: retryAfterSeconds,
       },
-      {
-        status: 429,
-        headers: {
-          'X-RateLimit-Limit': String(limit),
-          'X-RateLimit-Remaining': '0',
-          'X-RateLimit-Reset': String(reset),
-          'Retry-After': String(retryAfterSeconds),
-        },
-      }
+      { status: 429, headers: { 'Retry-After': retryAfterSeconds.toString() } }
     );
   }
 
@@ -128,3 +118,6 @@ export function withRateLimit(
     return handler(req);
   };
 }
+
+// Export helper functions for use in other modules
+export { getClientIp, hashIp } from './rate-limit/helpers';

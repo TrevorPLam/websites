@@ -51,12 +51,12 @@ marketing-websites/
 
 | Category            | Technology    | Version | Purpose                         |
 | ------------------- | ------------- | ------- | ------------------------------- |
-| **Framework**       | Next.js       | 16.1    | React framework with App Router |
-| **UI Library**      | React         | 19.2    | User interface library          |
-| **Language**        | TypeScript    | 5.1+    | Type-safe development           |
+| **Framework**       | Next.js       | 16.1.5  | React framework with App Router |
+| **UI Library**      | React         | 19.0.0  | User interface library          |
+| **Language**        | TypeScript    | 5.9.3   | Type-safe development           |
 | **Styling**         | Tailwind CSS  | v4      | Utility-first CSS framework     |
-| **Package Manager** | pnpm          | 9.0+    | Efficient package management    |
-| **Build System**    | Turbo         | 2.0     | Monorepo build orchestration    |
+| **Package Manager** | pnpm          | 10.29.2 | Efficient package management    |
+| **Build System**    | Turbo         | 2.8.10  | Monorepo build orchestration    |
 | **Database**        | Supabase      | Latest  | PostgreSQL + real-time features |
 | **Authentication**  | Supabase Auth | Latest  | OAuth 2.1 + multi-tenant auth   |
 | **Deployment**      | Vercel        | Latest  | Edge deployment platform        |
@@ -65,8 +65,8 @@ marketing-websites/
 
 ### Prerequisites
 
-- **Node.js** ≥ 20.9.0
-- **pnpm** ≥ 9.0
+- **Node.js** ≥ 22.0.0
+- **pnpm** ≥ 10.29.2
 - **Git** for version control
 
 ### Installation

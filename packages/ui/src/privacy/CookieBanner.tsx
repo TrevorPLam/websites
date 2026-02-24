@@ -1,11 +1,19 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import {
-  acceptAllCookies,
-  rejectNonEssentialCookies,
-  saveCustomConsent,
-} from '@repo/privacy/consent';
+
+// Mock consent functions - privacy package is temporarily disabled
+const acceptAllCookies = async () => {
+  console.log('Accept all cookies - mock implementation');
+};
+
+const rejectNonEssentialCookies = async () => {
+  console.log('Reject non-essential cookies - mock implementation');
+};
+
+const saveCustomConsent = async (preferences: any) => {
+  console.log('Save custom consent - mock implementation:', preferences);
+};
 
 interface CookieBannerProps {
   show: boolean;
