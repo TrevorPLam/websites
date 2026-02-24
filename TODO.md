@@ -129,6 +129,416 @@ This file provides a consolidated, checkable task list of all domain tasks acros
 
 ## DOMAIN 8: 🔄 PENDING
 
+- [ ] [DOMAIN-8-001-generate-metadata](tasks\domain-8\DOMAIN-8-001-generate-metadata.md) - Complete generateMetadata system with SEO factory
+- [ ] [DOMAIN-8-002-dynamic-sitemap](tasks\domain-8\DOMAIN-8-002-dynamic-sitemap.md) - Per-tenant dynamic sitemap with large site support
+- [ ] [DOMAIN-8-003-robots-ts](tasks\domain-8\DOMAIN-8-003-robots-ts.md) - Per-tenant robots.ts with AI crawler support
+- [ ] [DOMAIN-8-004-structured-data](tasks\domain-8\DOMAIN-8-004-structured-data.md) - Complete JSON-LD structured data system
+- [ ] [DOMAIN-8-005-dynamic-og-images](tasks\domain-8\DOMAIN-8-005-dynamic-og-images.md) - Dynamic OG images with edge runtime
+- [ ] [DOMAIN-8-008-edge-ab-testing-zero-cls](tasks\domain-8\DOMAIN-8-008-edge-ab-testing-zero-cls.md) - Edge A/B testing zero-CLS implementation
+- [ ] [DOMAIN-8-8-1-philosophy](tasks\domain-8\DOMAIN-8-8-1-philosophy.md) - 8.1-philosophy
+- [ ] [DOMAIN-8-8-10-seo-validation-pipeline-in-ci](tasks\domain-8\DOMAIN-8-8-10-seo-validation-pipeline-in-ci.md) - 8.10 SEO Validation Pipeline in CI
+- [ ] [DOMAIN-8-8-2-complete-generatemetadata-system](tasks\domain-8\DOMAIN-8-8-2-complete-generatemetadata-system.md) - 8.2 Complete `generateMetadata()` System
+- [ ] [DOMAIN-8-8-3-per-tenant-dynamic-sitemap](tasks\domain-8\DOMAIN-8-8-3-per-tenant-dynamic-sitemap.md) - 8.3 Per-Tenant Dynamic Sitemap
+- [ ] [DOMAIN-8-8-4-per-tenant-robotsts](tasks\domain-8\DOMAIN-8-8-4-per-tenant-robotsts.md) - 8.4 Per-Tenant `robots.ts`
+- [ ] [DOMAIN-8-8-5-complete-json-ld-structured-data-system](tasks\domain-8\DOMAIN-8-8-5-complete-json-ld-structured-data-system.md) - 8.5 Complete JSON-LD Structured Data System
+- [ ] [DOMAIN-8-8-6-dynamic-og-images-edge-runtime](tasks\domain-8\DOMAIN-8-8-6-dynamic-og-images-edge-runtime.md) - 8.6 Dynamic OG Images — Edge Runtime
+- [ ] [DOMAIN-8-8-7-cms-adapter-sanity-draft-mode](tasks\domain-8\DOMAIN-8-8-7-cms-adapter-sanity-draft-mode.md) - 8.7 CMS Adapter — Sanity Draft Mode
+- [ ] [DOMAIN-8-8-8-geo-generative-engine-optimization-layer](tasks\domain-8\DOMAIN-8-8-8-geo-generative-engine-optimization-layer.md) - 8.8 GEO — Generative Engine Optimization Layer
+- [ ] [DOMAIN-8-8-9-edge-ab-testing-zero-cls](tasks\domain-8\DOMAIN-8-8-9-edge-ab-testing-zero-cls.md) - 8.9 Edge A/B Testing (Zero-CLS)
+
+## DOMAIN 9: 🔄 PENDING
+
+- [ ] [DOMAIN-9-9-1-philosophy](tasks\domain-9\DOMAIN-9-9-1-philosophy.md) - 9.1-philosophy
+- [ ] [DOMAIN-9-9-2-session-attribution-store](tasks\domain-9\DOMAIN-9-9-2-session-attribution-store.md) - 9.2 Session Attribution Store
+- [ ] [DOMAIN-9-9-3-lead-scoring-engine](tasks\domain-9\DOMAIN-9-9-3-lead-scoring-engine.md) - 9.3 Lead Scoring Engine
+- [ ] [DOMAIN-9-9-4-phone-click-tracker-server-action](tasks\domain-9\DOMAIN-9-9-4-phone-click-tracker-server-action.md) - 9.4 Phone Click Tracker (Server Action)
+- [ ] [DOMAIN-9-9-5-lead-notification-system](tasks\domain-9\DOMAIN-9-9-5-lead-notification-system.md) - 9.5 Lead Notification System
+- [ ] [DOMAIN-9-lead-](tasks\domain-9\DOMAIN-9-lead-.md) - DOMAIN-9-lead-
+- [ ] [DOMAIN-9-lead-section-lead](tasks\domain-9\DOMAIN-9-lead-section-lead.md) - Section lead
+- [ ] [DOMAIN-9-philosophy-.md](tasks\domain-9\DOMAIN-9-philosophy.md-.md) - DOMAIN-9-philosophy-.md
+- [ ] [DOMAIN-9-philosophy-section-philosophymd.md](tasks\domain-9\DOMAIN-9-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-9-phone-](tasks\domain-9\DOMAIN-9-phone-.md) - DOMAIN-9-phone-
+- [ ] [DOMAIN-9-phone-section-phone](tasks\domain-9\DOMAIN-9-phone-section-phone.md) - Section phone
+- [ ] [DOMAIN-9-session-](tasks\domain-9\DOMAIN-9-session-.md) - DOMAIN-9-session-
+- [ ] [DOMAIN-9-session-section-session](tasks\domain-9\DOMAIN-9-session-section-session.md) - Section session
+
+## DOMAIN 10: 🔄 PENDING
+
+- [ ] [DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed](tasks\domain-10\DOMAIN-10-10-1-supabase-realtime-for-portal-lead-feed.md) - 10.1 Supabase Realtime for Portal Lead Feed
+- [ ] [DOMAIN-10-supabase-](tasks\domain-10\DOMAIN-10-supabase-.md) - DOMAIN-10-supabase-
+- [ ] [DOMAIN-10-supabase-section-supabase](tasks\domain-10\DOMAIN-10-supabase-section-supabase.md) - Section supabase
+
+## DOMAIN 11: 🔄 PENDING
+
+- [ ] [DOMAIN-11-11-1-philosophy](tasks\domain-11\DOMAIN-11-11-1-philosophy.md) - 11.1-philosophy
+- [ ] [DOMAIN-11-11-2-complete-stripe-webhook-handler](tasks\domain-11\DOMAIN-11-11-2-complete-stripe-webhook-handler.md) - 11.2 Complete Stripe Webhook Handler
+- [ ] [DOMAIN-11-11-3-stripe-checkout-session-creator-server-action](tasks\domain-11\DOMAIN-11-11-3-stripe-checkout-session-creator-server-action.md) - 11.3 Stripe Checkout Session Creator (Server Action)
+- [ ] [DOMAIN-11-11-4-stripe-customer-portal-self-service-billing](tasks\domain-11\DOMAIN-11-11-4-stripe-customer-portal-self-service-billing.md) - 11.4 Stripe Customer Portal (Self-Service Billing)
+- [ ] [DOMAIN-11-11-5-billing-page-component](tasks\domain-11\DOMAIN-11-11-5-billing-page-component.md) - 11.5 Billing Page Component
+- [ ] [DOMAIN-11-billing-](tasks\domain-11\DOMAIN-11-billing-.md) - DOMAIN-11-billing-
+- [ ] [DOMAIN-11-billing-section-billing](tasks\domain-11\DOMAIN-11-billing-section-billing.md) - Section billing
+- [ ] [DOMAIN-11-complete-](tasks\domain-11\DOMAIN-11-complete-.md) - DOMAIN-11-complete-
+- [ ] [DOMAIN-11-complete-section-complete](tasks\domain-11\DOMAIN-11-complete-section-complete.md) - Section complete
+- [ ] [DOMAIN-11-philosophy-.md](tasks\domain-11\DOMAIN-11-philosophy.md-.md) - DOMAIN-11-philosophy-.md
+- [ ] [DOMAIN-11-philosophy-section-philosophymd.md](tasks\domain-11\DOMAIN-11-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-11-stripe-](tasks\domain-11\DOMAIN-11-stripe-.md) - DOMAIN-11-stripe-
+- [ ] [DOMAIN-11-stripe-section-stripe](tasks\domain-11\DOMAIN-11-stripe-section-stripe.md) - Section stripe
+
+## DOMAIN 12: 🔄 PENDING
+
+- [ ] [DOMAIN-12-12-1-philosophy](tasks\domain-12\DOMAIN-12-12-1-philosophy.md) - 12.1-philosophy
+- [ ] [DOMAIN-12-12-2-qstash-client-setup](tasks\domain-12\DOMAIN-12-12-2-qstash-client-setup.md) - 12.2 QStash Client Setup
+- [ ] [DOMAIN-12-12-3-qstash-request-verification-middleware](tasks\domain-12\DOMAIN-12-12-3-qstash-request-verification-middleware.md) - 12.3 QStash Request Verification Middleware
+- [ ] [DOMAIN-12-12-4-email-digest-job](tasks\domain-12\DOMAIN-12-12-4-email-digest-job.md) - 12.4 Email Digest Job
+- [ ] [DOMAIN-12-12-5-crm-sync-job-hubspot-zapier](tasks\domain-12\DOMAIN-12-12-5-crm-sync-job-hubspot-zapier.md) - 12.5 CRM Sync Job (HubSpot + Zapier)
+- [ ] [DOMAIN-12-12-6-booking-reminder-job](tasks\domain-12\DOMAIN-12-12-6-booking-reminder-job.md) - 12.6 Booking Reminder Job
+- [ ] [DOMAIN-12-12-7-gdpr-tenant-deletion-job](tasks\domain-12\DOMAIN-12-12-7-gdpr-tenant-deletion-job.md) - 12.7 GDPR Tenant Deletion Job
+- [ ] [DOMAIN-12-booking-](tasks\domain-12\DOMAIN-12-booking-.md) - DOMAIN-12-booking-
+- [ ] [DOMAIN-12-booking-section-booking](tasks\domain-12\DOMAIN-12-booking-section-booking.md) - Section booking
+- [ ] [DOMAIN-12-crm-](tasks\domain-12\DOMAIN-12-crm-.md) - DOMAIN-12-crm-
+- [ ] [DOMAIN-12-crm-section-crm](tasks\domain-12\DOMAIN-12-crm-section-crm.md) - Section crm
+- [ ] [DOMAIN-12-email-](tasks\domain-12\DOMAIN-12-email-.md) - DOMAIN-12-email-
+- [ ] [DOMAIN-12-email-section-email](tasks\domain-12\DOMAIN-12-email-section-email.md) - Section email
+- [ ] [DOMAIN-12-gdpr-](tasks\domain-12\DOMAIN-12-gdpr-.md) - DOMAIN-12-gdpr-
+- [ ] [DOMAIN-12-gdpr-section-gdpr](tasks\domain-12\DOMAIN-12-gdpr-section-gdpr.md) - Section gdpr
+- [ ] [DOMAIN-12-philosophy-.md](tasks\domain-12\DOMAIN-12-philosophy.md-.md) - DOMAIN-12-philosophy-.md
+- [ ] [DOMAIN-12-philosophy-section-philosophymd.md](tasks\domain-12\DOMAIN-12-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-12-qstash-](tasks\domain-12\DOMAIN-12-qstash-.md) - DOMAIN-12-qstash-
+- [ ] [DOMAIN-12-qstash-section-qstash](tasks\domain-12\DOMAIN-12-qstash-section-qstash.md) - Section qstash
+
+## DOMAIN 13: 🔄 PENDING
+
+- [ ] [DOMAIN-13-13-1-philosophy](tasks\domain-13\DOMAIN-13-13-1-philosophy.md) - 13.1-philosophy
+- [ ] [DOMAIN-13-13-2-opentelemetry-instrumentation](tasks\domain-13\DOMAIN-13-13-2-opentelemetry-instrumentation.md) - 13.2 OpenTelemetry Instrumentation
+- [ ] [DOMAIN-13-13-3-tinybird-analytics-dashboard-schema](tasks\domain-13\DOMAIN-13-13-3-tinybird-analytics-dashboard-schema.md) - 13.3 Tinybird Analytics Dashboard Schema
+- [ ] [DOMAIN-13-13-4-portal-analytics-dashboard-component](tasks\domain-13\DOMAIN-13-13-4-portal-analytics-dashboard-component.md) - 13.4 Portal Analytics Dashboard Component
+- [ ] [DOMAIN-13-opentelemetry-](tasks\domain-13\DOMAIN-13-opentelemetry-.md) - DOMAIN-13-opentelemetry-
+- [ ] [DOMAIN-13-opentelemetry-section-opentelemetry](tasks\domain-13\DOMAIN-13-opentelemetry-section-opentelemetry.md) - Section opentelemetry
+- [ ] [DOMAIN-13-philosophy-.md](tasks\domain-13\DOMAIN-13-philosophy.md-.md) - DOMAIN-13-philosophy-.md
+- [ ] [DOMAIN-13-philosophy-section-philosophymd.md](tasks\domain-13\DOMAIN-13-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-13-portal-](tasks\domain-13\DOMAIN-13-portal-.md) - DOMAIN-13-portal-
+- [ ] [DOMAIN-13-portal-section-portal](tasks\domain-13\DOMAIN-13-portal-section-portal.md) - Section portal
+- [ ] [DOMAIN-13-tinybird-](tasks\domain-13\DOMAIN-13-tinybird-.md) - DOMAIN-13-tinybird-
+- [ ] [DOMAIN-13-tinybird-section-tinybird](tasks\domain-13\DOMAIN-13-tinybird-section-tinybird.md) - Section tinybird
+
+## DOMAIN 14: 🔄 PENDING
+
+- [ ] [DOMAIN-14-14-1-why-this-is-p0-in-2026](tasks\domain-14\DOMAIN-14-14-1-why-this-is-p0-in-2026.md) - 14.1 Why This Is P0 in 2026
+- [ ] [DOMAIN-14-14-2-accessibility-component-library](tasks\domain-14\DOMAIN-14-14-2-accessibility-component-library.md) - 14.2 Accessibility Component Library
+- [ ] [DOMAIN-14-14-3-accessible-form-components](tasks\domain-14\DOMAIN-14-14-3-accessible-form-components.md) - 14.3 Accessible Form Components
+- [ ] [DOMAIN-14-14-4-wcag-22-compliance-checklist-per-site](tasks\domain-14\DOMAIN-14-14-4-wcag-22-compliance-checklist-per-site.md) - 14.4 WCAG 2.2 Compliance Checklist per Site
+- [ ] [DOMAIN-14-14-5-automated-accessibility-testing-in-ci](tasks\domain-14\DOMAIN-14-14-5-automated-accessibility-testing-in-ci.md) - 14.5 Automated Accessibility Testing in CI
+- [ ] [DOMAIN-14-accessibility-](tasks\domain-14\DOMAIN-14-accessibility-.md) - DOMAIN-14-accessibility-
+- [ ] [DOMAIN-14-accessibility-section-accessibility](tasks\domain-14\DOMAIN-14-accessibility-section-accessibility.md) - Section accessibility
+- [ ] [DOMAIN-14-accessible-](tasks\domain-14\DOMAIN-14-accessible-.md) - DOMAIN-14-accessible-
+- [ ] [DOMAIN-14-accessible-section-accessible](tasks\domain-14\DOMAIN-14-accessible-section-accessible.md) - Section accessible
+- [ ] [DOMAIN-14-automated-](tasks\domain-14\DOMAIN-14-automated-.md) - DOMAIN-14-automated-
+- [ ] [DOMAIN-14-automated-section-automated](tasks\domain-14\DOMAIN-14-automated-section-automated.md) - Section automated
+- [ ] [DOMAIN-14-wcag-](tasks\domain-14\DOMAIN-14-wcag-.md) - DOMAIN-14-wcag-
+- [ ] [DOMAIN-14-wcag-section-wcag](tasks\domain-14\DOMAIN-14-wcag-section-wcag.md) - Section wcag
+- [ ] [DOMAIN-14-why-](tasks\domain-14\DOMAIN-14-why-.md) - DOMAIN-14-why-
+- [ ] [DOMAIN-14-why-section-why](tasks\domain-14\DOMAIN-14-why-section-why.md) - Section why
+
+## DOMAIN 15: 🔄 PENDING
+
+- [ ] [DOMAIN-15-15-1-philosophy](tasks\domain-15\DOMAIN-15-15-1-philosophy.md) - 15.1-philosophy
+- [ ] [DOMAIN-15-15-2-complete-security-headers-system](tasks\domain-15\DOMAIN-15-15-2-complete-security-headers-system.md) - 15.2 Complete Security Headers System
+- [ ] [DOMAIN-15-15-3-multi-layer-rate-limiting](tasks\domain-15\DOMAIN-15-15-3-multi-layer-rate-limiting.md) - 15.3 Multi-Layer Rate Limiting
+- [ ] [DOMAIN-15-15-4-complete-middleware](tasks\domain-15\DOMAIN-15-15-4-complete-middleware.md) - 15.4 Complete Middleware
+- [ ] [DOMAIN-15-15-5-secrets-manager](tasks\domain-15\DOMAIN-15-15-5-secrets-manager.md) - 15.5 Secrets Manager
+- [ ] [DOMAIN-15-complete-](tasks\domain-15\DOMAIN-15-complete-.md) - DOMAIN-15-complete-
+- [ ] [DOMAIN-15-complete-section-complete](tasks\domain-15\DOMAIN-15-complete-section-complete.md) - Section complete
+- [ ] [DOMAIN-15-multi-](tasks\domain-15\DOMAIN-15-multi-.md) - DOMAIN-15-multi-
+- [ ] [DOMAIN-15-multi-section-multi](tasks\domain-15\DOMAIN-15-multi-section-multi.md) - Section multi
+- [ ] [DOMAIN-15-philosophy-.md](tasks\domain-15\DOMAIN-15-philosophy.md-.md) - DOMAIN-15-philosophy-.md
+- [ ] [DOMAIN-15-philosophy-section-philosophymd.md](tasks\domain-15\DOMAIN-15-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-15-secrets-](tasks\domain-15\DOMAIN-15-secrets-.md) - DOMAIN-15-secrets-
+- [ ] [DOMAIN-15-secrets-section-secrets](tasks\domain-15\DOMAIN-15-secrets-section-secrets.md) - Section secrets
+
+## DOMAIN 16: 🔄 PENDING
+
+- [ ] [DOMAIN-16-16-1-philosophy](tasks\domain-16\DOMAIN-16-16-1-philosophy.md) - 16.1-philosophy
+- [ ] [DOMAIN-16-16-2-complete-github-actions-workflow](tasks\domain-16\DOMAIN-16-16-2-complete-github-actions-workflow.md) - 16.2 Complete GitHub Actions Workflow
+- [ ] [DOMAIN-16-16-3-feature-flags-system](tasks\domain-16\DOMAIN-16-16-3-feature-flags-system.md) - 16.3 Feature Flags System
+- [ ] [DOMAIN-16-complete-cancel-in-progress-runs-for-the-same-branchpr](tasks\domain-16\DOMAIN-16-complete-cancel-in-progress-runs-for-the-same-branchpr.md) - Cancel in-progress runs for the same branch/PR
+- [ ] [DOMAIN-16-complete-cancel-inprogress-runs-for-the-same-branchpr](tasks\domain-16\DOMAIN-16-complete-cancel-inprogress-runs-for-the-same-branchpr.md) - Cancel in-progress runs for the same branch/PR
+- [ ] [DOMAIN-16-feature-](tasks\domain-16\DOMAIN-16-feature-.md) - DOMAIN-16-feature-
+- [ ] [DOMAIN-16-feature-section-feature](tasks\domain-16\DOMAIN-16-feature-section-feature.md) - Section feature
+- [ ] [DOMAIN-16-philosophy-.md](tasks\domain-16\DOMAIN-16-philosophy.md-.md) - DOMAIN-16-philosophy-.md
+- [ ] [DOMAIN-16-philosophy-section-philosophymd.md](tasks\domain-16\DOMAIN-16-philosophy.md-section-philosophymd.md) - Section philosophy.md
+
+## DOMAIN 17: 🔄 PENDING
+
+- [ ] [DOMAIN-17-17-1-philosophy](tasks\domain-17\DOMAIN-17-17-1-philosophy.md) - 17.1-philosophy
+- [ ] [DOMAIN-17-17-2-onboarding-state-machine](tasks\domain-17\DOMAIN-17-17-2-onboarding-state-machine.md) - 17.2 Onboarding State Machine
+- [ ] [DOMAIN-17-17-3-onboarding-server-actions](tasks\domain-17\DOMAIN-17-17-3-onboarding-server-actions.md) - 17.3 Onboarding Server Actions
+- [ ] [DOMAIN-17-17-4-onboarding-wizard-ui](tasks\domain-17\DOMAIN-17-17-4-onboarding-wizard-ui.md) - 17.4 Onboarding Wizard UI
+- [ ] [DOMAIN-17-onboarding-](tasks\domain-17\DOMAIN-17-onboarding-.md) - DOMAIN-17-onboarding-
+- [ ] [DOMAIN-17-onboarding-section-onboarding](tasks\domain-17\DOMAIN-17-onboarding-section-onboarding.md) - Section onboarding
+- [ ] [DOMAIN-17-philosophy-.md](tasks\domain-17\DOMAIN-17-philosophy.md-.md) - DOMAIN-17-philosophy-.md
+- [ ] [DOMAIN-17-philosophy-section-philosophymd.md](tasks\domain-17\DOMAIN-17-philosophy.md-section-philosophymd.md) - Section philosophy.md
+
+## DOMAIN 18: 🔄 PENDING
+
+- [ ] [DOMAIN-18-18-1-philosophy](tasks\domain-18\DOMAIN-18-18-1-philosophy.md) - 18.1-philosophy
+- [ ] [DOMAIN-18-18-2-super-admin-dashboard](tasks\domain-18\DOMAIN-18-18-2-super-admin-dashboard.md) - 18.2 Super Admin Dashboard
+- [ ] [DOMAIN-18-18-3-admin-tenant-detail-impersonation](tasks\domain-18\DOMAIN-18-18-3-admin-tenant-detail-impersonation.md) - 18.3 Admin Tenant Detail + Impersonation
+- [ ] [DOMAIN-18-admin-](tasks\domain-18\DOMAIN-18-admin-.md) - DOMAIN-18-admin-
+- [ ] [DOMAIN-18-admin-section-admin](tasks\domain-18\DOMAIN-18-admin-section-admin.md) - Section admin
+- [ ] [DOMAIN-18-philosophy-.md](tasks\domain-18\DOMAIN-18-philosophy.md-.md) - DOMAIN-18-philosophy-.md
+- [ ] [DOMAIN-18-philosophy-section-philosophymd.md](tasks\domain-18\DOMAIN-18-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-18-super-](tasks\domain-18\DOMAIN-18-super-.md) - DOMAIN-18-super-
+- [ ] [DOMAIN-18-super-section-super](tasks\domain-18\DOMAIN-18-super-section-super.md) - Section super
+
+## DOMAIN 19: 🔄 PENDING
+
+- [ ] [DOMAIN-19-19-1-philosophy](tasks\domain-19\DOMAIN-19-19-1-philosophy.md) - 19.1-philosophy
+- [ ] [DOMAIN-19-19-2-calcom-webhook-handler](tasks\domain-19\DOMAIN-19-19-2-calcom-webhook-handler.md) - 19.2 Cal.com Webhook Handler
+- [ ] [DOMAIN-19-19-3-calcom-embed-widget-marketing-site](tasks\domain-19\DOMAIN-19-19-3-calcom-embed-widget-marketing-site.md) - 19.3 Cal.com Embed Widget (Marketing Site)
+- [ ] [DOMAIN-19-19-4-calcom-managed-user-provisioning](tasks\domain-19\DOMAIN-19-19-4-calcom-managed-user-provisioning.md) - 19.4 Cal.com Managed User Provisioning
+- [ ] [DOMAIN-19-calcom-](tasks\domain-19\DOMAIN-19-calcom-.md) - DOMAIN-19-calcom-
+- [ ] [DOMAIN-19-calcom-section-calcom](tasks\domain-19\DOMAIN-19-calcom-section-calcom.md) - Section calcom
+- [ ] [DOMAIN-19-philosophy-.md](tasks\domain-19\DOMAIN-19-philosophy.md-.md) - DOMAIN-19-philosophy-.md
+- [ ] [DOMAIN-19-philosophy-section-philosophymd.md](tasks\domain-19\DOMAIN-19-philosophy.md-section-philosophymd.md) - Section philosophy.md
+
+## DOMAIN 20: 🔄 PENDING
+
+- [ ] [DOMAIN-20-20-1-philosophy](tasks\domain-20\DOMAIN-20-20-1-philosophy.md) - 20.1-philosophy
+- [ ] [DOMAIN-20-20-2-email-package-structure](tasks\domain-20\DOMAIN-20-20-2-email-package-structure.md) - 20.2 Email Package Structure
+- [ ] [DOMAIN-20-20-3-email-client-multi-tenant-routing](tasks\domain-20\DOMAIN-20-20-3-email-client-multi-tenant-routing.md) - 20.3 Email Client & Multi-Tenant Routing
+- [ ] [DOMAIN-20-20-4-unified-send-function](tasks\domain-20\DOMAIN-20-20-4-unified-send-function.md) - 20.4 Unified Send Function
+- [ ] [DOMAIN-20-20-5-lead-notification-template-react-email-5](tasks\domain-20\DOMAIN-20-20-5-lead-notification-template-react-email-5.md) - 20.5 Lead Notification Template (React Email 5)
+- [ ] [DOMAIN-20-email-](tasks\domain-20\DOMAIN-20-email-.md) - DOMAIN-20-email-
+- [ ] [DOMAIN-20-email-section-email](tasks\domain-20\DOMAIN-20-email-section-email.md) - Section email
+- [ ] [DOMAIN-20-lead-](tasks\domain-20\DOMAIN-20-lead-.md) - DOMAIN-20-lead-
+- [ ] [DOMAIN-20-lead-section-lead](tasks\domain-20\DOMAIN-20-lead-section-lead.md) - Section lead
+- [ ] [DOMAIN-20-philosophy-.md](tasks\domain-20\DOMAIN-20-philosophy.md-.md) - DOMAIN-20-philosophy-.md
+- [ ] [DOMAIN-20-philosophy-section-philosophymd.md](tasks\domain-20\DOMAIN-20-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-20-unified-](tasks\domain-20\DOMAIN-20-unified-.md) - DOMAIN-20-unified-
+- [ ] [DOMAIN-20-unified-section-unified](tasks\domain-20\DOMAIN-20-unified-section-unified.md) - Section unified
+
+## DOMAIN 21: 🔄 PENDING
+
+- [ ] [DOMAIN-21-21-1-philosophy](tasks\domain-21\DOMAIN-21-21-1-philosophy.md) - 21.1-philosophy
+- [ ] [DOMAIN-21-21-2-supabase-storage-configuration](tasks\domain-21\DOMAIN-21-21-2-supabase-storage-configuration.md) - 21.2 Supabase Storage Configuration
+- [ ] [DOMAIN-21-21-3-supabase-image-loader](tasks\domain-21\DOMAIN-21-21-3-supabase-image-loader.md) - 21.3 Supabase Image Loader
+- [ ] [DOMAIN-21-21-4-upload-server-action-with-client-side-compression](tasks\domain-21\DOMAIN-21-21-4-upload-server-action-with-client-side-compression.md) - 21.4 Upload Server Action (with Client-Side Compression)
+- [ ] [DOMAIN-21-philosophy-.md](tasks\domain-21\DOMAIN-21-philosophy.md-.md) - DOMAIN-21-philosophy-.md
+- [ ] [DOMAIN-21-philosophy-section-philosophymd.md](tasks\domain-21\DOMAIN-21-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-21-supabase-](tasks\domain-21\DOMAIN-21-supabase-.md) - DOMAIN-21-supabase-
+- [ ] [DOMAIN-21-supabase-section-supabase](tasks\domain-21\DOMAIN-21-supabase-section-supabase.md) - Section supabase
+- [ ] [DOMAIN-21-upload-](tasks\domain-21\DOMAIN-21-upload-.md) - DOMAIN-21-upload-
+- [ ] [DOMAIN-21-upload-section-upload](tasks\domain-21\DOMAIN-21-upload-section-upload.md) - Section upload
+
+## DOMAIN 22: 🔄 PENDING
+
+- [ ] [DOMAIN-22-22-1-philosophy](tasks\domain-22\DOMAIN-22-22-1-philosophy.md) - 22.1-philosophy
+- [ ] [DOMAIN-22-22-2-ai-chat-api-route-streaming-edge](tasks\domain-22\DOMAIN-22-22-2-ai-chat-api-route-streaming-edge.md) - 22.2 AI Chat API Route (Streaming, Edge)
+- [ ] [DOMAIN-22-22-3-chat-widget-client-component](tasks\domain-22\DOMAIN-22-22-3-chat-widget-client-component.md) - 22.3 Chat Widget Client Component
+- [ ] [DOMAIN-22-22-4-rag-site-content-embedding-job](tasks\domain-22\DOMAIN-22-22-4-rag-site-content-embedding-job.md) - 22.4 RAG — Site Content Embedding Job
+- [ ] [DOMAIN-22-ai-](tasks\domain-22\DOMAIN-22-ai-.md) - DOMAIN-22-ai-
+- [ ] [DOMAIN-22-ai-section-ai](tasks\domain-22\DOMAIN-22-ai-section-ai.md) - Section ai
+- [ ] [DOMAIN-22-chat-](tasks\domain-22\DOMAIN-22-chat-.md) - DOMAIN-22-chat-
+- [ ] [DOMAIN-22-chat-section-chat](tasks\domain-22\DOMAIN-22-chat-section-chat.md) - Section chat
+- [ ] [DOMAIN-22-philosophy-.md](tasks\domain-22\DOMAIN-22-philosophy.md-.md) - DOMAIN-22-philosophy-.md
+- [ ] [DOMAIN-22-philosophy-section-philosophymd.md](tasks\domain-22\DOMAIN-22-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-22-rag-](tasks\domain-22\DOMAIN-22-rag-.md) - DOMAIN-22-rag-
+- [ ] [DOMAIN-22-rag-section-rag](tasks\domain-22\DOMAIN-22-rag-section-rag.md) - Section rag
+
+## DOMAIN 23: 🔄 PENDING
+
+- [ ] [DOMAIN-23-23-1-philosophy](tasks\domain-23\DOMAIN-23-23-1-philosophy.md) - 23.1-philosophy
+- [ ] [DOMAIN-23-23-2-tenant-metadata-factory](tasks\domain-23\DOMAIN-23-23-2-tenant-metadata-factory.md) - 23.2 Tenant Metadata Factory
+- [ ] [DOMAIN-23-23-3-json-ld-structured-data-system](tasks\domain-23\DOMAIN-23-23-3-json-ld-structured-data-system.md) - 23.3 JSON-LD Structured Data System
+- [ ] [DOMAIN-23-23-4-dynamic-sitemap](tasks\domain-23\DOMAIN-23-23-4-dynamic-sitemap.md) - 23.4 Dynamic Sitemap
+- [ ] [DOMAIN-23-23-5-per-tenant-robots.txt](tasks\domain-23\DOMAIN-23-23-5-per-tenant-robots.txt.md) - 23.5 Per-Tenant Robots.txt
+- [ ] [DOMAIN-23-23-6-dynamic-og-image-route](tasks\domain-23\DOMAIN-23-23-6-dynamic-og-image-route.md) - 23.6 Dynamic OG Image Route
+- [ ] [DOMAIN-23-dynamic-234-dynamic-sitemap](tasks\domain-23\DOMAIN-23-dynamic-234-dynamic-sitemap.md) - 23.4 Dynamic Sitemap
+- [ ] [DOMAIN-23-dynamic-236-dynamic-og-image-route](tasks\domain-23\DOMAIN-23-dynamic-236-dynamic-og-image-route.md) - 23.6 Dynamic OG Image Route
+- [ ] [DOMAIN-23-json-233-json-ld-structured-data-system](tasks\domain-23\DOMAIN-23-json-233-json-ld-structured-data-system.md) - 23.3 JSON-LD Structured Data System
+- [ ] [DOMAIN-23-json-233-jsonld-structured-data-system](tasks\domain-23\DOMAIN-23-json-233-jsonld-structured-data-system.md) - 23.3 JSON-LD Structured Data System
+- [ ] [DOMAIN-23-per-235-per-tenant-robotstxt](tasks\domain-23\DOMAIN-23-per-235-per-tenant-robotstxt.md) - 23.5 Per-Tenant Robots.txt
+- [ ] [DOMAIN-23-per-235-pertenant-robotstxt](tasks\domain-23\DOMAIN-23-per-235-pertenant-robotstxt.md) - 23.5 Per-Tenant Robots.txt
+- [ ] [DOMAIN-23-philosophy-231-philosophy.md](tasks\domain-23\DOMAIN-23-philosophy.md-231-philosophy.md) - 23.1 Philosophy
+- [ ] [DOMAIN-23-tenant-232-tenant-metadata-factory](tasks\domain-23\DOMAIN-23-tenant-232-tenant-metadata-factory.md) - 23.2 Tenant Metadata Factory
+
+## DOMAIN 24: 🔄 PENDING
+
+- [ ] [DOMAIN-24-24-1-philosophy](tasks\domain-24\DOMAIN-24-24-1-philosophy.md) - 24.1-philosophy
+- [ ] [DOMAIN-24-24-2-realtime-supabase-setup](tasks\domain-24\DOMAIN-24-24-2-realtime-supabase-setup.md) - 24.2 Realtime Supabase Setup
+- [ ] [DOMAIN-24-24-3-realtime-hook](tasks\domain-24\DOMAIN-24-24-3-realtime-hook.md) - 24.3 Realtime Hook
+- [ ] [DOMAIN-24-24-4-realtime-lead-feed-ui](tasks\domain-24\DOMAIN-24-24-4-realtime-lead-feed-ui.md) - 24.4 Realtime Lead Feed UI
+- [ ] [DOMAIN-24-philosophy-241-philosophy.md](tasks\domain-24\DOMAIN-24-philosophy.md-241-philosophy.md) - 24.1 Philosophy
+- [ ] [DOMAIN-24-realtime-242-realtime-supabase-setup](tasks\domain-24\DOMAIN-24-realtime-242-realtime-supabase-setup.md) - 24.2 Realtime Supabase Setup
+- [ ] [DOMAIN-24-realtime-243-realtime-hook](tasks\domain-24\DOMAIN-24-realtime-243-realtime-hook.md) - 24.3 Realtime Hook
+- [ ] [DOMAIN-24-realtime-244-realtime-lead-feed-ui](tasks\domain-24\DOMAIN-24-realtime-244-realtime-lead-feed-ui.md) - 24.4 Realtime Lead Feed UI
+
+## DOMAIN 25: 🔄 PENDING
+
+- [ ] [DOMAIN-25-25-1-philosophy](tasks\domain-25\DOMAIN-25-25-1-philosophy.md) - 25.1-philosophy
+- [ ] [DOMAIN-25-25-2-ab-testing-package](tasks\domain-25\DOMAIN-25-25-2-ab-testing-package.md) - 25.2 A/B Testing Package
+- [ ] [DOMAIN-25-25-3-using-ab-variants](tasks\domain-25\DOMAIN-25-25-3-using-ab-variants.md) - 25.3 Using A/B Variants in Server Components
+- [ ] [DOMAIN-25-ab-252-ab-testing-package](tasks\domain-25\DOMAIN-25-ab-252-ab-testing-package.md) - 25.2 A/B Testing Package
+- [ ] [DOMAIN-25-philosophy-251-philosophy.md](tasks\domain-25\DOMAIN-25-philosophy.md-251-philosophy.md) - 25.1 Philosophy
+- [ ] [DOMAIN-25-using-253-using-ab-variants-in-server-components](tasks\domain-25\DOMAIN-25-using-253-using-ab-variants-in-server-components.md) - 25.3 Using A/B Variants in Server Components
+
+## DOMAIN 26: 🔄 PENDING
+
+- [ ] [DOMAIN-26-26-1-philosophy](tasks\domain-26\DOMAIN-26-26-1-philosophy.md) - 26.1-philosophy
+- [ ] [DOMAIN-26-26-2-playwright-config](tasks\domain-26\DOMAIN-26-26-2-playwright-config.md) - 26.2 Playwright Config
+- [ ] [DOMAIN-26-26-3-auth-setup-file](tasks\domain-26\DOMAIN-26-26-3-auth-setup-file.md) - 26.3 Auth Setup File
+- [ ] [DOMAIN-26-26-4-test-fixtures](tasks\domain-26\DOMAIN-26-26-4-test-fixtures.md) - 26.4 Test Fixtures
+- [ ] [DOMAIN-26-26-5-critical-test-suites](tasks\domain-26\DOMAIN-26-26-5-critical-test-suites.md) - 26.5 Critical Test Suites
+- [ ] [DOMAIN-26-auth-263-auth-setup-file](tasks\domain-26\DOMAIN-26-auth-263-auth-setup-file.md) - 26.3 Auth Setup File
+- [ ] [DOMAIN-26-critical-265-critical-test-suites](tasks\domain-26\DOMAIN-26-critical-265-critical-test-suites.md) - 26.5 Critical Test Suites
+- [ ] [DOMAIN-26-philosophy-261-philosophy.md](tasks\domain-26\DOMAIN-26-philosophy.md-261-philosophy.md) - 26.1 Philosophy
+- [ ] [DOMAIN-26-playwright-262-playwright-config](tasks\domain-26\DOMAIN-26-playwright-262-playwright-config.md) - 26.2 Playwright Config
+- [ ] [DOMAIN-26-test-264-test-fixtures](tasks\domain-26\DOMAIN-26-test-264-test-fixtures.md) - 26.4 Test Fixtures
+
+## DOMAIN 27: 🔄 PENDING
+
+- [ ] [DOMAIN-27-27-1-philosophy](tasks\domain-27\DOMAIN-27-27-1-philosophy.md) - 27.1-philosophy
+- [ ] [DOMAIN-27-27-2-service-area-route](tasks\domain-27\DOMAIN-27-27-2-service-area-route.md) - 27.2 Service Area Route
+- [ ] [DOMAIN-27-27-3-service-area-hero-component](tasks\domain-27\DOMAIN-27-27-3-service-area-hero-component.md) - 27.3 Service Area Hero Component
+- [ ] [DOMAIN-27-27-4-service-area-job-cache-invalidation-on-config-change](tasks\domain-27\DOMAIN-27-27-4-service-area-job-cache-invalidation-on-config-change.md) - 27.4 Service Area Job: Cache Invalidation on Config Change
+- [ ] [DOMAIN-27-philosophy-.md](tasks\domain-27\DOMAIN-27-philosophy.md-.md) - DOMAIN-27-philosophy-.md
+- [ ] [DOMAIN-27-philosophy-section-philosophymd.md](tasks\domain-27\DOMAIN-27-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-27-service-](tasks\domain-27\DOMAIN-27-service-.md) - DOMAIN-27-service-
+- [ ] [DOMAIN-27-service-section-service](tasks\domain-27\DOMAIN-27-service-section-service.md) - Section service
+
+## DOMAIN 28: 🔄 PENDING
+
+- [ ] [DOMAIN-28-28-1-philosophy](tasks\domain-28\DOMAIN-28-28-1-philosophy.md) - 28.1-philosophy
+- [ ] [DOMAIN-28-28-2-sanity-schema](tasks\domain-28\DOMAIN-28-28-2-sanity-schema.md) - 28.2 Sanity Schema
+- [ ] [DOMAIN-28-28-3-sanity-client-groq-queries](tasks\domain-28\DOMAIN-28-28-3-sanity-client-groq-queries.md) - 28.3 Sanity Client + GROQ Queries
+- [ ] [DOMAIN-28-28-4-blog-post-page-isr-on-demand-revalidation](tasks\domain-28\DOMAIN-28-28-4-blog-post-page-isr-on-demand-revalidation.md) - 28.4 Blog Post Page (ISR + On-Demand Revalidation)
+- [ ] [DOMAIN-28-28-5-sanity-webhook-on-demand-isr](tasks\domain-28\DOMAIN-28-28-5-sanity-webhook-on-demand-isr.md) - 28.5 Sanity Webhook → On-Demand ISR
+- [ ] [DOMAIN-28-blog-](tasks\domain-28\DOMAIN-28-blog-.md) - DOMAIN-28-blog-
+- [ ] [DOMAIN-28-blog-section-blog](tasks\domain-28\DOMAIN-28-blog-section-blog.md) - Section blog
+- [ ] [DOMAIN-28-philosophy-.md](tasks\domain-28\DOMAIN-28-philosophy.md-.md) - DOMAIN-28-philosophy-.md
+- [ ] [DOMAIN-28-philosophy-section-philosophymd.md](tasks\domain-28\DOMAIN-28-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-28-sanity-](tasks\domain-28\DOMAIN-28-sanity-.md) - DOMAIN-28-sanity-
+- [ ] [DOMAIN-28-sanity-section-sanity](tasks\domain-28\DOMAIN-28-sanity-section-sanity.md) - Section sanity
+
+## DOMAIN 29: 🔄 PENDING
+
+- [ ] [DOMAIN-29-29-1-philosophy](tasks\domain-29\DOMAIN-29-29-1-philosophy.md) - 29.1-philosophy
+- [ ] [DOMAIN-29-29-2-settings-server-actions](tasks\domain-29\DOMAIN-29-29-2-settings-server-actions.md) - 29.2 Settings Server Actions
+- [ ] [DOMAIN-29-29-3-deep-merge-config-sql-function](tasks\domain-29\DOMAIN-29-29-3-deep-merge-config-sql-function.md) - 29.3 Deep Merge Config SQL Function
+- [ ] [DOMAIN-29-29-4-settings-form-hours-example-most-complex](tasks\domain-29\DOMAIN-29-29-4-settings-form-hours-example-most-complex.md) - 29.4 Settings Form (Hours Example — Most Complex)
+- [ ] [DOMAIN-29-deep-](tasks\domain-29\DOMAIN-29-deep-.md) - DOMAIN-29-deep-
+- [ ] [DOMAIN-29-deep-section-deep](tasks\domain-29\DOMAIN-29-deep-section-deep.md) - Section deep
+- [ ] [DOMAIN-29-philosophy-.md](tasks\domain-29\DOMAIN-29-philosophy.md-.md) - DOMAIN-29-philosophy-.md
+- [ ] [DOMAIN-29-philosophy-section-philosophymd.md](tasks\domain-29\DOMAIN-29-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-29-settings-](tasks\domain-29\DOMAIN-29-settings-.md) - DOMAIN-29-settings-
+- [ ] [DOMAIN-29-settings-section-settings](tasks\domain-29\DOMAIN-29-settings-section-settings.md) - Section settings
+
+## DOMAIN 30: 🔄 PENDING
+
+- [ ] [DOMAIN-30-30-1-philosophy](tasks\domain-30\DOMAIN-30-30-1-philosophy.md) - 30.1-philosophy
+- [ ] [DOMAIN-30-30-2-domain-management-service](tasks\domain-30\DOMAIN-30-30-2-domain-management-service.md) - 30.2 Domain Management Service
+- [ ] [DOMAIN-30-30-3-domain-management-ui](tasks\domain-30\DOMAIN-30-30-3-domain-management-ui.md) - 30.3 Domain Management UI
+- [ ] [DOMAIN-30-domain-](tasks\domain-30\DOMAIN-30-domain-.md) - DOMAIN-30-domain-
+- [ ] [DOMAIN-30-domain-section-domain](tasks\domain-30\DOMAIN-30-domain-section-domain.md) - Section domain
+- [ ] [DOMAIN-30-philosophy-.md](tasks\domain-30\DOMAIN-30-philosophy.md-.md) - DOMAIN-30-philosophy-.md
+- [ ] [DOMAIN-30-philosophy-section-philosophymd.md](tasks\domain-30\DOMAIN-30-philosophy.md-section-philosophymd.md) - Section philosophy.md
+
+## DOMAIN 31: 🔄 PENDING
+
+- [ ] [DOMAIN-31-31-1-philosophy](tasks\domain-31\DOMAIN-31-31-1-philosophy.md) - 31.1-philosophy
+- [ ] [DOMAIN-31-31-2-service-worker-setup](tasks\domain-31\DOMAIN-31-31-2-service-worker-setup.md) - 31.2 Service Worker Setup
+- [ ] [DOMAIN-31-31-3-offline-aware-contact-form-hook](tasks\domain-31\DOMAIN-31-31-3-offline-aware-contact-form-hook.md) - 31.3 Offline-Aware Contact Form Hook
+- [ ] [DOMAIN-31-31-4-pwa-manifest-nextjs-integration](tasks\domain-31\DOMAIN-31-31-4-pwa-manifest-nextjs-integration.md) - 31.4 PWA Manifest + Next.js Integration
+- [ ] [DOMAIN-31-offline-](tasks\domain-31\DOMAIN-31-offline-.md) - DOMAIN-31-offline-
+- [ ] [DOMAIN-31-offline-section-offline](tasks\domain-31\DOMAIN-31-offline-section-offline.md) - Section offline
+- [ ] [DOMAIN-31-philosophy-.md](tasks\domain-31\DOMAIN-31-philosophy.md-.md) - DOMAIN-31-philosophy-.md
+- [ ] [DOMAIN-31-philosophy-section-philosophymd.md](tasks\domain-31\DOMAIN-31-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-31-pwa-](tasks\domain-31\DOMAIN-31-pwa-.md) - DOMAIN-31-pwa-
+- [ ] [DOMAIN-31-pwa-section-pwa](tasks\domain-31\DOMAIN-31-pwa-section-pwa.md) - Section pwa
+- [ ] [DOMAIN-31-service-](tasks\domain-31\DOMAIN-31-service-.md) - DOMAIN-31-service-
+- [ ] [DOMAIN-31-service-section-service](tasks\domain-31\DOMAIN-31-service-section-service.md) - Section service
+
+## DOMAIN 32: 🔄 PENDING
+
+- [ ] [DOMAIN-32-32-1-philosophy](tasks\domain-32\DOMAIN-32-32-1-philosophy.md) - 32.1-philosophy
+- [ ] [DOMAIN-32-32-2-pdf-report-template](tasks\domain-32\DOMAIN-32-32-2-pdf-report-template.md) - 32.2 PDF Report Template
+- [ ] [DOMAIN-32-32-3-report-generation-job](tasks\domain-32\DOMAIN-32-32-3-report-generation-job.md) - 32.3 Report Generation Job
+- [ ] [DOMAIN-32-pdf-](tasks\domain-32\DOMAIN-32-pdf-.md) - DOMAIN-32-pdf-
+- [ ] [DOMAIN-32-pdf-section-pdf](tasks\domain-32\DOMAIN-32-pdf-section-pdf.md) - Section pdf
+- [ ] [DOMAIN-32-philosophy-.md](tasks\domain-32\DOMAIN-32-philosophy.md-.md) - DOMAIN-32-philosophy-.md
+- [ ] [DOMAIN-32-philosophy-section-philosophymd.md](tasks\domain-32\DOMAIN-32-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-32-report-](tasks\domain-32\DOMAIN-32-report-.md) - DOMAIN-32-report-
+- [ ] [DOMAIN-32-report-section-report](tasks\domain-32\DOMAIN-32-report-section-report.md) - Section report
+
+## DOMAIN 33: 🔄 PENDING
+
+- [ ] [DOMAIN-33-33-1-philosophy](tasks\domain-33\DOMAIN-33-33-1-philosophy.md) - 33.1-philosophy
+- [ ] [DOMAIN-33-33-2-cookie-consent-system](tasks\domain-33\DOMAIN-33-33-2-cookie-consent-system.md) - 33.2 Cookie Consent System
+- [ ] [DOMAIN-33-33-3-cookie-consent-banner-component](tasks\domain-33\DOMAIN-33-33-3-cookie-consent-banner-component.md) - 33.3 Cookie Consent Banner Component
+- [ ] [DOMAIN-33-33-4-right-to-erasure-data-deletion-system](tasks\domain-33\DOMAIN-33-33-4-right-to-erasure-data-deletion-system.md) - 33.4 Right to Erasure — Data Deletion System
+- [ ] [DOMAIN-33-33-5-public-erasure-request-form](tasks\domain-33\DOMAIN-33-33-5-public-erasure-request-form.md) - 33.5 Public Erasure Request Form
+- [ ] [DOMAIN-33-cookie-](tasks\domain-33\DOMAIN-33-cookie-.md) - DOMAIN-33-cookie-
+- [ ] [DOMAIN-33-cookie-section-cookie](tasks\domain-33\DOMAIN-33-cookie-section-cookie.md) - Section cookie
+- [ ] [DOMAIN-33-philosophy-.md](tasks\domain-33\DOMAIN-33-philosophy.md-.md) - DOMAIN-33-philosophy-.md
+- [ ] [DOMAIN-33-philosophy-section-philosophymd.md](tasks\domain-33\DOMAIN-33-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-33-public-](tasks\domain-33\DOMAIN-33-public-.md) - DOMAIN-33-public-
+- [ ] [DOMAIN-33-public-section-public](tasks\domain-33\DOMAIN-33-public-section-public.md) - Section public
+- [ ] [DOMAIN-33-right-](tasks\domain-33\DOMAIN-33-right-.md) - DOMAIN-33-right-
+- [ ] [DOMAIN-33-right-section-right](tasks\domain-33\DOMAIN-33-right-section-right.md) - Section right
+
+## DOMAIN 34: 🔄 PENDING
+
+- [ ] [DOMAIN-34-34-1-philosophy](tasks\domain-34\DOMAIN-34-34-1-philosophy.md) - 34.1-philosophy
+- [ ] [DOMAIN-34-34-2-white-label-config-schema](tasks\domain-34\DOMAIN-34-34-2-white-label-config-schema.md) - 34.2 White-Label Config Schema
+- [ ] [DOMAIN-34-34-3-white-label-theme-provider](tasks\domain-34\DOMAIN-34-34-3-white-label-theme-provider.md) - 34.3 White-Label Theme Provider
+- [ ] [DOMAIN-34-34-4-white-label-portal-layout](tasks\domain-34\DOMAIN-34-34-4-white-label-portal-layout.md) - 34.4 White-Label Portal Layout
+- [ ] [DOMAIN-34-34-5-white-label-settings-enterprise-admin](tasks\domain-34\DOMAIN-34-34-5-white-label-settings-enterprise-admin.md) - 34.5 White-Label Settings (Enterprise Admin)
+- [ ] [DOMAIN-34-philosophy-.md](tasks\domain-34\DOMAIN-34-philosophy.md-.md) - DOMAIN-34-philosophy-.md
+- [ ] [DOMAIN-34-philosophy-section-philosophymd.md](tasks\domain-34\DOMAIN-34-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-34-white-](tasks\domain-34\DOMAIN-34-white-.md) - DOMAIN-34-white-
+- [ ] [DOMAIN-34-white-section-white](tasks\domain-34\DOMAIN-34-white-section-white.md) - Section white
+
+## DOMAIN 35: 🔄 PENDING
+
+- [ ] [DOMAIN-35-35-1-philosophy](tasks\domain-35\DOMAIN-35-35-1-philosophy.md) - 35.1-philosophy
+- [ ] [DOMAIN-35-35-2-performance-budgets-configuration](tasks\domain-35\DOMAIN-35-35-2-performance-budgets-configuration.md) - 35.2 Performance Budgets Configuration
+- [ ] [DOMAIN-35-35-3-bundle-size-gate](tasks\domain-35\DOMAIN-35-35-3-bundle-size-gate.md) - 35.3 Bundle Size Gate
+- [ ] [DOMAIN-35-35-4-lcp-optimization-checklist-code-level](tasks\domain-35\DOMAIN-35-35-4-lcp-optimization-checklist-code-level.md) - 35.4 LCP Optimization Checklist (Code-Level)
+- [ ] [DOMAIN-35-35-5-vercel-speed-insights-integration](tasks\domain-35\DOMAIN-35-35-5-vercel-speed-insights-integration.md) - 35.5 Vercel Speed Insights Integration
+- [ ] [DOMAIN-35-35-6-lighthouse-ci-github-actions-job](tasks\domain-35\DOMAIN-35-35-6-lighthouse-ci-github-actions-job.md) - 35.6 Lighthouse CI GitHub Actions Job
+- [ ] [DOMAIN-35-35-7-bundle-size-check-ci-job](tasks\domain-35\DOMAIN-35-35-7-bundle-size-check-ci-job.md) - 35.7 Bundle Size Check CI Job
+- [ ] [DOMAIN-35-bundle-](tasks\domain-35\DOMAIN-35-bundle-.md) - ============================================================================
+- [ ] [DOMAIN-35-bundle-section-bundle](tasks\domain-35\DOMAIN-35-bundle-section-bundle.md) - Section bundle
+- [ ] [DOMAIN-35-lcp-](tasks\domain-35\DOMAIN-35-lcp-.md) - DOMAIN-35-lcp-
+- [ ] [DOMAIN-35-lcp-section-lcp](tasks\domain-35\DOMAIN-35-lcp-section-lcp.md) - Section lcp
+- [ ] [DOMAIN-35-lighthouse-](tasks\domain-35\DOMAIN-35-lighthouse-.md) - ============================================================================
+- [ ] [DOMAIN-35-performance-](tasks\domain-35\DOMAIN-35-performance-.md) - DOMAIN-35-performance-
+- [ ] [DOMAIN-35-performance-section-performance](tasks\domain-35\DOMAIN-35-performance-section-performance.md) - Section performance
+- [ ] [DOMAIN-35-philosophy-.md](tasks\domain-35\DOMAIN-35-philosophy.md-.md) - DOMAIN-35-philosophy-.md
+- [ ] [DOMAIN-35-philosophy-section-philosophymd.md](tasks\domain-35\DOMAIN-35-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-35-vercel-](tasks\domain-35\DOMAIN-35-vercel-.md) - DOMAIN-35-vercel-
+- [ ] [DOMAIN-35-vercel-section-vercel](tasks\domain-35\DOMAIN-35-vercel-section-vercel.md) - Section vercel
+
+## DOMAIN 36: 🔄 PENDING
+
+- [ ] [DOMAIN-36-36-1-philosophy](tasks\domain-36\DOMAIN-36-36-1-philosophy.md) - 36.1-philosophy
+- [ ] [DOMAIN-36-36-2-environment-architecture](tasks\domain-36\DOMAIN-36-36-2-environment-architecture.md) - 36.2 Environment Architecture
+- [ ] [DOMAIN-36-36-3-full-cicd-pipeline-complete](tasks\domain-36\DOMAIN-36-36-3-full-cicd-pipeline-complete.md) - 36.3 Full CI/CD Pipeline (Complete)
+- [ ] [DOMAIN-36-36-4-zero-downtime-migration-strategy](tasks\domain-36\DOMAIN-36-36-4-zero-downtime-migration-strategy.md) - 36.4 Zero-Downtime Migration Strategy
+- [ ] [DOMAIN-36-36-5-rollback-procedure](tasks\domain-36\DOMAIN-36-36-5-rollback-procedure.md) - 36.5 Rollback Procedure
+- [ ] [DOMAIN-36-36-6-fresh-environment-setup](tasks\domain-36\DOMAIN-36-36-6-fresh-environment-setup.md) - 36.6 Fresh Environment Setup
+- [ ] [DOMAIN-36-environment-](tasks\domain-36\DOMAIN-36-environment-.md) - DOMAIN-36-environment-
+- [ ] [DOMAIN-36-environment-section-environment](tasks\domain-36\DOMAIN-36-environment-section-environment.md) - Section environment
+- [ ] [DOMAIN-36-fresh-](tasks\domain-36\DOMAIN-36-fresh-.md) - ============================================================
+- [ ] [DOMAIN-36-full-](tasks\domain-36\DOMAIN-36-full-.md) - ============================================================================
+- [ ] [DOMAIN-36-philosophy-.md](tasks\domain-36\DOMAIN-36-philosophy.md-.md) - DOMAIN-36-philosophy-.md
+- [ ] [DOMAIN-36-philosophy-section-philosophymd.md](tasks\domain-36\DOMAIN-36-philosophy.md-section-philosophymd.md) - Section philosophy.md
+- [ ] [DOMAIN-36-rollback-](tasks\domain-36\DOMAIN-36-rollback-.md) - ============================================================
+- [ ] [DOMAIN-36-zero-](tasks\domain-36\DOMAIN-36-zero-.md) - DOMAIN-36-zero-
+- [ ] [DOMAIN-36-zero-section-zero](tasks\domain-36\DOMAIN-36-zero-section-zero.md) - Section zero
+
+## DOMAIN 8: 🔄 PENDING
+
 - [ ] [DOMAIN-8-DOMAIN-8-001-generate-metadata](tasks/domain-8/DOMAIN-8-001-generate-metadata.md) -
 - [ ] [DOMAIN-8-DOMAIN-8-002-dynamic-sitemap](tasks/domain-8/DOMAIN-8-002-dynamic-sitemap.md) -
 - [ ] [DOMAIN-8-DOMAIN-8-003-robots-ts](tasks/domain-8/DOMAIN-8-003-robots-ts.md) -
@@ -425,7 +835,7 @@ A task is considered **complete** when:
 
 ---
 
-_Last updated: 2026-02-23_
+_Last updated: 2026-02-24_
 _Total tasks: 245_
 _Completed: 50 (20.4%)_
 _Remaining: 195 (79.6%)_

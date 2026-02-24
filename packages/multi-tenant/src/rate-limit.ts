@@ -384,7 +384,7 @@ export function createEndpointRateLimitMiddleware(
 // RATE LIMITING UTILITIES
 // ============================================================================
 
-function getClientIP(request: NextRequest): string | null {
+export function getClientIP(request: NextRequest): string | null {
   const forwarded = request.headers.get('x-forwarded-for');
   const real = request.headers.get('x-real-ip');
   // NextRequest.ip is available in newer Next.js versions
