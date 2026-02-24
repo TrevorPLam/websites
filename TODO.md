@@ -41,11 +41,11 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 | Domain 32    | 6           | 6         | 0           | 0       |
 | Domain 33    | 5           | 0         | 0           | 5       |
 | Domain 34    | 5           | 5         | 0           | 0       |
-| Domain 35    | 7           | 0         | 0           | 7       |
+| Domain 35    | 7           | 7         | 0           | 0       |
 | Domain 36    | 6           | 0         | 0           | 6       |
 | Domain 37    | 156         | 3         | 0           | 153     |
 | Gap Analysis | 20          | 0         | 0           | 20      |
-| **Total**    | **467**     | **156**   | **0**       | **311** |
+| **Total**    | **467**     | **163**   | **0**       | **304** |
 
 ## DOMAIN 0: Foundation & Infrastructure
 
@@ -369,13 +369,13 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ## DOMAIN 35: Performance Monitoring 🔄 PENDING
 
-- [ ] DOMAIN-35-35-1-philosophy - Philosophy documentation
-- [ ] DOMAIN-35-35-2-performance-budgets-configuration - Performance Budgets Configuration
-- [ ] DOMAIN-35-35-3-bundle-size-gate - Bundle Size Gate
-- [ ] DOMAIN-35-35-4-lcp-optimization-checklist-code-level - LCP Optimization Checklist (Code-Level)
-- [ ] DOMAIN-35-35-5-vercel-speed-insights-integration - Vercel Speed Insights Integration
-- [ ] DOMAIN-35-35-6-lighthouse-ci-github-actions-job - Lighthouse CI GitHub Actions Job
-- [ ] DOMAIN-35-35-7-bundle-size-check-ci-job - Bundle Size Check CI Job
+- [x] DOMAIN-35-35-1-philosophy - Philosophy documentation
+- [x] DOMAIN-35-35-2-performance-budgets-configuration - Performance Budgets Configuration
+- [x] DOMAIN-35-35-3-bundle-size-gate - Bundle Size Gate
+- [x] DOMAIN-35-35-4-lcp-optimization-checklist-code-level - LCP Optimization Checklist (Code-Level)
+- [x] DOMAIN-35-35-5-vercel-speed-insights-integration - Vercel Speed Insights Integration
+- [x] DOMAIN-35-35-6-lighthouse-ci-github-actions-job - Lighthouse CI GitHub Actions Job
+- [x] DOMAIN-35-35-7-bundle-size-check-ci-job - Bundle Size Check CI Job
 
 ## DOMAIN 36: DevOps & Deployment 🔄 PENDING
 
@@ -1070,13 +1070,13 @@ This file contains all domain tasks across the monorepo, deduplicated and consol
 
 ## DOMAIN 35: 🔄 PENDING
 
-- [ ] [DOMAIN-35-35-1-philosophy](tasks\domain-35\DOMAIN-35-35-1-philosophy.md) - 35.1-philosophy
-- [ ] [DOMAIN-35-35-2-performance-budgets-configuration](tasks\domain-35\DOMAIN-35-35-2-performance-budgets-configuration.md) - 35.2 Performance Budgets Configuration
-- [ ] [DOMAIN-35-35-3-bundle-size-gate](tasks\domain-35\DOMAIN-35-35-3-bundle-size-gate.md) - 35.3 Bundle Size Gate
-- [ ] [DOMAIN-35-35-4-lcp-optimization-checklist-code-level](tasks\domain-35\DOMAIN-35-35-4-lcp-optimization-checklist-code-level.md) - 35.4 LCP Optimization Checklist (Code-Level)
-- [ ] [DOMAIN-35-35-5-vercel-speed-insights-integration](tasks\domain-35\DOMAIN-35-35-5-vercel-speed-insights-integration.md) - 35.5 Vercel Speed Insights Integration
-- [ ] [DOMAIN-35-35-6-lighthouse-ci-github-actions-job](tasks\domain-35\DOMAIN-35-35-6-lighthouse-ci-github-actions-job.md) - 35.6 Lighthouse CI GitHub Actions Job
-- [ ] [DOMAIN-35-35-7-bundle-size-check-ci-job](tasks\domain-35\DOMAIN-35-35-7-bundle-size-check-ci-job.md) - 35.7 Bundle Size Check CI Job
+- [x] [DOMAIN-35-35-1-philosophy](tasks\domain-35\DOMAIN-35-35-1-philosophy.md) - 35.1-philosophy
+- [x] [DOMAIN-35-35-2-performance-budgets-configuration](tasks\domain-35\DOMAIN-35-35-2-performance-budgets-configuration.md) - 35.2 Performance Budgets Configuration
+- [x] [DOMAIN-35-35-3-bundle-size-gate](tasks\domain-35\DOMAIN-35-35-3-bundle-size-gate.md) - 35.3 Bundle Size Gate
+- [x] [DOMAIN-35-35-4-lcp-optimization-checklist-code-level](tasks\domain-35\DOMAIN-35-35-4-lcp-optimization-checklist-code-level.md) - 35.4 LCP Optimization Checklist (Code-Level)
+- [x] [DOMAIN-35-35-5-vercel-speed-insights-integration](tasks\domain-35\DOMAIN-35-35-5-vercel-speed-insights-integration.md) - 35.5 Vercel Speed Insights Integration
+- [x] [DOMAIN-35-35-6-lighthouse-ci-github-actions-job](tasks\domain-35\DOMAIN-35-35-6-lighthouse-ci-github-actions-job.md) - 35.6 Lighthouse CI GitHub Actions Job
+- [x] [DOMAIN-35-35-7-bundle-size-check-ci-job](tasks\domain-35\DOMAIN-35-35-7-bundle-size-check-ci-job.md) - 35.7 Bundle Size Check CI Job
 - [ ] [DOMAIN-35-bundle-](tasks\domain-35\DOMAIN-35-bundle-.md) - ============================================================================
 - [ ] [DOMAIN-35-bundle-section-bundle](tasks\domain-35\DOMAIN-35-bundle-section-bundle.md) - Section bundle
 - [ ] [DOMAIN-35-lcp-](tasks\domain-35\DOMAIN-35-lcp-.md) - DOMAIN-35-lcp-
