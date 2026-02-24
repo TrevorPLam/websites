@@ -51,7 +51,7 @@ jobs:
         run: pnpm turbo run lint
 
       - name: Type check (full)
-        run: pnpm turbo run type-check
+        run: pnpm turbo run typecheck
 
       - name: Validate exports
         run: pnpm validate-exports

@@ -85,9 +85,9 @@ jobs:
       - name: Type check
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm turbo run type-check --filter="...[origin/main]"
+            pnpm turbo run typecheck --filter="...[origin/main]"
           else
-            pnpm turbo run type-check
+            pnpm turbo run typecheck
           fi
 
       # [Task 0.19] Export map validation — prevents broken package export paths
@@ -159,6 +159,40 @@ jobs:
       - name: Accessibility (a11y)
         run: pnpm test:a11y
 
+  security-gates:
+    name: security-gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10.29.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Semgrep security scan (blocking)
+        run: pnpm lint:security
+
+      - name: Dependency SCA scan (blocking)
+        run: pnpm audit --audit-level high
+
+      - name: Build security SAST workflow validation
+        run: |
+          test -f .github/workflows/security-sast.yml
+          test -f .semgrep/security-rules.yml
+
   # ─────────────────────────────────────────────────────────────────────────
   # Informative audit steps — non-blocking, continue-on-error
   # Run in parallel with quality-gates for visibility without blocking merge
@@ -217,6 +251,7 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────
   e2e-tests:
     name: e2e-tests
+    needs: [quality-gates, security-gates]
     runs-on: ubuntu-latest
     timeout-minutes: 45
 

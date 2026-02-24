@@ -47,12 +47,6 @@
       "outputs": ["*.tsbuildinfo"],
       "inputs": ["**/*.ts", "**/*.tsx", "tsconfig.json", "*.d.ts"]
     },
-    "type-check": {
-      "dependsOn": ["^typecheck"],
-      "cache": true,
-      "outputs": ["*.tsbuildinfo"],
-      "inputs": ["**/*.ts", "**/*.tsx", "tsconfig.json", "*.d.ts"]
-    },
     "lint": {
       "dependsOn": [],
       "cache": true,
