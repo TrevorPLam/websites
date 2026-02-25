@@ -36,7 +36,6 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "jest": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

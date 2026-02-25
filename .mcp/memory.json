@@ -1,0 +1,40 @@
+{
+  "memory": {
+    "project_context": "Marketing Websites Monorepo - Multi-tenant SaaS platform with Next.js 16, React 19, TypeScript, Supabase, and feature-sliced design architecture",
+    "key_patterns": {
+      "architecture": "Feature-Sliced Design (FSD) v2.1 with app → pages → widgets → features → entities → shared layers",
+      "tech_stack": "Next.js 16.1.5, React 19.0.0, TypeScript 5.9.3, Tailwind CSS v4, Turborepo 2.8.10, pnpm 10.29.2",
+      "database": "Supabase (PostgreSQL + Realtime) with Row Level Security for multi-tenant isolation",
+      "deployment": "Vercel with edge functions and ISR patterns"
+    },
+    "development_rules": [
+      "Always use TypeScript strict mode",
+      "Follow FSD layer isolation with unidirectional dependencies",
+      "Use Server Components by default, Client Components only when needed",
+      "All database access through repository pattern with tenant isolation",
+      "Use Zod for schema validation",
+      "Use Tailwind CSS only, no inline styles",
+      "Implement comprehensive error handling and logging"
+    ],
+    "security_requirements": [
+      "OAuth 2.1 with PKCE authentication",
+      "Row Level Security (RLS) for all database operations",
+      "Required tenantId parameters in all repository methods",
+      "Rate limiting and DDoS protection",
+      "Comprehensive audit logging with correlation IDs"
+    ],
+    "performance_targets": {
+      "LCP": "< 2.5s",
+      "INP": "< 200ms",
+      "CLS": "< 0.1",
+      "bundle_size": "< 250KB gzipped for JS"
+    },
+    "testing_standards": [
+      "Unit tests with Vitest",
+      "Integration tests for API endpoints",
+      "E2E tests with Playwright for critical user flows",
+      "Accessibility testing with axe-core",
+      "Security testing for tenant isolation"
+    ]
+  }
+}

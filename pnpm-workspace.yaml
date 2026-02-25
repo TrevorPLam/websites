@@ -51,10 +51,14 @@ catalog:
   '@sentry/nextjs': 10.38.0
   '@sentry/opentelemetry': ^10.39.0
   '@supabase/supabase-js': ^2.97.0
+  '@testing-library/jest-dom': 6.9.1
+  '@testing-library/react': ^13.4.0
+  '@testing-library/user-event': ^14.4.3
   '@types/node': ^22.19.11
   '@types/react': ^19.0.2
   '@types/react-dom': ^19.0.2
   '@types/react-window': ^1.8.8
+  '@types/next': ^9.0.0
   '@typescript-eslint/eslint-plugin': 8.56.0
   '@typescript-eslint/parser': 8.56.0
   '@upstash/ratelimit': ^2.0.5
@@ -76,6 +80,9 @@ catalog:
   glob: ^13.0.6
   gray-matter: 4.0.3
   husky: ^9.1.7
+  joi: ^17.13.3
+  jose: ^5.10.0
+  jsdom: ^25.0.0
   knip: ^5.85.0
   lint-staged: ^16.2.7
   lucide-react: ^0.344.0
@@ -102,6 +109,7 @@ catalog:
   tailwind-merge: 2.6.1
   tailwindcss: ^4.1.0
   tsx: ^4.21.0
+  turbo: ^2.4.0
   typescript: 5.9.3
   typescript-eslint: 8.56.0
   vitest: ^4.0.18

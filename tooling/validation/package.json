@@ -11,12 +11,13 @@
   "scripts": {
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
-    "test": "jest"
+    "test": "vitest"
   },
   "dependencies": {},
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

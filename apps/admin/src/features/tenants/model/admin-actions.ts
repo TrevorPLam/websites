@@ -1,3 +1,11 @@
+/**
+ * @file apps/admin/src/features/tenants/model/admin-actions.ts
+ * @summary Defines admin action types and interfaces for tenant management operations.
+ * @description Provides type definitions for admin operations including tenant creation, updates, and status changes.
+ * @security Admin-only operations require proper authorization checks.
+ * @adr none
+ * @requirements DOMAIN-7-001, DOMAIN-7-002
+ */
 'use server';
 
 import { z } from 'zod';
@@ -39,6 +47,12 @@ async function requireSuperAdmin() {
 
 // ── Actions ───────────────────────────────────────────────────────────────────
 
+/**
+ * Updates tenant status with proper authorization and audit logging.
+ *
+ * @param tenantId Tenant identifier to update.
+ * @param status New status value (active, suspended, or cancelled).
+ */
 export async function adminUpdateTenantStatus(
   tenantId: string,
   status: 'active' | 'suspended' | 'cancelled'
@@ -69,13 +83,20 @@ export async function adminUpdateTenantStatus(
     console.error('Failed to log audit entry for tenant status change:', {
       tenantId: validatedTenantId,
       status: validatedStatus,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     });
     // Re-throw the original error so the caller knows the operation failed
     throw error;
   }
 }
 
+/**
+ * Overrides feature flags for a specific tenant with admin authorization.
+ *
+ * @param tenantId Tenant identifier to modify.
+ * @param flag Feature flag to override.
+ * @param enabled Whether the flag should be enabled or disabled.
+ */
 export async function adminOverrideFeatureFlag(
   tenantId: string,
   flag: FeatureFlag,
@@ -89,6 +110,12 @@ export async function adminOverrideFeatureFlag(
   await setTenantFeatureOverride(validatedTenantId, validatedFlag, enabled);
 }
 
+/**
+ * Overrides billing tier for a specific tenant with audit logging.
+ *
+ * @param tenantId Tenant identifier to update.
+ * @param tier New billing tier (starter, professional, or enterprise).
+ */
 export async function adminOverrideBillingTier(
   tenantId: string,
   tier: 'starter' | 'professional' | 'enterprise'
@@ -118,6 +145,12 @@ export async function adminOverrideBillingTier(
   });
 }
 
+/**
+ * Queues a tenant for deletion with GDPR compliance and audit logging.
+ *
+ * @param tenantId Tenant identifier to delete.
+ * @param reason Administrative reason for deletion.
+ */
 export async function adminDeleteTenant(tenantId: string, reason: string) {
   // Validate inputs
   const validatedTenantId = tenantIdSchema.parse(tenantId);
@@ -157,6 +190,11 @@ export async function adminDeleteTenant(tenantId: string, reason: string) {
   });
 }
 
+/**
+ * Resends welcome email to a tenant with audit logging.
+ *
+ * @param tenantId Tenant identifier to send welcome email to.
+ */
 export async function adminResendWelcomeEmail(tenantId: string) {
   // Validate inputs
   const validatedTenantId = tenantIdSchema.parse(tenantId);
@@ -164,7 +202,11 @@ export async function adminResendWelcomeEmail(tenantId: string) {
   await requireSuperAdmin();
 
   // Re-queue welcome email via QStash
-  const { data: tenant } = await db.from('tenants').select('config').eq('id', validatedTenantId).single();
+  const { data: tenant } = await db
+    .from('tenants')
+    .select('config')
+    .eq('id', validatedTenantId)
+    .single();
 
   if (!tenant) throw new Error('Tenant not found');
 
@@ -184,6 +226,12 @@ export async function adminResendWelcomeEmail(tenantId: string) {
   });
 }
 
+/**
+ * Generates impersonation URL for admin to access tenant context.
+ *
+ * @param tenantId Tenant identifier to impersonate.
+ * @returns Impersonation URL with signed JWT token.
+ */
 export async function adminImpersonateTenant(tenantId: string) {
   // Validate inputs
   const validatedTenantId = tenantIdSchema.parse(tenantId);
@@ -215,7 +263,10 @@ export async function adminImpersonateTenant(tenantId: string) {
     action: 'admin.impersonation_started',
     table_name: 'tenants',
     record_id: validatedTenantId,
-    new_data: { impersonatedBy: 'super_admin', tokenExpiry: new Date(Date.now() + 5 * 60 * 1000).toISOString() },
+    new_data: {
+      impersonatedBy: 'super_admin',
+      tokenExpiry: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+    },
   });
 
   // Return impersonation URL with signed JWT token

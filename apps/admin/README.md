@@ -56,6 +56,7 @@ apps/admin/
 ## Access Control
 
 The admin dashboard implements role-based access control (RBAC) with the following roles:
+
 - **Super Admin**: Full system access
 - **Tenant Admin**: Limited to assigned tenants
 - **Billing Admin**: Billing and subscription management

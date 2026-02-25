@@ -1,9 +1,13 @@
 /**
  * @file packages/page-templates/src/__tests__/registry.test.ts
- * Tests for section registry: evol-3 capability metadata (resolveForSite, isFeatureEnabled)
- * and existing composePage + registerSection behaviour.
+ * @summary Tests for section registry functionality and evol-3 capability metadata.
+ * @description Validates resolveForSite, isFeatureEnabled, composePage, and registerSection behavior.
+ * @security none
+ * @adr none
+ * @requirements TEMPLATE-001, TEMPLATE-002
  */
 
+import { describe, it, expect, beforeEach } from 'vitest';
 import * as React from 'react';
 import type { SiteConfig } from '@repo/types';
 import {

@@ -1,11 +1,22 @@
 {
   "servers": {
-    "dependency-graph": {
+    "filesystem": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-dependency-graph"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "c:\\dev\\marketing-websites"],
       "env": {
-        "ROOT_DIR": "."
+        "ALLOWED_DIRECTORIES": "c:\\dev\\marketing-websites",
+        "READ_ONLY_BY_DEFAULT": "true"
       }
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git", "c:\\dev\\marketing-websites"],
+      "env": { "GIT_REPO_PATH": "c:\\dev\\marketing-websites", "ALLOW_PUSH": "false" }
+    },
+    "everything": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everything"],
+      "env": { "LOG_LEVEL": "info" }
     }
   }
 }

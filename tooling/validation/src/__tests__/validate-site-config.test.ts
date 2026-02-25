@@ -1,8 +1,13 @@
 /**
  * @file tooling/validation/src/__tests__/validate-site-config.test.ts
- * Tests for the site.config.ts validator
+ * @summary Tests for site.config.ts validator functionality.
+ * @description Validates configuration parsing, error handling, and batch validation operations.
+ * @security none
+ * @adr none
+ * @requirements VALIDATION-001, VALIDATION-002
  */
 
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
