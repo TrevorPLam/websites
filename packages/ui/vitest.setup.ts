@@ -1,4 +1,13 @@
 /**
+ * @file packages/ui/vitest.setup.ts
+ * @summary Vitest configuration setup for UI package testing with React Testing Library.
+ * @description Configures test environment, globals, and matchers for consistent testing.
+ * @security No security concerns - test configuration file.
+ * @adr none
+ * @requirements DOMAIN-3-1
+ */
+
+/**
  * UI package Vitest setup file
  * Local setup to avoid module resolution issues
  */
@@ -9,26 +18,8 @@ import { beforeAll, afterAll, expect, describe, it, vi } from 'vitest';
 // Import jest-dom matchers for React Testing Library compatibility
 import '@testing-library/jest-dom';
 
-// Import jest-axe for accessibility testing
-import { axe } from 'jest-axe';
-
-// Mock the toHaveNoViolations matcher for now
-expect.extend({
-  toHaveNoViolations: async (received: any) => {
-    const results = await axe(received);
-    const pass = results.violations.length === 0;
-    return {
-      pass,
-      message: () =>
-        pass
-          ? 'No accessibility violations found'
-          : `Found ${results.violations.length} accessibility violations`,
-    };
-  },
-});
-
 // Set critical environment variables BEFORE any module imports
-process.env.JWT_SECRET = 'test-secret-for-vitest';
+process.env.JWT_SECRET = 'test-secret';
 process.env.NODE_ENV = 'test';
 
 // Mock server-only module for tests

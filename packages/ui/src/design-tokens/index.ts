@@ -7,3 +7,7 @@
 
 export { designTokens } from '@repo/design-tokens';
 export type { DesignTokens } from '@repo/design-tokens';
+
+// Enhanced theme tokens with CSS custom properties
+export { themeTokens, generateCSSVariables, applyTenantTheme, validateWCAGCompliance } from './theme-tokens';
+export type { ThemeTokens } from './theme-tokens';
