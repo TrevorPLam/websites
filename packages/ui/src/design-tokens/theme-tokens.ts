@@ -1,4 +1,13 @@
 /**
+ * @file packages/ui/src/design-tokens/theme-tokens.ts
+ * @summary Comprehensive design token system with CSS custom properties for runtime theming.
+ * @description WCAG 2.2 AA compliant color system with proper contrast ratios and tenant-specific overrides.
+ * @security No security concerns - design token system for UI theming.
+ * @adr none
+ * @requirements WCAG-2.2, DOMAIN-3-1
+ */
+
+/**
  * Enhanced Design Tokens with CSS Custom Properties for Runtime Theming
  * WCAG 2.2 AA compliant color system with proper contrast ratios
  * Supports per-tenant theme overrides at runtime
@@ -13,12 +22,12 @@ export const themeTokens = {
       '--color-primary': '174 85% 33%',
       '--color-primary-foreground': '0 0% 100%',
       '--color-primary-hover': '174 85% 28%',
-      
+
       // Secondary colors
       '--color-secondary': '220 20% 14%',
       '--color-secondary-foreground': '0 0% 100%',
       '--color-secondary-hover': '220 20% 18%',
-      
+
       // Semantic colors
       '--color-background': '0 0% 100%',
       '--color-foreground': '222.2 84% 4.9%',
@@ -26,7 +35,7 @@ export const themeTokens = {
       '--color-muted-foreground': '220 10% 40%',
       '--color-accent': '174 85% 93%',
       '--color-accent-foreground': '174 85% 20%',
-      
+
       // Status colors (WCAG 2.2 AA compliant)
       '--color-success': '142 76% 36%',
       '--color-success-foreground': '0 0% 100%',
@@ -36,13 +45,13 @@ export const themeTokens = {
       '--color-error-foreground': '0 0% 100%',
       '--color-destructive': '0 72% 38%',
       '--color-destructive-foreground': '0 0% 100%',
-      
+
       // Border and input colors
       '--color-border': '220 14% 88%',
       '--color-input': '220 14% 88%',
       '--color-ring': '174 85% 33%',
     },
-    
+
     // Typography system (WCAG 2.2 AA compliant font sizes)
     typography: {
       '--font-family-sans': '"Inter", system-ui, -apple-system, sans-serif',
@@ -63,7 +72,7 @@ export const themeTokens = {
       '--line-height-normal': '1.5',
       '--line-height-relaxed': '1.75',
     },
-    
+
     // Spacing system (8px base unit)
     spacing: {
       '--spacing-0': '0',
@@ -80,7 +89,7 @@ export const themeTokens = {
       '--spacing-20': '5rem',    // 80px
       '--spacing-24': '6rem',    // 96px
     },
-    
+
     // Border radius system
     radius: {
       '--radius-none': '0',
@@ -92,7 +101,7 @@ export const themeTokens = {
       '--radius-2xl': '1.5rem',   // 24px
       '--radius-full': '9999px',
     },
-    
+
     // Component-specific tokens
     components: {
       // Button heights (WCAG 2.2 AA minimum 44px)
@@ -102,25 +111,25 @@ export const themeTokens = {
       '--button-padding-x-sm': '1rem',
       '--button-padding-x-md': '1.5rem',
       '--button-padding-x-lg': '2rem',
-      
+
       // Form controls
       '--input-height': '2.75rem',     // 44px minimum
       '--input-padding-x': '0.75rem',
       '--input-border-width': '1px',
       '--input-focus-ring-width': '2px',
-      
+
       // Card and layout
       '--card-padding': '1.5rem',
       '--card-border-radius': '0.75rem',
       '--card-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-      
+
       // Toast notifications
       '--toast-width': '22rem',
       '--toast-padding': '1rem',
       '--toast-border-radius': '0.5rem',
       '--toast-shadow': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
     },
-    
+
     // Animation tokens (respect prefers-reduced-motion)
     animation: {
       '--duration-fast': '150ms',
@@ -131,7 +140,7 @@ export const themeTokens = {
       '--easing-ease-in': 'cubic-bezier(0.4, 0, 1, 1)',
     },
   },
-  
+
   // JavaScript token object for static usage
   js: {
     colors: {
@@ -216,40 +225,53 @@ export const themeTokens = {
 
 export type ThemeTokens = typeof themeTokens;
 
-// Helper function to generate CSS custom properties string
+/**
+ * Generates CSS custom properties string from theme tokens.
+ *
+ * @returns CSS string with all theme variables defined for :root selector.
+ */
 export function generateCSSVariables(): string {
   const variables: string[] = [];
-  
+
   // Flatten all CSS custom properties
   Object.entries(themeTokens.css).forEach(([category, tokens]) => {
     Object.entries(tokens).forEach(([key, value]) => {
       variables.push(`  ${key}: ${value};`);
     });
   });
-  
+
   return `:root {\n${variables.join('\n')}\n}`;
 }
 
-// Helper function to apply tenant-specific theme overrides
+/**
+ * Applies tenant-specific theme overrides to the document.
+ *
+ * @param tenantId Tenant identifier used for CSS class scoping.
+ * @param customTokens Partial theme tokens to override defaults.
+ */
 export function applyTenantTheme(tenantId: string, customTokens: Partial<ThemeTokens['css']>): void {
   const root = document.documentElement;
-  
+
   // Apply tenant-specific CSS custom properties
   Object.entries(customTokens).forEach(([category, tokens]) => {
     Object.entries(tokens).forEach(([key, value]) => {
       root.style.setProperty(key, value);
     });
   });
-  
+
   // Add tenant class for scoped styling
   root.classList.add(`tenant-${tenantId}`);
 }
 
-// WCAG 2.2 AA compliance checker
+/**
+ * Validates WCAG 2.2 AA compliance for touch targets and accessibility.
+ *
+ * @returns True if all touch targets meet minimum 24x24px requirement.
+ */
 export function validateWCAGCompliance(): boolean {
   const root = document.documentElement;
   const computedStyle = getComputedStyle(root);
-  
+
   // Check minimum touch target sizes (24x24 CSS pixels)
   const buttonElements = document.querySelectorAll('button, [role="button"]');
   for (const button of buttonElements) {
@@ -259,9 +281,9 @@ export function validateWCAGCompliance(): boolean {
       return false;
     }
   }
-  
+
   // Check color contrast ratios would be done here in production
   // This is a placeholder for actual contrast ratio calculations
-  
+
   return true;
 }

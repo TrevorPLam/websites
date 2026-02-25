@@ -13,6 +13,7 @@
  */
 
 import { UseFormReturn, FieldValues, Path, useFieldArray } from 'react-hook-form';
+import { z } from 'zod';
 
 // ─── Field Array Utilities ────────────────────────────────────────────────────────
 
@@ -108,6 +109,13 @@ export function createNumberField(
 
 export function createCheckboxField(message = 'This field must be checked') {
   return z.boolean().refine((val) => val === true, { message });
+}
+
+export function createSelectField<T extends z.ZodTypeAny>(
+  schema: T,
+  message = 'Please select a valid option'
+) {
+  return schema.refine((val: any) => val !== undefined && val !== '', { message });
 }
 
 // ─── Form State Utilities ─────────────────────────────────────────────────────────
@@ -243,4 +251,70 @@ export function createNewsletterSchema() {
       newsletter: z.boolean().default(true),
     }),
   });
+}
+
+// ─── Additional Missing Functions ───────────────────────────────────────────────────
+
+export interface FormFieldConfig {
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  description?: string;
+}
+
+export function createFormFieldConfig(
+  label: string,
+  options: Partial<FormFieldConfig> = {}
+): FormFieldConfig {
+  return {
+    label,
+    placeholder: options.placeholder,
+    required: options.required ?? false,
+    disabled: options.disabled ?? false,
+    description: options.description,
+  };
+}
+
+export function getFormFieldError<T extends FieldValues>(
+  form: UseFormReturn<T>,
+  fieldName: Path<T>
+): string | undefined {
+  const error = form.formState.errors[fieldName];
+  return error?.message as string | undefined;
+}
+
+export function isFormFieldTouched<T extends FieldValues>(
+  form: UseFormReturn<T>,
+  fieldName: Path<T>
+): boolean {
+  return fieldName in form.formState.touchedFields;
+}
+
+export function isFormFieldDirty<T extends FieldValues>(
+  form: UseFormReturn<T>,
+  fieldName: Path<T>
+): boolean {
+  return fieldName in form.formState.dirtyFields;
+}
+
+export function resetFormToDefaults<T extends FieldValues>(
+  form: UseFormReturn<T>,
+  defaultValues?: Partial<T>
+): void {
+  form.reset(defaultValues);
+}
+
+export function resetFormExcept<T extends FieldValues>(
+  form: UseFormReturn<T>,
+  exceptFields: Path<T>[]
+): void {
+  const currentValues = form.getValues();
+  const resetValues: Partial<T> = {};
+
+  exceptFields.forEach(field => {
+    resetValues[field] = currentValues[field];
+  });
+
+  form.reset(resetValues);
 }

@@ -1,4 +1,13 @@
 /**
+ * @file packages/ui/src/components/__tests__/ButtonEnhanced.simple.test.tsx
+ * @summary Simplified test suite for enhanced Button component core functionality.
+ * @description Tests basic button accessibility and functionality without JSX dependencies.
+ * @security No security concerns - test file for UI component.
+ * @adr none
+ * @requirements WCAG-2.2, DOMAIN-3-1
+ */
+
+/**
  * Enhanced Button Component Tests - Simplified
  * Core functionality tests without JSX issues
  */
@@ -23,7 +32,7 @@ const createMockButton = (width: number, height: number, hasAccessibleName = tru
     querySelector: vi.fn(() => null),
     hasAttribute: vi.fn(() => false),
   } as any;
-  
+
   return button;
 };
 
@@ -31,9 +40,9 @@ describe('ButtonEnhanced Accessibility', () => {
   beforeEach(() => {
     // Mock window.getComputedStyle
     Object.defineProperty(window, 'getComputedStyle', {
-      value: vi.fn(() => ({ 
-        zoom: '1', 
-        outline: 'none', 
+      value: vi.fn(() => ({
+        zoom: '1',
+        outline: 'none',
         outlineOffset: '0px',
         getPropertyValue: vi.fn(() => 'none')
       })),
@@ -43,31 +52,31 @@ describe('ButtonEnhanced Accessibility', () => {
 
   it('meets WCAG 2.2 AA requirements for default button', () => {
     const button = createMockButton(100, 48, true);
-    
+
     expect(validateButtonAccessibility(button)).toBe(true);
   });
 
   it('fails WCAG validation for small touch targets', () => {
     const button = createMockButton(20, 20, true);
-    
+
     expect(validateButtonAccessibility(button)).toBe(false);
   });
 
   it('fails WCAG validation for missing accessible name', () => {
     const button = createMockButton(100, 48, false);
-    
+
     expect(validateButtonAccessibility(button)).toBe(false);
   });
 
   it('passes WCAG validation for minimum touch target size', () => {
     const button = createMockButton(44, 44, true);
-    
+
     expect(validateButtonAccessibility(button)).toBe(true);
   });
 
   it('passes WCAG validation for large touch target size', () => {
     const button = createMockButton(56, 56, true);
-    
+
     expect(validateButtonAccessibility(button)).toBe(true);
   });
 });

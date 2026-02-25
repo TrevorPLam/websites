@@ -1,60 +1,83 @@
 /**
  * @file packages/ui/src/index.ts
- * @summary Public export barrel for @repo/ui package.
- * @security Exposes safe component APIs and token aliases.
- * @requirements PROD-UI-001
+ * @summary UI package barrel export with enhanced primitives
+ * @description Complete UI component library with CVA architecture, Radix UI integration, and WCAG 2.2 AA compliance
+ * @security None - UI component exports only
+ * @requirements PROD-UI-001, TASK-005
  */
 
-'use client';
+// Enhanced primitives with loading states and full accessibility
+export { Button as ButtonEnhanced } from './components/ButtonEnhanced';
+export type { ButtonProps as ButtonEnhancedProps } from './components/ButtonEnhanced';
 
-// File: packages/ui/src/index.ts  [TRACE:FILE=packages.ui.index]
-// Purpose: Shared UI component library entry point for the monorepo. Provides themeable
-//          React components driven by CSS custom properties, enabling consistent design
-//          systems across all template applications.
-//
-// Relationship: Depends on @repo/types (ThemeInjector), @repo/utils (cn), radix-ui, sonner.
-//               Consumed by @repo/features, @repo/marketing-components, and all client layouts.
-// System role: UI layer; presentational components only; theme via CSS variables.
-// Assumptions: Consumers supply theme in globals.css; components receive standard HTML props.
-//              Toaster must be mounted once at the app root to display toast notifications.
-//
-// Exports / Entry: All UI components — layout, primitives, form, disclosure, overlay,
-//                  notification, feedback, navigation
-// Used by: All template applications, any workspace needing UI components
-//
-// Invariants:
-// - Components must be themeable via CSS custom properties
-// - Must maintain backward compatibility for existing props
-// - Components should be framework-agnostic within React ecosystem
-// - No direct styling dependencies that conflict with site themes
-//
-// Status: @public
-// Features:
-// - [FEAT:UI_COMPONENTS] Reusable React component library
-// - [FEAT:THEMING] CSS custom properties for theme support
-// - [FEAT:DESIGN_SYSTEM] Consistent component design patterns
-// - [FEAT:ACCESSIBILITY] Built-in accessibility features
-// - [FEAT:RESPONSIVE] Mobile-first responsive design
+// Toast notifications with promise-based loading states
+export {
+  Toast,
+  Toaster,
+  toastSuccess,
+  toastError,
+  toastWarning,
+  toastInfo,
+  toastPromise,
+  toastDismiss,
+  toastDismissAll,
+  validateToastAccessibility
+} from './components/Sonner';
+export type {
+  ToastProps,
+  ToastOptions,
+  ToasterProps
+} from './components/Sonner';
 
-/**
- * @repo/ui — Shared UI Component Library
- *
- * Themeable components driven by CSS custom properties.
- * Each site defines its own palette in globals.css; components adapt automatically.
- */
+// Existing primitives
+export { Button } from './components/Button';
+export type { ButtonProps } from './components/Button';
+export { Card } from './components/Card';
+export type { CardProps } from './components/Card';
+export { Input } from './components/Input';
+export type { InputProps } from './components/Input';
+export { Select } from './components/Select';
+export type { SelectOption, SelectProps } from './components/Select';
+export { Textarea } from './components/Textarea';
+export type { TextareaProps } from './components/Textarea';
+export { Label } from './components/Label';
+export type { LabelProps } from './components/Label';
+export { Checkbox } from './components/Checkbox';
+export type { CheckboxProps } from './components/Checkbox';
+export { RadioGroup, RadioGroupItem } from './components/RadioGroup';
+export type { RadioGroupProps, RadioGroupItemProps } from './components/RadioGroup';
+export { Switch } from './components/Switch';
+export type { SwitchProps, SwitchSize, SwitchVariant } from './components/Switch';
+export { Slider } from './components/Slider';
+export type { SliderProps } from './components/Slider';
+export { Badge } from './components/Badge';
+export type { BadgeProps, BadgeVariant, BadgeSize } from './components/Badge';
+export { Skeleton } from './components/Skeleton';
+export type { SkeletonProps, SkeletonVariant } from './components/Skeleton';
+export { Progress } from './components/Progress';
+export type { ProgressProps, ProgressVariant, ProgressSize } from './components/Progress';
+export { Toggle } from './components/Toggle';
+export type { ToggleProps, ToggleVariant, ToggleSize } from './components/Toggle';
+export { ToggleGroup, ToggleGroupItem } from './components/ToggleGroup';
+export type { ToggleGroupProps, ToggleGroupItemProps } from './components/ToggleGroup';
 
-// Consolidated component exports for better tree-shaking and organization
+// Enhanced design tokens with CSS custom properties
+export {
+  themeTokens,
+  generateCSSVariables,
+  applyTenantTheme,
+  validateWCAGCompliance
+} from './design-tokens';
+export type { ThemeTokens } from './design-tokens';
+
+// Re-export from sub-modules
 export * from './layout';
-export * from './primitives';
-export * from './overlays';
 export * from './navigation';
+export * from './overlays';
 export * from './forms';
 export * from './feedback';
 export * from './advanced';
 export * from './misc';
-export * from './a11y';
-export * from './booking';
-
 export * from './privacy';
-
+export * from './booking';
 export * from './design-tokens';

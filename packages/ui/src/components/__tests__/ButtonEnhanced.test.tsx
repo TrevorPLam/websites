@@ -1,4 +1,13 @@
 /**
+ * @file packages/ui/src/components/__tests__/ButtonEnhanced.test.tsx
+ * @summary Comprehensive test suite for enhanced Button component with WCAG 2.2 AA compliance.
+ * @description Tests accessibility, interactions, variants, and responsive behavior of Button component.
+ * @security No security concerns - test file for UI component.
+ * @adr none
+ * @requirements WCAG-2.2, DOMAIN-3-1
+ */
+
+/**
  * Enhanced Button Component Tests
  * WCAG 2.2 AA compliance testing
  */
