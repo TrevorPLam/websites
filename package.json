@@ -55,6 +55,8 @@
     "validate:circular": "pnpm madge:circular",
     "validate:budgets": "npx tsx scripts/perf/validate-budgets.ts",
     "health": "npx tsx scripts/health-check.ts",
+    "setup-sentry-alerts": "node scripts/setup-sentry-alerts.js",
+    "test-alerting": "node scripts/test-alerting-system.js",
     "validate-client": "npx tsx scripts/validate-client.ts",
     "validate-all-clients": "npx tsx scripts/validate-all-clients.ts",
     "program:wave0": "node scripts/operations/program-wave.js --wave 0",

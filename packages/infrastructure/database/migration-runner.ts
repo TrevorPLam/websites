@@ -2,9 +2,9 @@
  * @file packages/infrastructure/database/migration-runner.ts
  * @summary Safe migration execution with expand/contract pattern support
  * @exports Migration runner with validation and rollback capabilities
- * @invariants Maintains data integrity and zero-downtime guarantees
  * @security Production-safe with comprehensive validation
  * @description Zero-downtime migration runner for production database operations
+ * @requirements PROD-005 / database / zero-downtime migrations
  */
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
