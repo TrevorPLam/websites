@@ -1,0 +1,34 @@
+{
+  "total_tasks": 7,
+  "completed": 4,
+  "in_progress": 0,
+  "blocked": 0,
+  "completion_rate": 57,
+  "critical_issues": [
+    {
+      "id": "TASK-005",
+      "title": "UI Primitive Design System & CVA Architecture (Wave 0, Batch 1.2)",
+      "status": "🟡 To Do",
+      "priority": "P0"
+    },
+    {
+      "id": "PERF-001",
+      "title": "Core Web Vitals optimization",
+      "status": "🟡 To Do",
+      "priority": "P0"
+    }
+  ],
+  "new_tasks_this_week": 4,
+  "completed_this_week": 1,
+  "blockers_resolved": 1,
+  "recommendations": [],
+  "total_dependencies": 0,
+  "circular_dependencies": 0,
+  "blocked_by_dependencies": 0,
+  "critical_dependencies": [],
+  "resolution_suggestions": [],
+  "total_blockers": 0,
+  "critical_blockers": 0,
+  "avg_blocker_duration": 0,
+  "resolution_actions": []
+}

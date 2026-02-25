@@ -1,0 +1,174 @@
+name: AI Task Management
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Weekly Monday 9 AM UTC
+  workflow_dispatch:
+    inputs:
+      task_type:
+        description: 'Type of task analysis to run'
+        required: false
+        default: 'status'
+        type: choice
+        options:
+          - status
+          - dependencies
+          - blockers
+          - progress
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  analyze-tasks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: |
+          cd scripts
+          npm install
+          
+      - name: Generate Enhanced TODO
+        run: |
+          node scripts/generate-todo-enhanced.js
+          
+      - name: Analyze Task Progress
+        id: analyze
+        run: |
+          node scripts/analyze-task-progress.js --type=${{ github.event.inputs.task_type || 'status' }}
+          
+      - name: Create Status Report
+        if: github.event.inputs.task_type == 'status' || github.event.inputs.task_type == ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const analysis = JSON.parse(fs.readFileSync('task-analysis.json', 'utf8'));
+            
+            const issueBody = `
+            # 📊 Weekly Task Status Report
+            
+            ## 📈 Progress Overview
+            - **Total Tasks**: ${analysis.total_tasks}
+            - **Completed**: ${analysis.completed} (${analysis.completion_rate}%)
+            - **In Progress**: ${analysis.in_progress}
+            - **Blocked**: ${analysis.blocked}
+            
+            ## 🚨 Critical Issues
+            ${analysis.critical_issues.map(issue => `- **${issue.id}**: ${issue.title} (${issue.status})`).join('\n')}
+            
+            ## 🔄 Recent Activity
+            - **New Tasks**: ${analysis.new_tasks_this_week}
+            - **Completed Tasks**: ${analysis.completed_this_week}
+            - **Blockers Resolved**: ${analysis.blockers_resolved}
+            
+            ## 📋 Recommendations
+            ${analysis.recommendations.map(rec => `- ${rec}`).join('\n')}
+            
+            ---
+            *Generated on ${new Date().toISOString().split('T')[0]}*
+            `;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Weekly Task Status Report - ${new Date().toISOString().split('T')[0]}`,
+              body: issueBody,
+              labels: ['status-report', 'automated']
+            });
+            
+      - name: Update Task Dependencies
+        if: github.event.inputs.task_type == 'dependencies'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const analysis = JSON.parse(fs.readFileSync('task-analysis.json', 'utf8'));
+            
+            const issueBody = `
+            # 🔗 Task Dependencies Analysis
+            
+            ## 📊 Dependency Graph
+            - **Total Dependencies**: ${analysis.total_dependencies}
+            - **Circular Dependencies**: ${analysis.circular_dependencies}
+            - **Blocked Tasks**: ${analysis.blocked_by_dependencies}
+            
+            ## 🚨 Critical Dependencies
+            ${analysis.critical_dependencies.map(dep => 
+              `- **${dep.task}** depends on **${dep.depends_on}** (${dep.impact})`
+            ).join('\n')}
+            
+            ## 🔄 Dependency Resolution
+            ${analysis.resolution_suggestions.map(suggestion => `- ${suggestion}`).join('\n')}
+            
+            ---
+            *Generated on ${new Date().toISOString().split('T')[0]}*
+            `;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Task Dependencies Analysis - ${new Date().toISOString().split('T')[0]}`,
+              body: issueBody,
+              labels: ['dependencies', 'automated']
+            });
+            
+      - name: Identify Blockers
+        if: github.event.inputs.task_type == 'blockers'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const analysis = JSON.parse(fs.readFileSync('task-analysis.json', 'utf8'));
+            
+            const issueBody = `
+            # 🚧 Task Blockers Analysis
+            
+            ## 📊 Blocker Overview
+            - **Total Blockers**: ${analysis.total_blockers}
+            - **Critical Blockers**: ${analysis.critical_blockers}
+            - **Average Blocker Duration**: ${analysis.avg_blocker_duration} days
+            
+            ## 🚨 Critical Blockers
+            ${analysis.critical_blockers.map(blocker => 
+              `- **${blocker.task}** blocked by **${blocker.blocked_by}** (${blocker.duration} days)`
+            ).join('\n')}
+            
+            ## 🛠️ Resolution Actions
+            ${analysis.resolution_actions.map(action => `- ${action}`).join('\n')}
+            
+            ---
+            *Generated on ${new Date().toISOString().split('T')[0]}*
+            `;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Task Blockers Analysis - ${new Date().toISOString().split('T')[0]}`,
+              body: issueBody,
+              labels: ['blockers', 'automated']
+            });
+            
+      - name: Update TODO.md
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add TODO.md
+          git diff --staged --quiet || git commit -m "🤖 AI: Update TODO.md with enhanced task management"
+          git push

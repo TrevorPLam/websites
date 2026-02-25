@@ -1,6 +1,10 @@
 /**
- * Form components barrel export
- * Advanced form controls and form utilities
+ * @file packages/ui/src/forms/index.ts
+ * @summary Form components barrel export.
+ * @description Advanced form controls and form utilities.
+ * @security None - UI form exports only.
+ * @adr none
+ * @requirements none
  */
 
 export {
@@ -75,15 +79,11 @@ export type {
 // Field array components
 export {
   FieldArrayItem,
-  FieldArrayControls,
   DynamicFieldArray,
-  FormFieldHelper,
 } from './field-array';
 export type {
   FieldArrayItemProps,
-  FieldArrayControlsProps,
   DynamicFieldArrayProps,
-  FormFieldHelperProps,
 } from './field-array';
 
 // Validation helpers
@@ -92,10 +92,6 @@ export {
   createUserRegistrationSchema,
   createContactFormSchema,
   createAddressSchema,
-  createPaymentSchema,
-  createSurveySchema,
-  calculateFormProgress,
-  getFormCompletionPercentage,
   validateField,
   validateAllFields,
   hasFieldError,
@@ -106,17 +102,8 @@ export {
   saveFormData,
   loadFormData,
   clearFormData,
-  createFormAnalytics,
-  trackFieldInteraction,
-  trackFieldError,
-  trackSubmissionAttempt,
-  trackSuccessfulSubmission,
-  generateFormAriaLabels,
-  generateFormErrorIds,
   validationRules,
 } from './validation-helpers';
 export type {
-  FormProgress,
   FormSubmissionResult,
-  FormAnalytics,
 } from './validation-helpers';

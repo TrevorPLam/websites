@@ -1,21 +1,26 @@
 /**
+ * @file packages/ui/src/forms/validation-helpers.ts
+ * @summary Validation helper functions and schemas.
+ * @description Provides reusable validation patterns and schema definitions.
+ * @security none
+ * @adr none
+ * @requirements DOMAIN-3-1
+ */
+
+/**
  * Form validation helpers and utilities
- * Provides comprehensive validation patterns and form state management
  */
 
 import { z } from 'zod';
 import { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 
-// ─── Validation Patterns ───────────────────────────────────────────────────────
+// ─── Validation Patterns ─────────────────────────────────────────────────────--
 
 export const validationPatterns = {
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   phone: /^\+?[\d\s\-\(\)]+$/,
   url: /^https?:\/\/.+/,
   zipCode: /^\d{5}(-\d{4})?$/,
-  creditCard: /^\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}$/,
-  ssn: /^\d{3}-\d{2}-\d{4}$/,
-  ipv4: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
   strongPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
 };
 
@@ -60,74 +65,7 @@ export function createAddressSchema() {
   });
 }
 
-export function createPaymentSchema() {
-  return z.object({
-    cardNumber: z.string().regex(validationPatterns.creditCard, 'Please enter a valid credit card number'),
-    cardName: z.string().min(3, 'Name on card is required'),
-    expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Invalid month'),
-    expiryYear: z.string().regex(/^\d{2}$/, 'Invalid year'),
-    cvv: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
-    billingAddress: createAddressSchema(),
-    saveCard: z.boolean().default(false),
-  }).refine(data => {
-    const currentYear = new Date().getFullYear() % 100;
-    const expiryYear = parseInt(data.expiryYear);
-    const expiryMonth = parseInt(data.expiryMonth);
-    
-    if (expiryYear < currentYear) return false;
-    if (expiryYear === currentYear && expiryMonth < new Date().getMonth() + 1) return false;
-    
-    return true;
-  }, {
-    message: 'Card has expired',
-    path: ['expiryYear'],
-  });
-}
-
-export function createSurveySchema() {
-  return z.object({
-    overallSatisfaction: z.number().min(1).max(5, 'Please rate from 1 to 5'),
-    recommendLikelihood: z.number().min(1).max(10, 'Please rate from 1 to 10'),
-    features: z.array(z.string()).min(1, 'Please select at least one feature'),
-    comments: z.string().optional(),
-    contactPermission: z.boolean().default(false),
-  });
-}
-
-// ─── Form State Management ─────────────────────────────────────────────────────
-
-export interface FormProgress {
-  currentStep: number;
-  totalSteps: number;
-  isCompleted: boolean;
-  isValid: boolean;
-}
-
-export function calculateFormProgress<T extends FieldValues>(
-  form: UseFormReturn<T>,
-  totalSteps: number
-): FormProgress {
-  const currentStep = Math.floor(Object.keys(form.formState.touchedFields).length / 2) + 1;
-  const isValid = form.formState.isValid;
-  const isCompleted = currentStep >= totalSteps && isValid;
-
-  return {
-    currentStep: Math.min(currentStep, totalSteps),
-    totalSteps,
-    isCompleted,
-    isValid,
-  };
-}
-
-export function getFormCompletionPercentage<T extends FieldValues>(
-  form: UseFormReturn<T>,
-  totalFields: number
-): number {
-  const touchedFields = Object.keys(form.formState.touchedFields).length;
-  return Math.round((touchedFields / totalFields) * 100);
-}
-
-// ─── Form Validation Helpers ───────────────────────────────────────────────────
+// ─── Form Validation Helpers ─────────────────────────────────────────────────--
 
 export function validateField<T extends FieldValues>(
   form: UseFormReturn<T>,
@@ -168,7 +106,7 @@ export function clearAllErrors<T extends FieldValues>(form: UseFormReturn<T>): v
   form.clearErrors();
 }
 
-// ─── Form Submission Helpers ───────────────────────────────────────────────────
+// ─── Form Submission Helpers ─────────────────────────────────────────────────--
 
 export interface FormSubmissionResult<T> {
   success: boolean;
@@ -241,7 +179,7 @@ export async function submitForm<T extends FieldValues>(
   }
 }
 
-// ─── Form Persistence Helpers ───────────────────────────────────────────────────
+// ─── Form Persistence Helpers ─────────────────────────────────────────────────--
 
 export function saveFormData<T extends FieldValues>(
   form: UseFormReturn<T>,
@@ -276,86 +214,6 @@ export function clearFormData(storageKey: string): void {
   } catch (error) {
     console.error('Error clearing form data:', error);
   }
-}
-
-// ─── Form Analytics Helpers ─────────────────────────────────────────────────────
-
-export interface FormAnalytics {
-  startTime: number;
-  endTime?: number;
-  completionTime?: number;
-  fieldInteractions: Record<string, number>;
-  errors: Record<string, number>;
-  submissionAttempts: number;
-  successfulSubmissions: number;
-}
-
-export function createFormAnalytics(): FormAnalytics {
-  return {
-    startTime: Date.now(),
-    fieldInteractions: {},
-    errors: {},
-    submissionAttempts: 0,
-    successfulSubmissions: 0,
-  };
-}
-
-export function trackFieldInteraction<T extends FieldValues>(
-  analytics: FormAnalytics,
-  fieldName: Path<T>
-): void {
-  analytics.fieldInteractions[fieldName as string] = 
-    (analytics.fieldInteractions[fieldName as string] || 0) + 1;
-}
-
-export function trackFieldError<T extends FieldValues>(
-  analytics: FormAnalytics,
-  fieldName: Path<T>
-): void {
-  analytics.errors[fieldName as string] = 
-    (analytics.errors[fieldName as string] || 0) + 1;
-}
-
-export function trackSubmissionAttempt(analytics: FormAnalytics): void {
-  analytics.submissionAttempts++;
-}
-
-export function trackSuccessfulSubmission(analytics: FormAnalytics): void {
-  analytics.successfulSubmissions++;
-  analytics.endTime = Date.now();
-  analytics.completionTime = analytics.endTime - analytics.startTime;
-}
-
-// ─── Form Accessibility Helpers ─────────────────────────────────────────────────
-
-export function generateFormAriaLabels<T extends FieldValues>(
-  form: UseFormReturn<T>,
-  fieldLabels: Record<Path<T>, string>
-): Record<Path<T>, { 'aria-label': string; 'aria-invalid': boolean; 'aria-describedby'?: string }> {
-  const labels: Record<string, any> = {};
-  
-  Object.keys(fieldLabels).forEach(fieldName => {
-    const hasError = hasFieldError(form, fieldName as Path<T>);
-    labels[fieldName] = {
-      'aria-label': fieldLabels[fieldName as Path<T>],
-      'aria-invalid': hasError,
-      ...(hasError && { 'aria-describedby': `${fieldName}-error` }),
-    };
-  });
-  
-  return labels as Record<Path<T>, any>;
-}
-
-export function generateFormErrorIds<T extends FieldValues>(
-  form: UseFormReturn<T>
-): Record<Path<T>, string> {
-  const errorIds: Record<string, string> = {};
-  
-  Object.keys(form.formState.errors).forEach(fieldName => {
-    errorIds[fieldName] = `${fieldName}-error`;
-  });
-  
-  return errorIds as Record<Path<T>, string>;
 }
 
 // ─── Form Validation Rules ─────────────────────────────────────────────────────
