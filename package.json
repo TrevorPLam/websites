@@ -106,7 +106,12 @@
     "mcp:validate": "node scripts/validate-mcp-production.js",
     "mcp:start": "node scripts/mcp-dev-workflow.js start",
     "mcp:status": "node scripts/mcp-dev-workflow.js status",
-    "mcp:clean": "node scripts/mcp-dev-workflow.js clean"
+    "mcp:clean": "node scripts/mcp-dev-workflow.js clean",
+    "db:migrate": "./scripts/migrate-production.sh migrate",
+    "db:rollback": "./scripts/migrate-production.sh rollback",
+    "db:status": "./scripts/migrate-production.sh status",
+    "db:validate": "psql ${DATABASE_URL} -f database/migrations/validation.sql",
+    "db:backup": "pg_dump ${DATABASE_URL} --schema-only --no-owner > backups/manual-backup-$(date +%Y%m%d%H%M%S).sql"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
