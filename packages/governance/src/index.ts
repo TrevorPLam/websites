@@ -1,3 +1,10 @@
+/**
+ * @file packages/governance/src/index.ts
+ * @summary Enterprise governance and security frameworks for AI agents.
+ * @description Provides security patterns, authentication, and governance utilities.
+ * @security Handles authentication tokens and password hashing
+ * @requirements none
+ */
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -198,7 +205,7 @@ export class SecurityPolicyEngine {
 
   private async evaluateRule(rule: SecurityRule, request: SecurityRequest, policy: SecurityPolicy): Promise<PolicyDecision> {
     const conditionMet = this.evaluateCondition(rule.condition, request);
-    
+
     const decision: PolicyDecision = {
       policyId: policy.id,
       ruleId: rule.id,
@@ -349,7 +356,7 @@ export class AccessControlSystem {
 
   hasPermission(userId: string, permission: string): boolean {
     const userRoleIds = this.userRoles.get(userId) || [];
-    
+
     for (const roleId of userRoleIds) {
       const role = this.roles.get(roleId);
       if (role) {
@@ -358,21 +365,21 @@ export class AccessControlSystem {
         }
       }
     }
-    
+
     return false;
   }
 
   getUserPermissions(userId: string): string[] {
     const userRoleIds = this.userRoles.get(userId) || [];
     const permissions = new Set<string>();
-    
+
     for (const roleId of userRoleIds) {
       const role = this.roles.get(roleId);
       if (role) {
         role.permissions.forEach(perm => permissions.add(perm));
       }
     }
-    
+
     return Array.from(permissions);
   }
 }
@@ -474,7 +481,7 @@ export class RiskManagementSystem {
     if (updates.likelihood !== undefined || updates.impact !== undefined) {
       updatedRisk.score = updatedRisk.likelihood * updatedRisk.impact;
     }
-    
+
     this.risks.set(riskId, updatedRisk);
     return true;
   }
@@ -608,7 +615,7 @@ export class ComplianceManager {
 
   private generateRecommendations(assessments: ComplianceAssessment[]): string[] {
     const recommendations: string[] = [];
-    
+
     assessments.forEach(assessment => {
       if (assessment.overallCompliance < 0.8) {
         recommendations.push(`Improve compliance for ${assessment.standardId}`);
@@ -763,11 +770,11 @@ export interface GovernanceReport {
 }
 
 // Export main classes
-export { 
-  EnterpriseGovernanceFramework, 
-  SecurityPolicyEngine, 
-  AccessControlSystem, 
-  AuditLogger, 
-  RiskManagementSystem, 
-  ComplianceManager 
+export {
+  EnterpriseGovernanceFramework,
+  SecurityPolicyEngine,
+  AccessControlSystem,
+  AuditLogger,
+  RiskManagementSystem,
+  ComplianceManager
 };

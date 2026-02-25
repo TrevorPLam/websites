@@ -1,7 +1,9 @@
 /**
- * Enhanced Button Component with Loading States and Full Accessibility
- * WCAG 2.2 AA compliant with 24x24px minimum touch targets
- * Supports loading states, disabled states, and proper ARIA attributes
+ * @file packages/ui/src/components/ButtonEnhanced.tsx
+ * @summary Enhanced Button component with loading states and full accessibility.
+ * @description WCAG 2.2 AA compliant button with 24x24px minimum touch targets, loading states, and proper ARIA attributes.
+ * @security None - UI component only
+ * @requirements PROD-UI-001, WCAG-2.2-AA
  */
 
 import * as React from 'react';

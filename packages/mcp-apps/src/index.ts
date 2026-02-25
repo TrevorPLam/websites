@@ -1,3 +1,10 @@
+/**
+ * @file packages/mcp-apps/src/index.ts
+ * @summary MCP (Model Context Protocol) server applications for AI agents.
+ * @description Provides WebSocket and stdio transport servers for AI agent communication.
+ * @security Handles network connections and data serialization
+ * @requirements none
+ */
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { WebSocketServer } from 'ws';
@@ -91,8 +98,8 @@ export class InteractiveMCPApp {
         const result = await tool.handler(req.body);
         res.json(result);
       } catch (error) {
-        res.status(500).json({ 
-          error: error instanceof Error ? error.message : 'Unknown error' 
+        res.status(500).json({
+          error: error instanceof Error ? error.message : 'Unknown error'
         });
       }
     });
@@ -105,18 +112,18 @@ export class InteractiveMCPApp {
 
   private setupWebSocket(): void {
     this.wsServer = new WebSocketServer({ port: 8081 });
-    
+
     this.wsServer.on('connection', (ws) => {
       this.connections.add(ws);
-      
+
       ws.on('message', async (data) => {
         try {
           const message = JSON.parse(data.toString());
           await this.handleWebSocketMessage(ws, message);
         } catch (error) {
-          ws.send(JSON.stringify({ 
-            type: 'error', 
-            message: error instanceof Error ? error.message : 'Unknown error' 
+          ws.send(JSON.stringify({
+            type: 'error',
+            message: error instanceof Error ? error.message : 'Unknown error'
           }));
         }
       });
@@ -125,8 +132,8 @@ export class InteractiveMCPApp {
         this.connections.delete(ws);
       });
 
-      ws.send(JSON.stringify({ 
-        type: 'connected', 
+      ws.send(JSON.stringify({
+        type: 'connected',
         app: this.app.name,
         tools: this.app.tools.map(t => ({ name: t.name, description: t.description }))
       }));
@@ -142,7 +149,7 @@ export class InteractiveMCPApp {
         async (params) => {
           try {
             const result = await tool.handler(params);
-            
+
             // Broadcast to all WebSocket connections
             this.broadcast({
               type: 'tool_executed',
@@ -171,7 +178,7 @@ export class InteractiveMCPApp {
     const handler = this.app.ui.handlers.find(h => h.event === message.type);
     if (handler) {
       const result = await handler.handler(message.data);
-      ws.send(JSON.stringify({ 
+      ws.send(JSON.stringify({
         type: 'response',
         originalType: message.type,
         result,
@@ -223,11 +230,11 @@ export class InteractiveMCPApp {
             <p>${this.app.description}</p>
             <div id="status" class="status inactive">Connecting...</div>
         </div>
-        
+
         <div class="tools" id="tools">
             <!-- Tools will be dynamically added here -->
         </div>
-        
+
         <div class="logs" id="logs">
             <div>WebSocket connecting...</div>
         </div>
@@ -312,19 +319,19 @@ export class InteractiveMCPApp {
             async executeTool(toolName) {
                 const paramsInput = document.getElementById(\`params-\${toolName}\`);
                 const resultDiv = document.getElementById(\`result-\${toolName}\`);
-                
+
                 try {
                     const params = paramsInput.value ? JSON.parse(paramsInput.value) : {};
-                    
+
                     resultDiv.style.display = 'block';
                     resultDiv.innerHTML = 'Executing...';
-                    
+
                     const response = await fetch(\`/api/tools/\${toolName}\`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(params)
                     });
-                    
+
                     const result = await response.json();
                     this.displayResult(toolName, result);
                 } catch (error) {
@@ -423,7 +430,7 @@ export class GitHubMCPApp extends InteractiveMCPApp {
             return {
               content: [{
                 type: 'text',
-                text: \`Found \${repos.length} repositories:\\n\\n\${repos.map((repo: any) => 
+                text: \`Found \${repos.length} repositories:\\n\\n\${repos.map((repo: any) =>
                   \`- \${repo.name}: \${repo.description || 'No description'} (\${repo.stargazers_count} stars)\`
                 ).join('\\n')}\`,
               }],
@@ -493,7 +500,7 @@ export class FileSystemMCPApp extends InteractiveMCPApp {
           handler: async ({ path, encoding }) => {
             const fs = await import('fs/promises');
             const content = await fs.readFile(path, encoding as BufferEncoding);
-            
+
             return {
               content: [{
                 type: 'text',
@@ -512,15 +519,15 @@ export class FileSystemMCPApp extends InteractiveMCPApp {
           handler: async ({ path, recursive }) => {
             const fs = await import('fs/promises');
             const pathModule = await import('path');
-            
+
             const listDir = async (dirPath: string, prefix = ''): Promise<string[]> => {
               const entries = await fs.readdir(dirPath, { withFileTypes: true });
               const items: string[] = [];
-              
+
               for (const entry of entries) {
                 const fullPath = pathModule.join(dirPath, entry.name);
                 const relativePath = prefix ? pathModule.join(prefix, entry.name) : entry.name;
-                
+
                 if (entry.isDirectory() && recursive) {
                   items.push(\`\${relativePath}/\`);
                   items.push(...await listDir(fullPath, relativePath));
@@ -528,12 +535,12 @@ export class FileSystemMCPApp extends InteractiveMCPApp {
                   items.push(relativePath);
                 }
               }
-              
+
               return items;
             };
-            
+
             const items = await listDir(path);
-            
+
             return {
               content: [{
                 type: 'text',
@@ -577,7 +584,7 @@ export class DatabaseMCPApp extends InteractiveMCPApp {
             const result = await pool.query(query);
             await pool.end();
 
-            const formatted = result.rows.map(row => 
+            const formatted = result.rows.map(row =>
               Object.entries(row).map(([key, value]) => \`\${key}: \${value}\`).join(', ')
             ).join('\\n');
 

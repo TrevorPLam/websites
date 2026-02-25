@@ -1,7 +1,9 @@
 /**
- * Sonner Toast Notifications Component
- * Promise-based loading states with action buttons
- * WCAG 2.2 AA compliant with proper focus management
+ * @file packages/ui/src/components/Sonner.tsx
+ * @summary Sonner toast notifications component with promise-based loading states.
+ * @description WCAG 2.2 AA compliant toast system with action buttons and proper focus management.
+ * @security None - UI component only
+ * @requirements PROD-UI-001, WCAG-2.2-AA
  */
 
 import * as React from 'react';
