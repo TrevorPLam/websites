@@ -28,6 +28,12 @@ export interface FieldArrayItemProps {
   canMoveDown?: boolean;
 }
 
+/**
+ * Renders a single field array item with controls.
+ *
+ * @param props - Field array item properties
+ * @returns JSX element for the field array item
+ */
 export function FieldArrayItem({
   index,
   children,
@@ -43,13 +49,7 @@ export function FieldArrayItem({
       <div className="flex-1">{children}</div>
       <div className="flex items-center space-x-1">
         {canMoveUp && (
-          <Button
-            type="button"
-            variant="outline"
-            size="small"
-            onClick={onMoveUp}
-            className="px-2"
-          >
+          <Button type="button" variant="outline" size="small" onClick={onMoveUp} className="px-2">
             ↑
           </Button>
         )}
@@ -92,6 +92,12 @@ export interface DynamicFieldArrayProps<T extends FieldValues> {
   maxItems?: number;
 }
 
+/**
+ * Dynamic field array component with add/remove functionality.
+ *
+ * @param props - Dynamic field array properties
+ * @returns JSX element for the dynamic field array
+ */
 export function DynamicFieldArray<T extends FieldValues>({
   form,
   name,
