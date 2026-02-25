@@ -2,6 +2,7 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { Redis } from '@upstash/redis';
+import { db } from '@repo/db';
 import type { SiteConfig } from '@repo/config-schema';
 
 // Redis instance for caching
@@ -14,7 +15,7 @@ const BASE_DOMAINS = [
   'www.youragency.com',
   'localhost:3000',
   'localhost:3001',
-  'vercel.app', // Preview deployments
+  'marketing-websites.vercel.app', // Specific project Vercel deployment
 ];
 
 // Reserved subdomains that cannot be tenant identifiers
@@ -74,7 +75,7 @@ export function extractTenantIdentifier(request: NextRequest): TenantIdentifier 
   const pathname = request.nextUrl.pathname;
 
   const isBaseDomain = BASE_DOMAINS.some(
-    (base) => host === base || host.endsWith('.' + base) || host.includes('.vercel.app')
+    (base) => host === base || host.endsWith('.' + base)
   );
 
   // --- Custom Domain: Not a base domain and not a subdomain of base ---
@@ -109,31 +110,45 @@ export function extractTenantIdentifier(request: NextRequest): TenantIdentifier 
 // ============================================================================
 
 async function lookupTenantBySubdomain(subdomain: string): Promise<TenantRecord | null> {
-  // This should be implemented with your actual database client
-  // Example with Supabase:
-  // const { data, error } = await supabase
-  //   .from('tenants')
-  //   .select('id, subdomain, custom_domain, config, status')
-  //   .eq('subdomain', subdomain)
-  //   .single();
-  // return data;
+  try {
+    const { data, error } = await db
+      .from('tenants')
+      .select('id, subdomain, custom_domain, config, status')
+      .eq('subdomain', subdomain)
+      .eq('status', 'active') // Only return active tenants
+      .single();
 
-  // For now, return null to indicate implementation needed
-  return null;
+    if (error) {
+      console.error('Database error in lookupTenantBySubdomain:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Exception in lookupTenantBySubdomain:', error);
+    return null;
+  }
 }
 
 async function lookupTenantByCustomDomain(domain: string): Promise<TenantRecord | null> {
-  // This should be implemented with your actual database client
-  // Example with Supabase:
-  // const { data, error } = await supabase
-  //   .from('tenants')
-  //   .select('id, subdomain, custom_domain, config, status')
-  //   .eq('custom_domain', domain)
-  //   .single();
-  // return data;
+  try {
+    const { data, error } = await db
+      .from('tenants')
+      .select('id, subdomain, custom_domain, config, status')
+      .eq('custom_domain', domain)
+      .eq('status', 'active') // Only return active tenants
+      .single();
 
-  // For now, return null to indicate implementation needed
-  return null;
+    if (error) {
+      console.error('Database error in lookupTenantByCustomDomain:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Exception in lookupTenantByCustomDomain:', error);
+    return null;
+  }
 }
 
 // ============================================================================
@@ -213,19 +228,28 @@ export async function invalidateTenantCache(
   identifier: TenantIdentifier | { tenantId: string }
 ): Promise<void> {
   if ('tenantId' in identifier) {
-    // Need to lookup tenant to get all identifiers
-    // This is a placeholder - implement with actual DB lookup
-    // const tenant = await lookupTenantById(identifier.tenantId);
-    // if (tenant) {
-    //   const keysToDelete = [
-    //     `tenant:resolve:subdomain:${tenant.subdomain}`,
-    //     tenant.custom_domain ? `tenant:resolve:custom_domain:${tenant.custom_domain}` : null,
-    //     `tenant:resolve:path:${tenant.subdomain}`,
-    //   ].filter(Boolean) as string[];
-    //   if (keysToDelete.length) {
-    //     await redis.del(...keysToDelete);
-    //   }
-    // }
+    // Lookup tenant to get all identifiers for cache invalidation
+    try {
+      const { data: tenant } = await db
+        .from('tenants')
+        .select('id, subdomain, custom_domain')
+        .eq('id', identifier.tenantId)
+        .single();
+
+      if (tenant) {
+        const keysToDelete = [
+          `tenant:resolve:subdomain:${tenant.subdomain}`,
+          tenant.custom_domain ? `tenant:resolve:custom_domain:${tenant.custom_domain}` : null,
+          `tenant:resolve:path:${tenant.subdomain}`,
+        ].filter(Boolean) as string[];
+
+        if (keysToDelete.length > 0) {
+          await redis.del(...keysToDelete);
+        }
+      }
+    } catch (error) {
+      console.error('Error in invalidateTenantCache by tenantId:', error);
+    }
     return;
   }
 
@@ -234,9 +258,28 @@ export async function invalidateTenantCache(
 }
 
 export async function invalidateTenantCacheById(tenantId: string): Promise<void> {
-  // This requires looking up the tenant's identifiers from the database
-  // Placeholder implementation
-  console.log(`Cache invalidation requested for tenant: ${tenantId}`);
+  try {
+    // Lookup tenant to get all identifiers for cache invalidation
+    const { data: tenant } = await db
+      .from('tenants')
+      .select('id, subdomain, custom_domain')
+      .eq('id', tenantId)
+      .single();
+
+    if (tenant) {
+      const keysToDelete = [
+        `tenant:resolve:subdomain:${tenant.subdomain}`,
+        tenant.custom_domain ? `tenant:resolve:custom_domain:${tenant.custom_domain}` : null,
+        `tenant:resolve:path:${tenant.subdomain}`,
+      ].filter(Boolean) as string[];
+
+      if (keysToDelete.length > 0) {
+        await redis.del(...keysToDelete);
+      }
+    }
+  } catch (error) {
+    console.error('Error in invalidateTenantCacheById:', error);
+  }
 }
 
 export async function invalidateTenantServiceAreas(
@@ -322,7 +365,31 @@ export function createTenantMiddleware() {
     // Set tenant context headers for downstream components
     const response = NextResponse.next();
     response.headers.set('X-Tenant-Id', resolution.tenantId);
-    response.headers.set('X-Tenant-Config', JSON.stringify(resolution.tenantConfig));
+
+    // Strip sensitive data from config before adding to headers (only for success case)
+    if (resolution.success) {
+      const safeConfig = {
+        identity: {
+          siteName: resolution.tenantConfig.identity?.siteName,
+          contact: {
+            email: resolution.tenantConfig.identity?.contact?.email,
+            phone: resolution.tenantConfig.identity?.contact?.phone,
+          },
+        },
+        theme: {
+          brandColor: resolution.tenantConfig.theme?.brandColor,
+          logoUrl: resolution.tenantConfig.theme?.logoUrl,
+        },
+        seo: {
+          title: resolution.tenantConfig.seo?.title,
+          description: resolution.tenantConfig.seo?.description,
+        },
+        // Exclude sensitive data like API keys, webhook URLs, integration configs
+      };
+
+      response.headers.set('X-Tenant-Config', JSON.stringify(safeConfig));
+    }
+
     response.headers.set('X-Tenant-Identifier-Type', resolution.identifier.type);
     response.headers.set('X-Tenant-Identifier-Value', resolution.identifier.value);
 

@@ -1,0 +1,30 @@
+repos:
+  - repo: local
+    hooks:
+      - id: version-sync-check
+        name: Check version consistency
+        language: python
+        entry: python scripts/version_sync.py --check
+        pass_filenames: false
+        always_run: true
+
+      - id: markdownlint
+        name: Markdown lint
+        language: system
+        entry: markdownlint-cli2
+        args: ["**/*.md", "!node_modules", "!CHANGELOG.md"]
+        pass_filenames: false
+
+      - id: cspell
+        name: Spell check
+        language: system
+        entry: cspell
+        args: ["**/*.md", "--config", ".cspell.json"]
+        pass_filenames: false
+
+      - id: vale
+        name: Prose style check
+        language: system
+        entry: vale
+        args: ["docs/", "--minAlertLevel=error"]
+        pass_filenames: false

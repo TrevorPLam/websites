@@ -1,0 +1,7 @@
+# Content integrity baseline for critical documentation pages
+# Generated on Tue, Feb 24, 2026  7:58:06 PM
+# Format: page_name=sha256_hash
+getting-started=placeholder_hash
+install=placeholder_hash
+api-reference=placeholder_hash
+cli-reference=placeholder_hash

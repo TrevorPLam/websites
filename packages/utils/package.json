@@ -11,8 +11,8 @@
   "scripts": {
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "clsx": "catalog:",
@@ -21,8 +21,10 @@
   "devDependencies": {
     "@eslint/js": "catalog:",
     "@repo/eslint-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "catalog:"
+    "typescript-eslint": "catalog:",
+    "vitest": "catalog:"
   }
 }

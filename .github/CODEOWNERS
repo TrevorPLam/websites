@@ -12,3 +12,11 @@
 /clients/ @TrevorPLam
 /tasks/ @TrevorPLam
 /docs/ @TrevorPLam
+
+# Documentation requires doc team review
+/docs/          @TrevorPLam
+*.md            @TrevorPLam
+README.md       @TrevorPLam
+
+# CI workflows require platform team review
+/.github/workflows/  @TrevorPLam

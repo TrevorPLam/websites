@@ -1,0 +1,26 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "repo", "repos", "monorepo", "monorepos",
+    "semver", "pyproject", "toml",
+    "markdownlint", "lychee", "cspell",
+    "frontmatter", "devcontainer",
+    "kubectl", "npx", "uvx"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "**/*.min.js",
+    "CHANGELOG.md"
+  ],
+  "dictionaries": ["en_US", "companies", "softwareTerms"],
+  "overrides": [
+    {
+      "filename": "**/*.md",
+      "ignoreRegExpList": [
+        "`[^`]+`",
+        "```[\\s\\S]+?```"
+      ]
+    }
+  ]
+}

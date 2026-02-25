@@ -1,0 +1,17 @@
+timeout = 20
+max_concurrency = 64
+max_retries = 3
+no_ignore = false
+exclude = [
+  "^https://localhost",
+  "^http://127\\.0\\.0\\.1",
+  "^https://example\\.com",
+  "^mailto:",
+  "#.*",
+]
+accept = ["200..=206", "429"]
+exclude_path = [
+  "node_modules",
+  ".git",
+  "CHANGELOG.md",
+]

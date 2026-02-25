@@ -1,0 +1,13 @@
+# Files that this repo intentionally overrides — don't sync from template
+README.md
+.env.example
+CHANGELOG.md
+package.json          # If version differs per repo
+docs/getting-started.md
+.github/CODEOWNERS
+AGENTS.md
+TODO.md
+THEGOAL.md
+clients/              # Client-specific configurations
+sites/                # Site-specific configurations
+supabase/             # Database-specific configurations

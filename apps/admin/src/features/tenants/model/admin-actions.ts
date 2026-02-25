@@ -8,12 +8,30 @@ import { invalidateTenantCache } from '@repo/multi-tenant/resolve-tenant';
 import { setTenantFeatureOverride } from '@repo/feature-flags';
 import { enqueue } from '@repo/jobs/client';
 import type { FeatureFlag } from '@repo/feature-flags';
+import { TokenValidator } from '@repo/infra/auth';
 
-// ── Guards ────────────────────────────────────────────────────────────────────
+// ─── Types ─────────────────────────────────────────────────────────────────────
+
+interface ClerkSessionClaims {
+  metadata?: {
+    role?: string;
+  };
+}
+
+// ─── Input Validation Schemas ───────────────────────────────────────────────────
+
+const tenantIdSchema = z.string().uuid('Invalid tenant ID format');
+const tenantStatusSchema = z.enum(['active', 'suspended', 'cancelled']);
+const billingTierSchema = z.enum(['starter', 'professional', 'enterprise']);
+const featureFlagSchema = z.string();
+const nonEmptyStringSchema = z.string().min(1, 'Field cannot be empty');
+
+// ─── Guards ────────────────────────────────────────────────────────────────────
 
 async function requireSuperAdmin() {
   const { sessionClaims } = await auth();
-  const role = (sessionClaims?.metadata as any)?.role;
+  const claims = sessionClaims as ClerkSessionClaims | null;
+  const role = claims?.metadata?.role;
   if (role !== 'super_admin') {
     throw new Error('Unauthorized: Super admin role required');
   }
@@ -25,18 +43,37 @@ export async function adminUpdateTenantStatus(
   tenantId: string,
   status: 'active' | 'suspended' | 'cancelled'
 ) {
+  // Validate inputs
+  const validatedTenantId = tenantIdSchema.parse(tenantId);
+  const validatedStatus = tenantStatusSchema.parse(status);
+
   await requireSuperAdmin();
 
-  await updateBillingStatus(tenantId, status);
-  await invalidateTenantCache(tenantId);
+  try {
+    // Update billing status
+    await updateBillingStatus(validatedTenantId, validatedStatus);
 
-  await db.from('audit_logs').insert({
-    tenant_id: tenantId,
-    action: `admin.status_changed.${status}`,
-    table_name: 'tenants',
-    record_id: tenantId,
-    new_data: { status, changedBy: 'super_admin' },
-  });
+    // Invalidate cache
+    await invalidateTenantCache(validatedTenantId);
+
+    // Log audit trail
+    await db.from('audit_logs').insert({
+      tenant_id: validatedTenantId,
+      action: `admin.status_changed.${validatedStatus}`,
+      table_name: 'tenants',
+      record_id: validatedTenantId,
+      new_data: { status: validatedStatus, changedBy: 'super_admin' },
+    });
+  } catch (error) {
+    // If audit logging fails, we still want to know about it
+    console.error('Failed to log audit entry for tenant status change:', {
+      tenantId: validatedTenantId,
+      status: validatedStatus,
+      error: error instanceof Error ? error.message : String(error)
+    });
+    // Re-throw the original error so the caller knows the operation failed
+    throw error;
+  }
 }
 
 export async function adminOverrideFeatureFlag(
@@ -44,92 +81,144 @@ export async function adminOverrideFeatureFlag(
   flag: FeatureFlag,
   enabled: boolean
 ) {
+  // Validate inputs
+  const validatedTenantId = tenantIdSchema.parse(tenantId);
+  const validatedFlag = featureFlagSchema.parse(flag) as FeatureFlag;
+
   await requireSuperAdmin();
-  await setTenantFeatureOverride(tenantId, flag, enabled);
+  await setTenantFeatureOverride(validatedTenantId, validatedFlag, enabled);
 }
 
 export async function adminOverrideBillingTier(
   tenantId: string,
   tier: 'starter' | 'professional' | 'enterprise'
 ) {
+  // Validate inputs
+  const validatedTenantId = tenantIdSchema.parse(tenantId);
+  const validatedTier = billingTierSchema.parse(tier);
+
   await requireSuperAdmin();
 
   await db
     .from('tenants')
     .update({
-      billing_tier: tier,
+      billing_tier: validatedTier,
       updated_at: new Date().toISOString(),
     })
-    .eq('id', tenantId);
+    .eq('id', validatedTenantId);
 
-  await invalidateTenantCache(tenantId);
+  await invalidateTenantCache(validatedTenantId);
 
   await db.from('audit_logs').insert({
-    tenant_id: tenantId,
+    tenant_id: validatedTenantId,
     action: 'admin.billing_tier_override',
     table_name: 'tenants',
-    record_id: tenantId,
-    new_data: { billing_tier: tier },
+    record_id: validatedTenantId,
+    new_data: { billing_tier: validatedTier },
   });
 }
 
 export async function adminDeleteTenant(tenantId: string, reason: string) {
+  // Validate inputs
+  const validatedTenantId = tenantIdSchema.parse(tenantId);
+  const validatedReason = nonEmptyStringSchema.parse(reason);
+
   await requireSuperAdmin();
+
+  // Check if tenant is already queued for deletion
+  const { data: existingDeletion } = await db
+    .from('audit_logs')
+    .select('created_at')
+    .eq('tenant_id', validatedTenantId)
+    .eq('action', 'admin.tenant_deletion_queued')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existingDeletion) {
+    throw new Error('Tenant is already queued for deletion');
+  }
 
   // Queue immediate deletion (no 30-day grace for admin-initiated)
   await enqueue(
     'gdpr.delete_tenant',
-    { tenantId, reason },
+    { tenantId: validatedTenantId, reason: validatedReason },
     {
-      deduplicationId: `gdpr-delete-${tenantId}`,
+      deduplicationId: `gdpr-delete-${validatedTenantId}`,
     }
   );
 
   await db.from('audit_logs').insert({
-    tenant_id: tenantId,
+    tenant_id: validatedTenantId,
     action: 'admin.tenant_deletion_queued',
     table_name: 'tenants',
-    record_id: tenantId,
-    new_data: { reason, queuedBy: 'super_admin' },
+    record_id: validatedTenantId,
+    new_data: { reason: validatedReason, queuedBy: 'super_admin' },
   });
 }
 
 export async function adminResendWelcomeEmail(tenantId: string) {
+  // Validate inputs
+  const validatedTenantId = tenantIdSchema.parse(tenantId);
+
   await requireSuperAdmin();
 
   // Re-queue welcome email via QStash
-  const { data: tenant } = await db.from('tenants').select('config').eq('id', tenantId).single();
+  const { data: tenant } = await db.from('tenants').select('config').eq('id', validatedTenantId).single();
 
   if (!tenant) throw new Error('Tenant not found');
 
-  await enqueue('email.lead_digest', {
-    tenantId,
-    date: new Date().toISOString().split('T')[0],
+  // Enqueue welcome email (fixed: was lead_digest)
+  await enqueue('email.welcome', {
+    tenantId: validatedTenantId,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Add missing audit log entry
+  await db.from('audit_logs').insert({
+    tenant_id: validatedTenantId,
+    action: 'admin.welcome_email_resent',
+    table_name: 'tenants',
+    record_id: validatedTenantId,
+    new_data: { resentBy: 'super_admin' },
   });
 }
 
 export async function adminImpersonateTenant(tenantId: string) {
+  // Validate inputs
+  const validatedTenantId = tenantIdSchema.parse(tenantId);
+
   await requireSuperAdmin();
 
-  // Generate impersonation token
+  // Generate secure impersonation token
   const { data: tenant } = await db
     .from('tenants')
     .select('subdomain, custom_domain')
-    .eq('id', tenantId)
+    .eq('id', validatedTenantId)
     .single();
 
   if (!tenant) throw new Error('Tenant not found');
 
-  // Log impersonation start
-  await db.from('audit_logs').insert({
-    tenant_id: tenantId,
-    action: 'admin.impersonation_started',
-    table_name: 'tenants',
-    record_id: tenantId,
-    new_data: { impersonatedBy: 'super_admin' },
+  // Create short-lived JWT token for impersonation (5 minutes)
+  const tokenValidator = new TokenValidator();
+  const impersonationToken = await tokenValidator.generate({
+    userId: 'admin-impersonation',
+    email: 'admin@system.local',
+    roles: ['super_admin'],
+    tenantId: validatedTenantId,
+    mfaVerified: true,
   });
 
-  // Return impersonation URL (in production, this would be a signed token)
+  // Log impersonation start
+  await db.from('audit_logs').insert({
+    tenant_id: validatedTenantId,
+    action: 'admin.impersonation_started',
+    table_name: 'tenants',
+    record_id: validatedTenantId,
+    new_data: { impersonatedBy: 'super_admin', tokenExpiry: new Date(Date.now() + 5 * 60 * 1000).toISOString() },
+  });
+
+  // Return impersonation URL with signed JWT token
   const domain = tenant.custom_domain || `${tenant.subdomain}.youragency.com`;
-  return `https://${domain}?impersonate=true&admin_session=${Date.now()}`;
+  return `https://${domain}?impersonate=true&admin_session=${impersonationToken}`;
 }

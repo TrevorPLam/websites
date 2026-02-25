@@ -11,7 +11,6 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -21,8 +20,8 @@
     "paths": {
       "@repo/features": ["packages/features/src/index.ts"],
       "@repo/features/*": ["packages/features/src/*"],
-      "@repo/infra": ["packages/infra/index.ts"],
-      "@repo/infra/*": ["packages/infra/*"],
+      "@repo/infra": ["packages/infrastructure/index.ts"],
+      "@repo/infra/*": ["packages/infrastructure/*"],
       "@repo/ui": ["packages/ui/src/index.ts"],
       "@repo/ui/*": ["packages/ui/src/*"],
       "@repo/utils": ["packages/utils/src/index.ts"],
@@ -36,7 +35,19 @@
       "@repo/integrations": ["packages/integrations/src/index.ts"],
       "@repo/integrations/*": ["packages/integrations/*"],
       "@repo/integrations-core": ["packages/integrations-core/src/index.ts"],
-      "@repo/integrations-core/*": ["packages/integrations-core/src/*"]
+      "@repo/integrations-core/*": ["packages/integrations-core/src/*"],
+      "@repo/config-schema": ["packages/config-schema/src/index.ts"],
+      "@repo/config-schema/*": ["packages/config-schema/src/*"],
+      "@repo/design-tokens": ["packages/design-tokens/src/index.ts"],
+      "@repo/design-tokens/*": ["packages/design-tokens/src/*"],
+      "@repo/analytics": ["packages/analytics/src/index.ts"],
+      "@repo/analytics/*": ["packages/analytics/src/*"],
+      "@repo/billing": ["packages/billing/src/index.ts"],
+      "@repo/billing/*": ["packages/billing/src/*"],
+      "@repo/email": ["packages/email/src/index.ts"],
+      "@repo/email/*": ["packages/email/src/*"],
+      "@repo/feature-flags": ["packages/feature-flags/src/index.ts"],
+      "@repo/feature-flags/*": ["packages/feature-flags/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build", ".next"]

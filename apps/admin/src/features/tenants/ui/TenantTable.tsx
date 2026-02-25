@@ -1,3 +1,5 @@
+import { adminImpersonateTenant } from '../model/admin-actions';
+
 interface Tenant {
   id: string;
   'config->identity->siteName'?: string;
@@ -99,15 +101,46 @@ interface ImpersonateButtonProps {
 }
 
 function ImpersonateButton({ tenantId }: ImpersonateButtonProps) {
+  const [isImpersonating, setIsImpersonating] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState<string | null>(null);
+
+  const handleImpersonate = async () => {
+    try {
+      setIsImpersonating(true);
+      setError(null);
+      setSuccess(null);
+
+      const impersonationUrl = await adminImpersonateTenant(tenantId);
+
+      // Open impersonation URL in new window
+      window.open(impersonationUrl, '_blank', 'noopener,noreferrer');
+
+      setSuccess('Impersonation initiated successfully');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to impersonate tenant');
+    } finally {
+      setIsImpersonating(false);
+    }
+  };
+
   return (
-    <button
-      onClick={() => {
-        // TODO: Implement impersonation logic
-        console.log(`Impersonating tenant: ${tenantId}`);
-      }}
-      className="text-blue-600 underline text-xs hover:no-underline"
-    >
-      Impersonate
-    </button>
+    <div className="flex items-center gap-2">
+      <button
+        onClick={handleImpersonate}
+        disabled={isImpersonating}
+        className="text-blue-600 underline text-xs hover:no-underline disabled:opacity-50 disabled:no-underline"
+      >
+        {isImpersonating ? 'Impersonating...' : 'Impersonate'}
+      </button>
+
+      {error && (
+        <span className="text-red-600 text-xs">{error}</span>
+      )}
+
+      {success && (
+        <span className="text-green-600 text-xs">{success}</span>
+      )}
+    </div>
   );
 }

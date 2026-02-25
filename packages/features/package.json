@@ -22,8 +22,8 @@
     "lint": "eslint src",
     "type-check": "tsc --noEmit",
     "build": "tsc --noEmit",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "peerDependencies": {
     "next": "catalog:",
@@ -38,29 +38,15 @@
     "@repo/shared": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@supabase/supabase-js": "catalog:",
-    "date-fns": "catalog:",
-    "gray-matter": "catalog:",
-    "lucide-react": "catalog:",
-    "next-mdx-remote": "catalog:",
     "react-hook-form": "catalog:",
-    "reading-time": "catalog:",
-    "rehype-pretty-code": "catalog:",
-    "rehype-slug": "catalog:",
-    "remark-gfm": "catalog:",
-    "sonner": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@eslint/js": "catalog:",
     "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
+    "@repo/vitest-config": "workspace:*",
     "eslint": "catalog:",
-    "next": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "catalog:"
+    "typescript-eslint": "catalog:",
+    "vitest": "catalog:"
   }
 }

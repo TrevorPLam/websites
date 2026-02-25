@@ -1,0 +1,43 @@
+name: "Sync from Upstream Template"
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"   # Every Monday at 3 AM UTC
+  workflow_dispatch:        # Allow manual trigger from GitHub UI
+    inputs:
+      force:
+        description: 'Force sync even if no changes'
+        required: false
+        default: 'false'
+
+jobs:
+  sync:
+    name: "Pull template updates"
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    env:
+      SOURCE_REPOSITORY: "TrevorPLam/cli-template"
+      SOURCE_BRANCH: "main"
+
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_SYNC_PAT }}
+          fetch-depth: 0
+
+      - name: Run template sync
+        uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          github_token: ${{ secrets.REPO_SYNC_PAT }}
+          source_repo_path: ${{ env.SOURCE_REPOSITORY }}
+          upstream_branch: ${{ env.SOURCE_BRANCH }}
+          pr_title: "chore(template): sync from upstream template"
+          pr_commit_msg: "chore(template): apply upstream template changes"
+          pr_labels: "template-sync,automated"
+          # Don't fail if there are no changes
+          is_dry_run: ${{ github.event.inputs.force == 'false' && 'false' || 'false' }}

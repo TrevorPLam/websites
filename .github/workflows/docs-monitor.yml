@@ -1,0 +1,158 @@
+name: "Docs Real-Time Monitor"
+
+on:
+  schedule:
+    # Every 15 minutes (GitHub's minimum cron interval)
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  availability:
+    name: "Availability Check"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        endpoint:
+          - name: "GitHub Repo"
+            url: "https://github.com/TrevorPLam/marketing-websites"
+          - name: "README File"
+            url: "https://raw.githubusercontent.com/TrevorPLam/marketing-websites/main/README.md"
+          - name: "Package JSON"
+            url: "https://raw.githubusercontent.com/TrevorPLam/marketing-websites/main/package.json"
+          - name: "AGENTS MD"
+            url: "https://raw.githubusercontent.com/TrevorPLam/marketing-websites/main/AGENTS.md"
+
+    steps:
+      - name: Check ${{ matrix.endpoint.name }}
+        id: check
+        run: |
+          START=$(date +%s%3N)
+          HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" \
+            --max-time 10 \
+            --retry 2 \
+            --retry-delay 3 \
+            "${{ matrix.endpoint.url }}")
+          END=$(date +%s%3N)
+          LATENCY=$((END - START))
+
+          echo "status=$HTTP_STATUS" >> $GITHUB_OUTPUT
+          echo "latency=$LATENCY" >> $GITHUB_OUTPUT
+          echo "url=${{ matrix.endpoint.url }}" >> $GITHUB_OUTPUT
+
+          echo "Status: $HTTP_STATUS | Latency: ${LATENCY}ms | URL: ${{ matrix.endpoint.url }}"
+
+          if [ "$HTTP_STATUS" -ne 200 ]; then
+            echo "ERROR: Expected 200, got $HTTP_STATUS"
+            exit 1
+          fi
+
+          if [ "$LATENCY" -gt 5000 ]; then
+            echo "WARNING: Response time ${LATENCY}ms exceeds 5000ms threshold"
+            exit 1
+          fi
+
+      - name: Alert via Slack on failure
+        if: failure()
+        run: |
+          curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+            -H "Content-type: application/json" \
+            -d '{
+              "text": "🚨 *Docs Monitor Alert*",
+              "attachments": [{
+                "color": "danger",
+                "fields": [
+                  {"title": "Page", "value": "${{ matrix.endpoint.name }}", "short": true},
+                  {"title": "URL", "value": "${{ matrix.endpoint.url }}", "short": true},
+                  {"title": "Status", "value": "${{ steps.check.outputs.status }}", "short": true},
+                  {"title": "Latency", "value": "${{ steps.check.outputs.latency }}ms", "short": true}
+                ]
+              }]
+            }'
+
+  content-integrity:
+    name: "Content Integrity Check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch and hash critical pages
+        run: |
+          # Define critical pages and their expected content checksums
+          declare -A PAGES=(
+            ["getting-started"]="https://raw.githubusercontent.com/TrevorPLam/marketing-websites/main/docs/guides/github-actions-docs-validation.md"
+            ["install"]="https://raw.githubusercontent.com/TrevorPLam/marketing-websites/main/docs/guides/version-sync-script.md"
+          )
+
+          for PAGE in "${!PAGES[@]}"; do
+            URL="${PAGES[$PAGE]}"
+            HASH=$(curl -s "$URL" | sha256sum | awk '{print $1}')
+            echo "${PAGE}=${HASH}" >> content_hashes.txt
+            echo "Hash for ${PAGE}: ${HASH}"
+          done
+
+      - name: Compare with baseline
+        run: |
+          # If a baseline file exists in the repo, compare
+          if [ -f ".monitoring/content-baseline.txt" ]; then
+            if ! diff -u .monitoring/content-baseline.txt content_hashes.txt; then
+              echo "⚠️ Content change detected in critical docs pages"
+              # Don't fail on content change — just report it
+            fi
+          fi
+
+      - name: Update baseline
+        if: github.ref == 'refs/heads/main' && github.event_name != 'schedule'
+        run: |
+          mkdir -p .monitoring
+          cp content_hashes.txt .monitoring/content-baseline.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .monitoring/content-baseline.txt
+          git diff --staged --quiet || git commit -m "monitoring: update content baseline"
+          git push
+
+  ssl-check:
+    name: "TLS Certificate Check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check certificate expiry
+        run: |
+          DOMAIN="github.com"
+          EXPIRY=$(echo | openssl s_client -connect "${DOMAIN}:443" -servername "${DOMAIN}" 2>/dev/null \
+            | openssl x509 -noout -enddate 2>/dev/null \
+            | cut -d= -f2)
+
+          EXPIRY_EPOCH=$(date -d "$EXPIRY" +%s 2>/dev/null || date -j -f "%b %d %T %Y %Z" "$EXPIRY" +%s)
+          NOW_EPOCH=$(date +%s)
+          DAYS_LEFT=$(( (EXPIRY_EPOCH - NOW_EPOCH) / 86400 ))
+
+          echo "Certificate expires: $EXPIRY ($DAYS_LEFT days remaining)"
+
+          if [ "$DAYS_LEFT" -lt 30 ]; then
+            echo "WARNING: Certificate expires in $DAYS_LEFT days!"
+            exit 1
+          fi
+
+  published-links:
+    name: "Published Link Health"
+    runs-on: ubuntu-latest
+    # Run this one less frequently — it's network-intensive
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && contains(github.event.schedule, '0 */6')) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check links in published site
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --config .lychee.toml
+            --verbose
+            https://github.com/TrevorPLam/marketing-websites
+          output: ./published-link-report.md
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: published-link-report
+          path: ./published-link-report.md
+          retention-days: 30
