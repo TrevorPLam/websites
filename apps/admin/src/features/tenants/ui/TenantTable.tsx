@@ -1,3 +1,4 @@
+import React from 'react';
 import { adminImpersonateTenant } from '../model/admin-actions';
 
 interface Tenant {

@@ -5,6 +5,30 @@
 
 import { StripeBillingService } from './billing-service';
 
+// Singleton instance for webhook processing
+let billingServiceInstance: StripeBillingService | null = null;
+
+/**
+ * Get or create singleton billing service instance
+ */
+function getBillingServiceInstance(config: {
+  tenantId: string;
+  webhookSecret: string;
+  successUrl?: string;
+  cancelUrl?: string;
+  currency?: string;
+}): StripeBillingService {
+  if (!billingServiceInstance) {
+    billingServiceInstance = new StripeBillingService({
+      ...config,
+      successUrl: config.successUrl || 'http://localhost:3000',
+      cancelUrl: config.cancelUrl || 'http://localhost:3000',
+      currency: config.currency || 'usd',
+    });
+  }
+  return billingServiceInstance;
+}
+
 /**
  * Process webhook from raw request data
  */
@@ -13,7 +37,6 @@ export async function processWebhook(
   signature: string,
   config: {
     tenantId: string;
-    stripeSecretKey: string;
     webhookSecret: string;
     successUrl?: string;
     cancelUrl?: string;
@@ -21,13 +44,8 @@ export async function processWebhook(
   }
 ): Promise<{ status: number; message: string }> {
   try {
-    // Create billing service
-    const billingService = new StripeBillingService({
-      ...config,
-      successUrl: config.successUrl || 'http://localhost:3000',
-      cancelUrl: config.cancelUrl || 'http://localhost:3000',
-      currency: config.currency || 'usd',
-    });
+    // Use singleton billing service instance
+    const billingService = getBillingServiceInstance(config);
 
     // Process webhook
     const event = await billingService.handleWebhook(body, signature);
@@ -42,10 +60,10 @@ export async function processWebhook(
 
 /**
  * Express.js middleware for webhooks
+ * IMPORTANT: Use with express.raw({ type: 'application/json' }) to get raw request body
  */
 export function webhookMiddleware(config: {
   tenantId: string;
-  stripeSecretKey: string;
   webhookSecret: string;
   successUrl?: string;
   cancelUrl?: string;
@@ -57,7 +75,8 @@ export function webhookMiddleware(config: {
     }
 
     try {
-      const body = req.body;
+      // Use raw request body for Stripe signature verification
+      const body = req.body; // This should be raw string, not parsed object
       const signature = req.headers['stripe-signature'] || '';
 
       const result = await processWebhook(body, signature, config);

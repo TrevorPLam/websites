@@ -29,14 +29,35 @@ export async function POST(req: NextRequest) {
   const body = await req.text();
   const signature = req.headers.get('x-cal-signature-256');
 
-  // Tenant ID is passed in the webhook URL: /api/webhooks/cal?tenant=abc123
-  const tenantId = req.nextUrl.searchParams.get('tenant');
-  if (!tenantId) {
-    return NextResponse.json({ error: 'Missing tenant' }, { status: 400 });
+  // Parse event first to get organizer email for tenant lookup
+  let event: CalWebhookEvent;
+  try {
+    event = JSON.parse(body);
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+
+  // Extract organizer email from payload to determine tenant
+  const organizerEmail = event.payload?.organizer?.email;
+  if (!organizerEmail) {
+    return NextResponse.json({ error: 'Missing organizer email in payload' }, { status: 400 });
   }
 
   // Create database client with tenant context
   const db = createSupabaseServerClient();
+
+  // Look up tenant by organizer email (more secure than URL param)
+  const { data: tenant } = await db
+    .from('tenants')
+    .select('id, config')
+    .eq('config->>identity->>contact->>email', organizerEmail)
+    .single();
+
+  if (!tenant) {
+    return NextResponse.json({ error: 'Tenant not found for organizer' }, { status: 404 });
+  }
+
+  const tenantId = tenant.id;
 
   // Fetch per-tenant Cal.com webhook secret from secrets manager
   const { getTenantSecret } = await import('@repo/infrastructure/security');
@@ -51,34 +72,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
   }
 
-  // Idempotency: parse event ID from payload
-  let event: CalWebhookEvent;
-  try {
-    event = JSON.parse(body);
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
-  }
-
-  // Cal.com doesn't provide a unique event ID on the envelope —
-  // construct one from booking UID + trigger type
+  // Idempotency: use upsert to prevent race conditions
   const eventId = `cal:${event.triggerEvent}:${event.payload?.uid}`;
 
-  const { data: existing } = await db
-    .from('processed_webhooks')
-    .select('id')
-    .eq('provider', 'cal')
-    .eq('event_id', eventId)
-    .maybeSingle();
-
-  if (existing) {
-    return NextResponse.json({ received: true, duplicate: true });
+  try {
+    await db.from('processed_webhooks').upsert({
+      provider: 'cal',
+      event_id: eventId,
+      event_type: event.triggerEvent,
+    }, {
+      onConflict: 'provider,event_id'
+    });
+  } catch (upsertError: any) {
+    // If upsert fails due to constraint violation, it's a duplicate
+    if (upsertError.code === '23505') {
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+    throw upsertError;
   }
-
-  await db.from('processed_webhooks').insert({
-    provider: 'cal',
-    event_id: eventId,
-    event_type: event.triggerEvent,
-  });
 
   try {
     await handleCalEvent(event, tenantId, db);
@@ -223,9 +234,9 @@ async function handleBookingCancelled(
     .from('bookings')
     .update({
       status: 'cancelled',
-      metadata: payload.cancellationReason
-        ? `{ "cancellationReason": "${payload.cancellationReason}" }`
-        : '{ "cancellationReason": "unspecified" }',
+      metadata: JSON.stringify({
+        cancellationReason: payload.cancellationReason ?? 'unspecified'
+      }),
       updated_at: new Date().toISOString(),
     })
     .eq('cal_uid', payload.uid)

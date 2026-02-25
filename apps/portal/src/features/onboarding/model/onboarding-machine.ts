@@ -207,12 +207,16 @@ export function getPreviousStep(currentStep: OnboardingStep): OnboardingStep | n
 
 export function getStepProgress(currentStep: OnboardingStep): number {
   const currentIndex = ONBOARDING_STEPS.indexOf(currentStep);
-  const totalDataSteps = 6; // Exclude 'review' and 'complete'
+  // Derive total data steps dynamically (exclude review and complete)
+  const totalDataSteps = ONBOARDING_STEPS.filter(
+    s => s !== 'review' && s !== 'complete'
+  ).length;
   return Math.min((currentIndex / totalDataSteps) * 100, 100);
 }
 
 export function isStepComplete(step: OnboardingStep, data: Partial<OnboardingData>): boolean {
-  if (step === 'review' || step === 'complete') return false;
+  // Review and complete steps are always considered "complete" for navigation purposes
+  if (step === 'review' || step === 'complete') return true;
 
   const dataKey = STEP_META[step].dataKey;
   if (!dataKey) return false;

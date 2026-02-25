@@ -429,7 +429,17 @@ export async function handleVercelDomainWebhook(payload: {
   const { domain } = payload.payload;
 
   if (payload.type === 'domain.verified') {
-    await db.from('tenants').update({ status: 'active' }).eq('custom_domain', domain);
+    // Only update status if tenant is currently pending_domain verification
+    // Don't override suspended or other statuses
+    await db
+      .from('tenants')
+      .update({
+        status: 'active',
+        custom_domain_verified: true,
+        custom_domain_verified_at: new Date().toISOString()
+      })
+      .eq('custom_domain', domain)
+      .eq('status', 'pending_domain');
 
     const { invalidateTenantCache } = await import('./resolve-tenant');
     const { data: tenant } = await db.from('tenants').select('id').eq('custom_domain', domain).single();

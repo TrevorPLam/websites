@@ -14,7 +14,7 @@ import {
   IntegrationsSchema,
   type OnboardingStep,
 } from './onboarding-machine';
-import { addVercelDomain } from '@repo/multi-tenant/vercel-domains';
+import { addCustomDomainForTenant } from '@repo/multi-tenant/vercel-domains';
 
 // Unified step-save action (dispatches to per-step handlers)
 const SaveStepInputSchema = z.object({
@@ -121,7 +121,7 @@ export const saveOnboardingStep = createServerAction(SaveStepInputSchema, async 
       if (parsed.customDomain) {
         // Register domain with Vercel (immediate provisioning)
         try {
-          await addVercelDomain(parsed.customDomain, tenantId);
+          await addCustomDomainForTenant(tenantId, parsed.customDomain);
         } catch (err: any) {
           return { error: `Domain registration failed: ${err.message}` };
         }
@@ -192,17 +192,24 @@ export const completeOnboarding = createServerAction(
       .select('step, data')
       .eq('tenant_id', tenantId);
 
-    if (!steps || steps.length < 4) {
-      return { error: 'Please complete all required steps before launching.' };
+    // Check for specific required steps, not just count
+    const REQUIRED_STEPS = ['business-info', 'branding', 'contact-hours', 'services', 'domain'] as const;
+    const stepKeys = steps.map(s => s.step);
+    const missing = REQUIRED_STEPS.filter(requiredStep => !stepKeys.includes(requiredStep));
+
+    if (missing.length > 0) {
+      return { error: `Missing required steps: ${missing.join(', ')}. Please complete all steps before launching.` };
     }
 
-    // Merge all step data into a unified site.config
+    // Validate and merge all step data into a unified site.config
     const stepMap = Object.fromEntries(steps.map((s) => [s.step, s.data]));
-    const businessInfo = stepMap['business-info'];
-    const branding = stepMap['branding'];
-    const contactHours = stepMap['contact-hours'];
-    const services = stepMap['services'];
-    const integrations = stepMap['integrations'] ?? {};
+
+    // Re-validate each step's data with its schema before merging
+    const businessInfo = BusinessInfoSchema.parse(stepMap['business-info']);
+    const branding = BrandingSchema.parse(stepMap['branding']);
+    const contactHours = ContactHoursSchema.parse(stepMap['contact-hours']);
+    const services = ServicesSchema.parse(stepMap['services']);
+    const integrations = IntegrationsSchema.parse(stepMap['integrations'] ?? {});
 
     const config = {
       identity: {
@@ -251,10 +258,10 @@ export const completeOnboarding = createServerAction(
     // Queue sitemap rebuild
     await enqueue('sitemap.rebuild', { tenantId });
 
-    // Send welcome email
-    await enqueue('email.lead_digest', {
+    // Send welcome email (not lead digest)
+    await enqueue('email.welcome', {
       tenantId,
-      date: new Date().toISOString().split('T')[0],
+      siteName: businessInfo.businessName,
     });
 
     return { success: true, redirectTo: '/dashboard?onboarded=1' };

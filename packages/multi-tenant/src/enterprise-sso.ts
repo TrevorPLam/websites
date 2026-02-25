@@ -1,6 +1,7 @@
 import 'server-only';
 import { Redis } from '@upstash/redis';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
+import { z } from 'zod';
 
 // Redis instance for caching
 const redis = Redis.fromEnv();
@@ -8,6 +9,9 @@ const redis = Redis.fromEnv();
 // Environment variables
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+// Supabase client for SSO operations
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 // ============================================================================
 // TYPES
@@ -78,26 +82,34 @@ async function storeSSOProvider(
     attributeMappings?: SAMLAttributeMappings;
   }
 ): Promise<void> {
-  // This should be implemented with your actual database client
-  // await supabase.from('tenant_sso_providers').upsert({
-  //   tenant_id: tenantId,
-  //   provider_id: providerId,
-  //   provider_type: 'saml',
-  //   domains: config.domains,
-  //   attribute_mappings: config.attributeMappings,
-  //   created_at: new Date().toISOString(),
-  // });
-  console.log(`Storing SSO provider ${providerId} for tenant ${tenantId}`);
+  await supabase.from('tenant_sso_providers').upsert({
+    tenant_id: tenantId,
+    provider_id: providerId,
+    provider_type: 'saml',
+    domains: config.domains,
+    attribute_mappings: config.attributeMappings,
+    created_at: new Date().toISOString(),
+  });
+  console.log(`Stored SSO provider ${providerId} for tenant ${tenantId}`);
 }
 
 async function getSSOProviderFromDB(providerId: string): Promise<SSOProvider | null> {
-  // const { data } = await supabase
-  //   .from('tenant_sso_providers')
-  //   .select('*')
-  //   .eq('provider_id', providerId)
-  //   .single();
-  // return data;
-  return null;
+  const { data } = await supabase
+    .from('tenant_sso_providers')
+    .select('*')
+    .eq('provider_id', providerId)
+    .single();
+
+  if (!data) return null;
+
+  return {
+    providerId: data.provider_id,
+    providerType: data.provider_type,
+    domains: data.domains,
+    attributeMappings: data.attribute_mappings || {},
+    createdAt: data.created_at,
+    updatedAt: data.updated_at,
+  };
 }
 
 async function updateSSOProviderInDB(
@@ -105,94 +117,108 @@ async function updateSSOProviderInDB(
   providerId: string,
   updates: Partial<SSOProvider>
 ): Promise<void> {
-  // await supabase
-  //   .from('tenant_sso_providers')
-  //   .update({
-  //     domains: updates.domains,
-  //     attribute_mappings: updates.attributeMappings,
-  //     updated_at: new Date().toISOString(),
-  //   })
-  //   .eq('tenant_id', tenantId)
-  //   .eq('provider_id', providerId);
-  console.log(`Updating SSO provider ${providerId} for tenant ${tenantId}`);
+  await supabase
+    .from('tenant_sso_providers')
+    .update({
+      domains: updates.domains,
+      attribute_mappings: updates.attributeMappings,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('tenant_id', tenantId)
+    .eq('provider_id', providerId);
+  console.log(`Updated SSO provider ${providerId} for tenant ${tenantId}`);
 }
 
 async function removeSSOProviderFromDB(tenantId: string, providerId: string): Promise<void> {
-  // await supabase
-  //   .from('tenant_sso_providers')
-  //   .delete()
-  //   .eq('tenant_id', tenantId)
-  //   .eq('provider_id', providerId);
-  console.log(`Removing SSO provider ${providerId} for tenant ${tenantId}`);
+  await supabase
+    .from('tenant_sso_providers')
+    .delete()
+    .eq('tenant_id', tenantId)
+    .eq('provider_id', providerId);
+  console.log(`Removed SSO provider ${providerId} for tenant ${tenantId}`);
 }
 
 async function getTenantSSOProvidersFromDB(tenantId: string): Promise<SSOProvider[]> {
-  // const { data } = await supabase
-  //   .from('tenant_sso_providers')
-  //   .select('*')
-  //   .eq('tenant_id', tenantId);
-  // return data ?? [];
-  return [];
+  const { data } = await supabase
+    .from('tenant_sso_providers')
+    .select('*')
+    .eq('tenant_id', tenantId);
+
+  return (data || []).map(provider => ({
+    providerId: provider.provider_id,
+    providerType: provider.provider_type,
+    domains: provider.domains,
+    attributeMappings: provider.attribute_mappings || {},
+    createdAt: provider.created_at,
+    updatedAt: provider.updated_at,
+  }));
 }
 
 async function findSSOProviderByDomain(domain: string): Promise<SSOProvider | null> {
-  // const { data } = await supabase
-  //   .from('tenant_sso_providers')
-  //   .select('*')
-  //   .like('domains', `%${domain}%`)
-  //   .single();
-  // return data;
-  return null;
+  const { data } = await supabase
+    .from('tenant_sso_providers')
+    .select('*')
+    .like('domains', `%${domain}%`)
+    .single();
+
+  if (!data) return null;
+
+  return {
+    providerId: data.provider_id,
+    providerType: data.provider_type,
+    domains: data.domains,
+    attributeMappings: data.attribute_mappings || {},
+    createdAt: data.created_at,
+    updatedAt: data.updated_at,
+  };
 }
 
 async function getTenantIdForUser(email: string): Promise<string | null> {
-  // This would lookup the user's tenant based on email
-  // const { data } = await supabase
-  //   .from('users')
-  //   .select('tenant_id')
-  //   .eq('email', email)
-  //   .single();
-  // return data?.tenant_id ?? null;
-  return null;
+  const { data } = await supabase
+    .from('users')
+    .select('tenant_id')
+    .eq('email', email)
+    .single();
+
+  return data?.tenant_id ?? null;
 }
 
 async function createOrUpdateUser(user: SSOUser): Promise<string> {
   // Create or update user in database
-  // const { data: existingUser } = await supabase
-  //   .from('users')
-  //   .select('id')
-  //   .eq('email', user.email)
-  //   .eq('tenant_id', user.tenantId)
-  //   .single();
-  //
-  // if (existingUser) {
-  //   await supabase
-  //     .from('users')
-  //     .update({
-  //       first_name: user.firstName,
-  //       last_name: user.lastName,
-  //       role: user.role,
-  //       updated_at: new Date().toISOString(),
-  //     })
-  //     .eq('id', existingUser.id);
-  //   return existingUser.id;
-  // } else {
-  //   const { data: newUser } = await supabase
-  //     .from('users')
-  //     .insert({
-  //       id: user.userId,
-  //       tenant_id: user.tenantId,
-  //       email: user.email,
-  //       first_name: user.firstName,
-  //       last_name: user.lastName,
-  //       role: user.role,
-  //       created_at: new Date().toISOString(),
-  //     })
-  //     .select('id')
-  //     .single();
-  //   return newUser?.id ?? user.userId;
-  // }
-  return user.userId;
+  const { data: existingUser } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', user.email)
+    .eq('tenant_id', user.tenantId)
+    .single();
+
+  if (existingUser) {
+    await supabase
+      .from('users')
+      .update({
+        first_name: user.firstName,
+        last_name: user.lastName,
+        role: user.role,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', existingUser.id);
+    return existingUser.id;
+  } else {
+    const { data: newUser } = await supabase
+      .from('users')
+      .insert({
+        id: user.userId,
+        tenant_id: user.tenantId,
+        email: user.email,
+        first_name: user.firstName,
+        last_name: user.lastName,
+        role: user.role,
+        created_at: new Date().toISOString(),
+      })
+      .select('id')
+      .single();
+    return newUser?.id ?? user.userId;
+  }
 }
 
 // ============================================================================
@@ -492,7 +518,11 @@ export function validateSAMLProviderConfig(config: {
 
   // Validate metadata URL
   try {
-    new URL(config.metadataUrl);
+    const url = new URL(config.metadataUrl);
+    // SAML metadata must be served over HTTPS
+    if (url.protocol !== 'https:') {
+      errors.push('Metadata URL must use HTTPS');
+    }
   } catch {
     errors.push('Invalid metadata URL format');
   }
@@ -573,6 +603,11 @@ export function buildRLSWithSSO(baseRLS: string, ssoProviderId?: string): string
     return baseRLS;
   }
 
-  // This is a placeholder - actual implementation depends on your RLS structure
+  // Validate provider ID is a UUID to prevent SQL injection
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(ssoProviderId)) {
+    throw new Error('Invalid SSO provider ID format');
+  }
+
   return `(${baseRLS}) OR (sso_provider_id = '${ssoProviderId}')`;
 }

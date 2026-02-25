@@ -1,9 +1,10 @@
 'use client';
 
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 import { useEffect, useState, useCallback } from 'react';
 import type { Database } from '@repo/integrations/supabase';
 import { classifyLead } from '@repo/lead-capture/scoring';
+import { z } from 'zod';
 
 type Lead = Database['public']['Tables']['leads']['Row'];
 
@@ -13,17 +14,50 @@ type Lead = Database['public']['Tables']['leads']['Row'];
 // New leads appear instantly without page refresh.
 // ============================================================================
 
-const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// UUID validation schema
+const TenantIdSchema = z.string().uuid('Invalid tenant ID format');
 
 export function LeadFeed({ tenantId }: { tenantId: string }) {
+  // Validate tenant ID prop
+  const validatedTenantId = TenantIdSchema.parse(tenantId);
+
   const [leads, setLeads] = useState<Lead[]>([]);
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'error'>(
     'connecting'
   );
   const [newLeadIds, setNewLeadIds] = useState<Set<string>>(new Set());
+  const [supabase] = useState(() =>
+    createBrowserClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+  );
+
+  // Request notification permission on mount
+  useEffect(() => {
+    if (Notification.permission === 'default') {
+      // Request permission in response to user interaction
+      const handleUserInteraction = () => {
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            console.log('Notification permission granted');
+          }
+        });
+        // Remove listener after first interaction
+        document.removeEventListener('click', handleUserInteraction);
+        document.removeEventListener('keydown', handleUserInteraction);
+      };
+
+      // Add listeners for user interaction
+      document.addEventListener('click', handleUserInteraction);
+      document.addEventListener('keydown', handleUserInteraction);
+
+      return () => {
+        document.removeEventListener('click', handleUserInteraction);
+        document.removeEventListener('keydown', handleUserInteraction);
+      };
+    }
+  }, []);
 
   // Initial load
   useEffect(() => {
@@ -31,7 +65,7 @@ export function LeadFeed({ tenantId }: { tenantId: string }) {
       const { data } = await supabase
         .from('leads')
         .select('*')
-        .eq('tenant_id', tenantId)
+        .eq('tenant_id', validatedTenantId)
         .order('created_at', { ascending: false })
         .limit(50);
 
@@ -39,19 +73,19 @@ export function LeadFeed({ tenantId }: { tenantId: string }) {
     };
 
     loadLeads();
-  }, [tenantId]);
+  }, [validatedTenantId, supabase]);
 
   // Real-time subscription
   useEffect(() => {
     const channel = supabase
-      .channel(`leads:${tenantId}`)
+      .channel(`leads:${validatedTenantId}`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
           table: 'leads',
-          filter: `tenant_id=eq.${tenantId}`, // RLS + filter = double protection
+          filter: `tenant_id=eq.${validatedTenantId}`, // RLS + filter = double protection
         },
         (payload) => {
           const newLead = payload.new as Lead;
@@ -85,7 +119,7 @@ export function LeadFeed({ tenantId }: { tenantId: string }) {
           event: 'UPDATE',
           schema: 'public',
           table: 'leads',
-          filter: `tenant_id=eq.${tenantId}`,
+          filter: `tenant_id=eq.${validatedTenantId}`,
         },
         (payload) => {
           const updated = payload.new as Lead;
@@ -101,7 +135,7 @@ export function LeadFeed({ tenantId }: { tenantId: string }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [tenantId]);
+  }, [validatedTenantId, supabase]);
 
   return (
     <div aria-label="Live lead feed" aria-live="polite" aria-atomic="false">

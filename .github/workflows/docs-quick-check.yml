@@ -1,0 +1,47 @@
+name: "Quick Docs Check"
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "**/*.md"
+      - "package.json"
+      - "scripts/version_sync.py"
+  pull_request:
+    paths:
+      - "**/*.md"
+      - "package.json"
+      - "scripts/version_sync.py"
+
+jobs:
+  quick-check:
+    name: "Quick Documentation Validation"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5  # Don't run too long
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1  # Shallow checkout for speed
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Check version consistency
+        run: python scripts/version_sync.py --check
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install markdownlint
+        run: npm install -g markdownlint-cli2
+
+      - name: Quick markdown check
+        run: |
+          # Only check changed files to save time
+          git diff --name-only HEAD~1 HEAD --diff-filter=ACM | grep '\.md$' | head -10 | xargs -r markdownlint-cli2 || true

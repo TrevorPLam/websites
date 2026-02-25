@@ -5,12 +5,12 @@
 
 import { z } from 'zod';
 import Stripe from 'stripe';
+import { updateBillingStatus } from '@repo/multi-tenant';
 
 // Configuration schemas
 export const BillingConfigSchema = z.object({
   tenantId: z.string().uuid(),
-  stripeSecretKey: z.string().min(1),
-  webhookSecret: z.string().optional(),
+  webhookSecret: z.string().min(1),
   successUrl: z.string().url(),
   cancelUrl: z.string().url(),
   currency: z.string().default('usd'),
@@ -26,6 +26,7 @@ export const ProductSchema = z.object({
   priceId: z.string(),
   unitAmount: z.number(),
   currency: z.string(),
+  product: z.any().optional(), // Stripe Product object
   recurring: z
     .object({
       interval: z.enum(['day', 'week', 'month', 'year']),
@@ -69,7 +70,7 @@ export class StripeBillingService {
 
   constructor(config: BillingConfig) {
     this.config = config;
-    this.stripe = new Stripe(config.stripeSecretKey);
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   }
 
   /**
@@ -144,14 +145,21 @@ export class StripeBillingService {
   async createOrRetrieveCustomer(customerData: Customer): Promise<Stripe.Customer> {
     const validatedCustomer = CustomerSchema.parse(customerData);
 
-    // Try to retrieve existing customer by email
+    // Try to retrieve existing customer by email for this tenant
     const existingCustomers = await this.stripe.customers.list({
       email: validatedCustomer.email,
       limit: 1,
+      // Filter by tenant metadata to ensure customer isolation
+      expand: ['data.metadata'],
     });
 
-    if (existingCustomers.data.length > 0) {
-      return existingCustomers.data[0] as Stripe.Customer;
+    // Find customer belonging to this tenant
+    const tenantCustomer = existingCustomers.data.find(
+      customer => customer.metadata?.tenantId === this.config.tenantId
+    );
+
+    if (tenantCustomer) {
+      return tenantCustomer as Stripe.Customer;
     }
 
     // Create new customer
@@ -205,7 +213,7 @@ export class StripeBillingService {
   /**
    * Create a product
    */
-  async createProduct(product: Product): Promise<Stripe.Product> {
+  async createProduct(product: Product): Promise<{ product: Stripe.Product; price: Stripe.Price }> {
     const validatedProduct = ProductSchema.parse(product);
 
     const productConfig: Stripe.ProductCreateParams = {
@@ -229,9 +237,9 @@ export class StripeBillingService {
       priceConfig.recurring = validatedProduct.recurring;
     }
 
-    await this.stripe.prices.create(priceConfig);
+    const price = await this.stripe.prices.create(priceConfig);
 
-    return createdProduct;
+    return { product: createdProduct, price };
   }
 
   /**
@@ -253,9 +261,21 @@ export class StripeBillingService {
    * List all products for tenant
    */
   async listTenantProducts(): Promise<Stripe.ApiList<Stripe.Product>> {
-    return this.stripe.products.list({
-      limit: 100,
-    });
+    // List all products and filter by tenant metadata
+    const allProducts = await this.stripe.products.list({ limit: 100 });
+
+    // Filter products belonging to this tenant
+    const tenantProducts = allProducts.data.filter(
+      product => product.metadata?.tenantId === this.config.tenantId
+    );
+
+    // Return filtered list maintaining original structure
+    return {
+      object: 'list',
+      data: tenantProducts,
+      has_more: false,
+      url: '/v1/products',
+    } as Stripe.ApiList<Stripe.Product>;
   }
 
   /**
@@ -300,65 +320,96 @@ export class StripeBillingService {
   }
 
   private async handleCheckoutCompleted(session: Stripe.Checkout.Session): Promise<void> {
-    // Handle successful checkout
     console.log('Checkout completed:', session.id);
 
-    // You can emit events, update database, etc.
-    // Example: await this.notifyTenant(session.metadata?.tenantId, 'checkout_completed', session);
+    // Extract tenant ID from session metadata
+    const tenantId = session.metadata?.tenantId;
+    if (!tenantId) {
+      console.error('No tenant ID in session metadata:', session.id);
+      return;
+    }
+
+    // For one-time payments, activate tenant if they were in trial
+    if (session.mode === 'payment') {
+      await updateBillingStatus(tenantId, 'active');
+      console.log(`Activated tenant ${tenantId} after successful payment`);
+    }
+
+    // TODO: Send receipt, update internal records, emit events
   }
 
   private async handlePaymentSucceeded(invoice: Stripe.Invoice): Promise<void> {
-    // Handle successful payment
     console.log('Payment succeeded:', invoice.id);
 
-    // Update subscription status, send notifications, etc.
+    // Extract tenant ID from subscription metadata
+    const tenantId = invoice.subscription
+      ? (await this.stripe.subscriptions.retrieve(invoice.subscription as string)).metadata?.tenantId
+      : invoice.customer?.toString();
+
+    if (!tenantId) {
+      console.error('No tenant ID found for successful payment:', invoice.id);
+      return;
+    }
+
+    // Activate tenant on successful payment
+    await updateBillingStatus(tenantId, 'active');
+    console.log(`Activated tenant ${tenantId} after successful payment`);
+
+    // TODO: Send receipt, update payment records
   }
 
   private async handlePaymentFailed(invoice: Stripe.Invoice): Promise<void> {
-    // Handle failed payment
     console.log('Payment failed:', invoice.id);
 
-    // Notify customer, retry logic, etc.
+    // Extract tenant ID from subscription metadata
+    const tenantId = invoice.subscription
+      ? (await this.stripe.subscriptions.retrieve(invoice.subscription as string)).metadata?.tenantId
+      : invoice.customer?.toString();
+
+    if (!tenantId) {
+      console.error('No tenant ID found for failed payment:', invoice.id);
+      return;
+    }
+
+    // Suspend tenant on payment failure
+    await updateBillingStatus(tenantId, 'suspended');
+    console.log(`Suspended tenant ${tenantId} after payment failure`);
+
+    // TODO: Send notification, handle retry logic, update internal records
   }
 
   private async handleSubscriptionCreated(subscription: Stripe.Subscription): Promise<void> {
-    // Handle subscription creation
     console.log('Subscription created:', subscription.id);
 
-    // Update user status, grant access, etc.
+    // Extract tenant ID from subscription metadata
+    const tenantId = subscription.metadata?.tenantId;
+    if (!tenantId) {
+      console.error('No tenant ID in subscription metadata:', subscription.id);
+      return;
+    }
+
+    // Activate tenant when subscription is created
+    await updateBillingStatus(tenantId, 'active');
+    console.log(`Activated tenant ${tenantId} after subscription creation`);
+
+    // TODO: Grant access, send welcome email, update internal records
   }
 
   private async handleSubscriptionDeleted(subscription: Stripe.Subscription): Promise<void> {
-    // Handle subscription deletion
     console.log('Subscription deleted:', subscription.id);
 
-    // Revoke access, update user status, etc.
-  }
-}
-
-/**
- * Webhook handler utility
- */
-export class StripeWebhookHandler {
-  private billingService: StripeBillingService;
-
-  constructor(billingService: StripeBillingService) {
-    this.billingService = billingService;
-  }
-
-  async handleWebhook(request: Request): Promise<{ status: number; message: string }> {
-    try {
-      const body = await request.text();
-      const signature = request.headers.get('stripe-signature') || '';
-
-      const event = await this.billingService.handleWebhook(body, signature);
-      await this.billingService.processWebhookEvent(event);
-
-      return { status: 200, message: 'Webhook processed successfully' };
-    } catch (error) {
-      console.error('Webhook processing error:', error);
-      return { status: 400, message: 'Webhook processing failed' };
+    // Extract tenant ID from subscription metadata
+    const tenantId = subscription.metadata?.tenantId;
+    if (!tenantId) {
+      console.error('No tenant ID in subscription metadata:', subscription.id);
+      return;
     }
+
+    // Cancel tenant when subscription is deleted
+    await updateBillingStatus(tenantId, 'cancelled');
+    console.log(`Cancelled tenant ${tenantId} after subscription deletion`);
+
+    // TODO: Revoke access, send cancellation email, update internal records
   }
 }
 

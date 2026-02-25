@@ -127,8 +127,10 @@ export async function scoreLead(params: {
   attribution: ScoringInput['attribution'];
   hasPhone: boolean;
   messageLength: number;
+  submittedAt?: Date; // Allow passing actual submission time
 }): Promise<number> {
-  const sessionKey = `session:${params.sessionId}`;
+  // Tenant-scoped session key to prevent cross-tenant session hijacking
+  const sessionKey = `session:${params.tenantId}:${params.sessionId}`;
 
   // Read behavioral data accumulated by client-side tracking
   const sessionData = await redis.hgetall<{
@@ -151,7 +153,7 @@ export async function scoreLead(params: {
     attribution: params.attribution,
     hasPhone: params.hasPhone,
     messageLength: params.messageLength,
-    submittedAt: new Date(),
+    submittedAt: params.submittedAt ?? new Date(), // Use provided time or default to now
   });
 }
 

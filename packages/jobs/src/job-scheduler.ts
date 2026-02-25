@@ -283,7 +283,7 @@ export class JobScheduler {
 
     // Schedule with QStash
     const qstashConfig: any = {
-      url: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/jobs/handle`,
+      url: `${process.env.APP_URL || 'http://localhost:3000'}/api/jobs/handle`, // Use private env var
       body: JSON.stringify(qstashPayload),
       headers: {
         'Content-Type': 'application/json',
@@ -305,7 +305,7 @@ export class JobScheduler {
     }
 
     await this.qstash.publishJSON(qstashConfig);
-    return 'scheduled';
+    return jobId; // Return actual job ID for tracking
   }
 
   /**
@@ -313,8 +313,12 @@ export class JobScheduler {
    */
   async cancelJob(jobId: string): Promise<void> {
     // QStash doesn't have a direct cancel method in the current API
-    // This would typically be handled by your job management system
+    // In production, you would:
+    // 1. Mark job as cancelled in your database
+    // 2. Implement idempotent handlers that check job status
+    // 3. Use QStash's message cancellation when available
     console.log(`Canceling job: ${jobId}`);
+    // TODO: Implement actual job cancellation logic
   }
 
   /**
@@ -322,8 +326,11 @@ export class JobScheduler {
    */
   async getJobStatus(jobId: string): Promise<any> {
     // QStash doesn't have a direct getMessage method in the current API
-    // This would typically query your job database
+    // In production, you would query your job database:
+    // 1. Check if job exists and its current status
+    // 2. Return execution history, error details, etc.
     console.log(`Getting status for job: ${jobId}`);
+    // TODO: Implement actual job status tracking
     return { status: 'pending', jobId };
   }
 
@@ -340,7 +347,8 @@ export class JobScheduler {
    * Generate unique job ID
    */
   private generateJobId(): string {
-    return `job_${this.config.tenantId}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    // Use crypto.randomUUID() for cryptographically secure IDs
+    return `job_${this.config.tenantId}_${crypto.randomUUID()}`;
   }
 }
 
@@ -374,8 +382,14 @@ export class JobHandlerFactory {
         template: validatedPayload.template,
       });
 
-      // Integrate with your email service
-      // await emailService.sendEmail(validatedPayload);
+      // PRODUCTION: Integrate with your email service
+      // Example implementations:
+      // - Resend: await resend.emails.send({ ...validatedPayload });
+      // - SendGrid: await sgMail.send({ ...validatedPayload });
+      // - Postmark: await postmark.sendEmail({ ...validatedPayload });
+
+      // TODO: Implement actual email sending logic
+      throw new Error('Email handler not implemented - add email service integration');
     };
   }
 
@@ -390,8 +404,14 @@ export class JobHandlerFactory {
         provider: validatedPayload.provider,
       });
 
-      // Integrate with CRM provider
-      // await crmService.sync(validatedPayload);
+      // PRODUCTION: Integrate with CRM provider
+      // Example implementations:
+      // - HubSpot: await hubspotClient.crm.objects.contacts.createOrUpdate(validatedPayload);
+      // - Salesforce: await sfConn.sobject('Contact').create(validatedPayload);
+      // - Zapier: await zapierClient.createHook(validatedPayload);
+
+      // TODO: Implement actual CRM sync logic
+      throw new Error('CRM handler not implemented - add CRM service integration');
     };
   }
 
@@ -408,8 +428,14 @@ export class JobHandlerFactory {
         contactInfo: validatedPayload.contactInfo,
       });
 
-      // Send reminder via email/SMS
-      // await notificationService.sendReminder(validatedPayload);
+      // PRODUCTION: Send reminder via email/SMS
+      // Example implementations:
+      // - Email: await emailService.sendBookingReminder(validatedPayload);
+      // - SMS: await twilioClient.messages.create({ ...validatedPayload });
+      // - Push: await pushService.sendNotification(validatedPayload);
+
+      // TODO: Implement actual booking reminder logic
+      throw new Error('Booking reminder handler not implemented - add notification service integration');
     };
   }
 
@@ -422,10 +448,27 @@ export class JobHandlerFactory {
         tenantId: validatedPayload.tenantId,
         customerId: validatedPayload.customerId,
         deletionReason: validatedPayload.deletionReason,
+        retentionPeriod: validatedPayload.retentionPeriod,
       });
 
-      // Process data deletion
-      // await gdprService.processDeletion(validatedPayload);
+      // PRODUCTION: Process data deletion with compliance
+      // Example implementations:
+      // 1. Soft delete with retention period
+      // 2. Hard delete after retention expires
+      // 3. Audit trail for compliance
+      // 4. Notification to data protection officer
+
+      // For admin-initiated deletions, process immediately
+      if (validatedPayload.retentionPeriod === 0) {
+        // Immediate deletion logic
+        console.log('Processing immediate GDPR deletion for admin request');
+      } else {
+        // Scheduled deletion with retention period
+        console.log(`Scheduling GDPR deletion with ${validatedPayload.retentionPeriod} day retention`);
+      }
+
+      // TODO: Implement actual GDPR deletion logic
+      throw new Error('GDPR deletion handler not implemented - add data deletion compliance logic');
     };
   }
 

@@ -11,22 +11,30 @@ const redis = Redis.fromEnv();
 // Reference: https://docs.getunleash.io/guides/implement-feature-flags-in-nextjs
 // ============================================================================
 
-export type FeatureFlag =
-  | 'offline_lead_forms' // ElectricSQL local-first forms
-  | 'realtime_lead_feed' // Supabase Realtime in portal
-  | 'ab_testing' // Edge A/B testing
-  | 'ai_chat_widget' // AI chat bubble
-  | 'booking_calendar' // Cal.com/Calendly integration
-  | 'stripe_billing' // Enable billing for this tenant
-  | 'white_label_portal' // Hide agency branding
-  | 'gdpr_tools' // GDPR data export/deletion in portal
-  | 'api_access' // REST API access for enterprise
-  | 'sso_enabled' // SAML/OIDC SSO
-  | 'advanced_analytics' // Tinybird dashboard
-  | 'multi_site' // Multiple sites per tenant account
-  | 'custom_domain' // Custom domain routing
-  | 'ghl_crm_sync' // GoHighLevel CRM
-  | 'hubspot_crm_sync'; // HubSpot CRM
+// Define feature flags as const tuple for type safety
+const FEATURE_FLAGS = [
+  'offline_lead_forms',
+  'realtime_lead_feed',
+  'ab_testing',
+  'ai_chat_widget',
+  'booking_calendar',
+  'stripe_billing',
+  'white_label_portal',
+  'gdpr_tools',
+  'api_access',
+  'sso_enabled',
+  'advanced_analytics',
+  'multi_site',
+  'custom_domain',
+  'ghl_crm_sync',
+  'hubspot_crm_sync',
+] as const;
+
+export type FeatureFlag = typeof FEATURE_FLAGS[number];
+
+export function isValidFeatureFlag(flag: string): flag is FeatureFlag {
+  return (FEATURE_FLAGS as readonly string[]).includes(flag);
+}
 
 // Tier-based defaults (what each plan includes out of the box)
 const TIER_DEFAULTS: Record<string, Record<FeatureFlag, boolean>> = {
@@ -103,7 +111,7 @@ export async function isFeatureEnabled(
       const flagConfig = globalFlags[flag];
 
       if (typeof flagConfig === 'boolean') {
-        if (!flagConfig) return false; // Global kill switch
+        return flagConfig; // Global override (both kill switch and enable)
       } else if (typeof flagConfig === 'object') {
         // Tenant allowlist
         if (flagConfig.enabledTenants?.includes(context.tenantId)) return true;
@@ -154,9 +162,17 @@ export function useFeatureFlag(flag: FeatureFlag): boolean {
   if (typeof document === 'undefined') return false;
 
   const cookieKey = `ff_${flag}`;
-  const cookies = Object.fromEntries(document.cookie.split('; ').map((c) => c.split('=')));
 
-  return cookies[cookieKey] === 'true';
+  // Use URLSearchParams for robust cookie parsing
+  const cookieString = document.cookie
+    .split('; ')
+    .find(cookie => cookie.startsWith(`${cookieKey}=`));
+
+  if (!cookieString) return false;
+
+  // Extract value after the first '='
+  const value = cookieString.substring(cookieKey.length + 1);
+  return value === 'true';
 }
 
 // Deterministic hash for percentage rollouts (djb2)
@@ -176,8 +192,8 @@ export async function setTenantFeatureOverride(
   enabled: boolean
 ): Promise<void> {
   const key = `feature:${tenantId}:${flag}`;
-  // Persist indefinitely — admin explicitly chose this
-  await redis.set(key, enabled);
+  // Set with 90-day TTL to prevent indefinite overrides
+  await redis.set(key, enabled, { ex: 90 * 24 * 60 * 60 }); // 90 days in seconds
 }
 
 export async function clearTenantFeatureOverride(
@@ -205,29 +221,6 @@ export async function getFeatureFlagUsageStats(_flag: FeatureFlag): Promise<{
   };
 }
 
-// ── Feature flag validation ───────────────────────────────────────────────────
-
-export function isValidFeatureFlag(flag: string): flag is FeatureFlag {
-  const validFlags: FeatureFlag[] = [
-    'offline_lead_forms',
-    'realtime_lead_feed',
-    'ab_testing',
-    'ai_chat_widget',
-    'booking_calendar',
-    'stripe_billing',
-    'white_label_portal',
-    'gdpr_tools',
-    'api_access',
-    'sso_enabled',
-    'advanced_analytics',
-    'multi_site',
-    'custom_domain',
-    'ghl_crm_sync',
-    'hubspot_crm_sync',
-  ];
-
-  return validFlags.includes(flag as FeatureFlag);
-}
 
 // ── Feature flag middleware helper ───────────────────────────────────────────
 
@@ -256,17 +249,17 @@ export async function injectFeatureFlagsIntoCookie(
     'hubspot_crm_sync',
   ];
 
-  const flagValues: string[] = [];
+  // Check all flags in parallel for performance
+  const flagPromises = flags.map(async (flag) => ({
+    flag,
+    enabled: await isFeatureEnabled(flag, context),
+  }));
 
-  for (const flag of flags) {
-    const enabled = await isFeatureEnabled(flag, context);
-    flagValues.push(`ff_${flag}=${enabled}`);
-  }
+  const flagResults = await Promise.all(flagPromises);
 
-  if (flagValues.length > 0) {
-    response.headers.append(
-      'Set-Cookie',
-      flagValues.join('; ') + '; Path=/; HttpOnly; Secure; SameSite=Lax'
-    );
+  // Set each flag as a separate cookie (HTTP allows multiple Set-Cookie headers)
+  for (const { flag, enabled } of flagResults) {
+    const cookieValue = `ff_${flag}=${enabled ? 'true' : 'false'}; Path=/; HttpOnly; Secure; SameSite=Lax`;
+    response.headers.append('Set-Cookie', cookieValue);
   }
 }
