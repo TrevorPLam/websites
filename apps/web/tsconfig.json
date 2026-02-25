@@ -22,10 +22,23 @@
         "name": "next"
       }
     ],
-    "paths": {}
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/shared/*": ["./src/shared/*"],
+      "@/entities/*": ["./src/entities/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/widgets/*": ["./src/widgets/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/app/*": ["./src/app/*"],
+      "@repo/ui": ["../../packages/ui/src"],
+      "@repo/infra": ["../../packages/infra/src"],
+      "@repo/types": ["../../packages/types/src"]
+    }
   },
   "include": [
     "next-env.d.ts",
+    "src/**/*",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"

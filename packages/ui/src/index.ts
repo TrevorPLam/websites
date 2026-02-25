@@ -10,6 +10,30 @@
 export { Button as ButtonEnhanced } from './components/ButtonEnhanced';
 export type { ButtonProps as ButtonEnhancedProps } from './components/ButtonEnhanced';
 
+// Error boundaries and fallback UI components
+export {
+  ErrorBoundary,
+  EnhancedErrorBoundary,
+  RootErrorBoundary,
+  WidgetErrorBoundary,
+  useErrorBoundary,
+  type ErrorContext,
+  type EnhancedErrorBoundaryProps,
+} from './components/ErrorBoundary';
+export {
+  ErrorFallback,
+  LoadingFallback,
+  NetworkErrorFallback,
+  FormErrorFallback,
+  WidgetFallback,
+  PageFallback,
+  InlineFallback,
+  type BaseFallbackProps,
+  type LoadingFallbackProps,
+  type NetworkErrorFallbackProps,
+  type FormErrorFallbackProps,
+} from './components/FallbackUI';
+
 // Toast notifications with promise-based loading states
 export {
   Toast,

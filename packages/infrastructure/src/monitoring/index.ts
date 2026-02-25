@@ -21,4 +21,4 @@ export {
   healthCheckManager,
   type HealthCheckResult,
   type HealthCheckSummary,
-} from '../../monitoring/health-checks';
+} from './health-checks';

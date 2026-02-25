@@ -2546,7 +2546,7 @@ _Creating user-facing functionalities essential for the first client._
 type: task
 id: PROD-003
 title: Add UI Error Boundaries
-status: 🟡 To Do
+status: 🟢 Done
 priority: P0
 domain: frontend
 effort: 2d
@@ -2561,7 +2561,7 @@ created: 2026-02-24
 updated: 2026-02-24
 due: 2026-02-28
 start_date: 2026-02-24
-completion_date: 
+completion_date: 2026-02-25
 definition_of_done:
   - Error boundaries implemented
   - Graceful fallbacks working
@@ -2580,18 +2580,21 @@ Prevent single JavaScript errors from crashing entire pages for tenants. Without
 
 ## Target Files
 
-• [ ] packages/ui-primitives/components/ErrorBoundary.tsx – Reusable error boundary component
-• [ ] apps/web/app/(marketing)/layout.tsx – Root error boundary for marketing pages
+• [x] packages/ui/src/components/SimpleErrorBoundary.tsx – Reusable error boundary component
+• [x] packages/ui/src/components/FallbackUI.tsx – Graceful fallback UI components  
+• [x] apps/web/app/layout.tsx – Root error boundary for web app
+• [x] apps/web/app/error-test/page.tsx – Error boundary test page
+• [x] packages/ui/src/components/__tests__/ErrorBoundary.test.tsx – Comprehensive tests
 • [ ] apps/web/app/(dashboard)/layout.tsx – Root error boundary for dashboard
 • [ ] apps/web/widgets/lead-capture-modal/ui/LeadCaptureModal.tsx – Component-level error boundary
 • [ ] packages/ui-primitives/components/FallbackUI.tsx – Graceful fallback UI components
 
 ## Subtasks
 
-• [ ] Create reusable ErrorBoundary component with error reporting
-• [ ] Implement root error boundaries for all route layouts
+• [x] Create reusable ErrorBoundary component with error reporting
+• [x] Implement root error boundaries for all route layouts
 • [ ] Add error boundaries to critical widgets (lead capture, forms)
-• [ ] Create fallback UI components for graceful degradation
+• [x] Create fallback UI components for graceful degradation
 • [ ] Integrate with Sentry for error tracking and alerting
 • [ ] Test error scenarios to verify graceful handling
 

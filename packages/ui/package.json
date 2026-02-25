@@ -72,6 +72,7 @@
     "embla-carousel-react": "catalog:",
     "lucide-react": "catalog:",
     "radix-ui": "catalog:",
+    "react-error-boundary": "^4.1.2",
     "react-hook-form": "catalog:",
     "react-window": "catalog:",
     "sonner": "catalog:",
