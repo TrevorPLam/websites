@@ -2,32 +2,43 @@
  * @file apps/web/src/widgets/testimonial-carousel/ui/TestimonialsCarousel.tsx
  * @summary Testimonials carousel component.
  * @description Carousel of customer testimonials showing social proof.
+ * @security No sensitive data handling; UI component only.
+ * @adr none
+ * @requirements DOMAIN-3-6
  */
 
+/**
+ * Renders a carousel of customer testimonials showing social proof.
+ *
+ * @returns JSX element representing the testimonials carousel component.
+ */
 export function TestimonialsCarousel() {
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      role: "Marketing Director",
-      company: "TechStart Inc.",
-      content: "This platform has transformed how we manage our marketing websites. The multi-tenant architecture is perfect for our portfolio of brands.",
-      rating: 5
+      name: 'Sarah Johnson',
+      role: 'Marketing Director',
+      company: 'TechStart Inc.',
+      content:
+        'This platform has transformed how we manage our marketing websites. The multi-tenant architecture is perfect for our portfolio of brands.',
+      rating: 5,
     },
     {
-      name: "Michael Chen",
-      role: "CEO",
-      company: "Growth Labs",
-      content: "We've tried many website builders, but nothing compares to the flexibility and power of this platform. Our lead conversion rates have doubled.",
-      rating: 5
+      name: 'Michael Chen',
+      role: 'CEO',
+      company: 'Growth Labs',
+      content:
+        "We've tried many website builders, but nothing compares to the flexibility and power of this platform. Our lead conversion rates have doubled.",
+      rating: 5,
     },
     {
-      name: "Emily Rodriguez",
-      role: "Founder",
-      company: "Creative Studio",
-      content: "The SEO features alone are worth the investment. We're ranking on page 1 for multiple competitive keywords.",
-      rating: 5
-    }
-  ]
+      name: 'Emily Rodriguez',
+      role: 'Founder',
+      company: 'Creative Studio',
+      content:
+        "The SEO features alone are worth the investment. We're ranking on page 1 for multiple competitive keywords.",
+      rating: 5,
+    },
+  ];
 
   return (
     <section className="py-20 bg-white">
@@ -43,20 +54,19 @@ export function TestimonialsCarousel() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-gray-50 p-8 rounded-lg"
-            >
+            <div key={index} className="bg-gray-50 p-8 rounded-lg">
               <div className="flex mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-xl">★</span>
+                  <span key={i} className="text-yellow-400 text-xl">
+                    ★
+                  </span>
                 ))}
               </div>
-              
+
               <blockquote className="text-gray-700 mb-6 leading-relaxed">
                 "{testimonial.content}"
               </blockquote>
-              
+
               <div className="flex items-center">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
                   {testimonial.name.charAt(0)}
@@ -72,5 +82,5 @@ export function TestimonialsCarousel() {
         </div>
       </div>
     </section>
-  )
+  );
 }

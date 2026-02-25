@@ -2,27 +2,36 @@
  * @file apps/web/src/widgets/hero-banner/ui/HeroBanner.tsx
  * @summary Hero banner component.
  * @description Main hero section with headline, subheadline, and CTAs.
+ * @security No sensitive data handling; UI component only.
+ * @adr none
+ * @requirements DOMAIN-3-6
  */
 
-import Image from 'next/image'
+import Image from 'next/image';
 
 export interface HeroBannerProps {
-  headline: string
-  subheadline?: string
+  headline: string;
+  subheadline?: string;
   ctaPrimary: {
-    label: string
-    href: string
-  }
+    label: string;
+    href: string;
+  };
   ctaSecondary?: {
-    label: string
-    href: string
-  }
+    label: string;
+    href: string;
+  };
   backgroundImage?: {
-    url: string
-    alt: string
-  }
+    url: string;
+    alt: string;
+  };
 }
 
+/**
+ * Renders a hero banner section with headline, subheadline, and call-to-action buttons.
+ *
+ * @param props Hero banner props including headline, subheadline, CTAs, and background image.
+ * @returns JSX element representing the hero banner component.
+ */
 export function HeroBanner({
   headline,
   subheadline,
@@ -31,10 +40,7 @@ export function HeroBanner({
   backgroundImage,
 }: HeroBannerProps) {
   return (
-    <section
-      aria-labelledby="hero-headline"
-      className="relative min-h-[60vh] flex items-center"
-    >
+    <section aria-labelledby="hero-headline" className="relative min-h-[60vh] flex items-center">
       {backgroundImage && (
         <Image
           src={backgroundImage.url}
@@ -49,15 +55,10 @@ export function HeroBanner({
       )}
 
       <div className="relative z-10 container mx-auto px-4">
-        <h1
-          id="hero-headline"
-          className="text-4xl font-bold tracking-tight md:text-6xl text-white"
-        >
+        <h1 id="hero-headline" className="text-4xl font-bold tracking-tight md:text-6xl text-white">
           {headline}
         </h1>
-        {subheadline && (
-          <p className="mt-4 text-xl text-gray-200">{subheadline}</p>
-        )}
+        {subheadline && <p className="mt-4 text-xl text-gray-200">{subheadline}</p>}
         <div className="mt-8 flex flex-wrap gap-4">
           <a
             href={ctaPrimary.href}
@@ -76,5 +77,5 @@ export function HeroBanner({
         </div>
       </div>
     </section>
-  )
+  );
 }

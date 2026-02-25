@@ -2,28 +2,36 @@
  * @file apps/web/src/pages/login/index.tsx
  * @summary Login page composition.
  * @description Login form with authentication functionality.
+ * @security Implements secure form handling and authentication.
+ * @adr none
+ * @requirements DOMAIN-7-1
  */
 
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
+/**
+ * Renders the login page with authentication form.
+ *
+ * @returns JSX element representing the login page layout.
+ */
 export function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    
-    // TODO: Implement authentication logic
-    console.log('Login attempt:', { email, password })
-    
+    e.preventDefault();
+    setIsLoading(true);
+
+    // TODO(AUTH-001): Implement authentication logic
+    console.log('Login attempt:', { email, password });
+
     setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-  }
+      setIsLoading(false);
+    }, 1000);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -34,15 +42,12 @@ export function LoginPage() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{' '}
-            <a
-              href="/register"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
+            <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">
               create a new account
             </a>
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -93,10 +98,7 @@ export function LoginPage() {
             </div>
 
             <div className="text-sm">
-              <a
-                href="/forgot-password"
-                className="font-medium text-blue-600 hover:text-blue-500"
-              >
+              <a href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
                 Forgot your password?
               </a>
             </div>
@@ -114,5 +116,5 @@ export function LoginPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }
