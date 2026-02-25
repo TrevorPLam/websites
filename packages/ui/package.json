@@ -65,7 +65,7 @@
     "@dnd-kit/utilities": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@repo/design-tokens": "workspace:*",
-    "@repo/infra": "workspace:*",
+    "@repo/infrastructure": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "cmdk": "catalog:",

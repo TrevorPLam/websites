@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:",
-    "@repo/infra": "workspace:*",
+    "@repo/infrastructure": "workspace:*",
     "@repo/integrations-shared": "workspace:*",
     "@repo/integrations-supabase": "workspace:*",
     "@repo/jobs": "workspace:*",

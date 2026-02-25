@@ -31,7 +31,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/infra": "workspace:*"
+    "@repo/infrastructure": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

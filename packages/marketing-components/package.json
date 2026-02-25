@@ -20,7 +20,7 @@
   "dependencies": {
     "@hookform/resolvers": "catalog:",
     "@calcom/embed-react": "^1.5.3",
-    "@repo/infra": "workspace:*",
+    "@repo/infrastructure": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/utils": "workspace:*",

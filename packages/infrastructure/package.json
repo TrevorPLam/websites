@@ -1,5 +1,5 @@
 {
-  "name": "@repo/infra",
+  "name": "@repo/infrastructure",
   "version": "1.0.0",
   "private": true,
   "description": "Shared infrastructure package for security, middleware, logging, and request context",

@@ -28,7 +28,7 @@
       "@/pages/*": ["./src/pages/*"],
       "@/app/*": ["./src/app/*"],
       "@repo/ui": ["../../packages/ui/src"],
-      "@repo/infra": ["../../packages/infra/src"],
+      "@repo/infrastructure": ["../../packages/infrastructure/src"],
       "@repo/types": ["../../packages/types/src"]
     }
   },

@@ -24,7 +24,7 @@
     "react-dom": "catalog:"
   },
   "dependencies": {
-    "@repo/config-schema": "workspace:*",
+    "@repo/infrastructure": "workspace:*",
     "@upstash/redis": "catalog:",
     "@upstash/ratelimit": "catalog:",
     "@supabase/supabase-js": "catalog:",

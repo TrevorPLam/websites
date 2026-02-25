@@ -19,7 +19,7 @@
     "next": "catalog:"
   },
   "dependencies": {
-    "@repo/infra": "workspace:*",
+    "@repo/infrastructure": "workspace:*",
     "@repo/utils": "workspace:*",
     "@supabase/supabase-js": "catalog:",
     "server-only": "catalog:"

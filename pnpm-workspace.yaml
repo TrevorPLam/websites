@@ -32,7 +32,7 @@ catalog:
   create-client: 'tooling/create-client'
   email: 'packages/email'
   features: 'packages/features'
-  infra: 'packages/infra'
+  infrastructure: 'packages/infrastructure'
   integrations: 'packages/integrations'
   integrations-shared: 'packages/integrations-shared'
   marketing-components: 'packages/marketing-components'
