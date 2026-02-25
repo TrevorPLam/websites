@@ -96,7 +96,17 @@
     "ai:technical-debt": "node scripts/ai/automate-technical-debt-reduction.mjs",
     "validate:turbo-cache-env": "node scripts/validation/validate-turbo-cache-env.mjs",
     "syncpack:lint": "syncpack lint",
-    "syncpack:format": "syncpack format"
+    "syncpack:format": "syncpack format",
+    "mcp:setup-dev": "node scripts/setup-mcp-development.js dev",
+    "mcp:setup-prod": "node scripts/setup-mcp-development.js prod",
+    "mcp:workflow": "node scripts/mcp-dev-workflow.js",
+    "mcp:test": "node scripts/test-mcp-integration.js",
+    "mcp:test-ai": "node scripts/test-mcp-ai-integration.js",
+    "mcp:test-dev": "node scripts/test-mcp-development.js",
+    "mcp:validate": "node scripts/validate-mcp-production.js",
+    "mcp:start": "node scripts/mcp-dev-workflow.js start",
+    "mcp:status": "node scripts/mcp-dev-workflow.js status",
+    "mcp:clean": "node scripts/mcp-dev-workflow.js clean"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

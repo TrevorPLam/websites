@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 
 /**
+ * @file scripts/test-mcp-integration.js
+ * @summary Tests Model Context Protocol server functionality and JSON-RPC communication.
+ * @description Validates MCP server startup, configuration, and basic communication protocols.
+ * @security Directory restrictions enforced; no secrets exposed in test output.
+ * @adr none
+ * @requirements MCP-001, AI-ASSISTANT-TESTING
+ */
+
+/**
  * MCP Integration Test Suite
  * Tests Model Context Protocol server functionality and AI assistant integration
  */
