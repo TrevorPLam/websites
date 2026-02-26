@@ -12,42 +12,42 @@
 
 ### S-01: Populate skills/ layer structure
 
-- [ ] **Task**: Populate 21 empty directories starting with agency workflows
-- [ ] **Priority**: Critical - Base foundation for all skills
-- [ ] **Files to Create**:
-  - [ ] `skills/domain/marketing/client-intake.md`
-  - [ ] `skills/domain/marketing/seo-audit.md`
-  - [ ] `skills/domain/marketing/lead-research.md`
-  - [ ] `skills/domain/marketing/website-build.md`
-- [ ] **Validation**: At least one skill per `core/` subdir exists
+- [x] **Task**: Populate 21 empty directories starting with agency workflows
+- [x] **Priority**: Critical - Base foundation for all skills
+- [x] **Files to Create**:
+  - [x] `skills/domain/marketing/client-intake.md`
+  - [x] `skills/domain/marketing/seo-audit.md`
+  - [x] `skills/domain/marketing/lead-research.md`
+  - [x] `skills/domain/marketing/website-build.md`
+- [x] **Validation**: At least one skill per `core/` subdir exists
 
 ### S-02: Fix config.json → skillset mapping
 
-- [ ] **Task**: Ensure mcp-skillset can read skills/ at runtime
-- [ ] **Priority**: Critical - Agents have no skills available
-- [ ] **Action**: Verify config.json paths match actual directory structure
-- [ ] **Validation**: `mcp-skillset` returns populated skill list
+- [x] **Task**: Ensure mcp-skillset can read skills/ at runtime
+- [x] **Priority**: Critical - Agents have no skills available
+- [x] **Action**: Verify config.json paths match actual directory structure
+- [x] **Validation**: `mcp-skillset` returns populated skill list
 
 ### S-03: Create core operational skills
 
-- [ ] **Task**: Populate empty core subdirs (deploy/, review/, discovery/)
-- [ ] **Priority**: Critical - No operational capabilities
-- [ ] **Files to Create**:
-  - [ ] `skills/core/deploy/production-deploy.md`
-  - [ ] `skills/core/review/code-review.md`
-  - [ ] `skills/core/discovery/service-discovery.md`
-- [ ] **Template**: Use `skills/templates/workflow-skill.md` as base
+- [x] **Task**: Populate empty core subdirs (deploy/, review/, discovery/)
+- [x] **Priority**: Critical - No operational capabilities
+- [x] **Files to Create**:
+  - [x] `skills/core/deploy/production-deploy.md`
+  - [x] `skills/core/review/code-review.md`
+  - [x] `skills/core/discovery/service-discovery.md`
+- [x] **Template**: Use `skills/templates/workflow-skill.md` as base
 
 ### S-04: Create marketing domain skills
 
-- [ ] **Task**: Build primary agency use case skills
-- [ ] **Priority**: Critical - Core business functionality undefined
-- [ ] **Files to Create**:
-  - [ ] `skills/domain/marketing/client-intake.md`
-  - [ ] `skills/domain/marketing/seo-audit.md`
-  - [ ] `skills/domain/marketing/lead-research.md`
-  - [ ] `skills/domain/marketing/website-build.md`
-- [ ] **Tools**: Use existing fetch-mcp and filesystem-mcp
+- [x] **Task**: Build primary agency use case skills
+- [x] **Priority**: Critical - Core business functionality undefined
+- [x] **Files to Create**:
+  - [x] `skills/domain/marketing/client-intake.md`
+  - [x] `skills/domain/marketing/seo-audit.md`
+  - [x] `skills/domain/marketing/lead-research.md`
+  - [x] `skills/domain/marketing/website-build.md`
+- [x] **Tools**: Use existing fetch-mcp and filesystem-mcp
 
 ### S-05: Create integration skills
 
@@ -283,7 +283,7 @@
 - [x] **Critical Issues (7/7 completed)**: S-01, S-02, S-03, S-04, S-05, S-06, S-07 completed
 - [x] **High Issues (2/11 completed)**: S-10, S-11 completed
 - [ ] **Medium Issues (7)**: 0/7 completed
-- [ ] **Overall Progress**: 9/25 completed (36%)
+- [x] **Overall Progress**: 9/25 completed (36%)
 
 ### Next Actions:
 
