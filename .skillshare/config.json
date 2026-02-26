@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "project": "marketing-websites",
+  "source": ".claude/skills",
+  "targets": [
+    { "name": "windsurf", "path": ".windsurf/skills", "enabled": true },
+    { "name": "codex", "path": ".codex/skills", "enabled": true },
+    { "name": "cursor", "path": ".cursor/rules", "enabled": true, "convertToCursor": true }
+  ],
+  "syncMode": "merge",
+  "excludePatterns": ["node_modules/**", "dist/**", ".git/**"]
+}

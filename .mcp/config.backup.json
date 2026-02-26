@@ -18,47 +18,47 @@
     "sequential-thinking": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/sequential-thinking-fixed.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     },
     "github": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/github-server.ts"],
-      "env": { "GITHUB_TOKEN": "${GITHUB_TOKEN}", "LOG_LEVEL": "debug" }
+      "env": { "GITHUB_TOKEN": "${GITHUB_TOKEN}" }
     },
     "knowledge-graph": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/knowledge-graph-memory-fixed.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     },
     "enterprise-security": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/enterprise-security-gateway.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     },
     "multi-tenant": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/multi-tenant-orchestrator.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     },
     "observability": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/observability-monitor.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     },
     "enterprise-auth": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/enterprise-auth-gateway.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     },
     "secure-deployment": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/secure-deployment-manager.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     },
     "enterprise-registry": {
       "command": "npx",
       "args": ["tsx", "packages/mcp-servers/src/enterprise-registry.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+      "env": { "LOG_LEVEL": "debug" }
     }
   }
 }
