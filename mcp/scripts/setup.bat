@@ -41,6 +41,10 @@ pnpm add -g @modelcontextprotocol/server-memory
 REM Create .mcp directory if it doesn't exist
 if not exist .mcp mkdir .mcp
 
+REM Create data directory for SQLite databases
+if not exist data mkdir data
+echo ✅ Data directory created for SQLite databases
+
 REM Verify configuration
 echo 🔍 Verifying MCP configuration...
 

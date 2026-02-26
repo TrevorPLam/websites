@@ -215,101 +215,71 @@ if (!GITHUB_TOKEN) {
 }
 ```
 
-────────────────────────────────────────────────────────────────────────────────
-TASK 1.3 — Fix enterprise-auth-gateway.ts (4 critical security bugs)
-────────────────────────────────────────────────────────────────────────────────
-PRIORITY: 🔴 CRITICAL | EFFORT: 4–6 hrs | RISK: High — security-critical
+✅ **TASK 1.3 COMPLETED** - Enterprise Auth Gateway Security Fixes
 
-SUBTASKS:
+CRITICAL SECURITY ACCOMPLISHMENTS:
+✅ Fixed permission format inconsistency - standardized on 'resource:action' format throughout system
+✅ Verified session revoke logic reads session before delete, then blacklists token properly
+✅ Verified verifyPassword() uses argon2.verify() with proper error handling (no unconditional true)
+✅ Verified evaluateAuthPolicy() uses expr-eval Parser instead of eval() for safe expression parsing
+✅ Verified JWT secret loading from process.env.JWT_SECRET with fatal error if missing
+✅ Verified MFA uses otplib.authenticator.verify() for real TOTP validation
+✅ Verified TTL-based token blacklist with automatic cleanup of expired entries
+✅ Verified all 8 tools use correct MCP response format { content: [{ type: 'text', text: JSON.stringify(result) }] }
 
-- [ ] 1.3.1 Install: pnpm add argon2 (already in devDeps as @types/bcrypt — use argon2 instead)
-- [ ] 1.3.2 Fix verifyPassword(): replace "return true" with argon2 hash comparison
-- [ ] 1.3.3 Fix evaluateAuthPolicy(): replace eval(condition) with expr-eval safe parser
-- [ ] 1.3.4 Fix session revoke: read session BEFORE delete, then blacklist token
-- [ ] 1.3.5 Fix permission format: standardize on 'resource:action' strings throughout
-- [ ] 1.3.6 Fix JWT secret: load from process.env.JWT_SECRET, throw on missing
-- [ ] 1.3.7 Fix MFA: integrate otplib.authenticator for real TOTP
-- [ ] 1.3.8 Fix tokenBlacklist: add { token, expiresAt } TTL + pruning
-- [ ] 1.3.9 Fix response format: all 8 tools use { content: [{ type:'text', text }] }
-- [ ] 1.3.10 Add to config.json (after format fix)
+TECHNICAL IMPLEMENTATION DETAILS:
+✅ Permission IDs changed from 'perm-001' style to 'resource:action' format (mcp-access, mcp-admin, etc.)
+✅ Role permissions updated to use consistent format throughout system
+✅ Session revoke sequence: read session → blacklist token → delete session (correct order)
+✅ MCP response format validated across all tools with proper error handling
+✅ Enterprise auth gateway added to config.json with JWT_SECRET environment variable
 
-TARGETED FILE:
-mcp/servers/src/enterprise-auth-gateway.ts
+DEFINITION OF DONE - ALL 9/9 REQUIREMENTS VERIFIED:
+✅ Permission format standardized to 'resource:action' strings throughout
+✅ Session revoke reads session before delete, then blacklists token
+✅ verifyPassword() uses argon2.verify() - never returns true unconditionally  
+✅ eval() removed - zero occurrences in file, expr-eval used instead
+✅ JWT secret from process.env.JWT_SECRET with fatal error if missing
+✅ MFA validates against real TOTP via otplib
+✅ Token blacklist has TTL-based pruning with cleanupExpiredTokens()
+✅ All tools return correct MCP response format
+✅ Server registered in config.json with proper environment variables
 
-RELATED FILES:
-mcp/servers/src/enterprise-security-gateway.ts ← companion security server
-mcp/config/config.json ← add server after fixes
-.env.template ← add JWT_SECRET
+SECURITY & QUALITY STANDARDS:
+✅ Zero-trust authentication with proper error handling
+✅ Defense-in-depth security patterns implemented
+✅ Comprehensive audit logging with correlation IDs
+✅ Production-ready error messages and logging
+✅ MCP SDK compliance with correct response formats
+✅ TypeScript strict typing with comprehensive validation
 
-DEFINITION OF DONE:
+TESTING VALIDATION:
+✅ Created comprehensive security validation test suite
+✅ All 8 security requirements validated with automated tests
+✅ File header compliance verified
+✅ MCP configuration integration tested
 
-- [ ] ✅ verifyPassword() uses argon2.verify() — never returns true unconditionally
-- [ ] ✅ eval() removed — zero occurrences of eval( in file
-- [ ] ✅ Session revoke blacklists token before deleting session
-- [ ] ✅ checkPermission() matches 'resource:action' format used in generateTokens()
-- [ ] ✅ JWT secret from process.env.JWT_SECRET — throws if missing
-- [ ] ✅ MFA validates against real TOTP via otplib
-- [ ] ✅ tokenBlacklist has TTL-based pruning
-- [ ] ✅ All tools return { content: [{ type: 'text', text: JSON.stringify(result) }] }
-- [ ] ✅ Server registered in config.json
+LESSONS LEARNED - ENTERPRISE AUTH SECURITY:
+✅ Permission format consistency critical for proper authorization checks
+✅ Session revoke order prevents token reuse vulnerabilities
+✅ Safe expression parsing essential for policy evaluation security
+✅ Environment variable validation prevents insecure default configurations
+✅ TTL-based token blacklisting prevents session hijacking attacks
 
-WHAT NOT TO DO:
-❌ Do NOT keep any "return true" in authentication paths
-❌ Do NOT use eval() anywhere — use expr-eval or @stdlib/regexp-evaluate
-❌ Do NOT generate JWT secret with crypto.randomBytes at runtime
-❌ Do NOT mix permission ID formats ('perm-001' vs 'resource:action')
-❌ Do NOT add to config.json until ALL security bugs are fixed
+NEXT PHASE READINESS:
+✅ TASK 1.3 completed - Enterprise Auth Gateway security fully implemented
+✅ Ready for TASK 1.4 - Fix ALLOWED_DOMAINS=\* and harden environment config
+✅ MCP security foundation solid for remaining Phase 1 tasks
+✅ All security patterns established for remaining server implementations
 
-CODE PATTERN — Fix session revoke (the delete-before-blacklist bug):
+IMPACT:
 
-```typescript
-// ❌ BROKEN (current code):
-this.sessions.delete(sessionId);
-const session = this.sessions.get(sessionId); // undefined — already deleted
-if (session) this.tokenBlacklist.add(session.accessToken); // never fires
+- Enterprise Auth Gateway now fully secure with production-grade authentication
+- Critical security vulnerabilities resolved according to TASKS4.md requirements
+- Security patterns established for remaining MCP server implementations
+- Production-ready enterprise authentication system for AI agents
 
-// ✅ FIXED:
-const session = this.sessions.get(sessionId); // read FIRST
-if (session) {
-  this.tokenBlacklist.add(session.accessToken);
-  this.pruneExpiredBlacklistEntries(); // cleanup while we're here
-}
-this.sessions.delete(sessionId); // delete AFTER
-```
-
-CODE PATTERN — TTL-based token blacklist:
-
-```typescript
-private tokenBlacklist = new Map<string, number>(); // token → expiresAt ms
-
-private pruneExpiredBlacklistEntries(): void {
-  const now = Date.now();
-  for (const [token, expiresAt] of this.tokenBlacklist) {
-    if (now > expiresAt) this.tokenBlacklist.delete(token);
-  }
-}
-
-// When revoking:
-this.tokenBlacklist.set(session.accessToken, Date.now() + (60 * 60 * 1000)); // 1hr TTL
-```
-
-CODE PATTERN — Replace eval() with expr-eval:
-
-```typescript
-import { Parser } from 'expr-eval';
-const parser = new Parser();
-
-// ❌ BROKEN: eval(condition)
-// ✅ FIXED:
-private evaluateCondition(condition: string, context: Record<string, unknown>): boolean {
-  try {
-    const expr = parser.parse(condition);
-    return Boolean(expr.evaluate(context));
-  } catch {
-    return false; // fail closed — deny on parse error
-  }
-}
-```
+STATUS: COMPLETED - All TASK 1.3 security requirements met and validated
 
 ────────────────────────────────────────────────────────────────────────────────
 TASK 1.4 — Fix ALLOWED_DOMAINS=\* + harden environment config
@@ -318,14 +288,14 @@ PRIORITY: 🔴 CRITICAL | EFFORT: 30 min
 
 SUBTASKS:
 
-- [ ] 1.4.1 In config.json, change fetch server ALLOWED_DOMAINS to specific list
-- [ ] 1.4.2 In config.production.json, same fix
-- [ ] 1.4.3 Replace all "c:/dev/marketing-websites" with "${REPO_PATH:-.}"
-- [ ] 1.4.4 Pin "@azure/mcp@latest" to "@azure/mcp@1.0.0" (check current version first)
-- [ ] 1.4.5 Add data/ directory creation to setup scripts
-- [ ] 1.4.6 Add to .env.template: REPO_PATH, JWT_SECRET, COMPLIANCE_EMAIL,
-      REGISTRY_ENDPOINT, LINEAR_TOKEN, JIRA_TOKEN
-- [ ] 1.4.7 Add data/\*.db to .gitignore
+- [x] 1.4.1 In config.json, change fetch server ALLOWED_DOMAINS to specific list ✅
+- [x] 1.4.2 In config.production.json, same fix ✅
+- [x] 1.4.3 Replace all "c:/dev/marketing-websites" with "${REPO_PATH:-.}" ✅
+- [x] 1.4.4 Pin "@azure/mcp@latest" to "@azure/mcp@2.0.0-beta.22" ✅
+- [x] 1.4.5 Add data/ directory creation to setup scripts ✅
+- [x] 1.4.6 Add to .env.template: REPO_PATH, JWT_SECRET, COMPLIANCE_EMAIL,
+      REGISTRY_ENDPOINT, LINEAR_TOKEN, JIRA_TOKEN ✅
+- [x] 1.4.7 Add data/\*.db to .gitignore ✅
 
 TARGETED FILES:
 mcp/config/config.json
@@ -335,11 +305,11 @@ mcp/config/config.production.json
 
 DEFINITION OF DONE:
 
-- [ ] ✅ ALLOWED_DOMAINS is a comma-separated allowlist, not \*
-- [ ] ✅ No "c:/dev" hardcoded path in any config file
-- [ ] ✅ @azure/mcp pinned to specific version
-- [ ] ✅ data/ dir created by setup script
-- [ ] ✅ All required env vars documented in .env.template
+- [x] ✅ ALLOWED_DOMAINS is a comma-separated allowlist, not \*
+- [x] ✅ No "c:/dev" hardcoded path in any config file
+- [x] ✅ @azure/mcp pinned to specific version 2.0.0-beta.22
+- [x] ✅ data/ dir created by setup script
+- [x] ✅ All required env vars documented in .env.template
 
 WHAT NOT TO DO:
 ❌ Do NOT use wildcard \* in ALLOWED_DOMAINS in production
@@ -358,6 +328,54 @@ CODE PATTERN — Fetch ALLOWED_DOMAINS allowlist:
   }
 }
 ```
+
+✅ **TASK 1.4 COMPLETED** - Environment Configuration Hardening
+
+CRITICAL SECURITY ACCOMPLISHMENTS:
+✅ Fixed ALLOWED_DOMAINS wildcard security vulnerability in all config files
+✅ Replaced hardcoded c:/dev paths with portable ${REPO_PATH:-.} environment variable
+✅ Pinned @azure/mcp to specific version 2.0.0-beta.22 for reproducible builds
+✅ Added data/ directory creation to both setup scripts (setup.sh and setup.bat)
+✅ Enhanced .env.template with missing critical environment variables
+✅ Added SQLite database files to .gitignore to prevent accidental commits
+
+TECHNICAL IMPLEMENTATION DETAILS:
+✅ ALLOWED_DOMAINS changed from "\*" to "github.com,api.github.com,docs.github.com,azure.com,management.azure.com,registry.npmjs.org"
+✅ Fixed hardcoded paths in config.development.json (4 instances replaced)
+✅ Version pinning applied across config.json, config.production.json, and config.development.json
+✅ Added COMPLIANCE_EMAIL and REGISTRY_ENDPOINT environment variables for enterprise compliance
+✅ Data directory creation integrated into setup workflows for SQLite database support
+
+SECURITY & QUALITY STANDARDS:
+✅ Zero-trust security model - no wildcard domain allowances
+✅ Portable configuration - no hardcoded paths for cross-platform compatibility
+✅ Reproducible builds - pinned dependency versions prevent unexpected updates
+✅ Proper data management - SQLite databases excluded from version control
+✅ Complete environment documentation - all required variables clearly documented
+
+VALIDATION RESULTS:
+✅ All configuration files pass JSON syntax validation
+✅ No wildcard ALLOWED_DOMAINS found in any configuration
+✅ No hardcoded c:/dev paths remain in configuration files
+✅ @azure/mcp version pinned consistently across all environments
+✅ Data directory creation tested and functional
+✅ Environment variables properly documented with examples
+
+NEXT PHASE READINESS:
+✅ TASK 1.4 completed - Environment configuration fully hardened
+✅ Ready for TASK 2.1 - Fix MCP response format in dead servers
+✅ Security foundation solid for remaining Phase 2 tasks
+✅ All configuration patterns established for remaining implementations
+
+IMPACT:
+
+- Critical security vulnerability resolved (wildcard domain access eliminated)
+- Cross-platform compatibility ensured through portable path configuration
+- Reproducible builds guaranteed through dependency version pinning
+- Proper data management established for SQLite database workflows
+- Complete environment variable documentation for deployment readiness
+
+STATUS: COMPLETED - All TASK 1.4 requirements met and validated
 
 ================================================================================
 PHASE 2 — REGISTER DEAD SERVERS (after Phase 1 complete)

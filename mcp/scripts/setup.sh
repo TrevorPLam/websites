@@ -40,12 +40,16 @@ done
 # Create .mcp directory if it doesn't exist
 mkdir -p .mcp
 
+# Create data directory for SQLite databases
+mkdir -p data
+echo "✅ Data directory created for SQLite databases"
+
 # Verify configuration
 echo "🔍 Verifying MCP configuration..."
 
 if [ -f ".mcp/config.json" ]; then
     echo "✅ MCP configuration found"
-    
+
     # Validate JSON syntax
     if node -e "JSON.parse(require('fs').readFileSync('.mcp/config.json', 'utf8'))" 2>/dev/null; then
         echo "✅ Configuration JSON is valid"
