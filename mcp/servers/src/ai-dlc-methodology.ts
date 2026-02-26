@@ -9,7 +9,7 @@
 
 /**
  * AI-DLC (AI-Driven Lifecycle Collaboration) Methodology MCP Server
- * 
+ *
  * Implements the three-phase AI-DLC methodology:
  * 1. Inception - Requirements analysis and architecture planning
  * 2. Construction - Collaborative development with AI agents
@@ -99,7 +99,7 @@ class AIDLCMethodologyServer {
         'Architecture design and technology selection',
         'Risk assessment and mitigation planning',
         'Project planning and resource allocation',
-        'Quality standards and compliance definition'
+        'Quality standards and compliance definition',
       ],
       deliverables: [
         'Requirements specification document',
@@ -107,15 +107,15 @@ class AIDLCMethodologyServer {
         'Technology stack selection',
         'Project roadmap and milestones',
         'Risk register and mitigation strategies',
-        'Quality gates and acceptance criteria'
+        'Quality gates and acceptance criteria',
       ],
       aiAgents: [
         'requirements-analyst',
         'architecture-advisor',
         'risk-assessor',
         'project-planner',
-        'compliance-officer'
-      ]
+        'compliance-officer',
+      ],
     });
 
     this.phases.set('construction', {
@@ -127,7 +127,7 @@ class AIDLCMethodologyServer {
         'Unit testing and integration testing',
         'Documentation creation',
         'Continuous integration and deployment',
-        'Performance optimization and security hardening'
+        'Performance optimization and security hardening',
       ],
       deliverables: [
         'Source code and implementation',
@@ -135,7 +135,7 @@ class AIDLCMethodologyServer {
         'Technical documentation',
         'Deployment pipelines',
         'Performance benchmarks',
-        'Security audit reports'
+        'Security audit reports',
       ],
       aiAgents: [
         'code-generator',
@@ -143,8 +143,8 @@ class AIDLCMethodologyServer {
         'test-automation',
         'documentation-assistant',
         'performance-optimizer',
-        'security-scanner'
-      ]
+        'security-scanner',
+      ],
     });
 
     this.phases.set('operations', {
@@ -156,7 +156,7 @@ class AIDLCMethodologyServer {
         'User feedback collection and analysis',
         'Bug fixes and maintenance',
         'Feature enhancements and iterations',
-        'Continuous improvement and learning'
+        'Continuous improvement and learning',
       ],
       deliverables: [
         'Production deployment reports',
@@ -164,7 +164,7 @@ class AIDLCMethodologyServer {
         'User feedback analysis',
         'Maintenance logs and incident reports',
         'Enhancement proposals',
-        'Lessons learned and best practices'
+        'Lessons learned and best practices',
       ],
       aiAgents: [
         'deployment-coordinator',
@@ -172,8 +172,8 @@ class AIDLCMethodologyServer {
         'feedback-collector',
         'maintenance-automator',
         'enhancement-advisor',
-        'learning-orchestrator'
-      ]
+        'learning-orchestrator',
+      ],
     });
   }
 
@@ -188,24 +188,24 @@ class AIDLCMethodologyServer {
               type: 'object',
               properties: {
                 name: { type: 'string', description: 'Project name' },
-                requirements: { 
-                  type: 'array', 
+                requirements: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Initial requirements list'
+                  description: 'Initial requirements list',
                 },
-                stakeholders: { 
-                  type: 'array', 
+                stakeholders: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Project stakeholders'
+                  description: 'Project stakeholders',
                 },
-                constraints: { 
-                  type: 'array', 
+                constraints: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Project constraints (budget, timeline, technology)'
-                }
+                  description: 'Project constraints (budget, timeline, technology)',
+                },
               },
-              required: ['name', 'requirements']
-            }
+              required: ['name', 'requirements'],
+            },
           },
           {
             name: 'start_phase',
@@ -214,19 +214,19 @@ class AIDLCMethodologyServer {
               type: 'object',
               properties: {
                 projectId: { type: 'string', description: 'Project ID' },
-                phase: { 
-                  type: 'string', 
+                phase: {
+                  type: 'string',
                   enum: ['inception', 'construction', 'operations'],
-                  description: 'Phase to start'
+                  description: 'Phase to start',
                 },
-                participants: { 
-                  type: 'array', 
+                participants: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Session participants'
-                }
+                  description: 'Session participants',
+                },
               },
-              required: ['projectId', 'phase']
-            }
+              required: ['projectId', 'phase'],
+            },
           },
           {
             name: 'plan_activities',
@@ -235,23 +235,26 @@ class AIDLCMethodologyServer {
               type: 'object',
               properties: {
                 sessionId: { type: 'string', description: 'Collaboration session ID' },
-                activities: { 
+                activities: {
                   type: 'array',
                   items: {
                     type: 'object',
                     properties: {
-                      type: { type: 'string', enum: ['planning', 'coding', 'review', 'testing', 'deployment'] },
+                      type: {
+                        type: 'string',
+                        enum: ['planning', 'coding', 'review', 'testing', 'deployment'],
+                      },
                       description: { type: 'string' },
                       assignee: { type: 'string' },
-                      estimatedDuration: { type: 'number' }
+                      estimatedDuration: { type: 'number' },
                     },
-                    required: ['type', 'description']
+                    required: ['type', 'description'],
                   },
-                  description: 'Activities to plan'
-                }
+                  description: 'Activities to plan',
+                },
               },
-              required: ['sessionId']
-            }
+              required: ['sessionId'],
+            },
           },
           {
             name: 'execute_activity',
@@ -262,14 +265,14 @@ class AIDLCMethodologyServer {
                 activityId: { type: 'string', description: 'Activity ID' },
                 agentType: { type: 'string', description: 'Type of AI agent to use' },
                 context: { type: 'object', description: 'Additional context for execution' },
-                artifacts: { 
-                  type: 'array', 
+                artifacts: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Expected artifacts'
-                }
+                  description: 'Expected artifacts',
+                },
               },
-              required: ['activityId', 'agentType']
-            }
+              required: ['activityId', 'agentType'],
+            },
           },
           {
             name: 'review_deliverables',
@@ -278,19 +281,19 @@ class AIDLCMethodologyServer {
               type: 'object',
               properties: {
                 sessionId: { type: 'string', description: 'Collaboration session ID' },
-                deliverables: { 
-                  type: 'array', 
+                deliverables: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Deliverables to review'
+                  description: 'Deliverables to review',
                 },
-                qualityCriteria: { 
-                  type: 'array', 
+                qualityCriteria: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Quality criteria for review'
-                }
+                  description: 'Quality criteria for review',
+                },
               },
-              required: ['sessionId', 'deliverables']
-            }
+              required: ['sessionId', 'deliverables'],
+            },
           },
           {
             name: 'transition_phase',
@@ -302,14 +305,14 @@ class AIDLCMethodologyServer {
                 currentPhase: { type: 'string', description: 'Current phase' },
                 nextPhase: { type: 'string', description: 'Next phase' },
                 handoffNotes: { type: 'string', description: 'Handoff notes and lessons learned' },
-                artifacts: { 
-                  type: 'array', 
+                artifacts: {
+                  type: 'array',
                   items: { type: 'string' },
-                  description: 'Artifacts to transfer'
-                }
+                  description: 'Artifacts to transfer',
+                },
               },
-              required: ['projectId', 'currentPhase', 'nextPhase']
-            }
+              required: ['projectId', 'currentPhase', 'nextPhase'],
+            },
           },
           {
             name: 'get_project_status',
@@ -318,10 +321,10 @@ class AIDLCMethodologyServer {
               type: 'object',
               properties: {
                 projectId: { type: 'string', description: 'Project ID' },
-                includeActivities: { type: 'boolean', description: 'Include activity details' }
+                includeActivities: { type: 'boolean', description: 'Include activity details' },
               },
-              required: ['projectId']
-            }
+              required: ['projectId'],
+            },
           },
           {
             name: 'recommend_agents',
@@ -330,13 +333,17 @@ class AIDLCMethodologyServer {
               type: 'object',
               properties: {
                 activityType: { type: 'string', description: 'Activity type' },
-                complexity: { type: 'string', enum: ['low', 'medium', 'high'], description: 'Activity complexity' },
-                context: { type: 'object', description: 'Additional context' }
+                complexity: {
+                  type: 'string',
+                  enum: ['low', 'medium', 'high'],
+                  description: 'Activity complexity',
+                },
+                context: { type: 'object', description: 'Additional context' },
               },
-              required: ['activityType', 'complexity']
-            }
-          }
-        ]
+              required: ['activityType', 'complexity'],
+            },
+          },
+        ],
       };
     });
 
@@ -376,9 +383,9 @@ class AIDLCMethodologyServer {
 
   private async createProject(args: any): Promise<any> {
     const { name, requirements = [], stakeholders = [], constraints = [] } = args;
-    
+
     const projectId = `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const project: ProjectContext = {
       id: projectId,
       name,
@@ -388,7 +395,7 @@ class AIDLCMethodologyServer {
       stakeholders,
       constraints,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     this.projects.set(projectId, project);
@@ -401,16 +408,16 @@ class AIDLCMethodologyServer {
           'Start inception phase to gather detailed requirements',
           'Identify key stakeholders and their needs',
           'Define project constraints and success criteria',
-          'Select appropriate AI agents for collaboration'
+          'Select appropriate AI agents for collaboration',
         ],
-        recommendedAgents: this.phases.get('inception')?.aiAgents || []
-      }
+        recommendedAgents: this.phases.get('inception')?.aiAgents || [],
+      },
     };
   }
 
   private async startPhase(args: any): Promise<any> {
     const { projectId, phase, participants = [] } = args;
-    
+
     const project = this.projects.get(projectId);
     if (!project) {
       throw new McpError(ErrorCode.InvalidParams, `Project not found: ${projectId}`);
@@ -422,7 +429,7 @@ class AIDLCMethodologyServer {
     }
 
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const session: CollaborationSession = {
       id: sessionId,
       projectId,
@@ -430,7 +437,7 @@ class AIDLCMethodologyServer {
       participants,
       activities: [],
       startTime: new Date(),
-      status: 'active'
+      status: 'active',
     };
 
     this.sessions.set(sessionId, session);
@@ -449,15 +456,15 @@ class AIDLCMethodologyServer {
           'Review and confirm phase objectives and deliverables',
           'Assign AI agents and human participants to activities',
           'Set up collaboration tools and communication channels',
-          'Establish quality gates and review checkpoints'
-        ]
-      }
+          'Establish quality gates and review checkpoints',
+        ],
+      },
     };
   }
 
   private async planActivities(args: any): Promise<any> {
     const { sessionId, activities = [] } = args;
-    
+
     const session = this.sessions.get(sessionId);
     if (!session) {
       throw new McpError(ErrorCode.InvalidParams, `Session not found: ${sessionId}`);
@@ -470,7 +477,7 @@ class AIDLCMethodologyServer {
       assignee: activity.assignee,
       status: 'pending',
       duration: activity.estimatedDuration,
-      artifacts: []
+      artifacts: [],
     }));
 
     session.activities.push(...plannedActivities);
@@ -480,28 +487,31 @@ class AIDLCMethodologyServer {
       success: true,
       data: {
         activities: plannedActivities,
-        totalEstimatedDuration: plannedActivities.reduce((sum, activity) => sum + (activity.duration || 0), 0),
+        totalEstimatedDuration: plannedActivities.reduce(
+          (sum, activity) => sum + (activity.duration || 0),
+          0
+        ),
         agentAssignments: this.assignAgentsToActivities(plannedActivities),
         dependencies: this.identifyDependencies(plannedActivities),
         recommendations: [
           'Prioritize activities based on dependencies and critical path',
           'Ensure balanced workload between human and AI agents',
           'Set up regular review checkpoints for quality assurance',
-          'Plan for contingency buffers in critical activities'
-        ]
-      }
+          'Plan for contingency buffers in critical activities',
+        ],
+      },
     };
   }
 
   private async executeActivity(args: any): Promise<any> {
     const { activityId, agentType, context = {}, artifacts = [] } = args;
-    
+
     // Find activity across all sessions
     let activity: Activity | undefined;
     let session: CollaborationSession | undefined;
-    
+
     for (const s of this.sessions.values()) {
-      const found = s.activities.find(a => a.id === activityId);
+      const found = s.activities.find((a) => a.id === activityId);
       if (found) {
         activity = found;
         session = s;
@@ -530,14 +540,14 @@ class AIDLCMethodologyServer {
         executionResult,
         qualityMetrics: executionResult.qualityMetrics,
         nextSteps: executionResult.nextSteps,
-        recommendations: executionResult.recommendations
-      }
+        recommendations: executionResult.recommendations,
+      },
     };
   }
 
   private async reviewDeliverables(args: any): Promise<any> {
     const { sessionId, deliverables, qualityCriteria = [] } = args;
-    
+
     const session = this.sessions.get(sessionId);
     if (!session) {
       throw new McpError(ErrorCode.InvalidParams, `Session not found: ${sessionId}`);
@@ -551,11 +561,12 @@ class AIDLCMethodologyServer {
       recommendations: [
         'Add more comprehensive examples',
         'Include performance benchmarks',
-        'Document security considerations'
-      ]
+        'Document security considerations',
+      ],
     }));
 
-    const overallScore = reviewResults.reduce((sum, result) => sum + result.score, 0) / reviewResults.length;
+    const overallScore =
+      reviewResults.reduce((sum, result) => sum + result.score, 0) / reviewResults.length;
 
     return {
       success: true,
@@ -563,22 +574,25 @@ class AIDLCMethodologyServer {
         reviewResults,
         overallScore,
         phaseReady: overallScore >= 80,
-        actionItems: overallScore < 80 ? [
-          'Address identified issues in deliverables',
-          'Conduct additional quality reviews',
-          'Update documentation with missing details'
-        ] : [
-          'Proceed to next phase transition',
-          'Archive deliverables for future reference',
-          'Update project knowledge base'
-        ]
-      }
+        actionItems:
+          overallScore < 80
+            ? [
+                'Address identified issues in deliverables',
+                'Conduct additional quality reviews',
+                'Update documentation with missing details',
+              ]
+            : [
+                'Proceed to next phase transition',
+                'Archive deliverables for future reference',
+                'Update project knowledge base',
+              ],
+      },
     };
   }
 
   private async transitionPhase(args: any): Promise<any> {
     const { projectId, currentPhase, nextPhase, handoffNotes, artifacts = [] } = args;
-    
+
     const project = this.projects.get(projectId);
     if (!project) {
       throw new McpError(ErrorCode.InvalidParams, `Project not found: ${projectId}`);
@@ -608,7 +622,7 @@ class AIDLCMethodologyServer {
         transition: {
           from: currentPhaseConfig,
           to: nextPhaseConfig,
-          timestamp: new Date()
+          timestamp: new Date(),
         },
         handoffDocumentation: {
           notes: handoffNotes,
@@ -617,29 +631,30 @@ class AIDLCMethodologyServer {
             'Effective AI-human collaboration patterns',
             'Optimal agent selection for different activities',
             'Quality assurance best practices',
-            'Communication and coordination improvements'
-          ]
+            'Communication and coordination improvements',
+          ],
         },
         nextPhasePreparation: [
           'Review and adapt next phase methodology',
           'Select appropriate AI agents for new activities',
           'Update project context and constraints',
-          'Prepare collaboration tools and environments'
-        ]
-      }
+          'Prepare collaboration tools and environments',
+        ],
+      },
     };
   }
 
   private async getProjectStatus(args: any): Promise<any> {
     const { projectId, includeActivities = false } = args;
-    
+
     const project = this.projects.get(projectId);
     if (!project) {
       throw new McpError(ErrorCode.InvalidParams, `Project not found: ${projectId}`);
     }
 
-    const projectSessions = Array.from(this.sessions.values())
-      .filter(session => session.projectId === projectId);
+    const projectSessions = Array.from(this.sessions.values()).filter(
+      (session) => session.projectId === projectId
+    );
 
     const phaseProgress = this.calculatePhaseProgress(projectSessions);
     const overallProgress = this.calculateOverallProgress(projectSessions);
@@ -651,32 +666,38 @@ class AIDLCMethodologyServer {
         currentPhase: this.phases.get(project.phase),
         progress: {
           overall: overallProgress,
-          byPhase: phaseProgress
+          byPhase: phaseProgress,
         },
-        sessions: includeActivities ? projectSessions : projectSessions.map(s => ({
-          id: s.id,
-          phase: s.phase,
-          status: s.status,
-          participantCount: s.participants.length,
-          activityCount: s.activities.length
-        })),
+        sessions: includeActivities
+          ? projectSessions
+          : projectSessions.map((s) => ({
+              id: s.id,
+              phase: s.phase,
+              status: s.status,
+              participantCount: s.participants.length,
+              activityCount: s.activities.length,
+            })),
         metrics: {
           totalActivities: projectSessions.reduce((sum, s) => sum + s.activities.length, 0),
-          completedActivities: projectSessions.reduce((sum, s) => 
-            sum + s.activities.filter(a => a.status === 'completed').length, 0),
-          totalDuration: projectSessions.reduce((sum, s) => 
-            sum + s.activities.reduce((actSum, a) => actSum + (a.duration || 0), 0), 0),
-          collaborationScore: this.calculateCollaborationScore(projectSessions)
-        }
-      }
+          completedActivities: projectSessions.reduce(
+            (sum, s) => sum + s.activities.filter((a) => a.status === 'completed').length,
+            0
+          ),
+          totalDuration: projectSessions.reduce(
+            (sum, s) => sum + s.activities.reduce((actSum, a) => actSum + (a.duration || 0), 0),
+            0
+          ),
+          collaborationScore: this.calculateCollaborationScore(projectSessions),
+        },
+      },
     };
   }
 
   private async recommendAgents(args: any): Promise<any> {
     const { activityType, complexity, context = {} } = args;
-    
+
     const agentRecommendations = this.getAgentRecommendations(activityType, complexity);
-    
+
     return {
       success: true,
       data: {
@@ -686,134 +707,161 @@ class AIDLCMethodologyServer {
         configuration: {
           optimalTeamSize: agentRecommendations.teamSize,
           collaborationPattern: agentRecommendations.collaborationPattern,
-          qualityChecks: agentRecommendations.qualityChecks
+          qualityChecks: agentRecommendations.qualityChecks,
         },
         estimatedEfficiency: {
           timeReduction: agentRecommendations.timeReduction,
           qualityImprovement: agentRecommendations.qualityImprovement,
-          costOptimization: agentRecommendations.costOptimization
-        }
-      }
+          costOptimization: agentRecommendations.costOptimization,
+        },
+      },
     };
   }
 
-  private assignAgentsToActivities(activities: Activity[]): Array<{activity: string, agents: string[]}> {
-    return activities.map(activity => ({
+  private assignAgentsToActivities(
+    activities: Activity[]
+  ): Array<{ activity: string; agents: string[] }> {
+    return activities.map((activity) => ({
       activity: activity.description,
-      agents: this.getAgentRecommendations(activity.type, 'medium').primary
+      agents: this.getAgentRecommendations(activity.type, 'medium').primary,
     }));
   }
 
-  private identifyDependencies(activities: Activity[]): Array<{from: string, to: string, type: string}> {
+  private identifyDependencies(
+    activities: Activity[]
+  ): Array<{ from: string; to: string; type: string }> {
     // Simple dependency identification based on activity types
-    const dependencies: Array<{from: string, to: string, type: string}> = [];
-    
+    const dependencies: Array<{ from: string; to: string; type: string }> = [];
+
     for (let i = 0; i < activities.length - 1; i++) {
       dependencies.push({
         from: activities[i].description,
         to: activities[i + 1].description,
-        type: 'sequential'
+        type: 'sequential',
       });
     }
-    
+
     return dependencies;
   }
 
-  private async simulateAgentExecution(agentType: string, activity: Activity, context: any): Promise<any> {
+  private async simulateAgentExecution(
+    agentType: string,
+    activity: Activity,
+    context: any
+  ): Promise<any> {
     // Simulate different agent execution patterns
     const executionPatterns = {
       'requirements-analyst': {
         duration: 120,
         qualityMetrics: { completeness: 85, clarity: 90, feasibility: 88 },
-        nextSteps: ['Validate with stakeholders', 'Create user stories', 'Define acceptance criteria'],
-        recommendations: ['Use structured requirement templates', 'Include non-functional requirements']
+        nextSteps: [
+          'Validate with stakeholders',
+          'Create user stories',
+          'Define acceptance criteria',
+        ],
+        recommendations: [
+          'Use structured requirement templates',
+          'Include non-functional requirements',
+        ],
       },
       'code-generator': {
         duration: 60,
         qualityMetrics: { functionality: 92, maintainability: 85, performance: 88 },
         nextSteps: ['Code review', 'Unit testing', 'Documentation'],
-        recommendations: ['Follow coding standards', 'Add comprehensive tests', 'Document APIs']
+        recommendations: ['Follow coding standards', 'Add comprehensive tests', 'Document APIs'],
       },
       'test-automation': {
         duration: 45,
         qualityMetrics: { coverage: 95, reliability: 90, performance: 85 },
         nextSteps: ['Integration testing', 'Performance testing', 'Security testing'],
-        recommendations: ['Increase test coverage', 'Add edge case tests', 'Automate regression testing']
-      }
+        recommendations: [
+          'Increase test coverage',
+          'Add edge case tests',
+          'Automate regression testing',
+        ],
+      },
     };
 
-    return executionPatterns[agentType as keyof typeof executionPatterns] || {
-      duration: 30,
-      qualityMetrics: { quality: 80, efficiency: 75, reliability: 85 },
-      nextSteps: ['Review results', 'Document findings', 'Plan improvements'],
-      recommendations: ['Optimize execution', 'Improve quality', 'Enhance reliability']
-    };
+    return (
+      executionPatterns[agentType as keyof typeof executionPatterns] || {
+        duration: 30,
+        qualityMetrics: { quality: 80, efficiency: 75, reliability: 85 },
+        nextSteps: ['Review results', 'Document findings', 'Plan improvements'],
+        recommendations: ['Optimize execution', 'Improve quality', 'Enhance reliability'],
+      }
+    );
   }
 
   private getAgentRecommendations(activityType: string, complexity: string): any {
     const agentMatrix = {
-      'planning': {
+      planning: {
         primary: ['requirements-analyst', 'architecture-advisor', 'project-planner'],
         secondary: ['risk-assessor', 'compliance-officer'],
         teamSize: 2,
         collaborationPattern: 'sequential',
-        qualityChecks: ['stakeholder_validation', 'feasibility_analysis']
+        qualityChecks: ['stakeholder_validation', 'feasibility_analysis'],
       },
-      'coding': {
+      coding: {
         primary: ['code-generator', 'performance-optimizer'],
         secondary: ['security-scanner', 'documentation-assistant'],
         teamSize: 2,
         collaborationPattern: 'parallel',
-        qualityChecks: ['code_review', 'security_scan', 'performance_test']
+        qualityChecks: ['code_review', 'security_scan', 'performance_test'],
       },
-      'review': {
+      review: {
         primary: ['code-reviewer', 'quality-assurance'],
         secondary: ['security-scanner', 'compliance-officer'],
         teamSize: 1,
         collaborationPattern: 'collaborative',
-        qualityChecks: ['peer_review', 'automated_analysis']
-      }
+        qualityChecks: ['peer_review', 'automated_analysis'],
+      },
     };
 
-    const recommendations = agentMatrix[activityType as keyof typeof agentMatrix] || agentMatrix.coding;
-    
+    const recommendations =
+      agentMatrix[activityType as keyof typeof agentMatrix] || agentMatrix.coding;
+
     return {
       ...recommendations,
       timeReduction: complexity === 'high' ? '40%' : complexity === 'medium' ? '30%' : '20%',
       qualityImprovement: complexity === 'high' ? '35%' : complexity === 'medium' ? '25%' : '15%',
-      costOptimization: complexity === 'high' ? '25%' : complexity === 'medium' ? '20%' : '15%'
+      costOptimization: complexity === 'high' ? '25%' : complexity === 'medium' ? '20%' : '15%',
     };
   }
 
   private calculatePhaseProgress(sessions: CollaborationSession[]): any {
     const progress: any = {};
-    
+
     for (const phase of ['inception', 'construction', 'operations']) {
-      const phaseSessions = sessions.filter(s => s.phase === phase);
+      const phaseSessions = sessions.filter((s) => s.phase === phase);
       const totalActivities = phaseSessions.reduce((sum, s) => sum + s.activities.length, 0);
-      const completedActivities = phaseSessions.reduce((sum, s) => 
-        sum + s.activities.filter(a => a.status === 'completed').length, 0);
-      
+      const completedActivities = phaseSessions.reduce(
+        (sum, s) => sum + s.activities.filter((a) => a.status === 'completed').length,
+        0
+      );
+
       progress[phase] = totalActivities > 0 ? (completedActivities / totalActivities) * 100 : 0;
     }
-    
+
     return progress;
   }
 
   private calculateOverallProgress(sessions: CollaborationSession[]): number {
     const totalActivities = sessions.reduce((sum, s) => sum + s.activities.length, 0);
-    const completedActivities = sessions.reduce((sum, s) => 
-      sum + s.activities.filter(a => a.status === 'completed').length, 0);
-    
+    const completedActivities = sessions.reduce(
+      (sum, s) => sum + s.activities.filter((a) => a.status === 'completed').length,
+      0
+    );
+
     return totalActivities > 0 ? (completedActivities / totalActivities) * 100 : 0;
   }
 
   private calculateCollaborationScore(sessions: CollaborationSession[]): number {
     // Simple collaboration score based on session participation and activity completion
-    const avgParticipants = sessions.reduce((sum, s) => sum + s.participants.length, 0) / sessions.length;
+    const avgParticipants =
+      sessions.reduce((sum, s) => sum + s.participants.length, 0) / sessions.length;
     const completionRate = this.calculateOverallProgress(sessions);
-    
-    return Math.min(100, (avgParticipants * 10) + (completionRate * 0.8));
+
+    return Math.min(100, avgParticipants * 10 + completionRate * 0.8);
   }
 
   async run(): Promise<void> {
