@@ -149,7 +149,7 @@ Fix path references in `config.production.json`, remove `github-server.ts` refer
 Register 4 dead servers with corrected response format, replace all `Math.random()` stubs with real implementations starting with `observability-monitor.ts` and `enterprise-registry.ts`, add persistence to auth + registry servers.
 
 **Phase 3 — Hardening (23 Medium):** 🔄 IN PROGRESS
-Memory caps, Zod validation everywhere, fix regression tools in `-fixed.ts` files, delete originals, consolidate config path story from `.mcp/` vs `mcp/`.
+✅ Memory caps (issues #57-#61 completed), Zod validation everywhere, fix regression tools in `-fixed.ts` files, delete originals, consolidate config path story from `.mcp/` vs `mcp/`.
 
 ## Status Summary
 

@@ -503,7 +503,7 @@ export class IntelligentTestSelection {
   }
 
   private getRiskMultiplier(riskLevel: string): number {
-    const multipliers = {
+    const multipliers: Record<string, number> = {
       critical: 2.0,
       high: 1.5,
       medium: 1.0,
@@ -606,7 +606,10 @@ export class IntelligentTestSelection {
 
   private extractSourceFiles(content: string): string[] {
     const imports = content.match(/import.*from\s+['"`]([^'"`]+)['"`]/g) || [];
-    return imports.map((imp) => imp.match(/from\s+['"`]([^'"`]+)['"`]/)[1]);
+    return imports.map((imp) => {
+      const match = imp.match(/from\s+['"`]([^'"`]+)['"`]/);
+      return match ? match[1] : '';
+    }).filter(Boolean);
   }
 
   private extractTestedFunctions(content: string): string[] {
@@ -614,8 +617,10 @@ export class IntelligentTestSelection {
     const matches = content.match(/(?:it|test)\(['"`]([^'"`]+)['"`]/g) || [];
 
     for (const match of matches) {
-      const testName = match.match(/['"`]([^'"`]+)['"`]/)[1];
-      functions.push(testName);
+      const testName = match.match(/['"`]([^'"`]+)['"`]/);
+      if (testName) {
+        functions.push(testName[1]);
+      }
     }
 
     return functions;
@@ -624,19 +629,19 @@ export class IntelligentTestSelection {
   private extractDependencies(content: string): string[] {
     // Extract @repo dependencies
     const repoImports = content.match(/from\s+['"`]@repo\/([^'"`]+)['"`]/g) || [];
-    return repoImports.map((imp) => imp.match(/@repo\/([^'"`]+)/)[1]);
+    return repoImports.map((imp) => {
+      const match = imp.match(/@repo\/([^'"`]+)/);
+      return match ? match[1] : '';
+    }).filter(Boolean);
   }
 
   private extractTags(content: string): string[] {
     const tags: string[] = [];
-
-    // Look for @ tags in comments
     const tagMatches = content.match(/@(\w+)/g) || [];
     tags.push(...tagMatches.map((tag) => tag.substring(1)));
 
     return tags;
   }
-}
 
 // ============================================================================
 // Exports
