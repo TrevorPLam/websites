@@ -1,6 +1,6 @@
 # Task Update Automation Guide
 
-**Created:** 2026-02-18  
+**Created:** 2026-02-18
 **Purpose:** Guide for using the automated task update script
 
 ---
