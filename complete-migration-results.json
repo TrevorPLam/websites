@@ -1,0 +1,657 @@
+[
+  {
+    "sourceFile": "version-sync-script.md",
+    "targetFile": "how-to/development/version-sync-script.md",
+    "success": true
+  },
+  {
+    "sourceFile": "real-time-documentation-monitoring.md",
+    "targetFile": "how-to/development/real-time-documentation-monitoring.md",
+    "success": true
+  },
+  {
+    "sourceFile": "GUIDESINDEX.md",
+    "targetFile": "how-to/development/GUIDESINDEX.md",
+    "success": true
+  },
+  {
+    "sourceFile": "github-actions-docs-validation.md",
+    "targetFile": "how-to/development/github-actions-docs-validation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "documentation-validation-pipeline.md",
+    "targetFile": "how-to/development/documentation-validation-pipeline.md",
+    "success": true
+  },
+  {
+    "sourceFile": "AUTOMATION_IMPLEMENTATION_SUMMARY.md",
+    "targetFile": "how-to/development/AUTOMATION_IMPLEMENTATION_SUMMARY.md",
+    "success": true
+  },
+  {
+    "sourceFile": "AUTOMATED_DOCUMENTATION_MAINTENANCE_COMPLETE.md",
+    "targetFile": "how-to/development/AUTOMATED_DOCUMENTATION_MAINTENANCE_COMPLETE.md",
+    "success": true
+  },
+  {
+    "sourceFile": "automated-cli-template-updates.md",
+    "targetFile": "how-to/development/automated-cli-template-updates.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\zod-documentation.md",
+    "targetFile": "how-to/development/zod-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\style-dictionary-documentation.md",
+    "targetFile": "how-to/development/style-dictionary-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\spdx-spec.md",
+    "targetFile": "how-to/development/spdx-spec.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\slsa-provenance-spec.md",
+    "targetFile": "how-to/development/slsa-provenance-spec.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\semver-spec.md",
+    "targetFile": "how-to/development/semver-spec.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\sci-calculation-examples.md",
+    "targetFile": "how-to/development/sci-calculation-examples.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\green-software-foundation-sci-spec.md",
+    "targetFile": "how-to/development/green-software-foundation-sci-spec.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\design-tokens-w3c-cg-report.md",
+    "targetFile": "how-to/development/design-tokens-w3c-cg-report.md",
+    "success": true
+  },
+  {
+    "sourceFile": "standards-specs\\cyclonedx-spec.md",
+    "targetFile": "how-to/development/cyclonedx-spec.md",
+    "success": true
+  },
+  {
+    "sourceFile": "seo-metadata\\service-area-pages-engine.md",
+    "targetFile": "how-to/seo/service-area-pages-engine.md",
+    "success": true
+  },
+  {
+    "sourceFile": "seo-metadata\\seo-validation-ci-pipeline-2026.md",
+    "targetFile": "how-to/seo/seo-validation-ci-pipeline-2026.md",
+    "success": true
+  },
+  {
+    "sourceFile": "seo-metadata\\seo-optimization-guide.md",
+    "targetFile": "how-to/seo/seo-optimization-guide.md",
+    "success": true
+  },
+  {
+    "sourceFile": "seo-metadata\\schema-org-documentation.md",
+    "targetFile": "how-to/seo/schema-org-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "seo-metadata\\llms-txt-spec.md",
+    "targetFile": "how-to/seo/llms-txt-spec.md",
+    "success": true
+  },
+  {
+    "sourceFile": "seo-metadata\\generative-engine-optimization-2026.md",
+    "targetFile": "how-to/seo/generative-engine-optimization-2026.md",
+    "success": true
+  },
+  {
+    "sourceFile": "seo-metadata\\edge-ab-testing-zero-cls-2026.md",
+    "targetFile": "how-to/seo/edge-ab-testing-zero-cls-2026.md",
+    "success": true
+  },
+  {
+    "sourceFile": "scheduling\\calendly-documentation.md",
+    "targetFile": "how-to/operations/calendly-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "scheduling\\calcom-webhook-handler.md",
+    "targetFile": "how-to/operations/calcom-webhook-handler.md",
+    "success": true
+  },
+  {
+    "sourceFile": "scheduling\\calcom-embed-widget.md",
+    "targetFile": "how-to/operations/calcom-embed-widget.md",
+    "success": true
+  },
+  {
+    "sourceFile": "scheduling\\acuity-scheduling-documentation.md",
+    "targetFile": "how-to/operations/acuity-scheduling-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "payments-billing\\payments-integration-guide.md",
+    "targetFile": "how-to/payments/payments-integration-guide.md",
+    "success": true
+  },
+  {
+    "sourceFile": "payments-billing\\billing-page-components.md",
+    "targetFile": "how-to/payments/billing-page-components.md",
+    "success": true
+  },
+  {
+    "sourceFile": "linting\\steiger-linting-configuration.md",
+    "targetFile": "how-to/development/steiger-linting-configuration.md",
+    "success": true
+  },
+  {
+    "sourceFile": "linting\\steiger-documentation.md",
+    "targetFile": "how-to/development/steiger-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "linting\\steiger-ci-integration.md",
+    "targetFile": "how-to/development/steiger-ci-integration.md",
+    "success": true
+  },
+  {
+    "sourceFile": "linting\\prettier-documentation.md",
+    "targetFile": "how-to/development/prettier-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "linting\\eslint-9-documentation.md",
+    "targetFile": "how-to/development/eslint-9-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability\\vercel-otel-documentation.md",
+    "targetFile": "how-to/operations/vercel-otel-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability\\sentry-documentation.md",
+    "targetFile": "how-to/operations/sentry-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability\\opentelemetry-nextjs-instrumentation.md",
+    "targetFile": "how-to/operations/opentelemetry-nextjs-instrumentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability\\opentelemetry-instrumentation.md",
+    "targetFile": "how-to/operations/opentelemetry-instrumentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability\\opentelemetry-documentation.md",
+    "targetFile": "how-to/operations/opentelemetry-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability\\observability-philosophy.md",
+    "targetFile": "how-to/operations/observability-philosophy.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\tenant-suspension-patterns.md",
+    "targetFile": "explanation/multi-tenant/tenant-suspension-patterns.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\tenant-resolution-sequence-diagram.md",
+    "targetFile": "explanation/multi-tenant/tenant-resolution-sequence-diagram.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\tenant-resolution-implementation.md",
+    "targetFile": "explanation/multi-tenant/tenant-resolution-implementation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\routing-strategy-comparison.md",
+    "targetFile": "explanation/multi-tenant/routing-strategy-comparison.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\noisy-neighbor-prevention.md",
+    "targetFile": "explanation/multi-tenant/noisy-neighbor-prevention.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\enterprise-sso-integration.md",
+    "targetFile": "explanation/multi-tenant/enterprise-sso-integration.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\domain-lifecycle-management.md",
+    "targetFile": "explanation/multi-tenant/domain-lifecycle-management.md",
+    "success": true
+  },
+  {
+    "sourceFile": "multi-tenant\\billing-status-validation.md",
+    "targetFile": "explanation/multi-tenant/billing-status-validation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "monitoring\\tinybird-documentation.md",
+    "targetFile": "how-to/operations/tinybird-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\vercel-for-platforms-docs.md",
+    "targetFile": "how-to/operations/vercel-for-platforms-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\vercel-domains-api-docs.md",
+    "targetFile": "how-to/operations/vercel-domains-api-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\terraform-vercel-provider-docs.md",
+    "targetFile": "how-to/operations/terraform-vercel-provider-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\terraform-supabase-provider-docs.md",
+    "targetFile": "how-to/operations/terraform-supabase-provider-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\terraform-aws-provider-docs.md",
+    "targetFile": "how-to/operations/terraform-aws-provider-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\pnpm-deploy-documentation.md",
+    "targetFile": "how-to/operations/pnpm-deploy-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\opentofu-documentation.md",
+    "targetFile": "how-to/operations/opentofu-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\nx-cloud-documentation.md",
+    "targetFile": "how-to/operations/nx-cloud-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\launchdarkly-documentation.md",
+    "targetFile": "how-to/operations/launchdarkly-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\github-actions-workflow-complete.md",
+    "targetFile": "how-to/operations/github-actions-workflow-complete.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\github-actions-docs.md",
+    "targetFile": "how-to/operations/github-actions-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops\\deployment-runbook.md",
+    "targetFile": "how-to/operations/deployment-runbook.md",
+    "success": true
+  },
+  {
+    "sourceFile": "email\\resend-documentation.md",
+    "targetFile": "how-to/email/resend-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "email\\postmark-documentation.md",
+    "targetFile": "how-to/email/postmark-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "email\\lead-notification-template.md",
+    "targetFile": "how-to/email/lead-notification-template.md",
+    "success": true
+  },
+  {
+    "sourceFile": "cms-content\\storyblok-documentation.md",
+    "targetFile": "how-to/development/storyblok-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "cms-content\\sanity-documentation.md",
+    "targetFile": "how-to/development/sanity-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "cms-content\\sanity-cms-draft-mode-2026.md",
+    "targetFile": "how-to/development/sanity-cms-draft-mode-2026.md",
+    "success": true
+  },
+  {
+    "sourceFile": "cms-content\\blog-content-architecture.md",
+    "targetFile": "how-to/development/blog-content-architecture.md",
+    "success": true
+  },
+  {
+    "sourceFile": "frontend\\frontend-implementation-guide.md",
+    "targetFile": "how-to/development/frontend-implementation-guide.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\turborepo-remote-caching.md",
+    "targetFile": "how-to/development/turborepo-remote-caching.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\turborepo-documentation.md",
+    "targetFile": "how-to/development/turborepo-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\turbo-json-configuration.md",
+    "targetFile": "how-to/development/turbo-json-configuration.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\renovate-configuration-documentation.md",
+    "targetFile": "how-to/development/renovate-configuration-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\pnpm-workspaces-documentation.md",
+    "targetFile": "how-to/development/pnpm-workspaces-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\pnpm-vs-yarn-vs-npm-benchmarks.md",
+    "targetFile": "how-to/development/pnpm-vs-yarn-vs-npm-benchmarks.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\nx-core-team-whitepaper.md",
+    "targetFile": "how-to/development/nx-core-team-whitepaper.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\nx-affected-documentation.md",
+    "targetFile": "how-to/development/nx-affected-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "build-monorepo\\changesets-documentation.md",
+    "targetFile": "how-to/development/changesets-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\backend-integration-guide.md",
+    "targetFile": "how-to/development/backend-integration-guide.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\white-label-portal-architecture.md",
+    "targetFile": "reference/architecture/white-label-portal-architecture.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\site-config-schema-documentation.md",
+    "targetFile": "reference/architecture/site-config-schema-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\report-generation-engine.md",
+    "targetFile": "reference/architecture/report-generation-engine.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\realtime-lead-feed-implementation.md",
+    "targetFile": "reference/architecture/realtime-lead-feed-implementation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\package-level-fsd-implementation.md",
+    "targetFile": "reference/architecture/package-level-fsd-implementation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\monorepo-context-protocol-proposal.md",
+    "targetFile": "reference/architecture/monorepo-context-protocol-proposal.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\marketing-site-fsd-structure.md",
+    "targetFile": "reference/architecture/marketing-site-fsd-structure.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\client-portal-configuration.md",
+    "targetFile": "reference/architecture/client-portal-configuration.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\architecture-decision-record-template.md",
+    "targetFile": "reference/architecture/architecture-decision-record-template.md",
+    "success": true
+  },
+  {
+    "sourceFile": "architecture\\0000-use-adrs.md",
+    "targetFile": "reference/architecture/0000-use-adrs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal\\wcag-2.2-criteria.md",
+    "targetFile": "reference/accessibility/wcag-2.2-criteria.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal\\hhs-section-504-docs.md",
+    "targetFile": "reference/accessibility/hhs-section-504-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal\\gdpr-guide.md",
+    "targetFile": "reference/accessibility/gdpr-guide.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal\\axe-core-documentation.md",
+    "targetFile": "reference/accessibility/axe-core-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal\\ada-title-ii-final-rule.md",
+    "targetFile": "reference/accessibility/ada-title-ii-final-rule.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\thin-vertical-slice-guide.md",
+    "targetFile": "how-to/development/thin-vertical-slice-guide.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\reversibility-principles.md",
+    "targetFile": "how-to/development/reversibility-principles.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\repository-management.md",
+    "targetFile": "how-to/development/repository-management.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\quality-assurance-checklist.md",
+    "targetFile": "how-to/development/quality-assurance-checklist.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\prioritization-framework.md",
+    "targetFile": "how-to/development/prioritization-framework.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\monorepo-directory-structure.md",
+    "targetFile": "how-to/development/monorepo-directory-structure.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\internal-developer-portal-patterns.md",
+    "targetFile": "how-to/development/internal-developer-portal-patterns.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\independent-release-patterns.md",
+    "targetFile": "how-to/development/independent-release-patterns.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\git-branching-strategies.md",
+    "targetFile": "how-to/development/git-branching-strategies.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\fsd-layer-architecture.md",
+    "targetFile": "how-to/development/fsd-layer-architecture.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\file-header-template.md",
+    "targetFile": "how-to/development/file-header-template.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\feature-sliced-design-docs.md",
+    "targetFile": "how-to/development/feature-sliced-design-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\docstring-standards.md",
+    "targetFile": "how-to/development/docstring-standards.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\cross-slice-import-patterns.md",
+    "targetFile": "how-to/development/cross-slice-import-patterns.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\conventional-comments.md",
+    "targetFile": "how-to/development/conventional-comments.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\context-engineering.md",
+    "targetFile": "how-to/development/context-engineering.md",
+    "success": true
+  },
+  {
+    "sourceFile": "best-practices\\cli-scaffold-design.md",
+    "targetFile": "how-to/development/cli-scaffold-design.md",
+    "success": true
+  },
+  {
+    "sourceFile": "security\\authentication\\supabase-auth-docs.md",
+    "targetFile": "reference/security/supabase-auth-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "frontend\\react\\nextjs-16-documentation.md",
+    "targetFile": "how-to/development/nextjs-16-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "frontend\\performance\\performance-budgeting.md",
+    "targetFile": "how-to/development/performance-budgeting.md",
+    "success": true
+  },
+  {
+    "sourceFile": "frontend\\performance\\core-web-vitals-optimization.md",
+    "targetFile": "how-to/development/core-web-vitals-optimization.md",
+    "success": true
+  },
+  {
+    "sourceFile": "frontend\\performance\\bundle-size-budgets.md",
+    "targetFile": "how-to/development/bundle-size-budgets.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\monitoring\\tinybird-documentation.md",
+    "targetFile": "how-to/development/tinybird-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\messaging\\qstash-client-setup.md",
+    "targetFile": "how-to/development/qstash-client-setup.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\integrations\\hubspot-documentation.md",
+    "targetFile": "how-to/development/hubspot-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\schema-migration-safety.md",
+    "targetFile": "how-to/development/schema-migration-safety.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\postgresql-rls-documentation.md",
+    "targetFile": "how-to/development/postgresql-rls-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\postgresql-pg-stat-statements.md",
+    "targetFile": "how-to/development/postgresql-pg-stat-statements.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\pglite-documentation.md",
+    "targetFile": "how-to/development/pglite-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\pgbouncer-supavisor-configuration.md",
+    "targetFile": "how-to/development/pgbouncer-supavisor-configuration.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\electricsql-docs.md",
+    "targetFile": "how-to/development/electricsql-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\clickhouse-documentation.md",
+    "targetFile": "how-to/development/clickhouse-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\databases\\aws-rds-proxy-documentation.md",
+    "targetFile": "how-to/development/aws-rds-proxy-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\caching\\upstash-redis-documentation.md",
+    "targetFile": "how-to/development/upstash-redis-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\caching\\upstash-ratelimit-documentation.md",
+    "targetFile": "how-to/development/upstash-ratelimit-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "backend-data\\caching\\tenant-caching-patterns.md",
+    "targetFile": "how-to/development/tenant-caching-patterns.md",
+    "success": true
+  }
+]

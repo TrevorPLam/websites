@@ -4,15 +4,16 @@ description: "> **2026 Standards Compliance** | Next.js 16 · Vercel Edge · Mul
 domain: multi-tenant
 type: how-to
 layer: global
-audience: ["["developer"]"]
+audience: ["developer"]
 phase: 1
 complexity: advanced
 freshness_review: 2026-08-25
 validation_status: unverified
 last_updated: 2026-02-26
-tags: ["["development", "routing-strategy-comparison.md"]"]
-legacy_path: "multi-tenant/routing-strategy-comparison.md"
----# routing-strategy-comparison.md
+tags: ["multi-tenant", "routing-strategy-comparison.md"]
+legacy_path: "multi-tenant\routing-strategy-comparison.md"
+---
+# routing-strategy-comparison.md
 
 > **2026 Standards Compliance** | Next.js 16 · Vercel Edge · Multi-tenant Architecture
 

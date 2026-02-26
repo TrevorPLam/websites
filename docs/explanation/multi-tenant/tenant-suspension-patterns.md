@@ -4,15 +4,16 @@ description: "> **Internal Template – customize as needed**"
 domain: multi-tenant
 type: how-to
 layer: global
-audience: ["["developer"]"]
+audience: ["developer"]
 phase: 1
 complexity: advanced
 freshness_review: 2026-08-25
 validation_status: unverified
 last_updated: 2026-02-26
-tags: ["["development", "tenant-suspension-patterns.md"]"]
-legacy_path: "multi-tenant/tenant-suspension-patterns.md"
----# tenant-suspension-patterns.md
+tags: ["multi-tenant", "tenant-suspension-patterns.md"]
+legacy_path: "multi-tenant\tenant-suspension-patterns.md"
+---
+# tenant-suspension-patterns.md
 
 > **Internal Template – customize as needed**  
 > **2026 Standards Compliance** | GDPR Article 17 · Stripe Billing · Supabase RLS

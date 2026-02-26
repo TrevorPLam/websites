@@ -1,0 +1,62 @@
+[
+  {
+    "file": "reference/security/authentication/supabase-auth-docs.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "security"
+  },
+  {
+    "file": "explanation/multi-tenant/tenant-resolution-sequence-diagram.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "multi-tenant"
+  },
+  {
+    "file": "explanation/multi-tenant/tenant-suspension-patterns.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "multi-tenant"
+  },
+  {
+    "file": "explanation/multi-tenant/tenant-resolution-implementation.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "multi-tenant"
+  },
+  {
+    "file": "explanation/multi-tenant/routing-strategy-comparison.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "multi-tenant"
+  },
+  {
+    "file": "reference/architecture/package-level-fsd-implementation.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "architecture"
+  },
+  {
+    "file": "how-to/seo/seo-optimization-guide.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "seo"
+  },
+  {
+    "file": "how-to/seo/service-area-pages-engine.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "seo"
+  },
+  {
+    "file": "how-to/seo/schema-org-documentation.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "seo"
+  },
+  {
+    "file": "how-to/seo/llms-txt-spec.md",
+    "success": true,
+    "oldDomain": "development",
+    "newDomain": "seo"
+  }
+]

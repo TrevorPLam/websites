@@ -4,15 +4,16 @@ description: "> **Internal Reference** | Next.js 16 Edge Middleware · Upstash K
 domain: multi-tenant
 type: how-to
 layer: global
-audience: ["["developer"]"]
+audience: ["developer"]
 phase: 1
 complexity: advanced
 freshness_review: 2026-08-25
 validation_status: unverified
 last_updated: 2026-02-26
-tags: ["["development", "tenant-resolution-sequence-diagram.md"]"]
-legacy_path: "multi-tenant/tenant-resolution-sequence-diagram.md"
----# tenant-resolution-sequence-diagram.md
+tags: ["multi-tenant", "tenant-resolution-sequence-diagram.md"]
+legacy_path: "multi-tenant\tenant-resolution-sequence-diagram.md"
+---
+# tenant-resolution-sequence-diagram.md
 
 > **Internal Reference** | Next.js 16 Edge Middleware · Upstash KV · Supabase
 

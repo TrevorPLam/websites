@@ -1,0 +1,52 @@
+[
+  {
+    "sourceFile": "infrastructure-devops/github-actions-workflow-complete.md",
+    "targetFile": "how-to/operations/github-actions-workflow-complete.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability/observability-philosophy.md",
+    "targetFile": "reference/operations/observability-philosophy.md",
+    "success": true
+  },
+  {
+    "sourceFile": "observability/opentelemetry-documentation.md",
+    "targetFile": "reference/operations/opentelemetry-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "infrastructure-devops/vercel-for-platforms-docs.md",
+    "targetFile": "how-to/operations/vercel-for-platforms-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "monitoring/tinybird-documentation.md",
+    "targetFile": "undefinedtinybird-documentation.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal/hhs-section-504-docs.md",
+    "targetFile": "reference/accessibility/hhs-section-504-docs.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal/gdpr-guide.md",
+    "targetFile": "reference/accessibility/gdpr-guide.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal/ada-title-ii-final-rule.md",
+    "targetFile": "reference/accessibility/ada-title-ii-final-rule.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal/wcag-2.2-criteria.md",
+    "targetFile": "reference/accessibility/wcag-2.2-criteria.md",
+    "success": true
+  },
+  {
+    "sourceFile": "accessibility-legal/axe-core-documentation.md",
+    "targetFile": "reference/accessibility/axe-core-documentation.md",
+    "success": true
+  }
+]
