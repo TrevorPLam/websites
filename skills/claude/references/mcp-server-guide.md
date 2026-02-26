@@ -1,24 +1,37 @@
+/\*\*
+
+- @file skills/claude/references/mcp-server-guide.md
+- @summary MCP server development and integration guide for Claude agents.
+- @description Reference material for understanding MCP server patterns, tool development, and configuration.
+- @security Contains security best practices and validation patterns for MCP server implementation.
+- @requirements none
+  \*/
+
 ---
+
 name: mcp-server-guide
 description: |
-  **REFERENCE SKILL** - MCP server development and integration guide.
-  USE FOR: Understanding MCP server patterns, tool development, configuration.
-  DO NOT USE FOR: Direct execution - reference material only.
-  INVOKES: none.
+**REFERENCE SKILL** - MCP server development and integration guide.
+USE FOR: Understanding MCP server patterns, tool development, configuration.
+DO NOT USE FOR: Direct execution - reference material only.
+INVOKES: none.
 meta:
-  version: "1.0.0"
-  author: "cascade-ai"
-  category: "reference"
+version: "1.0.0"
+author: "cascade-ai"
+category: "reference"
+
 ---
 
 # MCP Server Development Guide
 
 ## Overview
+
 This reference document provides patterns and best practices for developing Model Context Protocol (MCP) servers in the marketing websites monorepo.
 
 ## MCP Server Architecture
 
 ### Core Components
+
 - **McpServer**: Main server class from @modelcontextprotocol/sdk
 - **Tools**: Callable functions with Zod validation
 - **Transport**: Communication layer (stdio, HTTP, WebSocket)
@@ -44,11 +57,13 @@ server.tool(
   { param: z.string().optional() },
   async ({ param }) => {
     const result = await doSomething(param);
-    return { 
-      content: [{ 
-        type: 'text', 
-        text: JSON.stringify(result) 
-      }] 
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result),
+        },
+      ],
     };
   }
 );
@@ -63,40 +78,48 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 ## Response Format Standards
 
 ### Success Response
+
 ```typescript
 return {
-  content: [{
-    type: 'text',
-    text: JSON.stringify({ 
-      result: data,
-      message: 'Success' 
-    })
-  }]
+  content: [
+    {
+      type: 'text',
+      text: JSON.stringify({
+        result: data,
+        message: 'Success',
+      }),
+    },
+  ],
 };
 ```
 
 ### Error Response
+
 ```typescript
 return {
-  content: [{
-    type: 'text',
-    text: JSON.stringify({ 
-      error: errorMessage 
-    })
-  }],
-  isError: true
+  content: [
+    {
+      type: 'text',
+      text: JSON.stringify({
+        error: errorMessage,
+      }),
+    },
+  ],
+  isError: true,
 };
 ```
 
 ## Tool Development Patterns
 
 ### Input Validation
+
 - Always use Zod schemas for parameter validation
 - Provide clear descriptions for each parameter
 - Set sensible defaults where appropriate
 - Handle edge cases gracefully
 
 ### Error Handling
+
 ```typescript
 server.tool('safe-tool', 'Description', schema, async (params) => {
   try {
@@ -106,13 +129,14 @@ server.tool('safe-tool', 'Description', schema, async (params) => {
     const message = err instanceof Error ? err.message : String(err);
     return {
       content: [{ type: 'text', text: JSON.stringify({ error: message }) }],
-      isError: true
+      isError: true,
     };
   }
 });
 ```
 
 ### Async Operations
+
 - Use proper async/await patterns
 - Handle timeouts appropriately
 - Provide progress feedback for long operations
@@ -121,12 +145,14 @@ server.tool('safe-tool', 'Description', schema, async (params) => {
 ## Security Considerations
 
 ### Input Sanitization
+
 - Validate all inputs with Zod schemas
 - Never trust client-provided data
 - Sanitize file paths and database queries
 - Implement rate limiting where appropriate
 
 ### Environment Variables
+
 ```typescript
 const REQUIRED_ENV = ['API_TOKEN', 'DATABASE_URL'];
 for (const env of REQUIRED_ENV) {
@@ -138,6 +164,7 @@ for (const env of REQUIRED_ENV) {
 ```
 
 ### Authentication
+
 - Validate tokens on startup
 - Implement proper session management
 - Use secure storage for credentials
@@ -146,6 +173,7 @@ for (const env of REQUIRED_ENV) {
 ## Configuration Management
 
 ### Server Registration
+
 ```json
 {
   "servers": {
@@ -162,6 +190,7 @@ for (const env of REQUIRED_ENV) {
 ```
 
 ### Environment-Specific Configs
+
 - Use config.json for development
 - Use config.production.json for production
 - Support environment variable substitution
@@ -170,6 +199,7 @@ for (const env of REQUIRED_ENV) {
 ## Testing Strategies
 
 ### Unit Testing
+
 ```typescript
 import { describe, it, expect } from 'vitest';
 import { createTestServer } from './test-utils';
@@ -184,6 +214,7 @@ describe('MyServer', () => {
 ```
 
 ### Integration Testing
+
 - Test with real MCP client connections
 - Validate tool registration and discovery
 - Test error handling and edge cases
@@ -192,12 +223,14 @@ describe('MyServer', () => {
 ## Performance Optimization
 
 ### Memory Management
+
 - Implement TTL for cached data
 - Clean up resources on shutdown
 - Use streaming for large datasets
 - Monitor memory usage
 
 ### Concurrency
+
 - Use proper async patterns
 - Implement request queuing where needed
 - Handle concurrent access to shared state
@@ -206,26 +239,31 @@ describe('MyServer', () => {
 ## Common Pitfalls
 
 ### Response Format
+
 - ❌ `return { success: true, data: result }`
 - ✅ `return { content: [{ type: 'text', text: JSON.stringify(result) }] }`
 
 ### Module Guards
+
 - ❌ `if (require.main === module)` (CJS pattern)
 - ✅ `if (import.meta.url === \`file://\${process.argv[1]}\`)` (ESM pattern)
 
 ### Error Handling
+
 - ❌ Throwing uncaught exceptions
 - ✅ Returning structured error responses
 
 ## Resource Management
 
 ### Database Connections
+
 - Use connection pooling
 - Handle connection timeouts
 - Implement retry logic
 - Clean up connections on shutdown
 
 ### File System Operations
+
 - Validate file paths
 - Handle permission errors
 - Use atomic writes where possible
@@ -234,16 +272,18 @@ describe('MyServer', () => {
 ## Monitoring and Observability
 
 ### Logging
+
 ```typescript
 const logger = {
   debug: (msg: string, data?: any) => console.log(`[DEBUG] ${msg}`, data),
   info: (msg: string, data?: any) => console.log(`[INFO] ${msg}`, data),
   warn: (msg: string, data?: any) => console.warn(`[WARN] ${msg}`, data),
-  error: (msg: string, data?: any) => console.error(`[ERROR] ${msg}`, data)
+  error: (msg: string, data?: any) => console.error(`[ERROR] ${msg}`, data),
 };
 ```
 
 ### Metrics
+
 - Track tool execution times
 - Monitor error rates
 - Log resource usage

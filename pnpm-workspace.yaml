@@ -73,8 +73,13 @@ catalog:
   '@vitest/coverage-v8': ^4.0.18
   '@vitest/ui': ^4.0.18
   '@chialab/vitest-axe': ^0.19.1
+  argon2: ^0.31.0
   axe-playwright: ^2.2.2
+  expr-eval: ^2.0.2
   jest-axe: ^10.0.0
+  jose: ^5.10.0
+  jsonwebtoken: ^9.0.3
+  otplib: ^12.0.1
   browser-image-compression: ^2.0.2
   clsx: 2.1.1
   cmdk: ^1.0.0
