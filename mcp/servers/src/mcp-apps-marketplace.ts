@@ -7,20 +7,10 @@
  * @requirements MCP-standards, enterprise-security
  */
 
-/**
- * MCP Apps Marketplace and Distribution Platform
- *
- * Provides a comprehensive platform for discovering, distributing, and managing
- * MCP applications with enterprise-grade features and community engagement.
- */
-
-<<<<<<< Updated upstream
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-=======
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
->>>>>>> Stashed changes
+import { z } from 'zod';
 
 interface MCPApp {
   id: string;
@@ -111,9 +101,6 @@ interface DeveloperAccount {
   };
 }
 
-<<<<<<< Updated upstream
-class MCPAppsMarketplace {
-=======
 /**
  * MCP Apps Marketplace - Enterprise app marketplace with comprehensive functionality.
  * Provides app discovery, submission, review, and management capabilities for MCP ecosystem.
@@ -121,7 +108,6 @@ class MCPAppsMarketplace {
  * @category MCP Server
  */
 export class MCPAppsMarketplace {
->>>>>>> Stashed changes
   private server: McpServer;
   private apps: Map<string, MCPApp> = new Map();
   private submissions: Map<string, AppSubmission> = new Map();
@@ -239,52 +225,6 @@ export class MCPAppsMarketplace {
           crashRate: 0.002,
         },
       },
-      {
-        id: 'workflow-automation',
-        name: 'Workflow Automation',
-        description: 'Automate complex workflows with visual builder and scheduling',
-        version: '3.0.1',
-        author: 'Workflow Corp',
-        publisher: 'Workflow Corp',
-        category: 'Productivity',
-        tags: ['automation', 'workflows', 'scheduling', 'integration'],
-        homepage: 'https://workflow-automation.io',
-        repository: 'https://github.com/workflow-corp/automation',
-        documentation: 'https://docs.workflow-automation.io',
-        license: 'Proprietary',
-        pricing: 'enterprise',
-        price: 199.99,
-        currency: 'USD',
-        screenshots: [
-          'https://screenshots.workflow.io/builder.png',
-          'https://screenshots.workflow.io/dashboard.png',
-        ],
-        downloadCount: 12450,
-        rating: 4.8,
-        reviewCount: 98,
-        lastUpdated: new Date('2026-02-22'),
-        publishedAt: new Date('2025-01-10'),
-        verified: true,
-        featured: true,
-        trending: true,
-        compatibility: {
-          mcpVersion: '1.0.0+',
-          platforms: ['Enterprise', 'Cloud', 'On-premise'],
-          dependencies: ['@workflow/core', 'redis', 'postgresql'],
-        },
-        security: {
-          verified: true,
-          scanDate: new Date('2026-02-25'),
-          vulnerabilities: 0,
-          signature: 'sha256:ghi789...',
-        },
-        metrics: {
-          installs: 12450,
-          activeUsers: 3210,
-          avgSessionDuration: 2400,
-          crashRate: 0.0005,
-        },
-      },
     ];
 
     apps.forEach((app) => this.apps.set(app.id, app));
@@ -369,272 +309,84 @@ export class MCPAppsMarketplace {
     });
   }
 
-  private setupToolHandlers(): void {
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
-      return {
-        tools: [
-          {
-            name: 'browse_apps',
-            description: 'Browse the MCP apps marketplace with filters and search',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                category: { type: 'string', description: 'Filter by category' },
-                tags: { type: 'array', items: { type: 'string' }, description: 'Filter by tags' },
-                pricing: { type: 'string', enum: ['free', 'paid', 'freemium', 'enterprise'] },
-                verified: { type: 'boolean', description: 'Show only verified apps' },
-                featured: { type: 'boolean', description: 'Show only featured apps' },
-                trending: { type: 'boolean', description: 'Show only trending apps' },
-                search: { type: 'string', description: 'Search term' },
-                sortBy: {
-                  type: 'string',
-                  enum: ['name', 'rating', 'downloads', 'updated', 'published'],
-                },
-                limit: { type: 'number', description: 'Maximum results to return' },
-              },
-            },
-          },
-          {
-            name: 'get_app_details',
-            description: 'Get detailed information about a specific app',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                appId: { type: 'string', description: 'App ID' },
-                includeReviews: { type: 'boolean', description: 'Include user reviews' },
-                includeMetrics: { type: 'boolean', description: 'Include usage metrics' },
-              },
-              required: ['appId'],
-            },
-          },
-          {
-            name: 'install_app',
-            description: 'Install an MCP app',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                appId: { type: 'string', description: 'App ID' },
-                version: { type: 'string', description: 'Specific version to install' },
-                config: { type: 'object', description: 'Installation configuration' },
-                autoUpdate: { type: 'boolean', description: 'Enable auto-updates' },
-              },
-              required: ['appId'],
-            },
-          },
-          {
-            name: 'submit_app',
-            description: 'Submit a new app to the marketplace',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                name: { type: 'string', description: 'App name' },
-                description: { type: 'string', description: 'App description' },
-                version: { type: 'string', description: 'App version' },
-                category: { type: 'string', description: 'App category' },
-                tags: { type: 'array', items: { type: 'string' }, description: 'App tags' },
-                homepage: { type: 'string', description: 'App homepage' },
-                repository: { type: 'string', description: 'Repository URL' },
-                documentation: { type: 'string', description: 'Documentation URL' },
-                license: { type: 'string', description: 'License' },
-                pricing: { type: 'string', enum: ['free', 'paid', 'freemium', 'enterprise'] },
-                price: { type: 'number', description: 'Price (if paid)' },
-              },
-              required: [
-                'name',
-                'description',
-                'version',
-                'category',
-                'homepage',
-                'repository',
-                'license',
-              ],
-            },
-          },
-          {
-            name: 'review_app',
-            description: 'Submit a review for an app',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                appId: { type: 'string', description: 'App ID' },
-                rating: { type: 'number', minimum: 1, maximum: 5, description: 'Rating (1-5)' },
-                title: { type: 'string', description: 'Review title' },
-                comment: { type: 'string', description: 'Review comment' },
-                pros: { type: 'array', items: { type: 'string' }, description: 'Pros' },
-                cons: { type: 'array', items: { type: 'string' }, description: 'Cons' },
-              },
-              required: ['appId', 'rating', 'title', 'comment'],
-            },
-          },
-          {
-            name: 'get_developer_profile',
-            description: 'Get developer profile and stats',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                developerId: { type: 'string', description: 'Developer ID' },
-                includeApps: { type: 'boolean', description: 'Include developer apps' },
-              },
-              required: ['developerId'],
-            },
-          },
-          {
-            name: 'get_marketplace_stats',
-            description: 'Get marketplace statistics and analytics',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                includeTrends: { type: 'boolean', description: 'Include trend data' },
-                timeRange: {
-                  type: 'string',
-                  enum: ['7d', '30d', '90d', '1y'],
-                  description: 'Time range for trends',
-                },
-              },
-            },
-          },
-          {
-            name: 'manage_submission',
-            description: 'Manage app submission status',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                submissionId: { type: 'string', description: 'Submission ID' },
-                action: { type: 'string', enum: ['approve', 'reject', 'request_changes'] },
-                feedback: { type: 'string', description: 'Feedback for developer' },
-              },
-              required: ['submissionId', 'action'],
-            },
-          },
-          {
-            name: 'security_scan',
-            description: 'Perform security scan on an app',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                appId: { type: 'string', description: 'App ID' },
-                scanLevel: { type: 'string', enum: ['basic', 'comprehensive', 'deep'] },
-              },
-              required: ['appId'],
-            },
-          },
-        ],
-      };
-    });
+  private setupTools(): void {
+    // Browse apps tool
+    this.server.tool(
+      'browse_apps',
+      'Browse the MCP apps marketplace with filters and search',
+      {
+        category: z.string().optional().describe('Filter by category'),
+        tags: z.array(z.string()).optional().describe('Filter by tags'),
+        pricing: z.enum(['free', 'paid', 'freemium', 'enterprise']).optional().describe('Filter by pricing model'),
+        verified: z.boolean().optional().describe('Show only verified apps'),
+        featured: z.boolean().optional().describe('Show only featured apps'),
+        trending: z.boolean().optional().describe('Show only trending apps'),
+        search: z.string().optional().describe('Search term'),
+        sortBy: z.enum(['name', 'rating', 'downloads', 'updated', 'published']).default('name').describe('Sort by field'),
+        limit: z.number().default(50).describe('Maximum results to return'),
+      },
+      async ({ category, tags = [], pricing, verified, featured, trending, search, sortBy = 'name', limit = 50 }) => {
+        let apps = Array.from(this.apps.values());
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const { name, arguments: args } = request.params;
-
-      try {
-        switch (name) {
-          case 'browse_apps':
-            return await this.browseApps(args);
-          case 'get_app_details':
-            return await this.getAppDetails(args);
-          case 'install_app':
-            return await this.installApp(args);
-          case 'submit_app':
-            return await this.submitApp(args);
-          case 'review_app':
-            return await this.reviewApp(args);
-          case 'get_developer_profile':
-            return await this.getDeveloperProfile(args);
-          case 'get_marketplace_stats':
-            return await this.getMarketplaceStats(args);
-          case 'manage_submission':
-            return await this.manageSubmission(args);
-          case 'security_scan':
-            return await this.securityScan(args);
-          default:
-            throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
+        // Apply filters
+        if (category) {
+          apps = apps.filter((p) => p.category === category);
         }
-      } catch (error) {
-        console.error(`Error executing tool ${name}:`, error);
-        throw new McpError(
-          ErrorCode.InternalError,
-          `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`
-        );
-      }
-    });
-  }
 
-  private async browseApps(args: any): Promise<any> {
-    const {
-      category,
-      tags = [],
-      pricing,
-      verified,
-      featured,
-      trending,
-      search,
-      sortBy = 'name',
-      limit = 50,
-    } = args;
+        if (tags.length > 0) {
+          apps = apps.filter((app) => tags.some((tag) => app.tags.includes(tag)));
+        }
 
-    let apps = Array.from(this.apps.values());
+        if (pricing) {
+          apps = apps.filter((p) => p.pricing === pricing);
+        }
 
-    // Apply filters
-    if (category) {
-      apps = apps.filter((app) => app.category === category);
-    }
+        if (verified !== undefined) {
+          apps = apps.filter((p) => p.verified === verified);
+        }
 
-    if (tags.length > 0) {
-      apps = apps.filter((app) => tags.some((tag) => app.tags.includes(tag)));
-    }
+        if (featured !== undefined) {
+          apps = apps.filter((p) => p.featured === featured);
+        }
 
-    if (pricing) {
-      apps = apps.filter((app) => app.pricing === pricing);
-    }
+        if (trending !== undefined) {
+          apps = apps.filter((p) => p.trending === trending);
+        }
 
-    if (verified !== undefined) {
-      apps = apps.filter((app) => app.verified === verified);
-    }
+        if (search) {
+          const searchLower = search.toLowerCase();
+          apps = apps.filter(
+            (app) =>
+              app.name.toLowerCase().includes(searchLower) ||
+              app.description.toLowerCase().includes(searchLower) ||
+              app.tags.some((tag) => tag.toLowerCase().includes(searchLower))
+          );
+        }
 
-    if (featured !== undefined) {
-      apps = apps.filter((app) => app.featured === featured);
-    }
+        // Apply sorting
+        apps.sort((a, b) => {
+          switch (sortBy) {
+            case 'name':
+              return a.name.localeCompare(b.name);
+            case 'rating':
+              return b.rating - a.rating;
+            case 'downloads':
+              return b.downloadCount - a.downloadCount;
+            case 'updated':
+              return b.lastUpdated.getTime() - a.lastUpdated.getTime();
+            case 'published':
+              return b.publishedAt.getTime() - a.publishedAt.getTime();
+            default:
+              return 0;
+          }
+        });
 
-    if (trending !== undefined) {
-      apps = apps.filter((app) => app.trending === trending);
-    }
+        // Apply limit
+        const limitedApps = apps.slice(0, limit);
 
-    if (search) {
-      const searchLower = search.toLowerCase();
-      apps = apps.filter(
-        (app) =>
-          app.name.toLowerCase().includes(searchLower) ||
-          app.description.toLowerCase().includes(searchLower) ||
-          app.tags.some((tag) => tag.toLowerCase().includes(searchLower))
-      );
-    }
-
-    // Apply sorting
-    apps.sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'rating':
-          return b.rating - a.rating;
-        case 'downloads':
-          return b.downloadCount - a.downloadCount;
-        case 'updated':
-          return b.lastUpdated.getTime() - a.lastUpdated.getTime();
-        case 'published':
-          return b.publishedAt.getTime() - a.publishedAt.getTime();
-        default:
-          return 0;
-      }
-    });
-
-    // Apply limit
-    const limitedApps = apps.slice(0, limit);
-
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
+        return {
+          success: true,
+          data: {
             apps: limitedApps.map((app) => ({
               id: app.id,
               name: app.name,
@@ -642,187 +394,180 @@ export class MCPAppsMarketplace {
               category: app.category,
               version: app.version,
               author: app.author,
-              rating: app.rating,
-              downloads: app.downloads,
               pricing: app.pricing,
+              price: app.price,
+              currency: app.currency,
+              rating: app.rating,
+              reviewCount: app.reviewCount,
+              downloadCount: app.downloadCount,
+              verified: app.verified,
+              featured: app.featured,
+              trending: app.trending,
               lastUpdated: app.lastUpdated,
+              tags: app.tags.slice(0, 2), // First 2 tags
             })),
             total: apps.length,
-            filtered: !!category || !!search || !!minRating,
-            filters: { category, search, minRating },
-          }),
-        },
-      ],
-=======
-      success: true,
-      data: {
-        apps: limitedApps.map((app) => ({
-          id: app.id,
-          name: app.name,
-          description: app.description,
-          category: app.category,
-          version: app.version,
-          author: app.author,
-          pricing: app.pricing,
-          price: app.price,
-          currency: app.currency,
-          rating: app.rating,
-          reviewCount: app.reviewCount,
-          downloadCount: app.downloadCount,
-          verified: app.verified,
-          featured: app.featured,
-          trending: app.trending,
-          lastUpdated: app.lastUpdated,
-          tags: app.tags,
-          screenshots: app.screenshots.slice(0, 2), // First 2 screenshots
-        })),
-        total: apps.length,
-        categories: this.getCategories(),
-        filters: {
-          pricing: ['free', 'paid', 'freemium', 'enterprise'],
-          tags: this.getAllTags(),
-        },
-        pagination: {
-          limit,
-          offset: 0,
-          hasMore: apps.length > limit,
-        },
+            categories: this.getCategories(),
+            filters: {
+              pricing: ['free', 'paid', 'freemium', 'enterprise'],
+              tags: this.getAllTags(),
+            },
+            pagination: {
+              limit,
+              offset: 0,
+              hasMore: apps.length > limit,
+            },
+          },
+        };
+      }
+    );
+
+    // Get app details tool
+    this.server.tool(
+      'get_app_details',
+      'Get detailed information about a specific app',
+      {
+        appId: z.string().describe('App ID'),
+        includeReviews: z.boolean().default(false).describe('Include user reviews'),
+        includeMetrics: z.boolean().default(false).describe('Include usage metrics'),
       },
->>>>>>> Stashed changes
-    };
-  }
+      async ({ appId, includeReviews = false, includeMetrics = false }) => {
+        const app = this.apps.get(appId);
+        if (!app) {
+          throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
+        }
 
-  private async getAppDetails(args: any): Promise<any> {
-    const { appId, includeReviews = false, includeMetrics = false } = args;
+        const details: any = { ...app };
 
-    const app = this.apps.get(appId);
-    if (!app) {
-      throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
-    }
+        if (includeReviews) {
+          details.reviews = this.reviews.get(appId) || [];
+        }
 
-    const details: any = { ...app };
+        if (includeMetrics) {
+          details.detailedMetrics = this.getDetailedMetrics(appId);
+        }
 
-    if (includeReviews) {
-      details.reviews = this.reviews.get(appId) || [];
-    }
+        details.installationGuide = this.getInstallationGuide(app);
+        details.compatibilityInfo = this.getCompatibilityInfo(app);
+        details.securityInfo = this.getSecurityInfo(app);
 
-    if (includeMetrics) {
-      details.detailedMetrics = this.getDetailedMetrics(appId);
-    }
+        return {
+          success: true,
+          data: details,
+        };
+      }
+    );
 
-    details.installationGuide = this.getInstallationGuide(app);
-    details.compatibilityInfo = this.getCompatibilityInfo(app);
-    details.securityInfo = this.getSecurityInfo(app);
+    // Install app tool
+    this.server.tool(
+      'install_app',
+      'Install an MCP app',
+      {
+        appId: z.string().describe('App ID'),
+        version: z.string().optional().describe('Specific version to install'),
+        config: z.record(z.any()).optional().describe('Installation configuration'),
+        autoUpdate: z.boolean().default(true).describe('Enable auto-updates'),
+      },
+      async ({ appId, version, config = {}, autoUpdate = true }) => {
+        const app = this.apps.get(appId);
+        if (!app) {
+          throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
+        }
 
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(details),
-        },
-      ],
-=======
-      success: true,
-      data: details,
->>>>>>> Stashed changes
-    };
-  }
+        const installation = {
+          appId,
+          version: version || app.version,
+          config,
+          autoUpdate,
+          installedAt: new Date(),
+          status: 'installing',
+          steps: [
+            'Downloading app package',
+            'Verifying integrity',
+            'Checking dependencies',
+            'Installing dependencies',
+            'Configuring app',
+            'Running post-install tests',
+          ],
+        };
 
-  private async installApp(args: any): Promise<any> {
-    const { appId, version, config = {}, autoUpdate = true } = args;
+        // Simulate installation process
+        setTimeout(() => {
+          installation.status = 'completed';
+          installation.completedAt = new Date();
+          installation.nextSteps = [
+            'Launch the app',
+            'Configure settings',
+            'Read documentation',
+            'Join community',
+          ];
+        }, 3000);
 
-    const app = this.apps.get(appId);
-    if (!app) {
-      throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
-    }
-
-    const installation = {
-      appId,
-      version: version || app.version,
-      config,
-      autoUpdate,
-      installedAt: new Date(),
-      status: 'installing',
-      steps: [
-        'Downloading app package',
-        'Verifying integrity',
-        'Checking dependencies',
-        'Installing dependencies',
-        'Configuring app',
-        'Running post-install tests',
-      ],
-    };
-
-    // Simulate installation process
-    setTimeout(() => {
-      installation.status = 'completed';
-      installation.completedAt = new Date();
-      installation.nextSteps = [
-        'Launch the app',
-        'Configure settings',
-        'Read documentation',
-        'Join community',
-      ];
-    }, 3000);
-
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
+        return {
+          success: true,
+          data: {
             installation,
             estimatedTime: '3-5 minutes',
-            nextSteps: [
-              'Configure app settings',
-              'Review documentation',
-              'Test app functionality',
-              'Integrate with workflows',
+            message: `Installing ${app.name}...`,
+          },
+        };
+      }
+    );
+
+    // Submit app tool
+    this.server.tool(
+      'submit_app',
+      'Submit a new app to the marketplace',
+      {
+        name: z.string().describe('App name'),
+        description: z.string().describe('App description'),
+        version: z.string().describe('App version'),
+        category: z.string().describe('App category'),
+        tags: z.array(z.string()).describe('App tags'),
+        homepage: z.string().describe('App homepage'),
+        repository: z.string().describe('Repository URL'),
+        documentation: z.string().describe('Documentation URL'),
+        license: z.string().describe('License'),
+        pricing: z.enum(['free', 'paid', 'freemium', 'enterprise']).describe('License type'),
+        price: z.number().optional().describe('Price (if paid)'),
+      },
+      async ({ name, description, version, category, tags, homepage, repository, documentation, license, pricing, price }) => {
+        const submission = {
+          id: `submission_${Date.now()}`,
+          appId: `app_${Date.now()}`,
+          status: 'pending' as const,
+          submittedAt: new Date(),
+          app: {
+            name,
+            description,
+            version,
+            category,
+            tags,
+            homepage,
+            repository,
+            documentation,
+            license,
+            pricing,
+            price,
+          },
+          reviewProcess: {
+            estimatedTime: '5-7 business days',
+            steps: [
+              'Initial validation',
+              'Security scanning',
+              'Code review',
+              'Functionality testing',
+              'Documentation review',
+              'Final approval',
             ],
-            dependencies: app.dependencies,
-          }),
-        },
-      ],
-=======
-      success: true,
-      data: {
-        installation,
-        estimatedTime: '3-5 minutes',
-        message: `Installing ${app.name}...`,
-      },
->>>>>>> Stashed changes
-    };
-  }
+          },
+        };
 
-  private async submitApp(args: any): Promise<any> {
-    const submission = {
-      id: `submission_${Date.now()}`,
-      appId: `app_${Date.now()}`,
-      status: 'pending' as const,
-      submittedAt: new Date(),
-      app: args,
-      reviewProcess: {
-        estimatedTime: '5-7 business days',
-        steps: [
-          'Initial validation',
-          'Security scanning',
-          'Code review',
-          'Functionality testing',
-          'Documentation review',
-          'Final approval',
-        ],
-      },
-    };
+        this.submissions.set(submission.id, submission);
 
-    this.submissions.set(submission.id, submission);
-
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
+        return {
+          success: true,
+          data: {
             submission,
             message: 'App submitted for review',
             nextSteps: [
@@ -831,286 +576,261 @@ export class MCPAppsMarketplace {
               'Address any issues',
               'Await final approval',
             ],
-          }),
-        },
-      ],
-=======
-      success: true,
-      data: {
-        submission,
-        message: 'App submitted for review',
-        nextSteps: [
-          'Wait for initial review',
-          'Respond to feedback',
-          'Address any issues',
-          'Await final approval',
-        ],
+          },
+        };
+      }
+    );
+
+    // Review app tool
+    this.server.tool(
+      'review_app',
+      'Submit a review for an app',
+      {
+        appId: z.string().describe('App ID'),
+        rating: z.number().min(1).max(5).describe('Rating (1-5)'),
+        title: z.string().describe('Review title'),
+        comment: z.string().describe('Review comment'),
+        pros: z.array(z.string()).optional().describe('Pros'),
+        cons: z.array(z.string()).optional().describe('Cons'),
       },
->>>>>>> Stashed changes
-    };
-  }
+      async ({ appId, rating, title, comment, pros = [], cons = [] }) => {
+        const app = this.apps.get(appId);
+        if (!app) {
+          throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
+        }
 
-  private async reviewApp(args: any): Promise<any> {
-    const { appId, rating, title, comment, pros = [], cons = [] } = args;
+        const review: UserReview = {
+          id: `review_${Date.now()}`,
+          appId,
+          userId: `user_${Date.now()}`,
+          username: 'current_user',
+          rating,
+          title,
+          comment,
+          pros,
+          cons,
+          helpful: 0,
+          verified: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
 
-    const app = this.apps.get(appId);
-    if (!app) {
-      throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
-    }
+        const appReviews = this.reviews.get(appId) || [];
+        appReviews.push(review);
+        this.reviews.set(appId, appReviews);
 
-    const review: UserReview = {
-      id: `review_${Date.now()}`,
-      appId,
-      userId: `user_${Date.now()}`,
-      username: 'current_user',
-      rating,
-      title,
-      comment,
-      pros,
-      cons,
-      helpful: 0,
-      verified: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+        // Update app rating
+        this.updateAppRating(appId);
 
-    const appReviews = this.reviews.get(appId) || [];
-    appReviews.push(review);
-    this.reviews.set(appId, appReviews);
-
-    // Update app rating
-    this.updateAppRating(appId);
-
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
+        return {
+          success: true,
+          data: {
             review,
             message: 'Review submitted successfully',
-            appRating: app.rating,
-            totalReviews: app.reviews.length,
-          }),
-        },
-      ],
-=======
-      success: true,
-      data: {
-        review,
-        message: 'Review submitted successfully',
-        impact: 'Thank you for your feedback!',
+            impact: 'Thank you for your feedback!',
+          },
+        };
+      }
+    );
+
+    // Get developer profile tool
+    this.server.tool(
+      'get_developer_profile',
+      'Get developer profile and stats',
+      {
+        developerId: z.string().describe('Developer ID'),
+        includeApps: z.boolean().default(false).describe('Include developer apps'),
       },
->>>>>>> Stashed changes
-    };
-  }
+      async ({ developerId, includeApps = false }) => {
+        const developer = this.developers.get(developerId);
+        if (!developer) {
+          throw new McpError(ErrorCode.InvalidParams, `Developer not found: ${developerId}`);
+        }
 
-  private async getDeveloperProfile(args: any): Promise<any> {
-    const { developerId, includeApps = false } = args;
+        const profile: any = { ...developer };
 
-    const developer = this.developers.get(developerId);
-    if (!developer) {
-      throw new McpError(ErrorCode.InvalidParams, `Developer not found: ${developerId}`);
-    }
+        if (includeApps) {
+          profile.apps = developer.apps.map((appId) => this.apps.get(appId)).filter(Boolean);
+        }
 
-    const profile: any = { ...developer };
+        profile.reputation = this.calculateReputation(developer);
+        profile.achievements = this.getAchievements(developer);
 
-    if (includeApps) {
-      profile.apps = developer.apps.map((appId) => this.apps.get(appId)).filter(Boolean);
-    }
+        return {
+          success: true,
+          data: profile,
+        };
+      }
+    );
 
-    profile.reputation = this.calculateReputation(developer);
-    profile.achievements = this.getAchievements(developer);
+    // Get marketplace stats tool
+    this.server.tool(
+      'get_marketplace_stats',
+      'Get marketplace statistics and analytics',
+      {
+        includeTrends: z.boolean().default(false).describe('Include trend data'),
+        timeRange: z.enum(['7d', '30d', '90d', '1y']).default('30d').describe('Time range for trends'),
+      },
+      async ({ includeTrends = false, timeRange = '30d' }) => {
+        const apps = Array.from(this.apps.values());
 
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(profile),
-        },
-      ],
-=======
-      success: true,
-      data: profile,
->>>>>>> Stashed changes
-    };
-  }
+        const stats = {
+          totalApps: apps.length,
+          totalDownloads: apps.reduce((sum, app) => sum + app.downloadCount, 0),
+          totalReviews: apps.reduce((sum, app) => sum + app.reviewCount, 0),
+          averageRating: apps.reduce((sum, app) => sum + app.rating, 0) / apps.length,
+          categories: this.getCategoryStats(),
+          pricingDistribution: this.getPricingStats(),
+          topDevelopers: this.getTopDevelopers(),
+          trendingApps: apps.filter((app) => app.trending).slice(0, 10),
+          featuredApps: apps.filter((app) => app.featured).slice(0, 10),
+        };
 
-  private async getMarketplaceStats(args: any): Promise<any> {
-    const { includeTrends = false, timeRange = '30d' } = args;
+        if (includeTrends) {
+          stats.trends = this.generateTrends(timeRange);
+        }
 
-    const apps = Array.from(this.apps.values());
+        return {
+          success: true,
+          data: stats,
+        };
+      }
+    );
 
-    const stats = {
-      totalApps: apps.length,
-      totalDownloads: apps.reduce((sum, app) => sum + app.downloadCount, 0),
-      totalReviews: apps.reduce((sum, app) => sum + app.reviewCount, 0),
-      averageRating: apps.reduce((sum, app) => sum + app.rating, 0) / apps.length,
-      categories: this.getCategoryStats(),
-      pricingDistribution: this.getPricingStats(),
-      topDevelopers: this.getTopDevelopers(),
-      trendingApps: apps.filter((app) => app.trending).slice(0, 10),
-      featuredApps: apps.filter((app) => app.featured).slice(0, 10),
-    };
+    // Manage submission tool
+    this.server.tool(
+      'manage_submission',
+      'Manage app submission status',
+      {
+        submissionId: z.string().describe('Submission ID'),
+        action: z.enum(['approve', 'reject', 'request_changes']).describe('Action'),
+        feedback: z.string().optional().describe('Feedback for developer'),
+      },
+      async ({ submissionId, action, feedback }) => {
+        const submission = this.submissions.get(submissionId);
+        if (!submission) {
+          throw new McpError(ErrorCode.InvalidParams, `Submission not found: ${submissionId}`);
+        }
 
-    if (includeTrends) {
-      stats.trends = this.generateTrends(timeRange);
-    }
+        submission.status = action as any;
+        submission.reviewedAt = new Date();
+        submission.reviewer = 'marketplace_admin';
 
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(stats),
-        },
-      ],
-=======
-      success: true,
-      data: stats,
->>>>>>> Stashed changes
-    };
-  }
+        if (feedback) {
+          submission.feedback = feedback;
+        }
 
-  private async manageSubmission(args: any): Promise<any> {
-    const { submissionId, action, feedback } = args;
+        if (action === 'rejected') {
+          submission.rejectionReason = feedback || 'Submission does not meet marketplace standards';
+        }
 
-    const submission = this.submissions.get(submissionId);
-    if (!submission) {
-      throw new McpError(ErrorCode.InvalidParams, `Submission not found: ${submissionId}`);
-    }
+        if (action === 'approved') {
+          submission.publicationDate = new Date();
+          // Create the actual app
+          const app: MCPApp = {
+            ...submission.app,
+            id: submission.appId,
+            publishedAt: new Date(),
+            lastUpdated: new Date(),
+            downloadCount: 0,
+            rating: 0,
+            reviewCount: 0,
+            verified: false,
+            featured: false,
+            trending: false,
+            compatibility: {
+              mcpVersion: '1.0.0+',
+              platforms: ['Web'],
+              dependencies: [],
+            },
+            security: {
+              verified: false,
+              scanDate: new Date(),
+              vulnerabilities: 0,
+              signature: '',
+            },
+            metrics: {
+              installs: 0,
+              activeUsers: 0,
+              avgSessionDuration: 0,
+              crashRate: 0,
+            },
+          };
+        }
 
-    submission.status = action as any;
-    submission.reviewedAt = new Date();
-    submission.reviewer = 'marketplace_admin';
-
-    if (feedback) {
-      submission.feedback = feedback;
-    }
-
-    if (action === 'rejected') {
-      submission.rejectionReason = feedback || 'Submission does not meet marketplace standards';
-    }
-
-    if (action === 'approved') {
-      submission.publicationDate = new Date();
-      // Create the actual app
-      const app: MCPApp = {
-        ...submission.app,
-        id: submission.appId,
-        publishedAt: new Date(),
-        lastUpdated: new Date(),
-        downloadCount: 0,
-        rating: 0,
-        reviewCount: 0,
-        verified: false,
-        featured: false,
-        trending: false,
-        compatibility: {
-          mcpVersion: '1.0.0+',
-          platforms: ['Web'],
-          dependencies: [],
-        },
-        security: {
-          verified: false,
-          scanDate: new Date(),
-          vulnerabilities: 0,
-          signature: '',
-        },
-        metrics: {
-          installs: 0,
-          activeUsers: 0,
-          avgSessionDuration: 0,
-          crashRate: 0,
-        },
-      };
-      this.apps.set(app.id, app);
-    }
-
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
+        return {
+          success: true,
+          data: {
             submission,
             message: `Submission ${action} successfully`,
-            nextSteps: ['Wait for processing', 'Check status updates', 'Contact support if needed'],
-          }),
-        },
-      ],
-=======
-      success: true,
-      data: {
-        submission,
-        message: `Submission ${action} successfully`,
+          },
+        };
+      }
+    );
+
+    // Security scan tool
+    this.server.tool(
+      'security_scan',
+      'Perform security scan on an app',
+      {
+        appId: z.string().describe('App ID'),
+        scanLevel: z.enum(['basic', 'comprehensive', 'deep']).default('basic').describe('Scan level'),
       },
->>>>>>> Stashed changes
-    };
-  }
+      async ({ appId, scanLevel = 'basic' }) => {
+        const app = this.apps.get(appId);
+        if (!app) {
+          throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
+        }
 
-  private async securityScan(args: any): Promise<any> {
-    const { appId, scanLevel = 'basic' } = args;
+        const scan = {
+          scanId: `scan_${Date.now()}`,
+          appId,
+          level: scanLevel,
+          status: 'scanning',
+          startedAt: new Date(),
+          findings: [],
+        };
 
-    const app = this.apps.get(appId);
-    if (!app) {
-      throw new McpError(ErrorCode.InvalidParams, `App not found: ${appId}`);
-    }
+        // Simulate security scan
+        setTimeout(() => {
+          scan.status = 'completed';
+          scan.completedAt = new Date();
+          scan.findings = [
+            {
+              type: 'info',
+              severity: 'low',
+              description: 'No critical security issues found',
+              recommendation: 'Continue monitoring',
+            },
+          ];
+        }, 2000);
 
-    const scan = {
-      appId,
-      scanLevel,
-      startedAt: new Date(),
-      status: 'scanning',
-      checks: [
-        'Code signature verification',
-        'Dependency vulnerability scan',
-        'Malware detection',
-        'Permission analysis',
-        'Data handling review',
-      ],
-    };
-
-    // Simulate scanning process
-    setTimeout(() => {
-      scan.status = 'completed';
-      scan.completedAt = new Date();
-      scan.results = {
-        vulnerabilities: Math.floor(Math.random() * 3),
-        severity: 'low',
-        recommendations: [
-          'Update dependencies to latest versions',
-          'Implement input validation',
-          'Review data encryption practices',
-        ],
-        passed: true,
-      };
-    }, 5000);
-
-    return {
-<<<<<<< Updated upstream
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(scan),
-        },
-      ],
-=======
-      success: true,
-      data: scan,
->>>>>>> Stashed changes
-    };
+        return {
+          success: true,
+          data: {
+            scan,
+            message: `Security scan completed for ${app.name}`,
+          },
+        };
+      }
+    );
   }
 
   // Helper methods
   private getCategories(): string[] {
-    return Array.from(new Set(Array.from(this.apps.values()).map((app) => app.category)));
+    const categories = new Set<string>();
+    for (const app of this.apps.values()) {
+      categories.add(app.category);
+    }
+    return Array.from(categories);
   }
 
   private getAllTags(): string[] {
-    const allTags = Array.from(this.apps.values()).flatMap((app) => app.tags);
-    return Array.from(new Set(allTags));
+    const tags = new Set<string>();
+    for (const app of this.apps.values()) {
+      app.tags.forEach(tag => tags.add(tag));
+    }
+    return Array.from(tags);
   }
 
   private getCategoryStats(): Record<string, number> {
@@ -1129,71 +849,10 @@ export class MCPAppsMarketplace {
     return stats;
   }
 
-  private getTopDevelopers(): any[] {
+  private getTopDevelopers(): DeveloperAccount[] {
     return Array.from(this.developers.values())
       .sort((a, b) => b.stats.totalDownloads - a.stats.totalDownloads)
-      .slice(0, 10)
-      .map((dev) => ({
-        id: dev.id,
-        name: dev.name,
-        totalDownloads: dev.stats.totalDownloads,
-        averageRating: dev.stats.averageRating,
-        activeApps: dev.stats.activeApps,
-      }));
-  }
-
-  private updateAppRating(appId: string): void {
-    const app = this.apps.get(appId);
-    const reviews = this.reviews.get(appId);
-
-    if (app && reviews && reviews.length > 0) {
-      const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-      app.rating = totalRating / reviews.length;
-      app.reviewCount = reviews.length;
-    }
-  }
-
-  private calculateReputation(developer: DeveloperAccount): any {
-    return {
-      score: Math.min(100, developer.stats.averageRating * 20 + developer.stats.activeApps * 5),
-      level:
-        developer.stats.totalDownloads > 100000
-          ? 'platinum'
-          : developer.stats.totalDownloads > 50000
-            ? 'gold'
-            : developer.stats.totalDownloads > 10000
-              ? 'silver'
-              : 'bronze',
-      badges: this.getBadges(developer),
-    };
-  }
-
-  private getBadges(developer: DeveloperAccount): string[] {
-    const badges = [];
-    if (developer.verified) badges.push('verified');
-    if (developer.stats.totalDownloads > 100000) badges.push('top_developer');
-    if (developer.stats.averageRating >= 4.8) badges.push('excellent_quality');
-    if (developer.stats.activeApps >= 5) badges.push('prolific');
-    return badges;
-  }
-
-  private getAchievements(developer: DeveloperAccount): any[] {
-    return [
-      {
-        id: 'first_app',
-        name: 'First App Published',
-        description: 'Published your first app',
-        earnedAt: developer.joinedAt,
-        icon: '🎉',
-      },
-      {
-        id: 'quality_focus',
-        name: 'Quality Focus',
-        description: 'Maintained 4.5+ average rating',
-        earnedAt: developer.stats.averageRating >= 4.5 ? new Date() : null,
-        icon: '⭐',
-      },
-    ].filter((achievement) => achievement.earnedAt);
+      .slice(0, 10);
   }
 
   private getDetailedMetrics(appId: string): any {
@@ -1201,108 +860,165 @@ export class MCPAppsMarketplace {
     if (!app) return null;
 
     return {
-      dailyActiveUsers: Math.floor(app.metrics.activeUsers * 0.7),
-      weeklyActiveUsers: app.metrics.activeUsers,
-      monthlyActiveUsers: Math.floor(app.metrics.activeUsers * 1.3),
-      retentionRate: 0.85,
-      churnRate: 0.15,
-      averageSessionDuration: app.metrics.avgSessionDuration,
-      crashFreeRate: 1 - app.metrics.crashRate,
-      performance: {
-        startupTime: Math.random() * 2000 + 500,
-        memoryUsage: Math.random() * 512 + 128,
-        cpuUsage: Math.random() * 0.3 + 0.1,
+      dailyActiveUsers: Math.floor(app.metrics.activeUsers / 30),
+      weeklyActiveUsers: Math.floor(app.metrics.activeUsers * 7 / 30),
+      monthlyActiveUsers: app.metrics.activeUsers,
+      averageSessionTime: app.metrics.avgSessionDuration,
+      crashRate: app.metrics.crashRate,
+    };
+  }
+
+  private getInstallationGuide(app: MCPApp): any {
+    return {
+      steps: [
+        '1. Verify MCP server compatibility',
+        '2. Download app package',
+        '3. Install dependencies',
+        '4. Configure app settings',
+        '5. Test functionality',
+      ],
+      requirements: {
+        mcpVersion: app.compatibility.mcpVersion,
+        platforms: app.compatibility.platforms,
+        dependencies: app.compatibility.dependencies,
       },
-      userSatisfaction: {
-        rating: app.rating,
-        wouldRecommend: 0.89,
-        featureRequests: 23,
-        bugReports: 5,
+      troubleshooting: {
+        commonIssues: [
+          'Installation failures',
+          'Dependency conflicts',
+          'Configuration errors',
+          'Performance issues',
+        ],
+        support: 'support@marketplace.com',
+        docs: app.documentation,
       },
     };
   }
 
-  private getInstallationGuide(app: MCPApp): string[] {
-    return [
-      `1. Install ${app.name}:`,
-      `   mcp install ${app.id}`,
-      `2. Configure the app:`,
-      `   mcp config ${app.id} --setup`,
-      `3. Verify installation:`,
-      `   mcp verify ${app.id}`,
-      `4. Launch the app:`,
-      `   mcp start ${app.id}`,
-    ];
-  }
-
   private getCompatibilityInfo(app: MCPApp): any {
     return {
-      minimumMCPVersion: app.compatibility.mcpVersion,
       supportedPlatforms: app.compatibility.platforms,
-      requiredDependencies: app.compatibility.dependencies,
-      systemRequirements: {
-        memory: '512MB minimum',
-        storage: '100MB minimum',
-        network: 'Internet connection required',
+      mcpVersion: app.compatibility.mcpVersion,
+      dependencies: app.compatibility.dependencies,
+      compatibilityMatrix: {
+        'VS Code': app.compatibility.platforms.includes('VS Code'),
+        'Cursor': app.compatibility.platforms.includes('Cursor'),
+        'Claude Desktop': app.compatibility.platforms.includes('Claude Desktop'),
+        'JetBrains': app.compatibility.platforms.includes('JetBrains'),
       },
-      integrationNotes: 'Works seamlessly with all major MCP clients',
+      versionHistory: [
+        {
+          version: '1.0.0',
+          releaseDate: app.publishedAt,
+          supported: true,
+        },
+      ],
+      futureCompatibility: 'Excellent',
     };
   }
 
   private getSecurityInfo(app: MCPApp): any {
     return {
-      verified: app.security.verified,
-      lastScanDate: app.security.scanDate,
-      vulnerabilitiesFound: app.security.vulnerabilities,
-      signatureVerified: !!app.security.signature,
-      securityRating:
-        app.security.vulnerabilities === 0
-          ? 'excellent'
-          : app.security.vulnerabilities <= 2
-            ? 'good'
-            : 'needs_attention',
+      securityLevel: app.security.verified ? 'High' : 'Medium',
+      lastScan: app.security.scanDate,
+      vulnerabilities: app.security.vulnerabilities,
+      signature: app.security.signature,
+      compliance: {
+        gdpr: true,
+        soc2: true,
+        iso27001: true,
+        hipaa: true,
+      },
       recommendations: [
-        'Keep app updated to latest version',
-        'Review permissions before installation',
-        'Report any security concerns',
+        'Regular security updates',
+        'Monitor for new vulnerabilities',
+        'Keep dependencies updated',
       ],
     };
   }
 
-  private generateTrends(timeRange: string): any {
-    const days = parseInt(timeRange.replace('d', ''));
+  private updateAppRating(appId: string): void {
+    const app = this.apps.get(appId);
+    if (!app) return;
+
+    const reviews = this.reviews.get(appId) || [];
+    if (reviews.length === 0) return;
+
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    app.rating = totalRating / reviews.length;
+  }
+
+  private calculateReputation(developer: DeveloperAccount): any {
+    const score = developer.stats.averageRating * 0.3 +
+      (developer.stats.totalDownloads / 100000) * 0.4 +
+      (developer.stats.activeApps / 10) * 0.3;
+
     return {
-      downloads: Array.from({ length: Math.min(days, 30) }, (_, i) => ({
-        date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        downloads: Math.floor(Math.random() * 1000) + 500,
-      })).reverse(),
-      submissions: Array.from({ length: 7 }, (_, i) => ({
-        week: `Week ${i + 1}`,
-        submissions: Math.floor(Math.random() * 20) + 5,
-      })),
-      categories: this.getCategoryStats(),
-      security: {
-        scansCompleted: Math.floor(Math.random() * 100) + 50,
-        vulnerabilitiesFixed: Math.floor(Math.random() * 20) + 5,
-        averageScanTime: '2.5 minutes',
+      score,
+      level: score > 0.8 ? 'Excellent' : score > 0.6 ? 'Good' : 'Developing',
+      factors: {
+        ratings: developer.stats.averageRating,
+        downloads: developer.stats.totalDownloads,
+        apps: developer.stats.activeApps,
+        revenue: developer.stats.totalRevenue,
       },
+    };
+  }
+
+  private getAchievements(developer: DeveloperAccount): string[] {
+    const achievements = [];
+
+    if (developer.stats.totalDownloads > 50000) {
+      achievements.push('Top Developer');
+    }
+    if (developer.stats.averageRating > 4.5) {
+      achievements.push('Highly Rated');
+    }
+    if (developer.verified) {
+      achievements.push('Verified Developer');
+    }
+    if (developer.stats.activeApps > 5) {
+      achievements.push('Prolific Developer');
+    }
+
+    return achievements;
+  }
+
+  private generateTrends(timeRange: string): any {
+    // Simulated trend data
+    const days = parseInt(timeRange.replace('d', ''));
+    const data = [];
+
+    for (let i = 0; i < days; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      data.push({
+        date: date.toISOString(),
+        downloads: Math.floor(Math.random() * 1000),
+        installs: Math.floor(Math.random() * 500),
+        revenue: Math.random() * 10000,
+      });
+    }
+
+    return {
+      period: timeRange,
+      data,
+      insights: [
+        'Downloads trending upward',
+        'Mobile app adoption increasing',
+        'Enterprise interest growing',
+      ],
     };
   }
 
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('MCP Apps Marketplace server running on stdio');
   }
 }
 
-<<<<<<< Updated upstream
-// ESM CLI guard
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Server startup
+if (require.main === module) {
   const server = new MCPAppsMarketplace();
   server.run().catch(console.error);
 }
-=======
-const server = new MCPAppsMarketplace();
-server.run().catch(console.error);
->>>>>>> Stashed changes
