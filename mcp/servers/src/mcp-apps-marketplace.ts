@@ -615,40 +615,28 @@ class MCPAppsMarketplace {
     const limitedApps = apps.slice(0, limit);
 
     return {
-      success: true,
-      data: {
-        apps: limitedApps.map((app) => ({
-          id: app.id,
-          name: app.name,
-          description: app.description,
-          category: app.category,
-          version: app.version,
-          author: app.author,
-          pricing: app.pricing,
-          price: app.price,
-          currency: app.currency,
-          rating: app.rating,
-          reviewCount: app.reviewCount,
-          downloadCount: app.downloadCount,
-          verified: app.verified,
-          featured: app.featured,
-          trending: app.trending,
-          lastUpdated: app.lastUpdated,
-          tags: app.tags,
-          screenshots: app.screenshots.slice(0, 2), // First 2 screenshots
-        })),
-        total: apps.length,
-        categories: this.getCategories(),
-        filters: {
-          pricing: ['free', 'paid', 'freemium', 'enterprise'],
-          tags: this.getAllTags(),
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            apps: limitedApps.map((app) => ({
+              id: app.id,
+              name: app.name,
+              description: app.description,
+              category: app.category,
+              version: app.version,
+              author: app.author,
+              rating: app.rating,
+              downloads: app.downloads,
+              pricing: app.pricing,
+              lastUpdated: app.lastUpdated,
+            })),
+            total: apps.length,
+            filtered: !!category || !!search || !!minRating,
+            filters: { category, search, minRating },
+          }),
         },
-        pagination: {
-          limit,
-          offset: 0,
-          hasMore: apps.length > limit,
-        },
-      },
+      ],
     };
   }
 
@@ -675,8 +663,12 @@ class MCPAppsMarketplace {
     details.securityInfo = this.getSecurityInfo(app);
 
     return {
-      success: true,
-      data: details,
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(details),
+        },
+      ],
     };
   }
 
@@ -718,12 +710,22 @@ class MCPAppsMarketplace {
     }, 3000);
 
     return {
-      success: true,
-      data: {
-        installation,
-        estimatedTime: '3-5 minutes',
-        message: `Installing ${app.name}...`,
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            installation,
+            estimatedTime: '3-5 minutes',
+            nextSteps: [
+              'Configure app settings',
+              'Review documentation',
+              'Test app functionality',
+              'Integrate with workflows',
+            ],
+            dependencies: app.dependencies,
+          }),
+        },
+      ],
     };
   }
 
@@ -750,17 +752,21 @@ class MCPAppsMarketplace {
     this.submissions.set(submission.id, submission);
 
     return {
-      success: true,
-      data: {
-        submission,
-        message: 'App submitted for review',
-        nextSteps: [
-          'Wait for initial review',
-          'Respond to feedback',
-          'Address any issues',
-          'Await final approval',
-        ],
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            submission,
+            message: 'App submitted for review',
+            nextSteps: [
+              'Wait for initial review',
+              'Respond to feedback',
+              'Address any issues',
+              'Await final approval',
+            ],
+          }),
+        },
+      ],
     };
   }
 
@@ -796,12 +802,17 @@ class MCPAppsMarketplace {
     this.updateAppRating(appId);
 
     return {
-      success: true,
-      data: {
-        review,
-        message: 'Review submitted successfully',
-        impact: 'Thank you for your feedback!',
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            review,
+            message: 'Review submitted successfully',
+            appRating: app.rating,
+            totalReviews: app.reviews.length,
+          }),
+        },
+      ],
     };
   }
 
@@ -823,8 +834,12 @@ class MCPAppsMarketplace {
     profile.achievements = this.getAchievements(developer);
 
     return {
-      success: true,
-      data: profile,
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(profile),
+        },
+      ],
     };
   }
 
@@ -850,8 +865,12 @@ class MCPAppsMarketplace {
     }
 
     return {
-      success: true,
-      data: stats,
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(stats),
+        },
+      ],
     };
   }
 
@@ -911,11 +930,16 @@ class MCPAppsMarketplace {
     }
 
     return {
-      success: true,
-      data: {
-        submission,
-        message: `Submission ${action} successfully`,
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            submission,
+            message: `Submission ${action} successfully`,
+            nextSteps: ['Wait for processing', 'Check status updates', 'Contact support if needed'],
+          }),
+        },
+      ],
     };
   }
 
@@ -958,8 +982,12 @@ class MCPAppsMarketplace {
     }, 5000);
 
     return {
-      success: true,
-      data: scan,
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(scan),
+        },
+      ],
     };
   }
 
@@ -1156,5 +1184,8 @@ class MCPAppsMarketplace {
   }
 }
 
-const server = new MCPAppsMarketplace();
-server.run().catch(console.error);
+// ESM CLI guard
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const server = new MCPAppsMarketplace();
+  server.run().catch(console.error);
+}

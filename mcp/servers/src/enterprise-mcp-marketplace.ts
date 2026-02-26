@@ -995,10 +995,8 @@ class EnterpriseMCPMarketplace {
   }
 }
 
-const server = new EnterpriseMCPMarketplace();
-server.run().catch(console.error);
-
 // ESM CLI guard
 if (import.meta.url === `file://${process.argv[1]}`) {
+  const server = new EnterpriseMCPMarketplace();
   server.run().catch(console.error);
 }

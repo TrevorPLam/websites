@@ -219,27 +219,31 @@
 
 ### S-20: Fix template INVOKES section
 
-- [ ] **Task**: Replace human comment with parseable MCP server list
-- [ ] **Priority**: Medium - Template usability
-- [ ] **Fix**: Change `INVOKES: [list-mcp-servers-needed]` → `INVOKES: [azure-mcp, github-mcp]`
+- [x] **Task**: Replace human comment with parseable MCP server list
+- [x] **Priority**: Medium - Template usability
+- [x] **Fix**: Change `INVOKES: [list-mcp-servers-needed]` → `INVOKES: [filesystem, fetch, github]`
+- [x] **Validation**: Template shows actual MCP server names
 
 ### S-21: Add structured error handling to template
 
-- [ ] **Task**: Replace generic error handling with step-level structure
-- [ ] **Priority**: Medium - Template robustness
-- [ ] **Add**: Error table with columns: `| Step | Error | Recovery | Rollback? |`
+- [x] **Task**: Replace generic error handling with step-level structure
+- [x] **Priority**: Medium - Template robustness
+- [x] **Add**: Error table with columns: `| Step | Error | Recovery | Rollback? |`
+- [x] **Validation**: Template includes structured error handling
 
 ### S-22: Fix hardcoded API URL in template
 
-- [ ] **Task**: Replace realistic-looking URL with obvious placeholder
-- [ ] **Priority**: Medium - Prevent accidental shipping of template URLs
-- [ ] **Fix**: Change `api.service.com` → `api.REPLACE-ME.com` or `api.[SERVICE_NAME].com # REPLACE THIS`
+- [x] **Task**: Replace realistic-looking URL with obvious placeholder
+- [x] **Priority**: Medium - Prevent accidental shipping of template URLs
+- [x] **Fix**: Change `api.service.com` → `api.[SERVICE_NAME].com # REPLACE THIS`
+- [x] **Validation**: Template uses obvious placeholder URLs
 
 ### S-23: Add changelog section to template
 
-- [ ] **Task**: Add versioning section for tracking skill updates
-- [ ] **Priority**: Medium - Skill maintenance
-- [ ] **Add**: `## Changelog` section with `| Version | Date | Change |` table
+- [x] **Task**: Add versioning section for tracking skill updates
+- [x] **Priority**: Medium - Skill maintenance
+- [x] **Add**: `## Changelog` section with `| Version | Date | Change |` table
+- [x] **Validation**: Template includes version tracking structure
 
 ---
 
@@ -247,25 +251,27 @@
 
 ### S-24: Create marketing agency skills
 
-- [ ] **Task**: Build core business use case skills
-- [ ] **Priority**: Critical - Primary agency functionality missing
-- [ ] **Skills to Create**:
-  - [ ] `skills/domain/marketing/client-intake.md`
-  - [ ] `skills/domain/marketing/seo-audit.md`
-  - [ ] `skills/domain/marketing/lead-research.md`
-  - [ ] `skills/domain/marketing/website-build.md`
-- [ ] **Tools Available**: fetch-mcp and filesystem-mcp already in config.json
-- [ ] **Impact**: Immediately usable by Windsurf/Cursor agents
+- [x] **Task**: Build core business use case skills
+- [x] **Priority**: Critical - Primary agency functionality missing
+- [x] **Skills to Create**:
+  - [x] `skills/domain/marketing/client-intake.md` (4.8KB - complete)
+  - [x] `skills/domain/marketing/seo-audit.md` (5.5KB - complete)
+  - [x] `skills/domain/marketing/lead-research.md` (5.6KB - complete)
+  - [x] `skills/domain/marketing/website-build.md` (6.7KB - complete)
+- [x] **Tools Available**: fetch-mcp and filesystem-mcp already in config.json
+- [x] **Impact**: Immediately usable by Windsurf/Cursor agents
+- [x] **Validation**: All 4 marketing skills exist and are substantial
 
 ### S-25: Create operational core skills
 
-- [ ] **Task**: Build skills to prevent session re-derivation
-- [ ] **Priority**: Critical - Agents re-derive deployment steps every session
-- [ ] **Skills to Create**:
-  - [ ] `skills/core/deploy/production-deploy.md`
-  - [ ] `skills/core/review/code-review.md`
-  - [ ] `skills/core/discovery/service-discovery.md`
-- [ ] **Impact**: Persistent operational knowledge across sessions
+- [x] **Task**: Build skills to prevent session re-derivation
+- [x] **Priority**: Critical - Agents re-derive deployment steps every session
+- [x] **Skills to Create**:
+  - [x] `skills/core/deploy/production-deploy.md` (exists with content)
+  - [x] `skills/core/review/code-review.md` (exists with content)
+  - [x] `skills/core/discovery/service-discovery.md` (exists with content)
+- [x] **Impact**: Persistent operational knowledge across sessions
+- [x] **Validation**: All 3 core skill directories exist with content
 
 ---
 
@@ -290,10 +296,10 @@
 
 ### Progress Summary:
 
-- [x] **Critical Issues (7/7 completed)**: S-01, S-02, S-03, S-04, S-05, S-06, S-07 completed
+- [x] **Critical Issues (9/9 completed)**: S-01, S-02, S-03, S-04, S-05, S-06, S-07, S-24, S-25 completed
 - [x] **High Issues (11/11 completed)**: S-08, S-09, S-10, S-11, S-12, S-13, S-14, S-15, S-16, S-17, S-18, S-19 completed
-- [ ] **Medium Issues (4)**: 0/4 completed (S-20 to S-23)
-- [x] **Overall Progress**: 18/25 completed (72%)
+- [x] **Medium Issues (4/4 completed)**: S-20, S-21, S-22, S-23 completed
+- [x] **Overall Progress**: 25/25 completed (100%)
 
 ### Next Actions:
 
@@ -306,7 +312,8 @@
 7. ✅ S-07 (populate codex subdirs) - COMPLETED
 8. ✅ S-10/S-11 (MCP references) - COMPLETED
 9. ✅ S-12 to S-19 (documentation drift) - COMPLETED
-10. ⏳ S-20 to S-23 (template quality) - NEXT PRIORITY
+10. ✅ S-20 to S-23 (template quality) - COMPLETED
+11. ✅ S-24 to S-25 (missing skills) - COMPLETED
 
 ---
 
