@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/widgets/admin-sidebar/ui/AdminSidebar.tsx
+ * @summary admin-sidebar widget component.
+ * @description Layout component for admin interface admin-sidebar section.
+ * @security none
+ * @requirements none
+ */
 'use client';
 import { cn } from '@/shared/lib/cn';
 import Link from 'next/link';

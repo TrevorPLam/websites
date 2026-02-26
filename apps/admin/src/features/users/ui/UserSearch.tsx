@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/features/users/ui/UserSearch.tsx
+ * @summary users feature implementation for admin interface.
+ * @description Provides users management functionality with proper error handling and user feedback.
+ * @security none
+ * @requirements none
+ */
 'use client';
 
 import React from 'react';

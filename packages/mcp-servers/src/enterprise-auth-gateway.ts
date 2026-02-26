@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/**
+ * @file mcp-servers/src/enterprise-auth-gateway.ts
+ * @summary MCP server implementation: enterprise-auth-gateway.
+ * @description Enterprise MCP server providing enterprise auth gateway capabilities.
+ * @security Enterprise-grade security with authentication, authorization, and audit logging.
+ * @requirements MCP-standards, enterprise-security
+ */
 
 /**
  * @file packages/mcp-servers/src/enterprise-auth-gateway.ts

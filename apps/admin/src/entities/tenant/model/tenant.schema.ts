@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/entities/tenant/model/tenant.schema.ts
+ * @summary tenant entity definitions and schemas.
+ * @description Core data structures and validation for tenant management.
+ * @security none
+ * @requirements none
+ */
 import { z } from 'zod';
 
 export const TenantSchema = z.object({

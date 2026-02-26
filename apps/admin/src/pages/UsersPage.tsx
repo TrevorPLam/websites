@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/pages/UsersPage.tsx
+ * @summary UsersPage page component.
+ * @description Main page component for UsersPage functionality.
+ * @security none
+ * @requirements none
+ */
 'use client';
 
 import React, { useState, useEffect } from 'react';

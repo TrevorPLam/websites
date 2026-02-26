@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/widgets/admin-footer/ui/AdminFooter.tsx
+ * @summary admin-footer widget component.
+ * @description Layout component for admin interface admin-footer section.
+ * @security none
+ * @requirements none
+ */
 'use client';
 import { cn } from '@/shared/lib/cn';
 

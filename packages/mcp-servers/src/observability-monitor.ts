@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/**
+ * @file mcp-servers/src/observability-monitor.ts
+ * @summary MCP server implementation: observability-monitor.
+ * @description Enterprise MCP server providing observability monitor capabilities.
+ * @security Enterprise-grade security with authentication, authorization, and audit logging.
+ * @requirements MCP-standards, enterprise-security
+ */
 
 /**
  * @file packages/mcp-servers/src/observability-monitor.ts

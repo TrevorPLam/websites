@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/features/system/ui/AlertsPanel.tsx
+ * @summary system feature implementation for admin interface.
+ * @description Provides system management functionality with proper error handling and user feedback.
+ * @security none
+ * @requirements none
+ */
 'use client';
 
 import React from 'react';

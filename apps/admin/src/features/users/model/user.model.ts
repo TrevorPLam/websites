@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/features/users/model/user.model.ts
+ * @summary users feature implementation for admin interface.
+ * @description Provides users management functionality with proper error handling and user feedback.
+ * @security none
+ * @requirements none
+ */
 import { User, UserSession } from '@/entities/user';
 
 export interface UserListState {

@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/shared/lib/format-date.ts
+ * @summary Shared utilities and components.
+ * @description Reusable functionality across admin application.
+ * @security none
+ * @requirements none
+ */
 import { format } from 'date-fns';
 
 export function formatDate(date: Date | string, formatStr = 'MMM dd, yyyy'): string {

@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/app/dashboard/page.tsx
+ * @summary 
+ * @description 
+ * @security none
+ * @requirements none
+ */
 import { db } from '@repo/db';
 import { headers } from 'next/headers';
 import { MetricCard } from '@/shared/ui/MetricCard';

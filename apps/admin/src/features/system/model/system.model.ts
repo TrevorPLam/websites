@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/features/system/model/system.model.ts
+ * @summary system feature implementation for admin interface.
+ * @description Provides system management functionality with proper error handling and user feedback.
+ * @security none
+ * @requirements none
+ */
 import { SystemMetrics, SystemAlert, SystemHealth } from '@/entities/system';
 
 export interface SystemMonitoringState {

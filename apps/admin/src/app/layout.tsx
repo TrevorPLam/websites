@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/app/layout.tsx
+ * @summary 
+ * @description 
+ * @security none
+ * @requirements none
+ */
 import { AdminHeader } from '@/widgets/admin-header';
 import { AdminSidebar } from '@/widgets/admin-sidebar';
 import { AdminFooter } from '@/widgets/admin-footer';

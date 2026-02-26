@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/features/tenants/ui/TenantDetailHeader.tsx
+ * @summary tenants feature implementation for admin interface.
+ * @description Provides tenants management functionality with proper error handling and user feedback.
+ * @security none
+ * @requirements none
+ */
 interface Tenant {
   id: string;
   config: any;

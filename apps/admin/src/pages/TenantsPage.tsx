@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/pages/TenantsPage.tsx
+ * @summary TenantsPage page component.
+ * @description Main page component for TenantsPage functionality.
+ * @security none
+ * @requirements none
+ */
 'use client';
 
 import React, { useState, useEffect } from 'react';

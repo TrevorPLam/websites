@@ -1,3 +1,10 @@
+/**
+ * @file context-engineering/src/index.ts
+ * @summary Advanced context engineering with hierarchical budgets and intelligent caching.
+ * @description Multi-level context management with compression and optimization metrics.
+ * @security none
+ * @requirements 2026-context-engineering, optimization
+ */
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 

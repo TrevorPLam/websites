@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/**
+ * @file mcp-servers/src/ai-dlc-methodology.ts
+ * @summary MCP server implementation: ai-dlc-methodology.
+ * @description Enterprise MCP server providing ai dlc methodology capabilities.
+ * @security none
+ * @requirements MCP-standards, enterprise-security
+ */
 
 /**
  * AI-DLC (AI-Driven Lifecycle Collaboration) Methodology MCP Server

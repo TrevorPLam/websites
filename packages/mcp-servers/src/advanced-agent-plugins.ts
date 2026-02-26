@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/**
+ * @file mcp-servers/src/advanced-agent-plugins.ts
+ * @summary MCP server implementation: advanced-agent-plugins.
+ * @description Enterprise MCP server providing advanced agent plugins capabilities.
+ * @security none
+ * @requirements MCP-standards, enterprise-security
+ */
 
 /**
  * Advanced AI Agent Plugins Architecture

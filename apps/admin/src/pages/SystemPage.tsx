@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/pages/SystemPage.tsx
+ * @summary SystemPage page component.
+ * @description Main page component for SystemPage functionality.
+ * @security none
+ * @requirements none
+ */
 'use client';
 
 import React, { useState, useEffect } from 'react';

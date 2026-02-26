@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/entities/user/model/user.schema.ts
+ * @summary user entity definitions and schemas.
+ * @description Core data structures and validation for user management.
+ * @security none
+ * @requirements none
+ */
 import { z } from 'zod';
 
 export const UserSchema = z.object({

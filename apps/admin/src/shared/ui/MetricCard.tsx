@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/shared/ui/MetricCard.tsx
+ * @summary Shared utilities and components.
+ * @description Reusable functionality across admin application.
+ * @security none
+ * @requirements none
+ */
 interface MetricCardProps {
   label: string;
   value: number;

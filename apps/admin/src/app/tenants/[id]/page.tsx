@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/app/tenants/[id]/page.tsx
+ * @summary 
+ * @description 
+ * @security none
+ * @requirements none
+ */
 import { db } from '@repo/db';
 import { notFound } from 'next/navigation';
 import { TenantDetailHeader } from '@/features/tenants/ui/TenantDetailHeader';

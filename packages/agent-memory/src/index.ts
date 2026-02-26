@@ -1,3 +1,10 @@
+/**
+ * @file agent-memory/src/index.ts
+ * @summary Enhanced memory system with confidence scoring and priority-based retrieval.
+ * @description 2026 standards-compliant memory management with multi-factor scoring and diversity selection.
+ * @security none
+ * @requirements 2026-agentic-coding, memory-systems
+ */
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 

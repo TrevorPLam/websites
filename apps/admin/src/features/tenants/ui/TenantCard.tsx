@@ -1,3 +1,10 @@
+/**
+ * @file apps/admin/src/features/tenants/ui/TenantCard.tsx
+ * @summary React component displaying tenant information with actions.
+ * @description Card component showing tenant details, metrics, and management actions for admin interface.
+ * @security Tenant data access restricted to admin users with proper authorization.
+ * @requirements DOMAIN-7-001, multi-tenant-admin-interface
+ */
 'use client';
 
 import React from 'react';

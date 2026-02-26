@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/entities/system/model/system.schema.ts
+ * @summary system entity definitions and schemas.
+ * @description Core data structures and validation for system management.
+ * @security none
+ * @requirements none
+ */
 import { z } from 'zod';
 
 export const SystemMetricsSchema = z.object({

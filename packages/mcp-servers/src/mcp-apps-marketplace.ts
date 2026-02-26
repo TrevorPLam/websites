@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/**
+ * @file mcp-servers/src/mcp-apps-marketplace.ts
+ * @summary MCP server implementation: mcp-apps-marketplace.
+ * @description Enterprise MCP server providing mcp apps marketplace capabilities.
+ * @security none
+ * @requirements MCP-standards, enterprise-security
+ */
 
 /**
  * MCP Apps Marketplace and Distribution Platform

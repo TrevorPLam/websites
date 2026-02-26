@@ -4,6 +4,8 @@
  * @file packages/mcp-servers/src/enterprise-registry.ts
  * @summary Enterprise MCP Registry and Discovery Service
  * @description Centralized registry for MCP servers, tools, and services with enterprise discovery capabilities
+ * @security Enterprise-grade security with authentication, authorization, and audit logging.
+ * @requirements MCP-standards, enterprise-security
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -298,7 +300,7 @@ export class EnterpriseRegistry {
       },
       async ({ server }) => {
         const serverId = crypto.randomUUID();
-        
+
         const mcpServer: MCPServer = {
           id: serverId,
           ...server,
@@ -368,7 +370,7 @@ export class EnterpriseRegistry {
       },
       async ({ query }) => {
         const results = await this.searchServers(query);
-        
+
         return {
           content: [{
             type: 'text',
@@ -421,7 +423,7 @@ export class EnterpriseRegistry {
         switch (action) {
           case 'list':
             const categories = Array.from(this.categories.values());
-            const summary = categories.map(cat => 
+            const summary = categories.map(cat =>
               `${cat.icon} ${cat.name} (${cat.id}): ${cat.description} - ${cat.count} servers`
             ).join('\n');
 
@@ -510,7 +512,7 @@ export class EnterpriseRegistry {
         switch (action) {
           case 'list':
             const services = Array.from(this.discoveryServices.values());
-            const summary = services.map(service => 
+            const summary = services.map(service =>
               `${service.name} (${service.id}) - ${service.type} - ${service.status} - Last sync: ${service.lastSync.toISOString()}`
             ).join('\n');
 
@@ -632,7 +634,7 @@ export class EnterpriseRegistry {
     }
 
     if (query.compatibility && query.compatibility.length > 0) {
-      servers = servers.filter(s => 
+      servers = servers.filter(s =>
         query.compatibility!.some(comp => s.compatibility.platforms.includes(comp))
       );
     }
@@ -647,7 +649,7 @@ export class EnterpriseRegistry {
     }
 
     if (query.compliance && query.compliance.length > 0) {
-      servers = servers.filter(s => 
+      servers = servers.filter(s =>
         query.compliance!.some(comp => s.compliance.frameworks.includes(comp))
       );
     }
@@ -655,7 +657,7 @@ export class EnterpriseRegistry {
     // Sort
     servers.sort((a, b) => {
       let comparison = 0;
-      
+
       switch (query.sortBy) {
         case 'name':
           comparison = a.name.localeCompare(b.name);
@@ -830,25 +832,25 @@ export class EnterpriseRegistry {
 
   private async generateUsageAnalytics(timeRange: string, serverId?: string, groupBy: string = 'category', metrics: string[] = ['downloads', 'stars']): Promise<any> {
     // Simulate analytics generation
-    const servers = serverId ? 
+    const servers = serverId ?
       [this.mcpServers.get(serverId)].filter(Boolean) as MCPServer[] :
       Array.from(this.mcpServers.values());
 
     const grouped = servers.reduce((acc, server) => {
-      const key = groupBy === 'category' ? server.category : 
-                 groupBy === 'owner' ? server.owner : 
+      const key = groupBy === 'category' ? server.category :
+                 groupBy === 'owner' ? server.owner :
                  server.status;
-      
+
       if (!acc[key]) {
         acc[key] = { count: 0, downloads: 0, stars: 0, forks: 0, issues: 0 };
       }
-      
+
       acc[key].count++;
       acc[key].downloads += server.metrics.downloads;
       acc[key].stars += server.metrics.stars;
       acc[key].forks += server.metrics.forks;
       acc[key].issues += server.metrics.issues;
-      
+
       return acc;
     }, {} as any);
 
@@ -905,7 +907,7 @@ export class EnterpriseRegistry {
       security: {
         averageScore: servers.reduce((sum, s) => sum + s.security.securityScore, 0) / servers.length,
         totalVulnerabilities: servers.reduce((sum, s) => sum + s.security.vulnerabilities.length, 0),
-        criticalVulnerabilities: servers.reduce((sum, s) => 
+        criticalVulnerabilities: servers.reduce((sum, s) =>
           sum + s.security.vulnerabilities.filter(v => v.severity === 'critical').length, 0),
       },
       metrics: {
@@ -944,7 +946,7 @@ export class EnterpriseRegistry {
       `  Deprecated Servers: ${stats.overview.deprecatedServers}`,
       '',
       'Categories:',
-      ...stats.categories.map((cat: any) => 
+      ...stats.categories.map((cat: any) =>
         `  ${cat.name}: ${cat.count} servers (${cat.percentage}%)`
       ),
       '',
@@ -964,7 +966,7 @@ export class EnterpriseRegistry {
       report.push(
         '',
         'Top Servers by Downloads:',
-        ...stats.topServers.map((server: any, index: number) => 
+        ...stats.topServers.map((server: any, index: number) =>
           `  ${index + 1}. ${server.name}: ${server.downloads.toLocaleString()} downloads, ${server.stars.toLocaleString()} stars`
         )
       );
@@ -974,7 +976,7 @@ export class EnterpriseRegistry {
       report.push(
         '',
         'Recent Activity:',
-        ...stats.recentActivity.map((activity: any) => 
+        ...stats.recentActivity.map((activity: any) =>
           `  ${activity.name} - ${activity.status} - ${activity.updated}`
         )
       );

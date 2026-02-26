@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/entities/tenant/ui/TenantAvatar.tsx
+ * @summary tenant entity definitions and schemas.
+ * @description Core data structures and validation for tenant management.
+ * @security none
+ * @requirements none
+ */
 'use client';
 import { cn } from '@/shared/lib/cn';
 import type { Tenant } from '../model/tenant.schema';

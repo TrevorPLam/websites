@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/features/tenants/ui/TenantTable.tsx
+ * @summary tenants feature implementation for admin interface.
+ * @description Provides tenants management functionality with proper error handling and user feedback.
+ * @security none
+ * @requirements none
+ */
 import React from 'react';
 import { adminImpersonateTenant } from '../model/admin-actions';
 

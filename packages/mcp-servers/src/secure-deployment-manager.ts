@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+/**
+ * @file mcp-servers/src/secure-deployment-manager.ts
+ * @summary MCP server implementation: secure-deployment-manager.
+ * @description Enterprise MCP server providing secure deployment manager capabilities.
+ * @security Enterprise-grade security with authentication, authorization, and audit logging.
+ * @requirements MCP-standards, enterprise-security
+ */
 
 /**
  * @file packages/mcp-servers/src/secure-deployment-manager.ts

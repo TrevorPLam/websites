@@ -1,3 +1,10 @@
+/**
+ * @file admin/src/widgets/admin-header/ui/AdminHeader.tsx
+ * @summary admin-header widget component.
+ * @description Layout component for admin interface admin-header section.
+ * @security none
+ * @requirements none
+ */
 'use client';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@repo/ui';
