@@ -2,7 +2,8 @@
 
 import React, { useState, useTransition, useOptimistic } from 'react';
 import { Button } from '@/shared/ui/Button';
-import { LeadSchema, validateLeadData, type Lead } from '@/entities/lead/@x/lead-capture';
+import { createLeadAction } from '../api/lead-capture-server-actions';
+import type { CreateLeadRequest } from '../api/lead-capture-api';
 
 /**
  * @file apps/web/src/features/lead-capture/ui/LeadCaptureForm.tsx
@@ -29,13 +30,17 @@ export interface LeadCaptureFormProps {
   };
   className?: string;
   tenantId: string;
+  landingPage?: string;
+  referrer?: string;
 }
 
 export function LeadCaptureForm({
   onSubmit,
   fields = { name: true, email: true, phone: false, company: false, message: false },
   className = '',
-  tenantId
+  tenantId,
+  landingPage = typeof window !== 'undefined' ? window.location.href : '',
+  referrer = typeof document !== 'undefined' ? document.referrer : undefined
 }: LeadCaptureFormProps) {
   const [formData, setFormData] = useState<LeadData>({
     name: '',
@@ -50,7 +55,7 @@ export function LeadCaptureForm({
   const [isPending, startTransition] = useTransition();
   const [optimisticLeads, addOptimisticLead] = useOptimistic(
     [],
-    (state: Lead[], newLead: Lead) => [...state, newLead]
+    (state: any[], newLead: any) => [...state, newLead]
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -72,28 +77,25 @@ export function LeadCaptureForm({
   };
 
   const validateForm = (): boolean => {
-    const validation = validateLeadData({
-      ...formData,
-      tenantId,
-      id: crypto.randomUUID(),
-      status: 'new',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    });
+    const newErrors: Record<string, string> = {};
 
-    if (!validation.success) {
-      const fieldErrors: Record<string, string> = {};
-      validation.error.issues.forEach((issue: any) => {
-        if (issue.path.length > 0) {
-          fieldErrors[issue.path[0] as string] = issue.message;
-        }
-      });
-      setErrors(fieldErrors);
-      return false;
+    // Basic validation
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
     }
 
-    setErrors({});
-    return true;
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+
+    if (fields.phone && formData.phone && !/^\+?[1-9]\d{1,14}$/.test(formData.phone.replace(/\D/g, ''))) {
+      newErrors.phone = 'Invalid phone number format';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -107,24 +109,52 @@ export function LeadCaptureForm({
 
     try {
       // Create optimistic lead for immediate UI feedback
-      const optimisticLead: Lead = {
+      const optimisticLead = {
         id: crypto.randomUUID(),
         ...formData,
         tenantId,
-        status: 'new',
+        status: 'captured' as const,
         createdAt: new Date(),
         updatedAt: new Date()
       };
 
       addOptimisticLead(optimisticLead);
 
-      await onSubmit?.(formData);
+      // Prepare lead data for Server Action
+      const leadData: CreateLeadRequest = {
+        tenantId,
+        email: formData.email,
+        name: formData.name,
+        phone: formData.phone,
+        company: formData.company,
+        message: formData.message,
+        landingPage,
+        referrer,
+        consent: {
+          marketing: false, // Default to false for GDPR compliance
+          processing: true // Required for data processing
+        }
+      };
 
-      // Reset form after successful submission
-      startTransition(() => {
-        setFormData({ name: '', email: '', phone: '', company: '', message: '' });
-        setErrors({});
-      });
+      // Call Server Action
+      const result = await createLeadAction(leadData);
+
+      if (result.success) {
+        // Reset form after successful submission
+        startTransition(() => {
+          setFormData({ name: '', email: '', phone: '', company: '', message: '' });
+          setErrors({});
+        });
+
+        // Call custom onSubmit if provided
+        await onSubmit?.(formData);
+      } else {
+        // Handle server errors
+        const errorMessage = typeof result.error === 'string'
+          ? result.error
+          : result.error?.message || 'Failed to submit form. Please try again.';
+        setErrors({ submit: errorMessage });
+      }
     } catch (error) {
       console.error('Failed to submit lead:', error);
       setErrors({ submit: 'Failed to submit form. Please try again.' });
