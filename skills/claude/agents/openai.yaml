@@ -1,30 +1,26 @@
 interface:
-  display_name: "Azure Deploy"
-  short_description: "Deploy to Azure using azd with validation"
-  icon_small: "./assets/azure-icon.svg"
-  brand_color: "#0078D4"
-  default_prompt: "Deploy this application to Azure with proper infrastructure"
+  display_name: 'Azure Deploy'
+  short_description: 'Deploy to Azure using azd with validation'
+  icon_small: './assets/azure-icon.svg'
+  brand_color: '#0078D4'
+  default_prompt: 'Deploy this application to Azure with proper infrastructure'
 
 policy:
-  allow_implicit_invocation: true  # Allow automatic deployment triggers
+  allow_implicit_invocation: true # Allow automatic deployment triggers
 
 dependencies:
   tools:
-    - type: "mcp"
-      value: "azure-mcp"
-      description: "Azure CLI and azd integration"
-    - type: "mcp"
-      value: "github-mcp"
-      description: "GitHub repository status management"
-    - type: "mcp"
-      value: "slack-mcp"
-      description: "Team notification system"
+    - type: 'mcp'
+      value: 'azure-mcp'
+      description: 'Azure CLI and azd integration'
+    - type: 'mcp'
+      value: 'github'
+      description: 'GitHub repository status management'
 
 permissions:
   required:
-    - "azure.resource.deploy"
-    - "azure.subscription.read"
-    - "repository.write"
+    - 'azure.resource.deploy'
+    - 'azure.subscription.read'
+    - 'repository.write'
   optional:
-    - "slack.message.post"
-    - "azure.resource.delete"
+    - 'azure.resource.delete'

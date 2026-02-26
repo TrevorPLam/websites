@@ -8,8 +8,8 @@ alwaysApply: false
 
 Use MCP tools for comprehensive analysis:
 
-1. **Repository Analysis**: @github-mcp get-pull-request
-2. **Security Assessment**: @enterprise-security code-security-scan  
+1. **Repository Analysis**: @github get-pull-request
+2. **Security Assessment**: @enterprise-security code-security-scan
 3. **Code Quality Analysis**: @sequential-thinking analyze-code-quality
 4. **Architecture Review**: @sequential-thinking review-architecture
 5. **Generate Review**: @sequential-thinking generate-review-summary

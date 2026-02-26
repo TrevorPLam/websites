@@ -29,7 +29,7 @@ This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) wit
 
 **Action:** Validate Azure environment and authentication
 
-- **Tool:** `azure-mcp` → `validate-config`
+- **Tool:** `azure-mcp` → `group` → `list`
 - **Purpose:** Ensure Azure CLI is authenticated and environment is ready
 - **Failure:** Abort deployment with authentication instructions
 
@@ -37,7 +37,7 @@ This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) wit
 
 **Action:** Provision Azure resources using azd
 
-- **Tool:** `azure-mcp` → `azd-up`
+- **Tool:** `azure-mcp` → `appservice` → `webapp` → `create`
 - **Purpose:** Deploy infrastructure and application to Azure
 - **Failure:** Provide detailed error logs and rollback suggestions
 

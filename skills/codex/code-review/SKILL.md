@@ -30,7 +30,7 @@ This Skill orchestrates a comprehensive code review process using MCP servers fo
 
 **Action:** Fetch PR details and changed files
 
-- **Tool:** `github-mcp` → `get-pull-request`
+- **Tool:** `github` → `get-pull-request`
 - **Purpose:** Analyze changes and context
 - **Failure:** Request valid PR URL
 
@@ -99,7 +99,7 @@ This Skill orchestrates a comprehensive code review process using MCP servers fo
 
 ## MCP Server Dependencies
 
-- `github-mcp`: PR analysis and file changes
+- `github`: PR analysis and file changes
 - `enterprise-security`: Security vulnerability scanning
 - `sequential-thinking`: Code analysis and reasoning
 

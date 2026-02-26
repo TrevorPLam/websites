@@ -305,27 +305,26 @@ export class AdvancedAgentPlugins {
           plugins = plugins.filter((p) => p.pricing === pricing);
         }
 
-        return {
-          success: true,
-          data: {
-            plugins: plugins.map((p) => ({
-              id: p.id,
-              name: p.name,
-              description: p.description,
-              category: p.category,
-              version: p.version,
-              enabled: p.enabled,
-              securityLevel: p.securityLevel,
-              pricing: p.pricing,
-              capabilities: p.capabilities,
-              dependencies: p.dependencies,
-              author: p.author,
-              resources: p.resources,
-            })),
-            total: plugins.length,
-            filters: { category, enabled, securityLevel, pricing },
-          },
+        const result = {
+          plugins: plugins.map((p) => ({
+            id: p.id,
+            name: p.name,
+            description: p.description,
+            category: p.category,
+            version: p.version,
+            enabled: p.enabled,
+            securityLevel: p.securityLevel,
+            pricing: p.pricing,
+            capabilities: p.capabilities,
+            dependencies: p.dependencies,
+            author: p.author,
+            resources: p.resources,
+          })),
+          total: plugins.length,
+          filters: { category, enabled, securityLevel, pricing },
         };
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
 
@@ -371,18 +370,17 @@ export class AdvancedAgentPlugins {
           config: plugin.config,
         });
 
-        return {
-          success: true,
-          data: {
-            plugin: {
-              id: plugin.id,
-              name: plugin.name,
-              enabled: plugin.enabled,
-              config: plugin.config,
-            },
-            enabledAt: new Date(),
+        const result = {
+          plugin: {
+            id: plugin.id,
+            name: plugin.name,
+            enabled: plugin.enabled,
+            config: plugin.config,
           },
+          enabledAt: new Date(),
         };
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
 
@@ -408,17 +406,16 @@ export class AdvancedAgentPlugins {
         plugin.enabled = false;
         this.activePlugins.delete(pluginId);
 
-        return {
-          success: true,
-          data: {
-            plugin: {
-              id: plugin.id,
-              name: plugin.name,
-              enabled: plugin.enabled,
-            },
-            disabledAt: new Date(),
+        const result = {
+          plugin: {
+            id: plugin.id,
+            name: plugin.name,
+            enabled: plugin.enabled,
           },
+          disabledAt: new Date(),
         };
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
 
@@ -450,17 +447,16 @@ export class AdvancedAgentPlugins {
           activePlugin.config = plugin.config;
         }
 
-        return {
-          success: true,
-          data: {
-            plugin: {
-              id: plugin.id,
-              name: plugin.name,
-              config: plugin.config,
-            },
-            configuredAt: new Date(),
+        const result = {
+          plugin: {
+            id: plugin.id,
+            name: plugin.name,
+            config: plugin.config,
           },
+          configuredAt: new Date(),
         };
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
 
@@ -488,13 +484,12 @@ export class AdvancedAgentPlugins {
           console.log(`Installing plugin from ${source}`);
         }, 1000);
 
-        return {
-          success: true,
-          data: {
-            installation,
-            message: 'Plugin installation started',
-          },
+        const result = {
+          installation,
+          message: 'Plugin installation started',
         };
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
 
@@ -530,17 +525,16 @@ export class AdvancedAgentPlugins {
           console.log(`Removing configuration for plugin ${pluginId}`);
         }
 
-        return {
-          success: true,
-          data: {
-            plugin: {
-              id: plugin.id,
-              name: plugin.name,
-            },
-            uninstalledAt: new Date(),
-            configRemoved: removeConfig,
+        const result = {
+          plugin: {
+            id: plugin.id,
+            name: plugin.name,
           },
+          uninstalledAt: new Date(),
+          configRemoved: removeConfig,
         };
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
 
@@ -569,21 +563,20 @@ export class AdvancedAgentPlugins {
         }
 
         // Execute plugin
-        const result = await this.simulatePluginExecution(plugin, action, parameters);
+        const executionResult = await this.simulatePluginExecution(plugin, action, parameters);
 
-        return {
-          success: true,
-          data: {
-            plugin: {
-              id: plugin.id,
-              name: plugin.name,
-            },
-            action,
-            parameters,
-            result,
-            executedAt: new Date(),
+        const result = {
+          plugin: {
+            id: plugin.id,
+            name: plugin.name,
           },
+          action,
+          parameters,
+          result: executionResult,
+          executedAt: new Date(),
         };
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
 
@@ -619,10 +612,7 @@ export class AdvancedAgentPlugins {
           Object.assign(status, this.generatePluginMetrics(pluginId));
         }
 
-        return {
-          success: true,
-          data: status,
-        };
+        return { content: [{ type: 'text', text: JSON.stringify(status) }] };
       }
     );
 
@@ -647,51 +637,47 @@ export class AdvancedAgentPlugins {
             if (!plugin) {
               throw new Error(`Plugin not found: ${pluginId}`);
             }
-            return {
-              success: true,
-              data: {
-                pluginId,
-                dependencies: plugin.dependencies,
-                missing: this.checkDependencies(plugin),
-                dependents: this.findDependents(pluginId),
-              },
+            const checkResult = {
+              pluginId,
+              dependencies: plugin.dependencies,
+              missing: this.checkDependencies(plugin),
+              dependents: this.findDependents(pluginId),
             };
+
+            return { content: [{ type: 'text', text: JSON.stringify(checkResult) }] };
 
           case 'install':
             // Simulate dependency installation
-            return {
-              success: true,
-              data: {
-                action,
-                dependencies,
-                installedAt: new Date(),
-                message: 'Dependencies installed successfully',
-              },
+            const installResult = {
+              action,
+              dependencies,
+              installedAt: new Date(),
+              message: 'Dependencies installed successfully',
             };
+
+            return { content: [{ type: 'text', text: JSON.stringify(installResult) }] };
 
           case 'update':
             // Simulate dependency update
-            return {
-              success: true,
-              data: {
-                action,
-                dependencies,
-                updatedAt: new Date(),
-                message: 'Dependencies updated successfully',
-              },
+            const updateResult = {
+              action,
+              dependencies,
+              updatedAt: new Date(),
+              message: 'Dependencies updated successfully',
             };
+
+            return { content: [{ type: 'text', text: JSON.stringify(updateResult) }] };
 
           case 'remove':
             // Simulate dependency removal
-            return {
-              success: true,
-              data: {
-                action,
-                dependencies,
-                removedAt: new Date(),
-                message: 'Dependencies removed successfully',
-              },
+            const removeResult = {
+              action,
+              dependencies,
+              removedAt: new Date(),
+              message: 'Dependencies removed successfully',
             };
+
+            return { content: [{ type: 'text', text: JSON.stringify(removeResult) }] };
 
           default:
             throw new Error(`Unknown action: ${action}`);
@@ -744,10 +730,9 @@ export class AdvancedAgentPlugins {
           };
         }, 3000);
 
-        return {
-          success: true,
-          data: audit,
-        };
+        const result = audit;
+
+        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
       }
     );
   }
@@ -1254,3 +1239,8 @@ export class AdvancedAgentPlugins {
 
 const server = new AdvancedAgentPlugins();
 server.run().catch(console.error);
+
+// ESM CLI guard
+if (import.meta.url === `file://${process.argv[1]}`) {
+  server.run().catch(console.error);
+}

@@ -401,17 +401,21 @@ class AIDLCMethodologyServer {
     this.projects.set(projectId, project);
 
     return {
-      success: true,
-      data: {
-        project,
-        nextSteps: [
-          'Start inception phase to gather detailed requirements',
-          'Identify key stakeholders and their needs',
-          'Define project constraints and success criteria',
-          'Select appropriate AI agents for collaboration',
-        ],
-        recommendedAgents: this.phases.get('inception')?.aiAgents || [],
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            project,
+            nextSteps: [
+              'Start inception phase to gather detailed requirements',
+              'Identify key stakeholders and their needs',
+              'Define project constraints and success criteria',
+              'Select appropriate AI agents for collaboration',
+            ],
+            recommendedAgents: this.phases.get('inception')?.aiAgents || [],
+          }),
+        },
+      ],
     };
   }
 
@@ -445,20 +449,24 @@ class AIDLCMethodologyServer {
     project.updatedAt = new Date();
 
     return {
-      success: true,
-      data: {
-        session,
-        phase: phaseConfig,
-        recommendedActivities: phaseConfig.activities,
-        aiAgents: phaseConfig.aiAgents,
-        kickoffPlan: [
-          `Initialize ${phase} phase with stakeholder alignment`,
-          'Review and confirm phase objectives and deliverables',
-          'Assign AI agents and human participants to activities',
-          'Set up collaboration tools and communication channels',
-          'Establish quality gates and review checkpoints',
-        ],
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            session,
+            phase: phaseConfig,
+            recommendedActivities: phaseConfig.activities,
+            aiAgents: phaseConfig.aiAgents,
+            kickoffPlan: [
+              `Initialize ${phase} phase with stakeholder alignment`,
+              'Review and confirm phase objectives and deliverables',
+              'Assign AI agents and human participants to activities',
+              'Set up collaboration tools and communication channels',
+              'Establish quality gates and review checkpoints',
+            ],
+          }),
+        },
+      ],
     };
   }
 
@@ -484,22 +492,26 @@ class AIDLCMethodologyServer {
     session.status = 'active';
 
     return {
-      success: true,
-      data: {
-        activities: plannedActivities,
-        totalEstimatedDuration: plannedActivities.reduce(
-          (sum, activity) => sum + (activity.duration || 0),
-          0
-        ),
-        agentAssignments: this.assignAgentsToActivities(plannedActivities),
-        dependencies: this.identifyDependencies(plannedActivities),
-        recommendations: [
-          'Prioritize activities based on dependencies and critical path',
-          'Ensure balanced workload between human and AI agents',
-          'Set up regular review checkpoints for quality assurance',
-          'Plan for contingency buffers in critical activities',
-        ],
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            activities: plannedActivities,
+            totalEstimatedDuration: plannedActivities.reduce(
+              (sum, activity) => sum + (activity.duration || 0),
+              0
+            ),
+            agentAssignments: this.assignAgentsToActivities(plannedActivities),
+            dependencies: this.identifyDependencies(plannedActivities),
+            recommendations: [
+              'Prioritize activities based on dependencies and critical path',
+              'Ensure balanced workload between human and AI agents',
+              'Set up regular review checkpoints for quality assurance',
+              'Plan for contingency buffers in critical activities',
+            ],
+          }),
+        },
+      ],
     };
   }
 
@@ -534,14 +546,18 @@ class AIDLCMethodologyServer {
     activity.duration = executionResult.duration;
 
     return {
-      success: true,
-      data: {
-        activity,
-        executionResult,
-        qualityMetrics: executionResult.qualityMetrics,
-        nextSteps: executionResult.nextSteps,
-        recommendations: executionResult.recommendations,
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            activity,
+            executionResult,
+            qualityMetrics: executionResult.qualityMetrics,
+            nextSteps: executionResult.nextSteps,
+            recommendations: executionResult.recommendations,
+          }),
+        },
+      ],
     };
   }
 
@@ -569,24 +585,28 @@ class AIDLCMethodologyServer {
       reviewResults.reduce((sum, result) => sum + result.score, 0) / reviewResults.length;
 
     return {
-      success: true,
-      data: {
-        reviewResults,
-        overallScore,
-        phaseReady: overallScore >= 80,
-        actionItems:
-          overallScore < 80
-            ? [
-                'Address identified issues in deliverables',
-                'Conduct additional quality reviews',
-                'Update documentation with missing details',
-              ]
-            : [
-                'Proceed to next phase transition',
-                'Archive deliverables for future reference',
-                'Update project knowledge base',
-              ],
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            reviewResults,
+            overallScore,
+            phaseReady: overallScore >= 80,
+            actionItems:
+              overallScore < 80
+                ? [
+                    'Address identified issues in deliverables',
+                    'Conduct additional quality reviews',
+                    'Update documentation with missing details',
+                  ]
+                : [
+                    'Proceed to next phase transition',
+                    'Archive deliverables for future reference',
+                    'Update project knowledge base',
+                  ],
+          }),
+        },
+      ],
     };
   }
 
@@ -617,30 +637,34 @@ class AIDLCMethodologyServer {
     project.updatedAt = new Date();
 
     return {
-      success: true,
-      data: {
-        transition: {
-          from: currentPhaseConfig,
-          to: nextPhaseConfig,
-          timestamp: new Date(),
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            transition: {
+              from: currentPhaseConfig,
+              to: nextPhaseConfig,
+              timestamp: new Date(),
+            },
+            handoffDocumentation: {
+              notes: handoffNotes,
+              artifacts,
+              lessonsLearned: [
+                'Effective AI-human collaboration patterns',
+                'Optimal agent selection for different activities',
+                'Quality assurance best practices',
+                'Communication and coordination improvements',
+              ],
+            },
+            nextPhasePreparation: [
+              'Review and adapt next phase methodology',
+              'Select appropriate AI agents for new activities',
+              'Update project context and constraints',
+              'Prepare collaboration tools and environments',
+            ],
+          }),
         },
-        handoffDocumentation: {
-          notes: handoffNotes,
-          artifacts,
-          lessonsLearned: [
-            'Effective AI-human collaboration patterns',
-            'Optimal agent selection for different activities',
-            'Quality assurance best practices',
-            'Communication and coordination improvements',
-          ],
-        },
-        nextPhasePreparation: [
-          'Review and adapt next phase methodology',
-          'Select appropriate AI agents for new activities',
-          'Update project context and constraints',
-          'Prepare collaboration tools and environments',
-        ],
-      },
+      ],
     };
   }
 
@@ -660,36 +684,40 @@ class AIDLCMethodologyServer {
     const overallProgress = this.calculateOverallProgress(projectSessions);
 
     return {
-      success: true,
-      data: {
-        project,
-        currentPhase: this.phases.get(project.phase),
-        progress: {
-          overall: overallProgress,
-          byPhase: phaseProgress,
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            project,
+            currentPhase: this.phases.get(project.phase),
+            progress: {
+              overall: overallProgress,
+              byPhase: phaseProgress,
+            },
+            sessions: includeActivities
+              ? projectSessions
+              : projectSessions.map((s) => ({
+                  id: s.id,
+                  phase: s.phase,
+                  status: s.status,
+                  participantCount: s.participants.length,
+                  activityCount: s.activities.length,
+                })),
+            metrics: {
+              totalActivities: projectSessions.reduce((sum, s) => sum + s.activities.length, 0),
+              completedActivities: projectSessions.reduce(
+                (sum, s) => sum + s.activities.filter((a) => a.status === 'completed').length,
+                0
+              ),
+              totalDuration: projectSessions.reduce(
+                (sum, s) => sum + s.activities.reduce((actSum, a) => actSum + (a.duration || 0), 0),
+                0
+              ),
+              collaborationScore: this.calculateCollaborationScore(projectSessions),
+            },
+          }),
         },
-        sessions: includeActivities
-          ? projectSessions
-          : projectSessions.map((s) => ({
-              id: s.id,
-              phase: s.phase,
-              status: s.status,
-              participantCount: s.participants.length,
-              activityCount: s.activities.length,
-            })),
-        metrics: {
-          totalActivities: projectSessions.reduce((sum, s) => sum + s.activities.length, 0),
-          completedActivities: projectSessions.reduce(
-            (sum, s) => sum + s.activities.filter((a) => a.status === 'completed').length,
-            0
-          ),
-          totalDuration: projectSessions.reduce(
-            (sum, s) => sum + s.activities.reduce((actSum, a) => actSum + (a.duration || 0), 0),
-            0
-          ),
-          collaborationScore: this.calculateCollaborationScore(projectSessions),
-        },
-      },
+      ],
     };
   }
 
@@ -699,22 +727,26 @@ class AIDLCMethodologyServer {
     const agentRecommendations = this.getAgentRecommendations(activityType, complexity);
 
     return {
-      success: true,
-      data: {
-        primaryAgents: agentRecommendations.primary,
-        secondaryAgents: agentRecommendations.secondary,
-        reasoning: agentRecommendations.reasoning,
-        configuration: {
-          optimalTeamSize: agentRecommendations.teamSize,
-          collaborationPattern: agentRecommendations.collaborationPattern,
-          qualityChecks: agentRecommendations.qualityChecks,
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            primaryAgents: agentRecommendations.primary,
+            secondaryAgents: agentRecommendations.secondary,
+            reasoning: agentRecommendations.reasoning,
+            configuration: {
+              optimalTeamSize: agentRecommendations.teamSize,
+              collaborationPattern: agentRecommendations.collaborationPattern,
+              qualityChecks: agentRecommendations.qualityChecks,
+            },
+            estimatedEfficiency: {
+              timeReduction: agentRecommendations.timeReduction,
+              qualityImprovement: agentRecommendations.qualityImprovement,
+              costOptimization: agentRecommendations.costOptimization,
+            },
+          }),
         },
-        estimatedEfficiency: {
-          timeReduction: agentRecommendations.timeReduction,
-          qualityImprovement: agentRecommendations.qualityImprovement,
-          costOptimization: agentRecommendations.costOptimization,
-        },
-      },
+      ],
     };
   }
 
@@ -871,5 +903,8 @@ class AIDLCMethodologyServer {
   }
 }
 
-const server = new AIDLCMethodologyServer();
-server.run().catch(console.error);
+// ESM CLI guard
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const server = new AIDLCMethodologyServer();
+  server.run().catch(console.error);
+}

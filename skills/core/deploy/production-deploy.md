@@ -4,7 +4,7 @@ description: |
   **PRODUCTION DEPLOYMENT WORKFLOW** - Automated production deployment with safety checks.
   USE FOR: Production deployments, hotfixes, rollback operations.
   DO NOT USE FOR: Development deployments, local testing.
-  INVOKES: [github-mcp, fetch-mcp, filesystem-mcp].
+  INVOKES: [github, fetch-mcp, filesystem-mcp].
 meta:
   version: '1.0.0'
   author: 'agency-system'
@@ -32,13 +32,14 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 **Action:** Validate deployment readiness and prerequisites
 
 **Validation:**
+
 - Branch protection rules satisfied
 - Code review approvals completed
 - All tests passing in CI/CD
 - Security scans passed
 - Performance benchmarks met
 
-**MCP Server:** github-mcp (for branch and PR validation)
+**MCP Server:** github (for branch and PR validation)
 
 **Expected Output:** Pre-flight check report with go/no-go decision
 
@@ -47,6 +48,7 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 **Action:** Prepare production environment for deployment
 
 **Validation:**
+
 - Database backups completed
 - Configuration files validated
 - Environment variables verified
@@ -62,6 +64,7 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 **Action:** Execute blue-green deployment strategy
 
 **Validation:**
+
 - New environment provisioned
 - Application deployed to green environment
 - Health checks passing
@@ -77,6 +80,7 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 **Action:** Perform comprehensive smoke testing on green environment
 
 **Validation:**
+
 - Critical user journeys tested
 - API endpoints responding
 - Database connectivity verified
@@ -92,6 +96,7 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 **Action:** Switch production traffic to new deployment
 
 **Validation:**
+
 - Load balancer configuration updated
 - Traffic routing verified
 - Error rates monitored
@@ -107,6 +112,7 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 **Action:** Validate deployment success and system stability
 
 **Validation:**
+
 - Health checks passing
 - Error rates within thresholds
 - Performance metrics stable
@@ -122,6 +128,7 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 **Action:** Clean up old deployment and finalize process
 
 **Validation:**
+
 - Blue environment decommissioned
 - Resources cleaned up
 - Documentation updated
@@ -134,15 +141,15 @@ This Skill orchestrates safe production deployments with comprehensive pre-fligh
 
 ## Error Handling
 
-| Step | Error | Recovery | Rollback? |
-|------|-------|----------|-----------|
-| Pre-Flight Validation | Check failures | Block deployment, fix issues | No |
-| Environment Preparation | Backup failures | Reschedule deployment, investigate | No |
-| Blue-Green Deployment | Deployment failures | Rollback to blue, investigate | Yes |
-| Smoke Testing | Critical failures | Block traffic switch, fix issues | No |
-| Traffic Switch | Routing errors | Immediate rollback to blue | Yes |
-| Post-Deployment Validation | Stability issues | Monitor, prepare rollback if needed | Yes |
-| Cleanup | Resource issues | Manual cleanup, document issues | No |
+| Step                       | Error               | Recovery                            | Rollback? |
+| -------------------------- | ------------------- | ----------------------------------- | --------- |
+| Pre-Flight Validation      | Check failures      | Block deployment, fix issues        | No        |
+| Environment Preparation    | Backup failures     | Reschedule deployment, investigate  | No        |
+| Blue-Green Deployment      | Deployment failures | Rollback to blue, investigate       | Yes       |
+| Smoke Testing              | Critical failures   | Block traffic switch, fix issues    | No        |
+| Traffic Switch             | Routing errors      | Immediate rollback to blue          | Yes       |
+| Post-Deployment Validation | Stability issues    | Monitor, prepare rollback if needed | Yes       |
+| Cleanup                    | Resource issues     | Manual cleanup, document issues     | No        |
 
 ## Success Criteria
 
@@ -183,13 +190,13 @@ skill invoke production-deploy --branch="hotfix/critical-bug" --environment="pro
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Pre-flight check failures | Review failed checks, fix issues, reschedule deployment |
-| Deployment timeouts | Increase timeout values, check resource availability |
-| Smoke test failures | Investigate failing tests, fix issues before traffic switch |
-| Traffic switch errors | Verify load balancer configuration, check DNS propagation |
-| Post-deployment instability | Monitor metrics, prepare rollback if thresholds exceeded |
+| Issue                       | Solution                                                    |
+| --------------------------- | ----------------------------------------------------------- |
+| Pre-flight check failures   | Review failed checks, fix issues, reschedule deployment     |
+| Deployment timeouts         | Increase timeout values, check resource availability        |
+| Smoke test failures         | Investigate failing tests, fix issues before traffic switch |
+| Traffic switch errors       | Verify load balancer configuration, check DNS propagation   |
+| Post-deployment instability | Monitor metrics, prepare rollback if thresholds exceeded    |
 
 ## Related Skills
 

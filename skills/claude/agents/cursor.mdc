@@ -8,10 +8,10 @@ alwaysApply: false
 
 Use MCP tools for Azure deployment:
 
-1. **Environment Validation**: @azure-mcp validate-config
-2. **Infrastructure Provisioning**: @azure-mcp azd-up
-3. **GitHub Integration**: @github-mcp update-deployment-status
-4. **Notification**: @slack-mcp post-message
+1. **Pre-Deployment Validation**: @github get-repo-status-config
+2. **Infrastructure Provisioning**: @azure-mcp appservice webapp create
+3. **Repository Analysis**: @github get-pull-request-status
+4. **Notification**: Notification via available channels
 
 ## Prerequisites
 - Azure CLI installed and authenticated

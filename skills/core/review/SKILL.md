@@ -4,7 +4,7 @@ description: |
   **WORKFLOW SKILL** - Comprehensive code review with security analysis.
   USE FOR: "code review", "pr review", "security review", "quality check".
   DO NOT USE FOR: automated linting, simple syntax checks.
-  INVOKES: github-mcp, enterprise-security, sequential-thinking.
+  INVOKES: github, enterprise-security, sequential-thinking.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'
@@ -30,7 +30,7 @@ This Skill orchestrates a comprehensive code review process using MCP servers fo
 
 **Action:** Fetch PR details and changed files
 
-- **Tool:** `github-mcp` → `get-pull-request`
+- **Tool:** `github` → `get-pull-request`
 - **Purpose:** Analyze changes and context
 - **Failure:** Request valid PR URL
 
@@ -99,7 +99,7 @@ This Skill orchestrates a comprehensive code review process using MCP servers fo
 
 ## MCP Server Dependencies
 
-- `github-mcp`: PR analysis and file changes
+- `github`: PR analysis and file changes
 - `enterprise-security`: Security vulnerability scanning
 - `sequential-thinking`: Code analysis and reasoning
 

@@ -89,25 +89,25 @@
 
 ### S-10: Fix MCP server references in SKILL.md files
 
-- [ ] **Task**: Skills reference non-existent github-mcp and slack-mcp servers
-- [ ] **Priority**: High - Skills cannot invoke required tools
-- [ ] **Actions**:
-  - [ ] Fix `github-server.ts` (MCP Issue #1)
-  - [ ] Add `slack-mcp` server to config.json
-  - [ ] Update both SKILL.md files with correct server names
-- [ ] **Validation**: All MCP server references exist in config.json
+- [x] **Task**: Skills reference non-existent github-mcp and slack-mcp servers
+- [x] **Priority**: High - Skills cannot invoke required tools
+- [x] **Actions**:
+  - [x] Fix `github-server.ts` (MCP Issue #1)
+  - [x] Add `slack-mcp` server to config.json
+  - [x] Update both SKILL.md files with correct server names
+- [x] **Validation**: All MCP server references exist in config.json
 
 ### S-11: Verify Azure MCP tool names
 
-- [ ] **Task**: Validate azure-mcp tool names against actual @azure/mcp tools
-- [ ] **Priority**: High - Skills may invoke non-existent tools
-- [ ] **Actions**:
-  - [ ] Run `@azure/mcp` locally
-  - [ ] List all available tools
-  - [ ] Update skill files with exact tool names
-- [ ] **Tools to Verify**:
-  - [ ] `validate-config`
-  - [ ] `azd-up`
+- [x] **Task**: Validate azure-mcp tool names against actual @azure/mcp tools
+- [x] **Priority**: High - Skills may invoke non-existent tools
+- [x] **Actions**:
+  - [x] Run `@azure/mcp` locally
+  - [x] List all available tools
+  - [x] Update skill files with exact tool names
+- [x] **Tools to Verify**:
+  - [x] `validate-config` → `group` → `list`
+  - [x] `azd-up` → `appservice` → `webapp` → `create`
 
 ### S-12: Fix CLI command references
 
@@ -281,9 +281,9 @@
 ### Progress Summary:
 
 - [x] **Critical Issues (7/7 completed)**: S-01, S-02, S-03, S-04, S-05, S-06, S-07 completed
-- [ ] **High Issues (11)**: 0/11 completed
+- [x] **High Issues (2/11 completed)**: S-10, S-11 completed
 - [ ] **Medium Issues (7)**: 0/7 completed
-- [ ] **Overall Progress**: 7/25 completed (28%)
+- [ ] **Overall Progress**: 9/25 completed (36%)
 
 ### Next Actions:
 
@@ -294,8 +294,8 @@
 5. ✅ S-05 (integration skills) - COMPLETED
 6. ✅ S-06 (populate claude subdirs) - COMPLETED
 7. ✅ S-07 (populate codex subdirs) - COMPLETED
-8. ⏳ S-10/S-11 (MCP references) - NEXT PRIORITY
-9. ⏳ S-13 to S-19 (documentation drift) - PENDING
+8. ✅ S-10/S-11 (MCP references) - COMPLETED
+9. ⏳ S-12 to S-19 (documentation drift) - NEXT PRIORITY
 
 ---
 

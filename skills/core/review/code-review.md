@@ -4,7 +4,7 @@ description: |
   **CODE REVIEW WORKFLOW** - Automated and manual code review process with security checks.
   USE FOR: Pull request reviews, security audits, quality assurance.
   DO NOT USE FOR: Simple syntax checks, basic linting.
-  INVOKES: [github-mcp, fetch-mcp, filesystem-mcp].
+  INVOKES: [github, fetch-mcp, filesystem-mcp].
 meta:
   version: '1.0.0'
   author: 'agency-system'
@@ -32,13 +32,14 @@ This Skill orchestrates comprehensive code review processes including automated 
 **Action:** Analyze pull request changes and context
 
 **Validation:**
+
 - Pull request metadata collected
 - Files changed identified
 - Commit history reviewed
 - Branch context verified
 - Review requirements assessed
 
-**MCP Server:** github-mcp (for PR data extraction)
+**MCP Server:** github (for PR data extraction)
 
 **Expected Output:** PR analysis report with change summary and review requirements
 
@@ -47,6 +48,7 @@ This Skill orchestrates comprehensive code review processes including automated 
 **Action:** Run comprehensive security analysis on code changes
 
 **Validation:**
+
 - Static analysis security scan completed
 - Dependency vulnerability check performed
 - Secret detection scan executed
@@ -62,6 +64,7 @@ This Skill orchestrates comprehensive code review processes including automated 
 **Action:** Evaluate code quality and maintainability
 
 **Validation:**
+
 - Code complexity analysis performed
 - Test coverage assessment completed
 - Performance impact analysis done
@@ -77,6 +80,7 @@ This Skill orchestrates comprehensive code review processes including automated 
 **Action:** Execute automated test suite on changes
 
 **Validation:**
+
 - Unit tests executed and passing
 - Integration tests completed
 - End-to-end tests run
@@ -92,13 +96,14 @@ This Skill orchestrates comprehensive code review processes including automated 
 **Action:** Assign appropriate reviewers based on expertise and file changes
 
 **Validation:**
+
 - Code ownership rules applied
 - Expertise matching performed
 - Reviewer availability checked
 - Conflict of interest avoided
 - Review load balanced
 
-**MCP Server:** github-mcp (for reviewer assignment)
+**MCP Server:** github (for reviewer assignment)
 
 **Expected Output:** Reviewer assignment with expertise justification
 
@@ -107,13 +112,14 @@ This Skill orchestrates comprehensive code review processes including automated 
 **Action:** Coordinate manual review process and feedback collection
 
 **Validation:**
+
 - Review requests sent
 - Feedback collected and consolidated
 - Discussion threads monitored
 - Resolution tracking maintained
 - Approval status tracked
 
-**MCP Server:** github-mcp (for review coordination)
+**MCP Server:** github (for review coordination)
 
 **Expected Output:** Review feedback summary with action items
 
@@ -122,6 +128,7 @@ This Skill orchestrates comprehensive code review processes including automated 
 **Action:** Make approval/rejection decision based on all reviews
 
 **Validation:**
+
 - All review criteria satisfied
 - Security issues addressed
 - Quality standards met
@@ -134,15 +141,15 @@ This Skill orchestrates comprehensive code review processes including automated 
 
 ## Error Handling
 
-| Step | Error | Recovery | Rollback? |
-|------|-------|----------|-----------|
-| PR Analysis | Inaccessible PR | Request access, use alternative data sources | No |
-| Security Scanning | Scan failures | Use alternative scanners, manual security review | No |
-| Quality Analysis | Tool failures | Use fallback analysis tools, manual review | No |
-| Automated Testing | Test failures | Block approval, require test fixes | No |
-| Review Assignment | No available reviewers | Escalate to team leads, expand reviewer pool | No |
-| Manual Review | Reviewer conflicts | Mediate conflicts, reassign if needed | No |
-| Approval Decision | Criteria not met | Request changes, re-review after fixes | No |
+| Step              | Error                  | Recovery                                         | Rollback? |
+| ----------------- | ---------------------- | ------------------------------------------------ | --------- |
+| PR Analysis       | Inaccessible PR        | Request access, use alternative data sources     | No        |
+| Security Scanning | Scan failures          | Use alternative scanners, manual security review | No        |
+| Quality Analysis  | Tool failures          | Use fallback analysis tools, manual review       | No        |
+| Automated Testing | Test failures          | Block approval, require test fixes               | No        |
+| Review Assignment | No available reviewers | Escalate to team leads, expand reviewer pool     | No        |
+| Manual Review     | Reviewer conflicts     | Mediate conflicts, reassign if needed            | No        |
+| Approval Decision | Criteria not met       | Request changes, re-review after fixes           | No        |
 
 ## Success Criteria
 
@@ -183,11 +190,11 @@ skill invoke code-review --pr="456" --repository="agency/platform" --expedited="
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Security scan timeouts | Increase timeout, scan in parallel, use faster scanner |
-| Reviewer availability | Auto-assign backup reviewers, escalate to team leads |
-| Quality gate failures | Provide specific improvement suggestions, block merge |
+| Issue                   | Solution                                                 |
+| ----------------------- | -------------------------------------------------------- |
+| Security scan timeouts  | Increase timeout, scan in parallel, use faster scanner   |
+| Reviewer availability   | Auto-assign backup reviewers, escalate to team leads     |
+| Quality gate failures   | Provide specific improvement suggestions, block merge    |
 | Test execution failures | Debug test environment, provide detailed failure reports |
 
 ## Related Skills

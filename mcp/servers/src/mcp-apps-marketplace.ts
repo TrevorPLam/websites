@@ -14,14 +14,8 @@
  * MCP applications with enterprise-grade features and community engagement.
  */
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ErrorCode,
-  ListToolsRequestSchema,
-  McpError,
-} from '@modelcontextprotocol/sdk/types.js';
 
 interface MCPApp {
   id: string;
@@ -113,14 +107,14 @@ interface DeveloperAccount {
 }
 
 class MCPAppsMarketplace {
-  private server: Server;
+  private server: McpServer;
   private apps: Map<string, MCPApp> = new Map();
   private submissions: Map<string, AppSubmission> = new Map();
   private reviews: Map<string, UserReview[]> = new Map();
   private developers: Map<string, DeveloperAccount> = new Map();
 
   constructor() {
-    this.server = new Server(
+    this.server = new McpServer(
       {
         name: 'mcp-apps-marketplace',
         version: '1.0.0',
@@ -133,7 +127,7 @@ class MCPAppsMarketplace {
     );
 
     this.initializeMarketplace();
-    this.setupToolHandlers();
+    this.setupTools();
   }
 
   private initializeMarketplace(): void {
