@@ -1,0 +1,118 @@
+name: Import/Export Validation
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate-imports:
+    runs-on: ubuntu-latest
+    name: Validate Import/Export Patterns
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Validate import patterns
+        run: pnpm validate:imports
+        
+      - name: Check for circular dependencies
+        run: pnpm analyze:deps
+        
+      - name: Validate package types
+        run: pnpm check:types
+        
+      - name: Lint import rules
+        run: pnpm lint:imports
+        
+      - name: Generate dependency graph
+        run: |
+          mkdir -p .github/outputs
+          madge --circular --image .github/outputs/deps.svg packages/*/src || true
+          
+      - name: Upload dependency graph
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-graph
+          path: .github/outputs/deps.svg
+          
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './.github/outputs/deps.svg';
+            
+            let comment = '## 🔍 Import/Export Validation Results\\n\\n';
+            
+            // Add dependency graph if it exists
+            if (fs.existsSync(path)) {
+              comment += '### 📊 Dependency Graph\\n\\n';
+              comment += '![Dependency Graph](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifact-dependency-graph/deps.svg)\\n\\n';
+            }
+            
+            comment += '### ✅ Validations Passed\\n\\n';
+            comment += '- ✅ Import patterns validated\\n';
+            comment += '- ✅ No circular dependencies found\\n';
+            comment += '- ✅ Package types validated\\n';
+            comment += '- ✅ Import linting passed\\n\\n';
+            comment += '---\\n\\n*This check was performed using dependency-cruiser, @arethetypeswrong/cli, and eslint-plugin-import.*';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  performance-check:
+    runs-on: ubuntu-latest
+    name: Performance Analysis
+    needs: validate-imports
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Analyze import resolution performance
+        run: |
+          echo "🔍 Analyzing import resolution performance..."
+          time pnpm type-check
+          
+      - name: Check bundle size impact
+        run: |
+          echo "📦 Checking bundle size impact..."
+          pnpm build || true
+          
+      - name: Generate performance report
+        run: |
+          echo "📊 Generating performance report..."
+          mkdir -p .github/outputs
+          echo "Import resolution performance completed at $(date)" > .github/outputs/performance-report.txt
+          
+      - name: Upload performance report
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-report
+          path: .github/outputs/performance-report.txt

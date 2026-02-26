@@ -1,0 +1,57 @@
+extends: existence
+message: "Diátaxis framework content must match its quadrant type"
+level: error
+scope: heading
+raw:
+  - '# Tutorials'
+  - '# How-To Guides'
+  - '# Reference'
+  - '# Explanations'
+  
+# Tutorials should be learning-oriented
+tutorials:
+  extends: existence
+  message: "Tutorials should be learning-oriented and beginner-friendly"
+  level: error
+  scope: heading
+  raw:
+    - 'Getting Started'
+    - 'Learning Paths'
+    - 'Quick Starts'
+    
+# How-To guides should be task-oriented
+howto:
+  extends: existence
+  message: "How-To guides should be task-oriented and goal-focused"
+  level: error
+  scope: heading
+  raw:
+    - 'Development Workflows'
+    - 'Integration Guides'
+    - 'Maintenance & Troubleshooting'
+    
+# Reference should be information-oriented
+reference:
+  extends: existence
+  message: "Reference should be information-oriented and comprehensive"
+  level: error
+  scope: heading
+  raw:
+    - 'API Documentation'
+    - 'Configuration Reference'
+    - 'CLI Reference'
+    - 'Database Schema'
+    - 'Error Codes'
+    
+# Explanations should be understanding-oriented
+explanation:
+  extends: existence
+  message: "Explanations should be understanding-oriented and conceptual"
+  level: error
+  scope: heading
+  raw:
+    - 'Architecture Decisions'
+    - 'Design Principles'
+    - 'Technical Context'
+    - 'Business Context'
+    - 'Operational Context'

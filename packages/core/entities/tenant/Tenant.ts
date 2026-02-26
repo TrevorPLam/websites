@@ -5,14 +5,14 @@
  * @invariants Keeps tenant and domain boundaries explicit.
  * @security Internal-only foundation module; avoid exposing tenant internals.
  * @gotchas Intended for server-side and test harness usage in this monorepo.
- 
+
  * @description Wave 0 foundational implementation for platform baseline.
  * @adr none
  * @requirements TASKS.md Wave 0 Task 2/3/4
  */
 
 import { TenantDomainError } from './errors';
-import type { TenantId } from '../../value-objects/TenantId';
+import type { TenantId } from '@repo/core';
 
 export interface TenantProps {
   id: TenantId;

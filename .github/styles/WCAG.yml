@@ -1,0 +1,12 @@
+extends: existence
+message: "Add descriptive alt text for images"
+level: error
+scope: raw
+raw:
+  - '\!\[.*?\]\([^)]+\)'
+  - '<img[^>]+>'
+exceptions:
+  - '\!\[.*?\]\([^)]+\)\{.*?alt="[^"]*".*?\}'
+  - '\!\[.*?\]\([^)]+\)\{.*?title="[^"]*".*?\}'
+  - '<img[^>]+alt="[^"]*"[^>]*>'
+  - '<img[^>]+title="[^"]*"[^>]*>'

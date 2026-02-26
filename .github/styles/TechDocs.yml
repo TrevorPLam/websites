@@ -1,0 +1,45 @@
+extends: existence
+message: "Technical documentation must include code examples"
+level: error
+scope: text
+raw:
+  - '```'
+  - '~~~'
+  
+# API documentation standards
+api-endpoints:
+  extends: existence
+  message: "API endpoints must include method, path, and description"
+  level: error
+  scope: heading
+  raw:
+    - 'GET'
+    - 'POST'
+    - 'PUT'
+    - 'DELETE'
+    - 'PATCH'
+    
+# Code block requirements
+code-examples:
+  extends: existence
+  message: "Code examples should include language specification"
+  level: warning
+  scope: raw
+  raw:
+    - '```typescript'
+    - '```javascript'
+    - '```bash'
+    - '```sql'
+    - '```json'
+    - '```yaml'
+    
+# Version consistency
+version-accuracy:
+  extends: existence
+  message: "Documentation should reference current version (2026)"
+  level: warning
+  scope: text
+raw:
+  - '2026'
+  - 'v2.0'
+  - 'version 2.0'

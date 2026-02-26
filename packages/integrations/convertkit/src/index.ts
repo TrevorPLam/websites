@@ -36,11 +36,13 @@ export class ConvertKitAdapter implements EmailAdapter {
   id = 'convertkit';
   private httpClient: ReturnType<typeof createHttpClient>;
   private config: IntegrationConfig;
+  private apiKey: string;
 
   constructor(apiKey: string) {
     if (!apiKey) {
       throw new Error('ConvertKit API key is required');
     }
+    this.apiKey = apiKey;
     secureLog('Adapter initialized with API key', { apiKey: this.apiKey });
 
     // Initialize HTTP client with circuit breaker and retry logic

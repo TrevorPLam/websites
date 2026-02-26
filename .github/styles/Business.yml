@@ -1,0 +1,34 @@
+extends: existence
+message: "Business documentation should clarify value proposition"
+level: suggestion
+scope: heading
+raw:
+  - 'Business Model'
+  - 'Revenue Model'
+  - 'Value Proposition'
+  - 'Customer Benefits'
+  
+# Audience clarity
+audience-clarity:
+  extends: existence
+  message: "Content should target the appropriate audience"
+  level: warning
+  scope: heading
+  raw:
+  - 'For Non-Technical Team Members'
+  - 'For Developers'
+  - 'For Administrators'
+  - 'For Business Users'
+  
+# ROI and metrics
+roi-metrics:
+  extends: existence
+  message: "Business documentation should include ROI and metrics"
+  level: suggestion
+  scope: text
+  raw:
+  - 'ROI'
+  - 'metrics'
+  - 'KPI'
+  - 'success metrics'
+  - 'performance indicators'

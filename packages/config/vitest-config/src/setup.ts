@@ -16,11 +16,11 @@ import { beforeAll, afterAll, expect, describe, it, vi } from 'vitest';
 // Import vitest-dom matchers for React Testing Library compatibility
 // import 'vitest-dom';
 
-// Import @vitest/axe for accessibility testing
-// import { toHaveNoViolations } from '@vitest/axe';
+// Import @chialab/vitest-axe for accessibility testing
+import { toHaveNoViolations } from '@chialab/vitest-axe';
 
-// Extend Vitest's expect with @vitest/axe matchers
-// expect.extend({ toHaveNoViolations } as any);
+// Extend Vitest's expect with @chialab/vitest-axe matchers
+expect.extend({ toHaveNoViolations } as any);
 
 // Set critical environment variables BEFORE any module imports
 process.env.NODE_ENV = 'test';

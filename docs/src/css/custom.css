@@ -1,0 +1,342 @@
+/* Custom CSS for Marketing Websites Documentation - 2026 Standards */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --ifm-color-primary: #2563eb;
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93bbfc;
+
+  --ifm-color-success: #16a34a;
+  --ifm-color-success-dark: #15803d;
+  --ifm-color-success-darker: #166534;
+  --ifm-color-success-darkest: #14532d;
+  --ifm-color-success-light: #22c55e;
+  --ifm-color-success-lighter: #4ade80;
+  --ifm-color-success-lightest: #86efac;
+
+  --ifm-color-warning: #ea580c;
+  --ifm-color-warning-dark: #c2410c;
+  --ifm-color-warning-darker: #9a3412;
+  --ifm-color-warning-darkest: #7c2d12;
+  --ifm-color-warning-light: #f97316;
+  --ifm-color-warning-lighter: #fb923c;
+  --ifm-color-warning-lightest: #fdba74;
+
+  --ifm-color-danger: #dc2626;
+  --ifm-color-danger-dark: #b91c1c;
+  --ifm-color-danger-darker: #991b1b;
+  --ifm-color-danger-darkest: #7f1d1d;
+  --ifm-color-danger-light: #ef4444;
+  --ifm-color-danger-lighter: #f87171;
+  --ifm-color-danger-lightest: #fca5a5;
+
+  --ifm-font-size-base: 16px;
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', 'Fira Code', Consolas, 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+
+  --ifm-code-font-size: 0.9em;
+  --ifm-pre-padding: 1.25rem 1.5rem;
+
+  --ifm-heading-font-weight: 600;
+  --ifm-heading-line-height: 1.25;
+
+  --ifm-navbar-link-hover-color: var(--ifm-color-primary-light);
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-navbar-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  --ifm-footer-background-color: #f8fafc;
+  --ifm-footer-color: #475569;
+  --ifm-footer-link-color: var(--ifm-color-primary);
+
+  --ifm-menu-color: #64748b;
+  --ifm-menu-link-padding-vertical: 0.5rem;
+  --ifm-menu-link-padding-horizontal: 1rem;
+
+  --ifm-toc-border-color: #e2e8f0;
+  --ifm-toc-link-color: #64748b;
+  --ifm-toc-link-active-color: var(--ifm-color-primary);
+
+  --ifm-card-background-color: #ffffff;
+  --ifm-card-border-radius: 0.5rem;
+  --ifm-card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+  --ifm-color-emphasis-300: #cbd5e1;
+  --ifm-color-emphasis-400: #94a3b8;
+  --ifm-color-emphasis-600: #475569;
+  --ifm-color-emphasis-700: #334155;
+  --ifm-color-emphasis-800: #1e293b;
+  --ifm-color-emphasis-900: #0f172a;
+
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #f8fafc;
+  --ifm-background-secondary-color: #f1f5f9;
+
+  --ifm-color-content: #1e293b;
+  --ifm-color-content-secondary: #64748b;
+
+  /* 2026 Standards Custom Properties */
+  --diátaxis-tutorials-color: #3b82f6;
+  --diátaxis-howto-color: #10b981;
+  --diátaxis-reference-color: #8b5cf6;
+  --diátaxis-explanation-color: #f59e0b;
+
+  --wcag-focus-color: #2563eb;
+  --wcag-focus-width: 2px;
+  --wcag-focus-offset: 2px;
+
+  --ai-gradient-start: #3b82f6;
+  --ai-gradient-end: #8b5cf6;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #60a5fa;
+  --ifm-color-primary-dark: #3b82f6;
+  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary-darkest: #1d4ed8;
+  --ifm-color-primary-light: #93bbfc;
+  --ifm-color-primary-lighter: #bfdbfe;
+  --ifm-color-primary-lightest: #dbeafe;
+
+  --ifm-background-color: #0f172a;
+  --ifm-background-surface-color: #1e293b;
+  --ifm-background-secondary-color: #334155;
+
+  --ifm-color-content: #f8fafc;
+  --ifm-color-content-secondary: #cbd5e1;
+
+  --ifm-navbar-background-color: #1e293b;
+  --ifm-footer-background-color: #1e293b;
+  --ifm-footer-color: #cbd5e1;
+
+  --ifm-menu-color: #94a3b8;
+  --ifm-toc-border-color: #334155;
+  --ifm-toc-link-color: #94a3b8;
+
+  --ifm-card-background-color: #1e293b;
+
+  --diátaxis-tutorials-color: #60a5fa;
+  --diátaxis-howto-color: #34d399;
+  --diátaxis-reference-color: #a78bfa;
+  --diátaxis-explanation-color: #fbbf24;
+}
+
+/* Diátaxis Framework Styling */
+.diátaxis-tutorials {
+  border-left: 4px solid var(--diátaxis-tutorials-color);
+}
+
+.diátaxis-howto {
+  border-left: 4px solid var(--diátaxis-howto-color);
+}
+
+.diátaxis-reference {
+  border-left: 4px solid var(--diátaxis-reference-color);
+}
+
+.diátaxis-explanation {
+  border-left: 4px solid var(--diátaxis-explanation-color);
+}
+
+/* WCAG 2.2 AA Compliance */
+*:focus {
+  outline: var(--wcag-focus-width) solid var(--wcag-focus-color);
+  outline-offset: var(--wcag-focus-offset);
+}
+
+/* Ensure minimum touch target size of 24x24 CSS pixels */
+.button,
+.navbar__link,
+.menu__link,
+.pagination-nav__link {
+  min-height: 24px;
+  min-width: 24px;
+  padding: 4px 8px;
+}
+
+/* Enhanced readability */
+.markdown {
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  line-height: var(--ifm-heading-line-height);
+  font-weight: var(--ifm-heading-font-weight);
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.markdown h1 {
+  font-size: 2.25em;
+  color: var(--ifm-color-content);
+}
+
+.markdown h2 {
+  font-size: 1.875em;
+  color: var(--ifm-color-content);
+}
+
+.markdown h3 {
+  font-size: 1.5em;
+  color: var(--ifm-color-content);
+}
+
+.markdown h4 {
+  font-size: 1.25em;
+  color: var(--ifm-color-content);
+}
+
+.markdown p {
+  margin-bottom: 1.25em;
+  max-width: 65ch;
+}
+
+.markdown ul,
+.markdown ol {
+  margin-bottom: 1.25em;
+  padding-left: 1.5em;
+}
+
+.markdown li {
+  margin-bottom: 0.5em;
+}
+
+/* Code block improvements */
+.code-block {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.code-block .prism-code {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  line-height: 1.5;
+}
+
+/* Table improvements */
+.markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1.5em;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.markdown th {
+  background-color: var(--ifm-background-surface-color);
+  font-weight: 600;
+}
+
+/* Alert improvements */
+.alert {
+  border-radius: 0.5rem;
+  border-left: 4px solid;
+  margin: 1.5em 0;
+}
+
+.alert--info {
+  border-left-color: var(--ifm-color-info);
+}
+
+.alert--success {
+  border-left-color: var(--ifm-color-success);
+}
+
+.alert--warning {
+  border-left-color: var(--ifm-color-warning);
+}
+
+.alert--danger {
+  border-left-color: var(--ifm-color-danger);
+}
+
+/* 2026 Standards Badge */
+.standards-badge {
+  background: linear-gradient(135deg, var(--ai-gradient-start), var(--ai-gradient-end));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .markdown {
+    font-size: 15px;
+  }
+  
+  .markdown h1 {
+    font-size: 2em;
+  }
+  
+  .markdown h2 {
+    font-size: 1.75em;
+  }
+  
+  .markdown h3 {
+    font-size: 1.5em;
+  }
+  
+  .markdown p {
+    max-width: 100%;
+  }
+}
+
+/* Print improvements */
+@media print {
+  .navbar,
+  .sidebar,
+  .pagination-nav,
+  .footer {
+    display: none;
+  }
+  
+  .markdown {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  .markdown h1 {
+    font-size: 18pt;
+    page-break-after: avoid;
+  }
+  
+  .markdown h2,
+  .markdown h3 {
+    page-break-after: avoid;
+  }
+  
+  .code-block,
+  .alert {
+    page-break-inside: avoid;
+  }
+}
+
+/* Animation improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

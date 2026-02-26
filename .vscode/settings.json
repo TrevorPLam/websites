@@ -1,10 +1,1 @@
-{
-  "editor.inlineSuggest.enabled": true,
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": true,
-    "markdown": true,
-    "scminput": false
-  },
-  "github.copilot.chat.codeGeneration.useInstructionFiles": true
-}
+{"typescript.preferences.importModuleSpecifier": "relative", "typescript.suggest.autoImports": true, "typescript.updateImportsOnFileMove.enabled": "always", "editor.codeActionsOnSave": {"source.organizeImports": true, "source.fixAll.eslint": true}, "typescript.preferences.includePackageJsonAutoImports": "on", "editor.formatOnSave": true, "editor.defaultFormatter": "esbenp.prettier-vscode", "[typescript]": {"editor.defaultFormatter": "esbenp.prettier-vscode"}, "[typescriptreact]": {"editor.defaultFormatter": "esbenp.prettier-vscode"}, "emmet.includeLanguages": {"typescript": "html", "typescriptreact": "html"}, "files.associations": {"*.ts": "typescript", "*.tsx": "typescriptreact"}}

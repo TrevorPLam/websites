@@ -1,7 +1,6 @@
-# Documentation Structure
+# Marketing Websites Monorepo Documentation
 
-This directory contains comprehensive documentation for the marketing websites monorepo,
-organized by domain and purpose for optimal navigation and maintainability.
+> Enterprise-grade multi-tenant SaaS platform for marketing websites with 2026 documentation standards
 
 ## 📖 For Non-Technical Team Members
 
@@ -15,6 +14,39 @@ This makes it easier to share tools, maintain quality, and ensure consistency ac
 - **Look for 🌟 icons** indicating business-focused content
 - **Technical terms are explained** in simple language
 - **Ask your development team** for help finding specific information
+
+## Documentation Structure (Diátaxis Framework)
+
+This documentation follows the [Diátaxis framework](https://diataxis.fr/) with four distinct content types:
+
+### 📚 [Tutorials](./tutorials/)
+_Learning-oriented, hands-on guides for beginners_
+
+- **Getting Started**: Setup your development environment
+- **Learning Paths**: Structured learning for different roles
+- **Quick Starts**: Launch common configurations in minutes
+
+### 🔧 [How-To Guides](./how-to/)
+_Task-oriented, goal-focused problem-solving steps_
+
+- **Development Workflows**: Feature implementation, testing, deployment
+- **Integration Guides**: Connect third-party services
+- **Maintenance & Troubleshooting**: Common issues and solutions
+
+### 📖 [Reference](./reference/)
+_Information-oriented technical descriptions and specifications_
+
+- **API Documentation**: Complete API reference with examples
+- **Configuration Reference**: All configuration options
+- **Database Schema**: Data structure documentation
+- **Error Codes**: Comprehensive error reference
+
+### 💡 [Explanations](./explanation/)
+_Understanding-oriented conceptual background and architecture decisions_
+
+- **Architecture Decisions**: ADRs and system design rationale
+- **Design Principles**: Core development philosophy
+- **Business Context**: Business model and compliance requirements
 
 ## Top-level layout
 

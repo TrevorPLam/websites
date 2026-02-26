@@ -1,0 +1,7 @@
+extends: existence
+message: "Paragraphs should be concise and readable"
+level: suggestion
+scope: paragraph
+# Paragraphs longer than 150 words should be split
+raw:
+  - '^(.{150,})\s*$'

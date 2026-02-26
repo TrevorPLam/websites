@@ -5,7 +5,7 @@
  * @invariants Keeps tenant and domain boundaries explicit.
  * @security Internal-only foundation module; avoid exposing tenant internals.
  * @gotchas Intended for server-side and test harness usage in this monorepo.
- 
+
  * @description Wave 0 foundational implementation for platform baseline.
  * @adr none
  * @requirements TASKS.md Wave 0 Task 2/3/4
@@ -92,24 +92,38 @@ export * from './logger/index.ts';
 // [FEAT:ENV]
 // NOTE: Environment validation exports - schema validation and configuration.
 export * from './env/index.ts';
+export * from './env/validate.ts';
 
-// [TRACE:BLOCK=packages.infra.exports.config]
-// [FEAT:CONFIG]
-// NOTE: Centralized configuration exports - type-safe environment variable access.
-export * from './src/config.ts';
+// [TRACE:BLOCK=packages.infra.exports.database]
+// [FEAT:DATABASE]
+// NOTE: Database exports - server utilities and type definitions.
+export * from './database/server.ts';
+export * from './database/types.ts';
 
-// [TRACE:CONST=packages.infra.version]
-// [FEAT:INFRASTRUCTURE]
-// NOTE: Package version constant - used for compatibility checks and debugging.
-export const INFRA_PACKAGE_VERSION = '1.0.0';
+// [TRACE:BLOCK=packages.infra.exports.cache]
+// [FEAT:CACHE]
+// NOTE: Cache exports - Redis integration and utilities.
+export * from './cache/redis.ts';
 
 // [TRACE:BLOCK=packages.infra.exports.experiments]
 // [FEAT:EXPERIMENTS]
 // NOTE: Experimentation exports - A/B testing engine and guardrails.
 export * from './experiments/index.ts';
 
+// [TRACE:BLOCK=packages.infra.exports.tenant]
+// [FEAT:TENANT]
+// NOTE: Tenant context exports - multi-tenant isolation and context.
 export * from './context/tenant-context.ts';
-export * from './database/server.ts';
-export * from './database/types.ts';
-export * from './cache/redis.ts';
+
+// [TRACE:BLOCK=packages.infra.exports.config]
+// [FEAT:CONFIG]
+// NOTE: Centralized configuration exports - type-safe environment variable access.
+export * from './src/config.ts';
+
+// [TRACE:BLOCK=packages.infra.exports.encryption]
+// [FEAT:ENCRYPTION]
+// NOTE: Encryption exports - security utilities and token management.
 export * from './security/encryption.ts';
+
+// Package version constant
+export const INFRA_PACKAGE_VERSION = '1.0.0';

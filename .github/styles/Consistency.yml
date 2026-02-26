@@ -1,0 +1,19 @@
+extends: consistency
+message: "Use consistent terminology for technical concepts"
+level: error
+ignorecase: true
+action:
+  name: suggest
+swap:
+  multi-tenant: multi-tenant
+  multi tenant: multi-tenant
+  multitenant: multi-tenant
+  feature-sliced design: Feature-Sliced Design
+  FSD: Feature-Sliced Design
+  fsd: Feature-Sliced Design
+  oauth 2.1: OAuth 2.1
+  oauth2.1: OAuth 2.1
+  wcag 2.2: WCAG 2.2
+  wcag2.2: WCAG 2.2
+  core web vitals: Core Web Vitals
+  diátaxis: Diátaxis

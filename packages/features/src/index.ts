@@ -8,14 +8,12 @@
  */
 import 'server-only';
 
-// Consolidated feature exports for better organization
+// Consolidated barrel exports (optimized for 2026 standards)
 export * from './core';
 export * from './content';
 export * from './business';
 export * from './advanced';
 export * from './utilities';
-
-// Individual exports for commonly used features
 export * from './blog';
 export * from './content-management';
 export * from './notification';

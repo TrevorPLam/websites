@@ -1,23 +1,54 @@
-# Marketing Monorepo LLM Context
+# Marketing Websites Monorepo
+> Enterprise-grade multi-tenant SaaS platform for marketing websites with 2026 documentation standards
 
-Project: Multi-tenant, multi-site Next.js marketing monorepo.
+## Docs
+- [Getting Started](docs/tutorials/): Setup and learning paths for new developers
+- [How-To Guides](docs/how-to/): Task-oriented guides for feature development and deployment
+- [API Reference](docs/reference/): Complete API documentation and configuration reference
+- [Architecture Decisions](docs/explanation/): System design and technical philosophy
 
-Primary docs:
-- README.md
-- DESIGN.md
-- CODEMAP.md
-- TODO.md
-- AGENTS.md
+## Key Features
+- Multi-tenant SaaS architecture with secure tenant isolation
+- Next.js 16 with React 19 Server Components and App Router
+- Feature-Sliced Design (FSD) v2.1 for scalable code organization
+- OAuth 2.1 with PKCE authentication and zero-trust security
+- Stripe payment processing and Cal.com scheduling integration
+- WCAG 2.2 AA accessibility compliance and Core Web Vitals optimization
 
-Architecture:
-- Feature-Sliced Design v2.1
-- Layer order: app -> pages -> widgets -> features -> entities -> shared
-- Prefer package public exports (`index.ts`), avoid deep imports.
+## Technology Stack
+- Frontend: Next.js 16, React 19, TypeScript 5.9, Tailwind CSS
+- Backend: Supabase (PostgreSQL), Node.js, tRPC
+- Infrastructure: Vercel, Turborepo, pnpm workspaces
+- Testing: Playwright, Vitest, React Testing Library
+- Monitoring: Sentry, Core Web Vitals, custom analytics
 
-Quality and security:
-- Run lint, type-check, tests, and docs validation before merge.
-- Keep tenant isolation explicit.
-- Never log or commit secrets.
+## Development Workflow
+1. Environment setup with pnpm and Turborepo
+2. Feature development using FSD layer isolation
+3. Testing with automated CI/CD pipeline
+4. Deployment with zero-downtime releases
+5. Monitoring and observability
 
-Task tracking:
-- Update TODO.md and task artifacts under tasks/ when tasks are completed.
+## Business Model
+- Multi-tenant SaaS for marketing websites
+- Agency client management with automated provisioning
+- Usage-based billing with Stripe integration
+- 1000+ client site scalability
+
+## Compliance & Security
+- GDPR/CCPA compliant data handling
+- SOC 2 Type II security controls
+- OWASP Top 10 vulnerability prevention
+- Multi-tenant data isolation with RLS policies
+
+## Performance Standards
+- Core Web Vitals: LCP <2.5s, INP <200ms, CLS <0.1
+- Bundle size: JS <250KB gzipped
+- Uptime: 99.9% availability SLA
+- Page load: <3s global average
+
+## AI Integration
+- MCP servers for context streaming and agent orchestration
+- RAG pipeline for documentation and code assistance
+- Automated testing and deployment workflows
+- Predictive analytics for performance optimization

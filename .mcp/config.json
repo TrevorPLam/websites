@@ -88,6 +88,16 @@
       "command": "npx",
       "args": ["-y", "mcp-skillset"],
       "env": { "SKILLS_PATH": ".claude/skills", "LOG_LEVEL": "info" }
+    },
+    "documentation": {
+      "command": "npx",
+      "args": ["tsx", "scripts/mcp/documentation-server.ts"],
+      "env": {
+        "DOCS_DIR": "docs",
+        "RAG_STATE": "rag-state.json",
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
     }
   }
 }

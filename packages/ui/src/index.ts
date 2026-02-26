@@ -10,7 +10,7 @@
 export { Button as ButtonEnhanced } from './components/ButtonEnhanced';
 export type { ButtonProps as ButtonEnhancedProps } from './components/ButtonEnhanced';
 
-// Error boundaries and fallback UI components
+// Error boundaries and fallback UI components (consolidated)
 export {
   ErrorBoundary,
   EnhancedErrorBoundary,
@@ -34,7 +34,7 @@ export {
   type FormErrorFallbackProps,
 } from './components/FallbackUI';
 
-// Toast notifications with promise-based loading states
+// Toast notifications with promise-based loading states (consolidated)
 export {
   Toast,
   Toaster,
@@ -45,12 +45,10 @@ export {
   toastPromise,
   toastDismiss,
   toastDismissAll,
-  validateToastAccessibility
-} from './components/Sonner';
-export type {
-  ToastProps,
-  ToastOptions,
-  ToasterProps
+  validateToastAccessibility,
+  type ToastProps,
+  type ToastOptions,
+  type ToasterProps
 } from './components/Sonner';
 
 // Existing primitives
@@ -85,16 +83,16 @@ export type { ToggleProps, ToggleVariant, ToggleSize } from './components/Toggle
 export { ToggleGroup, ToggleGroupItem } from './components/ToggleGroup';
 export type { ToggleGroupProps, ToggleGroupItemProps } from './components/ToggleGroup';
 
-// Enhanced design tokens with CSS custom properties
+// Enhanced design tokens with CSS custom properties (consolidated)
 export {
   themeTokens,
   generateCSSVariables,
   applyTenantTheme,
-  validateWCAGCompliance
+  validateWCAGCompliance,
+  type ThemeTokens
 } from './design-tokens';
-export type { ThemeTokens } from './design-tokens';
 
-// Re-export from sub-modules
+// Re-export from sub-modules (consolidated barrel exports)
 export * from './layout';
 export * from './navigation';
 export * from './overlays';
@@ -105,3 +103,4 @@ export * from './misc';
 export * from './privacy';
 export * from './booking';
 export * from './design-tokens';
+export * from './primitives';
