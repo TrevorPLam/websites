@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @file apps/web/src/widgets/hero-banner/ui/HeroBanner.tsx
  * @summary Hero banner component.

@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @file apps/web/src/widgets/testimonial-carousel/ui/TestimonialsCarousel.tsx
  * @summary Testimonials carousel component.

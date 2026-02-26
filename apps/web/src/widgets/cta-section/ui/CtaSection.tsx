@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @file apps/web/src/widgets/cta-section/ui/CtaSection.tsx
  * @summary CTA section component.

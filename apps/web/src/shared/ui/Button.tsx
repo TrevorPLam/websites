@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @file apps/web/src/shared/ui/Button.tsx
  * @summary Basic button component.

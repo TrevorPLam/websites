@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * @file apps/web/src/widgets/features-grid/ui/FeaturesGrid.tsx
  * @summary Features grid component.

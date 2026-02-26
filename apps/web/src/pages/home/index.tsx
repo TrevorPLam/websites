@@ -1,56 +1,48 @@
+import React from 'react'
+
 /**
  * @file apps/web/src/pages/home/index.tsx
- * @summary Home page composition.
- * @description Composes hero banner, features grid, testimonials, and CTA sections.
- * @security No sensitive data exposure; public content only.
- * @adr none
- * @requirements DOMAIN-3-6
+ * @summary home page composition.
+ * @description home page with FSD composition.
  */
 
-'use client';
+'use client'
 
-import { HeroBanner } from '@/widgets/hero-banner';
-import { FeaturesGrid } from '@/widgets/features-grid';
-import { TestimonialsCarousel } from '@/widgets/testimonial-carousel';
-import { CtaSection } from '@/widgets/cta-section';
+import { SiteHeader } from '@/widgets/site-header'
+import { Footer } from '@/widgets/footer'
 
-/**
- * Renders the home page with hero banner and feature sections.
- *
- * @returns JSX element representing the complete home page layout.
- */
 export function HomePage() {
   return (
-    <main>
-      <HeroBanner
-        headline="Marketing Websites That Convert"
-        subheadline="Build beautiful, high-performing marketing sites that drive results for your business."
-        ctaPrimary={{
-          label: 'Get Started Free',
-          href: '/pricing',
-        }}
-        ctaSecondary={{
-          label: 'View Demo',
-          href: '/dashboard',
-        }}
-        backgroundImage={{
-          url: '/images/hero-bg.jpg',
-          alt: 'Marketing website platform dashboard',
-        }}
+    <div className="min-h-screen bg-white">
+      <SiteHeader
+        siteName="Marketing Websites Platform"
+        navigation={[
+          { label: 'Home', href: '/' },
+          { label: 'About', href: '/about' },
+          { label: 'Pricing', href: '/pricing' },
+          { label: 'Contact', href: '/contact' },
+        ]}
       />
-
-      <FeaturesGrid />
-
-      <TestimonialsCarousel />
-
-      <CtaSection
-        headline="Ready to Grow Your Business?"
-        subheadline="Join thousands of businesses using our platform to create stunning marketing websites."
-        cta={{
-          label: 'Start Your Free Trial',
-          href: '/register',
-        }}
+      
+      <main className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Home
+          </h1>
+          <p className="text-xl text-gray-600">
+            Home page content
+          </p>
+        </div>
+      </main>
+      
+      <Footer
+        companyName="Marketing Websites Platform"
+        socialLinks={[
+          { name: 'Twitter', href: '#', icon: '🐦' },
+          { name: 'LinkedIn', href: '#', icon: '💼' },
+          { name: 'GitHub', href: '#', icon: '🐙' },
+        ]}
       />
-    </main>
-  );
+    </div>
+  )
 }
