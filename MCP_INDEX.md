@@ -16,25 +16,33 @@
 ## 📁 Workspace Structure
 
 ```
-mcp-skills-workspace/
-├── .mcp/                    # MCP Configuration
-│   ├── config.json          # Main configuration
-│   ├── config.development.json
-│   ├── config.production.json
-│   └── manifests/            # Security & compliance
+marketing-websites/
+├── mcp/                     # MCP Infrastructure
+│   ├── config/              # Configuration files
+│   │   └── config.json      # Main MCP server configuration
+│   ├── servers/             # MCP Server Implementations
+│   │   └── src/             # Server source code
+│   ├── apps/                # MCP Applications with UI
+│   │   └── src/             # App source code
+│   ├── docs/                # MCP Documentation (Diátaxis)
+│   │   ├── tutorials/       # Learning-oriented
+│   │   ├── how-to/         # Task-oriented
+│   │   ├── reference/      # Information-oriented
+│   │   └── explanation/    # Understanding-oriented
+│   └── scripts/             # Automation Scripts
 ├── skills/                  # Skills Definition
-│   ├── core/                 # Essential workflows
-│   ├── integration/          # Third-party integrations
-│   ├── domain/               # Business-specific
-│   └── templates/            # Skill templates
-├── packages/mcp-servers/     # MCP Server Implementation
-├── packages/mcp-apps/        # MCP Applications with UI
-├── docs/mcp/                 # Documentation (Diátaxis)
-│   ├── tutorials/            # Learning-oriented
-│   ├── how-to/              # Task-oriented
-│   ├── reference/           # Information-oriented
-│   └── explanation/        # Understanding-oriented
-├── scripts/mcp/              # Automation Scripts
+│   ├── core/               # Essential workflows
+│   ├── integration/        # Third-party integrations
+│   ├── domain/             # Business-specific
+│   ├── templates/          # Skill templates
+│   ├── claude/             # Claude-specific skills
+│   └── codex/              # Codex-specific skills
+├── packages/                # Monorepo Packages
+│   ├── agent-orchestration/ # Multi-agent orchestration
+│   ├── agent-governance/    # Enterprise governance
+│   ├── agent-tools/         # Tool contract system
+│   ├── agent-memory/        # Advanced memory systems
+│   └── context-engineering/ # Context engineering
 └── MCP_INDEX.md             # This file
 ```
 
@@ -73,27 +81,42 @@ Reusable templates for creating new skills:
 
 ## 🖥️ MCP Servers
 
-### Core Servers
+### Core Enterprise Servers
 
-- [Enterprise Registry](packages/mcp-servers/src/enterprise-registry.ts) - Server discovery and management
-- [Security Gateway](packages/mcp-servers/src/enterprise-security-gateway.ts) - Zero-trust security enforcement
-- [Observability Monitor](packages/mcp-servers/src/observability-monitor.ts) - Distributed tracing and monitoring
+- [Enterprise Registry](mcp/servers/src/enterprise-registry.ts) - Server discovery and management
+- [Enterprise Security Gateway](mcp/servers/src/enterprise-security-gateway.ts) - Zero-trust security enforcement
+- [Enterprise Auth Gateway](mcp/servers/src/enterprise-auth-gateway.ts) - OAuth 2.1 authentication
+- [Observability Monitor](mcp/servers/src/observability-monitor.ts) - Distributed tracing and monitoring
 
 ### AI & Reasoning Servers
 
-- [Sequential Thinking](packages/mcp-servers/src/sequential-thinking.ts) - Structured AI reasoning
-- [Knowledge Graph](packages/mcp-servers/src/knowledge-graph-memory.ts) - Memory and knowledge management
+- [Sequential Thinking](mcp/servers/src/sequential-thinking-fixed.ts) - Structured AI reasoning with debugging
+- [Knowledge Graph Memory](mcp/servers/src/knowledge-graph-memory-fixed.ts) - Persistent memory and knowledge management
+- [AI-DLC Methodology](mcp/servers/src/ai-dlc-methodology.ts) - AI-Driven Development Lifecycle
+- [Advanced Agent Plugins](mcp/servers/src/advanced-agent-plugins.ts) - Specialized agent modules
 
 ### Integration Servers
 
-- [GitHub Server](packages/mcp-servers/src/github-server.ts) - GitHub API integration
-- [Database Server](packages/mcp-servers/src/database-server.ts) - Database operations
-- [Filesystem Server](packages/mcp-servers/src/filesystem-server.ts) - File system access
+- [GitHub Server](mcp/servers/src/github-server.ts) - GitHub API integration
+- [Skillset Server](mcp/servers/src/skillset-server.ts) - Skills management and execution
+- [Documentation Server](mcp/scripts/documentation-server.ts) - Documentation RAG and search
 
-### Deployment Servers
+### Deployment & Orchestration Servers
 
-- [Secure Deployment Manager](packages/mcp-servers/src/secure-deployment-manager.ts) - Infrastructure deployment
-- [Multi-Tenant Orchestrator](packages/mcp-servers/src/multi-tenant-orchestrator.ts) - Tenant management
+- [Secure Deployment Manager](mcp/servers/src/secure-deployment-manager.ts) - Infrastructure deployment
+- [Multi-Tenant Orchestrator](mcp/servers/src/multi-tenant-orchestrator.ts) - Tenant management
+- [Enterprise MCP Marketplace](mcp/servers/src/enterprise-mcp-marketplace.ts) - Server marketplace
+- [MCP Apps Marketplace](mcp/servers/src/mcp-apps-marketplace.ts) - Application marketplace
+
+### External Servers (Configured)
+
+- **Filesystem** - `@modelcontextprotocol/server-filesystem` - File system access
+- **Git** - `@modelcontextprotocol/server-git` - Git repository operations
+- **Everything** - `@modelcontextprotocol/server-everything` - General purpose tools
+- **SQLite** - `mcp-server-sqlite` - Database operations
+- **Fetch** - `mcp-server-fetch` - HTTP requests
+- **Azure MCP** - `@azure/mcp@latest` - Azure services integration
+- **Ticketer** - `mcp-ticketer` - Issue tracking (Linear/Jira)
 
 ## 📚 Documentation
 
@@ -101,74 +124,76 @@ Reusable templates for creating new skills:
 
 Step-by-step guides for beginners:
 
-- [Getting Started](docs/mcp/tutorials/getting-started.md) - MCP introduction and setup
-- [MCP Basics](docs/mcp/tutorials/mcp-basics.md) - Core concepts and terminology
-- [First Skill](docs/mcp/tutorials/first-skill.md) - Create your first skill
-- [First Server](docs/mcp/tutorials/first-server.md) - Build your first MCP server
+- [Getting Started](mcp/docs/tutorials/getting-started.md) - MCP introduction and setup
+- [MCP Basics](mcp/docs/tutorials/mcp-basics.md) - Core concepts and terminology
+- [First Skill](mcp/docs/tutorials/first-skill.md) - Create your first skill
+- [First Server](mcp/docs/tutorials/first-server.md) - Build your first MCP server
 
 ### How-To Guides (Task-oriented)
 
 Practical guides for specific tasks:
 
-- [Setup Configuration](docs/mcp/how-to/setup-configuration.md) - Environment setup
-- [AI Integration](docs/mcp/how-to/ai-integration.md) - AI agent integration
-- [Git Server Setup](docs/mcp/how-to/git-server-setup.md) - Git server configuration
-- [Production Deployment](docs/mcp/how-to/production-deployment.md) - Production deployment
-- [A2A Integration](docs/mcp/how-to/a2a-integration.md) - Agent-to-Agent protocol
+- [Setup Configuration](mcp/docs/how-to/setup-configuration.md) - Environment setup
+- [AI Integration](mcp/docs/how-to/ai-integration.md) - AI agent integration
+- [Git Server Setup](mcp/docs/how-to/git-server-setup.md) - Git server configuration
+- [Production Deployment](mcp/docs/how-to/production-deployment.md) - Production deployment
+- [A2A Integration](mcp/docs/how-to/a2a-integration.md) - Agent-to-Agent protocol
 
 ### Reference (Information-oriented)
 
 Technical specifications and APIs:
 
-- [Configuration Reference](docs/mcp/reference/configuration-reference.md) - Complete configuration guide
-- [Skill Format](docs/mcp/reference/skill-format.md) - Skill file format specification
-- [Skills Guide](docs/mcp/reference/skills-guide.md) - Skills usage guide
-- [Comprehensive Guide](docs/mcp/reference/comprehensive-guide.md) - Complete reference
-- [Server API](docs/mcp/reference/server-api.md) - MCP server API documentation
+- [Configuration Reference](mcp/docs/reference/configuration-reference.md) - Complete configuration guide
+- [Skill Format](mcp/docs/reference/skill-format.md) - Skill file format specification
+- [Skills Guide](mcp/docs/reference/skills-guide.md) - Skills usage guide
+- [Comprehensive Guide](mcp/docs/reference/comprehensive-guide.md) - Complete reference
+- [Server API](mcp/docs/reference/server-api.md) - MCP server API documentation
 
 ### Explanation (Understanding-oriented)
 
 Conceptual background and architecture:
 
-- [Implementation Guide](docs/mcp/explanation/implementation-guide.md) - Implementation patterns
-- [Advanced Research 2026](docs/mcp/explanation/advanced-research-2026.md) - Cutting-edge research
-- [Agentic Coding Techniques](docs/mcp/explanation/agentic-coding-techniques.md) - AI coding patterns
-- [Agent Skills Research](docs/mcp/explanation/agent-skills-research.md) - Skills research
-- [Research Results](docs/mcp/explanation/research-results.md) - Research findings
+- [Implementation Guide](mcp/docs/explanation/implementation-guide.md) - Implementation patterns
+- [Advanced Research 2026](mcp/docs/explanation/advanced-research-2026.md) - Cutting-edge research
+- [Agentic Coding Techniques](mcp/docs/explanation/agentic-coding-techniques.md) - AI coding patterns
+- [Agent Skills Research](mcp/docs/explanation/agent-skills-research.md) - Skills research
+- [Research Results](mcp/docs/explanation/research-results.md) - Research findings
 
 ## 🛠️ Scripts & Automation
 
 ### Setup Scripts
 
-- [Setup (Unix)](scripts/mcp/setup.sh) - Unix/Linux setup script
-- [Setup (Windows)](scripts/mcp/setup.bat) - Windows setup script
+- [Setup (Unix)](mcp/scripts/setup.sh) - Unix/Linux setup script
+- [Setup (Windows)](mcp/scripts/setup.bat) - Windows setup script
 
 ### Development Scripts
 
-- [Development Workflow](scripts/mcp/dev-workflow.js) - Development automation
-- [Setup Development](scripts/mcp/setup-development.js) - Development environment setup
+- [Development Workflow](mcp/scripts/dev-workflow.js) - Development automation
+- [Setup Development](mcp/scripts/setup-development.js) - Development environment setup
 
 ### Testing Scripts
 
-- [Test AI Integration](scripts/mcp/test-ai-integration.js) - AI integration testing
-- [Test Development](scripts/mcp/test-development.js) - Development testing
-- [Test Integration](scripts/mcp/test-integration.js) - Integration testing
+- [Test AI Integration](mcp/scripts/test-ai-integration.js) - AI integration testing
+- [Test Development](mcp/scripts/test-development.js) - Development testing
+- [Test Integration](mcp/scripts/test-integration.js) - Integration testing
 
 ### Validation Scripts
 
-- [Validate Production](scripts/mcp/validate-production.js) - Production validation
-- [Migration Script](scripts/mcp/migrate.sh) - Workspace migration
-- [Validation Script](scripts/mcp/validate.sh) - Structure validation
+- [Validate Production](mcp/scripts/validate-production.js) - Production validation
+- [Migration Script](mcp/scripts/migrate.sh) - Workspace migration
+- [Validation Script](mcp/scripts/validate.sh) - Structure validation
+
+### Performance Scripts
+
+- [Performance Analysis](mcp/scripts/performance/performance-analysis.js) - Performance monitoring
+- [Documentation Server](mcp/scripts/documentation-server.ts) - Documentation RAG server
 
 ## 📦 Packages
 
-### MCP Servers
+### MCP Infrastructure
 
-- [@repo/mcp-servers](packages/mcp-servers/) - Core MCP server implementations
-
-### MCP Applications
-
-- [@repo/mcp-apps](packages/mcp-apps/) - Interactive MCP applications with UI
+- [MCP Servers](mcp/servers/) - Core MCP server implementations
+- [MCP Applications](mcp/apps/) - Interactive MCP applications with UI
 
 ### 🤖 Agent Packages (2026 Agentic Coding)
 
@@ -184,6 +209,11 @@ These packages provide the foundational AI agent infrastructure that works with 
 #### Context & Intelligence
 
 - [@repo/context-engineering](packages/context-engineering/) - Context engineering with budget management and anti-pollution
+
+### MCP Apps (Interactive UI)
+
+- [Interactive Dashboard](mcp/apps/src/interactive-dashboard.ts) - Real-time dashboards with bidirectional communication
+- [MCP Apps Index](mcp/apps/src/index.ts) - Apps registry and management
 
 ### Integration Architecture
 
@@ -211,15 +241,33 @@ AI Agent Ecosystem:
 
 ### Main Configuration
 
-- [config.json](.mcp/config.json) - Primary MCP configuration
-- [config.development.json](.mcp/config.development.json) - Development settings
-- [config.production.json](.mcp/config.production.json) - Production settings
+- [config.json](mcp/config/config.json) - Primary MCP configuration with all servers
 
-### Security & Compliance
+### Configuration Structure
 
-- [Security Audit](.mcp/manifests/security-audit.json) - Security audit results
-- [Supply Chain Safety](.mcp/manifests/supply-chain-safety.json) - Supply chain security
-- [Trusted Manifest](.mcp/manifests/trusted-manifest.json) - Trusted components
+The MCP configuration includes:
+
+- **Enterprise Servers**: Registry, Security Gateway, Auth Gateway, Observability
+- **AI & Reasoning**: Sequential Thinking, Knowledge Graph, AI-DLC Methodology
+- **Integration**: GitHub, Skillset, Documentation
+- **External Services**: Filesystem, Git, Everything, SQLite, Fetch, Azure, Ticketer
+
+### Server Status
+
+✅ **Production Ready**: Enterprise Registry, Security Gateway, Observability Monitor  
+✅ **AI Enhanced**: Sequential Thinking (with debugging), Knowledge Graph Memory  
+✅ **Integration Tested**: GitHub Server, Skillset Server, Documentation Server  
+🔄 **In Development**: AI-DLC Methodology, Advanced Agent Plugins
+
+### Environment Variables
+
+Required environment variables for configured servers:
+
+- `GITHUB_TOKEN` - GitHub API access
+- `AZURE_TOKEN` - Azure services access
+- `LINEAR_TOKEN` - Linear issue tracking
+- `JIRA_TOKEN` - Jira issue tracking
+- `REPO_PATH` - Repository path (default: current directory)
 
 ## 🚀 Getting Started
 
@@ -231,50 +279,70 @@ cd marketing-websites
 pnpm install
 ```
 
-### 2. Run Setup Script
+### 2. Configure Environment
+
+```bash
+# Set required environment variables
+export GITHUB_TOKEN="your-github-token"
+export AZURE_TOKEN="your-azure-token"  # Optional
+export LINEAR_TOKEN="your-linear-token"  # Optional
+export JIRA_TOKEN="your-jira-token"  # Optional
+```
+
+### 3. Run Setup Script
 
 ```bash
 # Unix/Linux
-./scripts/mcp/setup.sh
+./mcp/scripts/setup.sh
 
 # Windows
-./scripts/mcp/setup.bat
+./mcp/scripts/setup.bat
 ```
 
-### 3. Validate Configuration
+### 4. Validate Configuration
 
 ```bash
-./scripts/mcp/validate.sh
+./mcp/scripts/validate.sh
 ```
 
-### 4. Start Development
+### 5. Start Development
 
 ```bash
 pnpm dev
+```
+
+### 6. Test MCP Servers
+
+```bash
+# Test individual servers
+npx tsx mcp/servers/src/sequential-thinking-fixed.ts
+
+# Test with configuration
+node mcp/scripts/test-integration.js
 ```
 
 ## 📖 Learning Path
 
 ### Beginner Path
 
-1. [Getting Started](docs/mcp/tutorials/getting-started.md) - Learn MCP basics
-2. [MCP Basics](docs/mcp/tutorials/mcp-basics.md) - Understand core concepts
-3. [First Skill](docs/mcp/tutorials/first-skill.md) - Create your first skill
-4. [First Server](docs/mcp/tutorials/first-server.md) - Build your first server
+1. [Getting Started](mcp/docs/tutorials/getting-started.md) - Learn MCP basics
+2. [MCP Basics](mcp/docs/tutorials/mcp-basics.md) - Understand core concepts
+3. [First Skill](mcp/docs/tutorials/first-skill.md) - Create your first skill
+4. [First Server](mcp/docs/tutorials/first-server.md) - Build your first MCP server
 
 ### Intermediate Path
 
-1. [Configuration Reference](docs/mcp/reference/configuration-reference.md) - Master configuration
-2. [Skill Format](docs/mcp/reference/skill-format.md) - Understand skill format
-3. [AI Integration](docs/mcp/how-to/ai-integration.md) - Integrate with AI agents
-4. [Production Deployment](docs/mcp/how-to/production-deployment.md) - Deploy to production
+1. [Configuration Reference](mcp/docs/reference/configuration-reference.md) - Master configuration
+2. [Skill Format](mcp/docs/reference/skill-format.md) - Understand skill format
+3. [AI Integration](mcp/docs/how-to/ai-integration.md) - Integrate with AI agents
+4. [Production Deployment](mcp/docs/how-to/production-deployment.md) - Deploy to production
 
 ### Advanced Path
 
-1. [Implementation Guide](docs/mcp/explanation/implementation-guide.md) - Advanced patterns
-2. [Advanced Research 2026](docs/mcp/explanation/advanced-research-2026.md) - Cutting-edge techniques
-3. [Agentic Coding Techniques](docs/mcp/explanation/agentic-coding-techniques.md) - AI coding patterns
-4. [A2A Integration](docs/mcp/how-to/a2a-integration.md) - Agent-to-Agent communication
+1. [Implementation Guide](mcp/docs/explanation/implementation-guide.md) - Advanced patterns
+2. [Advanced Research 2026](mcp/docs/explanation/advanced-research-2026.md) - Cutting-edge techniques
+3. [Agentic Coding Techniques](mcp/docs/explanation/agentic-coding-techniques.md) - AI coding patterns
+4. [A2A Integration](mcp/docs/how-to/a2a-integration.md) - Agent-to-Agent communication
 
 ## 🔍 Search & Discovery
 
@@ -283,33 +351,34 @@ pnpm dev
 - Browse by [category](#-skills)
 - Search in [skills/](skills/) directory
 - Check [skill templates](skills/templates/) for examples
+- Explore [Claude skills](skills/claude/) and [Codex skills](skills/codex/)
 
 ### Find Servers
 
 - Browse [MCP servers](#-mcp-servers) list
-- Check [packages/mcp-servers/](packages/mcp-servers/) directory
-- See [server API](docs/mcp/reference/server-api.md) documentation
+- Check [mcp/servers/src/](mcp/servers/src/) directory
+- See [server API](mcp/docs/reference/server-api.md) documentation
 
 ### Find Documentation
 
 - Use [Diátaxis framework](#-documentation) navigation
 - Search by topic in relevant sections
-- Check [comprehensive guide](docs/mcp/reference/comprehensive-guide.md)
+- Check [comprehensive guide](mcp/docs/reference/comprehensive-guide.md)
 
 ## 🤝 Contributing
 
 ### Add New Skill
 
 1. Use [skill templates](skills/templates/) as starting point
-2. Follow [skill format](docs/mcp/reference/skill-format.md) specification
+2. Follow [skill format](mcp/docs/reference/skill-format.md) specification
 3. Add to appropriate [category](#-skills) directory
 4. Update documentation
 
 ### Add New Server
 
-1. Follow [server patterns](packages/mcp-servers/) in existing servers
-2. Update [configuration](.mcp/config.json) to include new server
-3. Add [API documentation](docs/mcp/reference/server-api.md)
+1. Follow [server patterns](mcp/servers/src/) in existing servers
+2. Update [configuration](mcp/config/config.json) to include new server
+3. Add [API documentation](mcp/docs/reference/server-api.md)
 4. Update this index
 
 ### Improve Documentation
@@ -323,8 +392,8 @@ pnpm dev
 
 ### Common Issues
 
-- [Troubleshooting Guide](docs/mcp/how-to/troubleshooting.md) - Common problems and solutions
-- [FAQ](docs/mcp/explanation/faq.md) - Frequently asked questions
+- [Troubleshooting Guide](mcp/docs/how-to/troubleshooting.md) - Common problems and solutions
+- [FAQ](mcp/docs/explanation/faq.md) - Frequently asked questions
 
 ### Get Help
 
@@ -342,7 +411,7 @@ pnpm dev
 
 ### Workspace Health
 
-- Run [validation script](scripts/mcp/validate.sh) to check structure
+- Run [validation script](mcp/scripts/validate.sh) to check structure
 - Monitor [CI/CD pipeline](https://ci.your-domain.com) for build status
 - Check [coverage reports](https://coverage.your-domain.com) for test coverage
 
@@ -356,7 +425,7 @@ pnpm dev
 ---
 
 **Last Updated**: 2026-02-26  
-**Version**: 1.0.0  
+**Version**: 2.0.0  
 **Maintainers**: MCP Team
 
 _This index is automatically generated and maintained. For updates, see the [contribution guidelines](#-contributing)._

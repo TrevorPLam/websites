@@ -606,10 +606,12 @@ export class IntelligentTestSelection {
 
   private extractSourceFiles(content: string): string[] {
     const imports = content.match(/import.*from\s+['"`]([^'"`]+)['"`]/g) || [];
-    return imports.map((imp) => {
-      const match = imp.match(/from\s+['"`]([^'"`]+)['"`]/);
-      return match ? match[1] : '';
-    }).filter(Boolean);
+    return imports
+      .map((imp) => {
+        const match = imp.match(/from\s+['"`]([^'"`]+)['"`]/);
+        return match ? match[1] : '';
+      })
+      .filter(Boolean);
   }
 
   private extractTestedFunctions(content: string): string[] {
@@ -629,10 +631,12 @@ export class IntelligentTestSelection {
   private extractDependencies(content: string): string[] {
     // Extract @repo dependencies
     const repoImports = content.match(/from\s+['"`]@repo\/([^'"`]+)['"`]/g) || [];
-    return repoImports.map((imp) => {
-      const match = imp.match(/@repo\/([^'"`]+)/);
-      return match ? match[1] : '';
-    }).filter(Boolean);
+    return repoImports
+      .map((imp) => {
+        const match = imp.match(/@repo\/([^'"`]+)/);
+        return match ? match[1] : '';
+      })
+      .filter(Boolean);
   }
 
   private extractTags(content: string): string[] {
@@ -642,7 +646,4 @@ export class IntelligentTestSelection {
 
     return tags;
   }
-
-// ============================================================================
-// Exports
-// ============================================================================
+}

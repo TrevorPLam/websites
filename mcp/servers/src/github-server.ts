@@ -9,6 +9,7 @@
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 
 // Validate GITHUB_TOKEN on startup
@@ -330,6 +331,9 @@ server.tool(
 
 // ESM CLI guard
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  async function startServer() {
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+  }
+  startServer().catch(console.error);
 }

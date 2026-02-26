@@ -4,7 +4,7 @@ description: |
   **WORKFLOW SKILL** - Deploy to Azure using azd.
   USE FOR: "deploy", "azd up", "provision infrastructure".
   DO NOT USE FOR: general Azure queries (use azure-mcp directly).
-  INVOKES: azure-mcp, github-mcp, slack-mcp.
+  INVOKES: azure-mcp, github, fetch.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'
@@ -45,7 +45,7 @@ This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) wit
 
 **Action:** Update GitHub status and deployment metadata
 
-- **Tool:** `github-mcp` → `update-deployment-status`
+- **Tool:** `github` → `update-deployment-status`
 - **Purpose:** Mark deployment status in GitHub PR/issues
 - **Failure:** Continue deployment, log GitHub sync failure
 
@@ -53,7 +53,7 @@ This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) wit
 
 **Action:** Send deployment notification to Slack
 
-- **Tool:** `slack-mcp` → `post-message`
+- **Tool:** `fetch` → `send-webhook-notification`
 - **Purpose:** Notify team of deployment completion
 - **Failure:** Non-critical, continue without notification
 
@@ -81,8 +81,8 @@ This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) wit
 ## MCP Server Dependencies
 
 - `azure-mcp`: Azure CLI and azd integration
-- `github-mcp`: GitHub repository status management
-- `slack-mcp`: Team notification system
+- `github`: GitHub repository status management
+- `fetch`: Webhook delivery for notifications
 
 ## Notes
 
