@@ -2,13 +2,14 @@
  * @file packages/monitoring/src/__tests__/rum-integration.test.ts
  * @summary Comprehensive tests for RUM integration service
  * @description Test coverage for RUM ingestion, correlation analysis, and performance monitoring
+ * @security Test coverage for multi-tenant data isolation and privacy compliance
  * @requirements TASK-007.5 / rum-testing / comprehensive-coverage
  * @version 2026.02.26
  */
 
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { RUMIntegrationService } from '../rum-integration';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RUMMetrics, SyntheticTestResult } from '../rum-integration';
+import { RUMIntegrationService } from '../rum-integration';
 
 // Mock Supabase client
 const mockSupabase = {
@@ -118,8 +119,8 @@ describe('RUMIntegrationService', () => {
         pageLoadStart: Date.now() - 5000,
       };
 
-      mockSupabase.insert.mockResolvedValue({ 
-        error: new Error('Database connection failed') 
+      mockSupabase.insert.mockResolvedValue({
+        error: new Error('Database connection failed'),
       });
 
       // Act & Assert
@@ -300,15 +301,15 @@ describe('RUMIntegrationService', () => {
       mockSupabase.single.mockResolvedValue({ data: null, error: null });
 
       // Mock synthetic data fetch
-      mockSupabase.select.mockResolvedValueOnce({ 
-        data: mockSyntheticData, 
-        error: null 
+      mockSupabase.select.mockResolvedValueOnce({
+        data: mockSyntheticData,
+        error: null,
       });
 
       // Mock RUM data fetch
-      mockSupabase.select.mockResolvedValueOnce({ 
-        data: mockRUMData, 
-        error: null 
+      mockSupabase.select.mockResolvedValueOnce({
+        data: mockRUMData,
+        error: null,
       });
 
       // Mock correlation storage
@@ -352,15 +353,15 @@ describe('RUMIntegrationService', () => {
       mockSupabase.order.mockReturnValue(mockSupabase);
 
       // Mock empty synthetic data
-      mockSupabase.select.mockResolvedValueOnce({ 
-        data: [], 
-        error: null 
+      mockSupabase.select.mockResolvedValueOnce({
+        data: [],
+        error: null,
       });
 
       // Mock empty RUM data
-      mockSupabase.select.mockResolvedValueOnce({ 
-        data: [], 
-        error: null 
+      mockSupabase.select.mockResolvedValueOnce({
+        data: [],
+        error: null,
       });
 
       // Act
@@ -391,9 +392,9 @@ describe('RUMIntegrationService', () => {
           session_id: 'session-001',
           timestamp: new Date(Date.now() - 950000).toISOString(),
           lcp: 2000, // Perfect match
-          inp: 150,  // Perfect match
-          cls: 0.1,  // Perfect match
-          ttfb: 400,  // Perfect match
+          inp: 150, // Perfect match
+          cls: 0.1, // Perfect match
+          ttfb: 400, // Perfect match
         },
       ];
 
@@ -404,13 +405,13 @@ describe('RUMIntegrationService', () => {
       mockSupabase.order.mockReturnValue(mockSupabase);
       mockSupabase.upsert.mockResolvedValue({ error: null });
 
-      mockSupabase.select.mockResolvedValueOnce({ 
-        data: mockSyntheticData, 
-        error: null 
+      mockSupabase.select.mockResolvedValueOnce({
+        data: mockSyntheticData,
+        error: null,
       });
-      mockSupabase.select.mockResolvedValueOnce({ 
-        data: mockRUMData, 
-        error: null 
+      mockSupabase.select.mockResolvedValueOnce({
+        data: mockRUMData,
+        error: null,
       });
 
       // Act
@@ -451,9 +452,9 @@ describe('RUMIntegrationService', () => {
 
       mockSupabase.select.mockReturnValue(mockSupabase);
       mockSupabase.eq.mockReturnValue(mockSupabase);
-      mockSupabase.single.mockResolvedValue({ 
-        data: mockBaseline, 
-        error: null 
+      mockSupabase.single.mockResolvedValue({
+        data: mockBaseline,
+        error: null,
       });
 
       // Act
@@ -476,9 +477,9 @@ describe('RUMIntegrationService', () => {
 
       mockSupabase.select.mockReturnValue(mockSupabase);
       mockSupabase.eq.mockReturnValue(mockSupabase);
-      mockSupabase.single.mockResolvedValue({ 
-        data: null, 
-        error: { message: 'No rows found' }
+      mockSupabase.single.mockResolvedValue({
+        data: null,
+        error: { message: 'No rows found' },
       });
 
       // Act
