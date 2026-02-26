@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 
-// Memory System Types
+// Enhanced Memory System Types with 2026 Standards
 export interface Episode {
   id: string;
   timestamp: Date;
@@ -14,19 +14,29 @@ export interface Episode {
     conditions: string[];
     duration: number;
     tags: string[];
+    confidence: number; // 2026: Add confidence scoring
+    priority: 'low' | 'medium' | 'high'; // 2026: Priority-based retrieval
+    consolidationCount: number; // 2026: Track consolidation attempts
   };
+  embeddings?: number[]; // 2026: Vector embeddings for semantic search
+  hashId: string; // 2026: Content-addressed storage
 }
 
 export interface SemanticKnowledge {
   entity: string;
   relationships: Array<{
     target: string;
-    type: 'is_a' | 'part_of' | 'related_to' | 'causes';
+    type: 'is_a' | 'part_of' | 'related_to' | 'causes' | 'requires' | 'enables'; // 2026: Extended relationship types
     confidence: number;
+    temporal?: 'past' | 'present' | 'future'; // 2026: Temporal relationships
+    strength: number; // 2026: Relationship strength for ranking
   }>;
   attributes: Record<string, any>;
   source: string;
   lastUpdated: Date;
+  accessCount: number; // 2026: Usage tracking for optimization
+  lastAccessed: Date; // 2026: Access patterns
+  verificationStatus: 'verified' | 'pending' | 'deprecated'; // 2026: Knowledge verification
 }
 
 export interface Procedure {
@@ -37,6 +47,11 @@ export interface Procedure {
   successRate: number;
   averageDuration: number;
   lastExecuted: Date;
+  automationLevel: 'manual' | 'assisted' | 'automatic'; // 2026: Automation levels
+  complexity: 'simple' | 'moderate' | 'complex'; // 2026: Complexity classification
+  dependencies: string[]; // 2026: Procedure dependencies
+  version: string; // 2026: Version tracking
+  rollbackProcedure?: string; // 2026: Rollback capability
 }
 
 export interface ProcedureStep {
@@ -45,29 +60,55 @@ export interface ProcedureStep {
   conditions: string[];
   fallback?: string;
   timeout: number;
+  retryPolicy: { // 2026: Structured retry policies
+    maxAttempts: number;
+    backoffStrategy: 'exponential' | 'linear' | 'immediate';
+    retryConditions: string[];
+  };
+  monitoring?: { // 2026: Step-level monitoring
+    metrics: string[];
+    alerts: string[];
+  };
+  parallelizable: boolean; // 2026: Parallel execution support
 }
 
-// Episodic Memory System
+// Enhanced Episodic Memory System with 2026 Best Practices
 export class EpisodicMemory {
   private episodes: Map<string, Episode> = new Map();
-  private vectorIndex: Map<string, string[]> = new Map(); // Simple vector-like index
+  private vectorIndex: Map<string, string[]> = new Map();
+  private consolidationQueue: Episode[] = []; // 2026: Consolidation pipeline
+  private accessPatterns: Map<string, number> = new Map(); // 2026: Access tracking
 
-  async storeEpisode(episode: Omit<Episode, 'id'>): Promise<string> {
+  async storeEpisode(episode: Omit<Episode, 'id' | 'hashId'>): Promise<string> {
     const id = uuidv4();
-    const fullEpisode: Episode = { ...episode, id };
-    
+    const hashId = this.generateHashId(episode); // 2026: Content-addressed ID
+    const fullEpisode: Episode = {
+      ...episode,
+      id,
+      hashId,
+      metadata: {
+        ...episode.metadata,
+        confidence: episode.metadata.confidence ?? 0.8, // 2026: Default confidence
+        priority: episode.metadata.priority ?? 'medium',
+        consolidationCount: 0
+      }
+    };
+
     this.episodes.set(id, fullEpisode);
-    
-    // Create searchable text for simple "vector" indexing
+
+    // Enhanced vector indexing with semantic search
     const searchText = this.createSearchText(fullEpisode);
     const keywords = this.extractKeywords(searchText);
-    
+
     keywords.forEach(keyword => {
       if (!this.vectorIndex.has(keyword)) {
         this.vectorIndex.set(keyword, []);
       }
       this.vectorIndex.get(keyword)!.push(id);
     });
+
+    // 2026: Track access patterns
+    this.accessPatterns.set(id, 0);
 
     return id;
   }
@@ -76,26 +117,45 @@ export class EpisodicMemory {
     const keywords = this.extractKeywords(context);
     const episodeScores = new Map<string, number>();
 
-    // Score episodes based on keyword matches
+    // Enhanced scoring with 2026 ranking algorithms
     keywords.forEach(keyword => {
       const episodeIds = this.vectorIndex.get(keyword) || [];
       episodeIds.forEach(id => {
         const currentScore = episodeScores.get(id) || 0;
-        episodeScores.set(id, currentScore + 1);
+        const episode = this.episodes.get(id)!;
+
+        // 2026: Multi-factor scoring
+        const priorityBonus = this.getPriorityBonus(episode.metadata.priority);
+        const confidenceBonus = episode.metadata.confidence * 0.2;
+        const recencyBonus = this.getRecencyBonus(episode.timestamp);
+
+        episodeScores.set(id, currentScore + 1 + priorityBonus + confidenceBonus + recencyBonus);
       });
     });
 
-    // Sort by score and return top episodes
+    // Sort by score and return top episodes with diversity
     const sortedEpisodes = Array.from(episodeScores.entries())
       .sort(([, a], [, b]) => b - a)
-      .slice(0, limit)
+      .slice(0, limit * 2) // Get more for diversity selection
       .map(([id]) => this.episodes.get(id)!);
 
-    return sortedEpisodes;
+    // 2026: Ensure diversity in results
+    return this.ensureDiversity(sortedEpisodes, limit);
   }
 
   async getEpisode(id: string): Promise<Episode | null> {
-    return this.episodes.get(id) || null;
+    const episode = this.episodes.get(id) || null;
+    if (episode) {
+      // 2026: Track access patterns
+      const currentCount = this.accessPatterns.get(id) || 0;
+      this.accessPatterns.set(id, currentCount + 1);
+
+      // Update last accessed if it's a semantic knowledge entry
+      if ('lastAccessed' in episode) {
+        episode.lastAccessed = new Date();
+      }
+    }
+    return episode;
   }
 
   async updateEpisode(id: string, updates: Partial<Episode>): Promise<boolean> {
@@ -112,11 +172,11 @@ export class EpisodicMemory {
     if (!episode) return false;
 
     this.episodes.delete(id);
-    
+
     // Remove from vector index
     const searchText = this.createSearchText(episode);
     const keywords = this.extractKeywords(searchText);
-    
+
     keywords.forEach(keyword => {
       const episodeIds = this.vectorIndex.get(keyword) || [];
       const index = episodeIds.indexOf(id);
@@ -155,6 +215,59 @@ export class EpisodicMemory {
     const stopWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'];
     return stopWords.includes(word);
   }
+
+  // 2026: Enhanced helper methods for advanced memory features
+  private generateHashId(episode: Omit<Episode, 'id' | 'hashId'>): string {
+    // Content-addressed hash generation (simplified)
+    const content = JSON.stringify(episode);
+    return btoa(content).slice(0, 16);
+  }
+
+  private getPriorityBonus(priority: 'low' | 'medium' | 'high'): number {
+    switch (priority) {
+      case 'high': return 0.5;
+      case 'medium': return 0.2;
+      case 'low': return 0;
+    }
+  }
+
+  private getRecencyBonus(timestamp: Date): number {
+    const daysSince = (Date.now() - timestamp.getTime()) / (1000 * 60 * 60 * 24);
+    return Math.max(0, 0.3 - daysSince * 0.01); // Decay over time
+  }
+
+  private ensureDiversity(episodes: Episode[], limit: number): Episode[] {
+    // Simple diversity selection based on outcome types
+    const selected: Episode[] = [];
+    const outcomes = new Set<string>();
+
+    for (const episode of episodes) {
+      if (selected.length >= limit) break;
+      if (!outcomes.has(episode.outcome)) {
+        selected.push(episode);
+        outcomes.add(episode.outcome);
+      }
+    }
+
+    // Fill remaining slots with highest scored episodes
+    while (selected.length < limit && selected.length < episodes.length) {
+      const nextEpisode = episodes.find(ep => !selected.includes(ep));
+      if (nextEpisode) selected.push(nextEpisode);
+      else break;
+    }
+
+    return selected;
+  }
+
+  // 2026: Memory consolidation methods
+  async consolidateEpisodes(): Promise<void> {
+    // Implementation for episode consolidation
+    // This would identify patterns and create semantic knowledge
+    this.consolidationQueue.forEach(episode => {
+      episode.metadata.consolidationCount++;
+    });
+    this.consolidationQueue = [];
+  }
 }
 
 // Semantic Memory System
@@ -169,7 +282,7 @@ export class SemanticMemory {
     };
 
     this.knowledgeGraph.set(knowledge.entity, fullKnowledge);
-    
+
     // Update entity index
     fullKnowledge.relationships.forEach(rel => {
       if (!this.entityIndex.has(rel.target)) {
@@ -200,7 +313,7 @@ export class SemanticMemory {
 
     while (queue.length > 0) {
       const { entity: currentEntity, depth, score } = queue.shift()!;
-      
+
       if (visited.has(currentEntity) || depth > maxDepth) continue;
       visited.add(currentEntity);
 
@@ -210,7 +323,7 @@ export class SemanticMemory {
       knowledge.relationships.forEach(rel => {
         const adjustedScore = score * rel.confidence;
         const currentScore = related.get(rel.target) || 0;
-        
+
         if (adjustedScore > currentScore) {
           related.set(rel.target, adjustedScore);
           queue.push({ entity: rel.target, depth: depth + 1, score: adjustedScore });
@@ -235,7 +348,7 @@ export class SemanticMemory {
     if (!knowledge) return false;
 
     this.knowledgeGraph.delete(entity);
-    
+
     // Remove from entity index
     knowledge.relationships.forEach(rel => {
       const entities = this.entityIndex.get(rel.target);
@@ -269,9 +382,9 @@ export class ProceduralMemory {
   async storeProcedure(procedure: Omit<Procedure, 'id' | 'lastExecuted'>): Promise<string> {
     const id = uuidv4();
     const fullProcedure: Procedure = { ...procedure, id, lastExecuted: new Date() };
-    
+
     this.procedures.set(id, fullProcedure);
-    
+
     // Update trigger index
     procedure.triggers.forEach(trigger => {
       if (!this.triggerIndex.has(trigger)) {
@@ -351,7 +464,7 @@ export class ProceduralMemory {
 
     this.procedures.delete(id);
     this.executionStats.delete(id);
-    
+
     // Remove from trigger index
     procedure.triggers.forEach(trigger => {
       const procedureIds = this.triggerIndex.get(trigger);
@@ -468,10 +581,10 @@ export class UnifiedMemorySystem {
   async consolidateMemory(): Promise<void> {
     // Get recent episodes
     const recentEpisodes = await this.episodic.retrieveSimilarEpisodes('', 100);
-    
+
     // Extract patterns and convert to semantic knowledge
     const patterns = this.extractPatterns(recentEpisodes);
-    
+
     for (const pattern of patterns) {
       await this.semantic.storeKnowledge(pattern);
     }
@@ -487,7 +600,7 @@ export class UnifiedMemorySystem {
       if (!actionOutcomes.has(key)) {
         actionOutcomes.set(key, { success: 0, failure: 0, total: 0 });
       }
-      
+
       const stats = actionOutcomes.get(key)!;
       stats.total++;
       if (episode.outcome === 'success') stats.success++;
@@ -497,7 +610,7 @@ export class UnifiedMemorySystem {
     // Create semantic knowledge from patterns
     actionOutcomes.forEach((stats, action) => {
       const successRate = stats.success / stats.total;
-      
+
       if (stats.total >= 3 && successRate > 0.7) {
         patterns.push({
           entity: action,

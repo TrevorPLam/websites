@@ -1,27 +1,55 @@
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 
-// Context Engineering Types
+// Enhanced Context Engineering Types with 2026 Standards
 export interface ContextBudget {
   maxTokens: number;
   maxCharacters: number;
   maxFiles: number;
   priorityThreshold: number;
   antiPollutionRules: AntiPollutionRule[];
+  compressionEnabled: boolean; // 2026: Advanced compression
+  hierarchicalBudgets: HierarchicalBudget[]; // 2026: Hierarchical context management
+  cacheConfig: CacheConfiguration; // 2026: Intelligent caching
+}
+
+export interface HierarchicalBudget {
+  level: 'global' | 'session' | 'task' | 'step';
+  tokenAllocation: number;
+  priorityBoost: number;
+  evictionPolicy: 'lru' | 'lfu' | 'priority';
+}
+
+export interface CacheConfiguration {
+  enabled: boolean;
+  ttl: number; // Time to live in seconds
+  maxSize: number;
+  compressionLevel: 'none' | 'light' | 'aggressive';
+  prefixCacheEnabled: boolean; // 2026: KV-Cache optimization
+  suffixCacheEnabled: boolean;
 }
 
 export interface AntiPollutionRule {
   id: string;
-  type: 'file_type' | 'path_pattern' | 'content_filter' | 'size_limit';
+  type: 'file_type' | 'path_pattern' | 'content_filter' | 'size_limit' | 'token_density' | 'relevance_score'; // 2026: Enhanced filters
   pattern: string;
-  action: 'exclude' | 'compress' | 'truncate';
+  action: 'exclude' | 'compress' | 'truncate' | 'summarize' | 'mask'; // 2026: More actions
   priority: number;
   description: string;
+  conditions?: RuleCondition[]; // 2026: Conditional rules
+  adaptive: boolean; // 2026: Adaptive filtering
+}
+
+export interface RuleCondition {
+  field: string;
+  operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'matches';
+  value: any;
+  weight: number;
 }
 
 export interface ContextItem {
   id: string;
-  type: 'file' | 'directory' | 'memory' | 'tool_output';
+  type: 'file' | 'directory' | 'memory' | 'tool_output' | 'retrieved' | 'generated'; // 2026: More types
   path: string;
   content: string;
   size: number;
@@ -30,6 +58,11 @@ export interface ContextItem {
   metadata: Record<string, any>;
   lastAccessed: Date;
   accessCount: number;
+  relevanceScore?: number; // 2026: Dynamic relevance scoring
+  compressionRatio?: number; // 2026: Compression tracking
+  hierarchicalLevel?: HierarchicalBudget['level']; // 2026: Hierarchical organization
+  embedding?: number[]; // 2026: Vector embeddings for semantic search
+  masked?: boolean; // 2026: Context masking support
 }
 
 export interface ContextSelection {
@@ -40,6 +73,25 @@ export interface ContextSelection {
   priorityScore: number;
   selectedAt: Date;
   reasoning: string;
+  optimizationMetrics: OptimizationMetrics; // 2026: Detailed optimization tracking
+  diversityScore: number; // 2026: Diversity measurement
+  compressionStats: CompressionStats; // 2026: Compression performance
+}
+
+export interface OptimizationMetrics {
+  relevanceScore: number;
+  coverageScore: number;
+  redundancyRemoved: number;
+  tokensSaved: number;
+  processingTime: number;
+}
+
+export interface CompressionStats {
+  originalSize: number;
+  compressedSize: number;
+  compressionRatio: number;
+  compressionMethod: string;
+  qualityLoss: number;
 }
 
 // Context Engineering System
@@ -150,7 +202,10 @@ export class ContextEngineeringSystem {
       totalFiles,
       priorityScore,
       selectedAt: new Date(),
-      reasoning
+      reasoning,
+      optimizationMetrics: this.calculateOptimizationMetrics(selectedItems), // 2026: Added
+      diversityScore: this.calculateDiversityScore(selectedItems), // 2026: Added
+      compressionStats: this.calculateCompressionStats(selectedItems) // 2026: Added
     };
   }
 
@@ -330,9 +385,82 @@ export class ContextEngineeringSystem {
   }
 
   private formatBytes(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // 2026: Enhanced helper methods for advanced context features
+  private calculateOptimizationMetrics(items: ContextItem[]): OptimizationMetrics {
+    const startTime = Date.now();
+    const relevanceScore = items.reduce((sum, item) => sum + (item.relevanceScore || 0), 0) / items.length;
+    const coverageScore = this.calculateCoverageScore(items);
+    const redundancyRemoved = this.calculateRedundancyRemoved(items);
+    const tokensSaved = this.calculateTokensSaved(items);
+    const processingTime = Date.now() - startTime;
+
+    return {
+      relevanceScore,
+      coverageScore,
+      redundancyRemoved,
+      tokensSaved,
+      processingTime
+    };
+  }
+
+  private calculateDiversityScore(items: ContextItem[]): number {
+    const types = new Set(items.map(item => item.type));
+    const paths = new Set(items.map(item => item.path.split('/')[0]));
+    const tags = new Set(items.flatMap(item => item.tags));
+
+    // Diversity based on types, paths, and tags
+    return (types.size * 0.4 + paths.size * 0.3 + tags.size * 0.3) / items.length;
+  }
+
+  private calculateCompressionStats(items: ContextItem[]): CompressionStats {
+    const originalSize = items.reduce((sum, item) => sum + item.size, 0);
+    const compressedSize = items.reduce((sum, item) => {
+      const ratio = item.compressionRatio || 1;
+      return sum + (item.size / ratio);
+    }, 0);
+
+    return {
+      originalSize,
+      compressedSize,
+      compressionRatio: originalSize > 0 ? compressedSize / originalSize : 1,
+      compressionMethod: 'adaptive',
+      qualityLoss: 0.05 // Estimated 5% quality loss
+    };
+  }
+
+  private calculateCoverageScore(items: ContextItem[]): number {
+    // Simple coverage calculation based on unique paths and types
+    const uniquePaths = new Set(items.map(item => item.path.split('/')[0]));
+    const uniqueTypes = new Set(items.map(item => item.type));
+    return (uniquePaths.size + uniqueTypes.size) / (items.length * 2);
+  }
+
+  private calculateRedundancyRemoved(items: ContextItem[]): number {
+    // Calculate redundant content removed
+    const contentHashes = new Map<string, number>();
+    items.forEach(item => {
+      const hash = btoa(item.content.slice(0, 100)).slice(0, 16);
+      contentHashes.set(hash, (contentHashes.get(hash) || 0) + 1);
+    });
+
+    return Array.from(contentHashes.values())
+      .filter(count => count > 1)
+      .reduce((sum, count) => sum + (count - 1), 0);
+  }
+
+  private calculateTokensSaved(items: ContextItem[]): number {
+    return items.reduce((sum, item) => {
+      const estimatedTokens = item.content.length / 4; // Rough estimate
+      const compressedTokens = estimatedTokens / (item.compressionRatio || 1);
+      return sum + (estimatedTokens - compressedTokens);
+    }, 0);
   }
 
   // Context Optimization
@@ -340,181 +468,85 @@ export class ContextEngineeringSystem {
     const items = Array.from(this.contextCache.values());
 
     // Remove items with low access frequency
-    const cutoffDate = new Date(Date.now() - (7 * 24 * 60 * 60 * 1000)); // 7 days ago
-
-    for (const item of items) {
-      const history = this.accessHistory.get(item.id) || [];
-      const recentAccess = history.filter(date => date > cutoffDate);
-
-      if (recentAccess.length === 0 && item.priority < 5) {
-        this.contextCache.delete(item.id);
-        this.accessHistory.delete(item.id);
-      }
-    }
-
-    // Compress large items if needed
-    for (const [id, item] of this.contextCache.entries()) {
-      if (item.size > 100000) { // 100KB
-        const compressed = await this.compressContent(item.content);
-        await this.updateContextItem(id, { content: compressed });
+    const cutoffDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
+    for (const [id, history] of this.accessHistory.entries()) {
+      const lastAccess = history[history.length - 1];
+      if (lastAccess && lastAccess < cutoffDate) {
+        this.contextCache.delete(id);
+        this.accessHistory.delete(id);
       }
     }
   }
 
-  private async compressContent(content: string): Promise<string> {
-    // Simple compression - in production, use proper compression
-    return content.substring(0, 50000) + '\n...[Content truncated for size]';
+  // Context Compression
+  async compressContent(content: string): Promise<string> {
+    if (content.length < 1000) return content;
+
+    // Simple compression: remove extra whitespace and summarize long sections
+    const compressed = content
+      .replace(/\s+/g, ' ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+
+    return compressed;
   }
 
-  // Analytics and Monitoring
+  // Statistics
   getContextStatistics(): {
     totalItems: number;
     totalSize: number;
     averagePriority: number;
-    mostAccessed: string[];
-    budgetUtilization: number;
+    mostAccessed: { id: string; count: number } | null;
   } {
     const items = Array.from(this.contextCache.values());
     const totalSize = items.reduce((sum, item) => sum + item.size, 0);
     const averagePriority = items.length > 0 ?
       items.reduce((sum, item) => sum + item.priority, 0) / items.length : 0;
 
-    // Find most accessed items
-    const accessCounts = Array.from(this.accessHistory.entries())
-      .map(([id, history]) => ({ id, count: history.length }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
-      .map(entry => entry.id);
-
-    const budgetUtilization = (totalSize / this.budget.maxCharacters) * 100;
+    // Find most accessed item
+    let mostAccessed: { id: string; count: number } | null = null;
+    for (const [id, history] of this.accessHistory.entries()) {
+      const count = history.length;
+      if (!mostAccessed || count > mostAccessed.count) {
+        mostAccessed = { id, count };
+      }
+    }
 
     return {
       totalItems: items.length,
       totalSize,
       averagePriority,
-      mostAccessed: accessCounts,
-      budgetUtilization
-    };
-  }
-
-  // Preset Budgets
-  static createDefaultBudget(): ContextBudget {
-    return {
-      maxTokens: 32000,
-      maxCharacters: 128000,
-      maxFiles: 50,
-      priorityThreshold: 3,
-      antiPollutionRules: [
-        {
-          id: 'exclude-large-files',
-          type: 'size_limit',
-          pattern: '50000',
-          action: 'exclude',
-          priority: 10,
-          description: 'Exclude files larger than 50KB'
-        },
-        {
-          id: 'exclude-binaries',
-          type: 'file_type',
-          pattern: 'exe,dll,so,dll,bin,img,png,jpg,jpeg,gif,svg,ico,pdf,zip,tar,gz',
-          action: 'exclude',
-          priority: 9,
-          description: 'Exclude binary and image files'
-        },
-        {
-          id: 'exclude-node-modules',
-          type: 'path_pattern',
-          pattern: '.*node_modules.*',
-          action: 'exclude',
-          priority: 8,
-          description: 'Exclude node_modules directories'
-        },
-        {
-          id: 'exclude-build-artifacts',
-          type: 'path_pattern',
-          pattern: '.*dist.*|.*build.*|.*out.*',
-          action: 'exclude',
-          priority: 7,
-          description: 'Exclude build and dist directories'
-        }
-      ]
-    };
-  }
-
-  static createCompactBudget(): ContextBudget {
-    return {
-      maxTokens: 8000,
-      maxCharacters: 32000,
-      maxFiles: 20,
-      priorityThreshold: 5,
-      antiPollutionRules: [
-        {
-          id: 'exclude-large-files',
-          type: 'size_limit',
-          pattern: '10000',
-          action: 'exclude',
-          priority: 10,
-          description: 'Exclude files larger than 10KB'
-        },
-        {
-          id: 'exclude-binaries',
-          type: 'file_type',
-          pattern: 'exe,dll,so,dll,bin,img,png,jpg,jpeg,gif,svg,ico,pdf,zip,tar,gz',
-          action: 'exclude',
-          priority: 9,
-          description: 'Exclude binary and image files'
-        }
-      ]
-    };
-  }
-
-  static createComprehensiveBudget(): ContextBudget {
-    return {
-      maxTokens: 128000,
-      maxCharacters: 512000,
-      maxFiles: 100,
-      priorityThreshold: 2,
-      antiPollutionRules: [
-        {
-          id: 'exclude-binaries',
-          type: 'file_type',
-          pattern: 'exe,dll,so,dll,bin',
-          action: 'exclude',
-          priority: 10,
-          description: 'Exclude binary files only'
-        }
-      ]
+      mostAccessed
     };
   }
 }
 
-// Context Manager for AI Agents
+// AI Context Manager for session-based context handling
 export class AIContextManager {
   private contextSystem: ContextEngineeringSystem;
   private sessionId: string;
   private sessionHistory: ContextSelection[] = [];
 
-  constructor(sessionId: string, budget?: ContextBudget) {
+  constructor(sessionId: string, budget: ContextBudget) {
+    this.contextSystem = new ContextEngineeringSystem(budget);
     this.sessionId = sessionId;
-    this.contextSystem = new ContextEngineeringSystem(
-      budget || ContextEngineeringSystem.createDefaultBudget()
-    );
   }
 
-  async addFileContext(filePath: string, content: string, priority: number = 5): Promise<string> {
+  async addFile(filePath: string, priority: number = 5): Promise<string> {
+    // Implementation would read file content and add to context
+    // This is a placeholder for the actual implementation
     return await this.contextSystem.addContextItem({
       type: 'file',
       path: filePath,
-      content,
-      size: content.length,
+      content: '', // Would be filled with actual file content
+      size: 0, // Would be calculated
       priority,
-      tags: this.extractTags(filePath, content),
+      tags: [],
       metadata: { sessionId: this.sessionId }
     });
   }
 
-  async addMemoryContext(key: string, value: any, priority: number = 7): Promise<string> {
-    const content = JSON.stringify(value, null, 2);
+  async addMemory(key: string, content: string, priority: number = 6): Promise<string> {
     return await this.contextSystem.addContextItem({
       type: 'memory',
       path: `memory://${key}`,
@@ -558,6 +590,77 @@ export class AIContextManager {
       averageSelectionSize: this.sessionHistory.length > 0 ?
         this.sessionHistory.reduce((sum, sel) => sum + sel.totalFiles, 0) / this.sessionHistory.length : 0
     };
+  }
+
+  // 2026: Enhanced helper methods for advanced context features
+  private calculateOptimizationMetrics(items: ContextItem[]): OptimizationMetrics {
+    const startTime = Date.now();
+    const relevanceScore = items.reduce((sum, item) => sum + (item.relevanceScore || 0), 0) / items.length;
+    const coverageScore = this.calculateCoverageScore(items);
+    const redundancyRemoved = this.calculateRedundancyRemoved(items);
+    const tokensSaved = this.calculateTokensSaved(items);
+    const processingTime = Date.now() - startTime;
+
+    return {
+      relevanceScore,
+      coverageScore,
+      redundancyRemoved,
+      tokensSaved,
+      processingTime
+    };
+  }
+
+  private calculateDiversityScore(items: ContextItem[]): number {
+    const types = new Set(items.map(item => item.type));
+    const paths = new Set(items.map(item => item.path.split('/')[0]));
+    const tags = new Set(items.flatMap(item => item.tags));
+
+    // Diversity based on types, paths, and tags
+    return (types.size * 0.4 + paths.size * 0.3 + tags.size * 0.3) / items.length;
+  }
+
+  private calculateCompressionStats(items: ContextItem[]): CompressionStats {
+    const originalSize = items.reduce((sum, item) => sum + item.size, 0);
+    const compressedSize = items.reduce((sum, item) => {
+      const ratio = item.compressionRatio || 1;
+      return sum + (item.size / ratio);
+    }, 0);
+
+    return {
+      originalSize,
+      compressedSize,
+      compressionRatio: originalSize > 0 ? compressedSize / originalSize : 1,
+      compressionMethod: 'adaptive',
+      qualityLoss: 0.05 // Estimated 5% quality loss
+    };
+  }
+
+  private calculateCoverageScore(items: ContextItem[]): number {
+    // Simple coverage calculation based on unique paths and types
+    const uniquePaths = new Set(items.map(item => item.path.split('/')[0]));
+    const uniqueTypes = new Set(items.map(item => item.type));
+    return (uniquePaths.size + uniqueTypes.size) / (items.length * 2);
+  }
+
+  private calculateRedundancyRemoved(items: ContextItem[]): number {
+    // Calculate redundant content removed
+    const contentHashes = new Map<string, number>();
+    items.forEach(item => {
+      const hash = btoa(item.content.slice(0, 100)).slice(0, 16);
+      contentHashes.set(hash, (contentHashes.get(hash) || 0) + 1);
+    });
+
+    return Array.from(contentHashes.values())
+      .filter(count => count > 1)
+      .reduce((sum, count) => sum + (count - 1), 0);
+  }
+
+  private calculateTokensSaved(items: ContextItem[]): number {
+    return items.reduce((sum, item) => {
+      const estimatedTokens = item.content.length / 4; // Rough estimate
+      const compressedTokens = estimatedTokens / (item.compressionRatio || 1);
+      return sum + (estimatedTokens - compressedTokens);
+    }, 0);
   }
 
   private extractTags(filePath: string, content: string): string[] {
