@@ -18,9 +18,63 @@
     "gzip": true
   },
   {
+    "name": "Marketing: Services page JS",
+    "path": "clients/testing-not-a-client/.next/static/chunks/app/services/page-*.js",
+    "limit": "80 kB",
+    "gzip": true
+  },
+  {
     "name": "Framework chunk",
     "path": "clients/testing-not-a-client/.next/static/chunks/framework-*.js",
     "limit": "150 kB",
+    "gzip": true
+  },
+  {
+    "name": "React library chunk",
+    "path": "clients/testing-not-a-client/.next/static/chunks/react-*.js",
+    "limit": "45 kB",
+    "gzip": true
+  },
+  {
+    "name": "Vendor chunk",
+    "path": "clients/testing-not-a-client/.next/static/chunks/vendor-*.js",
+    "limit": "100 kB",
+    "gzip": true
+  },
+  {
+    "name": "Portal: Dashboard JS",
+    "path": "apps/portal/.next/static/chunks/app/dashboard/page-*.js",
+    "limit": "120 kB",
+    "gzip": true
+  },
+  {
+    "name": "Portal: Admin interface JS",
+    "path": "apps/portal/.next/static/chunks/app/admin/page-*.js",
+    "limit": "150 kB",
+    "gzip": true
+  },
+  {
+    "name": "UI Components Package",
+    "path": "packages/ui/dist/index.js",
+    "limit": "35 kB",
+    "gzip": true
+  },
+  {
+    "name": "Features Package",
+    "path": "packages/features/dist/index.js",
+    "limit": "25 kB",
+    "gzip": true
+  },
+  {
+    "name": "Infrastructure Package",
+    "path": "packages/infrastructure/dist/index.js",
+    "limit": "20 kB",
+    "gzip": true
+  },
+  {
+    "name": "Integrations Package",
+    "path": "packages/integrations/dist/index.js",
+    "limit": "30 kB",
     "gzip": true
   }
 ]

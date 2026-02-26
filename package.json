@@ -105,6 +105,11 @@
     "madge:circular": "madge --circular packages/ clients/",
     "validate:circular": "pnpm madge:circular",
     "validate:budgets": "npx tsx scripts/perf/validate-budgets.ts",
+    "performance:check": "node scripts/performance/performance-alerts.mjs check",
+    "performance:baseline": "node scripts/performance/performance-alerts.mjs update-baseline",
+    "performance:simulate": "node scripts/performance/performance-alerts.mjs simulate-alert",
+    "performance:lighthouse": "lhci autorun",
+    "performance:size": "size-limit",
     "health": "npx tsx scripts/health-check.ts",
     "doctor": "npx tsx scripts/doctor.ts",
     "ci:local": "npx tsx scripts/run-ci-local.ts",
@@ -294,6 +299,86 @@
       "vite@<7.1.11": "7.1.11"
     }
   },
+  "size-limit": [
+    {
+      "name": "Marketing: Homepage First Load JS",
+      "path": "clients/testing-not-a-client/.next/static/chunks/app/page-*.js",
+      "limit": "90 kB",
+      "gzip": true
+    },
+    {
+      "name": "Marketing: Contact page JS",
+      "path": "clients/testing-not-a-client/.next/static/chunks/app/contact/page-*.js",
+      "limit": "65 kB",
+      "gzip": true
+    },
+    {
+      "name": "Marketing: Blog listing page JS",
+      "path": "clients/testing-not-a-client/.next/static/chunks/app/blog/page-*.js",
+      "limit": "75 kB",
+      "gzip": true
+    },
+    {
+      "name": "Marketing: Services page JS",
+      "path": "clients/testing-not-a-client/.next/static/chunks/app/services/page-*.js",
+      "limit": "80 kB",
+      "gzip": true
+    },
+    {
+      "name": "Framework chunk",
+      "path": "clients/testing-not-a-client/.next/static/chunks/framework-*.js",
+      "limit": "150 kB",
+      "gzip": true
+    },
+    {
+      "name": "React library chunk",
+      "path": "clients/testing-not-a-client/.next/static/chunks/react-*.js",
+      "limit": "45 kB",
+      "gzip": true
+    },
+    {
+      "name": "Vendor chunk",
+      "path": "clients/testing-not-a-client/.next/static/chunks/vendor-*.js",
+      "limit": "100 kB",
+      "gzip": true
+    },
+    {
+      "name": "Portal: Dashboard JS",
+      "path": "apps/portal/.next/static/chunks/app/dashboard/page-*.js",
+      "limit": "120 kB",
+      "gzip": true
+    },
+    {
+      "name": "Portal: Admin interface JS",
+      "path": "apps/portal/.next/static/chunks/app/admin/page-*.js",
+      "limit": "150 kB",
+      "gzip": true
+    },
+    {
+      "name": "UI Components Package",
+      "path": "packages/ui/dist/index.js",
+      "limit": "35 kB",
+      "gzip": true
+    },
+    {
+      "name": "Features Package",
+      "path": "packages/features/dist/index.js",
+      "limit": "25 kB",
+      "gzip": true
+    },
+    {
+      "name": "Infrastructure Package",
+      "path": "packages/infrastructure/dist/index.js",
+      "limit": "20 kB",
+      "gzip": true
+    },
+    {
+      "name": "Integrations Package",
+      "path": "packages/integrations/dist/index.js",
+      "limit": "30 kB",
+      "gzip": true
+    }
+  ],
   "dependencies": {
     "@sentry/opentelemetry": "catalog:",
     "@vercel/otel": "catalog:",

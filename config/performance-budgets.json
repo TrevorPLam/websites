@@ -1,0 +1,261 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-26",
+  "description": "Performance budgets for marketing websites monorepo following 2026 standards",
+
+  "coreWebVitals": {
+    "thresholds": {
+      "lcp": {
+        "good": 2500,
+        "needsImprovement": 4000,
+        "poor": 4000,
+        "description": "Largest Contentful Paint - loading performance",
+        "target": "75th percentile"
+      },
+      "inp": {
+        "good": 200,
+        "needsImprovement": 500,
+        "poor": 500,
+        "description": "Interaction to Next Paint - responsiveness",
+        "target": "75th percentile"
+      },
+      "cls": {
+        "good": 0.1,
+        "needsImprovement": 0.25,
+        "poor": 0.25,
+        "description": "Cumulative Layout Shift - visual stability",
+        "target": "75th percentile"
+      },
+      "fcp": {
+        "good": 1800,
+        "needsImprovement": 3000,
+        "poor": 3000,
+        "description": "First Contentful Paint - initial paint",
+        "target": "75th percentile"
+      },
+      "tbt": {
+        "good": 200,
+        "needsImprovement": 600,
+        "poor": 600,
+        "description": "Total Blocking Time - main thread blocking",
+        "target": "75th percentile"
+      },
+      "speedIndex": {
+        "good": 3400,
+        "needsImprovement": 5800,
+        "poor": 5800,
+        "description": "Speed Index - visual progression",
+        "target": "75th percentile"
+      }
+    },
+    "lighthouseCategories": {
+      "performance": {
+        "minScore": 0.85,
+        "description": "Overall Lighthouse performance score"
+      },
+      "accessibility": {
+        "minScore": 0.95,
+        "description": "WCAG 2.2 AA compliance"
+      },
+      "bestPractices": {
+        "minScore": 0.9,
+        "description": "Web development best practices"
+      },
+      "seo": {
+        "minScore": 0.9,
+        "description": "Search engine optimization"
+      }
+    }
+  },
+
+  "bundleSize": {
+    "limits": {
+      "marketing": {
+        "homepage": {
+          "limit": "90 kB",
+          "gzip": true,
+          "description": "Marketing homepage first load JS"
+        },
+        "contact": {
+          "limit": "65 kB",
+          "gzip": true,
+          "description": "Contact page JS"
+        },
+        "blog": {
+          "limit": "75 kB",
+          "gzip": true,
+          "description": "Blog listing page JS"
+        },
+        "services": {
+          "limit": "80 kB",
+          "gzip": true,
+          "description": "Services page JS"
+        }
+      },
+      "framework": {
+        "core": {
+          "limit": "150 kB",
+          "gzip": true,
+          "description": "Next.js framework chunk"
+        },
+        "react": {
+          "limit": "45 kB",
+          "gzip": true,
+          "description": "React library chunk"
+        },
+        "vendor": {
+          "limit": "100 kB",
+          "gzip": true,
+          "description": "Third-party vendor chunk"
+        }
+      },
+      "packages": {
+        "ui": {
+          "limit": "35 kB",
+          "gzip": true,
+          "description": "UI components package"
+        },
+        "features": {
+          "limit": "25 kB",
+          "gzip": true,
+          "description": "Business features package"
+        },
+        "infrastructure": {
+          "limit": "20 kB",
+          "gzip": true,
+          "description": "Infrastructure utilities package"
+        },
+        "integrations": {
+          "limit": "30 kB",
+          "gzip": true,
+          "description": "Third-party integrations package"
+        }
+      },
+      "portal": {
+        "dashboard": {
+          "limit": "120 kB",
+          "gzip": true,
+          "description": "Portal dashboard JS"
+        },
+        "admin": {
+          "limit": "150 kB",
+          "gzip": true,
+          "description": "Admin interface JS"
+        }
+      }
+    },
+    "enforcement": {
+      "failOnLimit": true,
+      "warningThreshold": 0.9,
+      "excludeDevDependencies": true,
+      "trackTrends": true
+    }
+  },
+
+  "resourceBudgets": {
+    "images": {
+      "maxSize": "500 kB",
+      "formats": ["webp", "avif", "jpg"],
+      "responsive": true,
+      "lazy": true,
+      "compression": true
+    },
+    "fonts": {
+      "maxSize": "200 kB",
+      "formats": ["woff2", "woff"],
+      "preload": ["critical"],
+      "display": "swap"
+    },
+    "css": {
+      "maxSize": "50 kB",
+      "critical": "inline",
+      "nonCritical": "async",
+      "purge": true
+    },
+    "totalPageWeight": {
+      "mobile": "1 MB",
+      "desktop": "2 MB",
+      "gzip": true
+    }
+  },
+
+  "monitoring": {
+    "alerting": {
+      "performanceRegression": {
+        "threshold": 0.1,
+        "window": "7d",
+        "severity": "warning"
+      },
+      "criticalFailure": {
+        "threshold": 0.2,
+        "window": "24h",
+        "severity": "critical"
+      },
+      "bundleSizeIncrease": {
+        "threshold": 0.15,
+        "window": "3d",
+        "severity": "warning"
+      }
+    },
+    "reporting": {
+      "frequency": "daily",
+      "channels": ["slack", "email", "dashboard"],
+      "stakeholders": ["performance-team", "devops", "product"]
+    }
+  },
+
+  "targets": {
+    "applications": [
+      {
+        "name": "marketing-web",
+        "type": "marketing",
+        "urls": [
+          "http://localhost:3000",
+          "http://localhost:3000/en/services",
+          "http://localhost:3000/en/contact",
+          "http://localhost:3000/en/blog"
+        ],
+        "budgetProfile": "marketing"
+      },
+      {
+        "name": "admin-portal",
+        "type": "portal",
+        "urls": [
+          "http://localhost:3001",
+          "http://localhost:3001/dashboard",
+          "http://localhost:3001/admin"
+        ],
+        "budgetProfile": "portal"
+      }
+    ],
+    "environments": {
+      "development": {
+        "warnOnly": true,
+        "skipExpensive": true
+      },
+      "staging": {
+        "warnOnly": false,
+        "skipExpensive": false
+      },
+      "production": {
+        "warnOnly": false,
+        "skipExpensive": false,
+        "strict": true
+      }
+    }
+  },
+
+  "compliance": {
+    "standards": [
+      "Core Web Vitals 2026",
+      "WCAG 2.2 AA",
+      "Performance Budgets Enterprise",
+      "Bundle Size Best Practices"
+    ],
+    "certification": {
+      "required": true,
+      "auditFrequency": "weekly",
+      "reporting": "automatic"
+    }
+  }
+}

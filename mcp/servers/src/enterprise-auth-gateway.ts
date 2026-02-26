@@ -15,9 +15,12 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { z } from 'zod';
+import argon2 from 'argon2';
 import crypto from 'crypto';
+import { Parser } from 'expr-eval';
 import jwt from 'jsonwebtoken';
+import otplib from 'otplib';
+import { z } from 'zod';
 
 // Authentication Types
 interface User {
@@ -61,6 +64,11 @@ interface AuthToken {
   issuedAt: Date;
 }
 
+interface BlacklistedToken {
+  token: string;
+  expiresAt: Date;
+}
+
 interface AuthSession {
   id: string;
   userId: string;
@@ -72,6 +80,21 @@ interface AuthSession {
   lastAccessed: Date;
   ipAddress: string;
   userAgent: string;
+}
+
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  tenantId: string;
+  roles: string[];
+  permissions: string[];
+  status: 'active' | 'inactive' | 'suspended';
+  lastLogin?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  passwordHash?: string;
+  mfaSecret?: string;
 }
 
 interface AuthPolicy {
@@ -104,6 +127,21 @@ interface PasswordPolicy {
   historyCount: number;
 }
 
+/**
+ * Enterprise Authentication Gateway MCP Server
+ *
+ * Provides comprehensive authentication, authorization, and identity management
+ * capabilities with OAuth 2.1 compliance, RBAC, MFA, and audit logging.
+ *
+ * Features:
+ * - Secure password hashing with Argon2
+ * - TOTP-based multi-factor authentication
+ * - Role-based access control (RBAC)
+ * - JWT token management with blacklisting
+ * - Policy-based access control
+ * - Session management and cleanup
+ * - Comprehensive audit logging
+ */
 export class EnterpriseAuthGateway {
   private server: McpServer;
   private users: Map<string, User> = new Map();
@@ -112,7 +150,10 @@ export class EnterpriseAuthGateway {
   private sessions: Map<string, AuthSession> = new Map();
   private policies: Map<string, AuthPolicy> = new Map();
   private jwtSecret: string;
-  private tokenBlacklist: Set<string> = new Set();
+  private tokenBlacklist: Map<string, Date> = new Map();
+  private userPasswordHashes: Map<string, string> = new Map();
+  private userMfaSecrets: Map<string, string> = new Map();
+  private parser = new Parser();
 
   constructor() {
     this.server = new McpServer({
@@ -120,22 +161,65 @@ export class EnterpriseAuthGateway {
       version: '1.0.0',
     });
 
-    this.jwtSecret = crypto.randomBytes(64).toString('hex');
+    // Load JWT secret from environment or throw error
+    this.jwtSecret = process.env.JWT_SECRET || '';
+    if (!this.jwtSecret) {
+      throw new Error('JWT_SECRET environment variable is required for production use');
+    }
+
     this.initializeSystemData();
     this.setupAuthTools();
+
+    // Clean up expired tokens every hour
+    setInterval(() => this.cleanupExpiredTokens(), 60 * 60 * 1000);
   }
 
   private initializeSystemData() {
     // Initialize system permissions
     const systemPermissions: Permission[] = [
-      { id: 'perm-001', name: 'mcp-access', resource: 'mcp', action: 'access', description: 'Access MCP servers', system: true },
-      { id: 'perm-002', name: 'mcp-admin', resource: 'mcp', action: 'admin', description: 'Administer MCP servers', system: true },
-      { id: 'perm-003', name: 'tenant-manage', resource: 'tenant', action: 'manage', description: 'Manage tenant settings', system: true },
-      { id: 'perm-004', name: 'user-manage', resource: 'user', action: 'manage', description: 'Manage users', system: true },
-      { id: 'perm-005', name: 'security-admin', resource: 'security', action: 'admin', description: 'Security administration', system: true },
+      {
+        id: 'perm-001',
+        name: 'mcp-access',
+        resource: 'mcp',
+        action: 'access',
+        description: 'Access MCP servers',
+        system: true,
+      },
+      {
+        id: 'perm-002',
+        name: 'mcp-admin',
+        resource: 'mcp',
+        action: 'admin',
+        description: 'Administer MCP servers',
+        system: true,
+      },
+      {
+        id: 'perm-003',
+        name: 'tenant-manage',
+        resource: 'tenant',
+        action: 'manage',
+        description: 'Manage tenant settings',
+        system: true,
+      },
+      {
+        id: 'perm-004',
+        name: 'user-manage',
+        resource: 'user',
+        action: 'manage',
+        description: 'Manage users',
+        system: true,
+      },
+      {
+        id: 'perm-005',
+        name: 'security-admin',
+        resource: 'security',
+        action: 'admin',
+        description: 'Security administration',
+        system: true,
+      },
     ];
 
-    systemPermissions.forEach(permission => this.permissions.set(permission.id, permission));
+    systemPermissions.forEach((permission) => this.permissions.set(permission.id, permission));
 
     // Initialize system roles
     const systemRoles: Role[] = [
@@ -143,7 +227,7 @@ export class EnterpriseAuthGateway {
         id: 'role-001',
         name: 'super-admin',
         description: 'Super administrator with full system access',
-        permissions: systemPermissions.map(p => p.id),
+        permissions: systemPermissions.map((p) => p.id),
         tenantId: 'system',
         system: true,
         createdAt: new Date(),
@@ -168,7 +252,7 @@ export class EnterpriseAuthGateway {
       },
     ];
 
-    systemRoles.forEach(role => this.roles.set(role.id, role));
+    systemRoles.forEach((role) => this.roles.set(role.id, role));
 
     // Initialize default auth policy
     const defaultPolicy: AuthPolicy = {
@@ -207,6 +291,38 @@ export class EnterpriseAuthGateway {
     };
 
     this.policies.set(defaultPolicy.id, defaultPolicy);
+  }
+
+  private async createUser(
+    username: string,
+    email: string,
+    tenantId: string,
+    password: string,
+    roles: string[] = []
+  ): Promise<User> {
+    const userId = crypto.randomUUID();
+    const passwordHash = await argon2.hash(password);
+    const mfaSecret = otplib.authenticator.generateSecret();
+
+    const user: User = {
+      id: userId,
+      username,
+      email,
+      tenantId,
+      roles,
+      permissions: this.getPermissionsForRoles(roles),
+      status: 'active',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      passwordHash,
+      mfaSecret,
+    };
+
+    this.users.set(userId, user);
+    this.userPasswordHashes.set(userId, passwordHash);
+    this.userMfaSecrets.set(userId, mfaSecret);
+
+    return user;
   }
 
   private setupAuthTools() {
@@ -272,7 +388,7 @@ export class EnterpriseAuthGateway {
 
         // Generate tokens
         const tokens = this.generateTokens(user);
-        
+
         // Create session
         const session: AuthSession = {
           id: crypto.randomUUID(),
@@ -294,12 +410,14 @@ export class EnterpriseAuthGateway {
         user.updatedAt = new Date();
 
         return {
-          content: [{
-            type: 'text',
-            text: `Authentication successful for ${username}\nSession ID: ${session.id}\nExpires: ${session.expiresAt.toISOString()}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Authentication successful for ${username}\nSession ID: ${session.id}\nExpires: ${session.expiresAt.toISOString()}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Token validation
@@ -314,19 +432,21 @@ export class EnterpriseAuthGateway {
       async ({ token, action, resource }) => {
         try {
           const decoded = jwt.verify(token, this.jwtSecret) as any;
-          
+
           // Check if token is blacklisted
-          if (this.tokenBlacklist.has(token)) {
+          if (this.isTokenBlacklisted(token)) {
             return {
               content: [{ type: 'text', text: 'Token validation failed: Token blacklisted' }],
             };
           }
 
           // Check session
-          const session = Array.from(this.sessions.values()).find(s => s.accessToken === token);
+          const session = Array.from(this.sessions.values()).find((s) => s.accessToken === token);
           if (!session || session.expiresAt < new Date()) {
             return {
-              content: [{ type: 'text', text: 'Token validation failed: Invalid or expired session' }],
+              content: [
+                { type: 'text', text: 'Token validation failed: Invalid or expired session' },
+              ],
             };
           }
 
@@ -334,7 +454,9 @@ export class EnterpriseAuthGateway {
           const user = this.users.get(decoded.userId);
           if (!user || user.status !== 'active') {
             return {
-              content: [{ type: 'text', text: 'Token validation failed: User not found or inactive' }],
+              content: [
+                { type: 'text', text: 'Token validation failed: User not found or inactive' },
+              ],
             };
           }
 
@@ -342,7 +464,9 @@ export class EnterpriseAuthGateway {
           const hasPermission = this.checkPermission(user, action, resource);
           if (!hasPermission) {
             return {
-              content: [{ type: 'text', text: 'Token validation failed: Insufficient permissions' }],
+              content: [
+                { type: 'text', text: 'Token validation failed: Insufficient permissions' },
+              ],
             };
           }
 
@@ -350,17 +474,19 @@ export class EnterpriseAuthGateway {
           session.lastAccessed = new Date();
 
           return {
-            content: [{
-              type: 'text',
-              text: `Token validation successful\nUser: ${user.username}\nTenant: ${user.tenantId}\nPermissions: ${user.permissions.join(', ')}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Token validation successful\nUser: ${user.username}\nTenant: ${user.tenantId}\nPermissions: ${user.permissions.join(', ')}`,
+              },
+            ],
           };
         } catch (error) {
           return {
             content: [{ type: 'text', text: 'Token validation failed: Invalid token' }],
           };
         }
-      },
+      }
     );
 
     // Token refresh
@@ -373,9 +499,11 @@ export class EnterpriseAuthGateway {
       async ({ refreshToken }) => {
         try {
           const decoded = jwt.verify(refreshToken, this.jwtSecret) as any;
-          
+
           // Find session
-          const session = Array.from(this.sessions.values()).find(s => s.refreshToken === refreshToken);
+          const session = Array.from(this.sessions.values()).find(
+            (s) => s.refreshToken === refreshToken
+          );
           if (!session) {
             return {
               content: [{ type: 'text', text: 'Token refresh failed: Invalid refresh token' }],
@@ -392,7 +520,7 @@ export class EnterpriseAuthGateway {
 
           // Generate new tokens
           const tokens = this.generateTokens(user);
-          
+
           // Update session
           session.accessToken = tokens.accessToken;
           session.refreshToken = tokens.refreshToken;
@@ -400,17 +528,19 @@ export class EnterpriseAuthGateway {
           session.lastAccessed = new Date();
 
           return {
-            content: [{
-              type: 'text',
-              text: `Token refresh successful\nNew token expires: ${session.expiresAt.toISOString()}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Token refresh successful\nNew token expires: ${session.expiresAt.toISOString()}`,
+              },
+            ],
           };
         } catch (error) {
           return {
             content: [{ type: 'text', text: 'Token refresh failed: Invalid refresh token' }],
           };
         }
-      },
+      }
     );
 
     // User management
@@ -420,14 +550,17 @@ export class EnterpriseAuthGateway {
       {
         action: z.enum(['create', 'update', 'delete', 'list']).describe('User management action'),
         userId: z.string().optional().describe('User ID for update/delete actions'),
-        userData: z.object({
-          username: z.string(),
-          email: z.string(),
-          password: z.string().optional(),
-          tenantId: z.string(),
-          roles: z.array(z.string()).optional(),
-          status: z.enum(['active', 'inactive', 'suspended']).optional(),
-        }).optional().describe('User data for create/update actions'),
+        userData: z
+          .object({
+            username: z.string(),
+            email: z.string(),
+            password: z.string().optional(),
+            tenantId: z.string(),
+            roles: z.array(z.string()).optional(),
+            status: z.enum(['active', 'inactive', 'suspended']).optional(),
+          })
+          .optional()
+          .describe('User data for create/update actions'),
       },
       async ({ action, userId, userData }) => {
         switch (action) {
@@ -459,7 +592,9 @@ export class EnterpriseAuthGateway {
             this.users.set(newUser.id, newUser);
 
             return {
-              content: [{ type: 'text', text: `User created: ${newUser.id} (${newUser.username})` }],
+              content: [
+                { type: 'text', text: `User created: ${newUser.id} (${newUser.username})` },
+              ],
             };
 
           case 'update':
@@ -494,20 +629,27 @@ export class EnterpriseAuthGateway {
             }
 
             const deleted = this.users.delete(userId);
-            
+
             // Clean up sessions
-            const sessionsToDelete = Array.from(this.sessions.values()).filter(s => s.userId === userId);
-            sessionsToDelete.forEach(session => this.sessions.delete(session.id));
+            const sessionsToDelete = Array.from(this.sessions.values()).filter(
+              (s) => s.userId === userId
+            );
+            sessionsToDelete.forEach((session) => this.sessions.delete(session.id));
 
             return {
-              content: [{ type: 'text', text: deleted ? `User deleted: ${userId}` : 'User not found' }],
+              content: [
+                { type: 'text', text: deleted ? `User deleted: ${userId}` : 'User not found' },
+              ],
             };
 
           case 'list':
             const users = Array.from(this.users.values());
-            const summary = users.map(u => 
-              `${u.username} (${u.id}) - ${u.email} - ${u.tenantId} - ${u.status} - Roles: ${u.roles.join(', ')}`
-            ).join('\n');
+            const summary = users
+              .map(
+                (u) =>
+                  `${u.username} (${u.id}) - ${u.email} - ${u.tenantId} - ${u.status} - Roles: ${u.roles.join(', ')}`
+              )
+              .join('\n');
 
             return {
               content: [{ type: 'text', text: `Users (${users.length}):\n\n${summary}` }],
@@ -518,7 +660,7 @@ export class EnterpriseAuthGateway {
               content: [{ type: 'text', text: 'Invalid action' }],
             };
         }
-      },
+      }
     );
 
     // Role management
@@ -528,12 +670,15 @@ export class EnterpriseAuthGateway {
       {
         action: z.enum(['create', 'update', 'delete', 'list']).describe('Role management action'),
         roleId: z.string().optional().describe('Role ID for update/delete actions'),
-        roleData: z.object({
-          name: z.string(),
-          description: z.string(),
-          permissions: z.array(z.string()),
-          tenantId: z.string().optional(),
-        }).optional().describe('Role data for create/update actions'),
+        roleData: z
+          .object({
+            name: z.string(),
+            description: z.string(),
+            permissions: z.array(z.string()),
+            tenantId: z.string().optional(),
+          })
+          .optional()
+          .describe('Role data for create/update actions'),
       },
       async ({ action, roleId, roleData }) => {
         switch (action) {
@@ -575,7 +720,7 @@ export class EnterpriseAuthGateway {
             }
 
             Object.assign(existingRole, roleData);
-            
+
             return {
               content: [{ type: 'text', text: `Role updated: ${roleId}` }],
             };
@@ -589,14 +734,19 @@ export class EnterpriseAuthGateway {
 
             const deleted = this.roles.delete(roleId);
             return {
-              content: [{ type: 'text', text: deleted ? `Role deleted: ${roleId}` : 'Role not found' }],
+              content: [
+                { type: 'text', text: deleted ? `Role deleted: ${roleId}` : 'Role not found' },
+              ],
             };
 
           case 'list':
             const roles = Array.from(this.roles.values());
-            const summary = roles.map(r => 
-              `${r.name} (${r.id}) - ${r.description} - Permissions: ${r.permissions.join(', ')}`
-            ).join('\n');
+            const summary = roles
+              .map(
+                (r) =>
+                  `${r.name} (${r.id}) - ${r.description} - Permissions: ${r.permissions.join(', ')}`
+              )
+              .join('\n');
 
             return {
               content: [{ type: 'text', text: `Roles (${roles.length}):\n\n${summary}` }],
@@ -607,7 +757,7 @@ export class EnterpriseAuthGateway {
               content: [{ type: 'text', text: 'Invalid action' }],
             };
         }
-      },
+      }
     );
 
     // Session management
@@ -623,14 +773,17 @@ export class EnterpriseAuthGateway {
         switch (action) {
           case 'list':
             let sessions = Array.from(this.sessions.values());
-            
+
             if (userId) {
-              sessions = sessions.filter(s => s.userId === userId);
+              sessions = sessions.filter((s) => s.userId === userId);
             }
 
-            const summary = sessions.map(s => 
-              `${s.id} - User: ${s.userId} - Expires: ${s.expiresAt.toISOString()} - IP: ${s.ipAddress}`
-            ).join('\n');
+            const summary = sessions
+              .map(
+                (s) =>
+                  `${s.id} - User: ${s.userId} - Expires: ${s.expiresAt.toISOString()} - IP: ${s.ipAddress}`
+              )
+              .join('\n');
 
             return {
               content: [{ type: 'text', text: `Sessions (${sessions.length}):\n\n${summary}` }],
@@ -643,29 +796,41 @@ export class EnterpriseAuthGateway {
               };
             }
 
-            const revoked = this.sessions.delete(sessionId);
-            
-            if (revoked) {
-              // Add token to blacklist
-              const session = this.sessions.get(sessionId);
-              if (session) {
-                this.tokenBlacklist.add(session.accessToken);
-              }
+            // Get session before deleting
+            const session = this.sessions.get(sessionId);
+            if (!session) {
+              return {
+                content: [{ type: 'text', text: 'Session not found' }],
+              };
             }
 
+            // Blacklist token before deleting session
+            this.blacklistToken(session.accessToken);
+
+            // Now delete the session
+            this.sessions.delete(sessionId);
+
             return {
-              content: [{ type: 'text', text: revoked ? `Session revoked: ${sessionId}` : 'Session not found' }],
+              content: [
+                {
+                  type: 'text',
+                  text: `Session revoked: ${sessionId}`,
+                },
+              ],
             };
 
           case 'cleanup':
             const now = new Date();
-            const expiredSessions = Array.from(this.sessions.entries())
-              .filter(([id, session]) => session.expiresAt < now);
+            const expiredSessions = Array.from(this.sessions.entries()).filter(
+              ([id, session]) => session.expiresAt < now
+            );
 
             expiredSessions.forEach(([id]) => this.sessions.delete(id));
 
             return {
-              content: [{ type: 'text', text: `Cleaned up ${expiredSessions.length} expired sessions` }],
+              content: [
+                { type: 'text', text: `Cleaned up ${expiredSessions.length} expired sessions` },
+              ],
             };
 
           default:
@@ -673,19 +838,36 @@ export class EnterpriseAuthGateway {
               content: [{ type: 'text', text: 'Invalid action' }],
             };
         }
-      },
+      }
     );
   }
 
   private verifyPassword(password: string, userId: string): boolean {
-    // Simplified password verification - in production, use proper password hashing
-    // For demo purposes, accept any password for users that exist
-    return true;
+    const passwordHash = this.userPasswordHashes.get(userId);
+    if (!passwordHash) {
+      return false;
+    }
+
+    try {
+      return argon2.verify(passwordHash, password);
+    } catch (error) {
+      console.error('Password verification error:', error);
+      return false;
+    }
   }
 
   private verifyMfaCode(code: string, userId: string): boolean {
-    // Simplified MFA verification - in production, integrate with MFA provider
-    return code.length === 6 && /^\d+$/.test(code);
+    const mfaSecret = this.userMfaSecrets.get(userId);
+    if (!mfaSecret) {
+      return false;
+    }
+
+    try {
+      return otplib.authenticator.verify({ token: code, secret: mfaSecret });
+    } catch (error) {
+      console.error('MFA verification error:', error);
+      return false;
+    }
   }
 
   private generateTokens(user: User): AuthToken {
@@ -713,15 +895,54 @@ export class EnterpriseAuthGateway {
 
   private getPermissionsForRoles(roleIds: string[]): string[] {
     const permissions = new Set<string>();
-    
+
     for (const roleId of roleIds) {
       const role = this.roles.get(roleId);
       if (role) {
-        role.permissions.forEach(permission => permissions.add(permission));
+        role.permissions.forEach((permission) => permissions.add(permission));
       }
     }
 
     return Array.from(permissions);
+  }
+
+  private blacklistToken(token: string): void {
+    // Decode token to get expiration time
+    try {
+      const decoded = jwt.decode(token) as any;
+      if (decoded && decoded.exp) {
+        const expiresAt = new Date(decoded.exp * 1000);
+        this.tokenBlacklist.set(token, expiresAt);
+      }
+    } catch (error) {
+      // If we can't decode, blacklist for a default period (24 hours)
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      this.tokenBlacklist.set(token, expiresAt);
+    }
+  }
+
+  private isTokenBlacklisted(token: string): boolean {
+    const expiresAt = this.tokenBlacklist.get(token);
+    if (!expiresAt) {
+      return false;
+    }
+
+    // Remove expired token and return false
+    if (expiresAt < new Date()) {
+      this.tokenBlacklist.delete(token);
+      return false;
+    }
+
+    return true;
+  }
+
+  private cleanupExpiredTokens(): void {
+    const now = new Date();
+    for (const [token, expiresAt] of this.tokenBlacklist.entries()) {
+      if (expiresAt < now) {
+        this.tokenBlacklist.delete(token);
+      }
+    }
   }
 
   private checkPermission(user: User, action: string, resource: string): boolean {
@@ -730,26 +951,45 @@ export class EnterpriseAuthGateway {
     return user.permissions.includes(requiredPermission) || user.permissions.includes('mcp-admin');
   }
 
-  private async evaluateAuthPolicy(policy: AuthPolicy, user: User, ipAddress: string): Promise<{ allowed: boolean; reason: string }> {
-    // Simplified policy evaluation - in production, implement comprehensive policy engine
+  private async evaluateAuthPolicy(
+    policy: AuthPolicy,
+    user: User,
+    ipAddress: string
+  ): Promise<{ allowed: boolean; reason: string }> {
+    // Comprehensive policy evaluation with safe expression parsing
     for (const rule of policy.rules) {
       if (!rule.enabled) continue;
 
-      // Simple IP whitelist check
-      if (rule.type === 'ip-whitelist' && rule.action === 'allow') {
-        const allowedIPs = rule.condition.match(/\[(.*?)\]/)?.[1]?.split(',').map(ip => ip.trim()) || [];
-        if (!allowedIPs.includes(ipAddress)) {
-          return { allowed: false, reason: `IP address not in whitelist` };
+      try {
+        // Simple IP whitelist check
+        if (rule.type === 'ip-whitelist' && rule.action === 'allow') {
+          const allowedIPs =
+            rule.condition
+              .match(/\[(.*?)\]/)?.[1]
+              ?.split(',')
+              .map((ip) => ip.trim()) || [];
+          if (!allowedIPs.includes(ipAddress)) {
+            return { allowed: false, reason: `IP address not in whitelist` };
+          }
         }
-      }
 
-      // Simple time-based check
-      if (rule.type === 'time-based' && rule.action === 'allow') {
-        const currentHour = new Date().getHours();
-        const condition = rule.condition.replace('hour', currentHour.toString());
-        if (!eval(condition)) {
-          return { allowed: false, reason: 'Access not allowed at this time' };
+        // Safe time-based check using expr-eval instead of eval
+        if (rule.type === 'time-based' && rule.action === 'allow') {
+          const currentHour = new Date().getHours();
+          const condition = rule.condition.replace('hour', currentHour.toString());
+
+          // Use safe expression parser instead of eval
+          const expr = this.parser.parse(condition);
+          const result = expr.evaluate();
+
+          if (!result) {
+            return { allowed: false, reason: 'Access not allowed at this time' };
+          }
         }
+      } catch (error) {
+        console.error('Policy evaluation error:', error);
+        // Fail closed on policy evaluation errors
+        return { allowed: false, reason: 'Policy evaluation failed' };
       }
     }
 

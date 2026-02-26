@@ -1,0 +1,67 @@
+{
+  "name": "@repo/testing-contracts",
+  "version": "1.0.0",
+  "description": "API contract testing framework with Pact-based architecture for external service integrations",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
+    },
+    "./mocks": {
+      "import": "./dist/mocks.js",
+      "types": "./dist/mocks.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:contracts": "vitest run --config vitest.contracts.config.ts",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@pact-foundation/pact": "^12.1.0",
+    "@pact-foundation/pact-node": "^10.0.0",
+    "zod": "^3.22.4",
+    "axios": "^1.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0",
+    "eslint": "^8.55.0",
+    "@repo/eslint-config": "workspace:*"
+  },
+  "peerDependencies": {
+    "vitest": ">=1.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "contract-testing",
+    "pact",
+    "api-testing",
+    "integration-testing",
+    "consumer-driven-contracts"
+  ],
+  "author": "Marketing Websites Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TrevorPLam/websites",
+    "directory": "packages/testing-contracts"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
