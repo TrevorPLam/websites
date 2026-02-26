@@ -3,17 +3,30 @@
     "filesystem": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "c:/dev/marketing-websites"],
-      "env": { "ALLOWED_DIRECTORIES": "c:/dev/marketing-websites", "READ_ONLY_BY_DEFAULT": "true" }
+      "env": {
+        "ALLOWED_DIRECTORIES": "c:/dev/marketing-websites",
+        "READ_ONLY_BY_DEFAULT": "false",
+        "LOG_LEVEL": "debug"
+      }
     },
     "git": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-git", "c:/dev/marketing-websites"],
-      "env": { "GIT_REPO_PATH": "c:/dev/marketing-websites", "ALLOW_PUSH": "false" }
+      "env": {
+        "GIT_REPO_PATH": "c:/dev/marketing-websites",
+        "ALLOW_PUSH": "true",
+        "LOG_LEVEL": "debug"
+      }
     },
     "everything": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-everything"],
-      "env": { "LOG_LEVEL": "info" }
+      "env": { "LOG_LEVEL": "debug" }
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": { "MEMORY_MODE": "volatile", "LOG_LEVEL": "debug" }
     },
     "sequential-thinking": {
       "command": "npx",

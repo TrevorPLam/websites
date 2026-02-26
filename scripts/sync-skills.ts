@@ -169,8 +169,7 @@ function syncSkills() {
 
       for (const skillFile of filteredFiles) {
         const relativePath = skillFile.replace(sourceDir, '');
-        const targetFileName = relativePath.replace(/[\/\\]/g, '_');
-        const targetPath = join(targetBaseDir, targetFileName);
+        const targetPath = join(targetBaseDir, relativePath);
 
         copySkillToTarget(skillFile, targetPath, target.convertToCursor);
         totalCopied++;

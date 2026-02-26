@@ -52,7 +52,14 @@ class MCPTester {
         throw new Error('Missing servers configuration');
       }
 
-      const requiredServers = ['filesystem', 'git', 'everything'];
+      const requiredServers = [
+        'filesystem',
+        'git',
+        'everything',
+        'github',
+        'knowledge-graph',
+        'sequential-thinking',
+      ];
       for (const server of requiredServers) {
         if (!config.servers[server]) {
           throw new Error(`Missing ${server} server configuration`);

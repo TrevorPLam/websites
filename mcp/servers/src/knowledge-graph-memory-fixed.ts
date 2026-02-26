@@ -11,7 +11,7 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { z } from 'zod';
 
 // Knowledge Graph Types
@@ -57,6 +57,12 @@ interface KnowledgeGraph {
   context: string;
 }
 
+/**
+ * Knowledge Graph Memory MCP Server for persistent AI intelligence.
+ *
+ * Transforms raw text into interconnected knowledge graphs with temporal awareness
+ * and provides tools for graph manipulation, querying, and persistence.
+ */
 export class KnowledgeGraphMemoryMCPServer {
   private server: McpServer;
   private graph: KnowledgeGraph;
@@ -355,6 +361,9 @@ export class KnowledgeGraphMemoryMCPServer {
           2
         );
 
+        // Write to disk
+        writeFileSync(filename, graphData, 'utf8');
+
         return {
           content: [
             {
@@ -521,7 +530,12 @@ export class KnowledgeGraphMemoryMCPServer {
       if (existsSync(this.storagePath)) {
         const data = readFileSync(this.storagePath, 'utf8');
         const loaded = JSON.parse(data);
-        this.knowledgeGraph = loaded;
+        this.graph = {
+          entities: new Map(Object.entries(loaded.entities || {})),
+          relations: new Map(Object.entries(loaded.relations || {})),
+          lastUpdated: new Date(loaded.lastUpdated),
+          context: loaded.context || 'general',
+        };
         console.error('Knowledge graph loaded from:', this.storagePath);
       } else {
         console.error(

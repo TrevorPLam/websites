@@ -21,7 +21,7 @@ const path = require('path');
 class MCPDevWorkflow {
   constructor() {
     this.rootDir = path.join(__dirname, '..');
-    this.mcpDir = path.join(this.rootDir, '.mcp');
+    this.mcpDir = path.join(this.rootDir, 'config');
   }
 
   async runWorkflow() {
@@ -54,18 +54,17 @@ class MCPDevWorkflow {
     try {
       // Run MCP integration tests
       console.log('1. Testing MCP server integration...');
-      await this.runScript('test-mcp-integration.js');
+      await this.runScript('test-integration.js');
 
       // Run AI assistant tests
       console.log('\n2. Testing AI assistant integration...');
-      await this.runScript('test-mcp-ai-integration.js');
+      await this.runScript('test-ai-integration.js');
 
       // Run production validation
       console.log('\n3. Validating production readiness...');
-      await this.runScript('validate-mcp-production.js');
+      await this.runScript('validate-production.js');
 
       console.log('\n✅ All tests completed successfully!');
-
     } catch (error) {
       console.error('\n❌ Test workflow failed:', error.message);
       process.exit(1);
@@ -87,7 +86,7 @@ class MCPDevWorkflow {
 
       // Check required servers
       const requiredServers = ['filesystem', 'git', 'everything'];
-      const missingServers = requiredServers.filter(server => !config.servers[server]);
+      const missingServers = requiredServers.filter((server) => !config.servers[server]);
 
       if (missingServers.length > 0) {
         throw new Error(`Missing servers: ${missingServers.join(', ')}`);
@@ -106,9 +105,9 @@ class MCPDevWorkflow {
 
       // Check test scripts
       const testScripts = [
-        'test-mcp-integration.js',
-        'test-mcp-ai-integration.js',
-        'validate-mcp-production.js'
+        'test-integration.js',
+        'test-ai-integration.js',
+        'validate-production.js',
       ];
 
       for (const script of testScripts) {
@@ -121,7 +120,6 @@ class MCPDevWorkflow {
       }
 
       console.log('\n✅ MCP development setup is valid!');
-
     } catch (error) {
       console.error('\n❌ Validation failed:', error.message);
       process.exit(1);
@@ -138,7 +136,7 @@ class MCPDevWorkflow {
         const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
         console.log('Current Configuration:');
-        Object.keys(config.servers).forEach(serverName => {
+        Object.keys(config.servers).forEach((serverName) => {
           const server = config.servers[serverName];
           console.log(`  ${serverName}: ${server.command} ${server.args.join(' ')}`);
         });
@@ -149,7 +147,7 @@ class MCPDevWorkflow {
       if (fs.existsSync(envPath)) {
         console.log('\nDevelopment Environment:');
         const envContent = fs.readFileSync(envPath, 'utf8');
-        envContent.split('\n').forEach(line => {
+        envContent.split('\n').forEach((line) => {
           if (line.trim() && !line.startsWith('#')) {
             console.log(`  ${line}`);
           }
@@ -165,7 +163,6 @@ class MCPDevWorkflow {
         console.log(`  Retention: ${memory.retention}`);
         console.log(`  Created: ${memory.created}`);
       }
-
     } catch (error) {
       console.error('❌ Status check failed:', error.message);
     }
@@ -186,18 +183,18 @@ class MCPDevWorkflow {
       const logDir = path.join(this.mcpDir, 'logs');
       if (fs.existsSync(logDir)) {
         const files = fs.readdirSync(logDir);
-        files.forEach(file => {
+        files.forEach((file) => {
           const filePath = path.join(logDir, file);
           fs.unlinkSync(filePath);
         });
         console.log('✅ Development logs cleared');
       }
 
-      // Remove temporary files created during MCP operations
-      // Rationale: Windows lacks glob expansion, so we manually check directory contents
-      // Follow-up: Iterate through files and remove .tmp extensions to prevent accumulation
+      // Clean temporary files created during MCP operations
+      // Rationale: Windows Command Prompt lacks native glob expansion, so we must manually iterate directory contents
+      // Follow-up: Remove all .tmp files to prevent disk space accumulation and potential conflicts
       const files = fs.readdirSync(this.mcpDir);
-      files.forEach(file => {
+      files.forEach((file) => {
         if (file.endsWith('.tmp')) {
           fs.unlinkSync(path.join(this.mcpDir, file));
           console.log(`✅ Removed temporary file: ${file}`);
@@ -205,7 +202,6 @@ class MCPDevWorkflow {
       });
 
       console.log('\n✅ Development environment cleaned!');
-
     } catch (error) {
       console.error('❌ Clean failed:', error.message);
     }
@@ -216,7 +212,7 @@ class MCPDevWorkflow {
 
     try {
       // Setup development environment
-      const setupScript = path.join(this.rootDir, 'scripts', 'setup-mcp-development.js');
+      const setupScript = path.join(this.rootDir, 'scripts', 'setup-development.js');
       await this.runCommand('node', [setupScript, 'dev']);
 
       // Validate setup
@@ -230,7 +226,6 @@ class MCPDevWorkflow {
       console.log('1. Restart your AI assistant');
       console.log('2. Start development with enhanced MCP capabilities');
       console.log('3. Use "node scripts/mcp-dev-workflow.js status" to check status');
-
     } catch (error) {
       console.error('\n❌ Development workflow failed:', error.message);
       process.exit(1);
@@ -242,7 +237,7 @@ class MCPDevWorkflow {
       const scriptPath = path.join(this.rootDir, 'scripts', scriptName);
       const child = spawn('node', [scriptPath], {
         stdio: 'inherit',
-        cwd: this.rootDir
+        cwd: this.rootDir,
       });
 
       child.on('close', (code) => {
@@ -261,7 +256,7 @@ class MCPDevWorkflow {
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, {
         stdio: 'inherit',
-        cwd: this.rootDir
+        cwd: this.rootDir,
       });
 
       child.on('close', (code) => {

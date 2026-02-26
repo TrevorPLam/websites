@@ -10,47 +10,17 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { WebSocketServer } from 'ws';
 import express from 'express';
 import { z } from 'zod';
-
-// MCP App Types
-export interface MCPApp {
-  id: string;
-  name: string;
-  description: string;
-  version: string;
-  server: McpServer;
-  ui: UIComponent;
-  tools: Tool[];
-  status: 'active' | 'inactive' | 'error';
-}
-
-export interface UIComponent {
-  type: 'web' | 'cli' | 'desktop';
-  config: UIConfig;
-  handlers: UIHandler[];
-}
-
-export interface UIConfig {
-  port?: number;
-  path?: string;
-  theme?: string;
-  layout?: 'sidebar' | 'tabs' | 'grid';
-}
-
-export interface UIHandler {
-  event: string;
-  handler: (data: any) => Promise<any>;
-}
-
-export interface Tool {
-  name: string;
-  description: string;
-  schema: z.ZodSchema;
-  handler: (params: any) => Promise<any>;
-}
+import type { MCPApp, UIComponent, Tool } from './types.js';
 
 // Interactive MCP App Base Class
+/**
+ * Base class for interactive MCP applications with WebSocket and HTTP interfaces.
+ *
+ * Provides common functionality for MCP apps that need web UI components,
+ * real-time communication, and tool management.
+ */
 export class InteractiveMCPApp {
-  protected app: MCPApp;
+  public readonly app: MCPApp;
   protected server: McpServer;
   protected uiServer: express.Application;
   protected wsServer: WebSocketServer;
@@ -393,6 +363,11 @@ export class InteractiveMCPApp {
 // Specific MCP App Implementations
 
 // GitHub MCP App
+/**
+ * MCP application for GitHub repository management and code analysis.
+ *
+ * Provides tools for repository operations, code analysis, and GitHub API integration.
+ */
 export class GitHubMCPApp extends InteractiveMCPApp {
   constructor() {
     super({
@@ -477,6 +452,11 @@ export class GitHubMCPApp extends InteractiveMCPApp {
 }
 
 // File System MCP App
+/**
+ * MCP application for file system operations and directory management.
+ *
+ * Provides tools for reading, writing, and managing files and directories.
+ */
 export class FileSystemMCPApp extends InteractiveMCPApp {
   constructor() {
     super({
@@ -555,6 +535,11 @@ export class FileSystemMCPApp extends InteractiveMCPApp {
 }
 
 // Database MCP App
+/**
+ * MCP application for database operations and data management.
+ *
+ * Provides tools for database queries, data manipulation, and schema management.
+ */
 export class DatabaseMCPApp extends InteractiveMCPApp {
   constructor() {
     super({
@@ -602,6 +587,11 @@ export class DatabaseMCPApp extends InteractiveMCPApp {
 }
 
 // MCP App Manager
+/**
+ * Manager class for coordinating multiple MCP applications.
+ *
+ * Handles registration, lifecycle management, and communication between apps.
+ */
 export class MCPAppManager {
   private apps: Map<string, InteractiveMCPApp> = new Map();
 

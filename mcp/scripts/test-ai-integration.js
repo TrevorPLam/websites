@@ -21,7 +21,7 @@ const path = require('path');
 class MCPAIAssistantTester {
   constructor() {
     this.testResults = [];
-    this.configPath = path.join(__dirname, '..', '.mcp', 'config.json');
+    this.configPath = path.join(__dirname, '..', 'config', 'config.json');
   }
 
   async runAllTests() {
@@ -50,21 +50,23 @@ class MCPAIAssistantTester {
 
       // Check for Cursor-specific requirements
       const cursorConfig = {
-        mcpServers: {}
+        mcpServers: {},
       };
 
       // Convert our config to Cursor format
       for (const [name, serverConfig] of Object.entries(config.servers)) {
         cursorConfig.mcpServers[name] = {
           command: serverConfig.command,
-          args: serverConfig.args
+          args: serverConfig.args,
         };
       }
 
       // Validate Cursor format
-      if (cursorConfig.mcpServers.filesystem &&
-          cursorConfig.mcpServers.git &&
-          cursorConfig.mcpServers.everything) {
+      if (
+        cursorConfig.mcpServers.filesystem &&
+        cursorConfig.mcpServers.git &&
+        cursorConfig.mcpServers.everything
+      ) {
         this.addResult('Cursor Compatibility', true, 'Configuration compatible with Cursor');
       } else {
         this.addResult('Cursor Compatibility', false, 'Missing required servers for Cursor');
@@ -82,14 +84,21 @@ class MCPAIAssistantTester {
       const config = JSON.parse(fs.readFileSync(this.configPath, 'utf8'));
 
       // Check for Windsurf-specific environment variables
-      const hasEnvVars = config.servers.filesystem.env &&
-                        config.servers.git.env &&
-                        config.servers.everything.env;
+      const hasEnvVars =
+        config.servers.filesystem.env && config.servers.git.env && config.servers.everything.env;
 
       if (hasEnvVars) {
-        this.addResult('Windsurf Compatibility', true, 'Environment variables configured for Windsurf');
+        this.addResult(
+          'Windsurf Compatibility',
+          true,
+          'Environment variables configured for Windsurf'
+        );
       } else {
-        this.addResult('Windsurf Compatibility', false, 'Missing environment variables for Windsurf');
+        this.addResult(
+          'Windsurf Compatibility',
+          false,
+          'Missing environment variables for Windsurf'
+        );
       }
     } catch (error) {
       this.addResult('Windsurf Compatibility', false, error.message);
@@ -102,7 +111,7 @@ class MCPAIAssistantTester {
     try {
       // Claude Desktop uses claude_desktop_config.json
       const claudeConfig = {
-        mcpServers: {}
+        mcpServers: {},
       };
 
       const config = JSON.parse(fs.readFileSync(this.configPath, 'utf8'));
@@ -112,18 +121,26 @@ class MCPAIAssistantTester {
         claudeConfig.mcpServers[name] = {
           command: serverConfig.command,
           args: serverConfig.args,
-          env: serverConfig.env || {}
+          env: serverConfig.env || {},
         };
       }
 
       // Validate Claude Desktop format
       const requiredServers = ['filesystem', 'git', 'everything'];
-      const hasAllServers = requiredServers.every(server => claudeConfig.mcpServers[server]);
+      const hasAllServers = requiredServers.every((server) => claudeConfig.mcpServers[server]);
 
       if (hasAllServers) {
-        this.addResult('Claude Desktop Compatibility', true, 'Configuration compatible with Claude Desktop');
+        this.addResult(
+          'Claude Desktop Compatibility',
+          true,
+          'Configuration compatible with Claude Desktop'
+        );
       } else {
-        this.addResult('Claude Desktop Compatibility', false, 'Missing required servers for Claude Desktop');
+        this.addResult(
+          'Claude Desktop Compatibility',
+          false,
+          'Missing required servers for Claude Desktop'
+        );
       }
     } catch (error) {
       this.addResult('Claude Desktop Compatibility', false, error.message);
@@ -138,7 +155,7 @@ class MCPAIAssistantTester {
       const expectedTools = {
         filesystem: ['read_file', 'write_file', 'list_directory', 'create_directory'],
         git: ['git_clone', 'git_status', 'git_add', 'git_commit', 'git_push'],
-        everything: ['echo', 'add', 'subtract', 'multiply', 'divide']
+        everything: ['echo', 'add', 'subtract', 'multiply', 'divide'],
       };
 
       const config = JSON.parse(fs.readFileSync(this.configPath, 'utf8'));
@@ -169,13 +186,11 @@ class MCPAIAssistantTester {
       const scenario = {
         task: 'Read a TypeScript file and analyze its structure',
         expectedServers: ['filesystem'],
-        expectedOperations: ['read_file']
+        expectedOperations: ['read_file'],
       };
 
       const config = JSON.parse(fs.readFileSync(this.configPath, 'utf8'));
-      const hasRequiredServers = scenario.expectedServers.every(server =>
-        config.servers[server]
-      );
+      const hasRequiredServers = scenario.expectedServers.every((server) => config.servers[server]);
 
       if (hasRequiredServers) {
         this.addResult('Real-World Scenario', true, 'Can handle file analysis tasks');
@@ -212,7 +227,7 @@ class MCPAIAssistantTester {
       const child = spawn('npx', serverConfig.args, {
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd: path.join(__dirname, '..'),
-        shell: true
+        shell: true,
       });
 
       let resolved = false;
@@ -252,7 +267,10 @@ class MCPAIAssistantTester {
         if (!resolved) {
           resolved = true;
           child.kill();
-          resolve({ success: initialized, output: initialized ? 'Server initialized' : 'No initialization detected' });
+          resolve({
+            success: initialized,
+            output: initialized ? 'Server initialized' : 'No initialization detected',
+          });
         }
       }, timeout);
     });
@@ -268,10 +286,10 @@ class MCPAIAssistantTester {
     console.log('\n📊 AI Assistant Integration Test Results:');
     console.log('==========================================');
 
-    const passed = this.testResults.filter(r => r.success).length;
+    const passed = this.testResults.filter((r) => r.success).length;
     const total = this.testResults.length;
 
-    this.testResults.forEach(result => {
+    this.testResults.forEach((result) => {
       const status = result.success ? '✅' : '❌';
       console.log(`${status} ${result.testName}: ${result.message}`);
     });
