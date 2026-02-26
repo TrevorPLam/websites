@@ -268,172 +268,488 @@ export class AdvancedAgentPlugins {
     };
   }
 
-  private setupToolHandlers(): void {
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
-      return {
-        tools: [
-          {
-            name: 'list_plugins',
-            description: 'List all available plugins with filtering options',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                category: { type: 'string', description: 'Filter by category' },
-                enabled: { type: 'boolean', description: 'Filter by enabled status' },
-                securityLevel: { type: 'string', enum: ['low', 'medium', 'high', 'enterprise'] },
-                pricing: { type: 'string', enum: ['free', 'paid', 'enterprise'] },
-              },
-            },
-          },
-          {
-            name: 'enable_plugin',
-            description: 'Enable a specific plugin',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                pluginId: { type: 'string', description: 'Plugin ID to enable' },
-                config: { type: 'object', description: 'Plugin configuration' },
-              },
-              required: ['pluginId'],
-            },
-          },
-          {
-            name: 'disable_plugin',
-            description: 'Disable a specific plugin',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                pluginId: { type: 'string', description: 'Plugin ID to disable' },
-              },
-              required: ['pluginId'],
-            },
-          },
-          {
-            name: 'configure_plugin',
-            description: 'Configure plugin settings',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                pluginId: { type: 'string', description: 'Plugin ID' },
-                config: { type: 'object', description: 'Configuration object' },
-              },
-              required: ['pluginId', 'config'],
-            },
-          },
-          {
-            name: 'install_plugin',
-            description: 'Install a new plugin from repository',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                source: { type: 'string', description: 'Plugin source (URL or package name)' },
-                version: { type: 'string', description: 'Specific version to install' },
-                autoEnable: { type: 'boolean', description: 'Auto-enable after installation' },
-              },
-              required: ['source'],
-            },
-          },
-          {
-            name: 'uninstall_plugin',
-            description: 'Uninstall a plugin',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                pluginId: { type: 'string', description: 'Plugin ID to uninstall' },
-                removeConfig: { type: 'boolean', description: 'Remove configuration data' },
-              },
-              required: ['pluginId'],
-            },
-          },
-          {
-            name: 'execute_plugin',
-            description: 'Execute a plugin with specific parameters',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                pluginId: { type: 'string', description: 'Plugin ID' },
-                action: { type: 'string', description: 'Action to execute' },
-                parameters: { type: 'object', description: 'Action parameters' },
-              },
-              required: ['pluginId', 'action'],
-            },
-          },
-          {
-            name: 'get_plugin_status',
-            description: 'Get detailed status and metrics for a plugin',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                pluginId: { type: 'string', description: 'Plugin ID' },
-                includeMetrics: { type: 'boolean', description: 'Include performance metrics' },
-              },
-              required: ['pluginId'],
-            },
-          },
-          {
-            name: 'manage_dependencies',
-            description: 'Manage plugin dependencies',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                action: { type: 'string', enum: ['check', 'install', 'update', 'remove'] },
-                pluginId: { type: 'string', description: 'Plugin ID' },
-                dependencies: { type: 'array', items: { type: 'string' } },
-              },
-              required: ['action'],
-            },
-          },
-          {
-            name: 'security_audit',
-            description: 'Perform security audit on plugins',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                pluginId: { type: 'string', description: 'Specific plugin ID (optional)' },
-                level: { type: 'string', enum: ['basic', 'comprehensive', 'deep'] },
-              },
-            },
-          },
-        ],
-      };
-    });
+  private setupTools(): void {
+    // List plugins tool
+    this.server.tool(
+      'list_plugins',
+      'List all available plugins with filtering options',
+      {
+        category: z
+          .enum(['reasoning', 'memory', 'communication', 'analysis', 'automation', 'integration'])
+          .optional()
+          .describe('Filter by category'),
+        enabled: z.boolean().optional().describe('Filter by enabled status'),
+        securityLevel: z
+          .enum(['low', 'medium', 'high', 'enterprise'])
+          .optional()
+          .describe('Filter by security level'),
+        pricing: z
+          .enum(['free', 'paid', 'enterprise'])
+          .optional()
+          .describe('Filter by pricing model'),
+      },
+      async ({ category, enabled, securityLevel, pricing }) => {
+        let plugins = Array.from(this.registry.plugins.values());
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const { name, arguments: args } = request.params;
-
-      try {
-        switch (name) {
-          case 'list_plugins':
-            return await this.listPlugins(args);
-          case 'enable_plugin':
-            return await this.enablePlugin(args);
-          case 'disable_plugin':
-            return await this.disablePlugin(args);
-          case 'configure_plugin':
-            return await this.configurePlugin(args);
-          case 'install_plugin':
-            return await this.installPlugin(args);
-          case 'uninstall_plugin':
-            return await this.uninstallPlugin(args);
-          case 'execute_plugin':
-            return await this.executePlugin(args);
-          case 'get_plugin_status':
-            return await this.getPluginStatus(args);
-          case 'manage_dependencies':
-            return await this.manageDependencies(args);
-          case 'security_audit':
-            return await this.securityAudit(args);
-          default:
-            throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
+        // Apply filters
+        if (category) {
+          plugins = plugins.filter((p) => p.category === category);
         }
-      } catch (error) {
-        console.error(`Error executing tool ${name}:`, error);
-        throw new McpError(
-          ErrorCode.InternalError,
-          `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`
-        );
+        if (enabled !== undefined) {
+          plugins = plugins.filter((p) => p.enabled === enabled);
+        }
+        if (securityLevel) {
+          plugins = plugins.filter((p) => p.securityLevel === securityLevel);
+        }
+        if (pricing) {
+          plugins = plugins.filter((p) => p.pricing === pricing);
+        }
+
+        return {
+          success: true,
+          data: {
+            plugins: plugins.map((p) => ({
+              id: p.id,
+              name: p.name,
+              description: p.description,
+              category: p.category,
+              version: p.version,
+              enabled: p.enabled,
+              securityLevel: p.securityLevel,
+              pricing: p.pricing,
+              capabilities: p.capabilities,
+              dependencies: p.dependencies,
+              author: p.author,
+              resources: p.resources,
+            })),
+            total: plugins.length,
+            filters: { category, enabled, securityLevel, pricing },
+          },
+        };
       }
-    });
+    );
+
+    // Enable plugin tool
+    this.server.tool(
+      'enable_plugin',
+      'Enable a specific plugin',
+      {
+        pluginId: z.string().describe('Plugin ID to enable'),
+        config: z.record(z.any()).optional().describe('Plugin configuration'),
+      },
+      async ({ pluginId, config = {} }) => {
+        const plugin = this.registry.plugins.get(pluginId);
+        if (!plugin) {
+          throw new Error(`Plugin not found: ${pluginId}`);
+        }
+
+        // Security validation
+        const securityCheck = this.validateSecurity(plugin);
+        if (!securityCheck.passed) {
+          throw new Error(`Security validation failed: ${securityCheck.violations.join(', ')}`);
+        }
+
+        // Check dependencies
+        const missingDeps = this.checkDependencies(plugin);
+        if (missingDeps.length > 0) {
+          throw new Error(`Missing dependencies: ${missingDeps.join(', ')}`);
+        }
+
+        // Validate configuration
+        const configValidation = this.validateConfig(plugin, config);
+        if (!configValidation.valid) {
+          throw new Error(`Configuration validation failed: ${configValidation.errors.join(', ')}`);
+        }
+
+        plugin.enabled = true;
+        plugin.config = { ...plugin.config, ...config };
+
+        // Initialize plugin instance
+        this.activePlugins.set(pluginId, {
+          instance: null, // Would be actual plugin instance
+          enabledAt: new Date(),
+          config: plugin.config,
+        });
+
+        return {
+          success: true,
+          data: {
+            plugin: {
+              id: plugin.id,
+              name: plugin.name,
+              enabled: plugin.enabled,
+              config: plugin.config,
+            },
+            enabledAt: new Date(),
+          },
+        };
+      }
+    );
+
+    // Disable plugin tool
+    this.server.tool(
+      'disable_plugin',
+      'Disable a specific plugin',
+      {
+        pluginId: z.string().describe('Plugin ID to disable'),
+      },
+      async ({ pluginId }) => {
+        const plugin = this.registry.plugins.get(pluginId);
+        if (!plugin) {
+          throw new Error(`Plugin not found: ${pluginId}`);
+        }
+
+        // Check for dependent plugins
+        const dependents = this.findDependents(pluginId);
+        if (dependents.length > 0) {
+          throw new Error(`Cannot disable plugin. Required by: ${dependents.join(', ')}`);
+        }
+
+        plugin.enabled = false;
+        this.activePlugins.delete(pluginId);
+
+        return {
+          success: true,
+          data: {
+            plugin: {
+              id: plugin.id,
+              name: plugin.name,
+              enabled: plugin.enabled,
+            },
+            disabledAt: new Date(),
+          },
+        };
+      }
+    );
+
+    // Configure plugin tool
+    this.server.tool(
+      'configure_plugin',
+      'Configure plugin settings',
+      {
+        pluginId: z.string().describe('Plugin ID'),
+        config: z.record(z.any()).describe('Configuration object'),
+      },
+      async ({ pluginId, config }) => {
+        const plugin = this.registry.plugins.get(pluginId);
+        if (!plugin) {
+          throw new Error(`Plugin not found: ${pluginId}`);
+        }
+
+        // Validate configuration
+        const configValidation = this.validateConfig(plugin, config);
+        if (!configValidation.valid) {
+          throw new Error(`Configuration validation failed: ${configValidation.errors.join(', ')}`);
+        }
+
+        plugin.config = { ...plugin.config, ...config };
+
+        // Update active plugin instance if exists
+        const activePlugin = this.activePlugins.get(pluginId);
+        if (activePlugin) {
+          activePlugin.config = plugin.config;
+        }
+
+        return {
+          success: true,
+          data: {
+            plugin: {
+              id: plugin.id,
+              name: plugin.name,
+              config: plugin.config,
+            },
+            configuredAt: new Date(),
+          },
+        };
+      }
+    );
+
+    // Install plugin tool
+    this.server.tool(
+      'install_plugin',
+      'Install a new plugin from repository',
+      {
+        source: z.string().describe('Plugin source (URL or package name)'),
+        version: z.string().optional().describe('Specific version to install'),
+        autoEnable: z.boolean().default(false).describe('Auto-enable after installation'),
+      },
+      async ({ source, version, autoEnable = false }) => {
+        const installation = {
+          id: `install_${Date.now()}`,
+          source,
+          version: version || 'latest',
+          status: 'installing' as const,
+          startedAt: new Date(),
+        };
+
+        // Simulate installation process
+        setTimeout(() => {
+          // In real implementation, would download and validate plugin
+          console.log(`Installing plugin from ${source}`);
+        }, 1000);
+
+        return {
+          success: true,
+          data: {
+            installation,
+            message: 'Plugin installation started',
+          },
+        };
+      }
+    );
+
+    // Uninstall plugin tool
+    this.server.tool(
+      'uninstall_plugin',
+      'Uninstall a plugin',
+      {
+        pluginId: z.string().describe('Plugin ID to uninstall'),
+        removeConfig: z.boolean().default(false).describe('Remove configuration data'),
+      },
+      async ({ pluginId, removeConfig = false }) => {
+        const plugin = this.registry.plugins.get(pluginId);
+        if (!plugin) {
+          throw new Error(`Plugin not found: ${pluginId}`);
+        }
+
+        // Check for dependent plugins
+        const dependents = this.findDependents(pluginId);
+        if (dependents.length > 0) {
+          throw new Error(`Cannot uninstall plugin. Required by: ${dependents.join(', ')}`);
+        }
+
+        // Disable and remove plugin
+        if (plugin.enabled) {
+          this.activePlugins.delete(pluginId);
+        }
+        this.registry.plugins.delete(pluginId);
+
+        // Remove configuration if requested
+        if (removeConfig) {
+          // In real implementation, would remove config files
+          console.log(`Removing configuration for plugin ${pluginId}`);
+        }
+
+        return {
+          success: true,
+          data: {
+            plugin: {
+              id: plugin.id,
+              name: plugin.name,
+            },
+            uninstalledAt: new Date(),
+            configRemoved: removeConfig,
+          },
+        };
+      }
+    );
+
+    // Execute plugin tool
+    this.server.tool(
+      'execute_plugin',
+      'Execute a plugin with specific parameters',
+      {
+        pluginId: z.string().describe('Plugin ID'),
+        action: z.string().describe('Action to execute'),
+        parameters: z.record(z.any()).optional().describe('Action parameters'),
+      },
+      async ({ pluginId, action, parameters = {} }) => {
+        const plugin = this.registry.plugins.get(pluginId);
+        if (!plugin) {
+          throw new Error(`Plugin not found: ${pluginId}`);
+        }
+
+        if (!plugin.enabled) {
+          throw new Error(`Plugin not enabled: ${pluginId}`);
+        }
+
+        // Check if action is supported
+        if (!plugin.capabilities.includes(action.replace('_', '-'))) {
+          throw new Error(`Action not supported by plugin: ${action}`);
+        }
+
+        // Execute plugin
+        const result = await this.simulatePluginExecution(plugin, action, parameters);
+
+        return {
+          success: true,
+          data: {
+            plugin: {
+              id: plugin.id,
+              name: plugin.name,
+            },
+            action,
+            parameters,
+            result,
+            executedAt: new Date(),
+          },
+        };
+      }
+    );
+
+    // Get plugin status tool
+    this.server.tool(
+      'get_plugin_status',
+      'Get detailed status and metrics for a plugin',
+      {
+        pluginId: z.string().describe('Plugin ID'),
+        includeMetrics: z.boolean().default(false).describe('Include performance metrics'),
+      },
+      async ({ pluginId, includeMetrics = false }) => {
+        const plugin = this.registry.plugins.get(pluginId);
+        if (!plugin) {
+          throw new Error(`Plugin not found: ${pluginId}`);
+        }
+
+        const status = {
+          id: plugin.id,
+          name: plugin.name,
+          enabled: plugin.enabled,
+          version: plugin.version,
+          securityLevel: plugin.securityLevel,
+          pricing: plugin.pricing,
+          dependencies: plugin.dependencies,
+          missingDependencies: this.checkDependencies(plugin),
+          dependents: this.findDependents(pluginId),
+          security: this.validateSecurity(plugin),
+          config: plugin.config,
+        };
+
+        if (includeMetrics) {
+          Object.assign(status, this.generatePluginMetrics(pluginId));
+        }
+
+        return {
+          success: true,
+          data: status,
+        };
+      }
+    );
+
+    // Manage dependencies tool
+    this.server.tool(
+      'manage_dependencies',
+      'Manage plugin dependencies',
+      {
+        action: z
+          .enum(['check', 'install', 'update', 'remove'])
+          .describe('Dependency management action'),
+        pluginId: z.string().optional().describe('Plugin ID'),
+        dependencies: z.array(z.string()).optional().describe('Dependencies to manage'),
+      },
+      async ({ action, pluginId, dependencies = [] }) => {
+        switch (action) {
+          case 'check':
+            if (!pluginId) {
+              throw new Error('Plugin ID required for check action');
+            }
+            const plugin = this.registry.plugins.get(pluginId);
+            if (!plugin) {
+              throw new Error(`Plugin not found: ${pluginId}`);
+            }
+            return {
+              success: true,
+              data: {
+                pluginId,
+                dependencies: plugin.dependencies,
+                missing: this.checkDependencies(plugin),
+                dependents: this.findDependents(pluginId),
+              },
+            };
+
+          case 'install':
+            // Simulate dependency installation
+            return {
+              success: true,
+              data: {
+                action,
+                dependencies,
+                installedAt: new Date(),
+                message: 'Dependencies installed successfully',
+              },
+            };
+
+          case 'update':
+            // Simulate dependency update
+            return {
+              success: true,
+              data: {
+                action,
+                dependencies,
+                updatedAt: new Date(),
+                message: 'Dependencies updated successfully',
+              },
+            };
+
+          case 'remove':
+            // Simulate dependency removal
+            return {
+              success: true,
+              data: {
+                action,
+                dependencies,
+                removedAt: new Date(),
+                message: 'Dependencies removed successfully',
+              },
+            };
+
+          default:
+            throw new Error(`Unknown action: ${action}`);
+        }
+      }
+    );
+
+    // Security audit tool
+    this.server.tool(
+      'security_audit',
+      'Perform security audit on plugins',
+      {
+        pluginId: z.string().optional().describe('Specific plugin ID (optional)'),
+        level: z.enum(['basic', 'comprehensive', 'deep']).default('basic').describe('Audit level'),
+      },
+      async ({ pluginId, level = 'basic' }) => {
+        const audit = {
+          id: `audit_${Date.now()}`,
+          level,
+          status: 'running' as const,
+          startedAt: new Date(),
+          checks: [
+            'Permission validation',
+            'Resource limit verification',
+            'Input/output sanitization',
+            'Dependency security scan',
+            'Code integrity verification',
+          ],
+        };
+
+        if (pluginId) {
+          const plugin = this.registry.plugins.get(pluginId);
+          if (!plugin) {
+            throw new Error(`Plugin not found: ${pluginId}`);
+          }
+          audit.pluginId = pluginId;
+          audit.pluginName = plugin.name;
+        }
+
+        // Simulate audit process
+        setTimeout(() => {
+          audit.status = 'completed';
+          audit.completedAt = new Date();
+          // @ts-ignore
+          audit.results = {
+            vulnerabilities: 0,
+            warnings: 2,
+            passed: true,
+            recommendations: ['Update to latest security patches', 'Review permission scope'],
+          };
+        }, 3000);
+
+        return {
+          success: true,
+          data: audit,
+        };
+      }
+    );
   }
 
   private async listPlugins(args: any): Promise<any> {
