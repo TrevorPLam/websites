@@ -78,6 +78,17 @@ interface Alert {
   metadata: Record<string, any>;
 }
 
+/**
+ * Observability Monitor MCP Server
+ *
+ * Provides comprehensive observability and monitoring capabilities including:
+ * - Distributed tracing with OpenTelemetry integration
+ * - Metrics collection and analysis
+ * - Health checks for MCP services
+ * - Alert management and notification
+ * - Performance monitoring and analytics
+ * - Memory management with automatic cleanup
+ */
 export class ObservabilityMonitor {
   private server: McpServer;
   private traces: Map<string, Span[]> = new Map();
@@ -85,6 +96,7 @@ export class ObservabilityMonitor {
   private healthChecks: Map<string, HealthCheck> = new Map();
   private alerts: Alert[] = [];
   private activeSpans: Map<string, Span> = new Map();
+  private cleanupInterval: NodeJS.Timeout;
 
   constructor() {
     this.server = new McpServer({
@@ -94,6 +106,36 @@ export class ObservabilityMonitor {
 
     this.initializeHealthChecks();
     this.setupObservabilityTools();
+    this.startMemoryCleanup();
+  }
+
+  private startMemoryCleanup() {
+    // Clean up orphaned spans every 30 seconds
+    this.cleanupInterval = setInterval(() => {
+      this.cleanupOrphanedSpans();
+    }, 30000);
+  }
+
+  private cleanupOrphanedSpans() {
+    const now = Date.now();
+    const ttl = 5 * 60 * 1000; // 5 minutes TTL
+    const orphanedSpanIds: string[] = [];
+
+    for (const [spanId, span] of this.activeSpans) {
+      const spanAge = now - span.startTime.getTime();
+      if (spanAge > ttl && !span.endTime) {
+        orphanedSpanIds.push(spanId);
+      }
+    }
+
+    // Remove orphaned spans
+    orphanedSpanIds.forEach((spanId) => {
+      this.activeSpans.delete(spanId);
+    });
+
+    if (orphanedSpanIds.length > 0) {
+      console.error(`Cleaned up ${orphanedSpanIds.length} orphaned spans`);
+    }
   }
 
   private initializeHealthChecks() {
@@ -392,6 +434,11 @@ export class ObservabilityMonitor {
             };
 
             this.alerts.push(newAlert);
+
+            // Cap alerts array to prevent memory leaks
+            if (this.alerts.length > 10000) {
+              this.alerts = this.alerts.slice(-10000);
+            }
 
             return {
               content: [{ type: 'text', text: `Alert created: ${newAlert.id} - ${alert.title}` }],
@@ -778,10 +825,40 @@ export class ObservabilityMonitor {
     await this.server.connect(transport);
     console.error('Observability Monitor MCP Server running on stdio');
   }
+
+  async cleanup() {
+    // Clear cleanup interval
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+
+    // Clear all maps and arrays
+    this.activeSpans.clear();
+    this.traces.clear();
+    this.metrics.clear();
+    this.healthChecks.clear();
+    this.alerts.length = 0;
+
+    console.error('Observability Monitor resources cleaned up');
+  }
 }
 
 // CLI execution
 if (import.meta.url === `file://${process.argv[1]}`) {
   const monitor = new ObservabilityMonitor();
+
+  // Handle graceful shutdown
+  process.on('SIGINT', async () => {
+    console.error('\nShutting down Observability Monitor...');
+    await monitor.cleanup();
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', async () => {
+    console.error('\nShutting down Observability Monitor...');
+    await monitor.cleanup();
+    process.exit(0);
+  });
+
   monitor.run().catch(console.error);
 }
