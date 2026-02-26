@@ -1,0 +1,388 @@
+# CODEOWNERS - Documentation and MCP Governance
+#
+# This file defines ownership patterns for the marketing-websites monorepo
+# following 2026 enterprise governance standards with clear responsibility assignment.
+#
+# Format: <pattern> <owner1> <owner2> <...>
+# - pattern: file path pattern (supports wildcards)
+# - owners: GitHub usernames, team names (@team-name), or email addresses
+#
+# Priority: Top-to-bottom. First matching pattern wins.
+#
+# Documentation: docs/CODEOWNERS.md
+# ADR: docs/architecture/decisions/ADR-001-codeowners-governance.md
+
+# ==============================================================================
+# GLOBAL OWNERSHIP - Executive Oversight
+# ==============================================================================
+
+# Root repository - Executive team
+* @trevorlam @executive-team
+
+# Critical security files - Security team
+SECURITY.md @security-team @trevorlam
+**/SECURITY.md @security-team
+**/.github/SECURITY.md @security-team
+
+# Enterprise governance - Architecture board
+ARCHITECTURE_PLAN.md @architecture-board @trevorlam
+GOVERNANCE.md @architecture-board
+**/ADR-*.md @architecture-board
+
+# ==============================================================================
+# DOCUMENTATION OWNERSHIP - Content Management
+# ==============================================================================
+
+# Documentation root - Documentation team
+docs/ @docs-team @technical-writers @trevorlam
+
+# Documentation configuration and schemas
+docs/.config/ @docs-team @architecture-board
+docs/.config/frontmatter.schema.ts @docs-team @architecture-board
+docs/frontmatter-schema.json @docs-team @architecture-board
+
+# Documentation validation and maintenance
+scripts/validate-frontmatter.ts @docs-team @devops-team
+scripts/check-freshness.ts @docs-team @devops-team
+scripts/generate-manifest.ts @docs-team @devops-team
+scripts/comprehensive-analysis.ts @docs-team @devops-team
+scripts/auto-maintenance-pr.ts @docs-team @devops-team
+
+# Documentation workflows and automation
+.github/workflows/docs-*.yml @docs-team @devops-team
+.github/workflows/maintenance-*.yml @docs-team @devops-team
+
+# Documentation by domain - Domain experts
+docs/tutorials/ @docs-team @tutorials-team @technical-writers
+docs/how-to/ @docs-team @how-to-team @technical-writers
+docs/reference/ @docs-team @reference-team @technical-writers
+docs/explanation/ @docs-team @explanation-team @technical-writers
+
+# MCP Documentation - MCP team
+docs/tutorials/mcp/ @mcp-team @docs-team
+docs/how-to/mcp/ @mcp-team @docs-team
+docs/reference/mcp/ @mcp-team @docs-team
+docs/explanation/mcp/ @mcp-team @docs-team
+
+# Security documentation - Security team
+docs/security/ @security-team @docs-team @technical-writers
+**/security-*.md @security-team @docs-team
+
+# Architecture documentation - Architecture team
+docs/architecture/ @architecture-board @docs-team @technical-writers
+docs/guides/architecture/ @architecture-board @docs-team
+
+# API and integration documentation - Integration team
+docs/api/ @integration-team @docs-team
+docs/guides/integration/ @integration-team @docs-team
+
+# README and index files - Documentation leads
+README.md @docs-team @trevorlam
+**/README.md @docs-team @domain-experts
+INDEX.md @docs-team @trevorlam
+**/INDEX.md @docs-team @domain-experts
+
+# Legacy documentation (archived) - Documentation team (read-only)
+docs/guides/_ARCHIVED.md @docs-team @trevorlam
+docs/guides/** @docs-team @trevorlam
+
+# ==============================================================================
+# MCP INFRASTRUCTURE OWNERSHIP - MCP Team
+# ==============================================================================
+
+# MCP servers and configuration
+mcp/ @mcp-team @architecture-board
+
+# MCP server implementations
+mcp/servers/src/ @mcp-team @architecture-board
+mcp/servers/src/documentation-server.ts @mcp-team @docs-team
+mcp/servers/src/skillset-server.ts @mcp-team @docs-team
+mcp/servers/src/github-server.ts @mcp-team @integration-team
+mcp/servers/src/sequential-thinking-*.ts @mcp-team @ai-team
+mcp/servers/src/knowledge-graph-*.ts @mcp-team @ai-team
+
+# MCP configuration and manifests
+mcp/config/ @mcp-team @devops-team
+mcp/config/config.json @mcp-team @devops-team
+mcp/data/ @mcp-team @devops-team
+mcp/manifests/ @mcp-team @devops-team
+
+# MCP scripts and tools
+mcp/scripts/ @mcp-team @devops-team
+mcp/apps/ @mcp-team @frontend-team
+
+# MCP documentation and guides
+mcp/docs/ @mcp-team @docs-team
+mcp/README.md @mcp-team @docs-team
+
+# ==============================================================================
+# PACKAGES OWNERSHIP - Package Maintainers
+# ==============================================================================
+
+# UI Components - Frontend team
+packages/ui/ @frontend-team @design-system-team
+packages/ui/**/*.tsx @frontend-team @design-system-team
+packages/ui/**/*.ts @frontend-team @design-system-team
+
+# Features and business logic - Backend team
+packages/features/ @backend-team @domain-experts
+packages/features/**/*.ts @backend-team @domain-experts
+
+# Infrastructure and utilities - DevOps team
+packages/infrastructure/ @devops-team @architecture-board
+packages/infrastructure/**/*.ts @devops-team @architecture-board
+
+# Analytics and monitoring - Data team
+packages/analytics/ @data-team @devops-team
+packages/analytics/**/*.ts @data-team @devops-team
+
+# Authentication and security - Security team
+packages/auth/ @security-team @backend-team
+packages/auth/**/*.ts @security-team @backend-team
+
+# Billing and payments - Payments team
+packages/billing/ @payments-team @backend-team
+packages/billing/**/*.ts @payments-team @backend-team
+
+# AI and testing - AI team
+packages/ai-testing/ @ai-team @qa-team
+packages/ai-testing/**/*.ts @ai-team @qa-team
+
+# ==============================================================================
+# APPLICATIONS OWNERSHIP - App Teams
+# ==============================================================================
+
+# Web application - Frontend team
+apps/web/ @frontend-team @product-team
+apps/web/**/*.tsx @frontend-team @product-team
+apps/web/**/*.ts @frontend-team @product-team
+
+# Admin dashboard - Admin team
+apps/admin/ @admin-team @frontend-team
+apps/admin/**/*.tsx @admin-team @frontend-team
+apps/admin/**/*.ts @admin-team @frontend-team
+
+# Portal application - Portal team
+apps/portal/ @portal-team @frontend-team
+apps/portal/**/*.tsx @portal-team @frontend-team
+apps/portal/**/*.ts @portal-team @frontend-team
+
+# ==============================================================================
+# CLIENTS OWNERSHIP - Client Teams
+# ==============================================================================
+
+# Client applications - Client success team
+clients/ @client-success-team @frontend-team
+clients/**/ @client-success-team @frontend-team
+
+# Client configuration and templates - Solutions team
+clients/**/config/ @solutions-team @client-success-team
+clients/**/templates/ @solutions-team @client-success-team
+
+# ==============================================================================
+# DEVELOPMENT OWNERSHIP - Development Teams
+# ==============================================================================
+
+# Build and tooling - DevOps team
+turbo.json @devops-team @architecture-board
+package.json @devops-team @architecture-board
+pnpm-workspace.yaml @devops-team @architecture-board
+tsconfig*.json @devops-team @architecture-board
+
+# Testing infrastructure - QA team
+vitest.config.ts @qa-team @devops-team
+playwright.config.ts @qa-team @devops-team
+**/__tests__/ @qa-team @domain-experts
+**/*.test.ts @qa-team @domain-experts
+**/*.spec.ts @qa-team @domain-experts
+
+# CI/CD and automation - DevOps team
+.github/workflows/ @devops-team @architecture-board
+.github/actions/ @devops-team @architecture-board
+.github/PULL_REQUEST_TEMPLATE.md @devops-team @docs-team
+
+# Development tools and scripts - DevOps team
+scripts/ @devops-team @architecture-board
+scripts/**/*.ts @devops-team @architecture-board
+scripts/**/*.js @devops-team @architecture-board
+scripts/**/*.mjs @devops-team @architecture-board
+
+# ==============================================================================
+# CONFIGURATION OWNERSHIP - Configuration Teams
+# ==============================================================================
+
+# Environment and deployment - DevOps team
+.env* @devops-team @security-team
+**/.env* @devops-team @security-team
+docker-compose*.yml @devops-team @security-team
+Dockerfile* @devops-team @security-team
+
+# Database and migrations - Database team
+database/ @database-team @backend-team
+database/**/*.sql @database-team @backend-team
+supabase/ @database-team @backend-team
+
+# Infrastructure and cloud - DevOps team
+**/terraform/ @devops-team @infrastructure-team
+**/k8s/ @devops-team @infrastructure-team
+**/cloudformation/ @devops-team @infrastructure-team
+
+# ==============================================================================
+# SKILLS OWNERSHIP - AI and Domain Teams
+# ==============================================================================
+
+# Skills infrastructure - AI team
+skills/ @ai-team @docs-team
+skills/README.md @ai-team @docs-team
+
+# Domain-specific skills - Domain experts
+skills/anthropic/ @ai-team @anthropic-experts
+skills/trailofbits/ @security-team @ai-team
+skills/connect/ @integration-team @ai-team
+
+# Skill templates and patterns - AI team
+skills/**/templates/ @ai-team @docs-team
+skills/**/patterns/ @ai-team @docs-team
+
+# ==============================================================================
+# MONITORING AND OBSERVABILITY OWNERSHIP
+# ==============================================================================
+
+# Monitoring and logging - DevOps team
+.monitoring/ @devops-team @sre-team
+**/prometheus/ @devops-team @sre-team
+**/grafana/ @devops-team @sre-team
+
+# Error tracking and analytics - Data team
+**/sentry/ @data-team @devops-team
+**/analytics/ @data-team @devops-team
+
+# Performance monitoring - SRE team
+**/performance/ @sre-team @devops-team
+**/lighthouse/ @frontend-team @sre-team
+
+# ==============================================================================
+# SECURITY OWNERSHIP - Security Team
+# ==============================================================================
+
+# Security policies and compliance
+policy/ @security-team @compliance-team
+**/security-*.yml @security-team @compliance-team
+**/compliance-*.md @security-team @compliance-team
+
+# Security tools and scanning
+**/security-tools/ @security-team @devops-team
+**/vulnerability-*.json @security-team @devops-team
+
+# ==============================================================================
+# EMERGENCY AND ESCALATION OWNERSHIP
+# ==============================================================================
+
+# Critical incidents - SRE team
+**/incident-*.md @sre-team @devops-team
+**/postmortem-*.md @sre-team @devops-team
+
+# Emergency fixes - Executive team
+**/emergency-*.md @executive-team @devops-team
+**/hotfix-*.md @executive-team @devops-team
+
+# ==============================================================================
+# DEFAULT OWNERSHIP - Fallback
+# ==============================================================================
+
+# Default to appropriate teams for unowned files
+# This should rarely be used due to comprehensive coverage above
+
+# Configuration files - DevOps team
+*.json @devops-team @architecture-board
+*.yml @devops-team @architecture-board
+*.yaml @devops-team @architecture-board
+
+# Code files - Backend team (default)
+*.ts @backend-team @architecture-board
+*.tsx @frontend-team @architecture-board
+*.js @backend-team @architecture-board
+*.jsx @frontend-team @architecture-board
+
+# Documentation files - Documentation team
+*.md @docs-team @domain-experts
+
+# Asset files - Design team
+*.png @design-team @frontend-team
+*.jpg @design-team @frontend-team
+*.svg @design-team @frontend-team
+*.ico @design-team @frontend-team
+
+# ==============================================================================
+# TEAM DEFINITIONS AND CONTACTS
+# ==============================================================================
+
+# Teams are defined in GitHub Organizations with the following structure:
+#
+# @executive-team - Executive leadership, strategic decisions
+# @architecture-board - Senior architects, technical standards
+# @security-team - Security engineers, compliance specialists
+# @docs-team - Technical writers, documentation specialists
+# @mcp-team - MCP developers, AI integration specialists
+# @frontend-team - Frontend developers, UI/UX specialists
+# @backend-team - Backend developers, API specialists
+# @devops-team - DevOps engineers, infrastructure specialists
+# @ai-team - AI/ML engineers, automation specialists
+# @qa-team - QA engineers, testing specialists
+# @data-team - Data engineers, analytics specialists
+# @sre-team - SRE engineers, reliability specialists
+# @integration-team - Integration specialists, third-party systems
+# @payments-team - Payment processing specialists
+# @database-team - Database administrators, data architects
+# @design-system-team - Design system engineers, component specialists
+# @technical-writers - Technical content creators
+# @domain-experts - Subject matter experts by domain
+# @tutorials-team - Tutorial content specialists
+# @how-to-team - How-to guide specialists
+# @reference-team - Reference documentation specialists
+# @explanation-team - Explanation content specialists
+# @anthropic-experts - Anthropic AI platform specialists
+# @client-success-team - Client success managers, support specialists
+# @solutions-team - Solutions architects, implementation specialists
+# @compliance-team - Compliance officers, legal specialists
+# @product-team - Product managers, business analysts
+# @admin-team - Admin dashboard specialists
+# @portal-team - Portal application specialists
+# @trevorlam - Repository owner, final escalation point
+#
+# For team membership and contact information, see:
+# - .github/teams/ directory
+# - docs/guides/contributing/team-structure.md
+# - Internal company directory
+#
+# ==============================================================================
+# GOVERNANCE AND ESCALATION
+# ==============================================================================
+#
+# 1. First-level approval: Pattern-matched team
+# 2. Second-level escalation: Domain expert team
+# 3. Third-level escalation: Architecture board
+# 4. Final escalation: Executive team (@trevorlam)
+#
+# For security issues: Always escalate to @security-team immediately
+# For incidents: Escalate to @sre-team and @executive-team
+# For compliance: Escalate to @compliance-team and @executive-team
+#
+# ==============================================================================
+# MAINTENANCE AND UPDATES
+# ==============================================================================
+#
+# This file should be reviewed quarterly by:
+# - @architecture-board (technical accuracy)
+# - @docs-team (documentation clarity)
+# - @executive-team (strategic alignment)
+#
+# Updates require:
+# 1. PR with clear rationale
+# 2. Approval from @architecture-board
+# 3. Notification to affected teams
+# 4. Documentation update in docs/CODEOWNERS.md
+#
+# Last reviewed: 2026-02-26
+# Next review: 2026-05-26
+# ==============================================================================
