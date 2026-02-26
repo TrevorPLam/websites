@@ -61,14 +61,15 @@
 
 ### S-06: Populate claude/ subdirectories
 
-- [ ] **Task**: Fill 5 empty claude/ subdirs
-- [ ] **Priority**: Critical - Claude agent capabilities limited
-- [ ] **Priority Order**:
-  - [ ] `skills/claude/code-review/` (highest priority)
-  - [ ] `skills/claude/deploy-production/` (high priority)
-  - [ ] `skills/claude/agents/`
-  - [ ] `skills/claude/assets/`
-  - [ ] `skills/claude/` (other subdirs)
+- [x] **Task**: Fill 5 empty claude/ subdirs
+- [x] **Priority**: Critical - Claude agent capabilities limited
+- [x] **Priority Order**:
+  - [x] `skills/claude/code-review/` (highest priority) - already had content
+  - [x] `skills/claude/deploy-production/` (high priority) - already had content
+  - [x] `skills/claude/agents/` - already had content
+  - [x] `skills/claude/assets/` - already had content
+  - [x] `skills/claude/references/` - POPULATED with claude-agent-patterns.md and mcp-integration-guide.md
+  - [x] `skills/claude/scripts/` - POPULATED with setup, validation, and orchestrator scripts
 
 ### S-07: Populate codex/ subdirectories
 
@@ -276,10 +277,10 @@
 
 ### Progress Summary:
 
-- [x] **Critical Issues (5/7 completed)**: S-01, S-02, S-03, S-04, S-05 completed
+- [x] **Critical Issues (6/7 completed)**: S-01, S-02, S-03, S-04, S-05, S-06 completed
 - [ ] **High Issues (11)**: 0/11 completed
 - [ ] **Medium Issues (7)**: 0/7 completed
-- [ ] **Overall Progress**: 5/25 completed (20%)
+- [ ] **Overall Progress**: 6/25 completed (24%)
 
 ### Next Actions:
 
@@ -288,9 +289,10 @@
 3. ✅ S-03 (core operational skills) - COMPLETED
 4. ✅ S-04 (marketing domain skills) - COMPLETED
 5. ✅ S-05 (integration skills) - COMPLETED
-6. ⏳ S-06/S-07 (populate claude/codex subdirs) - NEXT PRIORITY
-7. ⏳ S-10/S-11 (MCP references) - PENDING
-8. ⏳ S-13 to S-19 (documentation drift) - PENDING
+6. ✅ S-06 (populate claude subdirs) - COMPLETED
+7. ⏳ S-07 (populate codex subdirs) - NEXT PRIORITY
+8. ⏳ S-10/S-11 (MCP references) - PENDING
+9. ⏳ S-13 to S-19 (documentation drift) - PENDING
 
 ---
 
