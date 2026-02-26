@@ -16,6 +16,8 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
+import { z } from 'zod';
 
 interface AgentPlugin {
   id: string;
@@ -757,23 +759,27 @@ export class AdvancedAgentPlugins {
     }
 
     return {
-      success: true,
-      data: {
-        plugins: plugins.map((p) => ({
-          id: p.id,
-          name: p.name,
-          description: p.description,
-          category: p.category,
-          version: p.version,
-          enabled: p.enabled,
-          securityLevel: p.securityLevel,
-          pricing: p.pricing,
-          capabilities: p.capabilities,
-          dependencies: p.dependencies,
-        })),
-        total: plugins.length,
-        categories: Array.from(this.registry.categories),
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            plugins: plugins.map((p) => ({
+              id: p.id,
+              name: p.name,
+              description: p.description,
+              version: p.version,
+              category: p.category,
+              enabled: p.enabled,
+              securityLevel: p.securityLevel,
+              pricing: p.pricing,
+              capabilities: p.capabilities,
+            })),
+            total: plugins.length,
+            filtered: !!category || !!enabled || !!securityLevel || !!pricing,
+            filters: { category, enabled, securityLevel, pricing },
+          }),
+        },
+      ],
     };
   }
 
@@ -809,13 +815,17 @@ export class AdvancedAgentPlugins {
     plugin.config = { ...plugin.config, ...config };
 
     return {
-      success: true,
-      data: {
-        pluginId,
-        status: 'enabled',
-        config: plugin.config,
-        message: `Plugin ${plugin.name} enabled successfully`,
-      },
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({
+            pluginId,
+            status: 'enabled',
+            enabledAt: new Date(),
+            config: plugin.config,
+          }),
+        },
+      ],
     };
   }
 

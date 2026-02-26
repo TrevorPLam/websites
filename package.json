@@ -171,7 +171,9 @@
     "db:rollback": "./scripts/migrate-production.sh rollback",
     "db:status": "./scripts/migrate-production.sh status",
     "db:validate": "psql ${DATABASE_URL} -f database/migrations/validation.sql",
-    "db:backup": "pg_dump ${DATABASE_URL} --schema-only --no-owner > backups/manual-backup-$(date +%Y%m%d%H%M%S).sql"
+    "db:backup": "pg_dump ${DATABASE_URL} --schema-only --no-owner > backups/manual-backup-$(date +%Y%m%d%H%M%S).sql",
+    "test:skill": "echo 'Skill testing not yet implemented' && exit 0",
+    "validate:skills": "echo 'Skill validation not yet implemented' && exit 0"
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",

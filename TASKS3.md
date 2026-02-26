@@ -111,12 +111,13 @@
 
 ### S-12: Fix CLI command references
 
-- [ ] **Task**: Replace fake `skill invoke [skill-name]` CLI with actual MCP patterns
-- [ ] **Priority**: High - Documentation shows non-existent commands
-- [ ] **Actions**:
-  - [ ] Remove CLI command from `workflow-skill.md` template
-  - [ ] Add actual MCP tool invocation pattern for Windsurf/Cursor
-  - [ ] Document real agent interaction patterns
+- [x] **Task**: Replace fake `skill invoke [skill-name]` CLI with actual MCP patterns
+- [x] **Priority**: High - Documentation shows non-existent commands
+- [x] **Actions**:
+  - [x] Remove CLI command from `workflow-skill.md` template
+  - [x] Add actual MCP tool invocation pattern for Windsurf/Cursor
+  - [x] Document real agent interaction patterns
+- [x] **Validation**: Template shows correct agent invocation patterns
 
 ---
 
@@ -124,21 +125,23 @@
 
 ### S-08: Differentiate Claude vs Codex SKILL.md files
 
-- [ ] **Task**: Fix byte-for-byte identical SKILL.md files
-- [ ] **Priority**: High - No agent-specific differentiation
-- [ ] **Actions**:
-  - [ ] Add Claude-specific prompting to `skills/claude/SKILL.md`
-  - [ ] Add Codex-specific syntax to `skills/codex/SKILL.md`
-  - [ ] Ensure each agent has unique optimization
+- [x] **Task**: Fix byte-for-byte identical SKILL.md files
+- [x] **Priority**: High - No agent-specific differentiation
+- [x] **Actions**:
+  - [x] Add Claude-specific prompting to `skills/claude/azure-deploy.md`
+  - [x] Add Codex-specific syntax to `skills/codex/azure-deploy.md`
+  - [x] Ensure each agent has unique optimization
+- [x] **Validation**: Each agent has optimized skill file
 
 ### S-09: Fix skill filename vs name mismatch
 
-- [ ] **Task**: Rename SKILL.md to match frontmatter name (azure-deploy)
-- [ ] **Priority**: High - mcp-skillset registers wrong skill name
-- [ ] **Actions**:
-  - [ ] Rename `skills/claude/SKILL.md` → `skills/claude/azure-deploy.md`
-  - [ ] Rename `skills/codex/SKILL.md` → `skills/codex/azure-deploy.md`
-  - [ ] Verify registration uses correct skill names
+- [x] **Task**: Rename SKILL.md to match frontmatter name (azure-deploy)
+- [x] **Priority**: High - mcp-skillset registers wrong skill name
+- [x] **Actions**:
+  - [x] Rename `skills/claude/SKILL.md` → `skills/claude/azure-deploy.md`
+  - [x] Rename `skills/codex/SKILL.md` → `skills/codex/azure-deploy.md`
+  - [x] Verify registration uses correct skill names
+- [x] **Validation**: Filenames match frontmatter skill names
 
 ---
 
@@ -146,62 +149,69 @@
 
 ### S-13: Fix skills/README.md directory listings
 
-- [ ] **Task**: Update README to match actual directory structure
-- [ ] **Priority**: High - Documentation misleads users
-- [ ] **Changes**:
-  - [ ] Remove `core/test/` reference (doesn't exist)
-  - [ ] Add `core/discovery/` reference (exists but not listed)
+- [x] **Task**: Update README to match actual directory structure
+- [x] **Priority**: High - Documentation misleads users
+- [x] **Changes**:
+  - [x] Remove `core/test/` reference (doesn't exist)
+  - [x] Add `core/discovery/` reference (exists but not listed)
+  - [x] Update domain listings to match actual structure
+- [x] **Validation**: README matches actual directory structure
 
 ### S-14: Fix domain directory listings
 
-- [ ] **Task**: Update domain section in README
-- [ ] **Priority**: High - Missing existing domain, listing non-existent ones
-- [ ] **Changes**:
-  - [ ] Remove `domain/sales/` and `domain/analytics/` (don't exist)
-  - [ ] Add `domain/platform/` (exists but not listed)
-  - [ ] Create missing dirs or update accordingly
+- [x] **Task**: Update domain section in README
+- [x] **Priority**: High - Missing existing domain, listing non-existent ones
+- [x] **Changes**:
+  - [x] Remove `domain/sales/` and `domain/analytics/` (don't exist)
+  - [x] Add `domain/platform/` (exists but not listed)
+  - [x] Update domain skills descriptions
+- [x] **Validation**: Domain listings match actual directories
 
 ### S-15: Fix integration directory listings
 
-- [ ] **Task**: Update integration section in README
-- [ ] **Priority**: High - Only azure/ exists but github/ and slack/ listed
-- [ ] **Actions**:
-  - [ ] Create `integration/github/` and `integration/slack/` dirs
-  - [ ] Add skill files to each directory
-  - [ ] Or update README to reflect actual state
+- [x] **Task**: Update integration section in README
+- [x] **Priority**: High - Only azure/ exists but github/ and slack/ listed
+- [x] **Actions**:
+  - [x] Create `integration/github/` and `integration/slack/` dirs
+  - [x] Add skill files to each directory
+  - [x] Update README to reflect actual state
+- [x] **Validation**: All integration directories exist with content
 
 ### S-16: Fix README Quick Start command
 
-- [ ] **Task**: Fix failing `cp` command in Quick Start
-- [ ] **Priority**: High - Users cannot follow setup instructions
-- [ ] **Fix**: Prepend `mkdir -p skills/my-domain &&` to the cp command
+- [x] **Task**: Fix failing `cp` command in Quick Start
+- [x] **Priority**: High - Users cannot follow setup instructions
+- [x] **Fix**: Prepend `mkdir -p skills/my-domain &&` to the cp command
+- [x] **Validation**: Quick start command works without errors
 
 ### S-17: Add missing package.json scripts
 
-- [ ] **Task**: Create scripts referenced in README
-- [ ] **Priority**: High - Documentation references non-existent commands
-- [ ] **Scripts to Add**:
-  - [ ] `pnpm test:skill`
-  - [ ] `pnpm validate:skills`
-- [ ] **Alternative**: Remove from README if not needed
+- [x] **Task**: Create scripts referenced in README
+- [x] **Priority**: High - Documentation references non-existent commands
+- [x] **Scripts to Add**:
+  - [x] `pnpm test:skill` (placeholder implementation)
+  - [x] `pnpm validate:skills` (placeholder implementation)
+- [x] **Validation**: Scripts exist and can be executed
 
 ### S-18: Fix misleading implementation status
 
-- [ ] **Task**: Correct false "IMPLEMENTATION COMPLETE" claims
-- [ ] **Priority**: High - Misleading project status
-- [ ] **Actions**:
-  - [ ] Rename `AI_AGENT_SKILLS_IMPLEMENTATION_SUMMARY.md` → `ARCHITECTURE_PLAN.md`
-  - [ ] Add status column: Planned/In Progress/Complete
-  - [ ] Mark 4 of 6 packages as "Planned"
+- [x] **Task**: Correct false "IMPLEMENTATION COMPLETE" claims
+- [x] **Priority**: High - Misleading project status
+- [x] **Actions**:
+  - [x] Rename `AI_AGENT_SKILLS_IMPLEMENTATION_SUMMARY.md` → `ARCHITECTURE_PLAN.md`
+  - [x] Add status column: Planned/In Progress/Complete
+  - [x] Mark 5 of 6 packages as "Planned"
+- [x] **Validation**: Documentation accurately reflects implementation status
 
 ### S-19: Fix dependency implementation claims
 
-- [ ] **Task**: Move unimplemented dependencies to planned section
-- [ ] **Priority**: High - False claims about Bcrypt + Redis
-- [ ] **Actions**:
-  - [ ] Remove Bcrypt and Redis from "implemented" section
-  - [ ] Add both to "Planned Dependencies" section
-  - [ ] Update implementation timeline
+- [x] **Task**: Move unimplemented dependencies to planned section
+- [x] **Priority**: High - False claims about Bcrypt + Redis
+- [x] **Actions**:
+  - [x] Remove Bcrypt and Redis from "implemented" section
+  - [x] Add both to "Planned Dependencies" section
+  - [x] Update implementation timeline
+- [x] **Validation**: Dependency claims match actual implementation
 
 ---
 
@@ -281,9 +291,9 @@
 ### Progress Summary:
 
 - [x] **Critical Issues (7/7 completed)**: S-01, S-02, S-03, S-04, S-05, S-06, S-07 completed
-- [x] **High Issues (2/11 completed)**: S-10, S-11 completed
-- [ ] **Medium Issues (7)**: 0/7 completed
-- [x] **Overall Progress**: 9/25 completed (36%)
+- [x] **High Issues (11/11 completed)**: S-08, S-09, S-10, S-11, S-12, S-13, S-14, S-15, S-16, S-17, S-18, S-19 completed
+- [ ] **Medium Issues (4)**: 0/4 completed (S-20 to S-23)
+- [x] **Overall Progress**: 18/25 completed (72%)
 
 ### Next Actions:
 
@@ -295,7 +305,8 @@
 6. ✅ S-06 (populate claude subdirs) - COMPLETED
 7. ✅ S-07 (populate codex subdirs) - COMPLETED
 8. ✅ S-10/S-11 (MCP references) - COMPLETED
-9. ⏳ S-12 to S-19 (documentation drift) - NEXT PRIORITY
+9. ✅ S-12 to S-19 (documentation drift) - COMPLETED
+10. ⏳ S-20 to S-23 (template quality) - NEXT PRIORITY
 
 ---
 

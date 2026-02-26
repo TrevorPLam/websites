@@ -1,20 +1,28 @@
 ---
 name: azure-deploy
 description: |
-  **WORKFLOW SKILL** - Deploy to Azure using azd.
-  USE FOR: "deploy", "azd up", "provision infrastructure".
+  **WORKFLOW SKILL** - Deploy to Azure using azd optimized for Claude.
+  USE FOR: "deploy", "azd up", "provision infrastructure" with Claude's reasoning.
   DO NOT USE FOR: general Azure queries (use azure-mcp directly).
   INVOKES: azure-mcp, github.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'
+  agent: 'claude'
 ---
 
-# Azure Deployment Workflow
+# Azure Deployment Workflow (Claude-Optimized)
 
 ## Overview
 
-This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) with proper validation, provisioning, and notification workflows.
+This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) with Claude-specific optimizations for reasoning, step-by-step validation, and comprehensive error analysis.
+
+## Claude-Specific Features
+
+- **Reasoning Integration**: Leverages Claude's analytical capabilities for complex deployment decisions
+- **Step Validation**: Each step includes validation checkpoints aligned with Claude's methodical approach
+- **Error Analysis**: Detailed error patterns with Claude's natural language explanations
+- **Contextual Decision Making**: Environment-aware deployment strategies
 
 ## Prerequisites
 

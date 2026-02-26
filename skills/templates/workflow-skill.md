@@ -73,19 +73,35 @@ OPTIONAL_VAR=default_value
 
 ## Usage Examples
 
-```bash
-# Basic usage
-skill invoke [skill-name] --param=value
+### Agent Invocation Patterns
 
-# Advanced usage
-skill invoke [skill-name] --param=value --option=advanced
+**For Claude/Windsurf:**
+
+```text
+Claude, execute the [skill-name] workflow with the following parameters:
+- param: value
+- option: advanced
+```
+
+**For Cursor/Claude Code:**
+
+```text
+Execute skill [skill-name] with:
+--param=value
+--option=advanced
+```
+
+**Direct MCP Tool Usage:**
+
+```text
+Use the skillset MCP server to invoke [skill-name] with specified parameters.
 ```
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| [Common issue] | [Solution] |
+| Issue           | Solution   |
+| --------------- | ---------- |
+| [Common issue]  | [Solution] |
 | [Another issue] | [Solution] |
 
 ## Related Skills
