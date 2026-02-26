@@ -1,0 +1,33 @@
+interface:
+  display_name: "Production Deploy"
+  short_description: "Secure production deployment with safety checks"
+  icon_small: "./assets/deploy-icon.svg"
+  brand_color: "#DC2626"
+  default_prompt: "Deploy to production with comprehensive safety checks"
+
+policy:
+  allow_implicit_invocation: false  # Require explicit approval for production
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "github"
+      description: "Repository status and branch management"
+    - type: "mcp"
+      value: "enterprise-security"
+      description: "Security scanning and compliance"
+    - type: "mcp"
+      value: "observability"
+      description: "System monitoring and health checks"
+    - type: "mcp"
+      value: "secure-deployment"
+      description: "Deployment orchestration and rollback"
+
+permissions:
+  required:
+    - "deployment.production.execute"
+    - "security.scan.execute"
+    - "observability.baseline.capture"
+  optional:
+    - "notification.slack.send"
+    - "rollback.automatic.execute"

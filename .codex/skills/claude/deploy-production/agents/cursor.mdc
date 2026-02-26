@@ -1,0 +1,32 @@
+---
+description: 'When deploying to production environments with safety checks'
+globs: '**/deploy.yml'
+alwaysApply: false
+---
+
+# Production Deployment Workflow
+
+Use MCP tools for secure deployment:
+
+1. **Pre-Deployment Validation**: @github-mcp get-repo-status
+2. **Security Assessment**: @enterprise-security security-scan
+3. **Observability Baseline**: @observability capture-baseline
+4. **Deployment Execution**: @secure-deployment deploy-production
+5. **Post-Deployment Verification**: @observability health-check
+
+## Prerequisites
+- All tests passing in CI/CD
+- GitHub status checks green
+- Security scan completed
+- Deployment window approved
+
+## Error Handling
+- Automatic rollback on health check failures
+- Alerting via configured channels
+- Audit logging with correlation IDs
+
+## Success Criteria
+- All services healthy
+- Performance metrics within acceptable ranges
+- No security vulnerabilities introduced
+- User-facing functionality verified

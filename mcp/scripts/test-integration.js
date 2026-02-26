@@ -21,7 +21,7 @@ const path = require('path');
 class MCPTester {
   constructor() {
     this.testResults = [];
-    this.configPath = path.join(__dirname, '..', '.mcp', 'config.json');
+    this.configPath = path.join(__dirname, '..', 'config', 'config.json');
   }
 
   async runAllTests() {
@@ -124,17 +124,17 @@ class MCPTester {
     try {
       // Test basic JSON-RPC message format
       const testMessage = {
-        jsonrpc: "2.0",
+        jsonrpc: '2.0',
         id: 1,
-        method: "initialize",
+        method: 'initialize',
         params: {
-          protocolVersion: "2024-11-05",
+          protocolVersion: '2024-11-05',
           capabilities: {},
           clientInfo: {
-            name: "test-client",
-            version: "1.0.0"
-          }
-        }
+            name: 'test-client',
+            version: '1.0.0',
+          },
+        },
       };
 
       const result = await this.sendJSONRPCMessage('filesystem', testMessage);
@@ -157,7 +157,7 @@ class MCPTester {
       const child = spawn('npx', serverConfig.args, {
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd: path.join(__dirname, '..'),
-        shell: true
+        shell: true,
       });
 
       let output = '';
@@ -210,7 +210,7 @@ class MCPTester {
       const child = spawn('npx', serverConfig.args, {
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd: path.join(__dirname, '..'),
-        shell: true
+        shell: true,
       });
 
       let resolved = false;
@@ -219,7 +219,7 @@ class MCPTester {
         const response = data.toString();
         try {
           const parsed = JSON.parse(response);
-          if (parsed.jsonrpc === "2.0") {
+          if (parsed.jsonrpc === '2.0') {
             if (!resolved) {
               resolved = true;
               child.kill();
@@ -271,10 +271,10 @@ class MCPTester {
     console.log('\n📊 Test Results Summary:');
     console.log('========================');
 
-    const passed = this.testResults.filter(r => r.success).length;
+    const passed = this.testResults.filter((r) => r.success).length;
     const total = this.testResults.length;
 
-    this.testResults.forEach(result => {
+    this.testResults.forEach((result) => {
       const status = result.success ? '✅' : '❌';
       console.log(`${status} ${result.testName}: ${result.message}`);
     });

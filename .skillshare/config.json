@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "project": "marketing-websites",
-  "source": ".claude/skills",
+  "source": "skills",
   "targets": [
     { "name": "windsurf", "path": ".windsurf/skills", "enabled": true },
     { "name": "codex", "path": ".codex/skills", "enabled": true },

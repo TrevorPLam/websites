@@ -17,47 +17,27 @@
     },
     "sequential-thinking": {
       "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/sequential-thinking-fixed.ts"],
+      "args": ["tsx", "mcp/servers/src/sequential-thinking-fixed.ts"],
       "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
     },
     "github": {
       "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/github-server.ts"],
+      "args": ["tsx", "mcp/servers/src/github-server.ts"],
       "env": { "GITHUB_TOKEN": "${GITHUB_TOKEN}", "LOG_LEVEL": "debug" }
     },
     "knowledge-graph": {
       "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/knowledge-graph-memory-fixed.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
-    },
-    "enterprise-security": {
-      "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/enterprise-security-gateway.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
-    },
-    "multi-tenant": {
-      "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/multi-tenant-orchestrator.ts"],
+      "args": ["tsx", "mcp/servers/src/knowledge-graph-memory-fixed.ts"],
       "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
     },
     "observability": {
       "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/observability-monitor.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
-    },
-    "enterprise-auth": {
-      "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/enterprise-auth-gateway.ts"],
-      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
-    },
-    "secure-deployment": {
-      "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/secure-deployment-manager.ts"],
+      "args": ["tsx", "mcp/servers/src/observability-monitor.ts"],
       "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
     },
     "enterprise-registry": {
       "command": "npx",
-      "args": ["tsx", "packages/mcp-servers/src/enterprise-registry.ts"],
+      "args": ["tsx", "mcp/servers/src/enterprise-registry.ts"],
       "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
     },
     "sqlite": {
@@ -87,11 +67,11 @@
     "skillset": {
       "command": "npx",
       "args": ["-y", "mcp-skillset"],
-      "env": { "SKILLS_PATH": ".claude/skills", "LOG_LEVEL": "info" }
+      "env": { "SKILLS_PATH": "skills", "LOG_LEVEL": "info" }
     },
     "documentation": {
       "command": "npx",
-      "args": ["tsx", "scripts/mcp/documentation-server.ts"],
+      "args": ["tsx", "mcp/scripts/documentation-server.ts"],
       "env": {
         "DOCS_DIR": "docs",
         "RAG_STATE": "rag-state.json",

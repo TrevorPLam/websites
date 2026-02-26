@@ -1,0 +1,549 @@
+name: Enhanced MCP Testing Suite
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'mcp/servers/**'
+      - 'mcp/apps/**'
+      - '.github/workflows/mcp-testing.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'mcp/servers/**'
+      - 'mcp/apps/**'
+  schedule:
+    # Run comprehensive tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of tests to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - unit
+          - integration
+          - performance
+          - chaos
+      chaos_level:
+        description: 'Chaos testing intensity (1-5)'
+        required: false
+        default: '2'
+        type: string
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+  COVERAGE_THRESHOLD: '85'
+  PERFORMANCE_THRESHOLD_P95: '500'
+  PERFORMANCE_THRESHOLD_P99: '1000'
+
+jobs:
+  # Unit Tests - Fast feedback
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    strategy:
+      matrix:
+        test-suite:
+          - multi-tenant-orchestrator
+          - enterprise-registry
+          - enterprise-security-gateway
+          - observability-monitor
+          - secure-deployment-manager
+          - enterprise-mcp-marketplace
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run unit tests
+        run: |
+          pnpm test:unit -- \
+            --run mcp/servers/__tests__/unit/${{ matrix.test-suite }}*.test.ts \
+            --coverage \
+            --coverage-report=lcov \
+            --coverage-report=html \
+            --coverage-threshold=${{ env.COVERAGE_THRESHOLD }}
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unit-${{ matrix.test-suite }}
+          name: unit-${{ matrix.test-suite }}
+      
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: coverage-unit-${{ matrix.test-suite }}
+          path: coverage/
+          retention-days: 7
+
+  # Integration Tests - Cross-component testing
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: unit-tests
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mcp_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Setup test database
+        run: |
+          pnpm db:test:setup
+          pnpm db:migrate:test
+      
+      - name: Run integration tests
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mcp_test
+          REDIS_URL: redis://localhost:6379
+        run: |
+          pnpm test:integration -- \
+            --run mcp/servers/__tests__/integration/**/*.test.ts \
+            --coverage \
+            --coverage-report=lcov \
+            --coverage-threshold=80
+      
+      - name: Upload integration coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: integration
+          name: integration
+
+  # Contract Tests - Schema and API validation
+  contract-tests:
+    name: Contract Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: unit-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run contract tests
+        run: |
+          pnpm test:contract -- \
+            --run mcp/servers/__tests__/contracts/**/*.test.ts \
+            --coverage \
+            --coverage-report=lcov
+      
+      - name: Validate skill manifests
+        run: |
+          pnpm validate:skill-manifests
+      
+      - name: Upload contract coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: contract
+          name: contract
+
+  # Performance Tests - Load and stress testing
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: [unit-tests, integration-tests]
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'performance'
+    
+    strategy:
+      matrix:
+        scenario:
+          - registry-lookup
+          - orchestrator-execution
+          - deployment-pipeline
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Start test servers
+        run: |
+          pnpm start:test &
+          sleep 10
+      
+      - name: Setup k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+      
+      - name: Run performance tests
+        env:
+          BASE_URL: http://localhost:3000
+        run: |
+          k6 run --out json=results-${{ matrix.scenario }}.json \
+            mcp/scripts/performance/k6-scenarios/${{ matrix.scenario }}.js
+      
+      - name: Analyze performance results
+        run: |
+          node mcp/scripts/performance/analyze-results.js \
+            --results results-${{ matrix.scenario }}.json \
+            --threshold-p95 ${{ env.PERFORMANCE_THRESHOLD_P95 }} \
+            --threshold-p99 ${{ env.PERFORMANCE_THRESHOLD_P99 }}
+      
+      - name: Upload performance results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-results-${{ matrix.scenario }}
+          path: |
+            results-${{ matrix.scenario }}.json
+            performance-report-${{ matrix.scenario }}.html
+          retention-days: 30
+
+  # Chaos Tests - Failure scenario testing
+  chaos-tests:
+    name: Chaos Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: [unit-tests, integration-tests]
+    if: github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'chaos'
+    
+    strategy:
+      matrix:
+        chaos-scenario:
+          - registry-failure
+          - deployment-manager-failure
+          - memory-corruption
+          - tenant-isolation-breach
+          - external-integration-timeout
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Setup chaos environment
+        run: |
+          # Install chaos testing tools
+          sudo apt-get update
+          sudo apt-get install -y stress netcat-openbsd
+          
+          # Setup network simulation tools
+          sudo tc qdisc add dev lo root netem delay 100ms 10ms
+          sudo tc qdisc add dev lo parent 1:1 handle 10: netem loss 1%
+      
+      - name: Run chaos tests
+        env:
+          CHAOS_LEVEL: ${{ github.event.inputs.chaos_level || '2' }}
+          CHAOS_SCENARIO: ${{ matrix.chaos-scenario }}
+        run: |
+          pnpm test:chaos -- \
+            --run mcp/servers/__tests__/chaos/${{ matrix.chaos-scenario }}*.test.ts \
+            --coverage \
+            --coverage-report=lcov
+      
+      - name: Analyze resilience metrics
+        run: |
+          node mcp/scripts/chaos/analyze-resilience.js \
+            --scenario ${{ matrix.chaos-scenario }} \
+            --level ${{ env.CHAOS_LEVEL }}
+      
+      - name: Upload chaos results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: chaos-results-${{ matrix.chaos-scenario }}
+          path: |
+            chaos-report-${{ matrix.chaos-scenario }}.json
+            resilience-metrics-${{ matrix.chaos-scenario }}.html
+          retention-days: 30
+
+  # Security Tests - Security and compliance validation
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: unit-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run security audit
+        run: |
+          pnpm audit --audit-level moderate
+      
+      - name: Run SAST scan
+        uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_TYPESCRIPT_ES: true
+          VALIDATE_TYPESCRIPT: true
+      
+      - name: Run dependency security scan
+        uses: securecodewarrior/github-action-add-sarif@v1
+        with:
+          sarif-file: security-scan-results.sarif
+      
+      - name: Run tenant isolation tests
+        run: |
+          pnpm test:security -- \
+            --run mcp/servers/__tests__/security/**/*.test.ts
+
+  # Marketplace Lifecycle Tests
+  marketplace-tests:
+    name: Marketplace Lifecycle Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    needs: [unit-tests, integration-tests]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run marketplace lifecycle tests
+        run: |
+          pnpm test:marketplace -- \
+            --run mcp/servers/__tests__/marketplace/**/*.test.ts \
+            --coverage \
+            --coverage-report=lcov
+
+  # Observability Tests
+  observability-tests:
+    name: Observability Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: unit-tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run observability tests
+        run: |
+          pnpm test:observability -- \
+            --run mcp/servers/__tests__/observability/**/*.test.ts
+
+  # Test Results Aggregation
+  aggregate-results:
+    name: Aggregate Test Results
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [
+      unit-tests,
+      integration-tests,
+      contract-tests,
+      performance-tests,
+      chaos-tests,
+      security-tests,
+      marketplace-tests,
+      observability-tests
+    ]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+      
+      - name: Aggregate coverage reports
+        run: |
+          # Merge all coverage reports
+          npx nyc merge coverage-*/ coverage-final/
+          npx nyc report --reporter=html --reporter=text-summary --reporter=cobertura
+      
+      - name: Generate comprehensive test report
+        run: |
+          node mcp/scripts/generate-test-report.js \
+            --coverage coverage-final/ \
+            --performance performance-*/ \
+            --chaos chaos-*/ \
+            --output test-report.html
+      
+      - name: Upload final coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage-final/cobertura-coverage.xml
+          flags: comprehensive
+          name: comprehensive
+      
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: comprehensive-test-report
+          path: test-report.html
+          retention-days: 90
+      
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('test-report.html', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🧪 Test Results Report\n\n${report.substring(0, 60000)}...`
+            });
+
+  # Quality Gates
+  quality-gates:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: aggregate-results
+    if: always()
+    
+    steps:
+      - name: Check quality gates
+        run: |
+          # Check coverage threshold
+          COVERAGE=$(cat coverage-final/coverage-summary.json | jq '.total.lines.pct')
+          if (( $(echo "$COVERAGE < ${{ env.COVERAGE_THRESHOLD }}" | bc -l) )); then
+            echo "❌ Coverage threshold not met: ${COVERAGE}% < ${{ env.COVERAGE_THRESHOLD }}%"
+            exit 1
+          fi
+          
+          # Check for critical test failures
+          if [ "${{ needs.unit-tests.result }}" != "success" ]; then
+            echo "❌ Unit tests failed"
+            exit 1
+          fi
+          
+          if [ "${{ needs.integration-tests.result }}" != "success" ]; then
+            echo "❌ Integration tests failed"
+            exit 1
+          fi
+          
+          echo "✅ All quality gates passed"

@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * @file packages/mcp-servers/src/knowledge-graph-memory-fixed.ts
- * @summary Knowledge Graph Memory MCP Server for persistent AI intelligence
- * @description Transforms raw text into interconnected knowledge graphs with temporal awareness
+ * @file mcp/servers/src/knowledge-graph-memory-fixed.ts
+ * @summary Knowledge Graph Memory MCP Server for persistent AI intelligence.
+ * @description Transforms raw text into interconnected knowledge graphs with temporal awareness.
+ * @security No secrets logged; file system access limited to configured storage path.
+ * @adr none
  * @requirements MCP-001, AI-002
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { existsSync, readFileSync } from 'fs';
 import { z } from 'zod';
 
 // Knowledge Graph Types
@@ -65,7 +68,7 @@ export class KnowledgeGraphMemoryMCPServer {
       version: '1.0.0',
     });
 
-    this.storagePath = storagePath || '.mcp/knowledge-graph.json';
+    this.storagePath = storagePath || 'mcp/knowledge-graph.json';
     this.graph = {
       entities: new Map(),
       relations: new Map(),
@@ -84,14 +87,16 @@ export class KnowledgeGraphMemoryMCPServer {
       'Add an entity to the knowledge graph with temporal tracking',
       {
         name: z.string().describe('Name of the entity'),
-        type: z.enum(['person', 'project', 'concept', 'technology', 'decision', 'issue', 'requirement']).describe('Type of entity'),
+        type: z
+          .enum(['person', 'project', 'concept', 'technology', 'decision', 'issue', 'requirement'])
+          .describe('Type of entity'),
         attributes: z.record(z.any()).describe('Attributes of the entity'),
         context: z.string().optional().describe('Context for this entity addition'),
       },
       async ({ name, type, attributes, context }) => {
         const entityId = this.generateEntityId(name, type);
         const now = new Date();
-        
+
         const entity: KnowledgeEntity = {
           id: entityId,
           type,
@@ -99,24 +104,28 @@ export class KnowledgeGraphMemoryMCPServer {
           attributes,
           createdAt: now,
           updatedAt: now,
-          temporalVersions: [{
-            timestamp: now,
-            attributes: { ...attributes },
-            changeType: 'created',
-            context: context || 'manual_addition',
-          }],
+          temporalVersions: [
+            {
+              timestamp: now,
+              attributes: { ...attributes },
+              changeType: 'created',
+              context: context || 'manual_addition',
+            },
+          ],
         };
 
         this.graph.entities.set(entityId, entity);
         this.graph.lastUpdated = now;
 
         return {
-          content: [{
-            type: 'text',
-            text: `Entity "${name}" (${type}) added to knowledge graph with ID: ${entityId}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Entity "${name}" (${type}) added to knowledge graph with ID: ${entityId}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Add relationship between entities
@@ -126,9 +135,29 @@ export class KnowledgeGraphMemoryMCPServer {
       {
         fromEntityId: z.string().describe('ID of the source entity'),
         toEntityId: z.string().describe('ID of the target entity'),
-        relationType: z.enum(['is_a', 'part_of', 'related_to', 'causes', 'enables', 'depends_on', 'conflicts_with']).describe('Type of relationship'),
-        strength: z.number().min(0).max(1).default(0.8).describe('Strength of the relationship (0.0-1.0)'),
-        confidence: z.number().min(0).max(1).default(0.9).describe('Confidence in the relationship (0.0-1.0)'),
+        relationType: z
+          .enum([
+            'is_a',
+            'part_of',
+            'related_to',
+            'causes',
+            'enables',
+            'depends_on',
+            'conflicts_with',
+          ])
+          .describe('Type of relationship'),
+        strength: z
+          .number()
+          .min(0)
+          .max(1)
+          .default(0.8)
+          .describe('Strength of the relationship (0.0-1.0)'),
+        confidence: z
+          .number()
+          .min(0)
+          .max(1)
+          .default(0.9)
+          .describe('Confidence in the relationship (0.0-1.0)'),
         context: z.string().optional().describe('Context for this relationship'),
       },
       async ({ fromEntityId, toEntityId, relationType, strength, confidence, context }) => {
@@ -152,24 +181,28 @@ export class KnowledgeGraphMemoryMCPServer {
           strength,
           confidence,
           createdAt: now,
-          temporalHistory: [{
-            timestamp: now,
-            strength,
-            changeType: 'created',
-            context: context || 'manual_addition',
-          }],
+          temporalHistory: [
+            {
+              timestamp: now,
+              strength,
+              changeType: 'created',
+              context: context || 'manual_addition',
+            },
+          ],
         };
 
         this.graph.relations.set(relationId, relation);
         this.graph.lastUpdated = now;
 
         return {
-          content: [{
-            type: 'text',
-            text: `Relationship added: ${fromEntity.name} ${relationType} ${toEntity.name} (strength: ${strength}, confidence: ${confidence})`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Relationship added: ${fromEntity.name} ${relationType} ${toEntity.name} (strength: ${strength}, confidence: ${confidence})`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Query knowledge graph
@@ -178,21 +211,58 @@ export class KnowledgeGraphMemoryMCPServer {
       'Query the knowledge graph for entities and relationships',
       {
         query: z.string().describe('Natural language query for the knowledge graph'),
-        entityTypes: z.array(z.enum(['person', 'project', 'concept', 'technology', 'decision', 'issue', 'requirement'])).optional().describe('Filter by entity types'),
-        relationTypes: z.array(z.enum(['is_a', 'part_of', 'related_to', 'causes', 'enables', 'depends_on', 'conflicts_with'])).optional().describe('Filter by relationship types'),
-        timeRange: z.string().optional().describe('Time range for temporal filtering (e.g., "last-30-days")'),
+        entityTypes: z
+          .array(
+            z.enum([
+              'person',
+              'project',
+              'concept',
+              'technology',
+              'decision',
+              'issue',
+              'requirement',
+            ])
+          )
+          .optional()
+          .describe('Filter by entity types'),
+        relationTypes: z
+          .array(
+            z.enum([
+              'is_a',
+              'part_of',
+              'related_to',
+              'causes',
+              'enables',
+              'depends_on',
+              'conflicts_with',
+            ])
+          )
+          .optional()
+          .describe('Filter by relationship types'),
+        timeRange: z
+          .string()
+          .optional()
+          .describe('Time range for temporal filtering (e.g., "last-30-days")'),
         maxResults: z.number().default(20).describe('Maximum number of results to return'),
       },
       async ({ query, entityTypes, relationTypes, timeRange, maxResults }) => {
-        const results = this.performGraphQuery(query, entityTypes, relationTypes, timeRange, maxResults);
-        
+        const results = this.performGraphQuery(
+          query,
+          entityTypes,
+          relationTypes,
+          timeRange,
+          maxResults
+        );
+
         return {
-          content: [{
-            type: 'text',
-            text: `Found ${results.length} results for query "${query}":\n\n${results.map(r => `- ${r.type}: ${r.name || r.description}`).join('\n')}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Found ${results.length} results for query "${query}":\n\n${results.map((r) => `- ${r.type}: ${r.name || r.description}`).join('\n')}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Get entity details with temporal history
@@ -212,22 +282,25 @@ export class KnowledgeGraphMemoryMCPServer {
           };
         }
 
-        const relatedRelations = Array.from(this.graph.relations.values())
-          .filter(rel => rel.fromEntity === entityId || rel.toEntity === entityId);
+        const relatedRelations = Array.from(this.graph.relations.values()).filter(
+          (rel) => rel.fromEntity === entityId || rel.toEntity === entityId
+        );
 
         let temporalVersions = entity.temporalVersions;
         if (timeRange) {
           const cutoff = this.parseTimeRange(timeRange);
-          temporalVersions = temporalVersions.filter(v => v.timestamp >= cutoff);
+          temporalVersions = temporalVersions.filter((v) => v.timestamp >= cutoff);
         }
 
         return {
-          content: [{
-            type: 'text',
-            text: `Entity: ${entity.name} (${entity.type})\nCreated: ${entity.createdAt}\nUpdated: ${entity.updatedAt}\nRelations: ${relatedRelations.length}\nTemporal versions: ${includeHistory ? temporalVersions.length : 'hidden'}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Entity: ${entity.name} (${entity.type})\nCreated: ${entity.createdAt}\nUpdated: ${entity.updatedAt}\nRelations: ${relatedRelations.length}\nTemporal versions: ${includeHistory ? temporalVersions.length : 'hidden'}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Find hidden connections
@@ -241,15 +314,22 @@ export class KnowledgeGraphMemoryMCPServer {
         minStrength: z.number().default(0.3).describe('Minimum connection strength threshold'),
       },
       async ({ fromEntityId, toEntityId, maxDepth, minStrength }) => {
-        const connections = this.findIndirectConnections(fromEntityId, toEntityId, maxDepth, minStrength);
-        
+        const connections = this.findIndirectConnections(
+          fromEntityId,
+          toEntityId,
+          maxDepth,
+          minStrength
+        );
+
         return {
-          content: [{
-            type: 'text',
-            text: `Found ${connections.length} hidden connections between entities:\n\n${connections.map(c => `- Path: ${c.path.join(' -> ')} (strength: ${c.strength}, depth: ${c.depth})`).join('\n')}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Found ${connections.length} hidden connections between entities:\n\n${connections.map((c) => `- Path: ${c.path.join(' -> ')} (strength: ${c.strength}, depth: ${c.depth})`).join('\n')}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Save knowledge graph to storage
@@ -260,24 +340,30 @@ export class KnowledgeGraphMemoryMCPServer {
         backup: z.boolean().default(false).describe('Create a backup instead of overwriting'),
       },
       async ({ backup }) => {
-        const filename = backup ? 
-          `${this.storagePath}.backup.${Date.now()}.json` : 
-          this.storagePath;
-        
-        const graphData = JSON.stringify({
-          entities: Object.fromEntries(this.graph.entities),
-          relations: Object.fromEntries(this.graph.relations),
-          lastUpdated: this.graph.lastUpdated,
-          context: this.graph.context,
-        }, null, 2);
+        const filename = backup
+          ? `${this.storagePath}.backup.${Date.now()}.json`
+          : this.storagePath;
+
+        const graphData = JSON.stringify(
+          {
+            entities: Object.fromEntries(this.graph.entities),
+            relations: Object.fromEntries(this.graph.relations),
+            lastUpdated: this.graph.lastUpdated,
+            context: this.graph.context,
+          },
+          null,
+          2
+        );
 
         return {
-          content: [{
-            type: 'text',
-            text: `Knowledge graph saved to ${filename}\nStats: ${this.graph.entities.size} entities, ${this.graph.relations.size} relations`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Knowledge graph saved to ${filename}\nStats: ${this.graph.entities.size} entities, ${this.graph.relations.size} relations`,
+            },
+          ],
         };
-      },
+      }
     );
   }
 
@@ -289,7 +375,13 @@ export class KnowledgeGraphMemoryMCPServer {
     return `${fromId}_${type}_${toId}_${Date.now()}`;
   }
 
-  private performGraphQuery(query: string, entityTypes?: string[], relationTypes?: string[], timeRange?: string, maxResults: number = 20): any[] {
+  private performGraphQuery(
+    query: string,
+    entityTypes?: string[],
+    relationTypes?: string[],
+    timeRange?: string,
+    maxResults: number = 20
+  ): any[] {
     const results = [];
     const queryLower = query.toLowerCase();
     const cutoff = timeRange ? this.parseTimeRange(timeRange) : new Date(0);
@@ -338,19 +430,22 @@ export class KnowledgeGraphMemoryMCPServer {
     }
 
     // Sort by relevance and limit results
-    return results
-      .sort((a, b) => b.relevance - a.relevance)
-      .slice(0, maxResults);
+    return results.sort((a, b) => b.relevance - a.relevance).slice(0, maxResults);
   }
 
-  private findIndirectConnections(fromId: string, toId: string, maxDepth: number, minStrength: number): any[] {
+  private findIndirectConnections(
+    fromId: string,
+    toId: string,
+    maxDepth: number,
+    minStrength: number
+  ): any[] {
     const connections = [];
     const visited = new Set<string>();
     const queue = [{ entityId: fromId, path: [], strength: 1.0 }];
-    
+
     while (queue.length > 0 && queue[0].path.length < maxDepth) {
       const current = queue.shift()!;
-      
+
       if (current.entityId === toId && current.path.length > 0) {
         connections.push({
           path: current.path,
@@ -391,8 +486,13 @@ export class KnowledgeGraphMemoryMCPServer {
   private calculateRelevance(query: string, entity: KnowledgeEntity): number {
     const queryLower = query.toLowerCase();
     const nameMatch = entity.name.toLowerCase().includes(queryLower) ? 1.0 : 0.0;
-    const attributeMatch = JSON.stringify(entity.attributes).toLowerCase().includes(queryLower) ? 0.7 : 0.0;
-    const recencyBonus = Math.max(0, 1 - (Date.now() - entity.updatedAt.getTime()) / (1000 * 60 * 60 * 24 * 30)); // 30-day decay
+    const attributeMatch = JSON.stringify(entity.attributes).toLowerCase().includes(queryLower)
+      ? 0.7
+      : 0.0;
+    const recencyBonus = Math.max(
+      0,
+      1 - (Date.now() - entity.updatedAt.getTime()) / (1000 * 60 * 60 * 24 * 30)
+    ); // 30-day decay
 
     return nameMatch + attributeMatch + recencyBonus;
   }
@@ -400,7 +500,7 @@ export class KnowledgeGraphMemoryMCPServer {
   private parseTimeRange(timeRange: string): Date {
     const now = new Date();
     const match = timeRange.match(/last-(\d+)-(day|week|month|year)/);
-    
+
     if (!match) return new Date(0);
 
     const value = parseInt(match[1]);
@@ -417,8 +517,22 @@ export class KnowledgeGraphMemoryMCPServer {
   }
 
   private loadGraph(): void {
-    // In a real implementation, this would load from file system
-    console.error('Knowledge graph would be loaded from:', this.storagePath);
+    try {
+      if (existsSync(this.storagePath)) {
+        const data = readFileSync(this.storagePath, 'utf8');
+        const loaded = JSON.parse(data);
+        this.knowledgeGraph = loaded;
+        console.error('Knowledge graph loaded from:', this.storagePath);
+      } else {
+        console.error(
+          'Knowledge graph file not found, starting with empty graph:',
+          this.storagePath
+        );
+      }
+    } catch (error) {
+      console.error('Failed to load knowledge graph:', error);
+      console.error('Starting with empty knowledge graph');
+    }
   }
 
   async run() {
