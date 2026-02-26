@@ -10,8 +10,8 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { z } from 'zod';
 import crypto from 'crypto';
+import { z } from 'zod';
 
 // Registry Types
 interface MCPServer {
@@ -214,7 +214,7 @@ export class EnterpriseRegistry {
       },
     ];
 
-    defaultCategories.forEach(category => this.categories.set(category.id, category));
+    defaultCategories.forEach((category) => this.categories.set(category.id, category));
   }
 
   /**
@@ -262,7 +262,7 @@ export class EnterpriseRegistry {
       },
     ];
 
-    defaultServices.forEach(service => this.discoveryServices.set(service.id, service));
+    defaultServices.forEach((service) => this.discoveryServices.set(service.id, service));
   }
 
   /**
@@ -274,38 +274,44 @@ export class EnterpriseRegistry {
       'register-mcp-server',
       'Register a new MCP server in the enterprise registry',
       {
-        server: z.object({
-          name: z.string(),
-          description: z.string(),
-          version: z.string(),
-          category: z.string(),
-          tags: z.array(z.string()),
-          owner: z.string(),
-          repository: z.string(),
-          documentation: z.string(),
-          license: z.string(),
-          capabilities: z.array(z.object({
-            type: z.enum(['tool', 'resource', 'prompt']),
+        server: z
+          .object({
             name: z.string(),
             description: z.string(),
-            schema: z.any(),
-            examples: z.array(z.string()),
-            parameters: z.array(z.object({
-              name: z.string(),
-              type: z.string(),
-              required: z.boolean(),
-              description: z.string(),
-              defaultValue: z.any().optional(),
-            })),
-          })),
-          compatibility: z.object({
-            mcpVersion: z.string(),
-            platforms: z.array(z.string()),
-            languages: z.array(z.string()),
-            frameworks: z.array(z.string()),
-            dependencies: z.array(z.string()),
-          }),
-        }).describe('MCP server information'),
+            version: z.string(),
+            category: z.string(),
+            tags: z.array(z.string()),
+            owner: z.string(),
+            repository: z.string(),
+            documentation: z.string(),
+            license: z.string(),
+            capabilities: z.array(
+              z.object({
+                type: z.enum(['tool', 'resource', 'prompt']),
+                name: z.string(),
+                description: z.string(),
+                schema: z.any(),
+                examples: z.array(z.string()),
+                parameters: z.array(
+                  z.object({
+                    name: z.string(),
+                    type: z.string(),
+                    required: z.boolean(),
+                    description: z.string(),
+                    defaultValue: z.any().optional(),
+                  })
+                ),
+              })
+            ),
+            compatibility: z.object({
+              mcpVersion: z.string(),
+              platforms: z.array(z.string()),
+              languages: z.array(z.string()),
+              frameworks: z.array(z.string()),
+              dependencies: z.array(z.string()),
+            }),
+          })
+          .describe('MCP server information'),
       },
       async ({ server }) => {
         const serverId = crypto.randomUUID();
@@ -347,12 +353,14 @@ export class EnterpriseRegistry {
         }
 
         return {
-          content: [{
-            type: 'text',
-            text: `MCP server registered: ${serverId}\nName: ${server.name}\nCategory: ${server.category}\nStatus: active`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `MCP server registered: ${serverId}\nName: ${server.name}\nCategory: ${server.category}\nStatus: active`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Server discovery
@@ -360,33 +368,39 @@ export class EnterpriseRegistry {
       'discover-mcp-servers',
       'Discover MCP servers based on criteria',
       {
-        query: z.object({
-          category: z.string().optional(),
-          tags: z.array(z.string()).optional(),
-          owner: z.string().optional(),
-          status: z.string().optional(),
-          compatibility: z.array(z.string()).optional(),
-          security: z.object({
-            minScore: z.number().optional(),
-            maxVulnerabilities: z.number().optional(),
-          }).optional(),
-          compliance: z.array(z.string()).optional(),
-          sortBy: z.enum(['name', 'downloads', 'stars', 'updated']).default('name'),
-          sortOrder: z.enum(['asc', 'desc']).default('asc'),
-          limit: z.number().default(20),
-          offset: z.number().default(0),
-        }).describe('Discovery query parameters'),
+        query: z
+          .object({
+            category: z.string().optional(),
+            tags: z.array(z.string()).optional(),
+            owner: z.string().optional(),
+            status: z.string().optional(),
+            compatibility: z.array(z.string()).optional(),
+            security: z
+              .object({
+                minScore: z.number().optional(),
+                maxVulnerabilities: z.number().optional(),
+              })
+              .optional(),
+            compliance: z.array(z.string()).optional(),
+            sortBy: z.enum(['name', 'downloads', 'stars', 'updated']).default('name'),
+            sortOrder: z.enum(['asc', 'desc']).default('asc'),
+            limit: z.number().default(20),
+            offset: z.number().default(0),
+          })
+          .describe('Discovery query parameters'),
       },
       async ({ query }) => {
         const results = await this.searchServers(query);
 
         return {
-          content: [{
-            type: 'text',
-            text: this.formatDiscoveryResults(results, query),
-          }],
+          content: [
+            {
+              type: 'text',
+              text: this.formatDiscoveryResults(results, query),
+            },
+          ],
         };
-      },
+      }
     );
 
     // Server details
@@ -407,12 +421,17 @@ export class EnterpriseRegistry {
           };
         }
 
-        const details = this.formatServerDetails(server, includeMetrics, includeSecurity, includeCompliance);
+        const details = this.formatServerDetails(
+          server,
+          includeMetrics,
+          includeSecurity,
+          includeCompliance
+        );
 
         return {
           content: [{ type: 'text', text: details }],
         };
-      },
+      }
     );
 
     // Category management
@@ -420,21 +439,29 @@ export class EnterpriseRegistry {
       'manage-categories',
       'Manage server categories',
       {
-        action: z.enum(['list', 'create', 'update', 'delete']).describe('Category management action'),
+        action: z
+          .enum(['list', 'create', 'update', 'delete'])
+          .describe('Category management action'),
         categoryId: z.string().optional().describe('Category ID for update/delete actions'),
-        categoryData: z.object({
-          name: z.string(),
-          description: z.string(),
-          icon: z.string(),
-        }).optional().describe('Category data for create/update actions'),
+        categoryData: z
+          .object({
+            name: z.string(),
+            description: z.string(),
+            icon: z.string(),
+          })
+          .optional()
+          .describe('Category data for create/update actions'),
       },
       async ({ action, categoryId, categoryData }) => {
         switch (action) {
           case 'list':
             const categories = Array.from(this.categories.values());
-            const summary = categories.map(cat =>
-              `${cat.icon} ${cat.name} (${cat.id}): ${cat.description} - ${cat.count} servers`
-            ).join('\n');
+            const summary = categories
+              .map(
+                (cat) =>
+                  `${cat.icon} ${cat.name} (${cat.id}): ${cat.description} - ${cat.count} servers`
+              )
+              .join('\n');
 
             return {
               content: [{ type: 'text', text: `Categories (${categories.length}):\n\n${summary}` }],
@@ -456,13 +483,17 @@ export class EnterpriseRegistry {
             this.categories.set(newCategory.id, newCategory);
 
             return {
-              content: [{ type: 'text', text: `Category created: ${newCategory.id} - ${newCategory.name}` }],
+              content: [
+                { type: 'text', text: `Category created: ${newCategory.id} - ${newCategory.name}` },
+              ],
             };
 
           case 'update':
             if (!categoryId || !categoryData) {
               return {
-                content: [{ type: 'text', text: 'Category ID and data required for update action' }],
+                content: [
+                  { type: 'text', text: 'Category ID and data required for update action' },
+                ],
               };
             }
 
@@ -488,7 +519,12 @@ export class EnterpriseRegistry {
 
             const deleted = this.categories.delete(categoryId);
             return {
-              content: [{ type: 'text', text: deleted ? `Category deleted: ${categoryId}` : 'Category not found' }],
+              content: [
+                {
+                  type: 'text',
+                  text: deleted ? `Category deleted: ${categoryId}` : 'Category not found',
+                },
+              ],
             };
 
           default:
@@ -496,7 +532,7 @@ export class EnterpriseRegistry {
               content: [{ type: 'text', text: 'Invalid action' }],
             };
         }
-      },
+      }
     );
 
     // Discovery service management
@@ -504,29 +540,39 @@ export class EnterpriseRegistry {
       'manage-discovery-services',
       'Manage external discovery services',
       {
-        action: z.enum(['list', 'create', 'update', 'delete', 'sync']).describe('Service management action'),
+        action: z
+          .enum(['list', 'create', 'update', 'delete', 'sync'])
+          .describe('Service management action'),
         serviceId: z.string().optional().describe('Service ID for update/delete/sync actions'),
-        serviceData: z.object({
-          name: z.string(),
-          type: z.enum(['internal', 'external', 'hybrid']),
-          endpoint: z.string(),
-          authentication: z.object({
-            type: z.enum(['none', 'api-key', 'oauth', 'certificate']),
-            credentials: z.record(z.string()).optional(),
-          }),
-          syncSchedule: z.string(),
-        }).optional().describe('Service data for create/update actions'),
+        serviceData: z
+          .object({
+            name: z.string(),
+            type: z.enum(['internal', 'external', 'hybrid']),
+            endpoint: z.string(),
+            authentication: z.object({
+              type: z.enum(['none', 'api-key', 'oauth', 'certificate']),
+              credentials: z.record(z.string()).optional(),
+            }),
+            syncSchedule: z.string(),
+          })
+          .optional()
+          .describe('Service data for create/update actions'),
       },
       async ({ action, serviceId, serviceData }) => {
         switch (action) {
           case 'list':
             const services = Array.from(this.discoveryServices.values());
-            const summary = services.map(service =>
-              `${service.name} (${service.id}) - ${service.type} - ${service.status} - Last sync: ${service.lastSync.toISOString()}`
-            ).join('\n');
+            const summary = services
+              .map(
+                (service) =>
+                  `${service.name} (${service.id}) - ${service.type} - ${service.status} - Last sync: ${service.lastSync.toISOString()}`
+              )
+              .join('\n');
 
             return {
-              content: [{ type: 'text', text: `Discovery Services (${services.length}):\n\n${summary}` }],
+              content: [
+                { type: 'text', text: `Discovery Services (${services.length}):\n\n${summary}` },
+              ],
             };
 
           case 'create':
@@ -552,7 +598,12 @@ export class EnterpriseRegistry {
             this.discoveryServices.set(newService.id, newService);
 
             return {
-              content: [{ type: 'text', text: `Discovery service created: ${newService.id} - ${newService.name}` }],
+              content: [
+                {
+                  type: 'text',
+                  text: `Discovery service created: ${newService.id} - ${newService.name}`,
+                },
+              ],
             };
 
           case 'sync':
@@ -572,10 +623,12 @@ export class EnterpriseRegistry {
             const syncResult = await this.syncDiscoveryService(service);
 
             return {
-              content: [{
-                type: 'text',
-                text: `Discovery service synced: ${serviceId}\nServers discovered: ${syncResult.serversDiscovered}\nSync time: ${syncResult.syncTime}ms`,
-              }],
+              content: [
+                {
+                  type: 'text',
+                  text: `Discovery service synced: ${serviceId}\nServers discovered: ${syncResult.serversDiscovered}\nSync time: ${syncResult.syncTime}ms`,
+                },
+              ],
             };
 
           default:
@@ -583,7 +636,7 @@ export class EnterpriseRegistry {
               content: [{ type: 'text', text: 'Invalid action' }],
             };
         }
-      },
+      }
     );
 
     // Usage analytics
@@ -593,8 +646,14 @@ export class EnterpriseRegistry {
       {
         timeRange: z.string().default('last-30-days').describe('Time range for analytics'),
         serverId: z.string().optional().describe('Specific server ID'),
-        groupBy: z.enum(['category', 'owner', 'status']).default('category').describe('Grouping dimension'),
-        metrics: z.array(z.enum(['downloads', 'stars', 'forks', 'issues'])).default(['downloads', 'stars']).describe('Metrics to include'),
+        groupBy: z
+          .enum(['category', 'owner', 'status'])
+          .default('category')
+          .describe('Grouping dimension'),
+        metrics: z
+          .array(z.enum(['downloads', 'stars', 'forks', 'issues']))
+          .default(['downloads', 'stars'])
+          .describe('Metrics to include'),
       },
       async ({ timeRange, serverId, groupBy, metrics }) => {
         const analytics = await this.generateUsageAnalytics(timeRange, serverId, groupBy, metrics);
@@ -602,7 +661,7 @@ export class EnterpriseRegistry {
         return {
           content: [{ type: 'text', text: this.formatAnalyticsReport(analytics) }],
         };
-      },
+      }
     );
 
     // Registry statistics
@@ -618,7 +677,7 @@ export class EnterpriseRegistry {
         return {
           content: [{ type: 'text', text: this.formatStatisticsReport(stats) }],
         };
-      },
+      }
     );
   }
 
@@ -627,44 +686,48 @@ export class EnterpriseRegistry {
    * @param query - Registry query parameters including filters, sorting, and pagination
    * @returns Filtered and paginated server results with metadata
    */
-  private async searchServers(query: RegistryQuery): Promise<{ servers: MCPServer[]; total: number; hasMore: boolean }> {
+  private async searchServers(
+    query: RegistryQuery
+  ): Promise<{ servers: MCPServer[]; total: number; hasMore: boolean }> {
     let servers = Array.from(this.mcpServers.values());
 
     // Apply filters
     if (query.category) {
-      servers = servers.filter(s => s.category === query.category);
+      servers = servers.filter((s) => s.category === query.category);
     }
 
     if (query.tags && query.tags.length > 0) {
-      servers = servers.filter(s => query.tags!.some(tag => s.tags.includes(tag)));
+      servers = servers.filter((s) => query.tags!.some((tag) => s.tags.includes(tag)));
     }
 
     if (query.owner) {
-      servers = servers.filter(s => s.owner === query.owner);
+      servers = servers.filter((s) => s.owner === query.owner);
     }
 
     if (query.status) {
-      servers = servers.filter(s => s.status === query.status);
+      servers = servers.filter((s) => s.status === query.status);
     }
 
     if (query.compatibility && query.compatibility.length > 0) {
-      servers = servers.filter(s =>
-        query.compatibility!.some(comp => s.compatibility.platforms.includes(comp))
+      servers = servers.filter((s) =>
+        query.compatibility!.some((comp) => s.compatibility.platforms.includes(comp))
       );
     }
 
     if (query.security) {
       if (query.security.minScore) {
-        servers = servers.filter(s => s.security.securityScore >= query.security!.minScore!);
+        servers = servers.filter((s) => s.security.securityScore >= query.security!.minScore!);
       }
       if (query.security.maxVulnerabilities) {
-        servers = servers.filter(s => s.security.vulnerabilities.length <= query.security!.maxVulnerabilities!);
+        servers = servers.filter(
+          (s) => s.security.vulnerabilities.length <= query.security!.maxVulnerabilities!
+        );
       }
     }
 
     if (query.compliance && query.compliance.length > 0) {
-      servers = servers.filter(s =>
-        query.compliance!.some(comp => s.compliance.frameworks.includes(comp))
+      servers = servers.filter((s) =>
+        query.compliance!.some((comp) => s.compliance.frameworks.includes(comp))
       );
     }
 
@@ -703,25 +766,30 @@ export class EnterpriseRegistry {
     };
   }
 
-  private formatDiscoveryResults(results: { servers: MCPServer[]; total: number; hasMore: boolean }, query: RegistryQuery): string {
+  private formatDiscoveryResults(
+    results: { servers: MCPServer[]; total: number; hasMore: boolean },
+    query: RegistryQuery
+  ): string {
     const summary = [
       `Discovery Results: ${results.servers.length} of ${results.total} servers`,
       `Sort: ${query.sortBy} ${query.sortOrder}`,
       `Page: ${Math.floor((query.offset || 0) / (query.limit || 20)) + 1}`,
       '',
       'Servers:',
-      ...results.servers.map(server => [
-        `${server.name} (${server.id})`,
-        `  Category: ${server.category}`,
-        `  Owner: ${server.owner}`,
-        `  Version: ${server.version}`,
-        `  Status: ${server.status}`,
-        `  Downloads: ${server.metrics.downloads}`,
-        `  Stars: ${server.metrics.stars}`,
-        `  Tags: ${server.tags.join(', ')}`,
-        `  Description: ${server.description}`,
-        '',
-      ]).flat(),
+      ...results.servers
+        .map((server) => [
+          `${server.name} (${server.id})`,
+          `  Category: ${server.category}`,
+          `  Owner: ${server.owner}`,
+          `  Version: ${server.version}`,
+          `  Status: ${server.status}`,
+          `  Downloads: ${server.metrics.downloads}`,
+          `  Stars: ${server.metrics.stars}`,
+          `  Tags: ${server.tags.join(', ')}`,
+          `  Description: ${server.description}`,
+          '',
+        ])
+        .flat(),
     ];
 
     if (results.hasMore) {
@@ -731,7 +799,12 @@ export class EnterpriseRegistry {
     return summary.join('\n');
   }
 
-  private formatServerDetails(server: MCPServer, includeMetrics: boolean, includeSecurity: boolean, includeCompliance: boolean): string {
+  private formatServerDetails(
+    server: MCPServer,
+    includeMetrics: boolean,
+    includeSecurity: boolean,
+    includeCompliance: boolean
+  ): string {
     const details = [
       `Server Details: ${server.name}`,
       `ID: ${server.id}`,
@@ -749,16 +822,18 @@ export class EnterpriseRegistry {
       server.description,
       '',
       'Tags:',
-      ...server.tags.map(tag => `  - ${tag}`),
+      ...server.tags.map((tag) => `  - ${tag}`),
       '',
       'Capabilities:',
-      ...server.capabilities.map(cap => [
-        `${cap.type.toUpperCase()}: ${cap.name}`,
-        `  Description: ${cap.description}`,
-        `  Parameters: ${cap.parameters.length}`,
-        `  Examples: ${cap.examples.length}`,
-        '',
-      ]).flat(),
+      ...server.capabilities
+        .map((cap) => [
+          `${cap.type.toUpperCase()}: ${cap.name}`,
+          `  Description: ${cap.description}`,
+          `  Parameters: ${cap.parameters.length}`,
+          `  Examples: ${cap.examples.length}`,
+          '',
+        ])
+        .flat(),
       '',
       'Compatibility:',
       `  MCP Version: ${server.compatibility.mcpVersion}`,
@@ -767,7 +842,7 @@ export class EnterpriseRegistry {
       `  Frameworks: ${server.compatibility.frameworks.join(', ')}`,
       '',
       'Dependencies:',
-      ...server.dependencies.map(dep => `  - ${dep}`),
+      ...server.dependencies.map((dep) => `  - ${dep}`),
     ];
 
     if (includeMetrics) {
@@ -779,7 +854,7 @@ export class EnterpriseRegistry {
         `  Forks: ${server.metrics.forks}`,
         `  Issues: ${server.metrics.issues}`,
         `  Last Release: ${server.metrics.lastRelease.toISOString()}`,
-        `  Maintenance: ${server.metrics.maintenance}`,
+        `  Maintenance: ${server.metrics.maintenance}`
       );
     }
 
@@ -790,14 +865,16 @@ export class EnterpriseRegistry {
         `  Security Score: ${server.security.securityScore}/100`,
         `  Scan Date: ${server.security.scanDate.toISOString()}`,
         `  Vulnerabilities: ${server.security.vulnerabilities.length}`,
-        ...server.security.vulnerabilities.map(vuln => [
-          `  ${vuln.severity.toUpperCase()}: ${vuln.description}`,
-          `    CVE: ${vuln.cve || 'N/A'}`,
-          `    Fixed In: ${vuln.fixedIn || 'N/A'}`,
-        ]).flat(),
+        ...server.security.vulnerabilities
+          .map((vuln) => [
+            `  ${vuln.severity.toUpperCase()}: ${vuln.description}`,
+            `    CVE: ${vuln.cve || 'N/A'}`,
+            `    Fixed In: ${vuln.fixedIn || 'N/A'}`,
+          ])
+          .flat(),
         '',
         'Recommendations:',
-        ...server.security.recommendations.map(rec => `  - ${rec}`),
+        ...server.security.recommendations.map((rec) => `  - ${rec}`)
       );
     }
 
@@ -808,23 +885,46 @@ export class EnterpriseRegistry {
         `  Status: ${server.compliance.status.toUpperCase()}`,
         `  Audit Date: ${server.compliance.auditDate.toISOString()}`,
         `  Frameworks: ${server.compliance.frameworks.join(', ')}`,
-        `  Certifications: ${server.compliance.certifications.join(', ')}`,
+        `  Certifications: ${server.compliance.certifications.join(', ')}`
       );
     }
 
     return details.join('\n');
   }
 
-  private async syncDiscoveryService(service: DiscoveryService): Promise<{ serversDiscovered: number; syncTime: number }> {
+  private async syncDiscoveryService(
+    service: DiscoveryService
+  ): Promise<{ serversDiscovered: number; syncTime: number }> {
     const startTime = Date.now();
     let serversDiscovered = 0;
 
     try {
       // Simulate synchronization
       if (service.type === 'external') {
-        // Simulate external API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        serversDiscovered = Math.floor(Math.random() * 50) + 10;
+        // Real GitHub API search for MCP servers
+        try {
+          const response = await fetch(
+            'https://api.github.com/search/repositories?q=mcp-server+topic:mcp&sort=updated&order=desc',
+            {
+              headers: {
+                Accept: 'application/vnd.github.v3+json',
+                ...(process.env.GITHUB_TOKEN && {
+                  Authorization: `token ${process.env.GITHUB_TOKEN}`,
+                }),
+              },
+            }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            serversDiscovered = data.total_count || 0;
+          } else {
+            serversDiscovered = 0;
+          }
+        } catch (error) {
+          console.error('GitHub API search failed:', error);
+          serversDiscovered = 0;
+        }
       }
 
       service.lastSync = new Date();
@@ -832,7 +932,6 @@ export class EnterpriseRegistry {
       service.metrics.syncTime = Date.now() - startTime;
       service.metrics.errorRate = 0;
       service.metrics.lastSync = new Date();
-
     } catch (error) {
       service.metrics.errorRate = 1;
       service.status = 'error';
@@ -844,16 +943,24 @@ export class EnterpriseRegistry {
     };
   }
 
-  private async generateUsageAnalytics(timeRange: string, serverId?: string, groupBy: string = 'category', metrics: string[] = ['downloads', 'stars']): Promise<any> {
+  private async generateUsageAnalytics(
+    timeRange: string,
+    serverId?: string,
+    groupBy: string = 'category',
+    metrics: string[] = ['downloads', 'stars']
+  ): Promise<any> {
     // Simulate analytics generation
-    const servers = serverId ?
-      [this.mcpServers.get(serverId)].filter(Boolean) as MCPServer[] :
-      Array.from(this.mcpServers.values());
+    const servers = serverId
+      ? ([this.mcpServers.get(serverId)].filter(Boolean) as MCPServer[])
+      : Array.from(this.mcpServers.values());
 
     const grouped = servers.reduce((acc, server) => {
-      const key = groupBy === 'category' ? server.category :
-                 groupBy === 'owner' ? server.owner :
-                 server.status;
+      const key =
+        groupBy === 'category'
+          ? server.category
+          : groupBy === 'owner'
+            ? server.owner
+            : server.status;
 
       if (!acc[key]) {
         acc[key] = { count: 0, downloads: 0, stars: 0, forks: 0, issues: 0 };
@@ -885,15 +992,17 @@ export class EnterpriseRegistry {
       `Total Servers: ${analytics.total}`,
       '',
       'Analytics:',
-      ...Object.entries(analytics.data).map(([key, data]: [string, any]) => [
-        `${key}:`,
-        `  Count: ${data.count}`,
-        `  Downloads: ${data.downloads}`,
-        `  Stars: ${data.stars}`,
-        `  Forks: ${data.forks}`,
-        `  Issues: ${data.issues}`,
-        '',
-      ]).flat(),
+      ...Object.entries(analytics.data)
+        .map(([key, data]: [string, any]) => [
+          `${key}:`,
+          `  Count: ${data.count}`,
+          `  Downloads: ${data.downloads}`,
+          `  Stars: ${data.stars}`,
+          `  Forks: ${data.forks}`,
+          `  Issues: ${data.issues}`,
+          '',
+        ])
+        .flat(),
     ];
 
     return report.join('\n');
@@ -909,20 +1018,27 @@ export class EnterpriseRegistry {
         totalServers: servers.length,
         totalCategories: categories.length,
         totalServices: services.length,
-        activeServers: servers.filter(s => s.status === 'active').length,
-        deprecatedServers: servers.filter(s => s.status === 'deprecated').length,
+        activeServers: servers.filter((s) => s.status === 'active').length,
+        deprecatedServers: servers.filter((s) => s.status === 'deprecated').length,
       },
-      categories: categories.map(cat => ({
+      categories: categories.map((cat) => ({
         id: cat.id,
         name: cat.name,
         count: cat.count,
-        percentage: servers.length > 0 ? (cat.count / servers.length * 100).toFixed(1) : '0',
+        percentage: servers.length > 0 ? ((cat.count / servers.length) * 100).toFixed(1) : '0',
       })),
       security: {
-        averageScore: servers.reduce((sum, s) => sum + s.security.securityScore, 0) / servers.length,
-        totalVulnerabilities: servers.reduce((sum, s) => sum + s.security.vulnerabilities.length, 0),
-        criticalVulnerabilities: servers.reduce((sum, s) =>
-          sum + s.security.vulnerabilities.filter(v => v.severity === 'critical').length, 0),
+        averageScore:
+          servers.reduce((sum, s) => sum + s.security.securityScore, 0) / servers.length,
+        totalVulnerabilities: servers.reduce(
+          (sum, s) => sum + s.security.vulnerabilities.length,
+          0
+        ),
+        criticalVulnerabilities: servers.reduce(
+          (sum, s) =>
+            sum + s.security.vulnerabilities.filter((v) => v.severity === 'critical').length,
+          0
+        ),
       },
       metrics: {
         totalDownloads: servers.reduce((sum, s) => sum + s.metrics.downloads, 0),
@@ -937,12 +1053,12 @@ export class EnterpriseRegistry {
       stats.topServers = servers
         .sort((a, b) => b.metrics.downloads - a.metrics.downloads)
         .slice(0, 10)
-        .map(s => ({ name: s.name, downloads: s.metrics.downloads, stars: s.metrics.stars }));
+        .map((s) => ({ name: s.name, downloads: s.metrics.downloads, stars: s.metrics.stars }));
 
       stats.recentActivity = servers
         .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
         .slice(0, 10)
-        .map(s => ({ name: s.name, updated: s.updatedAt.toISOString(), status: s.status }));
+        .map((s) => ({ name: s.name, updated: s.updatedAt.toISOString(), status: s.status }));
     }
 
     return stats;
@@ -960,8 +1076,8 @@ export class EnterpriseRegistry {
       `  Deprecated Servers: ${stats.overview.deprecatedServers}`,
       '',
       'Categories:',
-      ...stats.categories.map((cat: any) =>
-        `  ${cat.name}: ${cat.count} servers (${cat.percentage}%)`
+      ...stats.categories.map(
+        (cat: any) => `  ${cat.name}: ${cat.count} servers (${cat.percentage}%)`
       ),
       '',
       'Security:',
@@ -980,8 +1096,9 @@ export class EnterpriseRegistry {
       report.push(
         '',
         'Top Servers by Downloads:',
-        ...stats.topServers.map((server: any, index: number) =>
-          `  ${index + 1}. ${server.name}: ${server.downloads.toLocaleString()} downloads, ${server.stars.toLocaleString()} stars`
+        ...stats.topServers.map(
+          (server: any, index: number) =>
+            `  ${index + 1}. ${server.name}: ${server.downloads.toLocaleString()} downloads, ${server.stars.toLocaleString()} stars`
         )
       );
     }
@@ -990,8 +1107,8 @@ export class EnterpriseRegistry {
       report.push(
         '',
         'Recent Activity:',
-        ...stats.recentActivity.map((activity: any) =>
-          `  ${activity.name} - ${activity.status} - ${activity.updated}`
+        ...stats.recentActivity.map(
+          (activity: any) => `  ${activity.name} - ${activity.status} - ${activity.updated}`
         )
       );
     }
