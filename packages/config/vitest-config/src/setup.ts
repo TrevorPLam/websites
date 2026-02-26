@@ -13,8 +13,8 @@
 // Import Vitest globals
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
-// Import vitest-dom matchers for React Testing Library compatibility
-import 'vitest-dom';
+// Import @testing-library/jest-dom matchers for React Testing Library compatibility
+import '@testing-library/jest-dom';
 
 // Import @chialab/vitest-axe for accessibility testing
 import toHaveNoViolations from '@chialab/vitest-axe';

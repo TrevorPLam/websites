@@ -1,23 +1,11 @@
 #!/usr/bin/env node
 /**
- * validate-exports.js — Export Map Validation Script
- *
- * [TRACE:FILE=scripts.validate-exports]
- * Purpose: Validates that every entry in every package.json `exports` field
- *          resolves to an actual file on disk. Prevents broken export paths
- *          (e.g., BUG-1: ./security/create-middleware → file at middleware/).
- *
- * Exports / Entry: Run via `pnpm validate-exports`
- * Used by: CI pipeline, pre-commit validation
- *
- * Invariants:
- * - All export targets must exist as files (not directories)
- * - Supports simple string exports and conditional exports (import/require/default)
- * - Scopes validation to workspace packages (packages/*, templates/*, etc.)
- *
- * Status: @public
- * Related Tasks: 0.19
- * Last Updated: 2026-02-14
+ * @file scripts/validate-exports.js
+ * @summary Validates package.json export maps resolve to actual files on disk.
+ * @description Prevents broken export paths by verifying every package.json exports entry exists.
+ * @security Reads package.json files only; no sensitive data accessed or processed.
+ * @adr none
+ * @requirements BUILD-VALIDATE-001, export-validation
  */
 
 const fs = require('fs');

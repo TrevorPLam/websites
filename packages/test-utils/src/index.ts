@@ -1,57 +1,10 @@
 /**
  * @file packages/test-utils/src/index.ts
- * @role test
- * @summary Centralized test utilities for the monorepo
- *
- * Provides common test helpers, factories, and utilities to reduce
- * code duplication and improve test consistency across packages.
- *
- * @entrypoints
- * - import { createMockAdapter, createTestTenant, renderWithProviders } from '@repo/test-utils'
- *
- * @exports
- * - Test factories for common data structures
- * - Mock utilities for adapters and services
- * - Custom render functions for React components
- * - Timing utilities for deterministic tests
- *
- * @depends_on
- * - External: vitest, @testing-library/react
- * - Internal: @repo/ui, @repo/infrastructure
- *
- * @used_by
- * - All package test suites
- *
- * @runtime
- * - environment: test
- * - side_effects: None (pure utilities)
- *
- * @data_flow
- * - inputs: test configuration and overrides
- * - outputs: mock objects and test utilities
- *
- * @invariants
- * - All factories must accept partial overrides
- * - Timing utilities must use vi.useFakeTimers for determinism
- *
- * @gotchas
- * - Import this package in devDependencies only
- * - Use vi.useFakeTimers() for any time-based tests
- *
- * @issues
- * - [severity:low] None observed in-file.
- *
- * @opportunities
- * - Add more factories as common patterns emerge
- * - Extend render utilities for different provider combinations
- *
- * @verification
- * - Run: pnpm test --testNamePattern="test-utils"
- *
- * @status
- * - confidence: high
- * - last_audited: 2026-02-23
- * - updated: Initial creation with core utilities
+ * @summary Centralized test utilities for the monorepo.
+ * @description Provides common test helpers, factories, and utilities to reduce code duplication and improve test consistency.
+ * @security No sensitive data handled; test mocks use safe placeholder values.
+ * @adr none
+ * @requirements none
  */
 
 import { render } from '@testing-library/react';

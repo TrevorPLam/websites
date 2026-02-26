@@ -1,4 +1,13 @@
-import { test, expect } from '../../fixtures';
+/**
+ * @file e2e/tests/public/contact-form.spec.ts
+ * @summary E2E tests for contact form submission and lead creation.
+ * @description Verifies contact form submissions create leads in database with proper tenant isolation.
+ * @security Tests public form submission; validates tenant data isolation and lead creation.
+ * @adr none
+ * @requirements E2E-CONTACT-001, contact-form-tests
+ */
+
+import { expect, test } from '../../fixtures';
 
 test.describe('Contact form → Lead creation', () => {
   test('submitting form creates a lead in the database', async ({
@@ -55,7 +64,8 @@ test.describe('Contact form → Lead creation', () => {
     const phoneLink = page.getByRole('link', { name: /^\+?[\d\s\(\)\-]{7,}$/ }).first();
     await phoneLink.click();
 
-    await page.waitForTimeout(500);
+    // Wait for event to be tracked using a more reliable method
+    await expect(page.locator('[data-testid="phone-tracked"]')).toBeVisible({ timeout: 1000 });
 
     const { count } = await supabase
       .from('phone_click_events')

@@ -56,3 +56,6 @@ pnpm-debug.log*
 .tmp/
 temp/
 tmp/
+
+# Generated artifacts
+scripts/generated-domain-configs.js

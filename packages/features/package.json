@@ -38,6 +38,7 @@
     "@repo/shared": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
+    "date-fns": "catalog:",
     "react-hook-form": "catalog:",
     "zod": "catalog:"
   },

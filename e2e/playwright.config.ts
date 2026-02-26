@@ -1,3 +1,12 @@
+/**
+ * @file e2e/playwright.config.ts
+ * @summary Playwright configuration for E2E testing with multi-tenant authentication.
+ * @description Configures test environment, authentication paths, and browser settings.
+ * @security Handles test authentication files securely; no production credentials.
+ * @adr none
+ * @requirements E2E-CONFIG-001, playwright-config
+ */
+
 import { defineConfig, devices } from '@playwright/test';
 import path from 'path';
 
@@ -13,7 +22,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 4 : 2,
+  workers: process.env.CI ? 2 : 2,
   reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }], ['github'], ['list']],
   timeout: 30_000,
   expect: {

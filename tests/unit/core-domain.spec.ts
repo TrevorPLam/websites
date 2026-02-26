@@ -1,11 +1,11 @@
 /**
- * @file tests/integration/core-domain.spec.ts
- * @summary Generated for Wave 0 foundational tasks.
+ * @file tests/unit/core-domain.spec.ts
+ * @summary Unit tests for core domain entities and value objects.
  * @exports Public module exports for this file.
  * @invariants Keeps tenant and domain boundaries explicit.
  * @security Internal-only foundation module; avoid exposing tenant internals.
  * @gotchas Intended for server-side and test harness usage in this monorepo.
- 
+ *
  * @description Wave 0 foundational implementation for platform baseline.
  * @adr none
  * @requirements TASKS.md Wave 0 Task 2/3/4
@@ -41,5 +41,18 @@ describe('core domain entities', () => {
     lead.qualify(84);
     lead.convert();
     expect(lead.toJSON().status).toBe('converted');
+  });
+
+  it('validates tenant ID format', () => {
+    const validId = createTenantId('6af30f12-a0f5-4ce8-b8bc-f236f0dd3719');
+    expect(validId.ok).toBe(true);
+
+    const invalidId = createTenantId('invalid-tenant-id');
+    expect(invalidId.ok).toBe(false);
+  });
+
+  it('rejects invalid email formats', () => {
+    const invalidEmail = Email.create('not-an-email');
+    expect(invalidEmail.ok).toBe(false);
   });
 });

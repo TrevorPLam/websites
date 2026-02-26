@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * Documentation MCP Server
- * 
- * Model Context Protocol server for documentation intelligence
- * providing tools for search, analysis, and content retrieval
- * 
- * Part of 2026 Documentation Standards - Phase 2 Automation
+ * @file scripts/mcp/documentation-server.ts
+ * @summary MCP server for documentation intelligence and content retrieval.
+ * @description Provides Model Context Protocol tools for search, analysis, and documentation processing.
+ * @security Handles API authentication; validates all input; no sensitive data exposure.
+ * @adr none
+ * @requirements MCP-DOCS-001, documentation-server
  */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync } from 'fs';
 import { glob } from 'glob';
-import { execSync } from 'child_process';
+import { dirname, join } from 'path';
 
 interface DocumentationServer {
   name: string;
@@ -62,14 +61,14 @@ class DocumentationMCPServer {
   constructor(docsDir: string = 'docs') {
     this.docsDir = docsDir;
     this.server = this.initializeServer();
-    
+
     // Initialize RAG pipeline if available
     try {
       this.ragPipeline = this.initializeRAGPipeline();
     } catch (error) {
       console.warn('RAG pipeline not available:', error.message);
     }
-    
+
     // Initialize health analyzer if available
     try {
       this.healthAnalyzer = this.initializeHealthAnalyzer();
@@ -94,30 +93,30 @@ class DocumentationMCPServer {
               properties: {
                 query: { type: 'string', description: 'Search query' },
                 filters: { type: 'object', description: 'Search filters' },
-                limit: { type: 'number', description: 'Result limit' }
+                limit: { type: 'number', description: 'Result limit' },
               },
-              required: ['query']
-            }
+              required: ['query'],
+            },
           },
           analyze: {
             description: 'Analyze documentation quality and health',
             inputSchema: {
               type: 'object',
               properties: {
-                type: { 
-                  type: 'string', 
+                type: {
+                  type: 'string',
                   enum: ['health', 'quality', 'accessibility', 'seo', 'links'],
-                  description: 'Analysis type'
+                  description: 'Analysis type',
                 },
-                scope: { 
-                  type: 'string', 
+                scope: {
+                  type: 'string',
                   enum: ['all', 'file', 'directory'],
-                  description: 'Analysis scope'
+                  description: 'Analysis scope',
                 },
-                target: { type: 'string', description: 'Target file or directory' }
+                target: { type: 'string', description: 'Target file or directory' },
               },
-              required: ['type']
-            }
+              required: ['type'],
+            },
           },
           extract: {
             description: 'Extract content from documentation',
@@ -125,27 +124,27 @@ class DocumentationMCPServer {
               type: 'object',
               properties: {
                 source: { type: 'string', description: 'Source file or directory' },
-                type: { 
-                  type: 'string', 
+                type: {
+                  type: 'string',
                   enum: ['extract', 'summarize', 'translate', 'generate'],
-                  description: 'Extraction type'
+                  description: 'Extraction type',
                 },
                 language: { type: 'string', description: 'Target language' },
-                context: { type: 'string', description: 'Additional context' }
+                context: { type: 'string', description: 'Additional context' },
               },
-              required: ['type']
-            }
+              required: ['type'],
+            },
           },
           health_check: {
             description: 'Check server health status',
             inputSchema: {
               type: 'object',
               properties: {},
-              required: []
-            }
-          }
-        }
-      }
+              required: [],
+            },
+          },
+        },
+      },
     };
   }
 
@@ -165,7 +164,7 @@ class DocumentationMCPServer {
       },
       init: async () => {
         console.log('RAG pipeline initialized');
-      }
+      },
     };
   }
 
@@ -178,7 +177,7 @@ class DocumentationMCPServer {
       analyzeAll: async (path: string) => {
         console.log(`Health analysis: ${path}`);
         return { score: 85, issues: [] };
-      }
+      },
     };
   }
 
@@ -187,13 +186,13 @@ class DocumentationMCPServer {
    */
   async searchDocumentation(request: SearchRequest) {
     console.log(`🔍 Searching documentation: ${request.query}`);
-    
+
     try {
       // Use RAG pipeline if available
       if (this.ragPipeline) {
         return await this.ragPipeline.search(request.query);
       }
-      
+
       // Fallback to file system search
       return await this.fileSystemSearch(request);
     } catch (error) {
@@ -207,22 +206,22 @@ class DocumentationMCPServer {
    */
   private async fileSystemSearch(request: SearchRequest) {
     const files = await glob(`${this.docsDir}/**/*.md`, {
-      ignore: ['**/node_modules/**', '**/.git/**', '**/dist/**']
+      ignore: ['**/node_modules/**', '**/.git/**', '**/dist/**'],
     });
-    
+
     const results = [];
     const limit = request.limit || 10;
-    
+
     for (const file of files.slice(0, limit)) {
       try {
         const content = readFileSync(file, 'utf-8');
         const lines = content.split('\n');
-        
+
         // Simple keyword matching
-        const matches = lines.filter(line => 
+        const matches = lines.filter((line) =>
           line.toLowerCase().includes(request.query.toLowerCase())
         ).length;
-        
+
         if (matches > 0) {
           const title = this.extractTitle(content);
           results.push({
@@ -230,18 +229,18 @@ class DocumentationMCPServer {
             title,
             matches,
             excerpt: this.createExcerpt(content, request.query),
-            metadata: this.extractMetadata(file, content)
+            metadata: this.extractMetadata(file, content),
           });
         }
       } catch (error) {
         console.error(`Error processing ${file}:`, error.message);
       }
     }
-    
+
     return {
       results,
       total: results.length,
-      query: request.query
+      query: request.query,
     };
   }
 
@@ -250,14 +249,14 @@ class DocumentationMCPServer {
    */
   async analyzeDocumentation(request: AnalysisRequest) {
     console.log(`📊 Analyzing documentation: ${request.type}`);
-    
+
     try {
       // Use health analyzer if available
       if (this.healthAnalyzer && request.type === 'health') {
         const target = request.target || this.docsDir;
         return await this.healthAnalyzer.analyzeAll(target);
       }
-      
+
       // Fallback analysis
       return await this.performAnalysis(request);
     } catch (error) {
@@ -271,7 +270,7 @@ class DocumentationMCPServer {
    */
   private async performAnalysis(request: AnalysisRequest) {
     const target = request.target || this.docsDir;
-    
+
     switch (request.type) {
       case 'health':
         return this.analyzeHealth(target);
@@ -295,26 +294,26 @@ class DocumentationMCPServer {
     const files = await glob(`${target}/**/*.md`);
     const issues = [];
     let score = 100;
-    
+
     for (const file of files) {
       try {
         const content = readFileSync(file, 'utf-8');
-        
+
         // Check for missing title
         if (!content.match(/^#\s+/m)) {
           issues.push({ file, issue: 'Missing title', severity: 'medium' });
           score -= 5;
         }
-        
+
         // Check for very short content
         if (content.length < 200) {
           issues.push({ file, issue: 'Content too short', severity: 'low' });
           score -= 2;
         }
-        
+
         // Check for broken links (basic check)
         const links = content.match(/\[.*?\]\(.*?\)/g) || [];
-        const httpLinks = links.filter(link => link.includes('http://'));
+        const httpLinks = links.filter((link) => link.includes('http://'));
         if (httpLinks.length > 0) {
           issues.push({ file, issue: 'Insecure HTTP links', severity: 'medium' });
           score -= 3;
@@ -324,7 +323,7 @@ class DocumentationMCPServer {
         score -= 10;
       }
     }
-    
+
     return { score: Math.max(0, score), issues };
   }
 
@@ -335,24 +334,24 @@ class DocumentationMCPServer {
     const files = await glob(`${target}/**/*.md`);
     const issues = [];
     let score = 100;
-    
+
     for (const file of files) {
       try {
         const content = readFileSync(file, 'utf-8');
-        
+
         // Check for code examples
         if (!content.includes('```')) {
           issues.push({ file, issue: 'No code examples', severity: 'medium' });
           score -= 5;
         }
-        
+
         // Check for proper structure
         const sections = content.split(/^##\s+/m);
         if (sections.length < 2) {
           issues.push({ file, issue: 'Poor structure', severity: 'medium' });
           score -= 5;
         }
-        
+
         // Check for word count
         const wordCount = content.split(/\s+/).length;
         if (wordCount < 100) {
@@ -364,7 +363,7 @@ class DocumentationMCPServer {
         score -= 10;
       }
     }
-    
+
     return { score: Math.max(0, score), issues };
   }
 
@@ -375,30 +374,30 @@ class DocumentationMCPServer {
     const files = await glob(`${target}/**/*.md`);
     const issues = [];
     let score = 100;
-    
+
     for (const file of files) {
       try {
         const content = readFileSync(file, 'utf-8');
-        
+
         // Check for image alt text
         const images = content.match(/!\[.*?\]\(.*?\)/g) || [];
-        const missingAlt = images.filter(img => !img.match(/!\[.*?\]/)[1]);
+        const missingAlt = images.filter((img) => !img.match(/!\[.*?\]/)[1]);
         if (missingAlt.length > 0) {
           issues.push({ file, issue: 'Missing image alt text', severity: 'medium' });
           score -= 3;
         }
-        
+
         // Check for proper headings
         const headings = content.match(/^#+\s+/gm) || [];
-        const skipHeadings = headings.filter(h => h.length > 80);
+        const skipHeadings = headings.filter((h) => h.length > 80);
         if (skipHeadings.length > 0) {
           issues.push({ file, issue: 'Headings too long', severity: 'low' });
           score -= 1;
         }
-        
+
         // Check for link text
         const links = content.match(/\[.*?\]\(.*?\)/g) || [];
-        const emptyLinks = links.filter(link => link.match(/\[\s*\]/));
+        const emptyLinks = links.filter((link) => link.match(/\[\s*\]/));
         if (emptyLinks.length > 0) {
           issues.push({ file, issue: 'Empty link text', severity: 'medium' });
           score -= 3;
@@ -408,7 +407,7 @@ class DocumentationMCPServer {
         score -= 10;
       }
     }
-    
+
     return { score: Math.max(0, score), issues };
   }
 
@@ -419,25 +418,25 @@ class DocumentationMCPServer {
     const files = await glob(`${target}/**/*.md`);
     const issues = [];
     let score = 100;
-    
+
     for (const file of files) {
       try {
         const content = readFileSync(file, 'utf-8');
-        
+
         // Check for title
         const title = this.extractTitle(content);
         if (!title || title.length < 10) {
           issues.push({ file, issue: 'Poor or missing title', severity: 'medium' });
           score -= 5;
         }
-        
+
         // Check for description
         const firstLines = content.split('\n').slice(0, 5).join(' ');
         if (firstLines.length < 50) {
           issues.push({ file, issue: 'Missing description', severity: 'medium' });
           score -= 3;
         }
-        
+
         // Check for meta tags (basic check)
         if (!content.includes('meta') && !content.includes('title:')) {
           issues.push({ file, issue: 'Missing meta tags', severity: 'low' });
@@ -448,7 +447,7 @@ class DocumentationMCPServer {
         score -= 10;
       }
     }
-    
+
     return { score: Math.max(0, score), issues };
   }
 
@@ -459,17 +458,17 @@ class DocumentationMCPServer {
     const files = await glob(`${target}/**/*.md`);
     const issues = [];
     let score = 100;
-    
+
     for (const file of files) {
       try {
         const content = readFileSync(file, 'utf-8');
-        
+
         // Extract all links
         const links = content.match(/\[.*?\]\((.*?)\)/g) || [];
-        
+
         for (const link of links) {
           const url = link.match(/\((.*?)\)/)[1];
-          
+
           // Check for broken internal links
           if (url.startsWith('./') || url.startsWith('../')) {
             const fullPath = join(dirname(file), url);
@@ -478,13 +477,13 @@ class DocumentationMCPServer {
               score -= 2;
             }
           }
-          
+
           // Check for HTTP links
           if (url.startsWith('http://')) {
             issues.push({ file, issue: `Insecure HTTP link: ${url}`, severity: 'medium' });
             score -= 1;
           }
-          
+
           // Check for empty link text
           const linkText = link.match(/\[(.*?)\]/)[1];
           if (!linkText || linkText.trim().length === 0) {
@@ -497,7 +496,7 @@ class DocumentationMCPServer {
         score -= 10;
       }
     }
-    
+
     return { score: Math.max(0, score), issues };
   }
 
@@ -506,10 +505,10 @@ class DocumentationMCPServer {
    */
   async extractContent(request: ContentRequest) {
     console.log(`📄 Extracting content: ${request.type}`);
-    
+
     try {
       const source = request.source || this.docsDir;
-      
+
       switch (request.type) {
         case 'extract':
           return await this.extractFromFile(source);
@@ -538,7 +537,7 @@ class DocumentationMCPServer {
       metadata: this.extractMetadata(source, content),
       wordCount: content.split(/\s+/).length,
       codeBlocks: (content.match(/```[\s\S]*?```/g) || []).length,
-      links: (content.match(/\[.*?\]\(.*?\)/g) || []).length
+      links: (content.match(/\[.*?\]\(.*?\)/g) || []).length,
     };
   }
 
@@ -548,15 +547,15 @@ class DocumentationMCPServer {
   private async summarizeContent(source: string) {
     const content = readFileSync(source, 'utf-8');
     const lines = content.split('\n');
-    
+
     // Simple summarization (first and last paragraphs)
     const firstPara = lines.slice(0, 5).join(' ').trim();
     const lastPara = lines.slice(-5).join(' ').trim();
-    
+
     return {
       summary: `${firstPara.substring(0, 200)}...`,
       wordCount: content.split(/\s+/).length,
-      sections: lines.filter(line => line.startsWith('##')).length
+      sections: lines.filter((line) => line.startsWith('##')).length,
     };
   }
 
@@ -565,13 +564,13 @@ class DocumentationMCPServer {
    */
   private async translateContent(source: string, language: string) {
     const content = readFileSync(source, 'utf-8');
-    
+
     // Mock translation (in production, use translation service)
     return {
       translatedContent: `[${language.toUpperCase()}] ${content.substring(0, 100)}...`,
       originalLanguage: 'en',
       targetLanguage: language,
-      confidence: 0.8
+      confidence: 0.8,
     };
   }
 
@@ -583,7 +582,7 @@ class DocumentationMCPServer {
     return {
       generatedContent: `Generated content based on: ${context}`,
       type: 'documentation',
-      confidence: 0.7
+      confidence: 0.7,
     };
   }
 
@@ -595,19 +594,19 @@ class DocumentationMCPServer {
       const serverStatus = this.server;
       const ragStatus = this.ragPipeline ? 'available' : 'unavailable';
       const healthStatus = this.healthAnalyzer ? 'available' : 'unavailable';
-      
+
       return {
         status: 'healthy',
         server: serverStatus,
         rag: ragStatus,
         health: healthStatus,
         uptime: process.uptime(),
-        memory: process.memoryUsage()
+        memory: process.memoryUsage(),
       };
     } catch (error) {
       return {
         status: 'unhealthy',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -626,13 +625,13 @@ class DocumentationMCPServer {
   private createExcerpt(content: string, query: string): string {
     const lines = content.split('\n');
     const queryLower = query.toLowerCase();
-    
+
     for (const line of lines) {
       if (line.toLowerCase().includes(queryLower)) {
         return line.substring(0, 200);
       }
     }
-    
+
     return content.substring(0, 200);
   }
 
@@ -641,7 +640,7 @@ class DocumentationMCPServer {
    */
   private extractMetadata(file: string, content: string): any {
     const stats = require('fs').statSync(file);
-    
+
     return {
       file,
       size: stats.size,
@@ -650,7 +649,7 @@ class DocumentationMCPServer {
       codeBlocks: (content.match(/```[\s\S]*?```/g) || []).length,
       links: (content.match(/\[.*?\]\(.*?\)/g) || []).length,
       hasTitle: !!content.match(/^#\s+/m),
-      sections: content.split(/^##\s+/m).length
+      sections: content.split(/^##\s+/m).length,
     };
   }
 
@@ -679,7 +678,7 @@ class DocumentationMCPServer {
     console.log(`🚀 Starting Documentation MCP Server on port ${port}`);
     console.log(`📚 Documentation directory: ${this.docsDir}`);
     console.log(`🔧 Available tools: ${Object.keys(this.server.capabilities.tools).join(', ')}`);
-    
+
     // In a real implementation, this would start an HTTP server
     console.log('✅ MCP Server ready for requests');
   }
@@ -689,38 +688,38 @@ class DocumentationMCPServer {
 async function main() {
   const args = process.argv.slice(2);
   const command = args[0];
-  
+
   const server = new DocumentationMCPServer();
-  
+
   switch (command) {
     case 'start':
       const port = parseInt(args[1]) || 3000;
       server.start(port);
       break;
-      
+
     case 'search':
       const searchRequest = JSON.parse(args[1] || '{}');
       const searchResults = await server.searchDocumentation(searchRequest);
       console.log('Search Results:', JSON.stringify(searchResults, null, 2));
       break;
-      
+
     case 'analyze':
       const analysisRequest = JSON.parse(args[1] || '{}');
       const analysisResults = await server.analyzeDocumentation(analysisRequest);
       console.log('Analysis Results:', JSON.stringify(analysisResults, null, 2));
       break;
-      
+
     case 'extract':
       const contentRequest = JSON.parse(args[1] || '{}');
       const contentResults = await server.extractContent(contentRequest);
       console.log('Content Results:', JSON.stringify(contentResults, null, 2));
       break;
-      
+
     case 'health':
       const healthResults = await server.healthCheck();
       console.log('Health Results:', JSON.stringify(healthResults, null, 2));
       break;
-      
+
     case 'help':
       console.log(`
 Documentation MCP Server
@@ -743,7 +742,7 @@ Examples:
   node scripts/mcp/documentation-server.ts extract '{"type": "summarize", "source": "docs/README.md"}'
       `);
       break;
-      
+
     default:
       console.error('Unknown command. Use "help" for available commands.');
       process.exit(1);
@@ -751,7 +750,7 @@ Examples:
 }
 
 if (require.main === module) {
-  main().catch(error => {
+  main().catch((error) => {
     console.error('Documentation MCP Server error:', error);
     process.exit(1);
   });

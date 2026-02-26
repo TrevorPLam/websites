@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * @file scripts/rag/rag-pipeline.mjs
- * @summary Processes documentation through RAG pipeline for analysis and retrieval.
- * @description Implements document chunking, embedding generation, and similarity search for knowledge base.
+ * @file scripts/rag/rag-pipeline-working.mjs
+ * @summary Working version of RAG pipeline for documentation processing and testing.
+ * @description Development version with enhanced logging and experimental features for RAG pipeline.
  * @security Handles API keys securely; validates input documents; no sensitive data in logs.
  * @adr none
- * @requirements AI-RAG-001, docs-processing
+ * @requirements AI-RAG-002, docs-processing-testing
  */
 
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { glob } from 'glob';
 
 // DocumentChunk factory function

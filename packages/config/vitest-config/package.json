@@ -16,7 +16,7 @@
     "@types/node": "catalog:",
     "typescript": "catalog:",
     "jsdom": "catalog:",
-    "vitest-dom": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
     "@chialab/vitest-axe": "catalog:"
   },
   "files": [

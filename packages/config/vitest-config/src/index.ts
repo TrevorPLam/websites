@@ -1,3 +1,12 @@
+/**
+ * @file packages/config/vitest-config/src/index.ts
+ * @summary Shared Vitest configuration for all packages in the monorepo.
+ * @description Follows 2026 best practices for performance and maintainability.
+ * @security No security concerns; configuration file only.
+ * @adr none
+ * @requirements CONFIG-TEST-001, vitest-config
+ */
+
 import { defineConfig } from 'vitest/config';
 
 /**
@@ -24,7 +33,10 @@ export const sharedConfig = {
     retry: process.env.CI ? 1 : 0,
     sequence: {
       concurrent: true,
-      shuffle: process.env.NODE_ENV === 'development' || process.env.CI, // Enable shuffle in CI to catch order dependencies
+      shuffle:
+        process.env.NODE_ENV === 'development' || process.env.CI
+          ? true
+          : { files: false, tests: false },
     },
     // Enhanced coverage with 2026 standards
     coverage: {
@@ -41,10 +53,10 @@ export const sharedConfig = {
       ],
       thresholds: {
         global: {
-          branches: 0, // Temporary: Remove thresholds until tests are functional
-          functions: 0,
-          lines: 0,
-          statements: 0,
+          branches: 20, // Phase 1: Start with 20% coverage
+          functions: 20,
+          lines: 20,
+          statements: 20,
         },
       },
       // 2026: All files coverage reporting

@@ -12,7 +12,14 @@
  * Provides field array helpers, validation utilities, and form state management
  */
 
-import { UseFormReturn, FieldValues, Path, useFieldArray } from 'react-hook-form';
+import {
+  ArrayPath,
+  FieldArrayWithId,
+  FieldValues,
+  Path,
+  useFieldArray,
+  UseFormReturn,
+} from 'react-hook-form';
 import { z } from 'zod';
 
 // ─── Field Array Utilities ────────────────────────────────────────────────────────
@@ -23,7 +30,7 @@ export interface FieldArrayProps<T extends FieldValues> {
 }
 
 export interface UseFieldArrayReturn<T extends FieldValues> {
-  fields: { id: string; value: any }[];
+  fields: FieldArrayWithId<T, ArrayPath<T>, 'id'>[];
   append: (value: any) => void;
   prepend: (value: any) => void;
   remove: (index: number) => void;
@@ -31,7 +38,7 @@ export interface UseFieldArrayReturn<T extends FieldValues> {
   move: (from: number, to: number) => void;
   insert: (index: number, value: any) => void;
   update: (index: number, value: any) => void;
-  replace: (index: number, value: any) => void;
+  replace: (data: any) => void;
 }
 
 export function useFieldArrayEnhanced<T extends FieldValues>({
@@ -52,7 +59,7 @@ export function useFieldArrayEnhanced<T extends FieldValues>({
     move: (from: number, to: number) => move(from, to),
     insert: (index: number, value: any) => insert(index, value),
     update: (index: number, value: any) => update(index, value),
-    replace: (index: number, value: any) => replace(index, value),
+    replace: (data: any) => replace(data),
   };
 }
 
@@ -89,8 +96,10 @@ export function createNumberField(
   min?: number,
   max?: number,
   message = 'Please enter a valid number'
-) {
-  let schema = z.string().regex(/^\d+$/, { message });
+): z.ZodEffects<z.ZodString, string, string> | z.ZodString {
+  let schema: z.ZodEffects<z.ZodString, string, string> | z.ZodString = z
+    .string()
+    .regex(/^\d+$/, { message });
 
   if (min !== undefined) {
     schema = schema.refine((val) => parseInt(val) >= min, {
@@ -154,7 +163,7 @@ export function getFirstFormError<T extends FieldValues>(
 
   return {
     field: firstError[0] as Path<T>,
-    message: firstError[1]?.message || 'Validation error',
+    message: (firstError[1]?.message as string) || 'Validation error',
   };
 }
 
@@ -302,7 +311,7 @@ export function resetFormToDefaults<T extends FieldValues>(
   form: UseFormReturn<T>,
   defaultValues?: Partial<T>
 ): void {
-  form.reset(defaultValues);
+  form.reset(defaultValues as T);
 }
 
 export function resetFormExcept<T extends FieldValues>(
@@ -312,9 +321,9 @@ export function resetFormExcept<T extends FieldValues>(
   const currentValues = form.getValues();
   const resetValues: Partial<T> = {};
 
-  exceptFields.forEach(field => {
+  exceptFields.forEach((field) => {
     resetValues[field] = currentValues[field];
   });
 
-  form.reset(resetValues);
+  form.reset(resetValues as T);
 }

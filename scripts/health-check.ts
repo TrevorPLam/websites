@@ -24,7 +24,25 @@
 import fs from 'fs';
 import path from 'path';
 
-const ROOT = path.resolve(process.cwd());
+// Find the actual repository root by looking for package.json and pnpm-workspace.yaml
+function findRepoRoot(startDir: string = process.cwd()): string {
+  let currentDir = path.resolve(startDir);
+
+  while (currentDir !== path.dirname(currentDir)) {
+    if (
+      fs.existsSync(path.join(currentDir, 'package.json')) &&
+      fs.existsSync(path.join(currentDir, 'pnpm-workspace.yaml'))
+    ) {
+      return currentDir;
+    }
+    currentDir = path.dirname(currentDir);
+  }
+
+  // Fallback to original behavior if root not found
+  return path.resolve(startDir);
+}
+
+const ROOT = findRepoRoot();
 
 const GREEN = '\x1b[32m';
 const RED = '\x1b[31m';
@@ -127,15 +145,34 @@ function checkClients(): void {
 
 function checkPackages(): void {
   section('Shared packages');
-  const pkgs = [
-    'packages/ui',
-    'packages/utils',
-    'packages/types',
-    'packages/infra',
-    'packages/features',
-    'packages/marketing-components',
-  ];
-  for (const pkg of pkgs) {
+
+  // Discover packages dynamically from workspace configuration
+  const workspaceConfig = readJson('package.json');
+  const workspaceGlobs = (workspaceConfig?.['workspaces'] as string[]) || [];
+
+  // Find all actual package directories
+  const packageDirs: string[] = [];
+  for (const glob of workspaceGlobs) {
+    if (glob.includes('packages/*')) {
+      const packagesDir = path.join(ROOT, 'packages');
+      if (fs.existsSync(packagesDir)) {
+        const dirs = fs
+          .readdirSync(packagesDir)
+          .filter((name) => {
+            const fullPath = path.join(packagesDir, name);
+            return (
+              fs.statSync(fullPath).isDirectory() &&
+              fs.existsSync(path.join(fullPath, 'package.json'))
+            );
+          })
+          .map((name) => `packages/${name}`);
+        packageDirs.push(...dirs);
+      }
+    }
+  }
+
+  // Check each discovered package
+  for (const pkg of packageDirs) {
     if (!fileExists(pkg)) {
       fail(pkg, 'directory not found');
       continue;
@@ -150,6 +187,10 @@ function checkPackages(): void {
       warn(pkg, 'no src/index.ts found');
     }
   }
+
+  if (packageDirs.length === 0) {
+    warn('packages/', 'no package directories found in workspaces');
+  }
 }
 
 function checkRootScripts(): void {
@@ -160,7 +201,7 @@ function checkRootScripts(): void {
     return;
   }
   const scripts = (pkg['scripts'] as Record<string, string> | undefined) ?? {};
-  for (const s of ['build', 'lint', 'type-check', 'test', 'format', 'validate-exports']) {
+  for (const s of ['build', 'lint', 'type-check', 'test', 'format', 'validate:exports']) {
     if (scripts[s]) {
       pass(`scripts.${s}`);
     } else {

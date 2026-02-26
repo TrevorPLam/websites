@@ -1,28 +1,10 @@
 /**
  * @file packages/test-utils/src/msw.ts
- * @role test
- * @summary Mock Service Worker setup for network interception
- *
- * Provides MSW utilities for mocking network requests in tests.
- * Enables fast, reliable integration tests without real backend.
- *
- * @entrypoints
- * - import { setupMsw, mockApi } from '@repo/test-utils/msw'
- *
- * @exports
- * - MSW setup and teardown utilities
- * - Common API mock handlers
- * - Network interception helpers
- *
- * @depends_on
- * - External: msw
- *
- * @used_by
- * - Integration test suites
- *
- * @runtime
- * - environment: test
- * - side_effects: Sets up global MSW instance
+ * @summary Mock Service Worker setup for network interception.
+ * @description Provides MSW utilities for mocking network requests in tests. Enables fast, reliable integration tests without real backend.
+ * @security No real network requests; all data is mocked and safe.
+ * @adr none
+ * @requirements none
  */
 
 import { http } from 'msw';
