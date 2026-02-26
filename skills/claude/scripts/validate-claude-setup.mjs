@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * @fileoverview Validate Claude agent setup and configuration
- * @author cascade-ai
- * @created 2026-02-26
- * @package claude-scripts
- * @pattern validation-script
- * @see skills/claude/references/claude-agent-patterns.md
+ * @file skills/claude/scripts/validate-claude-setup.mjs
+ * @summary Validate Claude agent environment configuration according to 2026 agentic coding standards.
+ * @description Performs comprehensive validation of Claude configuration, MCP setup, and repository structure.
+ * @security Validates no hardcoded secrets; checks environment variable usage only.
+ * @adr none
+ * @requirements TASKS3-S-06, 2026-agentic-coding-standards
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 /**
  * Claude Setup Validation Script
- * 
+ *
  * This script validates that the Claude agent environment is properly
  * configured according to 2026 agentic coding standards.
  */
@@ -43,7 +43,7 @@ class ClaudeSetupValidator {
     this.validateCodeQuality();
 
     this.printResults();
-    
+
     if (this.errors.length > 0) {
       process.exit(1);
     }
@@ -110,8 +110,8 @@ class ClaudeSetupValidator {
    */
   validateSettingsStructure(settings) {
     const required = ['agent', 'preferences', 'mcp', 'memory', 'optimization'];
-    const missing = required.filter(key => !settings[key]);
-    
+    const missing = required.filter((key) => !settings[key]);
+
     if (missing.length > 0) {
       this.errors.push(`Missing settings sections: ${missing.join(', ')}`);
     }
@@ -130,8 +130,8 @@ class ClaudeSetupValidator {
    */
   validateMemoryStructure(memory) {
     const required = ['working_memory', 'conversation_memory', 'task_memory', 'long_term_memory'];
-    const missing = required.filter(key => !memory[key]);
-    
+    const missing = required.filter((key) => !memory[key]);
+
     if (missing.length > 0) {
       this.errors.push(`Missing memory sections: ${missing.join(', ')}`);
     }
@@ -145,9 +145,14 @@ class ClaudeSetupValidator {
    * Validate optimization structure
    */
   validateOptimizationStructure(optimization) {
-    const required = ['parallel_execution', 'memory_management', 'context_optimization', 'error_handling'];
-    const missing = required.filter(key => !optimization[key]);
-    
+    const required = [
+      'parallel_execution',
+      'memory_management',
+      'context_optimization',
+      'error_handling',
+    ];
+    const missing = required.filter((key) => !optimization[key]);
+
     if (missing.length > 0) {
       this.errors.push(`Missing optimization sections: ${missing.join(', ')}`);
     }
@@ -160,7 +165,7 @@ class ClaudeSetupValidator {
     console.log('\n🔗 MCP Configuration:');
 
     const mcpConfigPath = join(this.repoRoot, 'mcp', 'config', 'config.json');
-    
+
     if (!existsSync(mcpConfigPath)) {
       this.errors.push('MCP configuration not found');
       return;
@@ -168,7 +173,7 @@ class ClaudeSetupValidator {
 
     try {
       const mcpConfig = JSON.parse(readFileSync(mcpConfigPath, 'utf8'));
-      
+
       if (!mcpConfig.servers) {
         this.errors.push('MCP servers section missing');
         return;
@@ -179,11 +184,13 @@ class ClaudeSetupValidator {
         'knowledge-graph',
         'github',
         'documentation',
-        'filesystem'
+        'filesystem',
       ];
 
       const availableServers = Object.keys(mcpConfig.servers);
-      const missingCritical = criticalServers.filter(server => !availableServers.includes(server));
+      const missingCritical = criticalServers.filter(
+        (server) => !availableServers.includes(server)
+      );
 
       if (missingCritical.length > 0) {
         this.warnings.push(`Missing critical MCP servers: ${missingCritical.join(', ')}`);
@@ -198,7 +205,6 @@ class ClaudeSetupValidator {
           this.warnings.push(`MCP server ${name} missing command`);
         }
       });
-
     } catch (error) {
       this.errors.push(`Invalid MCP configuration: ${error.message}`);
     }
@@ -212,10 +218,10 @@ class ClaudeSetupValidator {
 
     const memoryIndicators = [
       'skills/claude/references/claude-agent-patterns.md',
-      'skills/claude/references/mcp-integration-guide.md'
+      'skills/claude/references/mcp-integration-guide.md',
     ];
 
-    memoryIndicators.forEach(file => {
+    memoryIndicators.forEach((file) => {
       const filePath = join(this.repoRoot, file);
       if (existsSync(filePath)) {
         console.log(`  ✅ Memory reference: ${file}`);
@@ -235,14 +241,14 @@ class ClaudeSetupValidator {
     const optimizationIndicators = [
       'parallel_tool_calls: true',
       'context_caching: true',
-      'batch_operations: true'
+      'batch_operations: true',
     ];
 
     const settingsPath = join(this.repoRoot, '.claude', 'settings.json');
     if (existsSync(settingsPath)) {
       try {
         const settings = JSON.parse(readFileSync(settingsPath, 'utf8'));
-        
+
         if (settings.optimization?.parallel_tool_calls) {
           console.log('  ✅ Parallel tool calls enabled');
           this.successCount++;
@@ -256,7 +262,6 @@ class ClaudeSetupValidator {
         } else {
           this.warnings.push('MCP parallel execution not enabled');
         }
-
       } catch (error) {
         this.warnings.push('Could not validate optimization settings');
       }
@@ -276,10 +281,10 @@ class ClaudeSetupValidator {
       'skills/claude/references',
       'skills/claude/scripts',
       'mcp/config',
-      'docs/guides'
+      'docs/guides',
     ];
 
-    requiredDirs.forEach(dir => {
+    requiredDirs.forEach((dir) => {
       const dirPath = join(this.repoRoot, dir);
       if (existsSync(dirPath)) {
         console.log(`  ✅ Directory exists: ${dir}`);
@@ -296,14 +301,9 @@ class ClaudeSetupValidator {
   validateCodeQuality() {
     console.log('\n🔍 Code Quality:');
 
-    const qualityFiles = [
-      'package.json',
-      'tsconfig.json',
-      '.eslintrc.json',
-      '.prettierrc'
-    ];
+    const qualityFiles = ['package.json', 'tsconfig.json', '.eslintrc.json', '.prettierrc'];
 
-    qualityFiles.forEach(file => {
+    qualityFiles.forEach((file) => {
       const filePath = join(this.repoRoot, file);
       if (existsSync(filePath)) {
         console.log(`  ✅ Quality config: ${file}`);
@@ -328,12 +328,12 @@ class ClaudeSetupValidator {
 
     if (this.warnings.length > 0) {
       console.log('\n⚠️ WARNINGS:');
-      this.warnings.forEach(warning => console.log(`  - ${warning}`));
+      this.warnings.forEach((warning) => console.log(`  - ${warning}`));
     }
 
     if (this.errors.length > 0) {
       console.log('\n❌ ERRORS:');
-      this.errors.forEach(error => console.log(`  - ${error}`));
+      this.errors.forEach((error) => console.log(`  - ${error}`));
       console.log('\n💡 Fix errors before proceeding with Claude agent tasks.');
     } else {
       console.log('\n🎉 Claude agent setup is properly configured!');

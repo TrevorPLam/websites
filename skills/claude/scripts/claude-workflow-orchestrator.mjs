@@ -1,23 +1,21 @@
 #!/usr/bin/env node
 
 /**
- * @fileoverview Claude workflow orchestrator for multi-agent coordination
- * @author cascade-ai
- * @created 2026-02-26
- * @package claude-scripts
- * @pattern workflow-orchestration
- * @see skills/claude/references/mcp-integration-guide.md
+ * @file skills/claude/scripts/claude-workflow-orchestrator.mjs
+ * @summary Orchestrate complex workflows using Claude agents with MCP integration and parallel execution patterns.
+ * @description Manages multi-step workflows with parallel execution, session tracking, and error recovery.
+ * @security No credentials stored in session data; validates environment variable usage only.
+ * @adr none
+ * @requirements TASKS3-S-06, 2026-agentic-coding-standards
  */
 
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 
 /**
  * Claude Workflow Orchestrator
- * 
+ *
  * This script orchestrates complex workflows using Claude agents
  * with MCP integration and parallel execution patterns.
  */
@@ -43,9 +41,9 @@ class ClaudeWorkflowOrchestrator {
         { name: 'plan-implementation', server: 'sequential-thinking', parallel: false },
         { name: 'implement-changes', server: 'filesystem', parallel: false },
         { name: 'validate-changes', server: 'github', parallel: true },
-        { name: 'update-documentation', server: 'documentation', parallel: true }
+        { name: 'update-documentation', server: 'documentation', parallel: true },
       ],
-      estimatedDuration: '30-60 minutes'
+      estimatedDuration: '30-60 minutes',
     });
 
     this.workflows.set('code-review-security', {
@@ -55,9 +53,9 @@ class ClaudeWorkflowOrchestrator {
         { name: 'security-scan', server: 'github', parallel: true },
         { name: 'dependency-check', server: 'fetch', parallel: true },
         { name: 'pattern-validation', server: 'documentation', parallel: true },
-        { name: 'generate-report', server: 'sequential-thinking', parallel: false }
+        { name: 'generate-report', server: 'sequential-thinking', parallel: false },
       ],
-      estimatedDuration: '15-30 minutes'
+      estimatedDuration: '15-30 minutes',
     });
 
     this.workflows.set('multi-tenant-setup', {
@@ -68,9 +66,9 @@ class ClaudeWorkflowOrchestrator {
         { name: 'implement-tenant-isolation', server: 'filesystem', parallel: false },
         { name: 'setup-rls-policies', server: 'github', parallel: true },
         { name: 'validate-security', server: 'observability', parallel: true },
-        { name: 'create-documentation', server: 'documentation', parallel: true }
+        { name: 'create-documentation', server: 'documentation', parallel: true },
       ],
-      estimatedDuration: '45-90 minutes'
+      estimatedDuration: '45-90 minutes',
     });
   }
 
@@ -79,7 +77,7 @@ class ClaudeWorkflowOrchestrator {
    */
   async executeWorkflow(workflowName, options = {}) {
     console.log(`🚀 Starting workflow: ${workflowName}`);
-    
+
     const workflow = this.workflows.get(workflowName);
     if (!workflow) {
       throw new Error(`Workflow not found: ${workflowName}`);
@@ -90,7 +88,7 @@ class ClaudeWorkflowOrchestrator {
       workflow: workflowName,
       startTime: Date.now(),
       currentStep: 0,
-      status: 'running'
+      status: 'running',
     });
 
     try {
@@ -99,18 +97,17 @@ class ClaudeWorkflowOrchestrator {
         ...this.activeSessions.get(sessionId),
         status: 'completed',
         endTime: Date.now(),
-        results
+        results,
       });
 
       console.log(`✅ Workflow ${workflowName} completed successfully`);
       return results;
-
     } catch (error) {
       this.activeSessions.set(sessionId, {
         ...this.activeSessions.get(sessionId),
         status: 'failed',
         endTime: Date.now(),
-        error: error.message
+        error: error.message,
       });
 
       console.error(`❌ Workflow ${workflowName} failed:`, error.message);
@@ -127,9 +124,9 @@ class ClaudeWorkflowOrchestrator {
 
     while (stepIndex < workflow.steps.length) {
       const currentSteps = this.getParallelSteps(workflow, stepIndex);
-      
+
       console.log(`📋 Executing steps ${stepIndex + 1}-${stepIndex + currentSteps.length}:`);
-      currentSteps.forEach(step => console.log(`   - ${step.name} (${step.server})`));
+      currentSteps.forEach((step) => console.log(`   - ${step.name} (${step.server})`));
 
       const stepResults = await this.executeParallelSteps(currentSteps, options);
       results.push(...stepResults);
@@ -149,7 +146,7 @@ class ClaudeWorkflowOrchestrator {
 
     while (currentIndex < workflow.steps.length) {
       const step = workflow.steps[currentIndex];
-      
+
       if (step.parallel && parallelSteps.length > 0) {
         // Can execute in parallel with previous steps
         parallelSteps.push(step);
@@ -175,7 +172,7 @@ class ClaudeWorkflowOrchestrator {
       return [await this.executeStep(steps[0], options)];
     }
 
-    const promises = steps.map(step => this.executeStep(step, options));
+    const promises = steps.map((step) => this.executeStep(step, options));
     return await Promise.all(promises);
   }
 
@@ -184,28 +181,27 @@ class ClaudeWorkflowOrchestrator {
    */
   async executeStep(step, options) {
     console.log(`⚡ Executing: ${step.name} (${step.server})`);
-    
+
     try {
       const result = await this.invokeMCPServer(step.server, step.name, options);
-      
+
       console.log(`✅ Completed: ${step.name}`);
       return {
         step: step.name,
         server: step.server,
         status: 'success',
         result,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
-
     } catch (error) {
       console.log(`❌ Failed: ${step.name} - ${error.message}`);
-      
+
       return {
         step: step.name,
         server: step.server,
         status: 'error',
         error: error.message,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
     }
   }
@@ -216,9 +212,9 @@ class ClaudeWorkflowOrchestrator {
   async invokeMCPServer(serverName, operation, options) {
     // This would integrate with actual MCP servers
     // For now, simulate the operation
-    
+
     const delay = Math.random() * 2000 + 1000; // 1-3 second delay
-    await new Promise(resolve => setTimeout(resolve, delay));
+    await new Promise((resolve) => setTimeout(resolve, delay));
 
     return {
       server: serverName,
@@ -226,8 +222,8 @@ class ClaudeWorkflowOrchestrator {
       data: `Simulated result for ${operation} on ${serverName}`,
       metadata: {
         executionTime: delay,
-        timestamp: Date.now()
-      }
+        timestamp: Date.now(),
+      },
     };
   }
 
@@ -243,7 +239,7 @@ class ClaudeWorkflowOrchestrator {
    */
   listWorkflows() {
     console.log('📋 Available Workflows:\n');
-    
+
     for (const [name, workflow] of this.workflows) {
       console.log(`🔄 ${name}`);
       console.log(`   Description: ${workflow.description}`);
@@ -258,12 +254,12 @@ class ClaudeWorkflowOrchestrator {
    */
   getSessionStatus() {
     console.log('📊 Active Sessions:\n');
-    
+
     for (const [sessionId, session] of this.activeSessions) {
-      const duration = session.endTime 
-        ? session.endTime - session.startTime 
+      const duration = session.endTime
+        ? session.endTime - session.startTime
         : Date.now() - session.startTime;
-      
+
       console.log(`🔗 ${sessionId}`);
       console.log(`   Workflow: ${session.workflow}`);
       console.log(`   Status: ${session.status}`);
@@ -281,7 +277,7 @@ class ClaudeWorkflowOrchestrator {
       this.activeSessions.set(sessionId, {
         ...session,
         status: 'cancelled',
-        endTime: Date.now()
+        endTime: Date.now(),
       });
       console.log(`🛑 Session ${sessionId} cancelled`);
       return true;
