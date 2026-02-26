@@ -78,9 +78,44 @@ export default defineConfig({
       testMatch: '**/public/**/*.spec.ts',
     },
     {
-      name: 'a11y',
+      name: 'mobile-iphone',
+      use: { ...devices['iPhone 13'] },
+      testMatch: '**/mobile/**/*.spec.ts',
+    },
+    {
+      name: 'mobile-android',
+      use: { ...devices['Pixel 7'] },
+      testMatch: '**/mobile/**/*.spec.ts',
+    },
+    {
+      name: 'mobile-compact',
+      use: { ...devices['iPhone SE'] },
+      testMatch: '**/mobile/**/*.spec.ts',
+    },
+    {
+      name: 'tablet-ipad-pro',
+      use: { ...devices['iPad Pro'] },
+      testMatch: '**/tablet/**/*.spec.ts',
+    },
+    {
+      name: 'tablet-ipad',
+      use: { ...devices['iPad'] },
+      testMatch: '**/tablet/**/*.spec.ts',
+    },
+    {
+      name: 'a11y-desktop',
       use: { ...devices['Desktop Chrome'] },
-      testMatch: '**/a11y/**/*.spec.ts',
+      testMatch: '**/accessibility/**/*.spec.ts',
+    },
+    {
+      name: 'a11y-mobile',
+      use: { ...devices['iPhone 13'] },
+      testMatch: '**/accessibility/**/*.spec.ts',
+    },
+    {
+      name: 'a11y-tablet',
+      use: { ...devices['iPad Pro'] },
+      testMatch: '**/accessibility/**/*.spec.ts',
     },
   ],
   webServer: [

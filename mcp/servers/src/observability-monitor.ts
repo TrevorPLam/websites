@@ -208,6 +208,9 @@ export class ObservabilityMonitor {
 
         this.activeSpans.set(spanId, span);
 
+        // Add TTL cleanup for active spans (5-minute max span age)
+        this.cleanupExpiredSpans();
+
         if (!this.traces.has(traceId)) {
           this.traces.set(traceId, []);
         }
@@ -437,9 +440,7 @@ export class ObservabilityMonitor {
             this.alerts.push(newAlert);
 
             // Cap alerts array to prevent memory leaks
-            if (this.alerts.length > 10000) {
-              this.alerts = this.alerts.slice(-10000);
-            }
+            this.capAlertsArray();
 
             return {
               content: [{ type: 'text', text: `Alert created: ${newAlert.id} - ${alert.title}` }],
@@ -587,24 +588,173 @@ export class ObservabilityMonitor {
     this.metrics.get(name)!.push(metric);
   }
 
-  private async executeHealthCheck(_checkName: string, _timeout: number): Promise<void> {
-    // Simulate health check execution
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Real health check based on system resources
-        const memUsage = process.memoryUsage();
-        if (memUsage.heapUsed > 500 * 1024 * 1024) {
-          // 500MB limit
-          reject(
-            new Error(
-              `Health check failed: High memory usage - ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`
-            )
-          );
-        } else {
-          resolve();
-        }
-      }, 100); // Fixed 100ms timeout
-    });
+  private async executeHealthCheck(checkName: string, timeout: number): Promise<void> {
+    const startTime = Date.now();
+
+    try {
+      switch (checkName) {
+        case 'memory-usage':
+          await this.checkMemoryUsage();
+          break;
+        case 'cpu-usage':
+          await this.checkCpuUsage();
+          break;
+        case 'database-connection':
+          await this.checkDatabaseConnection();
+          break;
+        case 'mcp-server-status':
+          await this.checkMcpServerStatus();
+          break;
+        default:
+          // Generic health check
+          await this.checkGenericHealth();
+      }
+
+      // Update health check status
+      const check = this.healthChecks.get(checkName);
+      if (check) {
+        check.status = 'healthy';
+        check.responseTime = Date.now() - startTime;
+        check.lastCheck = new Date();
+      }
+    } catch (error) {
+      // Update health check status to unhealthy
+      const check = this.healthChecks.get(checkName);
+      if (check) {
+        check.status = 'unhealthy';
+        check.responseTime = Date.now() - startTime;
+        check.lastCheck = new Date();
+        check.message = error instanceof Error ? error.message : String(error);
+      }
+      throw error;
+    }
+  }
+
+  private async checkMemoryUsage(): Promise<void> {
+    const memUsage = process.memoryUsage();
+    const totalMemory = os.totalmem();
+    const freeMemory = os.freemem();
+    const usedMemory = totalMemory - freeMemory;
+    const memoryPercentage = (usedMemory / totalMemory) * 100;
+
+    // Update metadata
+    const check = this.healthChecks.get('memory-usage');
+    if (check) {
+      check.metadata = {
+        used: Math.round(memUsage.heapUsed / 1024 / 1024), // MB
+        available: Math.round(totalMemory / 1024 / 1024), // MB
+        percentage: Math.round(memoryPercentage * 100) / 100,
+        heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024), // MB
+        external: Math.round(memUsage.external / 1024 / 1024), // MB
+      };
+    }
+
+    // Check thresholds
+    if (memUsage.heapUsed > 1024 * 1024 * 1024) {
+      // 1GB limit
+      throw new Error(`High memory usage: ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`);
+    }
+
+    if (memoryPercentage > 90) {
+      throw new Error(`System memory usage too high: ${Math.round(memoryPercentage)}%`);
+    }
+  }
+
+  private async checkCpuUsage(): Promise<void> {
+    const loadAvg = os.loadavg()[0]; // 1-minute average
+    const cpus = os.cpus().length;
+    const cpuPercentage = (loadAvg / cpus) * 100;
+
+    // Update metadata
+    const check = this.healthChecks.get('cpu-usage');
+    if (check) {
+      check.metadata = {
+        percentage: Math.round(cpuPercentage * 100) / 100,
+        cores: cpus,
+        loadAvg: Math.round(loadAvg * 100) / 100,
+        uptime: Math.round(os.uptime()),
+      };
+    }
+
+    // Check thresholds
+    if (cpuPercentage > 90) {
+      throw new Error(`High CPU usage: ${Math.round(cpuPercentage)}%`);
+    }
+
+    if (loadAvg > cpus * 2) {
+      throw new Error(`System load too high: ${loadAvg.toFixed(2)} (cores: ${cpus})`);
+    }
+  }
+
+  private async checkDatabaseConnection(): Promise<void> {
+    // Simulate database connection check
+    // In production, this would be a real database ping
+    const connectionTime = Math.random() * 50 + 10; // 10-60ms simulated
+
+    // Update metadata
+    const check = this.healthChecks.get('database-connection');
+    if (check) {
+      check.metadata = {
+        connectionPool: 'active',
+        queryTime: Math.round(connectionTime),
+        activeConnections: Math.floor(Math.random() * 10) + 1,
+        maxConnections: 100,
+      };
+    }
+
+    // Simulate occasional connection issues
+    if (Math.random() < 0.05) {
+      // 5% chance of failure
+      throw new Error('Database connection timeout');
+    }
+  }
+
+  private async checkMcpServerStatus(): Promise<void> {
+    const uptime = process.uptime();
+
+    // Update metadata
+    const check = this.healthChecks.get('mcp-server-status');
+    if (check) {
+      check.metadata = {
+        uptime: Math.round(uptime),
+        version: '1.0.0',
+        nodeVersion: process.version,
+        platform: os.platform(),
+        arch: os.arch(),
+      };
+    }
+
+    // Check if server has been running for at least 10 seconds
+    if (uptime < 10) {
+      throw new Error('Server still starting up');
+    }
+  }
+
+  private async checkGenericHealth(): Promise<void> {
+    // Generic health check combining multiple metrics
+    await Promise.all([this.checkMemoryUsage(), this.checkCpuUsage()]);
+  }
+
+  private cleanupExpiredSpans(): void {
+    const now = Date.now();
+    const maxAge = 5 * 60 * 1000; // 5 minutes
+
+    for (const [spanId, span] of this.activeSpans.entries()) {
+      const spanAge = now - span.startTime.getTime();
+      if (spanAge > maxAge) {
+        this.activeSpans.delete(spanId);
+        console.warn(`Cleaned up expired span: ${spanId} (age: ${Math.round(spanAge / 1000)}s)`);
+      }
+    }
+  }
+
+  private capAlertsArray(): void {
+    const maxAlerts = 10000;
+    if (this.alerts.length > maxAlerts) {
+      // Keep the most recent alerts
+      this.alerts = this.alerts.slice(-maxAlerts);
+      console.warn(`Alerts array capped at ${maxAlerts} entries`);
+    }
   }
 
   private generateHealthSummary(results: HealthCheck[]): string {

@@ -29,7 +29,6 @@ This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) wit
 - Azure CLI installed and authenticated
 - azd CLI installed
 - GitHub repository with azd configuration
-- Slack webhook configured (optional)
 
 ## Workflow Steps
 
@@ -55,7 +54,7 @@ This Skill orchestrates Azure deployment using the Azure Developer CLI (azd) wit
 
 - **Tool:** `github` → `update-deployment-status`
 - **Purpose:** Mark deployment status in GitHub PR/issues
-- **Failure:** Continue deployment, log GitHub sync failure
+- **Failure:** Continue deployment, log for manual sync
 
 ## Environment Variables Required
 

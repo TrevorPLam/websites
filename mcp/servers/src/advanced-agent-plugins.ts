@@ -16,8 +16,31 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+<<<<<<< Updated upstream
 import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
+=======
+import { z } from 'zod';
+
+interface SecurityAuditResults {
+  vulnerabilities: number;
+  warnings: number;
+  passed: boolean;
+  recommendations: string[];
+}
+
+interface SecurityAudit {
+  id: string;
+  level: string;
+  status: 'running' | 'completed';
+  startedAt: Date;
+  completedAt?: Date;
+  pluginId?: string;
+  pluginName?: string;
+  checks: string[];
+  results?: SecurityAuditResults;
+}
+>>>>>>> Stashed changes
 
 interface AgentPlugin {
   id: string;
@@ -696,10 +719,10 @@ export class AdvancedAgentPlugins {
         level: z.enum(['basic', 'comprehensive', 'deep']).default('basic').describe('Audit level'),
       },
       async ({ pluginId, level = 'basic' }) => {
-        const audit = {
+        const audit: SecurityAudit = {
           id: `audit_${Date.now()}`,
           level,
-          status: 'running' as const,
+          status: 'running',
           startedAt: new Date(),
           checks: [
             'Permission validation',
@@ -723,7 +746,6 @@ export class AdvancedAgentPlugins {
         setTimeout(() => {
           audit.status = 'completed';
           audit.completedAt = new Date();
-          // @ts-ignore
           audit.results = {
             vulnerabilities: 0,
             warnings: 2,
@@ -739,6 +761,7 @@ export class AdvancedAgentPlugins {
     );
   }
 
+<<<<<<< Updated upstream
   private async listPlugins(args: any): Promise<any> {
     const { category, enabled, securityLevel, pricing } = args;
 
@@ -1146,6 +1169,8 @@ export class AdvancedAgentPlugins {
     };
   }
 
+=======
+>>>>>>> Stashed changes
   // Helper methods
   private checkDependencies(plugin: AgentPlugin): string[] {
     const missing: string[] = [];

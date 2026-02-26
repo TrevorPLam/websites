@@ -400,6 +400,7 @@ class AIDLCMethodologyServer {
 
     this.projects.set(projectId, project);
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -416,7 +417,20 @@ class AIDLCMethodologyServer {
           }),
         },
       ],
+=======
+    const result = {
+      project,
+      nextSteps: [
+        'Start inception phase to gather detailed requirements',
+        'Identify key stakeholders and their needs',
+        'Define project constraints and success criteria',
+        'Select appropriate AI agents for collaboration',
+      ],
+      recommendedAgents: this.phases.get('inception')?.aiAgents || [],
+>>>>>>> Stashed changes
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private async startPhase(args: any): Promise<any> {
@@ -424,12 +438,20 @@ class AIDLCMethodologyServer {
 
     const project = this.projects.get(projectId);
     if (!project) {
-      throw new McpError(ErrorCode.InvalidParams, `Project not found: ${projectId}`);
+      const error = `Project not found: ${projectId}`;
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     const phaseConfig = this.phases.get(phase as AIDLCPhase['name']);
     if (!phaseConfig) {
-      throw new McpError(ErrorCode.InvalidParams, `Invalid phase: ${phase}`);
+      const error = `Invalid phase: ${phase}`;
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -448,6 +470,7 @@ class AIDLCMethodologyServer {
     project.phase = phase as AIDLCPhase['name'];
     project.updatedAt = new Date();
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -466,8 +489,23 @@ class AIDLCMethodologyServer {
             ],
           }),
         },
+=======
+    const result = {
+      session,
+      phase: phaseConfig,
+      recommendedActivities: phaseConfig.activities,
+      aiAgents: phaseConfig.aiAgents,
+      kickoffPlan: [
+        `Initialize ${phase} phase with stakeholder alignment`,
+        'Review and confirm phase objectives and deliverables',
+        'Assign AI agents and human participants to activities',
+        'Set up collaboration tools and communication channels',
+        'Establish quality gates and review checkpoints',
+>>>>>>> Stashed changes
       ],
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private async planActivities(args: any): Promise<any> {
@@ -475,7 +513,11 @@ class AIDLCMethodologyServer {
 
     const session = this.sessions.get(sessionId);
     if (!session) {
-      throw new McpError(ErrorCode.InvalidParams, `Session not found: ${sessionId}`);
+      const error = `Session not found: ${sessionId}`;
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     const plannedActivities: Activity[] = activities.map((activity: any, index: number) => ({
@@ -491,6 +533,7 @@ class AIDLCMethodologyServer {
     session.activities.push(...plannedActivities);
     session.status = 'active';
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -511,8 +554,25 @@ class AIDLCMethodologyServer {
             ],
           }),
         },
+=======
+    const result = {
+      activities: plannedActivities,
+      totalEstimatedDuration: plannedActivities.reduce(
+        (sum, activity) => sum + (activity.duration || 0),
+        0
+      ),
+      agentAssignments: this.assignAgentsToActivities(plannedActivities),
+      dependencies: this.identifyDependencies(plannedActivities),
+      recommendations: [
+        'Prioritize activities based on dependencies and critical path',
+        'Ensure balanced workload between human and AI agents',
+        'Set up regular review checkpoints for quality assurance',
+        'Plan for contingency buffers in critical activities',
+>>>>>>> Stashed changes
       ],
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private async executeActivity(args: any): Promise<any> {
@@ -532,7 +592,11 @@ class AIDLCMethodologyServer {
     }
 
     if (!activity || !session) {
-      throw new McpError(ErrorCode.InvalidParams, `Activity not found: ${activityId}`);
+      const error = `Activity not found: ${activityId}`;
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     activity.status = 'in_progress';
@@ -545,6 +609,7 @@ class AIDLCMethodologyServer {
     activity.artifacts = artifacts;
     activity.duration = executionResult.duration;
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -558,7 +623,17 @@ class AIDLCMethodologyServer {
           }),
         },
       ],
+=======
+    const result = {
+      activity,
+      executionResult,
+      qualityMetrics: executionResult.qualityMetrics,
+      nextSteps: executionResult.nextSteps,
+      recommendations: executionResult.recommendations,
+>>>>>>> Stashed changes
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private async reviewDeliverables(args: any): Promise<any> {
@@ -566,7 +641,11 @@ class AIDLCMethodologyServer {
 
     const session = this.sessions.get(sessionId);
     if (!session) {
-      throw new McpError(ErrorCode.InvalidParams, `Session not found: ${sessionId}`);
+      const error = `Session not found: ${sessionId}`;
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     const reviewResults = deliverables.map((deliverable: string) => ({
@@ -584,6 +663,7 @@ class AIDLCMethodologyServer {
     const overallScore =
       reviewResults.reduce((sum, result) => sum + result.score, 0) / reviewResults.length;
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -607,7 +687,27 @@ class AIDLCMethodologyServer {
           }),
         },
       ],
+=======
+    const result = {
+      reviewResults,
+      overallScore,
+      phaseReady: overallScore >= 80,
+      actionItems:
+        overallScore < 80
+          ? [
+              'Address identified issues in deliverables',
+              'Conduct additional quality reviews',
+              'Update documentation with missing details',
+            ]
+          : [
+              'Proceed to next phase transition',
+              'Archive deliverables for future reference',
+              'Update project knowledge base',
+            ],
+>>>>>>> Stashed changes
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private async transitionPhase(args: any): Promise<any> {
@@ -615,14 +715,22 @@ class AIDLCMethodologyServer {
 
     const project = this.projects.get(projectId);
     if (!project) {
-      throw new McpError(ErrorCode.InvalidParams, `Project not found: ${projectId}`);
+      const error = `Project not found: ${projectId}`;
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     const currentPhaseConfig = this.phases.get(currentPhase as AIDLCPhase['name']);
     const nextPhaseConfig = this.phases.get(nextPhase as AIDLCPhase['name']);
 
     if (!currentPhaseConfig || !nextPhaseConfig) {
-      throw new McpError(ErrorCode.InvalidParams, 'Invalid phase configuration');
+      const error = 'Invalid phase configuration';
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     // Complete current phase sessions
@@ -636,6 +744,7 @@ class AIDLCMethodologyServer {
     project.phase = nextPhase as AIDLCPhase['name'];
     project.updatedAt = new Date();
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -664,8 +773,33 @@ class AIDLCMethodologyServer {
             ],
           }),
         },
+=======
+    const result = {
+      transition: {
+        from: currentPhaseConfig,
+        to: nextPhaseConfig,
+        timestamp: new Date(),
+      },
+      handoffDocumentation: {
+        notes: handoffNotes,
+        artifacts,
+        lessonsLearned: [
+          'Effective AI-human collaboration patterns',
+          'Optimal agent selection for different activities',
+          'Quality assurance best practices',
+          'Communication and coordination improvements',
+        ],
+      },
+      nextPhasePreparation: [
+        'Review and adapt next phase methodology',
+        'Select appropriate AI agents for new activities',
+        'Update project context and constraints',
+        'Prepare collaboration tools and environments',
+>>>>>>> Stashed changes
       ],
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private async getProjectStatus(args: any): Promise<any> {
@@ -673,7 +807,11 @@ class AIDLCMethodologyServer {
 
     const project = this.projects.get(projectId);
     if (!project) {
-      throw new McpError(ErrorCode.InvalidParams, `Project not found: ${projectId}`);
+      const error = `Project not found: ${projectId}`;
+      return {
+        content: [{ type: 'text', text: JSON.stringify({ error }) }],
+        isError: true,
+      };
     }
 
     const projectSessions = Array.from(this.sessions.values()).filter(
@@ -683,6 +821,7 @@ class AIDLCMethodologyServer {
     const phaseProgress = this.calculatePhaseProgress(projectSessions);
     const overallProgress = this.calculateOverallProgress(projectSessions);
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -718,7 +857,39 @@ class AIDLCMethodologyServer {
           }),
         },
       ],
+=======
+    const result = {
+      project,
+      currentPhase: this.phases.get(project.phase),
+      progress: {
+        overall: overallProgress,
+        byPhase: phaseProgress,
+      },
+      sessions: includeActivities
+        ? projectSessions
+        : projectSessions.map((s) => ({
+            id: s.id,
+            phase: s.phase,
+            status: s.status,
+            participantCount: s.participants.length,
+            activityCount: s.activities.length,
+          })),
+      metrics: {
+        totalActivities: projectSessions.reduce((sum, s) => sum + s.activities.length, 0),
+        completedActivities: projectSessions.reduce(
+          (sum, s) => sum + s.activities.filter((a) => a.status === 'completed').length,
+          0
+        ),
+        totalDuration: projectSessions.reduce(
+          (sum, s) => sum + s.activities.reduce((actSum, a) => actSum + (a.duration || 0), 0),
+          0
+        ),
+        collaborationScore: this.calculateCollaborationScore(projectSessions),
+      },
+>>>>>>> Stashed changes
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private async recommendAgents(args: any): Promise<any> {
@@ -726,6 +897,7 @@ class AIDLCMethodologyServer {
 
     const agentRecommendations = this.getAgentRecommendations(activityType, complexity);
 
+<<<<<<< Updated upstream
     return {
       content: [
         {
@@ -747,7 +919,25 @@ class AIDLCMethodologyServer {
           }),
         },
       ],
+=======
+    const result = {
+      primaryAgents: agentRecommendations.primary,
+      secondaryAgents: agentRecommendations.secondary,
+      reasoning: agentRecommendations.reasoning,
+      configuration: {
+        optimalTeamSize: agentRecommendations.teamSize,
+        collaborationPattern: agentRecommendations.collaborationPattern,
+        qualityChecks: agentRecommendations.qualityChecks,
+      },
+      estimatedEfficiency: {
+        timeReduction: agentRecommendations.timeReduction,
+        qualityImprovement: agentRecommendations.qualityImprovement,
+        costOptimization: agentRecommendations.costOptimization,
+      },
+>>>>>>> Stashed changes
     };
+
+    return { content: [{ type: 'text', text: JSON.stringify(result) }] };
   }
 
   private assignAgentsToActivities(
@@ -903,8 +1093,16 @@ class AIDLCMethodologyServer {
   }
 }
 
+<<<<<<< Updated upstream
 // ESM CLI guard
 if (import.meta.url === `file://${process.argv[1]}`) {
   const server = new AIDLCMethodologyServer();
+=======
+const server = new AIDLCMethodologyServer();
+server.run().catch(console.error);
+
+// ESM CLI guard
+if (import.meta.url === `file://${process.argv[1]}`) {
+>>>>>>> Stashed changes
   server.run().catch(console.error);
 }
