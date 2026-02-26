@@ -1,10 +1,9 @@
 /**
  * @file packages/agent-orchestration/src/index.ts
- * @summary Defines AI agent orchestration system for multi-agent coordination.
- * @description Provides interfaces and classes for managing AI agents, workflows, and communication protocols.
- * @security Agent communication requires authentication and authorization.
- * @adr none
- * @requirements AI-001, AI-002
+ * @summary Advanced multi-agent orchestration with 2026 standards compliance.
+ * @description Puppeteer pattern orchestration with MCP/A2A protocols, governance, and distributed tracing.
+ * @security Zero-trust architecture with comprehensive audit trails and policy enforcement.
+ * @requirements 2026-agentic-coding, multi-agent, orchestration, mcp-protocol
  */
 import { z } from 'zod';
 

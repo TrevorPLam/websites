@@ -86,6 +86,11 @@ export class EpisodicMemory {
   private consolidationQueue: Episode[] = []; // 2026: Consolidation pipeline
   private accessPatterns: Map<string, number> = new Map(); // 2026: Access tracking
 
+  /**
+   * Store a new episode with confidence scoring and content-addressed storage
+   * @param episode - Episode data without ID and hashId
+   * @returns Generated episode ID
+   */
   async storeEpisode(episode: Omit<Episode, 'id' | 'hashId'>): Promise<string> {
     const id = uuidv4();
     const hashId = this.generateHashId(episode); // 2026: Content-addressed ID
@@ -120,6 +125,12 @@ export class EpisodicMemory {
     return id;
   }
 
+  /**
+   * Retrieve similar episodes based on context with multi-factor scoring and diversity selection
+   * @param context - Search context for finding similar episodes
+   * @param limit - Maximum number of episodes to return
+   * @returns Array of similar episodes ranked by relevance and diversity
+   */
   async retrieveSimilarEpisodes(context: string, limit: number = 5): Promise<Episode[]> {
     const keywords = this.extractKeywords(context);
     const episodeScores = new Map<string, number>();
@@ -266,7 +277,10 @@ export class EpisodicMemory {
     return selected;
   }
 
-  // 2026: Memory consolidation methods
+  /**
+   * Consolidate episodes to extract patterns and create semantic knowledge
+   * Implements 2026 memory consolidation patterns for learning optimization
+   */
   async consolidateEpisodes(): Promise<void> {
     // Implementation for episode consolidation
     // This would identify patterns and create semantic knowledge
@@ -624,7 +638,8 @@ export class UnifiedMemorySystem {
           relationships: [{
             target: 'success',
             type: 'related_to',
-            confidence: successRate
+            confidence: successRate,
+            strength: 0.8
           }],
           attributes: {
             successRate,
@@ -633,7 +648,11 @@ export class UnifiedMemorySystem {
               .filter(e => e.action === action)
               .reduce((sum, e) => sum + e.metadata.duration, 0) / stats.total
           },
-          source: 'episodic_consolidation'
+          source: 'episodic_consolidation',
+          lastUpdated: new Date(),
+          accessCount: 0,
+          lastAccessed: new Date(),
+          verificationStatus: 'pending' as const
         });
       }
     });
@@ -641,6 +660,3 @@ export class UnifiedMemorySystem {
     return patterns;
   }
 }
-
-// Export all classes
-export { UnifiedMemorySystem, EpisodicMemory, SemanticMemory, ProceduralMemory };

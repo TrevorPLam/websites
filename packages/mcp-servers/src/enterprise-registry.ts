@@ -151,6 +151,9 @@ export class EnterpriseRegistry {
     this.setupRegistryTools();
   }
 
+  /**
+   * Initialize default server categories for organization
+   */
   private initializeCategories() {
     const defaultCategories: Category[] = [
       {
@@ -214,6 +217,9 @@ export class EnterpriseRegistry {
     defaultCategories.forEach(category => this.categories.set(category.id, category));
   }
 
+  /**
+   * Initialize default discovery services for external server synchronization
+   */
   private initializeDiscoveryServices() {
     const defaultServices: DiscoveryService[] = [
       {
@@ -259,6 +265,9 @@ export class EnterpriseRegistry {
     defaultServices.forEach(service => this.discoveryServices.set(service.id, service));
   }
 
+  /**
+   * Setup MCP registry tools and handlers for server management
+   */
   private setupRegistryTools() {
     // Server registration
     this.server.tool(
@@ -613,6 +622,11 @@ export class EnterpriseRegistry {
     );
   }
 
+  /**
+   * Search MCP servers based on query parameters with filtering and pagination
+   * @param query - Registry query parameters including filters, sorting, and pagination
+   * @returns Filtered and paginated server results with metadata
+   */
   private async searchServers(query: RegistryQuery): Promise<{ servers: MCPServer[]; total: number; hasMore: boolean }> {
     let servers = Array.from(this.mcpServers.values());
 
@@ -985,6 +999,9 @@ export class EnterpriseRegistry {
     return report.join('\n');
   }
 
+  /**
+   * Start the Enterprise Registry MCP server and begin listening for connections
+   */
   async run() {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
