@@ -1,15 +1,16 @@
 /**
  * @file packages/integrations/shared/src/__tests__/circuit-breaker-basic.test.ts
- * Task: Basic circuit breaker functionality tests
- *
- * Purpose: Test core circuit breaker patterns without complex dependencies
+ * @summary Basic circuit breaker functionality tests.
+ * @description Test core circuit breaker patterns without complex dependencies.
+ * @security Mock implementations only, no real network requests or authentication.
+ * @adr none
+ * @requirements none
  *
  * Created: 2026-02-21
- * Standards: 2026 testing best practices with Jest and mocking
+ * Standards: 2026 testing best practices with Vitest and mocking
  */
 
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 
 // Mock the logger to avoid dependency issues
 vi.mock('../utils/logger', () => ({

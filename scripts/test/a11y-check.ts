@@ -1,6 +1,9 @@
 /**
  * @file scripts/test/a11y-check.ts
- * @summary Accessibility test runner using jest-axe
+ * @summary Accessibility test runner using vitest and axe-core
+ * @security Read-only script, no sensitive data access or modification.
+ * @adr none
+ * @requirements WCAG 2.2 AA compliance
  * @see tasks/d-6-a11y-release-gate.md
  *
  * Purpose: Runs accessibility tests across all component test files
@@ -10,7 +13,7 @@
  * Used by: CI workflow, pre-commit hooks (optional)
  *
  * Invariants:
- * - All component tests should use jest-axe
+ * - All component tests should use jest-axe (compatible with Vitest)
  * - Tests must render components before checking
  * - Violations block CI merge
  *
@@ -21,20 +24,17 @@ import { execSync } from 'child_process';
 import { resolve } from 'path';
 
 /**
- * Runs accessibility tests using Jest
+ * Runs accessibility tests using Vitest
  * Filters to only jsdom environment tests (component tests)
  */
 function runA11yTests(): void {
-  const jestConfig = resolve(__dirname, '../../jest.config.js');
-  const testPattern = '--testMatch="**/__tests__/**/*.test.{ts,tsx}"';
-
-  console.log('🔍 Running accessibility tests with jest-axe...\n');
+  console.log('🔍 Running accessibility tests with axe-core...\n');
 
   try {
-    // Run Jest with jsdom environment (component tests)
+    // Run Vitest with jsdom environment (component tests)
     // Filter to tests that use jest-axe (accessibility tests)
     execSync(
-      `pnpm jest --testEnvironment=jsdom --testMatch="**/__tests__/**/*.test.{ts,tsx}" --testNamePattern="accessibility|a11y|has no accessibility violations" --passWithNoTests`,
+      `pnpm vitest run --testEnvironment=jsdom --testMatch="**/__tests__/**/*.test.{ts,tsx}" --testNamePattern="accessibility|a11y|has no accessibility violations" --passWithNoTests`,
       {
         stdio: 'inherit',
         cwd: resolve(__dirname, '../..'),

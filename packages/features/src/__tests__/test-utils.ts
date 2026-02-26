@@ -1,11 +1,13 @@
 /**
  * @file packages/features/src/__tests__/test-utils.ts
- * @role test
- * @summary Test utilities for feature module tests
- *
- * Provides common test helpers for testing feature modules including
- * mock adapters, server action mocks, and test fixtures.
+ * @summary Test utilities for features package with mocks and fixtures.
+ * @description Provides mock server actions, adapters, and test fixtures for unit testing.
+ * @security Mock implementations only, no real data access or authentication.
+ * @adr none
+ * @requirements none
  */
+
+import { vi } from 'vitest';
 
 /**
  * Mock server action result
@@ -23,10 +25,10 @@ export function createMockActionResult<T>(data: T, error?: string) {
  */
 export function createMockAdapter<T>(mockData: T) {
   return {
-    fetch: jest.fn().mockResolvedValue(mockData),
-    create: jest.fn().mockResolvedValue(mockData),
-    update: jest.fn().mockResolvedValue(mockData),
-    delete: jest.fn().mockResolvedValue(true),
+    fetch: vi.fn().mockResolvedValue(mockData),
+    create: vi.fn().mockResolvedValue(mockData),
+    update: vi.fn().mockResolvedValue(mockData),
+    delete: vi.fn().mockResolvedValue(true),
   };
 }
 

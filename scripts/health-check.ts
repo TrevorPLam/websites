@@ -4,6 +4,9 @@
  * @role script
  * @summary Single `pnpm health` command — checks workspace structure, package integrity,
  *          and key invariants. Exits 0 if all checks pass, 1 if any fail.
+ * @security Read-only script, no sensitive data access or modification.
+ * @adr none
+ * @requirements none
  *
  * @exports
  * - CLI: pnpm health
@@ -75,7 +78,7 @@ function checkWorkspaceFiles(): void {
       fail(f, 'not found');
     }
   }
-  for (const f of ['jest.config.js', 'jest.setup.js', 'knip.config.ts']) {
+  for (const f of ['knip.config.ts']) {
     if (fileExists(f)) {
       pass(f);
     } else {
