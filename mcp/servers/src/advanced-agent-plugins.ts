@@ -16,10 +16,6 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-<<<<<<< Updated upstream
-import { ErrorCode, McpError } from '@modelcontextprotocol/sdk/types.js';
-import { z } from 'zod';
-=======
 import { z } from 'zod';
 
 interface SecurityAuditResults {
@@ -40,7 +36,6 @@ interface SecurityAudit {
   checks: string[];
   results?: SecurityAuditResults;
 }
->>>>>>> Stashed changes
 
 interface AgentPlugin {
   id: string;
@@ -409,307 +404,6 @@ export class AdvancedAgentPlugins {
       }
     );
 
-    // Disable plugin tool
-    this.server.tool(
-      'disable_plugin',
-      'Disable a specific plugin',
-      {
-        pluginId: z.string().describe('Plugin ID to disable'),
-      },
-      async ({ pluginId }) => {
-        const plugin = this.registry.plugins.get(pluginId);
-        if (!plugin) {
-          throw new Error(`Plugin not found: ${pluginId}`);
-        }
-
-        // Check for dependent plugins
-        const dependents = this.findDependents(pluginId);
-        if (dependents.length > 0) {
-          throw new Error(`Cannot disable plugin. Required by: ${dependents.join(', ')}`);
-        }
-
-        plugin.enabled = false;
-        this.activePlugins.delete(pluginId);
-
-        const result = {
-          plugin: {
-            id: plugin.id,
-            name: plugin.name,
-            enabled: plugin.enabled,
-          },
-          disabledAt: new Date(),
-        };
-
-        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
-      }
-    );
-
-    // Configure plugin tool
-    this.server.tool(
-      'configure_plugin',
-      'Configure plugin settings',
-      {
-        pluginId: z.string().describe('Plugin ID'),
-        config: z.record(z.any()).describe('Configuration object'),
-      },
-      async ({ pluginId, config }) => {
-        const plugin = this.registry.plugins.get(pluginId);
-        if (!plugin) {
-          throw new Error(`Plugin not found: ${pluginId}`);
-        }
-
-        // Validate configuration
-        const configValidation = this.validateConfig(plugin, config);
-        if (!configValidation.valid) {
-          throw new Error(`Configuration validation failed: ${configValidation.errors.join(', ')}`);
-        }
-
-        plugin.config = { ...plugin.config, ...config };
-
-        // Update active plugin instance if exists
-        const activePlugin = this.activePlugins.get(pluginId);
-        if (activePlugin) {
-          activePlugin.config = plugin.config;
-        }
-
-        const result = {
-          plugin: {
-            id: plugin.id,
-            name: plugin.name,
-            config: plugin.config,
-          },
-          configuredAt: new Date(),
-        };
-
-        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
-      }
-    );
-
-    // Install plugin tool
-    this.server.tool(
-      'install_plugin',
-      'Install a new plugin from repository',
-      {
-        source: z.string().describe('Plugin source (URL or package name)'),
-        version: z.string().optional().describe('Specific version to install'),
-        autoEnable: z.boolean().default(false).describe('Auto-enable after installation'),
-      },
-      async ({ source, version, autoEnable = false }) => {
-        const installation = {
-          id: `install_${Date.now()}`,
-          source,
-          version: version || 'latest',
-          status: 'installing' as const,
-          startedAt: new Date(),
-        };
-
-        // Simulate installation process
-        setTimeout(() => {
-          // In real implementation, would download and validate plugin
-          console.log(`Installing plugin from ${source}`);
-        }, 1000);
-
-        const result = {
-          installation,
-          message: 'Plugin installation started',
-        };
-
-        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
-      }
-    );
-
-    // Uninstall plugin tool
-    this.server.tool(
-      'uninstall_plugin',
-      'Uninstall a plugin',
-      {
-        pluginId: z.string().describe('Plugin ID to uninstall'),
-        removeConfig: z.boolean().default(false).describe('Remove configuration data'),
-      },
-      async ({ pluginId, removeConfig = false }) => {
-        const plugin = this.registry.plugins.get(pluginId);
-        if (!plugin) {
-          throw new Error(`Plugin not found: ${pluginId}`);
-        }
-
-        // Check for dependent plugins
-        const dependents = this.findDependents(pluginId);
-        if (dependents.length > 0) {
-          throw new Error(`Cannot uninstall plugin. Required by: ${dependents.join(', ')}`);
-        }
-
-        // Disable and remove plugin
-        if (plugin.enabled) {
-          this.activePlugins.delete(pluginId);
-        }
-        this.registry.plugins.delete(pluginId);
-
-        // Remove configuration if requested
-        if (removeConfig) {
-          // In real implementation, would remove config files
-          console.log(`Removing configuration for plugin ${pluginId}`);
-        }
-
-        const result = {
-          plugin: {
-            id: plugin.id,
-            name: plugin.name,
-          },
-          uninstalledAt: new Date(),
-          configRemoved: removeConfig,
-        };
-
-        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
-      }
-    );
-
-    // Execute plugin tool
-    this.server.tool(
-      'execute_plugin',
-      'Execute a plugin with specific parameters',
-      {
-        pluginId: z.string().describe('Plugin ID'),
-        action: z.string().describe('Action to execute'),
-        parameters: z.record(z.any()).optional().describe('Action parameters'),
-      },
-      async ({ pluginId, action, parameters = {} }) => {
-        const plugin = this.registry.plugins.get(pluginId);
-        if (!plugin) {
-          throw new Error(`Plugin not found: ${pluginId}`);
-        }
-
-        if (!plugin.enabled) {
-          throw new Error(`Plugin not enabled: ${pluginId}`);
-        }
-
-        // Check if action is supported
-        if (!plugin.capabilities.includes(action.replace('_', '-'))) {
-          throw new Error(`Action not supported by plugin: ${action}`);
-        }
-
-        // Execute plugin
-        const executionResult = await this.simulatePluginExecution(plugin, action, parameters);
-
-        const result = {
-          plugin: {
-            id: plugin.id,
-            name: plugin.name,
-          },
-          action,
-          parameters,
-          result: executionResult,
-          executedAt: new Date(),
-        };
-
-        return { content: [{ type: 'text', text: JSON.stringify(result) }] };
-      }
-    );
-
-    // Get plugin status tool
-    this.server.tool(
-      'get_plugin_status',
-      'Get detailed status and metrics for a plugin',
-      {
-        pluginId: z.string().describe('Plugin ID'),
-        includeMetrics: z.boolean().default(false).describe('Include performance metrics'),
-      },
-      async ({ pluginId, includeMetrics = false }) => {
-        const plugin = this.registry.plugins.get(pluginId);
-        if (!plugin) {
-          throw new Error(`Plugin not found: ${pluginId}`);
-        }
-
-        const status = {
-          id: plugin.id,
-          name: plugin.name,
-          enabled: plugin.enabled,
-          version: plugin.version,
-          securityLevel: plugin.securityLevel,
-          pricing: plugin.pricing,
-          dependencies: plugin.dependencies,
-          missingDependencies: this.checkDependencies(plugin),
-          dependents: this.findDependents(pluginId),
-          security: this.validateSecurity(plugin),
-          config: plugin.config,
-        };
-
-        if (includeMetrics) {
-          Object.assign(status, this.generatePluginMetrics(pluginId));
-        }
-
-        return { content: [{ type: 'text', text: JSON.stringify(status) }] };
-      }
-    );
-
-    // Manage dependencies tool
-    this.server.tool(
-      'manage_dependencies',
-      'Manage plugin dependencies',
-      {
-        action: z
-          .enum(['check', 'install', 'update', 'remove'])
-          .describe('Dependency management action'),
-        pluginId: z.string().optional().describe('Plugin ID'),
-        dependencies: z.array(z.string()).optional().describe('Dependencies to manage'),
-      },
-      async ({ action, pluginId, dependencies = [] }) => {
-        switch (action) {
-          case 'check':
-            if (!pluginId) {
-              throw new Error('Plugin ID required for check action');
-            }
-            const plugin = this.registry.plugins.get(pluginId);
-            if (!plugin) {
-              throw new Error(`Plugin not found: ${pluginId}`);
-            }
-            const checkResult = {
-              pluginId,
-              dependencies: plugin.dependencies,
-              missing: this.checkDependencies(plugin),
-              dependents: this.findDependents(pluginId),
-            };
-
-            return { content: [{ type: 'text', text: JSON.stringify(checkResult) }] };
-
-          case 'install':
-            // Simulate dependency installation
-            const installResult = {
-              action,
-              dependencies,
-              installedAt: new Date(),
-              message: 'Dependencies installed successfully',
-            };
-
-            return { content: [{ type: 'text', text: JSON.stringify(installResult) }] };
-
-          case 'update':
-            // Simulate dependency update
-            const updateResult = {
-              action,
-              dependencies,
-              updatedAt: new Date(),
-              message: 'Dependencies updated successfully',
-            };
-
-            return { content: [{ type: 'text', text: JSON.stringify(updateResult) }] };
-
-          case 'remove':
-            // Simulate dependency removal
-            const removeResult = {
-              action,
-              dependencies,
-              removedAt: new Date(),
-              message: 'Dependencies removed successfully',
-            };
-
-            return { content: [{ type: 'text', text: JSON.stringify(removeResult) }] };
-
-          default:
-            throw new Error(`Unknown action: ${action}`);
-        }
-      }
-    );
-
     // Security audit tool
     this.server.tool(
       'security_audit',
@@ -761,448 +455,23 @@ export class AdvancedAgentPlugins {
     );
   }
 
-<<<<<<< Updated upstream
-  private async listPlugins(args: any): Promise<any> {
-    const { category, enabled, securityLevel, pricing } = args;
-
-    let plugins = Array.from(this.registry.plugins.values());
-
-    // Apply filters
-    if (category) {
-      plugins = plugins.filter((p) => p.category === category);
-    }
-    if (enabled !== undefined) {
-      plugins = plugins.filter((p) => p.enabled === enabled);
-    }
-    if (securityLevel) {
-      plugins = plugins.filter((p) => p.securityLevel === securityLevel);
-    }
-    if (pricing) {
-      plugins = plugins.filter((p) => p.pricing === pricing);
-    }
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
-            plugins: plugins.map((p) => ({
-              id: p.id,
-              name: p.name,
-              description: p.description,
-              version: p.version,
-              category: p.category,
-              enabled: p.enabled,
-              securityLevel: p.securityLevel,
-              pricing: p.pricing,
-              capabilities: p.capabilities,
-            })),
-            total: plugins.length,
-            filtered: !!category || !!enabled || !!securityLevel || !!pricing,
-            filters: { category, enabled, securityLevel, pricing },
-          }),
-        },
-      ],
-    };
-  }
-
-  private async enablePlugin(args: any): Promise<any> {
-    const { pluginId, config = {} } = args;
-
-    const plugin = this.registry.plugins.get(pluginId);
-    if (!plugin) {
-      throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-    }
-
-    // Check dependencies
-    const missingDeps = this.checkDependencies(plugin);
-    if (missingDeps.length > 0) {
-      return {
-        success: false,
-        error: 'Missing dependencies',
-        data: { missingDependencies: missingDeps },
-      };
-    }
-
-    // Security check
-    const securityCheck = this.validateSecurity(plugin);
-    if (!securityCheck.passed) {
-      return {
-        success: false,
-        error: 'Security validation failed',
-        data: { violations: securityCheck.violations },
-      };
-    }
-
-    plugin.enabled = true;
-    plugin.config = { ...plugin.config, ...config };
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
-            pluginId,
-            status: 'enabled',
-            enabledAt: new Date(),
-            config: plugin.config,
-          }),
-        },
-      ],
-    };
-  }
-
-  private async disablePlugin(args: any): Promise<any> {
-    const { pluginId } = args;
-
-    const plugin = this.registry.plugins.get(pluginId);
-    if (!plugin) {
-      throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-    }
-
-    // Check if other plugins depend on this one
-    const dependents = this.findDependents(pluginId);
-    if (dependents.length > 0) {
-      return {
-        success: false,
-        error: 'Plugin has active dependents',
-        data: { dependents },
-      };
-    }
-
-    plugin.enabled = false;
-
-    return {
-      success: true,
-      data: {
-        pluginId,
-        status: 'disabled',
-        message: `Plugin ${plugin.name} disabled successfully`,
-      },
-    };
-  }
-
-  private async configurePlugin(args: any): Promise<any> {
-    const { pluginId, config } = args;
-
-    const plugin = this.registry.plugins.get(pluginId);
-    if (!plugin) {
-      throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-    }
-
-    // Validate configuration
-    const validation = this.validateConfig(plugin, config);
-    if (!validation.valid) {
-      return {
-        success: false,
-        error: 'Configuration validation failed',
-        data: { errors: validation.errors },
-      };
-    }
-
-    plugin.config = { ...plugin.config, ...config };
-
-    return {
-      success: true,
-      data: {
-        pluginId,
-        config: plugin.config,
-        message: `Plugin ${plugin.name} configured successfully`,
-      },
-    };
-  }
-
-  private async installPlugin(args: any): Promise<any> {
-    const { source, version, autoEnable = false } = args;
-
-    const installation = {
-      source,
-      version: version || 'latest',
-      status: 'installing',
-      startedAt: new Date(),
-      steps: [
-        'Downloading plugin package',
-        'Verifying integrity',
-        'Checking dependencies',
-        'Installing dependencies',
-        'Registering plugin',
-        'Running post-install tests',
-      ],
-    };
-
-    // Simulate installation process
-    setTimeout(() => {
-      const newPlugin: AgentPlugin = {
-        id: `plugin_${Date.now()}`,
-        name: 'New Plugin',
-        description: 'Newly installed plugin',
-        version: version || '1.0.0',
-        author: 'External',
-        category: 'integration',
-        capabilities: ['basic-functionality'],
-        dependencies: [],
-        securityLevel: 'medium',
-        pricing: 'free',
-        enabled: autoEnable,
-        config: {},
-        permissions: ['basic-operations'],
-        resources: { cpu: 0.1, memory: 64, storage: 10 },
-      };
-
-      this.registry.plugins.set(newPlugin.id, newPlugin);
-    }, 2000);
-
-    return {
-      success: true,
-      data: {
-        installation,
-        estimatedTime: '2-5 minutes',
-        message: 'Plugin installation started',
-      },
-    };
-  }
-
-  private async uninstallPlugin(args: any): Promise<any> {
-    const { pluginId, removeConfig = false } = args;
-
-    const plugin = this.registry.plugins.get(pluginId);
-    if (!plugin) {
-      throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-    }
-
-    // Check for dependents
-    const dependents = this.findDependents(pluginId);
-    if (dependents.length > 0) {
-      return {
-        success: false,
-        error: 'Cannot uninstall plugin with active dependents',
-        data: { dependents },
-      };
-    }
-
-    this.registry.plugins.delete(pluginId);
-    this.activePlugins.delete(pluginId);
-
-    return {
-      success: true,
-      data: {
-        pluginId,
-        removed: true,
-        configRemoved: removeConfig,
-        message: `Plugin ${plugin.name} uninstalled successfully`,
-      },
-    };
-  }
-
-  private async executePlugin(args: any): Promise<any> {
-    const { pluginId, action, parameters = {} } = args;
-
-    const plugin = this.registry.plugins.get(pluginId);
-    if (!plugin) {
-      throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-    }
-
-    if (!plugin.enabled) {
-      return {
-        success: false,
-        error: 'Plugin is not enabled',
-      };
-    }
-
-    const execution = {
-      pluginId,
-      action,
-      parameters,
-      startedAt: new Date(),
-      status: 'executing',
-      executionId: `exec_${Date.now()}`,
-    };
-
-    // Simulate plugin execution
-    const result = await this.simulatePluginExecution(plugin, action, parameters);
-
-    return {
-      success: true,
-      data: {
-        execution,
-        result,
-        completedAt: new Date(),
-        duration: result.duration,
-      },
-    };
-  }
-
-  private async getPluginStatus(args: any): Promise<any> {
-    const { pluginId, includeMetrics = false } = args;
-
-    const plugin = this.registry.plugins.get(pluginId);
-    if (!plugin) {
-      throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-    }
-
-    const status = {
-      id: plugin.id,
-      name: plugin.name,
-      enabled: plugin.enabled,
-      version: plugin.version,
-      category: plugin.category,
-      securityLevel: plugin.securityLevel,
-      pricing: plugin.pricing,
-      dependencies: plugin.dependencies,
-      config: plugin.config,
-      permissions: plugin.permissions,
-      resources: plugin.resources,
-    };
-
-    if (includeMetrics) {
-      status.metrics = this.generatePluginMetrics(pluginId);
-    }
-
-    return {
-      success: true,
-      data: status,
-    };
-  }
-
-  private async manageDependencies(args: any): Promise<any> {
-    const { action, pluginId, dependencies = [] } = args;
-
-    switch (action) {
-      case 'check':
-        if (pluginId) {
-          const plugin = this.registry.plugins.get(pluginId);
-          if (!plugin) {
-            throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-          }
-          return {
-            success: true,
-            data: {
-              pluginId,
-              dependencies: plugin.dependencies,
-              status: this.checkDependencies(plugin),
-            },
-          };
-        } else {
-          const allDeps = new Map<string, string[]>();
-          for (const [id, plugin] of this.registry.plugins) {
-            allDeps.set(id, plugin.dependencies);
-          }
-          return {
-            success: true,
-            data: { dependencies: Object.fromEntries(allDeps) },
-          };
-        }
-
-      case 'install':
-        // Simulate dependency installation
-        return {
-          success: true,
-          data: {
-            installed: dependencies,
-            message: 'Dependencies installed successfully',
-          },
-        };
-
-      case 'update':
-        return {
-          success: true,
-          data: {
-            updated: dependencies,
-            message: 'Dependencies updated successfully',
-          },
-        };
-
-      case 'remove':
-        return {
-          success: true,
-          data: {
-            removed: dependencies,
-            message: 'Dependencies removed successfully',
-          },
-        };
-
-      default:
-        throw new McpError(ErrorCode.InvalidParams, `Unknown action: ${action}`);
-    }
-  }
-
-  private async securityAudit(args: any): Promise<any> {
-    const { pluginId, level = 'basic' } = args;
-
-    const audit = {
-      level,
-      startedAt: new Date(),
-      status: 'in_progress',
-      checks: [
-        'Permission validation',
-        'Resource limit verification',
-        'Input/output sanitization',
-        'Dependency security scan',
-        'Code integrity verification',
-      ],
-    };
-
-    if (pluginId) {
-      const plugin = this.registry.plugins.get(pluginId);
-      if (!plugin) {
-        throw new McpError(ErrorCode.InvalidParams, `Plugin not found: ${pluginId}`);
-      }
-      audit.pluginId = pluginId;
-      audit.pluginName = plugin.name;
-    }
-
-    // Simulate audit process
-    setTimeout(() => {
-      audit.status = 'completed';
-      audit.completedAt = new Date();
-      audit.results = {
-        vulnerabilities: 0,
-        warnings: 2,
-        passed: true,
-        recommendations: ['Update to latest security patches', 'Review permission scope'],
-      };
-    }, 3000);
-
-    return {
-      success: true,
-      data: audit,
-    };
-  }
-
-=======
->>>>>>> Stashed changes
   // Helper methods
-  private checkDependencies(plugin: AgentPlugin): string[] {
-    const missing: string[] = [];
-    for (const dep of plugin.dependencies) {
-      if (!this.registry.plugins.has(dep)) {
-        missing.push(dep);
-      }
-    }
-    return missing;
-  }
-
-  private findDependents(pluginId: string): string[] {
-    const dependents: string[] = [];
-    for (const [id, plugin] of this.registry.plugins) {
-      if (plugin.dependencies.includes(pluginId)) {
-        dependents.push(id);
-      }
-    }
-    return dependents;
-  }
-
   private validateSecurity(plugin: AgentPlugin): { passed: boolean; violations: string[] } {
     const violations: string[] = [];
 
-    // Check security level
-    if (plugin.securityLevel === 'enterprise' && !plugin.enabled) {
-      violations.push('Enterprise plugins require explicit enablement');
+    // Check resource limits
+    if (plugin.resources.cpu > 2.0) {
+      violations.push('CPU limit exceeds 2.0');
+    }
+    if (plugin.resources.memory > 4096) {
+      violations.push('Memory limit exceeds 4GB');
     }
 
     // Check permissions
-    if (plugin.permissions.includes('system-access') && plugin.securityLevel !== 'enterprise') {
-      violations.push('System access requires enterprise security level');
+    const dangerousPermissions = ['system-access', 'network-admin', 'file-system-write'];
+    const hasDangerousPerms = plugin.permissions.some((p) => dangerousPermissions.includes(p));
+    if (hasDangerousPerms && plugin.securityLevel !== 'enterprise') {
+      violations.push('Dangerous permissions require enterprise security level');
     }
 
     return {
@@ -1211,16 +480,30 @@ export class AdvancedAgentPlugins {
     };
   }
 
-  private validateConfig(plugin: AgentPlugin, config: any): { valid: boolean; errors: string[] } {
+  private checkDependencies(plugin: AgentPlugin): string[] {
+    const missing: string[] = [];
+
+    for (const dep of plugin.dependencies) {
+      if (!this.registry.plugins.has(dep)) {
+        missing.push(dep);
+      }
+    }
+
+    return missing;
+  }
+
+  private validateConfig(
+    plugin: AgentPlugin,
+    config: Record<string, any>
+  ): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
 
     // Basic validation
-    if (config.timeout && config.timeout < 1000) {
-      errors.push('Timeout must be at least 1000ms');
+    if (config.maxDepth && typeof config.maxDepth !== 'number') {
+      errors.push('maxDepth must be a number');
     }
-
-    if (config.maxDepth && config.maxDepth > 20) {
-      errors.push('Max depth cannot exceed 20');
+    if (config.timeout && typeof config.timeout !== 'number') {
+      errors.push('timeout must be a number');
     }
 
     return {
@@ -1229,53 +512,39 @@ export class AdvancedAgentPlugins {
     };
   }
 
-  private async simulatePluginExecution(
+  private simulatePluginExecution(
     plugin: AgentPlugin,
     action: string,
-    parameters: any
-  ): Promise<any> {
-    // Simulate different execution times based on plugin complexity
-    const duration = plugin.resources.cpu * 1000 + Math.random() * 500;
-    await new Promise((resolve) => setTimeout(resolve, duration));
-
+    parameters: Record<string, any>
+  ): any {
     return {
+      pluginId: plugin.id,
+      action,
+      parameters,
+      result: `Simulated execution of ${action} on ${plugin.name}`,
+      duration: Math.random() * 1000,
       success: true,
-      output: `Executed ${action} on ${plugin.name}`,
-      duration,
-      metrics: {
-        cpuUsed: plugin.resources.cpu,
-        memoryUsed: plugin.resources.memory,
-        operations: Math.floor(Math.random() * 100) + 1,
-      },
     };
   }
 
   private generatePluginMetrics(pluginId: string): any {
     return {
-      executions: Math.floor(Math.random() * 1000) + 100,
-      averageDuration: Math.random() * 5000 + 1000,
-      successRate: 0.95 + Math.random() * 0.04,
-      resourceUsage: {
-        cpu: Math.random() * 0.8,
-        memory: Math.random() * 1024,
-        storage: Math.random() * 100,
-      },
-      lastExecution: new Date(Date.now() - Math.random() * 86400000),
+      cpu: Math.random() * 100,
+      memory: Math.random() * 512,
+      requests: Math.floor(Math.random() * 1000),
       errors: Math.floor(Math.random() * 10),
+      uptime: Date.now() - this.activePlugins.get(pluginId)?.enabledAt.getTime(),
     };
   }
 
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('Advanced Agent Plugins server running on stdio');
   }
 }
 
-const server = new AdvancedAgentPlugins();
-server.run().catch(console.error);
-
-// ESM CLI guard
+// Server startup
 if (import.meta.url === `file://${process.argv[1]}`) {
+  const server = new AdvancedAgentPlugins();
   server.run().catch(console.error);
 }

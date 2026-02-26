@@ -44,12 +44,15 @@ export class GitHubMCPServer {
       },
       async ({ owner, type, limit }) => {
         try {
-          const response = await fetch(`https://api.github.com/${type}s/${owner}/repos?per_page=${limit}`, {
-            headers: {
-              'Authorization': `token ${process.env.GITHUB_TOKEN}`,
-              'Accept': 'application/vnd.github.v3+json',
-            },
-          });
+          const response = await fetch(
+            `https://api.github.com/${type}s/${owner}/repos?per_page=${limit}`,
+            {
+              headers: {
+                Authorization: `token ${process.env.GITHUB_TOKEN}`,
+                Accept: 'application/vnd.github.v3+json',
+              },
+            }
+          );
 
           if (!response.ok) {
             throw new Error(`GitHub API error: ${response.statusText}`);
@@ -58,19 +61,26 @@ export class GitHubMCPServer {
           const repos = await response.json();
 
           return {
-            content: [{
-              type: 'text',
-              text: `Found ${repos.length} repositories:\n\n${repos.map((repo: any) =>
-                `- ${repo.name}: ${repo.description || 'No description'} (${repo.stargazers_count} stars, ${repo.forks_count} forks)`
-              ).join('\n')}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Found ${repos.length} repositories:\n\n${repos
+                  .map(
+                    (repo: any) =>
+                      `- ${repo.name}: ${repo.description || 'No description'} (${repo.stargazers_count} stars, ${repo.forks_count} forks)`
+                  )
+                  .join('\n')}`,
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error listing repositories: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Error listing repositories: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              },
+            ],
             isError: true,
           };
         }
@@ -89,8 +99,8 @@ export class GitHubMCPServer {
         try {
           const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
             headers: {
-              'Authorization': `token ${process.env.GITHUB_TOKEN}`,
-              'Accept': 'application/vnd.github.v3+json',
+              Authorization: `token ${process.env.GITHUB_TOKEN}`,
+              Accept: 'application/vnd.github.v3+json',
             },
           });
 
@@ -101,25 +111,30 @@ export class GitHubMCPServer {
           const repoData = await response.json();
 
           return {
-            content: [{
-              type: 'text',
-              text: `Repository: ${repoData.full_name}\n\n` +
-                `Description: ${repoData.description || 'No description'}\n` +
-                `Language: ${repoData.language || 'Unknown'}\n` +
-                `Stars: ${repoData.stargazers_count}\n` +
-                `Forks: ${repoData.forks_count}\n` +
-                `Open Issues: ${repoData.open_issues_count}\n` +
-                `Created: ${new Date(repoData.created_at).toLocaleDateString()}\n` +
-                `Updated: ${new Date(repoData.updated_at).toLocaleDateString()}\n` +
-                `Clone URL: ${repoData.clone_url}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text:
+                  `Repository: ${repoData.full_name}\n\n` +
+                  `Description: ${repoData.description || 'No description'}\n` +
+                  `Language: ${repoData.language || 'Unknown'}\n` +
+                  `Stars: ${repoData.stargazers_count}\n` +
+                  `Forks: ${repoData.forks_count}\n` +
+                  `Open Issues: ${repoData.open_issues_count}\n` +
+                  `Created: ${new Date(repoData.created_at).toLocaleDateString()}\n` +
+                  `Updated: ${new Date(repoData.updated_at).toLocaleDateString()}\n` +
+                  `Clone URL: ${repoData.clone_url}`,
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error getting repository details: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Error getting repository details: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              },
+            ],
             isError: true,
           };
         }
@@ -142,8 +157,8 @@ export class GitHubMCPServer {
           const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
             method: 'POST',
             headers: {
-              'Authorization': `token ${process.env.GITHUB_TOKEN}`,
-              'Accept': 'application/vnd.github.v3+json',
+              Authorization: `token ${process.env.GITHUB_TOKEN}`,
+              Accept: 'application/vnd.github.v3+json',
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -160,21 +175,26 @@ export class GitHubMCPServer {
           const issue = await response.json();
 
           return {
-            content: [{
-              type: 'text',
-              text: `Issue created successfully!\n\n` +
-                `Title: ${issue.title}\n` +
-                `Number: #${issue.number}\n` +
-                `URL: ${issue.html_url}\n` +
-                `Labels: ${issue.labels.map((l: any) => l.name).join(', ') || 'None'}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text:
+                  `Issue created successfully!\n\n` +
+                  `Title: ${issue.title}\n` +
+                  `Number: #${issue.number}\n` +
+                  `URL: ${issue.html_url}\n` +
+                  `Labels: ${issue.labels.map((l: any) => l.name).join(', ') || 'None'}`,
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error creating issue: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Error creating issue: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              },
+            ],
             isError: true,
           };
         }
@@ -223,17 +243,21 @@ export class FileSystemMCPServer {
           const content = await fs.readFile(path, encoding as BufferEncoding);
 
           return {
-            content: [{
-              type: 'text',
-              text: content.toString(),
-            }],
+            content: [
+              {
+                type: 'text',
+                text: content.toString(),
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error reading file: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Error reading file: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              },
+            ],
             isError: true,
           };
         }
@@ -255,17 +279,21 @@ export class FileSystemMCPServer {
           await fs.writeFile(path, content, encoding as BufferEncoding);
 
           return {
-            content: [{
-              type: 'text',
-              text: `Successfully wrote to ${path}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Successfully wrote to ${path}`,
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error writing file: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Error writing file: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              },
+            ],
             isError: true,
           };
         }
@@ -295,7 +323,7 @@ export class FileSystemMCPServer {
 
               if (entry.isDirectory() && recursive) {
                 items.push(`${relativePath}/`);
-                items.push(...await listDir(fullPath, relativePath));
+                items.push(...(await listDir(fullPath, relativePath)));
               } else {
                 items.push(relativePath);
               }
@@ -307,17 +335,21 @@ export class FileSystemMCPServer {
           const items = await listDir(path);
 
           return {
-            content: [{
-              type: 'text',
-              text: `Contents of ${path}:\n\n${items.join('\n')}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Contents of ${path}:\n\n${items.join('\n')}`,
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error listing directory: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: `Error listing directory: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              },
+            ],
             isError: true,
           };
         }
@@ -360,9 +392,9 @@ export class DatabaseMCPServer {
         query: z.string().describe('SQL query to execute'),
         database: z.string().optional().describe('Database name (optional)'),
       },
-      async ({ query, database }) => {
+      async ({ query }) => {
         try {
-          const { Pool } = await import('postgres');
+          const { Pool } = await import('pg');
           const pool = new Pool({
             connectionString: process.env.DATABASE_URL,
           });
@@ -370,23 +402,30 @@ export class DatabaseMCPServer {
           const result = await pool.query(query);
           await pool.end();
 
-          const formatted = result.rows.map(row =>
-            Object.entries(row).map(([key, value]) => `${key}: ${value}`).join(', ')
-          ).join('\n');
+          const formatted = result.rows
+            .map((row: any) =>
+              Object.entries(row)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(', ')
+            )
+            .join('\n');
 
           return {
-            content: [{
-              type: 'text',
-              text: `Query executed successfully!\n\nRows returned: ${result.rows.length}\n\n${formatted}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: formatted,
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error executing query: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
-            isError: true,
+            content: [
+              {
+                type: 'text',
+                text: `Database error: ${error instanceof Error ? error.message : String(error)}`,
+              },
+            ],
           };
         }
       }
@@ -394,21 +433,21 @@ export class DatabaseMCPServer {
 
     // Get table schema
     this.server.tool(
-      'get-table-schema',
-      'Get schema information for a table',
+      'get_table_schema',
+      'Get table schema information',
       {
         table: z.string().describe('Table name'),
         database: z.string().optional().describe('Database name (optional)'),
       },
-      async ({ table, database }) => {
+      async ({ table }) => {
         try {
-          const { Pool } = await import('postgres');
+          const { Pool } = await import('pg');
           const pool = new Pool({
             connectionString: process.env.DATABASE_URL,
           });
 
           const query = `
-            SELECT column_name, data_type, is_nullable, column_default
+            SELECT column_name, data_type, is_nullable, column_default, column_default
             FROM information_schema.columns
             WHERE table_name = $1
             ORDER BY ordinal_position
@@ -417,23 +456,29 @@ export class DatabaseMCPServer {
           const result = await pool.query(query, [table]);
           await pool.end();
 
-          const schema = result.rows.map(row =>
-            `${row.column_name}: ${row.data_type}${row.is_nullable === 'YES' ? ' (nullable)' : ''}${row.column_default ? ` (default: ${row.column_default})` : ''}`
-          ).join('\n');
+          const columns = result.rows.map((row: any) => ({
+            name: row.column_name,
+            type: row.data_type,
+            nullable: row.is_nullable,
+            default: row.column_default,
+          }));
 
           return {
-            content: [{
-              type: 'text',
-              text: `Schema for table '${table}':\n\n${schema}`,
-            }],
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(columns),
+              },
+            ],
           };
         } catch (error) {
           return {
-            content: [{
-              type: 'text',
-              text: `Error getting table schema: ${error instanceof Error ? error.message : 'Unknown error'}`,
-            }],
-            isError: true,
+            content: [
+              {
+                type: 'text',
+                text: `Schema error: ${error instanceof Error ? error.message : String(error)}`,
+              },
+            ],
           };
         }
       }
@@ -443,7 +488,6 @@ export class DatabaseMCPServer {
   async run() {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('Database MCP Server running on stdio');
   }
 }
 
@@ -470,6 +514,6 @@ async function main() {
   }
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(console.error);
 }
