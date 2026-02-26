@@ -17,7 +17,7 @@
  *
  * @depends_on
  * - External: vitest, @testing-library/react
- * - Internal: @repo/ui, @repo/infra
+ * - Internal: @repo/ui, @repo/infrastructure
  *
  * @used_by
  * - All package test suites

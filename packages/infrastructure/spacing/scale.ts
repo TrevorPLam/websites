@@ -3,7 +3,7 @@
 //          Provides named tokens (xs → 3xl) mapping to pixel values and Tailwind class names.
 //
 // System role: Single source of truth for spacing token values.
-// Entry point: import from '@repo/infra/spacing'
+// Entry point: import from '@repo/infrastructure/spacing'
 //
 // Exports / Entry: SPACING_SCALE, SpacingKey, SpacingValue, spacingTailwindClass
 // Used by: spacing utils, UI components, layout systems

@@ -11,7 +11,7 @@
  */
 
 // Simple console-based logger to avoid monorepo import issues
-// TODO: Reintegrate with @repo/infra logging when project references are fixed
+// TODO: Reintegrate with @repo/infrastructure logging when project references are fixed
 
 export interface LogContext {
   integrationId: string;

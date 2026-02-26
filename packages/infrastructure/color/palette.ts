@@ -3,7 +3,7 @@
 //          Provides a baseline neutral palette and validation helpers for site.config.ts colors.
 //
 // System role: Color constants for default/fallback values; validation helpers for ThemeColors.
-// Entry point: import from '@repo/infra/color'
+// Entry point: import from '@repo/infrastructure/color'
 //
 // Exports / Entry: NEUTRAL_PALETTE, DEFAULT_THEME_COLORS, REQUIRED_COLOR_KEYS, validateThemeColors
 // Used by: site.config.ts validation, ThemeInjector fallback, design system documentation

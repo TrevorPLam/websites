@@ -21,7 +21,7 @@ import { z } from 'zod';
  *
  * @example
  * ```typescript
- * import { rateLimitEnvSchema } from '@repo/infra/env/schemas/rate-limit';
+ * import { rateLimitEnvSchema } from '@repo/infrastructure/env/schemas/rate-limit';
  *
  * const result = rateLimitEnvSchema.safeParse(process.env);
  * if (!result.success) {
@@ -86,7 +86,7 @@ export type RateLimitEnv = z.infer<typeof rateLimitEnvSchema>;
  *
  * @example
  * ```typescript
- * import { validateRateLimitEnv } from '@repo/infra/env/schemas/rate-limit';
+ * import { validateRateLimitEnv } from '@repo/infrastructure/env/schemas/rate-limit';
  *
  * try {
  *   const rateLimitEnv = validateRateLimitEnv();
@@ -152,7 +152,7 @@ export const validateRateLimitEnv = (env: Record<string, unknown> = process.env)
  *
  * @example
  * ```typescript
- * import { safeValidateRateLimitEnv } from '@repo/infra/env/schemas/rate-limit';
+ * import { safeValidateRateLimitEnv } from '@repo/infrastructure/env/schemas/rate-limit';
  *
  * const rateLimitEnv = safeValidateRateLimitEnv();
  * if (rateLimitEnv?.UPSTASH_REDIS_REST_URL) {
@@ -189,7 +189,7 @@ export const safeValidateRateLimitEnv = (
  *
  * @example
  * ```typescript
- * import { isDistributedRateLimitingEnabled } from '@repo/infra/env/schemas/rate-limit';
+ * import { isDistributedRateLimitingEnabled } from '@repo/infrastructure/env/schemas/rate-limit';
  *
  * if (isDistributedRateLimitingEnabled()) {
  *   console.log('Using distributed rate limiting with Redis');

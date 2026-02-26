@@ -3,7 +3,7 @@
 //          Validates color pairs against AA and AAA contrast requirements.
 //
 // System role: Pure WCAG compliance utilities — no side-effects.
-// Entry point: import from '@repo/infra/color'
+// Entry point: import from '@repo/infrastructure/color'
 //
 // Exports / Entry: getRelativeLuminance, getContrastRatio, meetsWcagAA, meetsWcagAAA,
 //                  getWcagLevel, WcagLevel, WcagContext

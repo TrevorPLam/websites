@@ -3,7 +3,7 @@
 //          Built on Radix UI Radio Group which provides correct role="radiogroup",
 //          keyboard navigation (arrows), and proper ARIA attributes. Uses CVA for sizing.
 //
-// Relationship: Depends on radix-ui, @repo/infra/variants (cva), @repo/utils (cn).
+// Relationship: Depends on radix-ui, @repo/infrastructure/variants (cva), @repo/utils (cn).
 // System role: Form primitive (Layer L2 @repo/ui).
 // Assumptions: Compose with Label component for accessible labelling. Controlled via
 //              value/onValueChange or uncontrolled via defaultValue.
@@ -28,7 +28,7 @@
 import * as React from 'react';
 import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 import { Circle } from 'lucide-react';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

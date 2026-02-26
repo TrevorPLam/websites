@@ -21,7 +21,7 @@
 // - [FEAT:UI] Optional leading dot indicator
 
 import * as React from 'react';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

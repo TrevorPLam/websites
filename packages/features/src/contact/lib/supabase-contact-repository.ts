@@ -37,8 +37,8 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { ContactFormData } from './contact-schema';
-import { safeValidateSupabaseEnv } from '@repo/infra/env';
-import { logError, withServerSpan } from '@repo/infra';
+import { safeValidateSupabaseEnv } from '@repo/infrastructure/env';
+import { logError, withServerSpan } from '@repo/infrastructure';
 
 // Type for Supabase leads table row
 interface SupabaseLeadRow {

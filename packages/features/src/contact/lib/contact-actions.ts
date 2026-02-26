@@ -4,7 +4,7 @@
 //          pluggable submission handlers for CRM integration. Provides template-agnostic
 //          contact form submission with 2026 security best practices.
 //
-// Relationship: Uses contact-schema. Depends on @repo/infra (rate limit, request context, IP validation).
+// Relationship: Uses contact-schema. Depends on @repo/infrastructure (rate limit, request context, IP validation).
 // System role: Server action submitContactForm; validates, rate-limits, then calls handler(data, metadata).
 // Assumptions: Handler is provided by template (e.g. insert lead + HubSpot sync); runWithRequestId for tracing.
 //
@@ -32,9 +32,9 @@
 import { headers } from 'next/headers';
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
-import { checkRateLimit, hashIp } from '@repo/infra';
-import { logError, withServerSpan, runWithRequestId } from '@repo/infra';
-import { getValidatedClientIp } from '@repo/infra/security';
+import { checkRateLimit, hashIp } from '@repo/infrastructure';
+import { logError, withServerSpan, runWithRequestId } from '@repo/infrastructure';
+import { getValidatedClientIp } from '@repo/infrastructure/security';
 import type { ContactFormData } from './contact-schema';
 import { validateContactSecurity } from './contact-schema';
 import { SupabaseContactRepository } from './supabase-contact-repository';

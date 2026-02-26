@@ -21,7 +21,7 @@ import { z } from 'zod';
  *
  * @example
  * ```typescript
- * import { hubspotEnvSchema } from '@repo/infra/env/schemas/hubspot';
+ * import { hubspotEnvSchema } from '@repo/infrastructure/env/schemas/hubspot';
  *
  * const result = hubspotEnvSchema.safeParse(process.env);
  * if (!result.success) {
@@ -75,7 +75,7 @@ export type HubspotEnv = z.infer<typeof hubspotEnvSchema>;
  *
  * @example
  * ```typescript
- * import { validateHubspotEnv } from '@repo/infra/env/schemas/hubspot';
+ * import { validateHubspotEnv } from '@repo/infrastructure/env/schemas/hubspot';
  *
  * try {
  *   const hubspotEnv = validateHubspotEnv();
@@ -126,7 +126,7 @@ export const validateHubspotEnv = (env: Record<string, unknown> = process.env): 
  *
  * @example
  * ```typescript
- * import { safeValidateHubspotEnv } from '@repo/infra/env/schemas/hubspot';
+ * import { safeValidateHubspotEnv } from '@repo/infrastructure/env/schemas/hubspot';
  *
  * const hubspotEnv = safeValidateHubspotEnv();
  * if (hubspotEnv?.HUBSPOT_PRIVATE_APP_TOKEN) {
@@ -152,7 +152,7 @@ export const safeValidateHubspotEnv = (
  *
  * @example
  * ```typescript
- * import { isHubspotEnabled } from '@repo/infra/env/schemas/hubspot';
+ * import { isHubspotEnabled } from '@repo/infrastructure/env/schemas/hubspot';
  *
  * if (isHubspotEnabled()) {
  *   console.log('Using HubSpot for CRM integration');

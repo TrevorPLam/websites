@@ -1,12 +1,12 @@
 /**
  * @file packages/integrations/supabase/client.ts
  * Purpose: Supabase client and lead operations — createSupabaseClient, insertLead, updateLead, getSupabaseClient.
- * Relationship: Depends on @repo/infra (logError, logInfo). Uses types.ts for config and row types.
+ * Relationship: Depends on @repo/infrastructure (logError, logInfo). Uses types.ts for config and row types.
  * System role: REST API to /rest/v1/leads; config from env or partial config; lazy singleton getSupabaseClient.
  * SECURITY (2026-02-21): Fixed service role key client-side usage. Now uses anon key with RLS.
  * Assumptions: SUPABASE_URL and SUPABASE_ANON_KEY required for client-side; service role for server-only.
  */
-import { logError, logInfo } from '@repo/infra';
+import { logError, logInfo } from '@repo/infrastructure';
 // [Task 0.24] Import SupabaseClientConfig from types.ts (removed duplicate from this file)
 import type { SupabaseClientConfig, SupabaseLeadRow } from './types';
 

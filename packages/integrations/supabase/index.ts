@@ -2,7 +2,7 @@
  * @file packages/integrations/supabase/index.ts
  * Purpose: Supabase integration barrel — client, insertLead/updateLead, leads helpers, types, pooling.
  * SECURITY (2026-02-21): Separated client/server configurations. Client uses anon key with RLS.
- * Relationship: Depends on @repo/infra, @repo/utils. Consumed by template lib/actions/supabase.
+ * Relationship: Depends on @repo/infrastructure, @repo/utils. Consumed by template lib/actions/supabase.
  * System role: createSupabaseClient, insertLead, updateLead, getSupabaseClient; server functions for admin.
  * Assumptions: NEXT_PUBLIC_SUPABASE_URL/ANON_KEY for client; SUPABASE_URL/SERVICE_ROLE_KEY for server.
  */

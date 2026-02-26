@@ -16,7 +16,7 @@ import { invalidateTenantCache } from '@repo/multi-tenant/resolve-tenant';
 import { setTenantFeatureOverride } from '@repo/feature-flags';
 import { enqueue } from '@repo/jobs/client';
 import type { FeatureFlag } from '@repo/feature-flags';
-import { TokenValidator } from '@repo/infra/auth';
+import { TokenValidator } from '@repo/infrastructure/auth';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 

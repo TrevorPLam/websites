@@ -10,8 +10,8 @@
  *
  * @example
  * ```typescript
- * import { validateEnv, createEnvSchema } from '@repo/infra/env/validate';
- * import type { CompleteEnv } from '@repo/infra/env/types';
+ * import { validateEnv, createEnvSchema } from '@repo/infrastructure/env/validate';
+ * import type { CompleteEnv } from '@repo/infrastructure/env/types';
  *
  * const env = validateEnv();
  * console.log('Site:', env.NEXT_PUBLIC_SITE_NAME);

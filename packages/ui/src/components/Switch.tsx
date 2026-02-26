@@ -3,7 +3,7 @@
 //          which provides correct role="switch", aria-checked, and keyboard activation
 //          (Space to toggle). Supports size and variant styling via CVA.
 //
-// Relationship: Depends on radix-ui, @repo/infra/variants (cva), @repo/utils (cn).
+// Relationship: Depends on radix-ui, @repo/infrastructure/variants (cva), @repo/utils (cn).
 // System role: Form primitive (Layer L2 @repo/ui).
 // Assumptions: Compose with Label component for accessible labelling. Controlled via
 //              checked/onCheckedChange or uncontrolled via defaultChecked.
@@ -25,7 +25,7 @@
 
 import * as React from 'react';
 import { Switch as SwitchPrimitive } from 'radix-ui';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

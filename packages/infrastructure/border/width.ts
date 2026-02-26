@@ -3,7 +3,7 @@
 //          Maps semantic width keys (0, 1, 2, 4, 8) to CSS values and Tailwind classes.
 //
 // System role: Single source of truth for border-width tokens.
-// Entry point: import from '@repo/infra/border'
+// Entry point: import from '@repo/infrastructure/border'
 //
 // Exports / Entry: BORDER_WIDTH_SCALE, BorderWidthKey, BorderWidthValue, getBorderWidth
 // Used by: UI components (Input, Card, Table, Divider)

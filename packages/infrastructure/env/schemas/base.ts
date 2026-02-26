@@ -18,7 +18,7 @@ import { z } from 'zod';
  *
  * @example
  * ```typescript
- * import { baseEnvSchema } from '@repo/infra/env/schemas/base';
+ * import { baseEnvSchema } from '@repo/infrastructure/env/schemas/base';
  *
  * const result = baseEnvSchema.safeParse(process.env);
  * if (!result.success) {
@@ -102,7 +102,7 @@ export type BaseEnv = z.infer<typeof baseEnvSchema>;
  *
  * @example
  * ```typescript
- * import { validateBaseEnv } from '@repo/infra/env/schemas/base';
+ * import { validateBaseEnv } from '@repo/infrastructure/env/schemas/base';
  *
  * try {
  *   const baseEnv = validateBaseEnv();
@@ -144,7 +144,7 @@ export const validateBaseEnv = (env: Record<string, unknown> = process.env): Bas
  *
  * @example
  * ```typescript
- * import { safeValidateBaseEnv } from '@repo/infra/env/schemas/base';
+ * import { safeValidateBaseEnv } from '@repo/infrastructure/env/schemas/base';
  *
  * const baseEnv = safeValidateBaseEnv();
  * if (baseEnv) {

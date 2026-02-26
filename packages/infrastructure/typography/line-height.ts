@@ -4,7 +4,7 @@
 //          to CSS values and Tailwind class names.
 //
 // System role: Single source of truth for line-height tokens.
-// Entry point: import from '@repo/infra/typography'
+// Entry point: import from '@repo/infrastructure/typography'
 //
 // Exports / Entry: LINE_HEIGHT_SCALE, LineHeightKey, LineHeightValue, getLineHeight
 // Used by: typography utils, UI text components

@@ -21,7 +21,7 @@ import { z } from 'zod';
  *
  * @example
  * ```typescript
- * import { supabaseEnvSchema } from '@repo/infra/env/schemas/supabase';
+ * import { supabaseEnvSchema } from '@repo/infrastructure/env/schemas/supabase';
  *
  * const result = supabaseEnvSchema.safeParse(process.env);
  * if (!result.success) {
@@ -87,7 +87,7 @@ export type SupabaseEnv = z.infer<typeof supabaseEnvSchema>;
  *
  * @example
  * ```typescript
- * import { validateSupabaseEnv } from '@repo/infra/env/schemas/supabase';
+ * import { validateSupabaseEnv } from '@repo/infrastructure/env/schemas/supabase';
  *
  * try {
  *   const supabaseEnv = validateSupabaseEnv();
@@ -155,7 +155,7 @@ export const validateSupabaseEnv = (env: Record<string, unknown> = process.env):
  *
  * @example
  * ```typescript
- * import { safeValidateSupabaseEnv } from '@repo/infra/env/schemas/supabase';
+ * import { safeValidateSupabaseEnv } from '@repo/infrastructure/env/schemas/supabase';
  *
  * const supabaseEnv = safeValidateSupabaseEnv();
  * if (supabaseEnv?.SUPABASE_URL) {
@@ -192,7 +192,7 @@ export const safeValidateSupabaseEnv = (
  *
  * @example
  * ```typescript
- * import { isSupabaseEnabled } from '@repo/infra/env/schemas/supabase';
+ * import { isSupabaseEnabled } from '@repo/infrastructure/env/schemas/supabase';
  *
  * if (isSupabaseEnabled()) {
  *   console.log('Using Supabase for data storage');

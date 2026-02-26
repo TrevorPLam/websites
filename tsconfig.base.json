@@ -20,8 +20,8 @@
     "paths": {
       "@repo/features": ["packages/features/src/index.ts"],
       "@repo/features/*": ["packages/features/src/*"],
-      "@repo/infra": ["packages/infrastructure/index.ts"],
-      "@repo/infra/*": ["packages/infrastructure/*"],
+      "@repo/infrastructure": ["packages/infrastructure/index.ts"],
+      "@repo/infrastructure/*": ["packages/infrastructure/*"],
       "@repo/ui": ["packages/ui/src/index.ts"],
       "@repo/ui/*": ["packages/ui/src/*"],
       "@repo/utils": ["packages/utils/src/index.ts"],

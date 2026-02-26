@@ -1,9 +1,9 @@
 // File: packages/infra/border/index.ts  [TRACE:FILE=packages.infra.border.index]
-// Purpose: Barrel export for the @repo/infra border module.
+// Purpose: Barrel export for the @repo/infrastructure border module.
 //          Re-exports border radius scale, border width utilities, and border helpers.
 //
 // System role: Client-safe public surface for border primitives.
-// Entry point: import from '@repo/infra/border'
+// Entry point: import from '@repo/infrastructure/border'
 //
 // Exports / Entry: See sub-module files for full export lists.
 // Used by: @repo/ui components, ThemeInjector, site.config.ts validation

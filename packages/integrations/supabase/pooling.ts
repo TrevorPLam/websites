@@ -7,8 +7,8 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { logError, logInfo } from '@repo/infra';
-import { Config } from '@repo/infra/src/config';
+import { logError, logInfo } from '@repo/infrastructure';
+import { Config } from '@repo/infrastructure/src/config';
 import type { Database } from './types';
 
 // ============================================================================

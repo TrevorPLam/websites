@@ -20,7 +20,7 @@
  *
  * @example
  * ```typescript
- * import type { BaseEnv, CompleteEnv } from '@repo/infra/env/types';
+ * import type { BaseEnv, CompleteEnv } from '@repo/infrastructure/env/types';
  *
  * const baseConfig: BaseEnv = {
  *   NODE_ENV: 'production',

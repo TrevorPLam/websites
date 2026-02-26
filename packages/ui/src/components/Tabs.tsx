@@ -5,7 +5,7 @@
 //          and orientations. Built on Radix UI Tabs for correct keyboard navigation and
 //          ARIA roles (tablist / tab / tabpanel).
 //
-// Relationship: Depends on radix-ui, @repo/infra/variants (cva), @repo/utils (cn).
+// Relationship: Depends on radix-ui, @repo/infrastructure/variants (cva), @repo/utils (cn).
 // System role: Disclosure primitive (Layer L2 @repo/ui).
 // Assumptions: Consumers control active tab via value/onValueChange or use defaultValue
 //              for uncontrolled usage.
@@ -27,7 +27,7 @@
 
 import * as React from 'react';
 import { Tabs as TabsPrimitive } from 'radix-ui';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

@@ -22,7 +22,7 @@ import { z } from 'zod';
  *
  * @example
  * ```typescript
- * import { publicEnvSchema } from '@repo/infra/env/schemas/public';
+ * import { publicEnvSchema } from '@repo/infrastructure/env/schemas/public';
  *
  * const result = publicEnvSchema.safeParse(process.env);
  * if (!result.success) {
@@ -113,7 +113,7 @@ export type PublicEnv = z.infer<typeof publicEnvSchema>;
  *
  * @example
  * ```typescript
- * import { validatePublicEnv } from '@repo/infra/env/schemas/public';
+ * import { validatePublicEnv } from '@repo/infrastructure/env/schemas/public';
  *
  * try {
  *   const publicEnv = validatePublicEnv();
@@ -163,7 +163,7 @@ export const validatePublicEnv = (env: Record<string, unknown> = process.env): P
  *
  * @example
  * ```typescript
- * import { safeValidatePublicEnv } from '@repo/infra/env/schemas/public';
+ * import { safeValidatePublicEnv } from '@repo/infrastructure/env/schemas/public';
  *
  * const publicEnv = safeValidatePublicEnv();
  * if (publicEnv) {
@@ -190,7 +190,7 @@ export const safeValidatePublicEnv = (
  *
  * @example
  * ```typescript
- * import { isAnalyticsEnabled } from '@repo/infra/env/schemas/public';
+ * import { isAnalyticsEnabled } from '@repo/infrastructure/env/schemas/public';
  *
  * if (isAnalyticsEnabled()) {
  *   console.log('Analytics tracking enabled');
@@ -213,7 +213,7 @@ export const isAnalyticsEnabled = (env: Record<string, unknown> = process.env): 
  *
  * @example
  * ```typescript
- * import { getAnalyticsId } from '@repo/infra/env/schemas/public';
+ * import { getAnalyticsId } from '@repo/infrastructure/env/schemas/public';
  *
  * const analyticsId = getAnalyticsId();
  * if (analyticsId) {

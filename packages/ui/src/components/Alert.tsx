@@ -20,7 +20,7 @@
 
 import * as React from 'react';
 import { AlertCircle, CheckCircle2, Info, XCircle } from 'lucide-react';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

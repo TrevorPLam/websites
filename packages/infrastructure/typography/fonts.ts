@@ -3,7 +3,7 @@
 //          Provides typed font family constants for system UI, serif, mono, and common web fonts.
 //
 // System role: Font definitions consumed by ThemeInjector and CSS variable generation.
-// Entry point: import from '@repo/infra/typography'
+// Entry point: import from '@repo/infrastructure/typography'
 //
 // Exports / Entry: FONT_STACKS, FontStackKey, SystemFontStack, getFontStack
 // Used by: ThemeInjector, site.config.ts theme validation, UI components

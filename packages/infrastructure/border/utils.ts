@@ -3,7 +3,7 @@
 //          and border shorthand constructors.
 //
 // System role: Pure border manipulation functions with no side-effects.
-// Entry point: import from '@repo/infra/border'
+// Entry point: import from '@repo/infrastructure/border'
 //
 // Exports / Entry: getBorderCssVars, borderShorthand, getRadiusCssVars, radiusVar
 // Used by: ThemeInjector, UI component styling

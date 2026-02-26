@@ -8,7 +8,7 @@
  * Assumptions: validateEnv() called once at app bootstrap; schemas compose (base, rate-limit, supabase, etc.).
  *
  * @example
- * import { validateEnv, getFeatureFlags } from '@repo/infra/env';
+ * import { validateEnv, getFeatureFlags } from '@repo/infrastructure/env';
  * const env = validateEnv();
  * const flags = getFeatureFlags();
  */

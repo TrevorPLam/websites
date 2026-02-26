@@ -3,7 +3,7 @@
 //          and shadow composition helpers.
 //
 // System role: Pure shadow manipulation functions with no side-effects.
-// Entry point: import from '@repo/infra/shadow'
+// Entry point: import from '@repo/infrastructure/shadow'
 //
 // Exports / Entry: getShadowCssVars, coloredShadow, elevationToShadow, combineShadows
 // Used by: ThemeInjector, component theming

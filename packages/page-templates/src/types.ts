@@ -134,7 +134,7 @@ export interface TemplateConfig {
  * and renders only when provided.
  *
  * Pattern: Slot content is ReactNode — no asChild/Slot primitive needed. The Slot
- * primitive from @repo/infra/composition/slots is for asChild prop composition;
+ * primitive from @repo/infrastructure/composition/slots is for asChild prop composition;
  * these named slots are content-injection points.
  *
  * @example

@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { healthCheckManager } from '@repo/infrastructurestructure/monitoring';
+import { healthCheckManager } from '@repo/infrastructure/monitoring';
 
 /**
  * GET /api/health

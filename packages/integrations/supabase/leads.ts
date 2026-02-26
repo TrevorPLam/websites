@@ -1,11 +1,11 @@
 /**
  * @file packages/integrations/supabase/leads.ts
  * Purpose: Legacy Supabase lead helpers (insertSupabaseLead, updateSupabaseLead, buildSupabaseHeaders, etc.).
- * Relationship: Uses @repo/infra/logger. Re-exported from index for backward compat; new code uses client.ts.
+ * Relationship: Uses @repo/infrastructure/logger. Re-exported from index for backward compat; new code uses client.ts.
  * System role: REST calls with Prefer: return=representation; parse data[0]; deprecated in favor of client.
  * Assumptions: @deprecated — use client.ts insertLead/updateLead for new implementations.
  */
-import { logError, logInfo } from '@repo/infra/logger';
+import { logError, logInfo } from '@repo/infrastructure/logger';
 import type { SupabaseLeadRow } from './types';
 
 const SUPABASE_LEADS_PATH = '/rest/v1/leads';

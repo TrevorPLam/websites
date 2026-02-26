@@ -9,7 +9,7 @@
 //
 // Invariants:
 // - HOCs preserve the wrapped component's displayName for DevTools
-// - withErrorBoundary uses class ErrorBoundary; componentDidCatch calls logError from @repo/infra/client
+// - withErrorBoundary uses class ErrorBoundary; componentDidCatch calls logError from @repo/infrastructure/client
 // - withConditionalRender renders null (not a placeholder) when condition is false
 // - No HOC introduces global state
 //

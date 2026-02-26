@@ -1,4 +1,4 @@
-import { getABVariant } from '@repo/infra/experiments';
+import { getABVariant } from '@repo/infrastructure/experiments';
 import { HomePageTemplate } from '@repo/page-templates';
 import type { SiteConfig } from '@repo/types';
 import siteConfig from '../site.config';

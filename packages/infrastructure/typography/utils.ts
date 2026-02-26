@@ -3,7 +3,7 @@
 //          text truncation helpers, and character-width estimation.
 //
 // System role: Pure utility functions with no side-effects.
-// Entry point: import from '@repo/infra/typography'
+// Entry point: import from '@repo/infrastructure/typography'
 //
 // Exports / Entry: getTypographyCssVars, isWebFontLoaded, truncateText, estimateTextWidth
 // Used by: ThemeInjector, UI text components

@@ -7,7 +7,7 @@
  */
 
 import * as React from 'react';
-import { cva, type ClassValue } from '@repo/infra/variants';
+import { cva, type ClassValue } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

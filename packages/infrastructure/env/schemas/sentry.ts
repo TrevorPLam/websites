@@ -21,7 +21,7 @@ import { z } from 'zod';
  *
  * @example
  * ```typescript
- * import { sentryEnvSchema } from '@repo/infra/env/schemas/sentry';
+ * import { sentryEnvSchema } from '@repo/infrastructure/env/schemas/sentry';
  *
  * const result = sentryEnvSchema.safeParse(process.env);
  * if (!result.success) {
@@ -93,7 +93,7 @@ export type SentryEnv = z.infer<typeof sentryEnvSchema>;
  *
  * @example
  * ```typescript
- * import { validateSentryEnv } from '@repo/infra/env/schemas/sentry';
+ * import { validateSentryEnv } from '@repo/infrastructure/env/schemas/sentry';
  *
  * try {
  *   const sentryEnv = validateSentryEnv();
@@ -149,7 +149,7 @@ export const validateSentryEnv = (env: Record<string, unknown> = process.env): S
  *
  * @example
  * ```typescript
- * import { safeValidateSentryEnv } from '@repo/infra/env/schemas/sentry';
+ * import { safeValidateSentryEnv } from '@repo/infrastructure/env/schemas/sentry';
  *
  * const sentryEnv = safeValidateSentryEnv();
  * if (sentryEnv?.NEXT_PUBLIC_SENTRY_DSN) {
@@ -176,7 +176,7 @@ export const safeValidateSentryEnv = (
  *
  * @example
  * ```typescript
- * import { isSentryEnabled } from '@repo/infra/env/schemas/sentry';
+ * import { isSentryEnabled } from '@repo/infrastructure/env/schemas/sentry';
  *
  * if (isSentryEnabled()) {
  *   console.log('Using Sentry for error tracking');
@@ -199,7 +199,7 @@ export const isSentryEnabled = (env: Record<string, unknown> = process.env): boo
  *
  * @example
  * ```typescript
- * import { getSentrySampleRate } from '@repo/infra/env/schemas/sentry';
+ * import { getSentrySampleRate } from '@repo/infrastructure/env/schemas/sentry';
  *
  * const sampleRate = getSentrySampleRate();
  * console.log(`Sentry sample rate: ${sampleRate * 100}%`);

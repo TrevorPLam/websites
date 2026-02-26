@@ -1,4 +1,4 @@
-import { getTenantSecret, setTenantSecret } from '@repo/infra/security';
+import { getTenantSecret, setTenantSecret } from '@repo/infrastructure/security';
 
 const CAL_API_BASE = 'https://api.cal.com/v2';
 

@@ -3,11 +3,11 @@
 > **Multi-tenant, multi-site Next.js 16 marketing platform with Feature-Sliced Design v2.1**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.9.0-brightgreen)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.1+-blue)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.1-black)](https://nextjs.org/)
-[![PNPM](https://img.shields.io/badge/pnpm-9.0+-red)](https://pnpm.io/)
-[![Turbo](https://img.shields.io/badge/Turbo-2.0-orange)](https://turbo.build/)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.5-black)](https://nextjs.org/)
+[![PNPM](https://img.shields.io/badge/pnpm-10.29.2-red)](https://pnpm.io/)
+[![Turbo](https://img.shields.io/badge/Turbo-2.4.0-orange)](https://turbo.build/)
 
 A **production-ready** monorepo for building and deploying marketing websites at scale. Built with **Next.js 16**, **React 19**, and **TypeScript**, following **Feature-Sliced Design (FSD) v2.1** architecture with enterprise-grade security, performance optimization, and multi-tenant isolation.
 
@@ -36,15 +36,21 @@ marketing-websites/
 │   ├── ui/                 # UI components (FSD)
 │   ├── features/           # Business features
 │   ├── entities/           # Data entities
-│   ├── infra/              # Infrastructure code
+│   ├── infrastructure/     # Infrastructure code
 │   ├── shared/             # Shared utilities
-│   └── integrations/       # Third-party integrations
+│   ├── integrations/       # Third-party integrations
+│   ├── config/             # Configuration schemas
+│   ├── marketing-components/ # Marketing-specific components
+│   └── [40+ specialized packages]
 ├── clients/                # Tenant-specific sites
 ├── sites/                  # Site configurations
 ├── docs/                   # Documentation
 ├── scripts/                # Automation scripts
 ├── tooling/                # Development tools
-└── tasks/                  # Domain tasks
+├── database/               # Database migrations
+├── supabase/               # Supabase configuration
+├── e2e/                    # E2E tests
+└── tests/                  # Integration tests
 ```
 
 ### Technology Stack
@@ -54,9 +60,9 @@ marketing-websites/
 | **Framework**       | Next.js       | 16.1.5  | React framework with App Router |
 | **UI Library**      | React         | 19.0.0  | User interface library          |
 | **Language**        | TypeScript    | 5.9.3   | Type-safe development           |
-| **Styling**         | Tailwind CSS  | v4      | Utility-first CSS framework     |
+| **Styling**         | Tailwind CSS  | v4.1.0  | Utility-first CSS framework     |
 | **Package Manager** | pnpm          | 10.29.2 | Efficient package management    |
-| **Build System**    | Turbo         | 2.8.10  | Monorepo build orchestration    |
+| **Build System**    | Turbo         | 2.4.0   | Monorepo build orchestration    |
 | **Database**        | Supabase      | Latest  | PostgreSQL + real-time features |
 | **Authentication**  | Supabase Auth | Latest  | OAuth 2.1 + multi-tenant auth   |
 | **Deployment**      | Vercel        | Latest  | Edge deployment platform        |
@@ -81,7 +87,7 @@ corepack enable
 pnpm install
 
 # Copy environment variables
-cp .env.example .env.local
+cp .env.template .env.local
 ```
 
 ### Development
@@ -89,11 +95,6 @@ cp .env.example .env.local
 ```bash
 # Start all applications in development mode
 pnpm dev
-
-# Start specific application
-pnpm dev:web          # Marketing site
-pnpm dev:portal       # Client portal
-pnpm dev:admin        # Admin dashboard
 
 # Run tests
 pnpm test
@@ -103,32 +104,35 @@ pnpm lint
 
 # Type checking
 pnpm type-check
-```
 
-### Building
-
-```bash
 # Build all packages
 pnpm build
-
-# Build specific application
-pnpm build:web
-pnpm build:portal
-pnpm build:admin
 ```
 
 ## 🎨 Feature-Sliced Design (FSD) v2.1
 
-This monorepo follows **Feature-Sliced Design v2.1** architecture with strict layer separation:
+This monorepo follows **Feature-Sliced Design v2.1** architecture with strict layer separation across packages:
 
 ```
-packages/ui/src/
-├── app/                 # App layer (pages, layouts)
-├── pages/               # Pages layer (route components)
-├── widgets/             # Widgets layer (composed features)
-├── features/            # Features layer (business logic)
-├── entities/            # Entities layer (business entities)
-└── shared/              # Shared layer (utilities, types)
+packages/
+├── entities/           # Entities layer (business entities)
+│   └── src/
+│       ├── lead/       # Lead entity
+│       └── tenant/     # Tenant entity
+├── features/           # Features layer (business logic)
+│   └── src/
+│       ├── authentication/
+│       ├── booking/
+│       ├── analytics/
+│       ├── blog/
+│       └── [20+ feature modules]
+├── ui/                 # Shared UI components
+│   └── src/
+│       ├── components/  # Reusable UI components
+│       ├── forms/       # Form components
+│       ├── booking/     # Booking-specific UI
+│       └── layout/      # Layout components
+└── shared/             # Shared layer (utilities, types)
 ```
 
 ### Cross-Slice Imports
@@ -139,6 +143,7 @@ Use **@x notation** for cross-slice imports:
 // Import from another slice
 import { Button } from '@x/ui/shared';
 import { UserEntity } from '@x/entities/user';
+import { BookingFeature } from '@x/features/booking';
 ```
 
 ## 🔒 Security & Multi-Tenancy
@@ -218,21 +223,32 @@ This repository includes comprehensive **AI agent context management**:
 ```yaml
 # pnpm-workspace.yaml
 packages:
-  - 'apps/*'
   - 'packages/*'
-  - 'tooling/*'
+  - 'packages/config/*'
+  - 'packages/integrations/*'
+  - 'packages/features/*'
+  - 'packages/ai-platform/*'
+  - 'packages/content-platform/*'
+  - 'packages/marketing-ops/*'
+  - 'packages/infrastructure/*'
+  - 'apps/*'
   - 'clients/*'
+  - 'tooling/*'
+  - 'e2e/*'
 ```
 
 ### Key Packages
 
 | Package              | Purpose           | Exports                   |
 | -------------------- | ----------------- | ------------------------- |
-| `@repo/ui`           | UI components     | FSD-structured components |
-| `@repo/features`     | Business features | Tenant-aware features     |
-| `@repo/infra`        | Infrastructure    | Auth, database, security  |
+| `@repo/ui`           | UI components     | Reusable components & forms |
+| `@repo/features`     | Business features | 20+ feature modules       |
+| `@repo/infrastructure`| Infrastructure    | Auth, database, security  |
+| `@repo/entities`     | Data entities     | Lead, tenant entities     |
 | `@repo/shared`       | Shared utilities  | Types, helpers, constants |
 | `@repo/integrations` | Third-party       | Stripe, HubSpot, Cal.com  |
+| `@repo/multi-tenant` | Multi-tenancy     | Tenant resolution, billing |
+| `@repo/analytics`    | Analytics         | Performance monitoring    |
 
 ## 🚀 Deployment
 
@@ -248,17 +264,33 @@ packages:
 
 ```bash
 # Core
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+SITE_NAME="Marketing Website"
+NODE_ENV=development
+
+# Analytics
+NEXT_PUBLIC_ANALYTICS_ID=
+ANALYTICS_ID=
+
+# Sentry Error Tracking
+NEXT_PUBLIC_SENTRY_DSN=
+SENTRY_AUTH_TOKEN=
+
+# Database (Supabase)
 DATABASE_URL=postgresql://...
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
 # Authentication
 NEXTAUTH_SECRET=your-secret
 NEXTAUTH_URL=http://localhost:3000
 
-# Third-party
+# Third-party Integrations
 STRIPE_SECRET_KEY=sk_...
-HUBSPOT_API_KEY=...
-CALCOM_API_KEY=...
+STRIPE_PUBLISHABLE_KEY=pk_...
+HUBSPOT_API_KEY=
+CALCOM_API_KEY=
 ```
 
 ## 📚 Documentation
@@ -267,23 +299,32 @@ CALCOM_API_KEY=...
 
 ```
 docs/
-├── guides/              # How-to guides
-│   ├── accessibility/  # Accessibility compliance
-│   ├── ai-automation/   # AI integration patterns
-│   ├── architecture/    # System architecture
-│   └── security/        # Security guidelines
-├── plan/               # Domain planning
-├── research/           # Research findings
-└── lessons-learned/    # Project insights
+├── README.md              # Documentation overview
+├── frontmatter-schema.json # Schema for doc metadata
+├── guides/                # How-to guides (165+ files)
+│   ├── accessibility/     # Accessibility compliance
+│   ├── ai-automation/     # AI integration patterns
+│   ├── architecture/      # System architecture
+│   ├── security/          # Security guidelines
+│   └── [15+ categories]
+├── observability/         # Monitoring and alerting
+├── operations/            # DevOps procedures
+├── quality/               # Code quality standards
+├── research/              # Research findings
+├── security/              # Security documentation
+├── standards/             # Industry standards
+└── testing/               # Testing strategies
 ```
 
 ### Key Documentation
 
-- **[Architecture Decision Records](docs/plan/)**
-- **[Security Guidelines](docs/guides/security/)**
-- **[Performance Optimization](docs/guides/performance/)**
+- **[Documentation Overview](docs/README.md)**
+- **[Security Guidelines](docs/security/)**
+- **[Architecture Guides](docs/guides/architecture/)**
 - **[AI Integration](docs/guides/ai-automation/)**
 - **[Multi-Tenant Patterns](docs/guides/multi-tenant/)**
+- **[Quality Standards](docs/quality/)**
+- **[Operations](docs/operations/)**
 
 ## 🤝 Contributing
 
@@ -361,9 +402,10 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📊 Project Status
 
-- **Status**: ✅ Production Ready
+- **Status**: ✅ Production Ready (95% Complete)
 - **Version**: 1.0.0
-- **Last Updated**: 2026-02-23
+- **Last Updated**: 2026-02-25
+- **Foundation**: All critical infrastructure tasks completed
 - **Maintainers**: Active development team
 - **Contributors**: [View contributors](https://github.com/your-org/marketing-websites/graphs/contributors)
 

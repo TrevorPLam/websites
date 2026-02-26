@@ -4,7 +4,7 @@
 //          and Tailwind class names.
 //
 // System role: Single source of truth for box-shadow tokens.
-// Entry point: import from '@repo/infra/shadow'
+// Entry point: import from '@repo/infrastructure/shadow'
 //
 // Exports / Entry: SHADOW_SCALE, ShadowKey, ShadowValue, ShadowConfig, getShadow
 // Used by: UI components, ThemeInjector, card/modal components

@@ -6,7 +6,7 @@
  *          Mirrors Input behavior for consistency in forms. Uses CVA for validation state.
  *
  * Relationship: Used by @repo/features contact/booking forms. Depends on
- *               @repo/infra/variants (cva), @repo/utils (cn).
+ *               @repo/infrastructure/variants (cva), @repo/utils (cn).
  * System role: Form primitive; aria-invalid and aria-describedby for error.
  * Assumptions: Same id/label/error pattern as Input; isValid shows primary border.
  *              Public API unchanged: error/isValid booleans derived into CVA validationState.
@@ -18,7 +18,7 @@
  */
 
 import * as React from 'react';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

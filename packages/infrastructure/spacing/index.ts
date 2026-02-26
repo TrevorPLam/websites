@@ -1,10 +1,10 @@
 // File: packages/infra/spacing/index.ts  [TRACE:FILE=packages.infra.spacing.index]
-// Purpose: Barrel export for the @repo/infra spacing module.
+// Purpose: Barrel export for the @repo/infrastructure spacing module.
 //          Re-exports spacing scale constants, utility functions, and React hooks
 //          for consistent spacing across the design system.
 //
 // System role: Client-safe public surface for spacing primitives.
-// Entry point: import from '@repo/infra/spacing'
+// Entry point: import from '@repo/infrastructure/spacing'
 //
 // Exports / Entry: See sub-module files for full export lists.
 // Used by: @repo/ui components, @repo/features, client apps

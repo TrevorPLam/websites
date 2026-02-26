@@ -3,7 +3,7 @@
 //          Refactored to use adapter pattern, eliminating ~300 lines of duplicated code across providers.
 //          Includes open provider registry (inf-10) for third-party provider self-registration.
 //
-// Relationship: Uses booking-schema, booking-provider-adapter. Depends on @repo/infra/env (validateEnv).
+// Relationship: Uses booking-schema, booking-provider-adapter. Depends on @repo/infrastructure/env (validateEnv).
 // System role: Factory of Mindbody/Vagaro/Square adapters; getBookingProviders is lazy to avoid build-time env.
 //              Provider registry (BOOKING_PROVIDER_REGISTRY) allows third-party providers to self-register.
 // Assumptions: Env vars like MINDBODY_ENABLED, MINDBODY_API_KEY; Calendly not yet implemented as adapter.
@@ -38,7 +38,7 @@ import {
   type ProviderConfig,
   type BookingProvider,
 } from './booking-provider-adapter';
-import { validateEnv } from '@repo/infra/env';
+import { validateEnv } from '@repo/infrastructure/env';
 
 /**
  * Mindbody API integration adapter

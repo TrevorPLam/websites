@@ -3,7 +3,7 @@
 //          Built on Radix UI Checkbox which provides correct role="checkbox", aria-checked,
 //          and keyboard activation (Space to toggle). Uses CVA for size styling.
 //
-// Relationship: Depends on radix-ui, @repo/infra/variants (cva), @repo/utils (cn).
+// Relationship: Depends on radix-ui, @repo/infrastructure/variants (cva), @repo/utils (cn).
 // System role: Form primitive (Layer L2 @repo/ui).
 // Assumptions: Compose with Label component for accessible labelling. Controlled via
 //              checked/onCheckedChange or uncontrolled via defaultChecked.
@@ -27,7 +27,7 @@
 import * as React from 'react';
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 import { Check } from 'lucide-react';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

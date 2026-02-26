@@ -1,10 +1,10 @@
 // File: packages/infra/composition/index.ts  [TRACE:FILE=packages.infra.composition.index]
-// Purpose: Barrel export for the @repo/infra composition module.
+// Purpose: Barrel export for the @repo/infrastructure composition module.
 //          Re-exports Slot, context factories, provider composer, render props,
 //          and HOC utilities from sub-modules.
 //
 // System role: Client-safe public surface.
-// Entry point: import from '@repo/infra/composition'
+// Entry point: import from '@repo/infrastructure/composition'
 //
 // Exports / Entry: See sub-module files for full export lists.
 // Used by: @repo/ui compound components, @repo/features, client apps

@@ -8,7 +8,7 @@
 
 import * as React from 'react';
 import { toast as sonnerToast, Toaster as SonnerToaster } from 'sonner';
-import { cva, type ClassValue } from '@repo/infra/variants';
+import { cva, type ClassValue } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

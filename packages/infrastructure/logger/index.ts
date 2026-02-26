@@ -29,7 +29,7 @@
  * Structured logger — server-only.
  * Production: JSON output (Vercel Log Drain compatible). Dev/test: human-readable.
  * Sanitizes context (OWASP logging); enriches with request ID when available.
- * @module @repo/infra/logger
+ * @module @repo/infrastructure/logger
  */
 
 import * as Sentry from '@sentry/nextjs';

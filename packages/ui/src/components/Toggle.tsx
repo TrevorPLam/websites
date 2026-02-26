@@ -23,7 +23,7 @@
 
 import * as React from 'react';
 import { Toggle as TogglePrimitive } from 'radix-ui';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

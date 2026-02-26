@@ -3,8 +3,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "paths": {
-      "@repo/infra": ["../../packages/infra/index.ts"],
-      "@repo/infra/*": ["../../packages/infra/*"],
+      "@repo/infrastructure": ["../../packages/infrastructure/index.ts"],
+      "@repo/infrastructure/*": ["../../packages/infrastructure/*"],
       "@repo/ui": ["../../packages/ui/src/index.ts"],
       "@repo/ui/*": ["../../packages/ui/src/*"],
       "@repo/utils": ["../../packages/utils/src/index.ts"],

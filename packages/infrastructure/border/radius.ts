@@ -4,7 +4,7 @@
 //          Includes site.config.ts borderRadius token mapping.
 //
 // System role: Single source of truth for border-radius tokens.
-// Entry point: import from '@repo/infra/border'
+// Entry point: import from '@repo/infrastructure/border'
 //
 // Exports / Entry: RADIUS_SCALE, RadiusKey, RadiusValue, BorderRadiusIntensity,
 //                  getRadius, radiusIntensityToKey

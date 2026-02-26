@@ -25,7 +25,7 @@ import { z } from 'zod';
  *
  * @example
  * ```typescript
- * import { bookingEnvSchema } from '@repo/infra/env/schemas/booking';
+ * import { bookingEnvSchema } from '@repo/infrastructure/env/schemas/booking';
  *
  * const result = bookingEnvSchema.safeParse(process.env);
  * if (!result.success) {
@@ -169,7 +169,7 @@ export type BookingEnv = z.infer<typeof bookingEnvSchema>;
  *
  * @example
  * ```typescript
- * import { validateBookingEnv } from '@repo/infra/env/schemas/booking';
+ * import { validateBookingEnv } from '@repo/infrastructure/env/schemas/booking';
  *
  * try {
  *   const bookingEnv = validateBookingEnv();
@@ -266,7 +266,7 @@ export const validateBookingEnv = (env: Record<string, unknown> = process.env): 
  *
  * @example
  * ```typescript
- * import { safeValidateBookingEnv } from '@repo/infra/env/schemas/booking';
+ * import { safeValidateBookingEnv } from '@repo/infrastructure/env/schemas/booking';
  *
  * const bookingEnv = safeValidateBookingEnv();
  * if (bookingEnv) {
@@ -325,7 +325,7 @@ export const safeValidateBookingEnv = (
  *
  * @example
  * ```typescript
- * import { getEnabledBookingProviders } from '@repo/infra/env/schemas/booking';
+ * import { getEnabledBookingProviders } from '@repo/infrastructure/env/schemas/booking';
  *
  * const providers = getEnabledBookingProviders();
  * console.log('Enabled providers:', providers); // ['mindbody', 'square']
@@ -363,7 +363,7 @@ export const getEnabledBookingProviders = (
  *
  * @example
  * ```typescript
- * import { isBookingEnabled } from '@repo/infra/env/schemas/booking';
+ * import { isBookingEnabled } from '@repo/infrastructure/env/schemas/booking';
  *
  * if (isBookingEnabled()) {
  *   console.log('Booking system is available');

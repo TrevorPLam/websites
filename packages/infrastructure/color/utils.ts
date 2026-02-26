@@ -4,7 +4,7 @@
 //          as used in site.config.ts theme.colors and ThemeInjector.
 //
 // System role: Pure color manipulation functions with no side-effects.
-// Entry point: import from '@repo/infra/color'
+// Entry point: import from '@repo/infrastructure/color'
 //
 // Exports / Entry: parseHsl, formatHsl, hslToCssVar, adjustHsl, toHexFromHsl, mixColors
 // Used by: ThemeInjector, color contrast checker, site config validation

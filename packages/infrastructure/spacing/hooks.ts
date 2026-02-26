@@ -3,7 +3,7 @@
 //          breakpoints and return appropriate spacing scale values for fluid layouts.
 //
 // System role: Client-side hooks — requires 'use client' at call site.
-// Entry point: import from '@repo/infra/spacing'
+// Entry point: import from '@repo/infrastructure/spacing'
 //
 // Exports / Entry: useResponsiveSpacing, useSpacingScale
 // Used by: UI components needing responsive spacing logic in JavaScript

@@ -3,7 +3,7 @@
 //          CSS custom property generation, and responsive spacing helpers.
 //
 // System role: Spacing computation helpers — pure functions with no side-effects.
-// Entry point: import from '@repo/infra/spacing'
+// Entry point: import from '@repo/infrastructure/spacing'
 //
 // Exports / Entry: pxToRem, remToPx, getSpacingValue, spacingVar, clampSpacing, scaleSpacing
 // Used by: UI components, layout systems, theme utilities

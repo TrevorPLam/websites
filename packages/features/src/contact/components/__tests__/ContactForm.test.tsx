@@ -11,7 +11,7 @@ import { axe } from 'jest-axe';
 import ContactForm from '../ContactForm';
 import type { ContactFeatureConfig, ContactSubmissionHandler } from '../../lib/contact-config';
 
-vi.mock('@repo/infra/client', () => ({
+vi.mock('@repo/infrastructure/client', () => ({
   setSentryContext: vi.fn().mockResolvedValue(undefined),
   setSentryUser: vi.fn().mockResolvedValue(undefined),
   withSentrySpan: vi.fn((_: unknown, fn: () => Promise<unknown>) => fn()),

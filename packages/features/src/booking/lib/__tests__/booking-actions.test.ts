@@ -26,7 +26,7 @@ vi.mock('next/headers', () => ({
   }),
 }));
 
-vi.mock('@repo/infra', () => ({
+vi.mock('@repo/infrastructure', () => ({
   secureAction: vi.fn(
     async (
       input,
@@ -86,7 +86,7 @@ vi.mock('@repo/infra', () => ({
   validateEnv: vi.fn(() => ({ NODE_ENV: 'test' })),
 }));
 
-vi.mock('@repo/infra/security', () => ({
+vi.mock('@repo/infrastructure/security', () => ({
   getValidatedClientIp: vi.fn().mockReturnValue('192.168.1.1'),
 }));
 

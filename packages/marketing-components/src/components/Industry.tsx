@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { cn } from '@repo/utils';
-import { sanitizeUrl } from '@repo/infra/client';
+import { sanitizeUrl } from '@repo/infrastructure/client';
 
 // Location components
 interface LocationListProps {

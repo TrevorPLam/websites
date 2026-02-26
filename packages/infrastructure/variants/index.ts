@@ -1,10 +1,10 @@
 // File: packages/infra/variants/index.ts  [TRACE:FILE=packages.infra.variants.index]
-// Purpose: Barrel export for the @repo/infra variant system module.
+// Purpose: Barrel export for the @repo/infrastructure variant system module.
 //          Re-exports the cva() function, type utilities, composition helpers,
 //          and class utilities from sub-modules.
 //
 // System role: Client-safe public surface.
-// Entry point: import from '@repo/infra/variants'
+// Entry point: import from '@repo/infrastructure/variants'
 //
 // Exports / Entry: See sub-module files for full export lists.
 // Used by: @repo/ui components (Button, Badge, Input variants), @repo/features

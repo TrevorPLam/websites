@@ -1,6 +1,6 @@
 /**
  * submitContactForm unit tests.
- * Mocks Next.js headers and @repo/infra for isolated testing.
+ * Mocks Next.js headers and @repo/infrastructure for isolated testing.
  */
 
 import { submitContactForm } from '../contact-actions';
@@ -14,17 +14,17 @@ jest.mock('next/headers', () => ({
   }),
 }));
 
-jest.mock('@repo/infra', () => ({
+jest.mock('@repo/infrastructure', () => ({
   checkRateLimit: jest.fn().mockResolvedValue(true),
   logError: jest.fn(),
   withServerSpan: jest.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 
-jest.mock('@repo/infra/context/server', () => ({
+jest.mock('@repo/infrastructure/context/server', () => ({
   runWithRequestId: jest.fn((_: unknown, fn: () => Promise<unknown>) => fn()),
 }));
 
-jest.mock('@repo/infra/security', () => ({
+jest.mock('@repo/infrastructure/security', () => ({
   getValidatedClientIp: jest.fn().mockReturnValue('127.0.0.1'),
 }));
 
@@ -42,7 +42,7 @@ describe('submitContactForm', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    const { checkRateLimit } = require('@repo/infra');
+    const { checkRateLimit } = require('@repo/infrastructure');
     (checkRateLimit as any).mockResolvedValue(true);
   });
 
@@ -85,7 +85,7 @@ describe('submitContactForm', () => {
   });
 
   it('returns rate limit message when checkRateLimit returns false', async () => {
-    const { checkRateLimit } = require('@repo/infra');
+    const { checkRateLimit } = require('@repo/infrastructure');
     (checkRateLimit as any).mockResolvedValue(false);
     const result = await submitContactForm(validData, mockHandler);
     expect(result.success).toBe(false);

@@ -1,6 +1,6 @@
 // File: packages/ui/src/components/Button.tsx  [TRACE:FILE=packages.ui.components.Button]
 // Purpose: Reusable button component providing consistent styling and behavior across the application.
-//          Uses CVA from @repo/infra/variants for variant/size styling.
+//          Uses CVA from @repo/infrastructure/variants for variant/size styling.
 //
 // Exports / Entry: Button component, ButtonProps interface
 // Used by: All application components requiring button interactions
@@ -20,7 +20,7 @@
 // - [FEAT:DESIGN] Multiple visual variants for different use cases
 
 import * as React from 'react';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 /**

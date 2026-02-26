@@ -53,14 +53,14 @@ export default defineConfig({
       clean: true,
     },
     projects: [
-      // Node environment: Server code, utilities, infra, integrations
+      // Node environment: Server code, utilities, infrastructure, integrations
       {
         test: {
           environment: 'node',
           include: [
             'packages/utils/**/*.test.ts',
             'packages/types/**/*.test.ts',
-            'packages/infra/**/__tests__/**/*.test.ts',
+            'packages/infrastructure/**/__tests__/**/*.test.ts',
             'packages/features/**/lib/**/*.test.ts',
             'packages/integrations/**/__tests__/**/*.test.ts',
             'packages/industry-schemas/**/*.test.ts',
@@ -72,7 +72,7 @@ export default defineConfig({
             '**/node_modules/**',
             '**/dist/**',
             '**/*.config.*',
-            'packages/infra/composition/**', // React HOC tests run in jsdom
+            'packages/infrastructure/composition/**', // React HOC tests run in jsdom
             '**/coverage/**',
           ],
           setupFiles: ['./packages/config/vitest-config/src/setup.ts'],
@@ -93,7 +93,7 @@ export default defineConfig({
             'packages/marketing-components/**/*.test.tsx',
             'packages/infrastructure/ui/**/*.test.ts',
             'packages/infrastructure/layout/**/*.test.ts',
-            'packages/infra/composition/**/*.test.ts',
+            'packages/infrastructure/composition/**/*.test.ts',
           ],
           exclude: ['**/node_modules/**', '**/dist/**', '**/*.config.*', '**/coverage/**'],
           setupFiles: ['./packages/config/vitest-config/src/setup.ts'],

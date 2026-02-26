@@ -12,7 +12,7 @@
 //          integration. Now accepts BookingFeatureConfig for configurable validation.
 //
 // Relationship: Uses booking-schema, booking-config, booking-providers, booking-repository.
-//              Depends on @repo/infra (rate limit, IP).
+//              Depends on @repo/infrastructure (rate limit, IP).
 // System role: Server actions; BookingRepository-backed storage (task 0-2); rate limit and
 //              fraud detection then provider sync. Tenant-scoped via resolveTenantId (task 0-3).
 // Assumptions: revalidatePath('/book') exists in app.
@@ -50,21 +50,21 @@ import {
   createServiceLabels,
   type BookingFormData,
 } from './booking-schema';
-import { secureAction } from '@repo/infra';
-import type { Result } from '@repo/infra';
+import { secureAction } from '@repo/infrastructure';
+import type { Result } from '@repo/infrastructure';
 import { z } from 'zod';
 import {
   getBookingForTenant,
   updateBookingStatus,
   getBookingByConfirmationForTenant,
-} from '@repo/infra';
+} from '@repo/infrastructure';
 import { getBookingProviders } from './booking-providers';
 import type { BookingProviderResponse } from './booking-provider-adapter';
-import { checkRateLimit, hashIp } from '@repo/infra';
-import { getValidatedClientIp } from '@repo/infra/security';
+import { checkRateLimit, hashIp } from '@repo/infrastructure';
+import { getValidatedClientIp } from '@repo/infrastructure/security';
 import type { BookingFeatureConfig } from './booking-config';
 import { getBookingRepository } from './booking-repository';
-import { validateEnv } from '@repo/infra/env';
+import { validateEnv } from '@repo/infrastructure/env';
 
 // validateEnv() with default options returns CompleteEnv directly (throwOnError=true)
 const validatedEnv = validateEnv() as { NODE_ENV: 'development' | 'production' | 'test' };

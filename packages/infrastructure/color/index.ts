@@ -1,10 +1,10 @@
 // File: packages/infra/color/index.ts  [TRACE:FILE=packages.infra.color.index]
-// Purpose: Barrel export for the @repo/infra color module.
+// Purpose: Barrel export for the @repo/infrastructure color module.
 //          Re-exports color utilities, HSL parsing/formatting, WCAG contrast checking,
 //          and palette constants.
 //
 // System role: Client-safe public surface for color primitives.
-// Entry point: import from '@repo/infra/color'
+// Entry point: import from '@repo/infrastructure/color'
 //
 // Exports / Entry: See sub-module files for full export lists.
 // Used by: ThemeInjector, @repo/ui components, accessibility tooling

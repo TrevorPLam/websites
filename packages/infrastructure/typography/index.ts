@@ -1,10 +1,10 @@
 // File: packages/infra/typography/index.ts  [TRACE:FILE=packages.infra.typography.index]
-// Purpose: Barrel export for the @repo/infra typography module.
+// Purpose: Barrel export for the @repo/infrastructure typography module.
 //          Re-exports font definitions, type scale constants, line-height utilities,
 //          and typography utility functions.
 //
 // System role: Client-safe public surface for typography primitives.
-// Entry point: import from '@repo/infra/typography'
+// Entry point: import from '@repo/infrastructure/typography'
 //
 // Exports / Entry: See sub-module files for full export lists.
 // Used by: @repo/ui components, ThemeInjector, client apps

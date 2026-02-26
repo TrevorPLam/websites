@@ -3,7 +3,7 @@
 //          Maps semantic size keys (xs → 9xl) to px, rem, and Tailwind class names.
 //
 // System role: Single source of truth for font size tokens.
-// Entry point: import from '@repo/infra/typography'
+// Entry point: import from '@repo/infrastructure/typography'
 //
 // Exports / Entry: TYPE_SCALE, TypeScaleKey, TypeScaleValue, getTypeScale
 // Used by: typography utils, UI components, heading/paragraph systems

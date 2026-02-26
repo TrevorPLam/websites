@@ -3,7 +3,7 @@
 //          Built on Radix UI Progress which provides correct role="progressbar",
 //          aria-valuenow, aria-valuemin, and aria-valuemax attributes. Uses CVA for variants.
 //
-// Relationship: Depends on radix-ui, @repo/infra/variants (cva), @repo/utils (cn).
+// Relationship: Depends on radix-ui, @repo/infrastructure/variants (cva), @repo/utils (cn).
 // System role: Feedback primitive (Layer L2 @repo/ui).
 // Assumptions: Used for loading states, file uploads, and progress tracking.
 //
@@ -26,7 +26,7 @@
 
 import * as React from 'react';
 import { Progress as ProgressPrimitive } from 'radix-ui';
-import { cva } from '@repo/infra/variants';
+import { cva } from '@repo/infrastructure/variants';
 import { cn } from '@repo/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

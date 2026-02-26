@@ -32,8 +32,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Input, Select, Textarea, Button } from '@repo/ui';
-import { setSentryContext, setSentryUser, withSentrySpan } from '@repo/infra/client';
-import { sanitizeHtml } from '@repo/infra/security/client';
+import { setSentryContext, setSentryUser, withSentrySpan } from '@repo/infrastructure/client';
+import { sanitizeHtml } from '@repo/infrastructure/security/client';
 import {
   createContactFormSchema,
   createContactFormDefaults,
