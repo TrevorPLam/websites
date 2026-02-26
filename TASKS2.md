@@ -102,8 +102,8 @@ Four complete servers have never run — wrong response format + not in `config.
 | 52  | `enterprise-mcp-marketplace.ts`   | Catalog statistics are hardcoded literals — never update                                        | Derive dynamically from catalog array                                       |
 | 53  | `mcp-apps-marketplace.ts`         | DAU/WAU/MAU ratios mathematically impossible — monthly < weekly                                 | Fix: DAU=10%, WAU=40%, MAU=100% of activeUsers                              |
 | 54  | `mcp-apps-marketplace.ts`         | `manageSubmission()` approve spreads unvalidated user input — undefined field crashes           | Apply Zod validation before spreading                                       |
-| 55  | `knowledge-graph-memory-fixed.ts` | `update-entity` + `get-relation-evolution` tools dropped — functional regression                | Port from original with corrected response format                           |
-| 56  | `sequential-thinking-fixed.ts`    | `explore-alternatives` tool dropped — functional regression                                     | Port from original with corrected response format                           |
+| 55  | `knowledge-graph-memory-fixed.ts` | `update-entity` + `get-relation-evolution` tools dropped — functional regression                | ✅ FIXED - Ported from original with corrected response format              |
+| 56  | `sequential-thinking-fixed.ts`    | `explore-alternatives` tool dropped — functional regression                                     | ✅ FIXED - Ported from original with corrected response format              |
 
 ---
 
@@ -149,12 +149,12 @@ Fix path references in `config.production.json`, remove `github-server.ts` refer
 Register 4 dead servers with corrected response format, replace all `Math.random()` stubs with real implementations starting with `observability-monitor.ts` and `enterprise-registry.ts`, add persistence to auth + registry servers.
 
 **Phase 3 — Hardening (23 Medium):** 🔄 IN PROGRESS
-✅ Memory caps (issues #57-#61 completed), Zod validation everywhere, fix regression tools in `-fixed.ts` files, delete originals, consolidate config path story from `.mcp/` vs `mcp/`.
+✅ Memory caps (issues #57-#61 completed), Zod validation everywhere, regression tools in `-fixed.ts` files FIXED (issues #55-#56), original files deleted, consolidate config path story from `.mcp/` vs `mcp/`.
 
 ## Status Summary
 
 - **Critical Issues (19)**: ✅ RESOLVED - All security vulnerabilities fixed
 - **High Priority Issues (33)**: ✅ RESOLVED - All dead servers registered, stubs eliminated
-- **Medium Priority Issues (23)**: 🔄 IN PROGRESS - Hardening phase underway
+- **Medium Priority Issues (23)**: 🔄 IN PROGRESS - 2 additional regression issues resolved (21 remaining)
 
-**Total Progress**: 52/75 issues resolved (69.3% complete)
+**Total Progress**: 54/75 issues resolved (72.0% complete)

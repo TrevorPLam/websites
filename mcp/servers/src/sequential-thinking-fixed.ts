@@ -300,6 +300,40 @@ export class SequentialThinkingMCPServer {
         };
       }
     );
+
+    // Explore alternatives
+    this.server.tool(
+      'explore-alternatives',
+      'Explore alternative approaches for a specific reasoning step',
+      {
+        planId: z.string().describe('ID of the reasoning plan'),
+        stepId: z.string().describe('ID of the step to explore alternatives for'),
+      },
+      async ({ planId, stepId }) => {
+        const branch = this.branches.get(stepId);
+        if (!branch) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `No alternatives found for step ${stepId}`,
+              },
+            ],
+          };
+        }
+
+        const recommendation = this.recommendAlternative(branch.alternatives);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Alternatives for step ${stepId}:\n${JSON.stringify({ alternatives: branch.alternatives, recommendation }, null, 2)}`,
+            },
+          ],
+        };
+      }
+    );
   }
 
   private async simulateStepExecution(
@@ -354,6 +388,37 @@ export class SequentialThinkingMCPServer {
     }
 
     return pattern;
+  }
+
+  private recommendAlternative(
+    alternatives: Array<{
+      id: string;
+      description: string;
+      pros: string[];
+      cons: string[];
+      confidence: number;
+    }>
+  ) {
+    // Recommend the alternative with highest confidence
+    const bestAlternative = alternatives.reduce((best, current) =>
+      current.confidence > best.confidence ? current : best
+    );
+
+    return {
+      recommended: bestAlternative.id,
+      reasoning: `Recommended "${bestAlternative.description}" based on confidence score of ${bestAlternative.confidence}`,
+      alternatives: alternatives.map((alt) => ({
+        id: alt.id,
+        description: alt.description,
+        confidence: alt.confidence,
+        riskAssessment:
+          alt.cons.length > alt.pros.length
+            ? 'high'
+            : alt.cons.length === alt.pros.length
+              ? 'medium'
+              : 'low',
+      })),
+    };
   }
 
   async run() {
