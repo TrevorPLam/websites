@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/tag-cloud/ui/Tag-cloud.tsx
  * @summary tag-cloud component.

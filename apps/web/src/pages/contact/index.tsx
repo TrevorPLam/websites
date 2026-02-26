@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/contact/index.tsx
  * @summary contact page composition.
@@ -46,3 +44,4 @@ export function ContactPage() {
     </div>
   )
 }
+export default ContactPage

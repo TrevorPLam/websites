@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/card-component/ui/Card-component.tsx
  * @summary card-component component.

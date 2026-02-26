@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/terms/index.tsx
  * @summary terms page composition.
@@ -46,3 +44,4 @@ export function TermsPage() {
     </div>
   )
 }
+export default TermsPage

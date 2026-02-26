@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/search-analytics/ui/Search-analytics.tsx
  * @summary search-analytics feature component.

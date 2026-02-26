@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/workflow-automation/ui/Workflow-automation.tsx
  * @summary workflow-automation feature component.

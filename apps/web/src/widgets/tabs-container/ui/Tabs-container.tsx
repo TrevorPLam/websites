@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/tabs-container/ui/Tabs-container.tsx
  * @summary tabs-container component.

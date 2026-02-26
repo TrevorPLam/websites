@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/badge-component/ui/Badge-component.tsx
  * @summary badge-component component.

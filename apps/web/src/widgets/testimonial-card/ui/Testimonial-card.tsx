@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/testimonial-card/ui/Testimonial-card.tsx
  * @summary testimonial-card component.

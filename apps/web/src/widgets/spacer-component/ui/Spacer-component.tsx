@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/spacer-component/ui/Spacer-component.tsx
  * @summary spacer-component component.

@@ -1,7 +1,7 @@
 /**
- * @file apps/web/src/entities/icon-font/index.ts
- * @summary icon-font entity public API.
+ * @file apps/web/src/entities//index.ts
+ * @summary  entity public API.
  */
 
-export { Icon-fontSchema, createIcon-font } from './model/icon-font.schema'
-export type { Icon-font } from './model/icon-font.schema'
+export { Schema, create } from './model/.schema'
+export type {  } from './model/.schema'

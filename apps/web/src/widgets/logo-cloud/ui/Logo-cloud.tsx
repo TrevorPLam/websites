@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/logo-cloud/ui/Logo-cloud.tsx
  * @summary logo-cloud component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/breadcrumb-trail/ui/Breadcrumb-trail.tsx
  * @summary breadcrumb-trail component.

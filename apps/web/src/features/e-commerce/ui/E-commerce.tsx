@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/e-commerce/ui/E-commerce.tsx
  * @summary e-commerce feature component.

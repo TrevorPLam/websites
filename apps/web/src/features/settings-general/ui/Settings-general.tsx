@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/settings-general/ui/Settings-general.tsx
  * @summary settings-general feature component.

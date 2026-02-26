@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/data-import/ui/Data-import.tsx
  * @summary data-import feature component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/payment-processing/ui/Payment-processing.tsx
  * @summary payment-processing feature component.

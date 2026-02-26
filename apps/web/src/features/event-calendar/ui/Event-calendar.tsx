@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/event-calendar/ui/Event-calendar.tsx
  * @summary event-calendar feature component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/media/index.tsx
  * @summary media page composition.
@@ -46,3 +44,4 @@ export function MediaPage() {
     </div>
   )
 }
+export default MediaPage

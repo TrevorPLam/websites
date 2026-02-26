@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/performance-monitoring/ui/Performance-monitoring.tsx
  * @summary performance-monitoring feature component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/accordion-panel/ui/Accordion-panel.tsx
  * @summary accordion-panel component.

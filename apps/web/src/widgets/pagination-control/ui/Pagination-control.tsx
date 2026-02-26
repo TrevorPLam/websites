@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/pagination-control/ui/Pagination-control.tsx
  * @summary pagination-control component.

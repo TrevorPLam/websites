@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/content-management/ui/Content-management.tsx
  * @summary content-management feature component.

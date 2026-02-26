@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/pricing-table/ui/Pricing-table.tsx
  * @summary pricing-table component.

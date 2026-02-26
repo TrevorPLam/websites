@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/users/index.tsx
  * @summary users page composition.
@@ -46,3 +44,4 @@ export function UsersPage() {
     </div>
   )
 }
+export default UsersPage

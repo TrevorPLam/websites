@@ -1,7 +1,7 @@
 /**
- * @file apps/web/src/entities/social-link/index.ts
- * @summary social-link entity public API.
+ * @file apps/web/src/entities//index.ts
+ * @summary  entity public API.
  */
 
-export { Social-linkSchema, createSocial-link } from './model/social-link.schema'
-export type { Social-link } from './model/social-link.schema'
+export { Schema, create } from './model/.schema'
+export type {  } from './model/.schema'

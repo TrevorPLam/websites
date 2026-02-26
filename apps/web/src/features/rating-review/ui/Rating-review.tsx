@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/rating-review/ui/Rating-review.tsx
  * @summary rating-review feature component.

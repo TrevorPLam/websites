@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/cookies/index.tsx
  * @summary cookies page composition.
@@ -46,3 +44,4 @@ export function CookiesPage() {
     </div>
   )
 }
+export default CookiesPage

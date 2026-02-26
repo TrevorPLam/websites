@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/sidebar/ui/Sidebar.tsx
  * @summary sidebar component.

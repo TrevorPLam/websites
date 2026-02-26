@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/webhooks/index.tsx
  * @summary webhooks page composition.
@@ -46,3 +44,4 @@ export function WebhooksPage() {
     </div>
   )
 }
+export default WebhooksPage

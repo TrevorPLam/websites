@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/progress-bar/ui/Progress-bar.tsx
  * @summary progress-bar component.

@@ -10,16 +10,9 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   output: 'standalone',
   experimental: {
-    ppr: true, // Enable Partial Prerendering (Next.js 16)
-    reactCompiler: true, // Enable React Compiler (Next.js 16)
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
+    // PPR and React Compiler require Next.js 16 canary
+    // ppr: true, // Enable Partial Prerendering (Next.js 16)
+    // reactCompiler: true, // Enable React Compiler (Next.js 16)
   },
   images: {
     remotePatterns: [
@@ -35,8 +28,6 @@ const nextConfig: NextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
   // Enable React strict mode
   reactStrictMode: true,
-  // Enable SWC minification
-  swcMinify: true,
   // Performance optimizations
   poweredByHeader: false,
   compress: true,

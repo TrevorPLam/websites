@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/date-picker/ui/Date-picker.tsx
  * @summary date-picker component.

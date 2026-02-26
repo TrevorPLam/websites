@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/signup/index.tsx
  * @summary signup page composition.
@@ -46,3 +44,4 @@ export function SignupPage() {
     </div>
   )
 }
+export default SignupPage

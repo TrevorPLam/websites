@@ -1,7 +1,7 @@
 /**
- * @file apps/web/src/entities/brand-logo/index.ts
- * @summary brand-logo entity public API.
+ * @file apps/web/src/entities//index.ts
+ * @summary  entity public API.
  */
 
-export { Brand-logoSchema, createBrand-logo } from './model/brand-logo.schema'
-export type { Brand-logo } from './model/brand-logo.schema'
+export { Schema, create } from './model/.schema'
+export type {  } from './model/.schema'

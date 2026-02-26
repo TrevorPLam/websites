@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/api-management/ui/Api-management.tsx
  * @summary api-management feature component.

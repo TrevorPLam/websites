@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/skeleton-loader/ui/Skeleton-loader.tsx
  * @summary skeleton-loader component.

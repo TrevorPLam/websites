@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/comment-system/ui/Comment-system.tsx
  * @summary comment-system feature component.

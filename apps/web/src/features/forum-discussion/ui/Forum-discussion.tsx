@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/forum-discussion/ui/Forum-discussion.tsx
  * @summary forum-discussion feature component.

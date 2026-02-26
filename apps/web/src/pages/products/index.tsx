@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/products/index.tsx
  * @summary products page composition.
@@ -46,3 +44,4 @@ export function ProductsPage() {
     </div>
   )
 }
+export default ProductsPage

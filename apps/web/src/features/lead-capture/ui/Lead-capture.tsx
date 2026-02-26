@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/lead-capture/ui/Lead-capture.tsx
  * @summary lead-capture feature component.

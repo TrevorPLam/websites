@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/mega-menu/ui/Mega-menu.tsx
  * @summary mega-menu component.

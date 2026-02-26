@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/spinner-loader/ui/Spinner-loader.tsx
  * @summary spinner-loader component.

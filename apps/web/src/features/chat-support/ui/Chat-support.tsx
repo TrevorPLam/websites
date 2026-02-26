@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/chat-support/ui/Chat-support.tsx
  * @summary chat-support feature component.

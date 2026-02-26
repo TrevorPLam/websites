@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/content/index.tsx
  * @summary content page composition.
@@ -46,3 +44,4 @@ export function ContentPage() {
     </div>
   )
 }
+export default ContentPage

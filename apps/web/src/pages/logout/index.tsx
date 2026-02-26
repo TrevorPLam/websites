@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/logout/index.tsx
  * @summary logout page composition.
@@ -46,3 +44,4 @@ export function LogoutPage() {
     </div>
   )
 }
+export default LogoutPage

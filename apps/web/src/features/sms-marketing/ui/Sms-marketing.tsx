@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/sms-marketing/ui/Sms-marketing.tsx
  * @summary sms-marketing feature component.

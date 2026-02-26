@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/help-desk/ui/Help-desk.tsx
  * @summary help-desk feature component.

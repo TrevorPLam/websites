@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/tree-view/ui/Tree-view.tsx
  * @summary tree-view component.

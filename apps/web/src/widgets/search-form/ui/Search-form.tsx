@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/search-form/ui/Search-form.tsx
  * @summary search-form component.

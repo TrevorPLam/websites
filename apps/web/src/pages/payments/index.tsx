@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/payments/index.tsx
  * @summary payments page composition.
@@ -46,3 +44,4 @@ export function PaymentsPage() {
     </div>
   )
 }
+export default PaymentsPage

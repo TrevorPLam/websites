@@ -6,17 +6,17 @@
 
 import { z } from 'zod'
 
-export const Color-paletteSchema = z.object({
+export const ColorPaletteSchema = z.object({
   id: z.string().uuid(),
   createdAt: z.date(),
   updatedAt: z.date(),
   // TODO: Add specific fields
 })
 
-export type Color-palette = z.infer<typeof Color-paletteSchema>
+export type ColorPalette = z.infer<typeof ColorPaletteSchema>
 
-export const createColor-palette = (data: Partial<Color-palette>): Color-palette => {
-  return Color-paletteSchema.parse({
+export const createColorPalette = (data: Partial<ColorPalette>): ColorPalette => {
+  return ColorPaletteSchema.parse({
     id: crypto.randomUUID(),
     createdAt: new Date(),
     updatedAt: new Date(),

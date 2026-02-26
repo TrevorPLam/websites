@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/input-field/ui/Input-field.tsx
  * @summary input-field component.

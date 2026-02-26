@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/audio-player/ui/Audio-player.tsx
  * @summary audio-player component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/analytics-tracking/ui/Analytics-tracking.tsx
  * @summary analytics-tracking feature component.

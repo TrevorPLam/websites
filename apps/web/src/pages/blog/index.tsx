@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/blog/index.tsx
  * @summary blog page composition.
@@ -46,3 +44,4 @@ export function BlogPage() {
     </div>
   )
 }
+export default BlogPage

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/file-upload/ui/File-upload.tsx
  * @summary file-upload feature component.

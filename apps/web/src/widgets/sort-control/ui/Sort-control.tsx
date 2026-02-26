@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/sort-control/ui/Sort-control.tsx
  * @summary sort-control component.

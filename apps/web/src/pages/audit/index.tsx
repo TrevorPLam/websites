@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/audit/index.tsx
  * @summary audit page composition.
@@ -46,3 +44,4 @@ export function AuditPage() {
     </div>
   )
 }
+export default AuditPage

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/form-builder/ui/Form-builder.tsx
  * @summary form-builder feature component.

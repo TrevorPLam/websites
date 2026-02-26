@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/user-authentication/ui/User-authentication.tsx
  * @summary user-authentication feature component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/notifications/index.tsx
  * @summary notifications page composition.
@@ -46,3 +44,4 @@ export function NotificationsPage() {
     </div>
   )
 }
+export default NotificationsPage

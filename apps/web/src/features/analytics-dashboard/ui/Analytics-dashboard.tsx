@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/analytics-dashboard/ui/Analytics-dashboard.tsx
  * @summary analytics-dashboard feature component.

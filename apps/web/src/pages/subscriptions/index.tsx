@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/subscriptions/index.tsx
  * @summary subscriptions page composition.
@@ -46,3 +44,4 @@ export function SubscriptionsPage() {
     </div>
   )
 }
+export default SubscriptionsPage

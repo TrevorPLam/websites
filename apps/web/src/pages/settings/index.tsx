@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/settings/index.tsx
  * @summary settings page composition.
@@ -46,3 +44,4 @@ export function SettingsPage() {
     </div>
   )
 }
+export default SettingsPage

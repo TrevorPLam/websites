@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/push-notifications/ui/Push-notifications.tsx
  * @summary push-notifications feature component.

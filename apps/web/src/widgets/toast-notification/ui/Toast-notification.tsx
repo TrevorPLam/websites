@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/toast-notification/ui/Toast-notification.tsx
  * @summary toast-notification component.

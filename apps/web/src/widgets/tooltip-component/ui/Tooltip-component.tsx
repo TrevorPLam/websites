@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/tooltip-component/ui/Tooltip-component.tsx
  * @summary tooltip-component component.

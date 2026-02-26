@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/checkout/index.tsx
  * @summary checkout page composition.
@@ -46,3 +44,4 @@ export function CheckoutPage() {
     </div>
   )
 }
+export default CheckoutPage

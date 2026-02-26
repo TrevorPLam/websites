@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/dashboard-admin/ui/Dashboard-admin.tsx
  * @summary dashboard-admin feature component.

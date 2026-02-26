@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/time-picker/ui/Time-picker.tsx
  * @summary time-picker component.

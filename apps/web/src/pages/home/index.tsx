@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/home/index.tsx
  * @summary home page composition.
@@ -46,3 +44,4 @@ export function HomePage() {
     </div>
   )
 }
+export default HomePage

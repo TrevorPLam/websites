@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/modal-dialog/ui/Modal-dialog.tsx
  * @summary modal-dialog component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/email-templates/ui/Email-templates.tsx
  * @summary email-templates feature component.

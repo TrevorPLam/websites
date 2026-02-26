@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/contact-form/ui/Contact-form.tsx
  * @summary contact-form component.

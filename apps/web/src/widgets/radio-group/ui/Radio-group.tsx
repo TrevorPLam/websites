@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/radio-group/ui/Radio-group.tsx
  * @summary radio-group component.

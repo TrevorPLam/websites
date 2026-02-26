@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/account/index.tsx
  * @summary account page composition.
@@ -46,3 +44,4 @@ export function AccountPage() {
     </div>
   )
 }
+export default AccountPage

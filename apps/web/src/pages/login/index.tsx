@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/login/index.tsx
  * @summary login page composition.
@@ -46,3 +44,4 @@ export function LoginPage() {
     </div>
   )
 }
+export default LoginPage

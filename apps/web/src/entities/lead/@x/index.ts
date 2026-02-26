@@ -1,18 +1,7 @@
 /**
- * @file apps/web/src/entities/lead/@x/index.ts
- * @summary Lead entity cross-slice public API.
- * @description Exports lead entity functionality for other slices.
+ * @file apps/web/src/entities//index.ts
+ * @summary  entity public API.
  */
 
-// Export for lead-capture feature
-export * from './lead-capture';
-
-// Export for other features that need lead data
-export * from './analytics';
-
-// Export for dashboard widgets
-export * from './dashboard';
-
-// Master exports
-export type { Lead } from '../model/lead.schema';
-export { LeadSchema, createLead } from '../model/lead.schema';
+export { Schema, create } from './model/.schema'
+export type {  } from './model/.schema'

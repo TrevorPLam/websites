@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/leads/index.tsx
  * @summary leads page composition.
@@ -46,3 +44,4 @@ export function LeadsPage() {
     </div>
   )
 }
+export default LeadsPage

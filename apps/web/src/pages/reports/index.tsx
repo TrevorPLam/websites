@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/reports/index.tsx
  * @summary reports page composition.
@@ -46,3 +44,4 @@ export function ReportsPage() {
     </div>
   )
 }
+export default ReportsPage

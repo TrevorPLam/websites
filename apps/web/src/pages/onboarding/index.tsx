@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/onboarding/index.tsx
  * @summary onboarding page composition.
@@ -46,3 +44,4 @@ export function OnboardingPage() {
     </div>
   )
 }
+export default OnboardingPage

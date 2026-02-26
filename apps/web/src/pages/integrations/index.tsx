@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/integrations/index.tsx
  * @summary integrations page composition.
@@ -46,3 +44,4 @@ export function IntegrationsPage() {
     </div>
   )
 }
+export default IntegrationsPage

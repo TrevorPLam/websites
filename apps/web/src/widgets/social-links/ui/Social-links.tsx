@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/social-links/ui/Social-links.tsx
  * @summary social-links component.

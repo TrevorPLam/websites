@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/blog-management/ui/Blog-management.tsx
  * @summary blog-management feature component.

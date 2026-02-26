@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/logs/index.tsx
  * @summary logs page composition.
@@ -46,3 +44,4 @@ export function LogsPage() {
     </div>
   )
 }
+export default LogsPage

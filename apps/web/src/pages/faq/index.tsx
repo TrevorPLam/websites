@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/faq/index.tsx
  * @summary faq page composition.
@@ -46,3 +44,4 @@ export function FaqPage() {
     </div>
   )
 }
+export default FaqPage

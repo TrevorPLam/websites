@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/orders/index.tsx
  * @summary orders page composition.
@@ -46,3 +44,4 @@ export function OrdersPage() {
     </div>
   )
 }
+export default OrdersPage

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/dashboard/index.tsx
  * @summary dashboard page composition.
@@ -46,3 +44,4 @@ export function DashboardPage() {
     </div>
   )
 }
+export default DashboardPage

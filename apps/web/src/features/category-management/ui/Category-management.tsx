@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/category-management/ui/Category-management.tsx
  * @summary category-management feature component.

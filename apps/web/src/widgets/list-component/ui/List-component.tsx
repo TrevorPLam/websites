@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/list-component/ui/List-component.tsx
  * @summary list-component component.

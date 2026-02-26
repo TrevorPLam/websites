@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/image-gallery/ui/Image-gallery.tsx
  * @summary image-gallery component.

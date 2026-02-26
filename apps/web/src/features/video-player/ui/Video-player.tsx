@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/video-player/ui/Video-player.tsx
  * @summary video-player feature component.

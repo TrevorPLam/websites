@@ -3,5 +3,5 @@
  * @summary site-header widget public API.
  */
 
-export { Site-header } from './ui/Site-header'
-export type { Site-headerProps } from './ui/Site-header'
+export { SiteHeader } from './ui/SiteHeader'
+export type { SiteHeaderProps } from './ui/SiteHeader'

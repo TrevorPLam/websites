@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/social-media/ui/Social-media.tsx
  * @summary social-media feature component.

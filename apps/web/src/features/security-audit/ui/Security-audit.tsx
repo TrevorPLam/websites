@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/security-audit/ui/Security-audit.tsx
  * @summary security-audit feature component.

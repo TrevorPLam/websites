@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/rating-stars/ui/Rating-stars.tsx
  * @summary rating-stars component.

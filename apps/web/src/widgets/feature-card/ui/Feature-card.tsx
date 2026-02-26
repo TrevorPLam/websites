@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/feature-card/ui/Feature-card.tsx
  * @summary feature-card component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/booking-system/ui/Booking-system.tsx
  * @summary booking-system feature component.

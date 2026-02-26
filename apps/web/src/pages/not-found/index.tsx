@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/not-found/index.tsx
  * @summary not-found page composition.
@@ -11,7 +9,7 @@ import React from 'react'
 import { SiteHeader } from '@/widgets/site-header'
 import { Footer } from '@/widgets/footer'
 
-export function Not-foundPage() {
+export function NotFoundPage() {
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader
@@ -23,7 +21,7 @@ export function Not-foundPage() {
           { label: 'Contact', href: '/contact' },
         ]}
       />
-      
+
       <main className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -34,7 +32,7 @@ export function Not-foundPage() {
           </p>
         </div>
       </main>
-      
+
       <Footer
         companyName="Marketing Websites Platform"
         socialLinks={[
@@ -46,3 +44,5 @@ export function Not-foundPage() {
     </div>
   )
 }
+
+export default NotFoundPage

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/webhook-integration/ui/Webhook-integration.tsx
  * @summary webhook-integration feature component.

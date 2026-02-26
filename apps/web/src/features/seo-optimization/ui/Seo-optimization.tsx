@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/seo-optimization/ui/Seo-optimization.tsx
  * @summary seo-optimization feature component.

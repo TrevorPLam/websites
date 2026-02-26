@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/alert-banner/ui/Alert-banner.tsx
  * @summary alert-banner component.

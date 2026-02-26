@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/carousel-slider/ui/Carousel-slider.tsx
  * @summary carousel-slider component.

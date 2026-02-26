@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/divider-line/ui/Divider-line.tsx
  * @summary divider-line component.

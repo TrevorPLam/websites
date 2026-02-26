@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/sitemap/index.tsx
  * @summary sitemap page composition.
@@ -46,3 +44,4 @@ export function SitemapPage() {
     </div>
   )
 }
+export default SitemapPage

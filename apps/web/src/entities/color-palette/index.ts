@@ -1,7 +1,7 @@
 /**
- * @file apps/web/src/entities/color-palette/index.ts
- * @summary color-palette entity public API.
+ * @file apps/web/src/entities//index.ts
+ * @summary  entity public API.
  */
 
-export { Color-paletteSchema, createColor-palette } from './model/color-palette.schema'
-export type { Color-palette } from './model/color-palette.schema'
+export { ColorPaletteSchema, createColorPalette } from './model/color-palette.schema'
+export type { ColorPalette } from './model/color-palette.schema'

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/tag-management/ui/Tag-management.tsx
  * @summary tag-management feature component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/newsletter-signup/ui/Newsletter-signup.tsx
  * @summary newsletter-signup component.

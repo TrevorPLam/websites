@@ -6,17 +6,17 @@
 
 import { z } from 'zod'
 
-export const Brand-logoSchema = z.object({
+export const BrandLogoSchema = z.object({
   id: z.string().uuid(),
   createdAt: z.date(),
   updatedAt: z.date(),
   // TODO: Add specific fields
 })
 
-export type Brand-logo = z.infer<typeof Brand-logoSchema>
+export type BrandLogo = z.infer<typeof BrandLogoSchema>
 
-export const createBrand-logo = (data: Partial<Brand-logo>): Brand-logo => {
-  return Brand-logoSchema.parse({
+export const createBrandLogo = (data: Partial<BrandLogo>): BrandLogo => {
+  return BrandLogoSchema.parse({
     id: crypto.randomUUID(),
     createdAt: new Date(),
     updatedAt: new Date(),

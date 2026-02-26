@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/survey-poll/ui/Survey-poll.tsx
  * @summary survey-poll feature component.

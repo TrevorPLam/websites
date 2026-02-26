@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/download/index.tsx
  * @summary download page composition.
@@ -46,3 +44,4 @@ export function DownloadPage() {
     </div>
   )
 }
+export default DownloadPage

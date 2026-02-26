@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/subscription-management/ui/Subscription-management.tsx
  * @summary subscription-management feature component.

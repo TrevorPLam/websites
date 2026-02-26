@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/server-error/index.tsx
  * @summary server-error page composition.
@@ -11,7 +9,7 @@ import React from 'react'
 import { SiteHeader } from '@/widgets/site-header'
 import { Footer } from '@/widgets/footer'
 
-export function Server-errorPage() {
+export function ServerErrorPage() {
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader
@@ -23,7 +21,7 @@ export function Server-errorPage() {
           { label: 'Contact', href: '/contact' },
         ]}
       />
-      
+
       <main className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -34,7 +32,7 @@ export function Server-errorPage() {
           </p>
         </div>
       </main>
-      
+
       <Footer
         companyName="Marketing Websites Platform"
         socialLinks={[
@@ -46,3 +44,5 @@ export function Server-errorPage() {
     </div>
   )
 }
+
+export default ServerErrorPage

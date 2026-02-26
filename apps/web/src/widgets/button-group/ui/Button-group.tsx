@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/button-group/ui/Button-group.tsx
  * @summary button-group component.

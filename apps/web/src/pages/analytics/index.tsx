@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/analytics/index.tsx
  * @summary analytics page composition.
@@ -46,3 +44,4 @@ export function AnalyticsPage() {
     </div>
   )
 }
+export default AnalyticsPage

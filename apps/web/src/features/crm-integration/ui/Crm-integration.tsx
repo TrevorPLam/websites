@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/crm-integration/ui/Crm-integration.tsx
  * @summary crm-integration feature component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/profile/index.tsx
  * @summary profile page composition.
@@ -46,3 +44,4 @@ export function ProfilePage() {
     </div>
   )
 }
+export default ProfilePage

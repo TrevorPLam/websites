@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/chart-component/ui/Chart-component.tsx
  * @summary chart-component component.

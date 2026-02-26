@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/textarea-field/ui/Textarea-field.tsx
  * @summary textarea-field component.

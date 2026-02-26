@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/filter-panel/ui/Filter-panel.tsx
  * @summary filter-panel component.

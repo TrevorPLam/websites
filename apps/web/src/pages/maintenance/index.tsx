@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/maintenance/index.tsx
  * @summary maintenance page composition.
@@ -46,3 +44,4 @@ export function MaintenancePage() {
     </div>
   )
 }
+export default MaintenancePage

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/security/index.tsx
  * @summary security page composition.
@@ -46,3 +44,4 @@ export function SecurityPage() {
     </div>
   )
 }
+export default SecurityPage

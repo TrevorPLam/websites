@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/avatar-component/ui/Avatar-component.tsx
  * @summary avatar-component component.

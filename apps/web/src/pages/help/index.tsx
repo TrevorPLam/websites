@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/help/index.tsx
  * @summary help page composition.
@@ -46,3 +44,4 @@ export function HelpPage() {
     </div>
   )
 }
+export default HelpPage

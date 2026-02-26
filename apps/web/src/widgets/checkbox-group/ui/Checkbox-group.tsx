@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/checkbox-group/ui/Checkbox-group.tsx
  * @summary checkbox-group component.

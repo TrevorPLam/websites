@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/welcome/index.tsx
  * @summary welcome page composition.
@@ -46,3 +44,4 @@ export function WelcomePage() {
     </div>
   )
 }
+export default WelcomePage

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/select-dropdown/ui/Select-dropdown.tsx
  * @summary select-dropdown component.

@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/reporting-export/ui/Reporting-export.tsx
  * @summary reporting-export feature component.

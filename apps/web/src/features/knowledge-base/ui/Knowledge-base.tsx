@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/features/knowledge-base/ui/Knowledge-base.tsx
  * @summary knowledge-base feature component.

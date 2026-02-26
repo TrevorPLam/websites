@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/register/index.tsx
  * @summary register page composition.
@@ -46,3 +44,4 @@ export function RegisterPage() {
     </div>
   )
 }
+export default RegisterPage

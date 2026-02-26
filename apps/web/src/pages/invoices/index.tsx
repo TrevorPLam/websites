@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/invoices/index.tsx
  * @summary invoices page composition.
@@ -46,3 +44,4 @@ export function InvoicesPage() {
     </div>
   )
 }
+export default InvoicesPage

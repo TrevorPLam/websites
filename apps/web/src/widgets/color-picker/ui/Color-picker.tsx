@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/color-picker/ui/Color-picker.tsx
  * @summary color-picker component.

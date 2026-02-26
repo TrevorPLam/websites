@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/pages/receipts/index.tsx
  * @summary receipts page composition.
@@ -46,3 +44,4 @@ export function ReceiptsPage() {
     </div>
   )
 }
+export default ReceiptsPage

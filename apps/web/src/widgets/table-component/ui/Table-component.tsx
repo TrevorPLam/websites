@@ -1,5 +1,3 @@
-import React from 'react'
-
 /**
  * @file apps/web/src/widgets/table-component/ui/Table-component.tsx
  * @summary table-component component.
