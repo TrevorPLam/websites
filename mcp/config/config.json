@@ -48,11 +48,14 @@
     "fetch": {
       "command": "npx",
       "args": ["-y", "mcp-server-fetch"],
-      "env": { "ALLOWED_DOMAINS": "*", "LOG_LEVEL": "info" }
+      "env": {
+        "ALLOWED_DOMAINS": "github.com,api.github.com,docs.github.com,azure.com,management.azure.com,registry.npmjs.org",
+        "LOG_LEVEL": "info"
+      }
     },
     "azure-mcp": {
       "command": "npx",
-      "args": ["-y", "@azure/mcp@latest"],
+      "args": ["-y", "@azure/mcp@2.0.0-beta.22"],
       "env": { "AZURE_TOKEN": "${AZURE_TOKEN}", "LOG_LEVEL": "info" }
     },
     "ticketer": {
@@ -87,6 +90,26 @@
         "LOG_LEVEL": "debug",
         "NODE_ENV": "development"
       }
+    },
+    "advanced-agent-plugins": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/advanced-agent-plugins.ts"],
+      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+    },
+    "ai-dlc-methodology": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/ai-dlc-methodology.ts"],
+      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+    },
+    "enterprise-mcp-marketplace": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/enterprise-mcp-marketplace.ts"],
+      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
+    },
+    "mcp-apps-marketplace": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/mcp-apps-marketplace.ts"],
+      "env": { "LOG_LEVEL": "debug", "NODE_ENV": "development" }
     }
   }
 }

@@ -75,12 +75,24 @@ interface TenantMetrics {
   agentCount: number;
 }
 
+/**
+ * Multi-Tenant Orchestrator MCP Server
+ *
+ * Provides comprehensive multi-tenant management capabilities including:
+ * - Tenant provisioning and deprovisioning
+ * - Resource allocation and quota management
+ * - Tenant isolation and security boundaries
+ * - Multi-tenant analytics and monitoring
+ * - Compliance checking and enforcement
+ * - Memory management with automatic cleanup
+ */
 export class MultiTenantOrchestrator {
   private server: McpServer;
   private tenants: Map<string, Tenant> = new Map();
   private isolations: Map<string, TenantIsolation> = new Map();
   private metrics: Map<string, TenantMetrics[]> = new Map();
   private resourcePools: Map<string, ResourcePool> = new Map();
+  private cleanupInterval: NodeJS.Timeout;
 
   constructor() {
     this.server = new McpServer({
@@ -90,6 +102,34 @@ export class MultiTenantOrchestrator {
 
     this.initializeResourcePools();
     this.setupTenantManagementTools();
+    this.startMetricsCleanup();
+  }
+
+  private startMetricsCleanup() {
+    // Clean up old metrics every hour to prevent memory leaks
+    this.cleanupInterval = setInterval(
+      () => {
+        this.cleanupOldMetrics();
+      },
+      60 * 60 * 1000
+    );
+  }
+
+  private cleanupOldMetrics() {
+    const now = new Date();
+    const cutoffTime = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Keep 24 hours of data
+
+    for (const [tenantId, metrics] of this.metrics.entries()) {
+      // Filter out old metrics
+      const filteredMetrics = metrics.filter((metric) => metric.timestamp > cutoffTime);
+
+      // Cap at 1000 entries per tenant to prevent unbounded growth
+      if (filteredMetrics.length > 1000) {
+        this.metrics.set(tenantId, filteredMetrics.slice(-1000));
+      } else {
+        this.metrics.set(tenantId, filteredMetrics);
+      }
+    }
   }
 
   private initializeResourcePools() {
@@ -685,12 +725,42 @@ export class MultiTenantOrchestrator {
     return report.join('\n');
   }
 
-  async run() {
+  async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     console.error('Multi-Tenant Orchestrator MCP Server running on stdio');
   }
+
+  async cleanup() {
+    // Clear cleanup interval
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+
+    // Clear all maps
+    this.tenants.clear();
+    this.isolations.clear();
+    this.metrics.clear();
+    this.resourcePools.clear();
+  }
 }
+
+const orchestrator = new MultiTenantOrchestrator();
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  console.error('\nShutting down Multi-Tenant Orchestrator...');
+  await orchestrator.cleanup();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.error('\nShutting down Multi-Tenant Orchestrator...');
+  await orchestrator.cleanup();
+  process.exit(0);
+});
+
+orchestrator.run().catch(console.error);
 
 // Resource Pool Implementation
 class ResourcePool {
