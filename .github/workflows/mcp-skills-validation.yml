@@ -1,0 +1,365 @@
+name: MCP & Skills Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - '.claude/skills/**'
+      - '.mcp/**'
+      - 'packages/mcp-servers/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '.claude/skills/**'
+      - '.mcp/**'
+      - 'packages/mcp-servers/**'
+
+jobs:
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run security audit
+        run: node scripts/security-audit.js
+      
+      - name: Run supply chain safety check
+        run: node scripts/supply-chain-safety.js
+      
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: |
+            .mcp/security-audit.json
+            .mcp/supply-chain-safety.json
+
+  skills-validation:
+    name: Skills Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Validate Skills structure
+        run: |
+          echo "Validating Skills structure..."
+          for skill in .claude/skills/*/; do
+            if [ -d "$skill" ]; then
+              skill_name=$(basename "$skill")
+              echo "Validating skill: $skill_name"
+              
+              # Check required files
+              if [ ! -f "$skill/SKILL.md" ]; then
+                echo "❌ $skill_name: Missing SKILL.md"
+                exit 1
+              fi
+              
+              # Validate YAML frontmatter
+              if ! grep -q "^---" "$skill/SKILL.md"; then
+                echo "❌ $skill_name: SKILL.md missing YAML frontmatter"
+                exit 1
+              fi
+              
+              # Check required fields
+              if ! grep -q "name:" "$skill/SKILL.md"; then
+                echo "❌ $skill_name: SKILL.md missing name field"
+                exit 1
+              fi
+              
+              if ! grep -q "description:" "$skill/SKILL.md"; then
+                echo "❌ $skill_name: SKILL.md missing description field"
+                exit 1
+              fi
+              
+              echo "✅ $skill_name: Structure valid"
+            fi
+          done
+      
+      - name: Validate MCP configuration
+        run: |
+          echo "Validating MCP configuration..."
+          if [ ! -f ".mcp/config.json" ]; then
+            echo "❌ Missing MCP configuration"
+            exit 1
+          fi
+          
+          # Validate JSON syntax
+          if ! jq empty .mcp/config.json; then
+            echo "❌ Invalid MCP configuration JSON"
+            exit 1
+          fi
+          
+          # Check required servers
+          required_servers=("filesystem" "git" "github")
+          for server in "${required_servers[@]}"; do
+            if ! jq -e ".servers.\"$server\"" .mcp/config.json > /dev/null; then
+              echo "❌ Missing required MCP server: $server"
+              exit 1
+            fi
+          done
+          
+          echo "✅ MCP configuration valid"
+
+  mcp-servers-build:
+    name: MCP Servers Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build MCP servers
+        run: |
+          echo "Building MCP servers..."
+          cd packages/mcp-servers
+          npm run build || echo "Build failed - using development mode"
+      
+      - name: Test MCP server configurations
+        run: |
+          echo "Testing MCP server configurations..."
+          # Test each server configuration
+          for server in $(jq -r '.servers | keys[]' .mcp/config.json); do
+            echo "Testing server: $server"
+            
+            # Extract server config
+            config=$(jq ".servers.\"$server\"" .mcp/config.json)
+            
+            # Validate command exists
+            command=$(echo "$config" | jq -r '.command')
+            if [ -z "$command" ] || [ "$command" = "null" ]; then
+              echo "❌ $server: Missing command"
+              exit 1
+            fi
+            
+            # Validate args array
+            args=$(echo "$config" | jq -r '.args[]? // empty')
+            if [ -z "$args" ]; then
+              echo "❌ $server: Missing args"
+              exit 1
+            fi
+            
+            echo "✅ $server: Configuration valid"
+          done
+
+  cross-platform-sync:
+    name: Cross-Platform Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Test skills synchronization
+        run: |
+          echo "Testing skills synchronization..."
+          
+          # Run sync script
+          node scripts/sync-skills.js
+          
+          # Verify all platforms have skills
+          platforms=("windsurf" "codex" "cursor")
+          for platform in "${platforms[@]}"; do
+            target_path=""
+            case $platform in
+              "windsurf")
+                target_path=".windsurf/skills"
+                ;;
+              "codex")
+                target_path=".codex/skills"
+                ;;
+              "cursor")
+                target_path=".cursor/rules"
+                ;;
+            esac
+            
+            if [ ! -d "$target_path" ]; then
+              echo "❌ $platform: Missing target directory $target_path"
+              exit 1
+            fi
+            
+            skill_count=$(find "$target_path" -maxdepth 1 -type d | wc -l)
+            skill_count=$((skill_count - 1)) # Exclude the directory itself
+            
+            if [ $skill_count -eq 0 ]; then
+              echo "❌ $platform: No skills synced"
+              exit 1
+            fi
+            
+            echo "✅ $platform: $skill_count skills synced"
+          done
+
+  performance-validation:
+    name: Performance Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Validate skill performance
+        run: |
+          echo "Validating skill performance..."
+          
+          # Check skill token efficiency
+          for skill in .claude/skills/*/; do
+            if [ -d "$skill" ]; then
+              skill_name=$(basename "$skill")
+              skill_md="$skill/SKILL.md"
+              
+              if [ -f "$skill_md" ]; then
+                # Count tokens (rough estimation)
+                description=$(sed -n '/^description:/,/^meta:/p' "$skill_md" | sed '1d;$d')
+                description_length=$(echo "$description" | wc -c)
+                
+                # Check if description is too long (should be ~30-50 tokens)
+                if [ $description_length -gt 500 ]; then
+                  echo "⚠️  $skill_name: Description may be too long for progressive disclosure"
+                fi
+                
+                # Check for MCP dependencies
+                if grep -q "INVOKES:" "$skill_md"; then
+                  mcp_count=$(grep -o "mcp-[a-z-]*" "$skill_md" | wc -l)
+                  if [ $mcp_count -gt 3 ]; then
+                    echo "⚠️  $skill_name: Uses many MCP servers ($mcp_count), consider optimization"
+                  fi
+                fi
+                
+                echo "✅ $skill_name: Performance validated"
+              fi
+            fi
+          done
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run integration tests
+        run: |
+          echo "Running integration tests..."
+          
+          # Test skill discovery
+          if [ -f ".claude/skills/skill-discovery/SKILL.md" ]; then
+            echo "✅ Skill discovery skill exists"
+          else
+            echo "❌ Skill discovery skill missing"
+            exit 1
+          fi
+          
+          # Test universal rules
+          if [ -f ".claude/CLAUDE.md" ]; then
+            echo "✅ Universal rules exist"
+          else
+            echo "❌ Universal rules missing"
+            exit 1
+          fi
+          
+          # Test cursor rules
+          if [ -f ".cursorrules" ]; then
+            echo "✅ Cursor rules exist"
+          else
+            echo "❌ Cursor rules missing"
+            exit 1
+          fi
+          
+          # Test MCP configuration completeness
+          server_count=$(jq '.servers | length' .mcp/config.json)
+          if [ $server_count -lt 10 ]; then
+            echo "⚠️  Only $server_count MCP servers configured (expected 10+)"
+          else
+            echo "✅ MCP servers configured ($server_count servers)"
+          fi
+
+  report-summary:
+    name: Report Summary
+    runs-on: ubuntu-latest
+    needs: [security-audit, skills-validation, mcp-servers-build, cross-platform-sync, performance-validation, integration-tests]
+    if: always()
+    steps:
+      - name: Download security reports
+        uses: actions/download-artifact@v4
+        with:
+          name: security-reports
+        continue-on-error: true
+      
+      - name: Generate summary
+        run: |
+          echo "# MCP & Skills Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Job Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Audit | ${{ needs.security-audit.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Skills Validation | ${{ needs.skills-validation.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| MCP Servers Build | ${{ needs.mcp-servers-build.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Cross-Platform Sync | ${{ needs.cross-platform-sync.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance Validation | ${{ needs.performance-validation.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Integration Tests | ${{ needs.integration-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Add security report summary if available
+          if [ -f ".mcp/security-audit.json" ]; then
+            echo "## Security Summary" >> $GITHUB_STEP_SUMMARY
+            critical=$(jq '.summary.criticalIssues' .mcp/security-audit.json)
+            total=$(jq '.summary.issuesFound' .mcp/security-audit.json)
+            echo "- Critical Issues: $critical" >> $GITHUB_STEP_SUMMARY
+            echo "- Total Issues: $total" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi

@@ -59,7 +59,7 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 
 ### Core Web Vitals Targets
 - **LCP** (Largest Contentful Paint): < 2.5s
-- **INP** (Interaction to Next Paint): < 200ms  
+- **INP** (Interaction to Next Paint): < 200ms
 - **CLS** (Cumulative Layout Shift): < 0.1
 
 ### Optimization Requirements
@@ -67,6 +67,27 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 - Implement proper font preloading and image priority loading
 - Use startTransition for non-blocking interactions
 - Bundle size: JS < 250KB gzipped
+
+## MCP/Skills Integration (2026)
+
+### Skills Usage
+- **Skills encode HOW (procedural knowledge)**
+- **MCP provides WHAT (external access)**
+- Use 2-3 skills maximum for optimal context efficiency
+- Progressive disclosure patterns (~30-50 tokens idle)
+- Skills located in `.claude/skills/` (source of truth)
+
+### MCP Server Access
+- Use @mcp-server-name for external tool access
+- Available servers: filesystem, git, github, sqlite, fetch, azure-mcp
+- Enterprise servers: enterprise-security, multi-tenant, observability
+- Advanced servers: sequential-thinking, knowledge-graph, skillset
+
+### Cursor-Specific Patterns
+- Convert Skills to `.cursor/rules/*.mdc` format
+- Use `alwaysApply: false` for manual skill invocation
+- Include `globs` patterns for file-specific rules
+- Maximum 40-tool limit per Cursor session
 
 ## Multi-Agent Integration (2026)
 
@@ -140,7 +161,7 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 
 ### Before Commit
 1. Run `pnpm type-check` - no TypeScript errors
-2. Run `pnpm lint` - no linting errors  
+2. Run `pnpm lint` - no linting errors
 3. Run `pnpm test` - all tests passing
 4. Validate MCP/A2A configurations
 5. Check Core Web Vitals impact

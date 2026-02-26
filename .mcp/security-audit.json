@@ -1,0 +1,106 @@
+{
+  "timestamp": "2026-02-26T03:58:05.503Z",
+  "skills": {
+    "azure-deploy": {
+      "hash": "338045ae164922b57af78cd1acc466ebeb78568025adf1a442bd35ea9fedf572",
+      "issues": [],
+      "status": "secure"
+    },
+    "code-review": {
+      "hash": "565e52b9bb2af7cfe92739710970cac11544ebed56737dfe34b84d4453af0284",
+      "issues": [],
+      "status": "secure"
+    },
+    "deploy-production": {
+      "hash": "e7bcdc2c64329666e486102083b335b805f70e73ec2d6f6304871ffb40b26963",
+      "issues": [],
+      "status": "secure"
+    },
+    "skill-discovery": {
+      "hash": "d04fdf8823e458dd009e18b03ed014fc3223befcfbb58215b1c0f40521ae35bc",
+      "issues": [],
+      "status": "secure"
+    },
+    "tenant-setup": {
+      "hash": "5388cf6e2f2f53d12ac6e0a3639a3d10626257abd4be040a61642acb3cfa5fc4",
+      "issues": [],
+      "status": "secure"
+    }
+  },
+  "mcpServers": {
+    "filesystem": {
+      "issues": [],
+      "status": "secure"
+    },
+    "git": {
+      "issues": [],
+      "status": "secure"
+    },
+    "everything": {
+      "issues": [],
+      "status": "secure"
+    },
+    "sequential-thinking": {
+      "issues": [],
+      "status": "secure"
+    },
+    "github": {
+      "issues": [],
+      "status": "secure"
+    },
+    "knowledge-graph": {
+      "issues": [],
+      "status": "secure"
+    },
+    "enterprise-security": {
+      "issues": [],
+      "status": "secure"
+    },
+    "multi-tenant": {
+      "issues": [],
+      "status": "secure"
+    },
+    "observability": {
+      "issues": [],
+      "status": "secure"
+    },
+    "enterprise-auth": {
+      "issues": [],
+      "status": "secure"
+    },
+    "secure-deployment": {
+      "issues": [],
+      "status": "secure"
+    },
+    "enterprise-registry": {
+      "issues": [],
+      "status": "secure"
+    },
+    "sqlite": {
+      "issues": [],
+      "status": "secure"
+    },
+    "fetch": {
+      "issues": [],
+      "status": "secure"
+    },
+    "azure-mcp": {
+      "issues": [],
+      "status": "secure"
+    },
+    "ticketer": {
+      "issues": [],
+      "status": "secure"
+    },
+    "skillset": {
+      "issues": [],
+      "status": "secure"
+    }
+  },
+  "summary": {
+    "totalSkills": 5,
+    "totalMcpServers": 17,
+    "issuesFound": 0,
+    "criticalIssues": 0
+  }
+}

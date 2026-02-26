@@ -1,0 +1,677 @@
+{
+  "timestamp": "2026-02-26T03:58:13.715Z",
+  "manifest": {
+    "version": "1.0.0",
+    "trustedSkills": {
+      "azure-deploy": {
+        "hash": "0b89487a3ca8b883760eac93b17fbd1a31f42ff865dd6150270696c0a15eb989",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "76f9db68b91c1dfbc795240ea4aaf5ca618e0623d320b1e3936fc5de7655b1ab",
+            "size": 947,
+            "modified": "2026-02-26T03:53:05.900Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "9e09801eac39f3e6100e9c69f1dbc1362a2434eba7af2f337dfa8c30cd603174",
+            "size": 824,
+            "modified": "2026-02-26T03:53:00.071Z"
+          },
+          "assets\\azure-icon.svg": {
+            "hash": "b868b002abb6783446ebc7e16a29a4b1002115e554e6cd4b64d06b17b3592d01",
+            "size": 460,
+            "modified": "2026-02-26T03:53:11.950Z"
+          },
+          "SKILL.md": {
+            "hash": "338045ae164922b57af78cd1acc466ebeb78568025adf1a442bd35ea9fedf572",
+            "size": 2788,
+            "modified": "2026-02-26T03:52:55.286Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.498Z"
+      },
+      "code-review": {
+        "hash": "3f68abdc9e59dbddfbebf5a4dbff57504efedd2f512bd99b020a3501396db1be",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "8c6ef211cde01108c38bf46c524b6387ab87397dd6ee1745c38c00756eb10f8e",
+            "size": 1139,
+            "modified": "2026-02-26T03:49:55.574Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "0b404147dec5c8a68773b2b48f839cdfabd11b9e82bf7658c8a2009739fe2041",
+            "size": 850,
+            "modified": "2026-02-26T03:44:52.246Z"
+          },
+          "assets\\review-icon.svg": {
+            "hash": "6d9fb5047b4113fdeb7b61f5e2f4b7c95f68d3821120cf46bde551c10c7d2e7d",
+            "size": 414,
+            "modified": "2026-02-26T03:50:12.841Z"
+          },
+          "SKILL.md": {
+            "hash": "565e52b9bb2af7cfe92739710970cac11544ebed56737dfe34b84d4453af0284",
+            "size": 2783,
+            "modified": "2026-02-26T03:45:42.291Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.506Z"
+      },
+      "deploy-production": {
+        "hash": "a154b0cea5b924f9e3d36ae55021d0644b5211fd151f82b55bca6b528db76aad",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "af9650f0097423fa2fb46682bfb612d41f25f7abc92492116cfe509b26c0df62",
+            "size": 955,
+            "modified": "2026-02-26T03:50:26.275Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "8836ddfaac021061db9d144659dedbf7b5b09c8cbda70952f13d35a1ee666491",
+            "size": 1004,
+            "modified": "2026-02-26T03:44:31.332Z"
+          },
+          "assets\\deploy-icon.svg": {
+            "hash": "f815a4d046a5c92e00662e31b8fa39bc464fbe77cb647f505eb39d444710fcff",
+            "size": 337,
+            "modified": "2026-02-26T03:50:31.763Z"
+          },
+          "SKILL.md": {
+            "hash": "e7bcdc2c64329666e486102083b335b805f70e73ec2d6f6304871ffb40b26963",
+            "size": 2753,
+            "modified": "2026-02-26T03:45:42.473Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.511Z"
+      },
+      "skill-discovery": {
+        "hash": "69da0b56d36c01a6080b36489672872061ae938362a8c7eabe5995196c758b59",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "eb0082c6871d75ae92f5885de1379d33dd6d4096727e642533bdaf2c4b0adfe8",
+            "size": 1535,
+            "modified": "2026-02-26T03:56:15.123Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "62a624b393d255938cc7e6b74c8c22ebba080b6c40cc586356e14edf6944c59f",
+            "size": 710,
+            "modified": "2026-02-26T03:56:07.614Z"
+          },
+          "assets\\discovery-icon.svg": {
+            "hash": "925f7cfe8585bf0ed0a3426c41c220ce9d8156f033f884658ff4ce4e5aaa58ca",
+            "size": 383,
+            "modified": "2026-02-26T03:56:26.645Z"
+          },
+          "SKILL.md": {
+            "hash": "d04fdf8823e458dd009e18b03ed014fc3223befcfbb58215b1c0f40521ae35bc",
+            "size": 4302,
+            "modified": "2026-02-26T03:55:59.643Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.516Z"
+      },
+      "tenant-setup": {
+        "hash": "89efa71c0f527760a06ad15189fc5c901d6490c7df4d7b080cea1b508091de1c",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "26d07a2048f30761d4c8f9a0fa606d9da4700e39a041041e33e5e88eef1ca266",
+            "size": 1255,
+            "modified": "2026-02-26T03:50:46.741Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "541dd0da535a6bd5859fbff87a10c964d7fda5fa4896ac036cc71e0c8537c6b9",
+            "size": 1028,
+            "modified": "2026-02-26T03:45:13.531Z"
+          },
+          "assets\\tenant-icon.svg": {
+            "hash": "6051664d441f267b1c7b16b2273eb0dcbeba8dad7703dc39b860ef6a17be0d11",
+            "size": 360,
+            "modified": "2026-02-26T03:50:54.274Z"
+          },
+          "SKILL.md": {
+            "hash": "5388cf6e2f2f53d12ac6e0a3639a3d10626257abd4be040a61642acb3cfa5fc4",
+            "size": 3539,
+            "modified": "2026-02-26T03:45:42.552Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.521Z"
+      }
+    },
+    "trustedMcpServers": {
+      "filesystem": {
+        "configHash": "a93818e53c26c4c75644205b239ae8ad736e410d25dd112282d42115666d6a2d",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "git": {
+        "configHash": "ef43c3732b64b17ac1e24f7d8be14fe3c0376fd0135ecf59d7a2218ce680e258",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "everything": {
+        "configHash": "0a1f6fb3ecfa8ce9348448c69b6341dd06e4d5782f0edd8406fa26da3d69a83c",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "sequential-thinking": {
+        "configHash": "5387ab712f9159f96a2821ffcfc4fd80711a38461bfad437cd580a2a81655c39",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "github": {
+        "configHash": "9b9aebb241989f3b5072d992d7838d542dd28bf3c198f8b5b253530b44fed4ce",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "knowledge-graph": {
+        "configHash": "9fa42f057afd91f359b38d0d75b2b58d11c0329bb6a024931a9debf7b2e09684",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "enterprise-security": {
+        "configHash": "2b24931029b45d86874b391769ea21da3127e13b2e28337add0392450291dba8",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "multi-tenant": {
+        "configHash": "840d87536770deff66b9151e2bda0aca8e1a80475e88db6323b57cdda6bdbcbc",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "observability": {
+        "configHash": "af8cdb84d639e4a61ab6f4563e8f0228b40ef55ea285b16608bd138504734d88",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "enterprise-auth": {
+        "configHash": "1cd31c25f7653ccbdbf0f9231157788648efc084deb0ed35900147ab239abcac",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "secure-deployment": {
+        "configHash": "96d131a94a32b9d2d9b94f69b6e4b1887c1629a1cacaf6c0df0d3c158e4d35ed",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "enterprise-registry": {
+        "configHash": "c049550c628fc3c6a4a9edb6c064e081c4308f6754a40d9571b772122bc04145",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "sqlite": {
+        "configHash": "a59339b160a289eb4c43797f5c6fc7ac13696366d570e982cf3050cb4907cf4e",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "fetch": {
+        "configHash": "f9e7fb1fd4bbbd5933a0e9808ea960af94c57c62a8f972b0414a42aa6c6de5cf",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "azure-mcp": {
+        "configHash": "1155031f67cb77b3a036523e707092707f7248c38f7dc69e938cf8bd1fc2c346",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "ticketer": {
+        "configHash": "93a1e486dda75e747c596c534804541dfabf5dc9ab600bcdfc8c38a8e88037c5",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      },
+      "skillset": {
+        "configHash": "701747ead61b33a65ebb574481e05bdf2c3a0bcd44b835b7bce123301988e319",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.524Z"
+      }
+    },
+    "lastUpdated": "2026-02-26T03:58:09.487Z"
+  },
+  "skills": {
+    "azure-deploy": {
+      "status": "trusted",
+      "fingerprint": {
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "76f9db68b91c1dfbc795240ea4aaf5ca618e0623d320b1e3936fc5de7655b1ab",
+            "size": 947,
+            "modified": "2026-02-26T03:53:05.900Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "9e09801eac39f3e6100e9c69f1dbc1362a2434eba7af2f337dfa8c30cd603174",
+            "size": 824,
+            "modified": "2026-02-26T03:53:00.071Z"
+          },
+          "assets\\azure-icon.svg": {
+            "hash": "b868b002abb6783446ebc7e16a29a4b1002115e554e6cd4b64d06b17b3592d01",
+            "size": 460,
+            "modified": "2026-02-26T03:53:11.950Z"
+          },
+          "SKILL.md": {
+            "hash": "338045ae164922b57af78cd1acc466ebeb78568025adf1a442bd35ea9fedf572",
+            "size": 2788,
+            "modified": "2026-02-26T03:52:55.286Z"
+          }
+        },
+        "hash": "0b89487a3ca8b883760eac93b17fbd1a31f42ff865dd6150270696c0a15eb989"
+      },
+      "issues": [],
+      "trusted": {
+        "hash": "0b89487a3ca8b883760eac93b17fbd1a31f42ff865dd6150270696c0a15eb989",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "76f9db68b91c1dfbc795240ea4aaf5ca618e0623d320b1e3936fc5de7655b1ab",
+            "size": 947,
+            "modified": "2026-02-26T03:53:05.900Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "9e09801eac39f3e6100e9c69f1dbc1362a2434eba7af2f337dfa8c30cd603174",
+            "size": 824,
+            "modified": "2026-02-26T03:53:00.071Z"
+          },
+          "assets\\azure-icon.svg": {
+            "hash": "b868b002abb6783446ebc7e16a29a4b1002115e554e6cd4b64d06b17b3592d01",
+            "size": 460,
+            "modified": "2026-02-26T03:53:11.950Z"
+          },
+          "SKILL.md": {
+            "hash": "338045ae164922b57af78cd1acc466ebeb78568025adf1a442bd35ea9fedf572",
+            "size": 2788,
+            "modified": "2026-02-26T03:52:55.286Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.498Z"
+      }
+    },
+    "code-review": {
+      "status": "trusted",
+      "fingerprint": {
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "8c6ef211cde01108c38bf46c524b6387ab87397dd6ee1745c38c00756eb10f8e",
+            "size": 1139,
+            "modified": "2026-02-26T03:49:55.574Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "0b404147dec5c8a68773b2b48f839cdfabd11b9e82bf7658c8a2009739fe2041",
+            "size": 850,
+            "modified": "2026-02-26T03:44:52.246Z"
+          },
+          "assets\\review-icon.svg": {
+            "hash": "6d9fb5047b4113fdeb7b61f5e2f4b7c95f68d3821120cf46bde551c10c7d2e7d",
+            "size": 414,
+            "modified": "2026-02-26T03:50:12.841Z"
+          },
+          "SKILL.md": {
+            "hash": "565e52b9bb2af7cfe92739710970cac11544ebed56737dfe34b84d4453af0284",
+            "size": 2783,
+            "modified": "2026-02-26T03:45:42.291Z"
+          }
+        },
+        "hash": "3f68abdc9e59dbddfbebf5a4dbff57504efedd2f512bd99b020a3501396db1be"
+      },
+      "issues": [],
+      "trusted": {
+        "hash": "3f68abdc9e59dbddfbebf5a4dbff57504efedd2f512bd99b020a3501396db1be",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "8c6ef211cde01108c38bf46c524b6387ab87397dd6ee1745c38c00756eb10f8e",
+            "size": 1139,
+            "modified": "2026-02-26T03:49:55.574Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "0b404147dec5c8a68773b2b48f839cdfabd11b9e82bf7658c8a2009739fe2041",
+            "size": 850,
+            "modified": "2026-02-26T03:44:52.246Z"
+          },
+          "assets\\review-icon.svg": {
+            "hash": "6d9fb5047b4113fdeb7b61f5e2f4b7c95f68d3821120cf46bde551c10c7d2e7d",
+            "size": 414,
+            "modified": "2026-02-26T03:50:12.841Z"
+          },
+          "SKILL.md": {
+            "hash": "565e52b9bb2af7cfe92739710970cac11544ebed56737dfe34b84d4453af0284",
+            "size": 2783,
+            "modified": "2026-02-26T03:45:42.291Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.506Z"
+      }
+    },
+    "deploy-production": {
+      "status": "trusted",
+      "fingerprint": {
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "af9650f0097423fa2fb46682bfb612d41f25f7abc92492116cfe509b26c0df62",
+            "size": 955,
+            "modified": "2026-02-26T03:50:26.275Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "8836ddfaac021061db9d144659dedbf7b5b09c8cbda70952f13d35a1ee666491",
+            "size": 1004,
+            "modified": "2026-02-26T03:44:31.332Z"
+          },
+          "assets\\deploy-icon.svg": {
+            "hash": "f815a4d046a5c92e00662e31b8fa39bc464fbe77cb647f505eb39d444710fcff",
+            "size": 337,
+            "modified": "2026-02-26T03:50:31.763Z"
+          },
+          "SKILL.md": {
+            "hash": "e7bcdc2c64329666e486102083b335b805f70e73ec2d6f6304871ffb40b26963",
+            "size": 2753,
+            "modified": "2026-02-26T03:45:42.473Z"
+          }
+        },
+        "hash": "a154b0cea5b924f9e3d36ae55021d0644b5211fd151f82b55bca6b528db76aad"
+      },
+      "issues": [],
+      "trusted": {
+        "hash": "a154b0cea5b924f9e3d36ae55021d0644b5211fd151f82b55bca6b528db76aad",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "af9650f0097423fa2fb46682bfb612d41f25f7abc92492116cfe509b26c0df62",
+            "size": 955,
+            "modified": "2026-02-26T03:50:26.275Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "8836ddfaac021061db9d144659dedbf7b5b09c8cbda70952f13d35a1ee666491",
+            "size": 1004,
+            "modified": "2026-02-26T03:44:31.332Z"
+          },
+          "assets\\deploy-icon.svg": {
+            "hash": "f815a4d046a5c92e00662e31b8fa39bc464fbe77cb647f505eb39d444710fcff",
+            "size": 337,
+            "modified": "2026-02-26T03:50:31.763Z"
+          },
+          "SKILL.md": {
+            "hash": "e7bcdc2c64329666e486102083b335b805f70e73ec2d6f6304871ffb40b26963",
+            "size": 2753,
+            "modified": "2026-02-26T03:45:42.473Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.511Z"
+      }
+    },
+    "skill-discovery": {
+      "status": "trusted",
+      "fingerprint": {
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "eb0082c6871d75ae92f5885de1379d33dd6d4096727e642533bdaf2c4b0adfe8",
+            "size": 1535,
+            "modified": "2026-02-26T03:56:15.123Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "62a624b393d255938cc7e6b74c8c22ebba080b6c40cc586356e14edf6944c59f",
+            "size": 710,
+            "modified": "2026-02-26T03:56:07.614Z"
+          },
+          "assets\\discovery-icon.svg": {
+            "hash": "925f7cfe8585bf0ed0a3426c41c220ce9d8156f033f884658ff4ce4e5aaa58ca",
+            "size": 383,
+            "modified": "2026-02-26T03:56:26.645Z"
+          },
+          "SKILL.md": {
+            "hash": "d04fdf8823e458dd009e18b03ed014fc3223befcfbb58215b1c0f40521ae35bc",
+            "size": 4302,
+            "modified": "2026-02-26T03:55:59.643Z"
+          }
+        },
+        "hash": "69da0b56d36c01a6080b36489672872061ae938362a8c7eabe5995196c758b59"
+      },
+      "issues": [],
+      "trusted": {
+        "hash": "69da0b56d36c01a6080b36489672872061ae938362a8c7eabe5995196c758b59",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "eb0082c6871d75ae92f5885de1379d33dd6d4096727e642533bdaf2c4b0adfe8",
+            "size": 1535,
+            "modified": "2026-02-26T03:56:15.123Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "62a624b393d255938cc7e6b74c8c22ebba080b6c40cc586356e14edf6944c59f",
+            "size": 710,
+            "modified": "2026-02-26T03:56:07.614Z"
+          },
+          "assets\\discovery-icon.svg": {
+            "hash": "925f7cfe8585bf0ed0a3426c41c220ce9d8156f033f884658ff4ce4e5aaa58ca",
+            "size": 383,
+            "modified": "2026-02-26T03:56:26.645Z"
+          },
+          "SKILL.md": {
+            "hash": "d04fdf8823e458dd009e18b03ed014fc3223befcfbb58215b1c0f40521ae35bc",
+            "size": 4302,
+            "modified": "2026-02-26T03:55:59.643Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.516Z"
+      }
+    },
+    "tenant-setup": {
+      "status": "trusted",
+      "fingerprint": {
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "26d07a2048f30761d4c8f9a0fa606d9da4700e39a041041e33e5e88eef1ca266",
+            "size": 1255,
+            "modified": "2026-02-26T03:50:46.741Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "541dd0da535a6bd5859fbff87a10c964d7fda5fa4896ac036cc71e0c8537c6b9",
+            "size": 1028,
+            "modified": "2026-02-26T03:45:13.531Z"
+          },
+          "assets\\tenant-icon.svg": {
+            "hash": "6051664d441f267b1c7b16b2273eb0dcbeba8dad7703dc39b860ef6a17be0d11",
+            "size": 360,
+            "modified": "2026-02-26T03:50:54.274Z"
+          },
+          "SKILL.md": {
+            "hash": "5388cf6e2f2f53d12ac6e0a3639a3d10626257abd4be040a61642acb3cfa5fc4",
+            "size": 3539,
+            "modified": "2026-02-26T03:45:42.552Z"
+          }
+        },
+        "hash": "89efa71c0f527760a06ad15189fc5c901d6490c7df4d7b080cea1b508091de1c"
+      },
+      "issues": [],
+      "trusted": {
+        "hash": "89efa71c0f527760a06ad15189fc5c901d6490c7df4d7b080cea1b508091de1c",
+        "version": "1.0.0",
+        "files": {
+          "agents\\cursor.mdc": {
+            "hash": "26d07a2048f30761d4c8f9a0fa606d9da4700e39a041041e33e5e88eef1ca266",
+            "size": 1255,
+            "modified": "2026-02-26T03:50:46.741Z"
+          },
+          "agents\\openai.yaml": {
+            "hash": "541dd0da535a6bd5859fbff87a10c964d7fda5fa4896ac036cc71e0c8537c6b9",
+            "size": 1028,
+            "modified": "2026-02-26T03:45:13.531Z"
+          },
+          "assets\\tenant-icon.svg": {
+            "hash": "6051664d441f267b1c7b16b2273eb0dcbeba8dad7703dc39b860ef6a17be0d11",
+            "size": 360,
+            "modified": "2026-02-26T03:50:54.274Z"
+          },
+          "SKILL.md": {
+            "hash": "5388cf6e2f2f53d12ac6e0a3639a3d10626257abd4be040a61642acb3cfa5fc4",
+            "size": 3539,
+            "modified": "2026-02-26T03:45:42.552Z"
+          }
+        },
+        "addedAt": "2026-02-26T03:58:09.521Z"
+      }
+    }
+  },
+  "mcpServers": {
+    "filesystem": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "a93818e53c26c4c75644205b239ae8ad736e410d25dd112282d42115666d6a2d",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "git": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "ef43c3732b64b17ac1e24f7d8be14fe3c0376fd0135ecf59d7a2218ce680e258",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "everything": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "0a1f6fb3ecfa8ce9348448c69b6341dd06e4d5782f0edd8406fa26da3d69a83c",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "sequential-thinking": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "5387ab712f9159f96a2821ffcfc4fd80711a38461bfad437cd580a2a81655c39",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "github": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "9b9aebb241989f3b5072d992d7838d542dd28bf3c198f8b5b253530b44fed4ce",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "knowledge-graph": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "9fa42f057afd91f359b38d0d75b2b58d11c0329bb6a024931a9debf7b2e09684",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "enterprise-security": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "2b24931029b45d86874b391769ea21da3127e13b2e28337add0392450291dba8",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "multi-tenant": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "840d87536770deff66b9151e2bda0aca8e1a80475e88db6323b57cdda6bdbcbc",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "observability": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "af8cdb84d639e4a61ab6f4563e8f0228b40ef55ea285b16608bd138504734d88",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "enterprise-auth": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "1cd31c25f7653ccbdbf0f9231157788648efc084deb0ed35900147ab239abcac",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "secure-deployment": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "96d131a94a32b9d2d9b94f69b6e4b1887c1629a1cacaf6c0df0d3c158e4d35ed",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "enterprise-registry": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "c049550c628fc3c6a4a9edb6c064e081c4308f6754a40d9571b772122bc04145",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "sqlite": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "a59339b160a289eb4c43797f5c6fc7ac13696366d570e982cf3050cb4907cf4e",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "fetch": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "f9e7fb1fd4bbbd5933a0e9808ea960af94c57c62a8f972b0414a42aa6c6de5cf",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "azure-mcp": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "1155031f67cb77b3a036523e707092707f7248c38f7dc69e938cf8bd1fc2c346",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "ticketer": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "93a1e486dda75e747c596c534804541dfabf5dc9ab600bcdfc8c38a8e88037c5",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.522Z"
+      }
+    },
+    "skillset": {
+      "status": "trusted",
+      "issues": [],
+      "trusted": {
+        "configHash": "701747ead61b33a65ebb574481e05bdf2c3a0bcd44b835b7bce123301988e319",
+        "command": "npx",
+        "addedAt": "2026-02-26T03:58:09.524Z"
+      }
+    }
+  },
+  "summary": {
+    "totalSkills": 5,
+    "totalMcpServers": 17,
+    "trusted": 22,
+    "untrusted": 0,
+    "modified": 0,
+    "suspicious": 0,
+    "insecure": 0
+  }
+}
