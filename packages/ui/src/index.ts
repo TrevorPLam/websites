@@ -48,7 +48,7 @@ export {
   validateToastAccessibility,
   type ToastProps,
   type ToastOptions,
-  type ToasterProps
+  type ToasterProps,
 } from './components/Sonner';
 
 // Existing primitives
@@ -89,7 +89,7 @@ export {
   generateCSSVariables,
   applyTenantTheme,
   validateWCAGCompliance,
-  type ThemeTokens
+  type ThemeTokens,
 } from './design-tokens';
 
 // Re-export from sub-modules (consolidated barrel exports)
