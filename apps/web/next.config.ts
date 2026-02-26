@@ -51,6 +51,142 @@ const nextConfig: NextConfig = {
       ],
     },
   ],
+  // Documentation migration redirects
+  async redirects() {
+    return [
+      // Security documentation redirects
+      {
+        source: '/docs/guides/security/security-implementation-guide',
+        destination: '/docs/guides-new/security/security-patterns-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/security/encryption/multi-layer-rate-limiting',
+        destination: '/docs/guides-new/security/security-patterns-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/security/authentication/supabase-auth-docs',
+        destination: '/docs/guides-new/security/security-patterns-guide',
+        permanent: true,
+      },
+      // Payment documentation redirects
+      {
+        source: '/docs/guides/payments-billing/stripe-documentation',
+        destination: '/docs/guides-new/payments/payment-processing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/payments-billing/stripe-checkout-sessions',
+        destination: '/docs/guides-new/payments/payment-processing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/payments-billing/stripe-customer-portal',
+        destination: '/docs/guides-new/payments/payment-processing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/payments-billing/stripe-webhook-handler',
+        destination: '/docs/guides-new/payments/payment-processing-guide',
+        permanent: true,
+      },
+      // SEO documentation redirects
+      {
+        source: '/docs/guides/seo-metadata/metadata-generation-system',
+        destination: '/docs/guides-new/seo/seo-optimization-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/seo-metadata/dynamic-sitemap-generation',
+        destination: '/docs/guides-new/seo/seo-optimization-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/seo-metadata/structured-data-system',
+        destination: '/docs/guides-new/seo/seo-optimization-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/seo-metadata/dynamic-og-images',
+        destination: '/docs/guides-new/seo/seo-optimization-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/multi-tenant/tenant-metadata-factory',
+        destination: '/docs/guides-new/seo/seo-optimization-guide',
+        permanent: true,
+      },
+      // Testing documentation redirects
+      {
+        source: '/docs/guides/testing/playwright-best-practices',
+        destination: '/docs/guides-new/testing/testing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/testing/testing-library-documentation',
+        destination: '/docs/guides-new/testing/testing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/testing/vitest-documentation',
+        destination: '/docs/guides-new/testing/testing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/testing/e2e-testing-suite-patterns',
+        destination: '/docs/guides-new/testing/testing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/testing/axe-core-documentation',
+        destination: '/docs/guides-new/testing/testing-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/testing/playwright-documentation',
+        destination: '/docs/guides-new/testing/testing-guide',
+        permanent: true,
+      },
+      // Email documentation redirects
+      {
+        source: '/docs/guides/email/email-package-structure',
+        destination: '/docs/guides-new/email/email-architecture-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/email/multi-tenant-email-routing',
+        destination: '/docs/guides-new/email/email-architecture-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/email/unified-email-send',
+        destination: '/docs/guides-new/email/email-architecture-guide',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/email/email-integration-guide',
+        destination: '/docs/guides-new/email/email-architecture-guide',
+        permanent: true,
+      },
+      // AI documentation redirects
+      {
+        source: '/docs/guides/ai-automation/ai-integration-guide',
+        destination: '/docs/guides-new/ai/ai-integration-patterns',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/ai-automation/ide-agentic-setup-guide',
+        destination: '/docs/guides-new/ai/ai-integration-patterns',
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/best-practices/agentic-development',
+        destination: '/docs/guides-new/ai/ai-integration-patterns',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -1,10 +1,10 @@
-# Email Integration Guide
+# Email Architecture Guide
 
 > **Production-Ready Email Services & Multi-Tenant Routing — February 2026**
 
 ## Overview
 
-Comprehensive email integration guide covering transactional email services, multi-tenant routing, template management, and delivery optimization. Focus on scalable patterns and production-ready implementations with 2026 security standards.
+Comprehensive email architecture guide covering transactional email services, multi-tenant routing, template management, and delivery optimization. Focus on scalable patterns and production-ready implementations with 2026 security standards.
 
 ## Key Features
 

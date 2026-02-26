@@ -1,10 +1,10 @@
-# AI Integration Guide
+# AI Integration Patterns
 
 > **Practical AI Agent Patterns for Development — February 2026**
 
 ## Overview
 
-This guide consolidates AI agent patterns, context management, and integration strategies for modern development workflows. Focus on practical implementation rather than theoretical architectures.
+Comprehensive guide covering AI agent patterns, context management, and integration strategies for modern development workflows. Focus on practical implementation rather than theoretical architectures with 2026 enterprise standards.
 
 ## Key Features
 
@@ -12,6 +12,8 @@ This guide consolidates AI agent patterns, context management, and integration s
 - **Agent Patterns**: Reusable AI agent templates and workflows
 - **Integration Patterns**: Claude, GitHub Copilot, and custom AI integration
 - **Cold-Start Optimization**: Fast AI agent initialization patterns
+- **Multi-Agent Orchestration**: Production-ready agent coordination
+- **Security & Governance**: Enterprise-grade AI safety protocols
 
 ---
 
@@ -410,56 +412,319 @@ export class AIColdStart {
 
 ---
 
-## 🔧 Practical Usage Examples
+## 🔧 IDE-Specific Configurations
 
-### File Creation Workflow
+### Cursor AI Configuration
 
-```bash
-# 1. AI agent detects new file creation
-git add packages/ui/src/widgets/new-component.tsx
+**File**: `.cursorrules`
 
-# 2. Context automatically loaded
-# - Root AGENTS.md (master coordination)
-# - @repo/ui AGENTS.md (package-specific)
-# - FSD Enforcer agent triggers
+**Key Features**:
+- Role definition as senior TypeScript engineer
+- Technology stack specifications (Next.js 16, React 19, TypeScript 5.9.3)
+- FSD v2.1 architecture rules
+- Multi-tenant security requirements
+- OAuth 2.1 with PKCE implementation
+- Performance standards (Core Web Vitals)
+- MCP and A2A protocol integration
 
-# 3. AI agent validates structure
-# ✅ Correct FSD layer (widgets/)
-# ✅ Proper TypeScript types
-# ✅ Accessibility patterns included
-# ✅ Performance optimizations applied
-```
+### Windsurf AI Configuration
 
-### Component Generation Pattern
+**File**: `.windsurfrules`
+
+**Key Features**:
+- Cascade-specific features (Memory Management, Multi-Agent Orchestration)
+- Workflow integration with todo_list tool
+- Parallel tool execution patterns
+- MCP server configurations
+- A2A protocol implementation
+- Browser preview integration
+- Agent governance and audit trails
+
+### GitHub Copilot Configuration
+
+**Files**:
+- `.github/copilot-instructions.md` (repository-wide)
+- `NAME.instructions.md` (path-specific)
+- `AGENTS.md` (agent instructions)
+
+**Key Features**:
+- Role & context definition
+- Technology stack specifications
+- Code standards & patterns
+- Security requirements (multi-tenant, OAuth 2.1)
+- Performance standards
+- Multi-agent integration (2026)
+
+---
+
+## 🔄 Multi-Agent Orchestration
+
+### Hierarchical Orchestration Pattern
 
 ```typescript
-// AI-generated component template
-export function NewComponent({ 
-  id, 
-  children, 
-  className 
-}: NewComponentProps) {
-  return (
-    <div 
-      id={id}
-      className={cn('new-component', className)}
-      role="region"
-      aria-labelledby={`${id}-label`}
-    >
-      <h2 id={`${id}-label`} className="sr-only">
-        New Component
-      </h2>
-      {children}
-    </div>
-  );
+// lib/multi-agent-orchestrator.ts
+export class MultiAgentOrchestrator {
+  private agents: Map<string, AgentBase> = new Map();
+  private taskQueue: Task[] = [];
+
+  constructor() {
+    this.initializeAgents();
+  }
+
+  private initializeAgents(): void {
+    this.agents.set('orchestrator', new OrchestratorAgent());
+    this.agents.set('fsd-enforcer', new FSDEnforcerAgent());
+    this.agents.set('a11y-auditor', new A11yAuditorAgent());
+    this.agents.set('rls-validator', new RLSValidatorAgent());
+    this.agents.set('performance-guardian', new PerformanceGuardianAgent());
+  }
+
+  async executeWorkflow(spec: Specification): Promise<WorkflowResult> {
+    // Orchestrator breaks down spec into tasks
+    const orchestrator = this.agents.get('orchestrator')!;
+    const plan = await orchestrator.createExecutionPlan(spec);
+
+    // Execute tasks in parallel where possible
+    const results = await this.executeTasks(plan.tasks);
+
+    return {
+      success: results.every(r => r.success),
+      results,
+      artifacts: this.collectArtifacts(results),
+    };
+  }
+
+  private async executeTasks(tasks: Task[]): Promise<TaskResult[]> {
+    // Execute independent tasks in parallel
+    const independentTasks = tasks.filter(t => t.dependencies.length === 0);
+    const dependentTasks = tasks.filter(t => t.dependencies.length > 0);
+
+    const independentResults = await Promise.all(
+      independentTasks.map(task => this.executeTask(task))
+    );
+
+    // Execute dependent tasks after dependencies complete
+    const dependentResults: TaskResult[] = [];
+    for (const task of dependentTasks) {
+      const result = await this.executeTask(task);
+      dependentResults.push(result);
+    }
+
+    return [...independentResults, ...dependentResults];
+  }
+
+  private async executeTask(task: Task): Promise<TaskResult> {
+    const agent = this.agents.get(task.agentType);
+    if (!agent) {
+      throw new Error(`Agent ${task.agentType} not found`);
+    }
+
+    return agent.execute(task.context);
+  }
+}
+```
+
+### Parallel Agent Execution
+
+```typescript
+// lib/parallel-execution.ts
+export class ParallelExecutor {
+  async executeParallel(
+    tasks: Task[],
+    maxConcurrency: number = 3
+  ): Promise<TaskResult[]> {
+    const results: TaskResult[] = [];
+    const executing: Promise<TaskResult>[] = [];
+
+    for (const task of tasks) {
+      const promise = this.executeTask(task);
+      executing.push(promise);
+
+      if (executing.length >= maxConcurrency) {
+        const completed = await Promise.race(executing);
+        results.push(completed);
+        executing.splice(executing.indexOf(promise), 1);
+      }
+    }
+
+    // Wait for remaining tasks
+    const remaining = await Promise.all(executing);
+    results.push(...remaining);
+
+    return results;
+  }
+
+  private async executeTask(task: Task): Promise<TaskResult> {
+    // Execute task in isolated context
+    const context = await this.createIsolatedContext(task);
+    const agent = this.getAgent(task.agentType);
+    
+    return agent.execute(context);
+  }
+
+  private async createIsolatedContext(task: Task): Promise<TaskContext> {
+    // Create isolated git worktree for task
+    const worktreePath = await this.createGitWorktree(task.id);
+    
+    return {
+      worktreePath,
+      task,
+      environment: this.getTaskEnvironment(task),
+    };
+  }
+}
+```
+
+---
+
+## 🛡️ Security & Governance
+
+### AI Security Framework
+
+```typescript
+// lib/ai-security.ts
+export class AISecurityFramework {
+  private securityPolicies: SecurityPolicy[] = [
+    new InputValidationPolicy(),
+    new OutputSanitizationPolicy(),
+    new PackageVerificationPolicy(),
+    new AccessControlPolicy(),
+  ];
+
+  async validateAIOutput(output: AIOutput): Promise<SecurityResult> {
+    const violations: SecurityViolation[] = [];
+
+    for (const policy of this.securityPolicies) {
+      const result = await policy.validate(output);
+      if (!result.valid) {
+        violations.push(...result.violations);
+      }
+    }
+
+    return {
+      valid: violations.length === 0,
+      violations,
+      sanitizedOutput: await this.sanitizeOutput(output, violations),
+    };
+  }
+
+  private async sanitizeOutput(
+    output: AIOutput, 
+    violations: SecurityViolation[]
+  ): Promise<AIOutput> {
+    let sanitized = { ...output };
+
+    for (const violation of violations) {
+      sanitized = await this.applySanitization(sanitized, violation);
+    }
+
+    return sanitized;
+  }
 }
 
-// Generated with:
-// ✅ Semantic HTML structure
-// ✅ Accessibility attributes
-// ✅ TypeScript types
-// ✅ Tailwind CSS classes
-// ✅ FSD compliance
+class PackageVerificationPolicy implements SecurityPolicy {
+  async validate(output: AIOutput): Promise<PolicyResult> {
+    const packageNames = this.extractPackageNames(output.code);
+    const violations: SecurityViolation[] = [];
+
+    for (const packageName of packageNames) {
+      if (!(await this.verifyPackageExists(packageName))) {
+        violations.push({
+          type: 'slopsquatting',
+          severity: 'high',
+          message: `Package ${packageName} does not exist - potential supply chain attack`,
+        });
+      }
+    }
+
+    return {
+      valid: violations.length === 0,
+      violations,
+    };
+  }
+
+  private async verifyPackageExists(packageName: string): Promise<boolean> {
+    // Check against npm registry
+    try {
+      const response = await fetch(`https://registry.npmjs.org/${packageName}`);
+      return response.ok;
+    } catch {
+      return false;
+    }
+  }
+}
+```
+
+### Agent Governance
+
+```typescript
+// lib/agent-governance.ts
+export class AgentGovernance {
+  private auditLogger: AuditLogger;
+  private policyEngine: PolicyEngine;
+
+  constructor() {
+    this.auditLogger = new AuditLogger();
+    this.policyEngine = new PolicyEngine();
+  }
+
+  async governAgentExecution(
+    agent: AgentBase,
+    context: AgentContext
+  ): Promise<GovernanceResult> {
+    // Log agent execution attempt
+    await this.auditLogger.log({
+      agent: agent.name,
+      action: 'execute',
+      context: context.hash,
+      timestamp: new Date(),
+    });
+
+    // Check governance policies
+    const policyResult = await this.policyEngine.evaluate(agent, context);
+    
+    if (!policyResult.allowed) {
+      await this.auditLogger.log({
+        agent: agent.name,
+        action: 'blocked',
+        reason: policyResult.reason,
+        timestamp: new Date(),
+      });
+
+      return {
+        allowed: false,
+        reason: policyResult.reason,
+      };
+    }
+
+    // Execute with monitoring
+    const result = await this.executeWithMonitoring(agent, context);
+
+    return {
+      allowed: true,
+      result,
+    };
+  }
+
+  private async executeWithMonitoring(
+    agent: AgentBase,
+    context: AgentContext
+  ): Promise<AgentResult> {
+    const startTime = Date.now();
+    const result = await agent.execute(context);
+    const duration = Date.now() - startTime;
+
+    await this.auditLogger.log({
+      agent: agent.name,
+      action: 'completed',
+      duration,
+      success: result.success,
+      timestamp: new Date(),
+    });
+
+    return result;
+  }
+}
 ```
 
 ---
@@ -510,6 +775,13 @@ const agentMetrics = {
 - **Accessibility First**: WCAG 2.2 AA compliance
 - **Performance Optimized**: Core Web Vitals targets
 
+### Security Standards
+
+- **OAuth 2.1**: Secure API authentication patterns
+- **Zero-Trust Architecture**: Never trust, always verify
+- **Package Verification**: Prevent slopsquatting attacks
+- **Audit Logging**: Comprehensive agent action tracking
+
 ---
 
-This consolidated guide provides practical AI integration patterns while eliminating theoretical complexity and focusing on actionable implementation strategies.
+This consolidated guide provides practical AI integration patterns while eliminating theoretical complexity and focusing on actionable implementation strategies for enterprise-grade development workflows.

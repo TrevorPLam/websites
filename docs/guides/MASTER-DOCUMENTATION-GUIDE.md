@@ -9,60 +9,70 @@ This master guide consolidates all technical documentation for the multi-tenant 
 ## 📚 Table of Contents
 
 ### 🏗️ Architecture & Foundation
+
 - [Feature-Sliced Design v2.1](#feature-sliced-design-v21)
 - [Multi-Tenant Architecture](#multi-tenant-architecture)
 - [System Architecture Patterns](#system-architecture-patterns)
 - [Build System & Monorepo](#build-system--monorepo)
 
 ### 🔧 Backend & Data Integration
+
 - [Backend Integration Guide](#backend-integration-guide)
 - [Database Architecture](#database-architecture)
 - [API Integration Patterns](#api-integration-patterns)
 - [Caching & Performance](#caching--performance)
 
 ### 🎨 Frontend Development
+
 - [Frontend Implementation Guide](#frontend-implementation-guide)
 - [React 19 & Next.js 16](#react-19--nextjs-16)
 - [Component Architecture](#component-architecture)
 - [Performance Optimization](#performance-optimization)
 
 ### 🔒 Security & Compliance
+
 - [Security Implementation Guide](#security-implementation-guide)
 - [Authentication & Authorization](#authentication--authorization)
 - [Data Protection](#data-protection)
 - [Compliance Standards](#compliance-standards)
 
 ### 📧 Email & Communication
+
 - [Email Integration Guide](#email-integration-guide)
 - [Multi-Tenant Email Routing](#multi-tenant-email-routing)
 - [Template Management](#template-management)
 - [Delivery Analytics](#delivery-analytics)
 
 ### 💳 Payments & Billing
+
 - [Payments Integration Guide](#payments-integration-guide)
 - [Stripe Integration](#stripe-integration)
 - [Subscription Management](#subscription-management)
 - [Billing Analytics](#billing-analytics)
 
 ### 🔍 SEO & Metadata
+
 - [SEO Optimization Guide](#seo-optimization-guide)
 - [Metadata Generation](#metadata-generation)
 - [Structured Data](#structured-data)
 - [AI Search Optimization](#ai-search-optimization)
 
 ### 🤖 AI & Automation
+
 - [AI Integration Guide](#ai-integration-guide)
 - [Agent Context Management](#agent-context-management)
 - [Automation Patterns](#automation-patterns)
 - [Cold-Start Optimization](#cold-start-optimization)
 
 ### 📊 Testing & Quality Assurance
+
 - [Testing Strategies](#testing-strategies)
 - [Quality Assurance](#quality-assurance)
 - [CI/CD Integration](#cicd-integration)
 - [Performance Testing](#performance-testing)
 
 ### 🏢 Infrastructure & DevOps
+
 - [Infrastructure Patterns](#infrastructure-patterns)
 - [Deployment Strategies](#deployment-strategies)
 - [Monitoring & Observability](#monitoring--observability)
@@ -193,7 +203,7 @@ export class TenantDatabase {
 
   async query<T = any>(sql: string, params?: any[]): Promise<T[]> {
     const client = await pool.connect();
-    
+
     try {
       // Set tenant context for RLS
       await client.query('SET app.current_tenant_id = $1', [this.tenantId]);
@@ -277,10 +287,7 @@ class SlidingWindowRateLimiter {
 
 ```typescript
 export class CacheManager {
-  async getWithFallback<T>(
-    key: string,
-    fetcher: () => Promise<T>
-  ): Promise<T> {
+  async getWithFallback<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
     // Try memory cache first
     let value = await this.get<T>(key);
     if (value) return value;
@@ -313,7 +320,7 @@ Modern frontend development with Next.js 16, React 19, and TypeScript.
 // Server Component - Default pattern
 export async function UserProfile({ userId }: { userId: string }) {
   const user = await getUser(userId);
-  
+
   return (
     <div className="user-profile">
       <h1>{user.name}</h1>
@@ -327,12 +334,12 @@ export async function UserProfile({ userId }: { userId: string }) {
 
 export function UserActions({ userId }: { userId: string }) {
   const [isFollowing, setIsFollowing] = useState(false);
-  
+
   const handleFollow = async () => {
     await followUser(userId);
     setIsFollowing(!isFollowing);
   };
-  
+
   return (
     <button onClick={handleFollow}>
       {isFollowing ? 'Unfollow' : 'Follow'}
@@ -437,7 +444,7 @@ const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
 
 ### Security Implementation Guide
 
-**Location**: `docs/guides/security/security-implementation-guide.md`
+**Location**: `docs/guides-new/security/security-patterns-guide.md`
 
 Production-ready security implementation with defense-in-depth architecture.
 
@@ -449,11 +456,14 @@ export function securityHeaders(request: NextRequest) {
   const nonce = crypto.randomBytes(16).toString('base64');
 
   // Content Security Policy
-  response.headers.set('Content-Security-Policy', [
-    "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}'`,
-    "style-src 'self' 'unsafe-inline'",
-  ].join('; '));
+  response.headers.set(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      `script-src 'self' 'nonce-${nonce}'`,
+      "style-src 'self' 'unsafe-inline'",
+    ].join('; ')
+  );
 
   // Additional headers
   response.headers.set('X-Frame-Options', 'DENY');
@@ -469,10 +479,11 @@ export function securityHeaders(request: NextRequest) {
 ```typescript
 export class SecretsManager {
   encrypt(secret: string, tenantId: string): EncryptedData {
-    const tenantKey = crypto.createHash('sha256')
+    const tenantKey = crypto
+      .createHash('sha256')
       .update(tenantId + this.encryptionKey)
       .digest();
-    
+
     const cipher = crypto.createCipher('aes-256-gcm', tenantKey);
     // ... encryption logic
   }
@@ -487,10 +498,7 @@ export class SecretsManager {
 
 ```typescript
 export class AuthService {
-  async exchangeCodeForTokens(
-    code: string, 
-    codeVerifier: string
-  ): Promise<TokenResponse> {
+  async exchangeCodeForTokens(code: string, codeVerifier: string): Promise<TokenResponse> {
     const response = await fetch(this.tokenUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -502,7 +510,7 @@ export class AuthService {
         client_secret: this.clientSecret,
       }),
     });
-    
+
     return response.json();
   }
 }
@@ -515,11 +523,11 @@ export function authorizeTenant(tenantId: string) {
   return async (request: NextRequest) => {
     const token = request.headers.get('Authorization')?.replace('Bearer ', '');
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
-    
+
     if (decoded.tenantId !== tenantId) {
       throw new Error('Unauthorized tenant access');
     }
-    
+
     return decoded;
   };
 }
@@ -595,10 +603,10 @@ export class EmailService {
   async sendEmail(params: EmailParams, provider?: string): Promise<EmailResult> {
     const selectedProvider = provider || this.defaultProvider;
     const emailProvider = this.providers.get(selectedProvider);
-    
+
     const tenantConfig = await this.getTenantConfig(params.tenantId);
     const brandedParams = await this.applyTenantBranding(params, tenantConfig);
-    
+
     return emailProvider.sendEmail(brandedParams);
   }
 }
@@ -633,11 +641,14 @@ export class EmailRouter {
     const tenantConfig = await this.loadTenantConfig(tenantId);
     const provider = this.selectProvider(tenantConfig, params);
     const routedParams = await this.applyRoutingRules(tenantId, params, tenantConfig);
-    
-    return this.emailService.sendEmail({
-      ...routedParams,
-      tenantId,
-    }, provider);
+
+    return this.emailService.sendEmail(
+      {
+        ...routedParams,
+        tenantId,
+      },
+      provider
+    );
   }
 }
 ```
@@ -664,7 +675,7 @@ export class EmailTemplateService {
     const templateData = { ...data, ...tenantBranding };
     const html = render(this.getTemplate(templateId, templateData));
     const text = this.generateTextVersion(html);
-    
+
     return { html, text };
   }
 }
@@ -747,7 +758,7 @@ export class CheckoutService {
     };
 
     const session = await this.stripe.checkout.sessions.create(sessionParams);
-    
+
     return {
       success: true,
       sessionId: session.id,
@@ -795,7 +806,7 @@ export class CustomerPortalService {
 export class SubscriptionService {
   async handleSubscriptionCreated(subscription: Stripe.Subscription): Promise<void> {
     const tenantId = subscription.metadata?.tenantId;
-    
+
     await db.tenantSubscriptions.update({
       where: { tenantId },
       data: {
@@ -817,7 +828,7 @@ export class SubscriptionService {
 ```typescript
 export class BillingAnalytics {
   async getRevenueMetrics(tenantId?: string): Promise<RevenueMetrics> {
-    const whereClause = tenantId 
+    const whereClause = tenantId
       ? { tenantId, createdAt: { gte: startDate } }
       : { createdAt: { gte: startDate } };
 
@@ -950,17 +961,21 @@ export class StructuredDataService {
 export class GEOService {
   async generateLLMsTxt(tenantId: string): Promise<string> {
     const tenant = await this.getTenantWithContent(tenantId);
-    
+
     return `# LLMs.txt for ${tenant.branding?.companyName}
 
 ## Company Information
-${tenant.branding?.companyName} specializes in ${tenant.services?.map(s => s.name).join(', ')}.
+${tenant.branding?.companyName} specializes in ${tenant.services?.map((s) => s.name).join(', ')}.
 
 ## Services Offered
-${tenant.services?.map(service => `
+${tenant.services
+  ?.map(
+    (service) => `
 ### ${service.name}
 ${service.description}
-`).join('\n')}
+`
+  )
+  .join('\n')}
 `;
   }
 }
@@ -984,7 +999,7 @@ export class AIContextLoader {
     const root = await this.loadRootContext();
     const packageContext = packageName ? await this.loadPackageContext(packageName) : '';
     const subAgents = await this.loadSubAgents();
-    
+
     return { root, package: packageContext, subAgents };
   }
 }
@@ -994,15 +1009,19 @@ export class AIContextLoader {
 
 ```markdown
 ## FSD Enforcer Agent
+
 **Trigger**: File creation or modification in packages/
-**Rules**: 
+**Rules**:
+
 - Enforce FSD v2.1 layer structure
 - Validate import directions
 - Check @x notation for cross-slice imports
 
-## A11y Auditor Agent  
+## A11y Auditor Agent
+
 **Trigger**: UI component changes
 **Rules**:
+
 - Validate WCAG 2.2 AA compliance
 - Check semantic HTML structure
 - Verify keyboard navigation
@@ -1016,17 +1035,21 @@ export class AIContextLoader {
 
 ```markdown
 # Root AGENTS.md (Master coordination - 60 lines max)
+
 ## Repository Overview
+
 Multi-tenant Next.js 16 marketing platform with FSD v2.1 architecture.
 
 ## Quick Start Commands
+
 pnpm install
 pnpm dev
 pnpm build
 pnpm test
 
 ## Per-Package AGENTS.md References
-See packages/*/AGENTS.md for package-specific guidance.
+
+See packages/\*/AGENTS.md for package-specific guidance.
 ```
 
 ### Automation Patterns
@@ -1066,8 +1089,7 @@ export class AIColdStart {
     const cacheKey = packageName || 'root';
     const now = Date.now();
 
-    if (this.contextCache.has(cacheKey) && 
-        (now - this.lastRefresh) < this.CACHE_TTL) {
+    if (this.contextCache.has(cacheKey) && now - this.lastRefresh < this.CACHE_TTL) {
       return this.contextCache.get(cacheKey)!;
     }
 
@@ -1093,7 +1115,7 @@ describe('UserService', () => {
   it('should create user with valid data', async () => {
     const userData = { name: 'John', email: 'john@example.com' };
     const user = await userService.create(userData);
-    
+
     expect(user).toBeDefined();
     expect(user.name).toBe(userData.name);
     expect(user.email).toBe(userData.email);
@@ -1110,7 +1132,7 @@ describe('User API Integration', () => {
       .post('/api/users')
       .send({ name: 'John', email: 'john@example.com' })
       .expect(201);
-    
+
     expect(response.body.name).toBe('John');
   });
 });
@@ -1194,10 +1216,10 @@ export function reportWebVitals() {
 resource "vercel_project" "main" {
   name = "marketing-platform"
   framework = "nextjs"
-  
+
   build_command = "pnpm build"
   output_directory = ".next"
-  
+
   environment_variables = {
     NODE_ENV = "production"
   }
@@ -1257,10 +1279,7 @@ import { trace } from '@opentelemetry/api';
 
 const tracer = trace.getTracer('marketing-platform');
 
-export function withTracing<T extends (...args: any[]) => any>(
-  name: string,
-  fn: T
-): T {
+export function withTracing<T extends (...args: any[]) => any>(name: string, fn: T): T {
   return ((...args: any[]) => {
     const span = tracer.startSpan(name);
     try {
@@ -1305,14 +1324,10 @@ Sentry.init({
 ```typescript
 // Redis caching for scalability
 export class CacheService {
-  async getOrSet<T>(
-    key: string,
-    fetcher: () => Promise<T>,
-    ttl: number = 3600
-  ): Promise<T> {
+  async getOrSet<T>(key: string, fetcher: () => Promise<T>, ttl: number = 3600): Promise<T> {
     const cached = await this.redis.get(key);
     if (cached) return JSON.parse(cached);
-    
+
     const data = await fetcher();
     await this.redis.setex(key, ttl, JSON.stringify(data));
     return data;

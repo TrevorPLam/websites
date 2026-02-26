@@ -7,6 +7,7 @@ _Generated on 2026-02-25 08:07 UTC via `scripts/generate-master-guidance-book.py
 ## Table of Contents
 
 ### Inventory
+
 - [Complete Source Inventory](#complete-source-inventory)
 - [Consolidated Guidance](#consolidated-guidance)
 
@@ -132,10 +133,7 @@ _Generated on 2026-02-25 08:07 UTC via `scripts/generate-master-guidance-book.py
   - [Unified Email Send (`email/unified-email-send.md`)](#unified-email-send-emailunified-email-sendmd)
 - [Payments Billing Guidance](#payments-billing-guidance)
   - [Billing Page Components (`payments-billing/billing-page-components.md`)](#billing-page-components-payments-billingbilling-page-componentsmd)
-  - [Stripe Checkout Sessions (`payments-billing/stripe-checkout-sessions.md`)](#stripe-checkout-sessions-payments-billingstripe-checkout-sessionsmd)
-  - [Stripe Customer Portal (`payments-billing/stripe-customer-portal.md`)](#stripe-customer-portal-payments-billingstripe-customer-portalmd)
-  - [Stripe Documentation (`payments-billing/stripe-documentation.md`)](#stripe-documentation-payments-billingstripe-documentationmd)
-  - [Stripe Webhook Handler (`payments-billing/stripe-webhook-handler.md`)](#stripe-webhook-handler-payments-billingstripe-webhook-handlermd)
+  - [Payment Processing Guide (`../guides-new/payments/payment-processing-guide.md`)](#payment-processing-guide-guides-newpaymentspayment-processing-guidemd)
 - [Scheduling Guidance](#scheduling-guidance)
   - [Acuity Scheduling Documentation (`scheduling/acuity-scheduling-documentation.md`)](#acuity-scheduling-documentation-schedulingacuity-scheduling-documentationmd)
   - [Calcom Embed Widget (`scheduling/calcom-embed-widget.md`)](#calcom-embed-widget-schedulingcalcom-embed-widgetmd)
@@ -526,7 +524,6 @@ We will measure the effectiveness of our ADR process by:
 
 [Add content here]
 
-
 #### Architecture Decision Record Template architecture/architecture-decision-record-template.md
 
 _Source: `architecture/architecture-decision-record-template.md`_
@@ -641,7 +638,6 @@ _Source: `architecture/architecture-decision-record-template.md`_
 ##### Testing
 
 [Add content here]
-
 
 #### Client Portal Configuration architecture/client-portal-configuration.md
 
@@ -815,7 +811,6 @@ export function createServerAction<T>(
 ##### Testing
 
 [Add content here]
-
 
 #### Marketing Site Fsd Structure architecture/marketing-site-fsd-structure.md
 
@@ -1345,7 +1340,6 @@ export function generateBlogPostStructuredData(post: BlogPost) {
 
 ---
 
-
 #### Monorepo Context Protocol Proposal architecture/monorepo-context-protocol-proposal.md
 
 _Source: `architecture/monorepo-context-protocol-proposal.md`_
@@ -1659,7 +1653,6 @@ error_recovery:
 ##### Testing
 
 [Add content here]
-
 
 #### Package Level Fsd Implementation architecture/package-level-fsd-implementation.md
 
@@ -2459,7 +2452,6 @@ debugFSD('tenant', 'entities', 'Creating tenant entity');
 
 ---
 
-
 #### Realtime Lead Feed Implementation architecture/realtime-lead-feed-implementation.md
 
 _Source: `architecture/realtime-lead-feed-implementation.md`_
@@ -2763,7 +2755,6 @@ Supabase Realtime `postgres_changes` uses WAL decoding, which adds load proporti
 
 [Add content here]
 
-
 #### Report Generation Engine architecture/report-generation-engine.md
 
 _Source: `architecture/report-generation-engine.md`_
@@ -2955,7 +2946,6 @@ This route must use the **Node.js runtime**, not Edge — `@react-pdf/renderer` 
 ##### Testing
 
 [Add content here]
-
 
 #### Site Config Schema Documentation architecture/site-config-schema-documentation.md
 
@@ -4403,7 +4393,6 @@ describe('Configuration API', () => {
 
 [Add content here]
 
-
 #### White Label Portal Architecture architecture/white-label-portal-architecture.md
 
 _Source: `architecture/white-label-portal-architecture.md`_
@@ -4606,7 +4595,6 @@ export function WhiteLabelFooter({ hideAgencyBranding, supportEmail, hideSupport
 
 [Add content here]
 
-
 ### Best Practices Guidance
 
 #### Agentic Development best-practices/agentic-development.md
@@ -4617,7 +4605,7 @@ _Source: `best-practices/agentic-development.md`_
 
 **Consolidated February 24, 2026**
 
-***
+---
 
 #### TABLE OF CONTENTS
 
@@ -4632,7 +4620,7 @@ _Source: `best-practices/agentic-development.md`_
 9. [Novel & Innovative Techniques](#novel--innovative-techniques)
 10. [Quick Reference & Checklists](#quick-reference--checklists)
 
-***
+---
 
 #### CURRENT STATE OF AI CODING TOOLS
 
@@ -4643,34 +4631,40 @@ _Source: `best-practices/agentic-development.md`_
 ###### Latest Features (February 2026)
 
 **Composer 1.5** (Released February 8, 2026)
+
 - Latest version of multi-file agentic editing engine
 - Multi-file context awareness and coordination
 
 **Supermaven-Powered Tab Autocomplete**
+
 - Industry-fastest autocomplete
 - Multi-line predictions
 - Auto-imports
 - Next-edit prediction
 
 **Visual Editor / Design Mode**
+
 - Drag-and-drop UI editing (introduced late 2025)
 - Describe changes and agent finds/modifies corresponding React/CSS files
 
 **Model Flexibility**
+
 - Switch between Claude 4.5 Sonnet, GPT-5.2, Gemini 3 Flash
 - Cursor's proprietary models for specific tasks
 - Auto-selects optimal model per task complexity
 
 **BugBot**
+
 - Automated PR reviewer
 - Catches issues before merge
 - Provides "Fix in Cursor" jump links
 
 **Memory System**
+
 - Persistent project memory across sessions
 - Carries context from session to session
 
-***
+---
 
 ##### Windsurf
 
@@ -4680,48 +4674,56 @@ _Source: `best-practices/agentic-development.md`_
 ###### Wave 13 Update (February 2026)
 
 **Parallel Multi-Agent Sessions**
+
 - Run multiple Cascade agents simultaneously
 - Each agent operates independently
 
 **Git Worktrees Support**
+
 - Keep agent work isolated in separate branches
 - Prevent context collision between parallel agents
 
 **Side-by-Side Cascade Panes**
+
 - Review multiple agent conversations simultaneously
 - Compare outputs across agents
 
 **Gemini 3 Flash**
+
 - Available to all users
 - Pro-level reasoning with Flash-level speed
 - Optimized for agentic workflows
 
 **Deep Codebase Indexing**
+
 - Indexes entire project structure
 - Agents understand cross-file context
 - Not limited to open files
 
-***
+---
 
 ##### GitHub Copilot (Mobile)
 
 ###### Mobile-Specific Features
 
 **Copilot Code Review on Mobile**
+
 - Analyzes pull requests directly from phone
 - Suggests improvements on-device
 
 **Coding Agent via Mobile**
+
 - Assign issues to Copilot
 - Generates ready-to-review pull requests
 - Refine, iterate, approve, merge entirely from mobile app
 
 **Copilot Chat in GitHub Mobile**
+
 - Answers general software development questions
 - Provides specific answers about code in any repository
 - Context-aware responses
 
-***
+---
 
 ##### OpenAI Codex App
 
@@ -4732,16 +4734,19 @@ _Source: `best-practices/agentic-development.md`_
 ###### Key Features
 
 **Multi-Agent Parallel Workflows**
+
 - Manage multiple coding agents simultaneously
 - Separate threads organized by project
 - Independent agent sessions
 
 **Skills System**
+
 - Bundle instructions, tools, and scripts into reusable capabilities
 - Examples: Figma-to-code, deploy to Vercel/Cloudflare, generate images via GPT Image
 - Skills invokable across all agent sessions
 
 **Automations**
+
 - Schedule background tasks
 - Daily issue triage
 - CI failure summaries
@@ -4749,15 +4754,17 @@ _Source: `best-practices/agentic-development.md`_
 - Runs without manual prompts
 
 **GPT-5.3-Codex** (Latest Model, February 2026)
+
 - 25% faster performance
 - Real-time interactive steering during multi-file tasks
 - Top SWE-Bench Pro scores
 
 **Usage Statistics**
+
 - Usage doubled since December 2025
 - Over 1 million developers in the past month
 
-***
+---
 
 ##### Claude Code (Mobile)
 
@@ -4766,50 +4773,58 @@ _Source: `best-practices/agentic-development.md`_
 ###### Mobile Access
 
 **Mobile IDE for Claude Code** (App Store)
+
 - Sends prompts from iPhone/iPad
 - Runs instantly on Mac via Claude Code
 - Results and chat history sync in real time
 
 **Claude Mobile App** (Android/Google Play)
+
 - Versatile coding assistant
 - Plans multi-step tasks
 - Pulls in relevant context
 - Identifies and fixes errors through conversation
 
 **Remote Control Feature** (Announced February 23, 2026)
+
 - Kick off task in mobile Claude app
 - Executes in development environment
 - Seamless cross-device workflow
 
 **Model Choices**
+
 - Sonnet (balanced performance)
 - Opus (complex reasoning)
 - Haiku (speed-optimized)
 
-***
+---
 
 ##### Key Industry Trends (2026)
 
 ###### Agentic Multi-File Workflows
+
 - All five tools now support agents that modify multiple files simultaneously
 - Move beyond single-line completions
 - Context-aware cross-file edits
 
 ###### Mobile-First AI Coding
+
 - Remote control features (Claude Code)
 - Issue-to-PR workflows (GitHub Copilot)
 - Standalone agent apps closing gap with desktop
 
 ###### On-Device AI
+
 - Growing in mobile development
 - Lightweight models running locally on iOS/Android
 - Faster, private, battery-efficient inference
 
 ###### Cross-Platform Development
+
 - Flutter, React Native, Kotlin Multiplatform dominant in 2026
 - All AI tools optimized to support cross-platform frameworks
 
-***
+---
 
 #### TECHNICAL SETUP & CONFIGURATION
 
@@ -4823,7 +4838,7 @@ _Source: `best-practices/agentic-development.md`_
 - [ ] **Use typed languages + linters** — TypeScript strict mode and configured ESLint give agents verifiable targets
 - [ ] **Review diffs before accepting** — AI code can look right while being subtly wrong; read every diff
 
-***
+---
 
 ##### Cursor — Setup & Configuration
 
@@ -4851,6 +4866,7 @@ _Source: `best-practices/agentic-development.md`_
 **Purpose**: Shapes every AI interaction in project
 
 **Should contain:**
+
 - Preferred languages, frameworks, libraries (e.g., "Always use TypeScript strict mode")
 - Architectural patterns (e.g., "Follow repository pattern for DB access")
 - Styling rules (e.g., "Use Tailwind CSS, never inline styles")
@@ -4861,11 +4877,13 @@ _Source: `best-practices/agentic-development.md`_
 **For larger projects**, replace `.cursorrules` with structured Markdown files inside `.cursor/rules/`
 
 **Include three types of rules:**
+
 1. **Commands** — build scripts, test runners (e.g., `npm run typecheck`)
 2. **Code style** — module system, import patterns, naming conventions
 3. **Workflow rules** — e.g., "Always typecheck after a series of edits"
 
 **Best practices:**
+
 - Keep rules short
 - Reference canonical files rather than copy-pasting style guides
 - Check rules into git so whole team benefits
@@ -4880,7 +4898,7 @@ _Source: `best-practices/agentic-development.md`_
 4. Click **Save to workspace** to store plans in `.cursor/plans/` for documentation and future context
 5. Approve plan, then let agent execute
 
-***
+---
 
 ##### Windsurf — Setup & Configuration
 
@@ -4889,6 +4907,7 @@ _Source: `best-practices/agentic-development.md`_
 **Create `windsurf_rules.md` or project rules file before starting any session**
 
 **Include:**
+
 - Directory structure overview (where new components, server actions, API routes go)
 - Framework-specific patterns (e.g., "Use Server Components by default; Client Components only when needed")
 - Validation/typing rules (e.g., "Use Zod for schema validation, TypeScript for all types")
@@ -4905,12 +4924,13 @@ _Source: `best-practices/agentic-development.md`_
 ###### Security Configuration
 
 **Before starting project, configure least-privilege controls:**
+
 - Limit repository access and project visibility
 - Windsurf only sees what's needed for each task
 - Keep extensions controlled
 - Keep workstation patched — developer machines are primary supply chain risk
 
-***
+---
 
 ##### GitHub Copilot Mobile — Setup & Configuration
 
@@ -4919,6 +4939,7 @@ _Source: `best-practices/agentic-development.md`_
 **GitHub Copilot supports persistent custom instructions — configure before first session**
 
 **Setup:**
+
 1. Navigate to Copilot settings → **Custom Instructions**
 2. Define coding language, framework preferences, response style, project-specific constraints
 3. Instructions injected into every Copilot request automatically
@@ -4930,7 +4951,7 @@ _Source: `best-practices/agentic-development.md`_
 - **Enable Copilot Chat** in GitHub Mobile for asking questions about any repository
 - **For Coding Agent workflow**: Assign issues to Copilot directly from mobile — generates PR you can review, iterate on, and merge without desktop
 
-***
+---
 
 ##### OpenAI Codex App — Setup & Configuration
 
@@ -4939,26 +4960,30 @@ _Source: `best-practices/agentic-development.md`_
 ###### Before Starting
 
 **Set up Skills**
+
 - Bundle recurring instructions, tools, workflows into named Skills
 - Examples: "Deploy to Vercel" Skill, "Figma-to-code" Skill
 - Agents invoke on demand
 
 **Set up Automations**
+
 - Configure background scheduled tasks
 - Examples: daily issue triage, CI failure summaries
 - Runs without manual prompt
 
 **Organize by project**
+
 - Agent sessions separated by project in UI
 - Set up project structure before running first agent
 - Keeps context clean
 
 **Use GPT-5.3-Codex as model**
+
 - Latest (February 2026)
 - 25% speed improvement
 - Real-time interactive steering during multi-file tasks
 
-***
+---
 
 ##### Claude Code Mobile — Setup & Configuration
 
@@ -4980,34 +5005,39 @@ _Source: `best-practices/agentic-development.md`_
 **Purpose**: Claude Code's equivalent of `.cursorrules` — persists project context, coding conventions, instructions across every session
 
 **Example structure:**
+
 ```markdown
 # Project: My Marketing Monorepo
 
 ## Stack
+
 - Next.js 16, React 19, TypeScript strict mode
 - Feature-Sliced Design (FSD) v2.1 architecture
 - Turborepo monorepo, pnpm workspaces
 - Supabase (DB + Auth), Stripe, Clerk, Vercel
 
 ## Architecture Rules
+
 - Always use Server Components by default
 - Client Components only when interactivity required
 - Follow FSD layer isolation
 - All DB access through repository pattern
 
 ## Code Style
+
 - TypeScript strict mode, no `any`
 - Zod for all schema validation
 - Tailwind CSS only, no inline styles
 - shadcn/ui for base components
 
 ## Commands
+
 - Build: `pnpm build`
 - Typecheck: `pnpm typecheck`
 - Test: `pnpm test`
 ```
 
-***
+---
 
 #### MCP, TOOLS, SKILLS & MEMORY SYSTEMS
 
@@ -5040,27 +5070,27 @@ _Source: `best-practices/agentic-development.md`_
 - **Scope each server to narrow blast radius** — per-project keys, limited directories, dev/test data only
 - **Log every tool call** for audit trail of agent actions
 
-***
+---
 
 ##### MCP vs. Skills — Key Distinction
 
-| Feature | MCP | Skills |
-|---------|-----|--------|
-| **Data freshness** | Real-time, live | Static (update manually) |
-| **Setup complexity** | Higher (server required) | Low (single command install) |
-| **Offline support** | No | Yes |
-| **Latency** | Network-dependent | Zero |
-| **Can execute actions** | Yes | No |
-| **Security model** | Requires auth setup | No external access |
-| **Best for** | Dynamic data, live actions | Documentation, coding patterns |
+| Feature                 | MCP                        | Skills                         |
+| ----------------------- | -------------------------- | ------------------------------ |
+| **Data freshness**      | Real-time, live            | Static (update manually)       |
+| **Setup complexity**    | Higher (server required)   | Low (single command install)   |
+| **Offline support**     | No                         | Yes                            |
+| **Latency**             | Network-dependent          | Zero                           |
+| **Can execute actions** | Yes                        | No                             |
+| **Security model**      | Requires auth setup        | No external access             |
+| **Best for**            | Dynamic data, live actions | Documentation, coding patterns |
 
 **Skills** are static context files installed directly into project — teach AI about framework, SDK, or library's patterns — no server, no network call, no latency — version-controlled and work offline
 
 **MCP** provides real-time access to live systems, APIs, databases — requires server setup but can execute actions and fetch current data
 
-**The hybrid approach is most powerful**: Use Skills to give agent foundational knowledge about *how* to write code, and MCP to let agent *act* on live systems at runtime
+**The hybrid approach is most powerful**: Use Skills to give agent foundational knowledge about _how_ to write code, and MCP to let agent _act_ on live systems at runtime
 
-***
+---
 
 ##### Memory Systems
 
@@ -5080,65 +5110,74 @@ _Source: `best-practices/agentic-development.md`_
 **More powerful memory through dedicated Memory MCPs:**
 
 **Knowledge Graph Memory MCP**
+
 - Builds dynamic graph of entities (people, projects, components) and relationships
-- Agent learns *who owns what* across sessions
+- Agent learns _who owns what_ across sessions
 - Persists indefinitely
 
 **Cognee MCP**
+
 - Graph-RAG that ingests documents and creates interconnected knowledge
 - Agent discovers non-obvious relationships
 - Example: "how does this billing change affect the legacy API?"
 
 **Vector Database MCPs** (Chroma, Weaviate, Milvus)
+
 - Store embeddings of codebase, docs, notes
 - Agent searches semantically for most relevant snippet
 - Alternative to stuffing entire codebase into context
 
 **Usage guidance:**
+
 - Use **graph-style memory** when you care about relationships and long-lived knowledge
 - Use **vector DB MCPs** when you need fast, relevant retrieval from large document sets
 
 ###### 3. Session Checkpoints
 
 **Platform-specific implementations:**
+
 - **Cursor**: Stores plans in `.cursor/plans/`, offers session memory across projects
 - **Claude Code**: Remote Control feature + background task memory persists between sessions
 - **Codex app**: Automations system + project-scoped session history provides background task memory
 
-***
+---
 
 ##### Tools (Inside Agents)
 
 **"Tools" in agent context**: Individual callable functions AI uses mid-task — distinct from MCP servers (which host the tools)
 
 **Example tool chain during problem-solving:**
+
 - Read file → Search codebase → Edit file → Run typecheck → Fix errors
 
 **Implementation across platforms:**
+
 - **Cursor's Composer**: Tool-calling as core of agentic loop
 - **Windsurf's Cascade**: Tool selection and chaining built into engine
 - **Claude Code**: Autonomous tool selection during execution
 - **Codex app's Skills system**: Bundle instructions + tools + scripts into named, reusable Skills that any agent session can invoke on demand
 
-***
+---
 
 ##### Sequential Thinking MCP — Meta-Cognition
 
-**Special category of MCP** — doesn't give agent new *senses* (files, databases), gives it better *mindset*
+**Special category of MCP** — doesn't give agent new _senses_ (files, databases), gives it better _mindset_
 
 **Sequential Thinking MCP externalizes agent reasoning:**
+
 - Explicit, ordered steps and branches
 - Rather than single opaque answer
 - Lets you review each step
 - Agent can revisit plan mid-execution
 
 **Best for**: Large architectural tasks like "migrate our auth system"
+
 - Breaks work into phases: analyze → design → implement → test → roll out
 - Human reviews each phase before proceeding
 
 **Pairs naturally with Task Master MCP**: Converts PRDs into structured, agent-readable task lists stored in `.taskmaster/` in repo
 
-***
+---
 
 #### BEST MCP SERVERS FOR DEVELOPERS
 
@@ -5149,57 +5188,66 @@ _Source: `best-practices/agentic-development.md`_
 **Purpose**: Ground agents in current, real-world knowledge rather than stale training data
 
 **Context7 MCP**
+
 - Fetches live, version-specific library docs at query time
 - Ask "how do I use latest feature of X?" pulls current docs, not outdated training data
 - **First server to install** for any developer
 
 **Brave Search MCP**
+
 - Best for general web queries and finding URLs
 - Gives agents live search without built-in browser dependency
 
 **Firecrawl MCP / Jina Reader MCP**
+
 - Converts any URL into clean Markdown
 - Strips nav, ads, boilerplate
 - Agent reads actual article content
 
 **Perplexity MCP / Exa MCP**
+
 - Semantic search
 - Use when you need "find the 5 most relevant sources on topic"
 - Rather than raw web search
 - Paid APIs, best for deeper research tasks
 
 **GPT Researcher MCP**
+
 - Runs full deep-research agent
 - Plans, executes, writes citation-backed reports
 - Great for architecture decisions: "should we migrate from REST to tRPC?"
 
-***
+---
 
 ##### 🎨 Create — Design & Frontend
 
 **Purpose**: Close design-to-code gap entirely
 
 **Figma MCP (Dev Mode)**
+
 - Exposes live structure of any selected Figma layer
 - Hierarchy, auto-layout, variants, text styles, token references
-- Agents generate code against *real* design instead of screenshots
+- Agents generate code against _real_ design instead of screenshots
 
 **Magic UI MCP**
+
 - Exposes Magic UI React + Tailwind component library
 - Say "make marquee of logos" or "add blur fade text animation"
 - Get back production-ready JSX immediately
 
-***
+---
 
 ##### 🏗️ Build — Engineering & Ops
 
 **Purpose**: Writing, debugging, securing code
 
 **Official Filesystem MCP**
+
 - Strictly limits access to allowed directories
 - Safe default for letting agents read repo and explain architecture
 
 **Desktop Commander**
+
 - "God Mode" alternative
 - Adds full terminal access
 - Process management (run servers, kill ports)
@@ -5207,80 +5255,91 @@ _Source: `best-practices/agentic-development.md`_
 - Treat like interactive shell
 
 **E2B MCP**
+
 - Cloud sandbox for running generated code safely
 - Ask "write script to analyze this CSV and chart it"
 - Executes without touching your machine or production data
 
 **Git MCP (local)**
+
 - Gives agents structured understanding of branches, commits, diffs
 - Without fragile shell output parsing
 
 **GitHub MCP**
+
 - Live repo search, PR reading, commit summaries
 - Better than pasting GitHub links into chat
 
 **GitLab MCP**
+
 - Deep integration with GitLab CI/CD pipelines and merge requests
 - Answers "why did this pipeline fail?"
 
 **Semgrep MCP**
-- Static analysis running *as agent writes*
+
+- Static analysis running _as agent writes_
 - Catches security vulnerabilities
 - Enforces coding standards in real time
 
-***
+---
 
 ##### 🗄️ Data — Backend & Infrastructure
 
 **Purpose**: Agents need access to real data — scope carefully
 
-| Server | Best For | Key Capability |
-|--------|----------|----------------|
-| **Prisma Postgres** | TypeScript teams | Query data AND manage schema migrations via `npx prisma mcp` |
-| **Supabase / PostgreSQL** | Production relational data | Fully aware of Row Level Security policies |
-| **Convex** | Full-stack feature builds | Exposes backend functions and tables; say "add notifications feed" and it wires both |
-| **MongoDB** | Document/NoSQL data | Schema inspection and JSON querying for messy collections |
-| **SQLite** | Local prototyping | Experiment with schemas safely away from production |
-| **MindsDB MCP** | Multi-source federation | Treats multiple DBs and SaaS tools as single virtual database |
-| **AWS MCP Suite** | AWS infrastructure | Official servers for DynamoDB, Aurora, Neptune |
-| **Stripe MCP** | Financial ops | Customer management, payment/subscription status, payment link creation |
+| Server                    | Best For                   | Key Capability                                                                       |
+| ------------------------- | -------------------------- | ------------------------------------------------------------------------------------ |
+| **Prisma Postgres**       | TypeScript teams           | Query data AND manage schema migrations via `npx prisma mcp`                         |
+| **Supabase / PostgreSQL** | Production relational data | Fully aware of Row Level Security policies                                           |
+| **Convex**                | Full-stack feature builds  | Exposes backend functions and tables; say "add notifications feed" and it wires both |
+| **MongoDB**               | Document/NoSQL data        | Schema inspection and JSON querying for messy collections                            |
+| **SQLite**                | Local prototyping          | Experiment with schemas safely away from production                                  |
+| **MindsDB MCP**           | Multi-source federation    | Treats multiple DBs and SaaS tools as single virtual database                        |
+| **AWS MCP Suite**         | AWS infrastructure         | Official servers for DynamoDB, Aurora, Neptune                                       |
+| **Stripe MCP**            | Financial ops              | Customer management, payment/subscription status, payment link creation              |
 
-***
+---
 
 ##### 🧪 Test — QA & Automation
 
 **Purpose**: Validate code by actually running the app
 
 **Playwright MCP**
+
 - Agents interact with web app using structured accessibility trees (not screenshots)
 - Great for "go to localhost:3000, log in, verify dashboard loads"
 
 **Chrome DevTools MCP**
+
 - Direct agent access to Console, Network tab, Performance Profiler
 - Ask "why is LCP slow on homepage?"
 
 **BrowserStack MCP**
+
 - Agents rent real cloud devices
 - Verify code on specific browser/OS combos
 - Without local setup
 
-***
+---
 
 ##### 🚀 Deploy & Observe — Run
 
 **Purpose**: Ship app and keep it healthy in production
 
 **Vercel MCP**
+
 - Deployment monitoring
 - Environment variables
 - Production vs. preview health for Next.js apps
 
 **Netlify MCP**
+
 - Site management
 - Build hooks
 - Environment variables for JAMstack projects
 
 **Sentry MCP**
+
 - Point agent at live Sentry issue
 - Pulls full error context
 - Correlates with recent releases
@@ -5288,95 +5347,112 @@ _Source: `best-practices/agentic-development.md`_
 - No more screenshotting stack traces into chat
 
 **Datadog MCP**
+
 - Queries metrics, logs, distributed traces
 - For "it's slow in production" moments
 
 **Last9 MCP**
+
 - Reliability engineering and service graphs
 - Correlates change events with live metrics
 - Detects if recent deploy caused latency spike
 
-***
+---
 
 ##### 💼 Work — Productivity & Coordination
 
 **Purpose**: Connect agents to team's actual workflow
 
 **Slack MCP**
+
 - Read channels, summarize threads, post messages
 - Turns unread chat history into queryable knowledge base
 
 **Linear MCP**
+
 - Issue creation, sprint tracking, cycle updates
 - Ideal for high-velocity startups
 
 **Jira MCP**
+
 - Complex enterprise workflows
 - Ticket state management
 
 **Notion MCP**
+
 - Semantic search over Notion workspace
 
 **Google Drive MCP**
+
 - Access Docs, Sheets, Slides
 - Say "find Q3 product spec and scaffold code from it"
 
 **Obsidian MCP**
+
 - Reads, searches, refactors local Markdown vaults
 - Power-user add-on if notes already live in Obsidian
 
 **Task Master MCP**
+
 - Converts PRDs into structured, agent-readable task lists
 - Stored in `.taskmaster/` in repo
 - Keeps agents and humans in sync
 
 **n8n MCP**
+
 - Triggers existing multi-step automation workflows from agent prompt
 
 **Zapier MCP**
+
 - Connects agents to 5,000+ apps
 - Without custom API integrations
 
 **Pipedream MCP**
+
 - Developer-centric
 - Triggers serverless Node.js/Python
 - Event-driven workflows
 
-***
+---
 
 ##### 🧬 Brain — Memory & Metacognition
 
 **Purpose**: Give agents persistent memory and structured thinking
 
 **Sequential Thinking MCP**
+
 - Externalizes reasoning as explicit, ordered steps and branches
 - Instead of one opaque answer
 - Ideal for large architectural tasks: "migrate our auth flow to new provider"
 
 **Knowledge Graph Memory MCP**
+
 - Builds dynamic graph of entities (people, projects, concepts) and relationships
 - Persists across sessions
 
 **Cognee MCP**
+
 - Graph-RAG that ingests documents
 - Finds non-obvious connections
 - Answers "how does this billing change affect legacy API?"
 
 **Chroma / Weaviate / Milvus (Vector DBs)**
+
 - RAG-as-a-tool
 - Semantic search over large document piles
 - For exactly relevant paragraph rather than stuffing entire codebase into context
 
-***
+---
 
 ##### Where to Discover More MCP Servers
 
 **Main registries to bookmark:**
+
 - **GitHub's official MCP repository** — Reference implementations and source of truth
 - **Awesome MCP Servers** — Community curated list
 - **Glama.ai** — Marketplace with visual previews and search
 
-***
+---
 
 #### INFORMATION GAPS & ADVANCED TOPICS
 
@@ -5388,7 +5464,8 @@ _Source: `best-practices/agentic-development.md`_
 
 **As of 2026**, prompt engineering (crafting clever instructions) is largely solved — models powerful enough to interpret intent without hand-tuned phrasing
 
-**What determines output quality at scale**: **Context engineering** — deliberate design of *everything model sees* inside context window:
+**What determines output quality at scale**: **Context engineering** — deliberate design of _everything model sees_ inside context window:
+
 - Memory
 - Retrieved documents
 - Tool outputs
@@ -5404,21 +5481,25 @@ _Source: `best-practices/agentic-development.md`_
 ###### What to Control in Context Window
 
 **Keep context under ~25K tokens**
+
 - Models experience "lost in the middle" degradation with oversized context
 - Performance drops significantly for information buried in middle of huge window
 
 **Avoid context poisoning**
+
 - Stale, contradictory, or irrelevant information silently degrades every response
 - Without obvious error signals
 
 **Start new sessions between tasks**
+
 - Carrying over completed task's context into new task is one of most common causes of agent drift
 
 **Context packing**
+
 - Before starting any session, dump relevant docs, existing code patterns, constraints directly into session or rules file
 - So agent never guesses
 
-***
+---
 
 ##### Spec-Driven Development (SDD)
 
@@ -5427,6 +5508,7 @@ _Source: `best-practices/agentic-development.md`_
 ###### Overview
 
 Before writing any code, produce structured specification document:
+
 - Part PRD (user-centric "why")
 - Part SRS (technical "how")
 - Agent uses as blueprint for entire build
@@ -5434,6 +5516,7 @@ Before writing any code, produce structured specification document:
 ###### The 5-Stage SDD Workflow
 
 **1. Spec authoring**
+
 - Write `spec.md` or `PRD.md` covering:
   - Requirements
   - UX flows
@@ -5442,31 +5525,36 @@ Before writing any code, produce structured specification document:
 - "15-minute waterfall"
 
 **2. Planning**
+
 - Ask agent to read spec and generate step-by-step project plan
 - Review and edit plan before any code written
 
 **3. Task breakdown**
+
 - Decompose plan into atomic, single-responsibility tasks
 - Store in `.taskmaster/` (via Task Master MCP) or individual Markdown task files
 
 **4. Implementation**
+
 - Agent tackles tasks one at a time
 - You review focused, narrow diffs
 - Instead of thousand-line code dumps
 
 **5. Validation & drift detection**
+
 - Agent checks each completed task against original spec
 - Catches specification drift before it compounds
 
 **Results**: Organizations using SDD see **26% productivity gains** and dramatically fewer bugs from spec-implementation misalignment
 
-***
+---
 
 ##### AI Code Security — The Overlooked Risk
 
 ###### The Research Data (2026)
 
 **Independent research shows:**
+
 - **29–45%** of AI-generated code contains security vulnerabilities
 - **19.7%** of package recommendations from AI tools point to libraries that **don't exist** (supply chain attack vector called "slopsquatting")
 - **40%** of GitHub Copilot-generated programs contained exploitable vulnerabilities (NYU study of 1,692 programs)
@@ -5476,16 +5564,16 @@ Before writing any code, produce structured specification document:
 
 **Research-backed combination achieving up to 96% hallucination/vulnerability reduction:**
 
-| Layer | Action | Reduction |
-|-------|--------|-----------|
-| **Retrieval (RAG)** | Feed agents current docs via Context7 MCP; keep context under 25K tokens | 60–80% |
-| **Static Analysis** | Run Semgrep MCP or integrate SAST tools alongside agent output | 89.5% precision in hybrid |
-| **Verification Pipeline** | Multi-agent cross-validation; agent reviews own output with second pass | 28% improvement |
-| **Chain-of-Thought** | Force agents to reason step-by-step before writing code | Significant for logic tasks |
+| Layer                     | Action                                                                   | Reduction                   |
+| ------------------------- | ------------------------------------------------------------------------ | --------------------------- |
+| **Retrieval (RAG)**       | Feed agents current docs via Context7 MCP; keep context under 25K tokens | 60–80%                      |
+| **Static Analysis**       | Run Semgrep MCP or integrate SAST tools alongside agent output           | 89.5% precision in hybrid   |
+| **Verification Pipeline** | Multi-agent cross-validation; agent reviews own output with second pass  | 28% improvement             |
+| **Chain-of-Thought**      | Force agents to reason step-by-step before writing code                  | Significant for logic tasks |
 
 **Always verify package names** before installing anything agent recommends — slopsquatting (fabricated package names) is now active supply chain threat
 
-***
+---
 
 ##### Git as Your AI Safety Net
 
@@ -5494,28 +5582,33 @@ Before writing any code, produce structured specification document:
 ###### Key Practices for AI-Assisted Development
 
 **Commit after every approved agent task**
+
 - Not after features, after individual tasks
 - One task = one commit
 
 **Write descriptive commit messages**
+
 - Agents can read git log to understand what changed and why
 - "fix bug" commits break this
 
 **Use branches per agent session**
+
 - Windsurf's Wave 13 git worktree support
 - Cursor's Plan Mode both isolate agent work in branches
 - Never let agent write directly to `main`
 
 **Treat agent output like PR**
+
 - Require yourself to review every diff before approving
 - Same as you would colleague's pull request
 
 **Entire** (Former GitHub CEO's new tool, raised $60M in 2026)
+
 - Emerging AI-native git layer
 - Captures session context, prompts, reasoning transcripts alongside every commit
 - Without polluting git history
 
-***
+---
 
 ##### Multi-Agent Orchestration
 
@@ -5524,21 +5617,25 @@ Before writing any code, produce structured specification document:
 ###### Patterns That Work
 
 **Hierarchical orchestration in Cursor**
+
 - Primary "Orchestrator" agent reads spec, breaks into subtasks
 - Delegates to specialized agents (DB agent, API agent, UI agent)
 - Each with scoped context and rules
 
 **Windsurf Wave 13 parallel Cascades**
+
 - Run multiple independent Cascade sessions simultaneously
 - Across different git worktrees
 - One agent builds feature, another writes tests, third reviews security
 
 **Antigravity** (New tool, currently free in public preview)
+
 - Visual "manager view" acts as mission control for parallel agents across workspaces
 - Agents communicate through artifacts (plans, screenshots, task lists)
 - Rather than shared context
 
 **Codex app parallel threads**
+
 - Multiple agent sessions organized by project in UI
 - With Automations for background-scheduled work
 
@@ -5548,83 +5645,92 @@ Give each agent **narrow, non-overlapping scope** — shared context between two
 
 **Agents communicate via artifacts** (files, PRs, task lists) rather than reading each other's sessions
 
-***
+---
 
 ##### Prompt Engineering Techniques Still Worth Knowing
 
 **Even though context engineering supersedes prompt engineering at system level, certain prompting patterns still meaningfully improve per-task output quality:**
 
 **Chain-of-Thought (CoT)**
+
 - Add "think step by step" or "reason through this before writing code"
 - LLMs often get final answers wrong because they skip intermediate reasoning steps
 - Not because they lack knowledge
 
 **Few-shot prompting**
+
 - Provide 2–3 examples of exact output format you want before asking
 - Essential for tasks where output structure matters (JSON schemas, test files, config formats)
 
 **Role prompting**
+
 - "You are senior TypeScript engineer with deep knowledge of React Server Components"
 - Keeps responses domain-specific
 - Avoids generic, shallow answers
 
 **Self-consistency**
+
 - Ask agent same question with different phrasing
 - Then compare outputs
 - Inconsistency reveals low-confidence areas that need human review
 
 **Meta-prompting**
-- Instruct agent to *generate its own prompt* for subtask before executing it
+
+- Instruct agent to _generate its own prompt_ for subtask before executing it
 - Particularly useful for complex, multi-step operations
 
-***
+---
 
 ##### The Emerging Tooling Landscape
 
 **Tools not yet in your stack directly relevant to your workflow:**
 
 **Antigravity**
+
 - Free, parallel multi-agent IDE in public preview
 - Worth testing alongside Windsurf for complex multi-workstream projects
 
 **Task Master MCP**
+
 - Converts PRDs into structured agent task lists stored in repo
 - Directly bridges spec → task → code workflow
 - Without CLI overhead
 
 **Entire**
+
 - AI-native git layer capturing full agent session context alongside commits
 - Watch closely as it matures in 2026
 
 **Sequential Thinking MCP**
+
 - Missing from current MCP setup
 - Critical for any architectural decision or large refactor
 - Want agent to reason through plan before touching code
 
-***
+---
 
 #### PLATFORM-SPECIFIC IMPLEMENTATION
 
 ##### Universal Config Comparison
 
-| Feature | Cursor | Windsurf | GitHub Copilot | Codex App | Claude Code Mobile |
-|---------|--------|----------|----------------|-----------|-------------------|
-| **MCP config file** | `.cursor/mcp.json` or `~/.cursor/mcp.json` | `~/.codeium/windsurf/mcp_config.json` | Not native yet | Built-in UI | `.mcp.json` (project root) |
-| **MCP marketplace** | No | Yes (blue checkmark = official) | No | No | No |
-| **Tool limit** | 40 | 100 | N/A | N/A | N/A |
-| **Skills system** | `.cursorrules` / `.cursor/rules/` | `windsurf_rules.md` | `.github/skills/SKILL.md` | Skills UI | `CLAUDE.md` |
-| **Persistent memory** | Memory MCP + session memory | Memory MCP + rules file | Custom Instructions | Project threads | `CLAUDE.md` + Memory MCP |
-| **Env var interpolation** | Manual via OS env | `${env:VAR_NAME}` syntax | N/A | N/A | `${VAR_NAME}` syntax |
+| Feature                   | Cursor                                     | Windsurf                              | GitHub Copilot            | Codex App       | Claude Code Mobile         |
+| ------------------------- | ------------------------------------------ | ------------------------------------- | ------------------------- | --------------- | -------------------------- |
+| **MCP config file**       | `.cursor/mcp.json` or `~/.cursor/mcp.json` | `~/.codeium/windsurf/mcp_config.json` | Not native yet            | Built-in UI     | `.mcp.json` (project root) |
+| **MCP marketplace**       | No                                         | Yes (blue checkmark = official)       | No                        | No              | No                         |
+| **Tool limit**            | 40                                         | 100                                   | N/A                       | N/A             | N/A                        |
+| **Skills system**         | `.cursorrules` / `.cursor/rules/`          | `windsurf_rules.md`                   | `.github/skills/SKILL.md` | Skills UI       | `CLAUDE.md`                |
+| **Persistent memory**     | Memory MCP + session memory                | Memory MCP + rules file               | Custom Instructions       | Project threads | `CLAUDE.md` + Memory MCP   |
+| **Env var interpolation** | Manual via OS env                          | `${env:VAR_NAME}` syntax              | N/A                       | N/A             | `${VAR_NAME}` syntax       |
 
-***
+---
 
 ##### Cursor — MCP & Tools Setup
 
 ###### MCP Config Scopes
 
-| Scope | File Path |
-|-------|-----------|
-| Project-only | `.cursor/mcp.json` |
+| Scope          | File Path            |
+| -------------- | -------------------- |
+| Project-only   | `.cursor/mcp.json`   |
 | All workspaces | `~/.cursor/mcp.json` |
 
 ###### Method 1 — Command Palette (Easiest)
@@ -5687,16 +5793,18 @@ Cursor has **40-tool limit** across all connected MCP servers
 Memory is project-scoped via `.cursor/rules/` directory
 
 **For cross-session persistent memory**: Add Memory MCP server to `mcp.json`
+
 - Creates `memory.json` file
 - Persists entities, relationships, observations across all sessions
 
-***
+---
 
 ##### Windsurf — MCP & Tools Setup
 
 ###### MCP Config Location
 
 **Single global path:**
+
 ```
 ~/.codeium/windsurf/mcp_config.json
 ```
@@ -5759,6 +5867,7 @@ Windsurf's Cascade has **100-tool limit** (more generous than Cursor)
 Add Memory MCP server to `mcp_config.json`
 
 Windsurf's Cascade engine automatically calls:
+
 - `create_entities`
 - `create_relations`
 - `add_observations`
@@ -5767,7 +5876,7 @@ As it learns your project
 
 **For project-level persistent context**: Maintain `windsurf_rules.md` file and update after every manual code change so next Cascade session inherits accurate state
 
-***
+---
 
 ##### GitHub Copilot — Skills & Memory Setup
 
@@ -5788,6 +5897,7 @@ Create in your repo:
 ```
 
 **For personal skills** shared across all repos:
+
 ```
 ~/.copilot/skills/skill-name/SKILL.md
 ```
@@ -5803,6 +5913,7 @@ description: Guide for debugging failing GitHub Actions workflows. Use this when
 ---
 
 To debug a failing workflow:
+
 1. Use `list_workflow_runs` to find recent failures
 2. Use `summarize_job_log_failures` to get AI summary of what failed
 3. Use `get_job_logs` for full detail if needed
@@ -5817,22 +5928,23 @@ Copilot auto-discovers skills in known directories — no registration step requ
 
 ###### Skills vs. Custom Instructions
 
-| Use Custom Instructions for... | Use Skills for... |
-|--------------------------------|-------------------|
+| Use Custom Instructions for...     | Use Skills for...                          |
+| ---------------------------------- | ------------------------------------------ |
 | Coding standards (always relevant) | Specialized tasks (conditionally relevant) |
-| Repo-wide patterns | Domain-specific workflows |
-| Response style preferences | Step-by-step procedures with scripts |
+| Repo-wide patterns                 | Domain-specific workflows                  |
+| Response style preferences         | Step-by-step procedures with scripts       |
 
 ###### Memory in GitHub Copilot
 
 Copilot does not currently have persistent memory layer in traditional sense
 
 **Use Custom Instructions as memory proxy:**
+
 - Settings → Copilot → Custom Instructions
 - Encode project context, preferences, constraints
 - They inject into every session automatically
 
-***
+---
 
 ##### OpenAI Codex App — Skills & Automations
 
@@ -5841,6 +5953,7 @@ Copilot does not currently have persistent memory layer in traditional sense
 In Codex app, Skills are **bundled packages of instructions + tools + scripts** that any agent session can invoke by name
 
 **To create Skill:**
+
 1. Open Codex app → navigate to **Skills**
 2. Click **New Skill**
 3. Define: name, trigger description, instructions, attached tools
@@ -5867,13 +5980,14 @@ Automations are **scheduled background agents** that run without manual prompt:
 Memory is session + project scoped
 
 **Organize app by project** — each project maintains:
+
 - Own agent session history
 - Thread context
 - Automations schedule
 
 Context never bleeds between clients
 
-***
+---
 
 ##### Claude Code Mobile — MCP & CLAUDE.md
 
@@ -5923,17 +6037,19 @@ Claude Code's equivalent of `.cursorrules` — persists project context across e
 Claude Code currently does not have formal Skills system like GitHub Copilot
 
 **Equivalent pattern**: Modular `CLAUDE.md` sections
+
 - Break `CLAUDE.md` into task-specific sections (deployment, testing, design-to-code)
 - Agent loads only what's relevant
 - Reference canonical files rather than duplicating content
 
-***
+---
 
 #### BEST PRACTICES & HIGHEST STANDARDS
 
 ##### The `AGENTS.md` Standard — Emerging Universal
 
 **`AGENTS.md` is now emerging open standard:**
+
 - Adopted by 60,000+ repositories
 - Backed by Agentic AI Foundation under Linux Foundation stewardship
 - Supersedes fragmented ecosystem of `.cursorrules`, `CLAUDE.md`, `windsurf_rules.md`
@@ -5952,22 +6068,26 @@ Claude Code currently does not have formal Skills system like GitHub Copilot
 # AGENTS.md
 
 ## Role
+
 You are senior TypeScript engineer working in Next.js 16/React 19
 monorepo using Feature-Sliced Design. You write modular, testable code
 and never compromise Code Health for speed.
 
 ## Stack
+
 - Next.js 16, React 19, TypeScript (strict mode, no `any`)
 - Feature-Sliced Design v2.1 layer isolation enforced
 - Turborepo + pnpm workspaces
 - Supabase + RLS, Clerk auth, Stripe, Vercel
 
 ## Architecture Rules
+
 - Server Components by default; Client Components only for interactivity
 - All DB access via repository pattern in packages/core/
 - Zod for all schema validation; no raw object types
 
 ## Workflow Sequence (MANDATORY)
+
 1. Run code_health_review BEFORE touching any file
 2. Implement changes in atomic commits (one task = one commit)
 3. Run pre_commit_code_health_safeguard before each commit
@@ -5975,17 +6095,20 @@ and never compromise Code Health for speed.
 5. Run analyze_change_set before opening any PR
 
 ## Dos
+
 - Reference canonical files (e.g., see components/Button.tsx for patterns)
 - Write tests alongside code, never after
 - Use git worktrees for parallel workstreams
 
 ## Don'ts
+
 - Never delete failing test to make coverage pass
 - Never use `any` type
 - Never commit directly to main
 - Never hardcode secrets
 
 ## Verification
+
 - Build: `pnpm build`
 - Typecheck: `pnpm typecheck`
 - Test: `pnpm test --coverage`
@@ -5995,24 +6118,29 @@ and never compromise Code Health for speed.
 ###### Critical Rules for `AGENTS.md` Quality
 
 **Keep it lean**
-- New research shows larger context files actually *reduce* coding agent success rates
+
+- New research shows larger context files actually _reduce_ coding agent success rates
 - Only include most essential instructions
 
 **Reference out, don't duplicate**
+
 - Link to canonical files instead of copy-pasting content
 - Keeps initial context window small
 
 **Never put human-readable README content in it**
+
 - `AGENTS.md` is for agent execution logic only
 - `README.md` is for humans
 
 **Treat it as living documentation**
+
 - Update whenever you manually fix something agent got wrong
 
 **For monorepos**
+
 - Add package-specific `AGENTS.md` files in each package directory for scoped instructions
 
-***
+---
 
 ##### Code Health — The Missing Agent Guardrail
 
@@ -6021,6 +6149,7 @@ and never compromise Code Health for speed.
 **Research confirms**: AI performs best on code with **Code Health score of 9.5–10.0**
 
 Lower scores increase:
+
 - Hallucination rates
 - Token waste
 - Defect probability
@@ -6034,6 +6163,7 @@ Install **CodeScene Code Health MCP** and encode this workflow in `AGENTS.md`:
 3. **Pre-PR** → `analyze_change_set` full branch vs. base ref check before opening pull request
 
 **When health regresses**, agent enters automated **refactor loop**:
+
 - review → plan → refactor → re-measure
 - Cannot proceed until score recovers
 
@@ -6045,7 +6175,7 @@ Highest standard treats **code coverage as behavioral regression signal, not van
 - Agent facing failing test will delete it if you allow it; coverage gate makes this immediately visible
 - Target ~99% unit test coverage supplemented by end-to-end tests that exercise full system in realistic scenarios
 
-***
+---
 
 ##### Context Engineering — Highest Standard Practices
 
@@ -6053,31 +6183,35 @@ Highest standard treats **code coverage as behavioral regression signal, not van
 
 Treat context window as **finite, precious budget** — allocate deliberately
 
-| Context Slot | What Belongs Here | What Doesn't |
-|--------------|-------------------|--------------|
-| System/rules | Architecture rules, role, coding standards | Full style guides, README content |
-| Retrieved docs | Current, query-relevant snippets only | Entire documentation files |
-| Conversation history | Last 3–5 relevant turns | Completed, resolved tasks |
-| Code context | Files directly involved in current task | Entire repo dumps |
+| Context Slot         | What Belongs Here                          | What Doesn't                      |
+| -------------------- | ------------------------------------------ | --------------------------------- |
+| System/rules         | Architecture rules, role, coding standards | Full style guides, README content |
+| Retrieved docs       | Current, query-relevant snippets only      | Entire documentation files        |
+| Conversation history | Last 3–5 relevant turns                    | Completed, resolved tasks         |
+| Code context         | Files directly involved in current task    | Entire repo dumps                 |
 
 ###### Selective Context Injection — Production Standard
 
 **Role-based filtering**
-- Multi-agent systems should give each specialized agent only context relevant to *its* role
+
+- Multi-agent systems should give each specialized agent only context relevant to _its_ role
 - Test agent doesn't need Stripe API docs
 - Deploy agent doesn't need component patterns
 
 **Predictive prefetching**
+
 - Advanced setups analyze conversation flow
 - Preload likely-needed context before agent requests it
 - Reduces latency on context-heavy operations
 
 **Dynamic allocation**
+
 - Adjust context budget per query type
 - Factual queries allocate more to retrieved docs
 - Complex architectural queries allocate more to conversation history
 
 **Graceful degradation**
+
 - Never let context overflow crash session
 - Implement intelligent truncation that preserves most important information
 - Switches to summarization automatically
@@ -6089,7 +6223,7 @@ Treat context window as **finite, precious budget** — allocate deliberately
 - Keep `AGENTS.md` under ~500 words — lean context outperforms stuffed context
 - Validate that every piece of context you inject is **current, accurate, and relevant** — stale context degrades silently
 
-***
+---
 
 ##### MCP Security — OWASP Standard
 
@@ -6098,18 +6232,22 @@ Treat context window as **finite, precious budget** — allocate deliberately
 ###### Architecture Standards
 
 **Session isolation**
+
 - Each agent session must have own isolated MCP connection scope
 - No shared sessions across users or workstreams
 
 **Least privilege by default**
+
 - Start every MCP server in read-only mode
 - Add write access only with explicit rollback plan
 
 **Network segmentation**
+
 - Place MCP servers in private subnets reachable only by authorized workloads
 - Front external endpoints with rate-limiting gateways
 
 **Scope tokens to audiences**
+
 - Use OAuth 2.1 resource indicators
 - Credentials issued for one MCP server cannot be replayed against another
 
@@ -6130,7 +6268,7 @@ Treat context window as **finite, precious budget** — allocate deliberately
 - **Back up configuration** before any MCP-mediated modification
 - **Validate reads after writes** — use read-only tools to confirm changes took effect correctly
 
-***
+---
 
 ##### Spec-Driven Development — Enterprise Standard
 
@@ -6140,26 +6278,31 @@ Great spec for agents has **five mandatory sections**:
 
 ```markdown
 ## 1. Intent & Constraints
+
 - What this builds and why (user-centric outcome)
 - What is explicitly OUT OF SCOPE
 - Hard constraints (must use X, cannot change Y)
 
 ## 2. Functional Requirements
+
 - User stories: "As [user], I want [action] so that [outcome]"
 - Acceptance criteria: specific, testable, unambiguous
 - Edge cases and error states
 
 ## 3. Technical Specification
+
 - Stack and architecture decisions
 - Data models and API contracts
 - Integration points and dependencies
 
 ## 4. File Map
+
 - List of files to create, modify, or delete
 - Which FSD layer/package each file lives in
 - Naming conventions
 
 ## 5. Validation Checklist
+
 - Build passes
 - TypeScript strict passes
 - Test coverage gate passes
@@ -6170,18 +6313,22 @@ Great spec for agents has **five mandatory sections**:
 ###### Key Quality Signals for Good Spec
 
 **Acceptance criteria are testable**
+
 - Agent can write test that definitively passes or fails
 
 **Edge cases explicitly listed**
+
 - Agents never handle undocumented edge cases gracefully
 
 **File paths specified**
-- Removes all ambiguity about *where* generated code lives
+
+- Removes all ambiguity about _where_ generated code lives
 
 **Takes 15–30 minutes to write well**
+
 - Rushed spec costs 5× that in rework
 
-***
+---
 
 ##### Multi-Agent Orchestration — Highest Standard Patterns
 
@@ -6200,20 +6347,20 @@ Enterprise-standard architecture separates agents by function with zero shared c
 - Sub-agents preferable to monolithic agents — one agent for security, one for docs, one for tests reduces both context pollution and hallucination rates
 - Each agent session **scoped to one task** — completing it, committing it, closing session before next task begins
 
-***
+---
 
 ##### Agentic Git Workflow — Highest Standard
 
-| Practice | Standard | Why |
-|----------|----------|-----|
-| **Commit frequency** | After every approved task | One task = one atomic, reversible unit |
-| **Branch strategy** | Branch per agent session, never write to `main` | Isolates agent work; safe rollback |
-| **Commit messages** | Descriptive: "Add Stripe webhook handler for subscription.updated" | Agents read git log; vague messages break context |
-| **PR review** | Treat every agent diff like colleague's PR | 40% of AI PRs contain subtle bugs invisible without review |
-| **Merge strategy** | Squash-merge agent branches | Keeps history clean; preserves task granularity |
-| **Session transcripts** | Store in `.cursor/plans/` or `.taskmaster/` | Artifacts alongside commits for future agent context |
+| Practice                | Standard                                                           | Why                                                        |
+| ----------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------- |
+| **Commit frequency**    | After every approved task                                          | One task = one atomic, reversible unit                     |
+| **Branch strategy**     | Branch per agent session, never write to `main`                    | Isolates agent work; safe rollback                         |
+| **Commit messages**     | Descriptive: "Add Stripe webhook handler for subscription.updated" | Agents read git log; vague messages break context          |
+| **PR review**           | Treat every agent diff like colleague's PR                         | 40% of AI PRs contain subtle bugs invisible without review |
+| **Merge strategy**      | Squash-merge agent branches                                        | Keeps history clean; preserves task granularity            |
+| **Session transcripts** | Store in `.cursor/plans/` or `.taskmaster/`                        | Artifacts alongside commits for future agent context       |
 
-***
+---
 
 ##### The Production Agentic Checklist
 
@@ -6230,7 +6377,7 @@ Adapted from Stack AI's 2026 agentic architecture standard — run before shippi
 - [ ] Secrets stored in env vars, never in config JSON
 - [ ] Every agent session committed to isolated branch, not `main`
 
-***
+---
 
 #### ENTERPRISE METHODOLOGIES
 
@@ -6239,6 +6386,7 @@ Adapted from Stack AI's 2026 agentic architecture standard — run before shippi
 **Defining enterprise shift of 2026**: Not adopting new tool — it's **fundamental redefinition of engineering role**
 
 AI agents now act as first-pass executors across entire SDLC:
+
 - Analyzing feasibility during planning
 - Implementing features during build
 - Expanding test coverage during validation
@@ -6247,17 +6395,19 @@ AI agents now act as first-pass executors across entire SDLC:
 **Compresses weeks of coordination into continuous workflows**
 
 **McKinsey reports**: AI-centric organizations achieving:
+
 - **20–40% reductions in operating costs**
 - **12–14 point increases in EBITDA margins**
 
 ###### Enterprise Operating Model
 
 Deceptively simple:
+
 - **Delegate** — agents handle first-pass execution, scaffolding, implementation, testing, documentation
 - **Review** — engineers validate outputs for correctness, risk, alignment
 - **Own** — architecture, trade-offs, outcomes remain irreversibly human
 
-***
+---
 
 ##### The 5 Microsoft Azure Multi-Agent Orchestration Patterns
 
@@ -6267,16 +6417,15 @@ Microsoft's Azure Architecture Center formalized **five canonical orchestration 
 
 ###### Pattern Selection Matrix
 
-| Pattern | Routing | Best For | Avoid When |
-|---------|---------|----------|------------|
-| **Sequential** | Deterministic, linear order | Step-by-step refinement with clear stage dependencies | Stages parallelizable or workflow needs backtracking |
-| **Concurrent** | Fan-out / fan-in | Independent multi-perspective analysis; latency-sensitive tasks | Agents need to build on each other's work sequentially |
-| **Group Chat** | Chat manager controls turn order | Consensus-building, brainstorming, maker-checker validation loops | More than 3 agents — control degrades rapidly |
-| **Handoff** | Agents decide dynamically when to transfer control | Tasks where right specialist emerges during processing | Routing is deterministic — use sequential instead |
-| **Magentic** | Manager builds and adapts task ledger dynamically | Open-ended problems with no predetermined solution path | Time-sensitive tasks — pattern is slow to converge |
+| Pattern        | Routing                                            | Best For                                                          | Avoid When                                             |
+| -------------- | -------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------ |
+| **Sequential** | Deterministic, linear order                        | Step-by-step refinement with clear stage dependencies             | Stages parallelizable or workflow needs backtracking   |
+| **Concurrent** | Fan-out / fan-in                                   | Independent multi-perspective analysis; latency-sensitive tasks   | Agents need to build on each other's work sequentially |
+| **Group Chat** | Chat manager controls turn order                   | Consensus-building, brainstorming, maker-checker validation loops | More than 3 agents — control degrades rapidly          |
+| **Handoff**    | Agents decide dynamically when to transfer control | Tasks where right specialist emerges during processing            | Routing is deterministic — use sequential instead      |
+| **Magentic**   | Manager builds and adapts task ledger dynamically  | Open-ended problems with no predetermined solution path           | Time-sensitive tasks — pattern is slow to converge     |
 
 ###### The Complexity
-
 
 #### Cli Scaffold Design best-practices/cli-scaffold-design.md
 
@@ -7281,7 +7430,6 @@ class ErrorReporter {
 - [Vitest Testing Framework](https://vitest.dev/)
 - [Mocha Test Runner](https://mochajs.org/)
 
-
 #### Conventional Comments best-practices/conventional-comments.md
 
 _Source: `best-practices/conventional-comments.md`_
@@ -7312,7 +7460,6 @@ Use [Conventional Comments](https://conventionalcomments.org/) during code revie
 - `issue:` This action lacks tenant scoping. Please require `tenantId` from server context and validate access.
 - `suggestion:` Consider extracting this parsing logic into `shared/lib/parse-date.ts` to reduce duplication.
 - `question:` Should this edge case map to a 400 instead of a 500?
-
 
 #### Cross Slice Import Patterns best-practices/cross-slice-import-patterns.md
 
@@ -7455,7 +7602,6 @@ export default defineConfig({
 
 ---
 
-
 #### Docstring Standards best-practices/docstring-standards.md
 
 _Source: `best-practices/docstring-standards.md`_
@@ -7495,7 +7641,6 @@ export function resolveTenantMetadata(tenantId: string) {
 
 - Local pre-commit runs `pnpm verify:docstrings` on staged JS/TS files.
 - CI should include `pnpm verify:docstrings` in quality pipelines.
-
 
 #### Feature Sliced Design Docs best-practices/feature-sliced-design-docs.md
 
@@ -7614,7 +7759,6 @@ FSD 2.1 is a pragmatic evolution of the methodology. By prioritizing the "pages-
 
 [Add content here]
 
-
 #### File Header Template best-practices/file-header-template.md
 
 _Source: `best-practices/file-header-template.md`_
@@ -7662,7 +7806,6 @@ This guide defines the standard header format for new and substantially modified
  * @requirements DOMAIN-9-3, GDPR-data-minimization
  */
 ```
-
 
 #### Fsd Layer Architecture best-practices/fsd-layer-architecture.md
 
@@ -7867,7 +8010,6 @@ shared/         src/shared/ (imported by all layers)
 
 ---
 
-
 #### Git Branching Strategies best-practices/git-branching-strategies.md
 
 _Source: `best-practices/git-branching-strategies.md`_
@@ -8023,7 +8165,6 @@ Enforced by `commitlint` + `husky`:
 - ConfigCat TBD Guide — https://configcat.com/trunk-based-development/
 
 ---
-
 
 #### Independent Release Patterns best-practices/independent-release-patterns.md
 
@@ -8503,7 +8644,6 @@ This ensures only one release process runs at a time per branch .
 ##### Testing
 
 [Add content here]
-
 
 #### Internal Developer Portal Patterns best-practices/internal-developer-portal-patterns.md
 
@@ -9581,7 +9721,6 @@ export class AWSProvider implements CloudProvider {
 
 [Add content here]
 
-
 #### Monorepo Directory Structure best-practices/monorepo-directory-structure.md
 
 _Source: `best-practices/monorepo-directory-structure.md`_
@@ -9830,7 +9969,6 @@ catalog:
 - Turborepo Monorepo Guide — https://turbo.build/repo/docs
 
 ---
-
 
 #### Prioritization Framework best-practices/prioritization-framework.md
 
@@ -10515,7 +10653,6 @@ interface ReleasePriority {
 ##### Testing
 
 [Add content here]
-
 
 #### Quality Assurance Checklist best-practices/quality-assurance-checklist.md
 
@@ -11403,15 +11540,15 @@ Overall quality rating of **B+ (78/100)** reflects a well-maintained, comprehens
 
 _This QA checklist should be updated monthly to track improvements and ensure continued quality excellence across all documentation guides._
 
-
 #### Repository Management best-practices/repository-management.md
 
 _Source: `best-practices/repository-management.md`_
 
 #### Master Brief: Internal Repository Management
+
 ###### A Complete Reference from Basics to Enterprise Methodology
 
-***
+---
 
 ##### PART I: BASICS
 
@@ -11438,13 +11575,13 @@ Only staged changes are saved when you run `git commit` — this design lets you
 
 ###### Distributed vs. Centralized
 
-| Concept | Centralized (SVN) | Distributed (Git) |
-|---|---|---|
-| Repositories | One shared central repo | Every developer has a full local repo |
-| Commit scope | Goes directly to central server | Saved locally first, then pushed |
-| Offline work | Not possible | Fully supported |
-| Conflict timing | Exposed during `update` | Explicit `merge` step |
-| Popularity | Declining | Dominant standard today |
+| Concept         | Centralized (SVN)               | Distributed (Git)                     |
+| --------------- | ------------------------------- | ------------------------------------- |
+| Repositories    | One shared central repo         | Every developer has a full local repo |
+| Commit scope    | Goes directly to central server | Saved locally first, then pushed      |
+| Offline work    | Not possible                    | Fully supported                       |
+| Conflict timing | Exposed during `update`         | Explicit `merge` step                 |
+| Popularity      | Declining                       | Dominant standard today               |
 
 ###### The Root Directory
 
@@ -11474,11 +11611,11 @@ project-root/
 
 ###### The `src/` Directory — Organization Patterns
 
-| Architecture | `src/` Organization |
-|---|---|
-| **Feature-based** | `src/auth/`, `src/billing/`, `src/dashboard/` |
-| **Layer-based** | `src/controllers/`, `src/services/`, `src/models/` |
-| **Domain-driven** | `src/domain/`, `src/application/`, `src/infrastructure/` |
+| Architecture             | `src/` Organization                                         |
+| ------------------------ | ----------------------------------------------------------- |
+| **Feature-based**        | `src/auth/`, `src/billing/`, `src/dashboard/`               |
+| **Layer-based**          | `src/controllers/`, `src/services/`, `src/models/`          |
+| **Domain-driven**        | `src/domain/`, `src/application/`, `src/infrastructure/`    |
 | **Component-based** (UI) | `src/components/`, `src/hooks/`, `src/pages/`, `src/store/` |
 
 Feature-based organization scales better because when you need to delete or refactor a feature, all related files are co-located rather than scattered across layer directories.
@@ -11528,7 +11665,7 @@ A complete README covers: project title and one-line description; badges (build 
 - Raw data must never be modified in place; transformations produce new output files
 - Configuration templates (`.env.example`) belong in the repo; actual env files with values do not
 
-***
+---
 
 ##### PART II: FUNDAMENTALS
 
@@ -11536,21 +11673,21 @@ A complete README covers: project title and one-line description; badges (build 
 
 Every internal organization decision traces back to two concepts:
 
-- **Cohesion** — How well the elements *inside* a module belong together (intra-module concern)
-- **Coupling** — The strength of connections *between* modules (inter-module concern)
+- **Cohesion** — How well the elements _inside_ a module belong together (intra-module concern)
+- **Coupling** — The strength of connections _between_ modules (inter-module concern)
 
 The universal design target is **high cohesion + low coupling**.
 
 ###### The Six Levels of Cohesion (Worst to Best)
 
-| Level | Description | Example |
-|---|---|---|
-| **Coincidental** | Elements have no meaningful relationship | A `helpers.js` with unrelated utilities |
-| **Logical** | Elements share a vague technical category | A `database/` folder mixing reads, writes, migrations, seeds |
-| **Temporal** | Elements are executed at the same time | An `init.js` that runs everything on startup |
-| **Communicational** | Elements operate on the same data | A `shipment/` module with all shipment logic |
-| **Sequential** | Output of one element feeds into the next | A data transformation pipeline |
-| **Functional** | All elements contribute to one single goal | A `calculateInvoiceTotal()` function |
+| Level               | Description                                | Example                                                      |
+| ------------------- | ------------------------------------------ | ------------------------------------------------------------ |
+| **Coincidental**    | Elements have no meaningful relationship   | A `helpers.js` with unrelated utilities                      |
+| **Logical**         | Elements share a vague technical category  | A `database/` folder mixing reads, writes, migrations, seeds |
+| **Temporal**        | Elements are executed at the same time     | An `init.js` that runs everything on startup                 |
+| **Communicational** | Elements operate on the same data          | A `shipment/` module with all shipment logic                 |
+| **Sequential**      | Output of one element feeds into the next  | A data transformation pipeline                               |
+| **Functional**      | All elements contribute to one single goal | A `calculateInvoiceTotal()` function                         |
 
 ###### Types of Coupling (Strongest to Weakest)
 
@@ -11672,22 +11809,22 @@ Each ADR records: context (what problem forced this), decision (what was chosen)
 - A linter (`markdownlint`) runs on documentation in CI
 - Comments in source code link to relevant doc files: `// See /docs/auth-flow.md`
 
-***
+---
 
 ##### PART III: BEST PRACTICES
 
 ###### Code Quality Metrics (Measurable Standards)
 
-| Metric | What It Measures | Target |
-|---|---|---|
-| **Cyclomatic Complexity** | Independent logical paths through a function | ≤10 per function |
-| **Maintainability Index** | Volume, complexity, comments composite | ≥85 |
-| **Code Duplication** | Identical/near-identical code blocks | Near 0% |
-| **Unit Test Pass Rate** | Tests passing on every commit | 100% |
-| **Code Churn** | Frequency of add/modify/delete | High churn on stable modules = design instability |
-| **Technical Debt Ratio** | Effort to fix maintainability issues | Track trend |
-| **Dependency Graph Complexity** | Depth/density of inter-module connections | Flat, minimal |
-| **Average Code Review Time** | PR open to first substantive review | Benchmark against DORA tier |
+| Metric                          | What It Measures                             | Target                                            |
+| ------------------------------- | -------------------------------------------- | ------------------------------------------------- |
+| **Cyclomatic Complexity**       | Independent logical paths through a function | ≤10 per function                                  |
+| **Maintainability Index**       | Volume, complexity, comments composite       | ≥85                                               |
+| **Code Duplication**            | Identical/near-identical code blocks         | Near 0%                                           |
+| **Unit Test Pass Rate**         | Tests passing on every commit                | 100%                                              |
+| **Code Churn**                  | Frequency of add/modify/delete               | High churn on stable modules = design instability |
+| **Technical Debt Ratio**        | Effort to fix maintainability issues         | Track trend                                       |
+| **Dependency Graph Complexity** | Depth/density of inter-module connections    | Flat, minimal                                     |
+| **Average Code Review Time**    | PR open to first substantive review          | Benchmark against DORA tier                       |
 
 ###### The Coding Standards Document
 
@@ -11739,15 +11876,23 @@ Enforced by a linter configuration file committed to the repo (`.eslintrc`, `.py
 
 ```markdown
 ## [Unreleased]
+
 ### Added
+
 - New CSV export for invoice module
 
 ## [2.4.0] - 2026-02-10
+
 ### Added
+
 - OAuth2 SSO login support
+
 ### Fixed
+
 - Null pointer in billing service for EU tax
+
 ### Removed
+
 - Legacy XML API endpoints
 ```
 
@@ -11762,6 +11907,7 @@ Every entry grouped under: Added, Changed, Deprecated, Removed, Fixed, Security.
 ###### Semantic Versioning Inside the Repository
 
 `MAJOR.MINOR.PATCH`:
+
 - **PATCH** — Backward-compatible bug fix only
 - **MINOR** — New backward-compatible feature
 - **MAJOR** — Breaking change
@@ -11791,7 +11937,7 @@ The version in the manifest must always match the corresponding `git tag` on the
 
 `workspace:*` means always use the local version — no version resolution, no risk of a published version and local version diverging.
 
-***
+---
 
 ##### PART IV: HIGHEST STANDARDS
 
@@ -11820,13 +11966,13 @@ Netflix applied this pattern and was able to swap a data source from a JSON API 
 
 ###### SOLID Principles Applied Inside a Repository
 
-| Principle | Internal Repository Implication |
-|---|---|
-| **Single Responsibility** | One file, one class, one public purpose |
-| **Open/Closed** | Add new behavior by creating new files, not modifying existing ones |
-| **Liskov Substitution** | Any implementation of an interface must be swappable without changing the caller |
-| **Interface Segregation** | Many small, role-specific interfaces over one large general one |
-| **Dependency Inversion** | High-level modules import interfaces, never concrete classes |
+| Principle                 | Internal Repository Implication                                                  |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| **Single Responsibility** | One file, one class, one public purpose                                          |
+| **Open/Closed**           | Add new behavior by creating new files, not modifying existing ones              |
+| **Liskov Substitution**   | Any implementation of an interface must be swappable without changing the caller |
+| **Interface Segregation** | Many small, role-specific interfaces over one large general one                  |
+| **Dependency Inversion**  | High-level modules import interfaces, never concrete classes                     |
 
 ###### Quality Gates as Hard Internal Contracts
 
@@ -11918,36 +12064,36 @@ Log format is **structured JSON** — never plain string concatenation. All logg
 3. **Accepted or Rejected** — Status updated; PR merge is the formal approval event
 4. **Superseded** — Old ADR status updated to `Superseded by ADR-NNNN`; never deleted
 
-***
+---
 
 ##### PART V: ENTERPRISE METHODOLOGIES
 
 ###### Conway's Law: The Foundational Enterprise Constraint
 
-*"Any organization that designs a system will produce a design whose structure is a copy of the organization's communication structure."*
+_"Any organization that designs a system will produce a design whose structure is a copy of the organization's communication structure."_
 
 The **Inverse Conway Maneuver**: restructure your teams to match the architecture you want, and the code will follow. Team boundaries become module boundaries; organizational communication pathways become dependency edges.
 
 ###### Repository Architecture Strategy
 
-| | **Monorepo** | **Polyrepo** | **Hybrid** |
-|---|---|---|---|
-| **Structure** | All projects in one repo | One repo per project/service | Related services grouped per repo |
-| **Code sharing** | Instant — one commit updates all consumers | Requires versioned packages | Partial sharing within group repos |
-| **CI/CD** | Unified pipeline with selective build/test | Each repo has an independent pipeline | Per-group pipelines |
-| **Access control** | Harder; CODEOWNERS mitigates | Strict per-repo permissions naturally | Balanced |
-| **Enterprise adopters** | Google, Meta, Microsoft, Uber, Twitter | Amazon, Netflix | Mid-size product companies |
+|                         | **Monorepo**                               | **Polyrepo**                          | **Hybrid**                         |
+| ----------------------- | ------------------------------------------ | ------------------------------------- | ---------------------------------- |
+| **Structure**           | All projects in one repo                   | One repo per project/service          | Related services grouped per repo  |
+| **Code sharing**        | Instant — one commit updates all consumers | Requires versioned packages           | Partial sharing within group repos |
+| **CI/CD**               | Unified pipeline with selective build/test | Each repo has an independent pipeline | Per-group pipelines                |
+| **Access control**      | Harder; CODEOWNERS mitigates               | Strict per-repo permissions naturally | Balanced                           |
+| **Enterprise adopters** | Google, Meta, Microsoft, Uber, Twitter     | Amazon, Netflix                       | Mid-size product companies         |
 
 ###### Monorepo Tooling at Scale
 
-| Tool | Language Focus | Key Capability |
-|---|---|---|
-| **Bazel** | Java, C++, Go, multi-language | Hermetic builds, advanced caching, distributed execution |
-| **Nx** | JavaScript/TypeScript | Dependency graph, smart task runner, Nx Cloud remote cache |
-| **Turborepo** | JavaScript/TypeScript | Remote caching, task scheduling, incremental adoption |
-| **Pants** | Python, Go, Java, Scala, Docker | File-level granularity, secure lockfile builds |
-| **Rush** | JavaScript | Parallel/incremental builds, team version coordination |
-| **Lerna** | JavaScript/TypeScript | Package publishing, distributed caching |
+| Tool          | Language Focus                  | Key Capability                                             |
+| ------------- | ------------------------------- | ---------------------------------------------------------- |
+| **Bazel**     | Java, C++, Go, multi-language   | Hermetic builds, advanced caching, distributed execution   |
+| **Nx**        | JavaScript/TypeScript           | Dependency graph, smart task runner, Nx Cloud remote cache |
+| **Turborepo** | JavaScript/TypeScript           | Remote caching, task scheduling, incremental adoption      |
+| **Pants**     | Python, Go, Java, Scala, Docker | File-level granularity, secure lockfile builds             |
+| **Rush**      | JavaScript                      | Parallel/incremental builds, team version coordination     |
+| **Lerna**     | JavaScript/TypeScript           | Package publishing, distributed caching                    |
 
 Universal principle: **affected-only builds** — only projects whose dependency graph includes the modified code are rebuilt and retested.
 
@@ -11955,11 +12101,11 @@ Universal principle: **affected-only builds** — only projects whose dependency
 
 Applying open-source collaboration patterns to internal private codebases:
 
-| Role | Responsibilities |
-|---|---|
-| **Core Maintainers** | Define roadmap, review PRs, enforce standards |
-| **Regular Contributors** | Deliver features, address review feedback |
-| **Occasional Contributors** | Submit fixes, update docs |
+| Role                        | Responsibilities                              |
+| --------------------------- | --------------------------------------------- |
+| **Core Maintainers**        | Define roadmap, review PRs, enforce standards |
+| **Regular Contributors**    | Deliver features, address review feedback     |
+| **Occasional Contributors** | Submit fixes, update docs                     |
 
 Every contributor follows the same workflow: fork upstream → create feature branch → implement → open PR. This democratizes contribution while maintaining governance through code review and branch protection.
 
@@ -11967,20 +12113,20 @@ Every contributor follows the same workflow: fork upstream → create feature br
 
 A **Bounded Context** is the primary unit of internal organization — a clearly delimited region where a specific domain model is valid and a specific team has ownership. The same word means different things across contexts:
 
-| Term | Sales Context | Fulfillment Context | Accounting Context |
-|---|---|---|---|
-| **Customer** | Shopping history, preferences | Shipping address only | Billing info, credit limit |
-| **Order** | Items, discounts, totals | Items to pack, tracking | Invoice, payment status, tax |
+| Term         | Sales Context                 | Fulfillment Context     | Accounting Context           |
+| ------------ | ----------------------------- | ----------------------- | ---------------------------- |
+| **Customer** | Shopping history, preferences | Shipping address only   | Billing info, credit limit   |
+| **Order**    | Items, discounts, totals      | Items to pack, tracking | Invoice, payment status, tax |
 
 ###### Context Mapping: How Bounded Contexts Relate
 
-| Relationship | Internal Structure | Use When |
-|---|---|---|
-| **Partnership** | Shared interfaces, coordinated changes | Tightly coupled contexts evolving together |
-| **Customer-Supplier** | Upstream publishes versioned API; downstream consumes | One team depends on another's output |
-| **Conformist** | Downstream adapts fully to upstream model | Integrating with a system you cannot influence |
+| Relationship                    | Internal Structure                                         | Use When                                                                |
+| ------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **Partnership**                 | Shared interfaces, coordinated changes                     | Tightly coupled contexts evolving together                              |
+| **Customer-Supplier**           | Upstream publishes versioned API; downstream consumes      | One team depends on another's output                                    |
+| **Conformist**                  | Downstream adapts fully to upstream model                  | Integrating with a system you cannot influence                          |
 | **Anti-Corruption Layer (ACL)** | Translation module between clean domain and external model | Preventing poorly structured external system from infecting your domain |
-| **Shared Kernel** | Small set of shared value objects in `src/shared/kernel/` | Common primitives needed by multiple contexts |
+| **Shared Kernel**               | Small set of shared value objects in `src/shared/kernel/`  | Common primitives needed by multiple contexts                           |
 
 The context map is a committed diagram in `docs/architecture/context-map.md` written in Mermaid, version-controlled alongside the code.
 
@@ -12045,6 +12191,7 @@ Exposed modules must be treated as **public APIs** with the same versioning, bac
 ###### The `shared/kernel/` Pattern
 
 Governance rules:
+
 - Only **pure value objects** — no business logic, no domain services
 - **Changes require sign-off from all consuming teams**
 - **Fitness function enforces size** — a growing shared kernel is a warning sign of insufficient bounded context isolation
@@ -12056,7 +12203,7 @@ Governance rules:
 - **Renovate Bot** or **Dependabot** automates dependency update PRs
 - **Changesets** (JS/TS) or **Release Please** (multi-language) automates version bumping and changelog generation from commit history
 
-***
+---
 
 ##### PART VI: NOVEL AND UNIQUE TECHNIQUES
 
@@ -12096,15 +12243,12 @@ Tools: **Stryker** (JS/TS/.NET), **PIT/PITest** (Java), **mutmut** (Python), **c
 
 ###### Property-Based Testing: Mathematical Correctness
 
-Verifies that invariants hold for *all possible inputs* rather than specific examples:
+Verifies that invariants hold for _all possible inputs_ rather than specific examples:
 
 ```typescript
 // fast-check (TypeScript)
-test("encode/decode round-trip", () => {
-    fc.assert(fc.property(
-        fc.string(),
-        (s) => decode(encode(s)) === s
-    ));
+test('encode/decode round-trip', () => {
+  fc.assert(fc.property(fc.string(), (s) => decode(encode(s)) === s));
 });
 ```
 
@@ -12130,6 +12274,7 @@ specs/
 ```
 
 Three-command workflow:
+
 - `/specify` — Transforms ideas into structured, detailed Markdown specs
 - `/plan` — Generates sequential technical implementation plan from spec
 - `/tasks` — Breaks plan into phased, atomic AI-executable chunks
@@ -12173,12 +12318,12 @@ All dependency construction is centralized in a single `src/composition-root.ts`
 
 ```typescript
 // src/composition-root.ts — ONLY file that imports concrete implementations
-import { PostgresUserRepository } from "./infrastructure/db/PostgresUserRepository";
-import { SendgridEmailService } from "./infrastructure/email/SendgridEmailService";
+import { PostgresUserRepository } from './infrastructure/db/PostgresUserRepository';
+import { SendgridEmailService } from './infrastructure/email/SendgridEmailService';
 
 export const container = {
-    userRepository: new PostgresUserRepository(config.db),
-    emailService: new SendgridEmailService(config.sendgrid),
+  userRepository: new PostgresUserRepository(config.db),
+  emailService: new SendgridEmailService(config.sendgrid),
 };
 ```
 
@@ -12220,13 +12365,13 @@ git commit-graph write --reachable --changed-paths
 
 Precomputes and caches reachability data for the commit DAG, dramatically accelerating `git log`, `git merge-base`, `git blame`, and push/fetch negotiation. Combined with `git multi-pack-index write`, these are the same optimizations Microsoft applied to the Windows repository after migrating to Git.
 
-***
+---
 
 ##### PART VII: ADDITIONAL CRITICAL GAPS
 
 ###### Technical Debt Hotspot Analysis (CodeScene)
 
-Only 2–3% of a typical codebase's files account for 11–16% of all commits. These **hotspots** — files that are both complex *and* frequently modified — are the only technical debt worth prioritizing immediately.
+Only 2–3% of a typical codebase's files account for 11–16% of all commits. These **hotspots** — files that are both complex _and_ frequently modified — are the only technical debt worth prioritizing immediately.
 
 ```
 docs/reports/
@@ -12252,13 +12397,14 @@ src/infrastructure/db/migrations/
 
 **Flyway vs. Liquibase:**
 
-| | **Flyway** | **Liquibase** |
-|---|---|---|
-| **Format** | SQL files only | SQL, XML, YAML, or JSON |
-| **Rollback** | Manual undo scripts | Built-in rollback commands |
+|              | **Flyway**              | **Liquibase**                     |
+| ------------ | ----------------------- | --------------------------------- |
+| **Format**   | SQL files only          | SQL, XML, YAML, or JSON           |
+| **Rollback** | Manual undo scripts     | Built-in rollback commands        |
 | **Best for** | Straightforward schemas | Complex multi-environment schemas |
 
 Critical rules:
+
 - **Never modify a committed migration file** — checksum validation breaks all environments
 - **Never delete a migration file** — breaks fresh environment setup
 - **One concern per migration**
@@ -12288,6 +12434,7 @@ Migration logic lives in `src/infrastructure/migrations/document-migrations/` �
 ###### Structured Logging Standards
 
 Five internal logging standards:
+
 - **Structured JSON always** — Every log line is machine-parseable JSON
 - **Five levels with precise semantics** — `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`
 - **Correlation IDs on every line** — Same `correlationId` threads through every log line from a single user request
@@ -12299,72 +12446,86 @@ Five internal logging standards:
 ```typescript
 // src/config/index.ts
 const ConfigSchema = z.object({
-    database: z.object({
-        host: z.string().min(1),
-        port: z.coerce.number().int().positive(),
-    }),
+  database: z.object({
+    host: z.string().min(1),
+    port: z.coerce.number().int().positive(),
+  }),
 });
 
 export const config = ConfigSchema.parse({
-    database: { host: process.env.DB_HOST, port: process.env.DB_PORT },
+  database: { host: process.env.DB_HOST, port: process.env.DB_PORT },
 });
 ```
 
 If a required environment variable is missing or malformed, **the application fails at startup with a precise error** rather than failing silently at runtime. No `process.env` call ever appears outside `src/config/`.
 
-***
+---
 
 ##### PART VIII: YOUR REPOSITORY — SPECIFIC GAPS (THEGOAL.md)
 
 Based on analysis of your Marketing Websites Monorepo (FSD v2.1 + Zero-Trust Multi-Tenancy), here are the specific gaps not yet addressed:
 
 ###### 1. FSD Public API Contract Testing
+
 `index.ts` barrel exports at each FSD layer serve as the public API but have no **contract test** validating runtime shapes. Add `tests/architecture/` fitness functions verifying no `internal/` path is re-exported through an `index.ts` and `packages/core/src/index.ts` matches `packages/types/`.
 
 ###### 2. `Result<T, E>` Monad Usage Convention Document
+
 You have `packages/core/src/shared/Result.ts` but no committed `docs/guides/development/result-monad.md` specifying when to use `Result<T, E>` vs. throwing vs. returning `null`. Without it, all three patterns accumulate inconsistently:
+
 - **Domain layer** — Always returns `Result<T, DomainError>`; never throws
 - **Application layer** — Unwraps `Result`, maps to transport errors
 - **Infrastructure layer** — Catches exceptions, maps to `Result` before surfacing
 
 ###### 3. Database Migration Expand/Contract Pattern Enforcement
+
 `docs/guides/development/database-migrations.md` references the expand/contract pattern but no CI check verifies that migrations touching existing columns always come in sets of three. Add a `database/migrations/README.md` enforcing the naming convention.
 
 ###### 4. `packages/core/` Isolation Fitness Functions
+
 `madge.config.js` checks circular dependencies but no dedicated fitness function verifies `packages/core/`'s zero-dependency constraint at CI time:
+
 ```typescript
-test("packages/core has no external dependencies", () => {
-    const pkg = JSON.parse(fs.readFileSync("packages/core/package.json"));
-    expect(Object.keys(pkg.dependencies ?? {})).toEqual([]);
+test('packages/core has no external dependencies', () => {
+  const pkg = JSON.parse(fs.readFileSync('packages/core/package.json'));
+  expect(Object.keys(pkg.dependencies ?? {})).toEqual([]);
 });
 ```
 
 ###### 5. RLS Policy Golden File Tests
+
 `tests/integration/rls-bypass.spec.ts` exists but there is no committed golden file baseline of exactly which RLS policies exist on every table. Add `database/policies/golden/` with one JSON file per table, auto-generated by `scripts/generate-policy-snapshots.ts`.
 
 ###### 6. Webhook Idempotency Registry
+
 `packages/integrations/webhooks/idempotency.ts` stores keys in Redis but there is no committed registry document specifying key format, TTL, and behavior per integration. Also add an `idempotency_keys` database table as fallback for Redis restarts.
 
 ###### 7. `clients/` White-Label Override Contract
+
 `clients/_template/` exists but no committed `clients/OVERRIDE_CONTRACT.md` specifying what enterprise clients cannot override (security headers, RLS context injection, audit logging). Add a CI workflow step validating each client's middleware against a security baseline.
 
 ###### 8. Feature Flag Lifecycle Management
+
 `packages/flags/` lacks a flag lifecycle document governing naming convention, a registry with owner and planned removal milestone, a stale flag detector, and a removal checklist in `CONTRIBUTING.md`.
 
 ###### 9. `packages/email/` Visual Regression Tests
+
 No visual regression tests exist for email templates. Add either a Litmus/Email on Acid integration in `ci-nightly.yml` or committed golden HTML files in `packages/email/src/templates/__golden__/` with a CI diff check.
 
 ###### 10. `scripts/` Idempotency Annotations
+
 Each script should have a header block declaring idempotency status, destructiveness, required environment variables, and side effects. `db-reset.sh` specifically needs a mandatory confirmation prompt and must be blocked when `NODE_ENV=production`.
 
 ###### 11. `packages/types/` vs `packages/core/` Boundary Clarification
+
 A missing document clarifying the exact rule:
+
 - **`packages/types/`** — Pure structural TypeScript interfaces; no logic; used by infrastructure adapters and UI
 - **`packages/core/`** — Rich domain objects with business methods and validation; never imported by infrastructure
 
 ###### 12. Temporal Coupling Tracking
-`scripts/analyze/dependency-graph.js` generates import graph visualizations but no change coupling analysis. Add `scripts/analyze/change-coupling.sh` using Code Maat or Git log analysis, regenerating `docs/reports/change-coupling.md` weekly in CI to surface hidden dependencies between `packages/integrations/` adapters and `database/migrations/`.
 
+`scripts/analyze/dependency-graph.js` generates import graph visualizations but no change coupling analysis. Add `scripts/analyze/change-coupling.sh` using Code Maat or Git log analysis, regenerating `docs/reports/change-coupling.md` weekly in CI to surface hidden dependencies between `packages/integrations/` adapters and `database/migrations/`.
 
 #### Reversibility Principles best-practices/reversibility-principles.md
 
@@ -12727,7 +12888,6 @@ This ADR ensures compliance with:
 ##### Testing
 
 [Add content here]
-
 
 #### Thin Vertical Slice Guide best-practices/thin-vertical-slice-guide.md
 
@@ -13379,7 +13539,6 @@ interface SliceMetrics {
 - [The Feature Revolution - McKinsey](https://www.mckinsey.com/business-functions/operations/our-insights/the-feature-revolution)
 - [Monday.dev Vertical Slicing Platform](https://monday.com/products/monday-dev/)
 
-
 ### Frontend Guidance
 
 #### Frontend Implementation Guide frontend/frontend-implementation-guide.md
@@ -13413,7 +13572,7 @@ Comprehensive frontend development guide covering Next.js 16, React 19, TypeScri
 export async function UserProfile({ userId }: { userId: string }) {
   // Server-side data fetching
   const user = await getUser(userId);
-  
+
   return (
     <div className="user-profile">
       <h1>{user.name}</h1>
@@ -13427,12 +13586,12 @@ export async function UserProfile({ userId }: { userId: string }) {
 
 export function UserActions({ userId }: { userId: string }) {
   const [isFollowing, setIsFollowing] = useState(false);
-  
+
   const handleFollow = async () => {
     await followUser(userId);
     setIsFollowing(!isFollowing);
   };
-  
+
   return (
     <button onClick={handleFollow}>
       {isFollowing ? 'Unfollow' : 'Follow'}
@@ -13478,7 +13637,7 @@ import { useFormStatus } from 'react-dom';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-  
+
   return (
     <button type="submit" disabled={pending}>
       {pending ? 'Submitting...' : 'Submit'}
@@ -13536,31 +13695,29 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(request: NextRequest) {
   const hostname = request.headers.get('host') || '';
   const subdomain = hostname.split('.')[0];
-  
+
   // Tenant resolution logic
   const tenantId = resolveTenant(subdomain);
-  
+
   // Add tenant context to headers
   const response = NextResponse.next();
   response.headers.set('x-tenant-id', tenantId);
   response.headers.set('x-subdomain', subdomain);
-  
+
   // Rate limiting per tenant
   const clientIP = request.ip || 'anonymous';
   const rateLimitKey = `rate-limit:${tenantId}:${clientIP}`;
-  
+
   // Check rate limit (simplified)
   if (isRateLimited(rateLimitKey)) {
     return new NextResponse('Too Many Requests', { status: 429 });
   }
-  
+
   return response;
 }
 
 export const config = {
-  matcher: [
-    '/((?!api/health|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api/health|_next/static|_next/image|favicon.ico).*)'],
 };
 ```
 
@@ -13572,17 +13729,17 @@ export const config = {
 
 ```css
 /* app.css - Tailwind v4 CSS-first approach */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --color-primary: #3b82f6;
   --color-primary-foreground: #ffffff;
   --color-secondary: #64748b;
   --color-secondary-foreground: #ffffff;
-  
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
@@ -13592,7 +13749,7 @@ export const config = {
   .btn-primary {
     @apply bg-primary text-primary-foreground px-4 py-2 rounded-md font-medium;
   }
-  
+
   .card {
     @apply bg-white border border-gray-200 rounded-lg shadow-sm;
   }
@@ -13603,11 +13760,11 @@ export const config = {
 
 ```typescript
 // UI components with Tailwind v4
-export function Button({ 
-  variant = 'primary', 
-  size = 'md', 
-  children, 
-  className 
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  children,
+  className
 }: ButtonProps) {
   const baseClasses = 'font-medium rounded-md transition-colors';
   const variantClasses = {
@@ -13622,11 +13779,11 @@ export function Button({
   };
 
   return (
-    <button 
+    <button
       className={cn(
-        baseClasses, 
-        variantClasses[variant], 
-        sizeClasses[size], 
+        baseClasses,
+        variantClasses[variant],
+        sizeClasses[size],
         className
       )}
     >
@@ -13659,17 +13816,17 @@ export function reportWebVitals(metric: any) {
 }
 
 // Image optimization
-export function OptimizedImage({ 
-  src, 
-  alt, 
+export function OptimizedImage({
+  src,
+  alt,
   priority = false,
-  className 
+  className
 }: ImageProps) {
   return (
     <picture>
-      <source 
-        srcSet={`${src}?format=webp&w=800`} 
-        type="image/webp" 
+      <source
+        srcSet={`${src}?format=webp&w=800`}
+        type="image/webp"
       />
       <img
         src={`${src}?w=800`}
@@ -13732,7 +13889,7 @@ describe('Button Component', () => {
   it('handles click events', () => {
     const handleClick = jest.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     fireEvent.click(screen.getByRole('button'));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
@@ -13753,23 +13910,23 @@ import { test, expect } from '@playwright/test';
 
 test('user can complete purchase flow', async ({ page }) => {
   await page.goto('/');
-  
+
   // Navigate to product
   await page.click('[data-testid="product-link"]');
-  
+
   // Add to cart
   await page.click('[data-testid="add-to-cart"]');
-  
+
   // Checkout
   await page.click('[data-testid="checkout-button"]');
-  
+
   // Fill form
   await page.fill('[data-testid="email"]', 'test@example.com');
   await page.fill('[data-testid="name"]', 'Test User');
-  
+
   // Submit
   await page.click('[data-testid="submit-order"]');
-  
+
   // Verify success
   await expect(page.locator('[data-testid="order-success"]')).toBeVisible();
 });
@@ -13789,7 +13946,7 @@ export function AccessibleForm() {
       <h2 id="form-title" className="sr-only">
         Contact Information
       </h2>
-      
+
       <div className="form-group">
         <label htmlFor="email">
           Email Address
@@ -13808,7 +13965,7 @@ export function AccessibleForm() {
           We'll never share your email with anyone else.
         </div>
       </div>
-      
+
       <button type="submit" className="btn-primary">
         Submit Form
       </button>
@@ -13819,7 +13976,7 @@ export function AccessibleForm() {
 // Focus management
 export function Modal({ isOpen, onClose, children }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (isOpen && modalRef.current) {
       modalRef.current.focus();
@@ -13829,7 +13986,7 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
           // Focus trapping logic
         }
       };
-      
+
       document.addEventListener('keydown', trapFocus);
       return () => document.removeEventListener('keydown', trapFocus);
     }
@@ -13838,7 +13995,7 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       ref={modalRef}
       role="dialog"
       aria-modal="true"
@@ -13927,7 +14084,6 @@ export function setupPerformanceMonitoring() {
 ---
 
 This consolidated frontend guide provides practical implementation patterns for modern web development while eliminating redundant documentation and focusing on actionable code examples.
-
 
 #### Bundle Size Budgets frontend/performance/bundle-size-budgets.md
 
@@ -14060,7 +14216,6 @@ Now I have enough context to generate all 5 Batch B documents at production dept
 ```
 
 ```
-
 
 #### Core Web Vitals Optimization frontend/performance/core-web-vitals-optimization.md
 
@@ -15674,7 +15829,6 @@ const LayoutStabilityManager = {
 
 [Add content here]
 
-
 #### Performance Budgeting frontend/performance/performance-budgeting.md
 
 _Source: `frontend/performance/performance-budgeting.md`_
@@ -16320,7 +16474,6 @@ class BudgetAlertManager {
 - [Lighthouse Performance Audits](https://developers.google.com/web/tools/lighthouse/audits/performance)
 - [Web Performance Working Group](https://www.w3.org/webperf/)
 - [Performance Budgeting Best Practices](https://web.dev/performance-budgeting-101/)
-
 
 #### Nextjs 16 Documentation frontend/react/nextjs-16-documentation.md
 
@@ -17790,7 +17943,6 @@ export function withPerformanceTracking<T extends Record<string, any>>(
 
 [Add content here]
 
-
 ### Backend Data Guidance
 
 #### Backend Integration Guide backend-data/backend-integration-guide.md
@@ -17828,7 +17980,7 @@ import { createPool } from '@vercel/postgres';
 // Connection pool configuration
 const poolConfig = {
   max: 20, // Maximum connections
-  min: 5,  // Minimum connections
+  min: 5, // Minimum connections
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 };
@@ -17845,11 +17997,11 @@ export class TenantDatabase {
 
   async query<T = any>(sql: string, params?: any[]): Promise<T[]> {
     const client = await pool.connect();
-    
+
     try {
       // Set tenant context for RLS
       await client.query('SET app.current_tenant_id = $1', [this.tenantId]);
-      
+
       const result = await client.query(sql, params);
       return result.rows;
     } finally {
@@ -17859,14 +18011,14 @@ export class TenantDatabase {
 
   async transaction<T>(callback: (client: any) => Promise<T>): Promise<T> {
     const client = await pool.connect();
-    
+
     try {
       await client.query('BEGIN');
       await client.query('SET app.current_tenant_id = $1', [this.tenantId]);
-      
+
       const result = await callback(client);
       await client.query('COMMIT');
-      
+
       return result;
     } catch (error) {
       await client.query('ROLLBACK');
@@ -17940,11 +18092,7 @@ export class CacheManager {
 
   // Set with automatic JSON serialization
   async set(key: string, value: any, ttl: number = 3600): Promise<void> {
-    await redis.setex(
-      this.getKey(key), 
-      ttl, 
-      JSON.stringify(value)
-    );
+    await redis.setex(this.getKey(key), ttl, JSON.stringify(value));
   }
 
   // Multi-layer caching strategy
@@ -17962,7 +18110,7 @@ export class CacheManager {
     // Layer 1: Memory cache (if available)
     const memoryKey = `memory:${key}`;
     let value = await this.get<T>(memoryKey);
-    
+
     if (value) return value;
 
     // Layer 2: Redis cache
@@ -17975,11 +18123,11 @@ export class CacheManager {
 
     // Layer 3: Database fetch
     value = await fetcher();
-    
+
     // Cache in all layers
     await this.set(key, value, l2TTL);
     await this.set(memoryKey, value, l1TTL);
-    
+
     return value;
   }
 
@@ -17994,9 +18142,7 @@ export class CacheManager {
   // Cache warming
   async warmCache(keys: Array<{ key: string; fetcher: () => Promise<any> }>): Promise<void> {
     await Promise.all(
-      keys.map(({ key, fetcher }) => 
-        this.getWithFallback(key, fetcher).catch(console.error)
-      )
+      keys.map(({ key, fetcher }) => this.getWithFallback(key, fetcher).catch(console.error))
     );
   }
 }
@@ -18022,8 +18168,8 @@ export class SlidingWindowRateLimiter {
   }
 
   async isAllowed(
-    identifier: string, 
-    windowSize?: number, 
+    identifier: string,
+    windowSize?: number,
     maxRequests?: number
   ): Promise<{ allowed: boolean; remaining: number; resetTime: number }> {
     const now = Math.floor(Date.now() / 1000);
@@ -18067,17 +18213,13 @@ export class SlidingWindowRateLimiter {
   ): Promise<{ allowed: boolean; tier: string; details: any[] }> {
     const results = await Promise.all(
       tiers.map(async (tier, index) => {
-        const result = await this.isAllowed(
-          `${identifier}:tier${index}`,
-          tier.window,
-          tier.max
-        );
+        const result = await this.isAllowed(`${identifier}:tier${index}`, tier.window, tier.max);
         return { tier: `tier${index}`, ...result };
       })
     );
 
-    const blockedTier = results.find(r => !r.allowed);
-    
+    const blockedTier = results.find((r) => !r.allowed);
+
     return {
       allowed: !blockedTier,
       tier: blockedTier?.tier || 'all',
@@ -18095,7 +18237,7 @@ export async function checkRateLimit(req: NextRequest): Promise<boolean> {
   const identifier = `${tenantId}:${clientId}`;
 
   const result = await rateLimiter.checkMultiTier(identifier, [
-    { window: 60, max: 100 },    // Per minute
+    { window: 60, max: 100 }, // Per minute
     { window: 3600, max: 1000 }, // Per hour
     { window: 86400, max: 10000 }, // Per day
   ]);
@@ -18133,14 +18275,14 @@ export class OAuth2Client {
   generatePKCE(): { verifier: string; challenge: string } {
     const verifier = randomBytes(32).toString('base64url');
     const challenge = createHash('sha256').update(verifier).digest('base64url');
-    
+
     return { verifier, challenge };
   }
 
   // Build authorization URL
   getAuthorizationUrl(scopes: string[], state?: string): string {
     const { verifier, challenge } = this.generatePKCE();
-    
+
     // Store verifier in session/cache for later use
     const params = new URLSearchParams({
       response_type: 'code',
@@ -18157,8 +18299,8 @@ export class OAuth2Client {
 
   // Exchange authorization code for tokens
   async exchangeCodeForTokens(
-    code: string, 
-    codeVerifier: string, 
+    code: string,
+    codeVerifier: string,
     state?: string
   ): Promise<TokenResponse> {
     const response = await fetch(this.tokenUrl, {
@@ -18224,11 +18366,11 @@ export class HubSpotClient extends OAuth2Client {
 
   async createContact(contact: ContactData): Promise<HubSpotContact> {
     const tokens = await this.getValidTokens();
-    
+
     const response = await fetch(`${this.apiUrl}/crm/v3/objects/contacts`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${tokens.access_token}`,
+        Authorization: `Bearer ${tokens.access_token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -18288,7 +18430,7 @@ export class FeatureFlagManager {
   async loadFlags(): Promise<void> {
     // Load flags from database or external service
     const flags = await this.fetchFlagsForTenant(this.tenantId);
-    
+
     flags.forEach(flag => {
       this.flags.set(flag.key, flag);
     });
@@ -18296,7 +18438,7 @@ export class FeatureFlagManager {
 
   isEnabled(flagKey: string, context?: any): boolean {
     const flag = this.flags.get(flagKey);
-    
+
     if (!flag) return false;
     if (!flag.enabled) return false;
 
@@ -18304,7 +18446,7 @@ export class FeatureFlagManager {
     if (flag.rolloutPercentage) {
       const hash = this.hashContext(flagKey, context);
       const percentage = (hash % 100) + 1;
-      
+
       if (percentage > flag.rolloutPercentage) {
         return false;
       }
@@ -18321,20 +18463,20 @@ export class FeatureFlagManager {
   private hashContext(flagKey: string, context?: any): number {
     const str = `${flagKey}:${this.tenantId}:${JSON.stringify(context || {})}`;
     let hash = 0;
-    
+
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
-    
+
     return Math.abs(hash);
   }
 
   private evaluateConditions(conditions: FlagCondition[], context: any): boolean {
     return conditions.every(condition => {
       const value = context[condition.property];
-      
+
       switch (condition.operator) {
         case 'eq':
           return value === condition.value;
@@ -18358,17 +18500,17 @@ export class FeatureFlagManager {
 }
 
 // Usage in components
-export function FeatureFlaggedComponent({ 
-  flag, 
-  children, 
-  fallback 
+export function FeatureFlaggedComponent({
+  flag,
+  children,
+  fallback
 }: FeatureFlaggedComponentProps) {
   const flagManager = new FeatureFlagManager(getCurrentTenantId());
-  
+
   if (flagManager.isEnabled(flag)) {
     return <>{children}</>;
   }
-  
+
   return <>{fallback}</>;
 }
 ```
@@ -18447,15 +18589,15 @@ export class AnalyticsCollector {
     // Get or create session ID
     if (typeof window !== 'undefined') {
       let sessionId = sessionStorage.getItem('analytics_session_id');
-      
+
       if (!sessionId) {
         sessionId = crypto.randomUUID();
         sessionStorage.setItem('analytics_session_id', sessionId);
       }
-      
+
       return sessionId;
     }
-    
+
     return 'server-session';
   }
 }
@@ -18543,7 +18685,6 @@ analytics.track({
 ---
 
 This consolidated backend guide provides production-ready integration patterns while eliminating redundant documentation and focusing on scalable implementations.
-
 
 #### Tenant Caching Patterns backend-data/caching/tenant-caching-patterns.md
 
@@ -18651,7 +18792,6 @@ export function tenantSessionKey(tenantId: string, userId: string) {
 - Vercel Incremental Migration — https://vercel.com/docs/incremental-migration
 
 ---
-
 
 #### Upstash Ratelimit Documentation backend-data/caching/upstash-ratelimit-documentation.md
 
@@ -19973,7 +20113,6 @@ class DebugRateLimiter extends Ratelimit {
 
 [Add content here]
 
-
 #### Upstash Redis Documentation backend-data/caching/upstash-redis-documentation.md
 
 _Source: `backend-data/caching/upstash-redis-documentation.md`_
@@ -21197,7 +21336,6 @@ class DebugRedis extends Redis {
 ##### Implementation
 
 [Add content here]
-
 
 #### Aws Rds Proxy Documentation backend-data/databases/aws-rds-proxy-documentation.md
 
@@ -22513,7 +22651,6 @@ class IntelligentConnectionPool {
 
 [Add content here]
 
-
 #### Clickhouse Documentation backend-data/databases/clickhouse-documentation.md
 
 _Source: `backend-data/databases/clickhouse-documentation.md`_
@@ -22599,7 +22736,6 @@ SAMPLE BY user_id;
 ##### Testing
 
 [Add content here]
-
 
 #### Electricsql Docs backend-data/databases/electricsql-docs.md
 
@@ -23194,7 +23330,6 @@ const subscription = posts.subscribe(setPosts);
 
 [Add content here]
 
-
 #### Pgbouncer Supavisor Configuration backend-data/databases/pgbouncer-supavisor-configuration.md
 
 _Source: `backend-data/databases/pgbouncer-supavisor-configuration.md`_
@@ -23577,7 +23712,6 @@ WHERE datname = current_database();
 - [Supabase Connecting to Postgres](https://docs-12z0pelsj-supabase.vercel.app/docs/guides/database/connecting-to-postgres)
 - [Supabase Local Pooler Config](https://github.com/orgs/supabase/discussions/21264)
 - [Drizzle + Supabase Docs](https://orm.drizzle.team/docs/connect-supabase)
-
 
 #### Pglite Documentation backend-data/databases/pglite-documentation.md
 
@@ -24414,7 +24548,6 @@ async function migrateFromSQLite(sqliteDB: any, pgliteDB: PGlite) {
 
 [Add content here]
 
-
 #### Postgresql Pg Stat Statements backend-data/databases/postgresql-pg-stat-statements.md
 
 _Source: `backend-data/databases/postgresql-pg-stat-statements.md`_
@@ -25003,7 +25136,6 @@ SELECT cron.schedule('weekly-stats-reset', '0 3 * * 0', 'CALL reset_query_stats_
 
 [Add content here]
 
-
 #### Postgresql Rls Documentation backend-data/databases/postgresql-rls-documentation.md
 
 _Source: `backend-data/databases/postgresql-rls-documentation.md`_
@@ -25437,7 +25569,6 @@ WHERE tablename = 'documents';
 ##### Policy USING vs WITH CHECK
 
 [Add content here]
-
 
 #### Schema Migration Safety backend-data/databases/schema-migration-safety.md
 
@@ -25896,7 +26027,6 @@ Post-Migration:
 - [Drizzle Migrations Docs](https://orm.drizzle.team/docs/migrations)
 - [Supabase RLS Docs](https://supabase.com/docs/guides/auth/row-level-security)
 - [PostgreSQL Safe and Unsafe Migration Operations](https://www.postgresql.org/docs/current/ddl-alter.html)
-
 
 #### Hubspot Documentation backend-data/integrations/hubspot-documentation.md
 
@@ -26441,7 +26571,6 @@ export function withMonitoring<T extends any[], R>(
 }
 ```
 
-
 #### Qstash Client Setup backend-data/messaging/qstash-client-setup.md
 
 _Source: `backend-data/messaging/qstash-client-setup.md`_
@@ -26592,7 +26721,6 @@ export async function registerAllSchedules() {
 
 ---
 
-
 #### Tinybird Documentation backend-data/monitoring/tinybird-documentation.md
 
 _Source: `backend-data/monitoring/tinybird-documentation.md`_
@@ -26681,7 +26809,6 @@ Tinybird uses **Pipes** to define data transformations in SQL. These pipes are b
 ##### Testing
 
 [Add content here]
-
 
 ### Multi Tenant Guidance
 
@@ -27460,7 +27587,6 @@ ORDER BY month DESC;
 
 ---
 
-
 #### Domain Lifecycle Management multi-tenant/domain-lifecycle-management.md
 
 _Source: `multi-tenant/domain-lifecycle-management.md`_
@@ -28039,7 +28165,6 @@ CREATE INDEX idx_tenant_domains_last_checked ON tenant_domains(last_checked_at);
 - [Domain Security Best Practices](https://vercel.com/docs/concepts/domains/security) - Domain security guidelines
 
 ---
-
 
 #### Enterprise Sso Integration multi-tenant/enterprise-sso-integration.md
 
@@ -28747,7 +28872,6 @@ test.describe('Enterprise SSO', () => {
 - [Azure AD SSO Guide](https://docs.microsoft.com/en-us/azure/active-directory/) - Microsoft IdP
 
 ---
-
 
 #### Noisy Neighbor Prevention multi-tenant/noisy-neighbor-prevention.md
 
@@ -29492,7 +29616,6 @@ describe('Adaptive Throttling', () => {
 - [Artillery Load Testing](https://www.artillery.io/docs/) - Performance testing framework
 
 ---
-
 
 #### Routing Strategy Comparison multi-tenant/routing-strategy-comparison.md
 
@@ -30518,7 +30641,6 @@ graph TD
 
 ---
 
-
 #### Tenant Metadata Factory multi-tenant/tenant-metadata-factory.md
 
 _Source: `multi-tenant/tenant-metadata-factory.md`_
@@ -30633,7 +30755,6 @@ describe('Tenant Metadata Factory Integration', () => {
 - https://web.dev/learn/seo/metadata/ — web.dev
 
 ---
-
 
 #### Tenant Resolution Implementation multi-tenant/tenant-resolution-implementation.md
 
@@ -31247,7 +31368,6 @@ await trackTenantResolution('subdomain', tenant?.id || null, resolutionTime, hos
 
 ---
 
-
 #### Tenant Resolution Sequence Diagram multi-tenant/tenant-resolution-sequence-diagram.md
 
 _Source: `multi-tenant/tenant-resolution-sequence-diagram.md`_
@@ -31507,7 +31627,6 @@ Using separate key namespaces for slug-based and domain-based lookups enables:
 - [Noisy Neighbor Prevention](./noisy-neighbor-prevention.md)
 - [Next.js Middleware Docs](https://nextjs.org/docs/app/building-your-application/routing/middleware)
 - [Upstash Redis Global Replication](https://upstash.com/docs/redis/features/globalreplication)
-
 
 #### Tenant Suspension Patterns multi-tenant/tenant-suspension-patterns.md
 
@@ -32407,7 +32526,6 @@ ORDER BY monthly_mrr DESC;
 
 ---
 
-
 ### Security Guidance
 
 #### Supabase Auth Docs security/authentication/supabase-auth-docs.md
@@ -33037,7 +33155,6 @@ user's authenticated JWT. Use `SELECT auth.jwt();` to inspect what the token loo
 
 [Add content here]
 
-
 #### Multi Layer Rate Limiting security/encryption/multi-layer-rate-limiting.md
 
 _Source: `security/encryption/multi-layer-rate-limiting.md`_
@@ -33329,7 +33446,6 @@ export async function getTenantRateLimitStats(tenantId: string) {
 
 ```
 
-
 #### Security Implementation Guide security/security-implementation-guide.md
 
 _Source: `security/security-implementation-guide.md`_
@@ -33368,7 +33484,10 @@ interface SecurityConfig {
   reportUri?: string;
 }
 
-export function securityHeaders(request: NextRequest, config: SecurityConfig = { enableCSP: true, enableHSTS: true }) {
+export function securityHeaders(
+  request: NextRequest,
+  config: SecurityConfig = { enableCSP: true, enableHSTS: true }
+) {
   const response = NextResponse.next();
   const nonce = crypto.randomBytes(16).toString('base64');
 
@@ -33393,7 +33512,10 @@ export function securityHeaders(request: NextRequest, config: SecurityConfig = {
 
   // HTTP Strict Transport Security
   if (config.enableHSTS) {
-    response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    response.headers.set(
+      'Strict-Transport-Security',
+      'max-age=31536000; includeSubDomains; preload'
+    );
   }
 
   // Additional security headers
@@ -33455,16 +33577,19 @@ export class SecretsManager {
   encrypt(secret: string, tenantId: string): { encrypted: string; iv: string; tag: string } {
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipher(this.algorithm, this.encryptionKey);
-    
+
     // Add tenant context to encryption
-    const tenantKey = crypto.createHash('sha256').update(tenantId + this.encryptionKey).digest();
+    const tenantKey = crypto
+      .createHash('sha256')
+      .update(tenantId + this.encryptionKey)
+      .digest();
     const tenantCipher = crypto.createCipher(this.algorithm, tenantKey);
-    
+
     let encrypted = tenantCipher.update(secret, 'utf8', 'hex');
     encrypted += tenantCipher.final('hex');
-    
+
     const tag = tenantCipher.getAuthTag();
-    
+
     return {
       encrypted,
       iv: iv.toString('hex'),
@@ -33474,14 +33599,17 @@ export class SecretsManager {
 
   // Decrypt secret with tenant validation
   decrypt(encryptedData: { encrypted: string; iv: string; tag: string }, tenantId: string): string {
-    const tenantKey = crypto.createHash('sha256').update(tenantId + this.encryptionKey).digest();
+    const tenantKey = crypto
+      .createHash('sha256')
+      .update(tenantId + this.encryptionKey)
+      .digest();
     const decipher = crypto.createDecipher(this.algorithm, tenantKey);
-    
+
     decipher.setAuthTag(Buffer.from(encryptedData.tag, 'hex'));
-    
+
     let decrypted = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-    
+
     return decrypted;
   }
 
@@ -33489,9 +33617,9 @@ export class SecretsManager {
   async rotateSecret(secretName: string, tenantId: string): Promise<SecretConfig> {
     const oldSecret = await this.getSecret(secretName, tenantId);
     const newSecret = this.generateSecret();
-    
+
     const encrypted = this.encrypt(newSecret, tenantId);
-    
+
     const newConfig: SecretConfig = {
       name: secretName,
       value: encrypted.encrypted,
@@ -33502,7 +33630,7 @@ export class SecretsManager {
 
     // Log rotation event
     console.log(`Secret rotated: ${secretName} for tenant ${tenantId}`);
-    
+
     return newConfig;
   }
 
@@ -33556,7 +33684,7 @@ export function middleware(request: NextRequest) {
   // Rate limiting by tenant
   const tenantId = request.headers.get('x-tenant-id') || 'anonymous';
   const rateLimitKey = `rate-limit:${tenantId}:${request.ip}`;
-  
+
   // Add tenant context to response headers for debugging
   response.headers.set('x-tenant-id', tenantId);
   response.headers.set('x-request-id', crypto.randomUUID());
@@ -33565,9 +33693,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!api/health|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api/health|_next/static|_next/image|favicon.ico).*)'],
 };
 ```
 
@@ -33662,7 +33788,6 @@ export function logSecurityEvent(event: {
 ```
 
 This consolidated guide provides the essential security patterns needed for production deployment while eliminating redundant documentation and focusing on practical implementation.
-
 
 ### Testing Guidance
 
@@ -34221,7 +34346,6 @@ try {
 
 [Add content here]
 
-
 #### E2E Testing Suite Patterns testing/e2e-testing-suite-patterns.md
 
 _Source: `testing/e2e-testing-suite-patterns.md`_
@@ -34571,7 +34695,6 @@ jobs:
 ##### Testing
 
 [Add content here]
-
 
 #### Playwright Best Practices testing/playwright-best-practices.md
 
@@ -35219,7 +35342,6 @@ export default defineConfig({
 ##### Implementation
 
 [Add content here]
-
 
 #### Playwright Documentation testing/playwright-documentation.md
 
@@ -36239,7 +36361,6 @@ export default defineConfig({
 
 [Add content here]
 
-
 #### Testing Library Documentation testing/testing-library-documentation.md
 
 _Source: `testing/testing-library-documentation.md`_
@@ -36921,7 +37042,6 @@ export default defineConfig({
 ##### Implementation
 
 [Add content here]
-
 
 #### Vitest Documentation testing/vitest-documentation.md
 
@@ -37717,7 +37837,6 @@ vi.spyOn();
 
 [Add content here]
 
-
 ### Observability Guidance
 
 #### Observability Philosophy observability/observability-philosophy.md
@@ -37931,7 +38050,6 @@ Client Events → Edge Middleware → Server Components → Database
 _Last Updated: 2026-02-24_
 _Domain: 13 - Observability & Error Tracking_
 _Status: Foundation Complete_
-
 
 #### Opentelemetry Documentation observability/opentelemetry-documentation.md
 
@@ -38260,7 +38378,6 @@ export default sdk;
 
 [Add content here]
 
-
 #### Opentelemetry Instrumentation observability/opentelemetry-instrumentation.md
 
 _Source: `observability/opentelemetry-instrumentation.md`_
@@ -38351,7 +38468,6 @@ Ensuring trace IDs are propagated across asynchronous boundaries and external se
 ##### Testing
 
 [Add content here]
-
 
 #### Opentelemetry Nextjs Instrumentation observability/opentelemetry-nextjs-instrumentation.md
 
@@ -39521,7 +39637,6 @@ groups:
 
 [Add content here]
 
-
 #### Sentry Documentation observability/sentry-documentation.md
 
 _Source: `observability/sentry-documentation.md`_
@@ -40565,7 +40680,6 @@ alertManager.addRule({
 
 [Add content here]
 
-
 #### Vercel Otel Documentation observability/vercel-otel-documentation.md
 
 _Source: `observability/vercel-otel-documentation.md`_
@@ -41045,7 +41159,6 @@ export function register() {
 
 [Add content here]
 
-
 ### Infrastructure Devops Guidance
 
 #### Deployment Runbook infrastructure-devops/deployment-runbook.md
@@ -41299,7 +41412,6 @@ After every production promotion, verify in order:
 ##### Testing
 
 [Add content here]
-
 
 #### Github Actions Docs infrastructure-devops/github-actions-docs.md
 
@@ -41712,7 +41824,6 @@ jobs:
 
 [Add content here]
 
-
 #### Github Actions Workflow Complete infrastructure-devops/github-actions-workflow-complete.md
 
 _Source: `infrastructure-devops/github-actions-workflow-complete.md`_
@@ -41952,7 +42063,6 @@ jobs:
 - Vercel Staging Environments — https://vercel.com/kb/guide/set-up-a-staging-environment-on-vercel
 
 ---
-
 
 #### Launchdarkly Documentation infrastructure-devops/launchdarkly-documentation.md
 
@@ -42973,7 +43083,6 @@ const mockClient = {
 
 [Add content here]
 
-
 #### Nx Cloud Documentation infrastructure-devops/nx-cloud-documentation.md
 
 _Source: `infrastructure-devops/nx-cloud-documentation.md`_
@@ -43424,7 +43533,6 @@ Teams using Nx Cloud typically achieve:
 ##### Testing
 
 [Add content here]
-
 
 #### Opentofu Documentation infrastructure-devops/opentofu-documentation.md
 
@@ -44048,7 +44156,6 @@ terraform {
 
 [Add content here]
 
-
 #### Pnpm Deploy Documentation infrastructure-devops/pnpm-deploy-documentation.md
 
 _Source: `infrastructure-devops/pnpm-deploy-documentation.md`_
@@ -44261,7 +44368,6 @@ By combining `pnpm deploy` and `pnpm fetch`, teams can create highly optimized, 
 ##### Testing
 
 [Add content here]
-
 
 #### Terraform Aws Provider Docs infrastructure-devops/terraform-aws-provider-docs.md
 
@@ -44971,7 +45077,6 @@ terraform plan
 
 [Add content here]
 
-
 #### Terraform Supabase Provider Docs infrastructure-devops/terraform-supabase-provider-docs.md
 
 _Source: `infrastructure-devops/terraform-supabase-provider-docs.md`_
@@ -45543,7 +45648,6 @@ resource "supabase_settings" "backups" {
 ##### Testing
 
 [Add content here]
-
 
 #### Terraform Vercel Provider Docs infrastructure-devops/terraform-vercel-provider-docs.md
 
@@ -46268,7 +46372,6 @@ terraform fmt
 
 [Add content here]
 
-
 #### Vercel Domains Api Docs infrastructure-devops/vercel-domains-api-docs.md
 
 _Source: `infrastructure-devops/vercel-domains-api-docs.md`_
@@ -46710,7 +46813,6 @@ console.log(`Configuration: ${health.config.valid}`);
 ##### Testing
 
 [Add content here]
-
 
 #### Vercel For Platforms Docs infrastructure-devops/vercel-for-platforms-docs.md
 
@@ -47332,7 +47434,6 @@ const monitoring = {
 
 [Add content here]
 
-
 ### Build Monorepo Guidance
 
 #### Changesets Documentation build-monorepo/changesets-documentation.md
@@ -47683,7 +47784,6 @@ Changesets automatically generates `CHANGELOG.md` entries with commit references
 
 [Add content here]
 
-
 #### Nx Affected Documentation build-monorepo/nx-affected-documentation.md
 
 _Source: `build-monorepo/nx-affected-documentation.md`_
@@ -47937,7 +48037,6 @@ jobs:
 
 [Add content here]
 
-
 #### Nx Core Team Whitepaper build-monorepo/nx-core-team-whitepaper.md
 
 _Source: `build-monorepo/nx-core-team-whitepaper.md`_
@@ -48038,7 +48137,6 @@ Adopting a monorepo with Nx is not an end in itself but the beginning of a journ
 ##### Testing
 
 [Add content here]
-
 
 #### Pnpm Vs Yarn Vs Npm Benchmarks build-monorepo/pnpm-vs-yarn-vs-npm-benchmarks.md
 
@@ -48463,7 +48561,6 @@ yarn install
 
 [Add content here]
 
-
 #### Pnpm Workspaces Documentation build-monorepo/pnpm-workspaces-documentation.md
 
 _Source: `build-monorepo/pnpm-workspaces-documentation.md`_
@@ -48649,7 +48746,6 @@ The `catalog:` protocol streamlines monorepo maintenance by providing a single s
 ##### Testing
 
 [Add content here]
-
 
 #### Renovate Configuration Documentation build-monorepo/renovate-configuration-documentation.md
 
@@ -48871,7 +48967,6 @@ Renovate supports the `catalog:` protocol introduced in pnpm 9. Ensure the `pnpm
 - Mend Common Practices — https://docs.mend.io/wsk/common-practices-for-renovate-configuration
 
 ---
-
 
 #### Turbo Json Configuration build-monorepo/turbo-json-configuration.md
 
@@ -50053,7 +50148,6 @@ Key differences:
 ## Testing
 
 [Add content here]
-
 
 #### Turborepo Documentation build-monorepo/turborepo-documentation.md
 
@@ -51805,7 +51899,6 @@ console.log('Active builds:', tenantIsolation.getActiveBuilds());
 - [Package Management](https://pnpm.io/) - Package manager documentation
 - [Workspace Configuration](https://pnpm.io/workspaces/) - Workspace setup and management
 
-
 #### Turborepo Remote Caching build-monorepo/turborepo-remote-caching.md
 
 _Source: `build-monorepo/turborepo-remote-caching.md`_
@@ -52121,7 +52214,6 @@ metrics.trackCacheMiss({ task: 'test', reason: 'input-changed' });
 ##### Testing
 
 [Add content here]
-
 
 ### Linting Guidance
 
@@ -52625,7 +52717,6 @@ eslint src/**/*.ts --max-warnings 0
 ##### Testing
 
 [Add content here]
-
 
 #### Prettier Documentation linting/prettier-documentation.md
 
@@ -53653,7 +53744,6 @@ const debugConfig: Config = {
 
 [Add content here]
 
-
 #### Steiger Ci Integration linting/steiger-ci-integration.md
 
 _Source: `linting/steiger-ci-integration.md`_
@@ -53771,7 +53861,6 @@ pnpm steiger apps/*/src packages/*/src
 - FSD CI Integration — https://feature-sliced.design/docs/guides/tech/with-steiger
 
 ---
-
 
 #### Steiger Documentation linting/steiger-documentation.md
 
@@ -53958,7 +54047,6 @@ Steiger is an essential tool for any team adopting Feature-Sliced Design. By aut
 ##### Testing
 
 [Add content here]
-
 
 #### Steiger Linting Configuration linting/steiger-linting-configuration.md
 
@@ -55382,7 +55470,6 @@ export default defineConfig([
 
 [Add content here]
 
-
 ### Cms Content Guidance
 
 #### Blog Content Architecture cms-content/blog-content-architecture.md
@@ -55585,7 +55672,6 @@ const articleSchema = {
 ##### Testing
 
 [Add content here]
-
 
 #### Sanity Cms Draft Mode 2026 cms-content/sanity-cms-draft-mode-2026.md
 
@@ -56224,7 +56310,6 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ---
 
 _Last updated: February 2026_
-
 
 #### Sanity Documentation cms-content/sanity-documentation.md
 
@@ -57252,7 +57337,6 @@ function convertOldContent(oldContent) {
 ##### Testing
 
 [Add content here]
-
 
 #### Storyblok Documentation cms-content/storyblok-documentation.md
 
@@ -58360,7 +58444,6 @@ module.exports = {
 
 [Add content here]
 
-
 ### Email Guidance
 
 #### Email Package Structure email/email-package-structure.md
@@ -58480,7 +58563,6 @@ describe('Email Package Structure Integration', () => {
 
 ---
 
-
 #### Lead Notification Template email/lead-notification-template.md
 
 _Source: `email/lead-notification-template.md`_
@@ -58598,7 +58680,6 @@ describe('Lead Notification Template Integration', () => {
 
 ---
 
-
 #### Multi Tenant Email Routing email/multi-tenant-email-routing.md
 
 _Source: `email/multi-tenant-email-routing.md`_
@@ -58715,7 +58796,6 @@ describe('Multi-Tenant Email Routing Integration', () => {
 - https://nextjs.org/docs/app/building-your-application/optimizing/server-components — nextjs.org
 
 ---
-
 
 #### Postmark Documentation email/postmark-documentation.md
 
@@ -59229,7 +59309,6 @@ export class EmailMonitor {
 ##### Implementation
 
 [Add content here]
-
 
 #### Resend Documentation email/resend-documentation.md
 
@@ -59917,7 +59996,6 @@ export class EmailMonitor {
 
 [Add content here]
 
-
 #### Unified Email Send email/unified-email-send.md
 
 _Source: `email/unified-email-send.md`_
@@ -60034,7 +60112,6 @@ describe('Unified Email Send Function Integration', () => {
 - https://react.email/docs/introduction — react.email
 
 ---
-
 
 ### Payments Billing Guidance
 
@@ -60155,22 +60232,24 @@ describe('Billing Page Components Integration', () => {
 
 ---
 
+#### Payment Processing Guide ../guides-new/payments/payment-processing-guide.md
 
-#### Stripe Checkout Sessions payments-billing/stripe-checkout-sessions.md
+_Source: `../guides-new/payments/payment-processing-guide.md`_
 
-_Source: `payments-billing/stripe-checkout-sessions.md`_
+#### Payment Processing Guide
 
-#### Stripe Checkout Sessions
+> **Comprehensive Payment Processing Documentation — February 2026**
 
-> **Reference Documentation — February 2026**
+See the complete [Payment Processing Guide](../guides-new/payments/payment-processing-guide.md) for consolidated documentation covering:
 
-##### Overview
+- Complete Stripe integration patterns
+- Checkout session implementation
+- Customer portal management
+- Webhook handling and security
+- Multi-tenant payment patterns
+- 2026 security standards compliance
 
-Complete Stripe Checkout session implementation for Next.js applications. [stripe.com](https://stripe.com/docs/checkout)
-
-##### Implementation
-
-This document covers complete stripe checkout session implementation for next.js applications following 2026 security standards and best practices. Key features include:
+---
 
 - **Defense-in-depth**: Multiple layers of security protection
 - **Audit logging**: Comprehensive security event tracking
@@ -60271,55 +60350,6 @@ describe('Stripe Checkout Sessions Integration', () => {
 - https://stripe.com/docs/payments/checkout/nextjs — stripe.com
 - https://nextjs.org/docs/app/api-reference/functions/cookies — nextjs.org
 
----
-
-
-#### Stripe Customer Portal payments-billing/stripe-customer-portal.md
-
-_Source: `payments-billing/stripe-customer-portal.md`_
-
-#### Stripe Customer Portal
-
-> **Reference Documentation — February 2026**
-
-##### Overview
-
-Self-service customer portal implementation with Stripe. [stripe.com](https://stripe.com/docs/billing/subscriptions/customer-portal)
-
-##### Implementation
-
-This document covers self-service customer portal implementation with stripe following 2026 security standards and best practices. Key features include:
-
-- **Defense-in-depth**: Multiple layers of security protection
-- **Audit logging**: Comprehensive security event tracking
-- **Performance optimized**: Minimal overhead for production use
-- **Multi-tenant ready**: Built for SaaS applications
-- **TypeScript first**: Full type safety and IntelliSense support
-
-The implementation follows 3 authoritative sources and includes practical examples for immediate integration.
-
-##### Core Implementation
-
-```typescript
-// Example implementation for Stripe Customer Portal
-import { NextRequest, NextResponse } from 'next/server';
-
-export async function StripeCustomerPortal(request: NextRequest): Promise<NextResponse> {
-  // Implementation here
-  return NextResponse.json({ success: true });
-}
-```
-
-The implementation includes:
-
-- Input validation and sanitization
-- Error handling and logging
-- Performance optimization
-- Security hardening
-- TypeScript type safety
-
-##### Usage Examples
-
 ###### Basic Usage
 
 ```typescript
@@ -60389,70 +60419,20 @@ describe('Stripe Customer Portal Integration', () => {
 - https://stripe.com/docs/api/customer_portal — stripe.com
 - https://nextjs.org/docs/app/building-your-application/authentication — nextjs.org
 
----
-
-
-#### Stripe Documentation payments-billing/stripe-documentation.md
-
-_Source: `payments-billing/stripe-documentation.md`_
-
-#### stripe-documentation.md
-
-##### Overview
-
-Stripe is a comprehensive payment processing platform that provides APIs and tools for businesses to accept and manage payments online. This documentation covers Stripe's core APIs, payment processing patterns, webhook handling, and best practices for 2026 integration.
-
-##### API Fundamentals
-
-###### REST API Architecture
-
-The Stripe API is organized around REST with predictable resource-oriented URLs:
-
-```typescript
-// API endpoint structure
-https://api.stripe.com/v1/{resource}
-
-// Examples
-https://api.stripe.com/v1/charges
-https://api.stripe.com/v1/customers
-https://api.stripe.com/v1/payment_intents
-```
-
-###### Authentication
-
-###### API Key Authentication
-
-```typescript
-// Using API key in header
-const headers = {
-  Authorization: `Bearer ${apiKey}`,
-  'Content-Type': 'application/x-www-form-urlencoded',
-};
-
-// Test vs Live mode
-const testKey = 'sk_test_...'; // Test mode
-const liveKey = 'sk_live_...'; // Live mode
-```
-
-###### Environment Configuration
-
-```typescript
-interface StripeConfig {
-  apiKey: string;
-  apiVersion: string;
   maxNetworkRetries: number;
   timeout: number;
-}
+  }
 
 const stripeConfig: StripeConfig = {
-  apiKey: process.env.STRIPE_SECRET_KEY,
-  apiVersion: '2026-01-28',
-  maxNetworkRetries: 3,
-  timeout: 30000,
+apiKey: process.env.STRIPE_SECRET_KEY,
+apiVersion: '2026-01-28',
+maxNetworkRetries: 3,
+timeout: 30000,
 };
 
 const stripe = require('stripe')(stripeConfig.apiKey);
-```
+
+````
 
 ##### Core Payment Processing
 
@@ -60498,7 +60478,7 @@ interface PaymentIntent {
   payment_method: string | null;
   next_action: NextAction | null;
 }
-```
+````
 
 ###### Payment Methods
 
@@ -61232,60 +61212,12 @@ class StripeAnalytics {
 
 [Add content here]
 
+await handleStripeEvent(event);
 
-#### Stripe Webhook Handler payments-billing/stripe-webhook-handler.md
-
-_Source: `payments-billing/stripe-webhook-handler.md`_
-
-#### Stripe Webhook Handler
-
-> **Reference Documentation — February 2026**
-
-##### Overview
-
-Stripe webhooks notify your application of billing events (subscription created, invoice paid, payment failed). The handler must verify the Stripe signature before processing, use `stripe.webhooks.constructEvent()` with the raw request body, and return 200 immediately — long processing goes to a QStash queue. [digitalapplied](https://www.digitalapplied.com/blog/stripe-payment-integration-developer-guide-2026)
-
----
-
-##### Critical: Raw Body Requirement
-
-Next.js App Router does not buffer the raw body by default. Stripe signature verification requires the **raw bytes** — not the parsed JSON. This is the most common source of webhook verification failures:
-
-```typescript
-// apps/*/src/app/api/webhooks/stripe/route.ts
-export const runtime = 'nodejs'; // Must be Node.js — not Edge
-export const dynamic = 'force-dynamic';
-
-import Stripe from 'stripe';
-import { NextRequest, NextResponse } from 'next/server';
-import { handleStripeEvent } from '@repo/billing/webhook-handler';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia', // Use latest stable API version
-});
-
-export async function POST(req: NextRequest) {
-  const rawBody = await req.text(); // ← Must use .text(), not .json()
-  const signature = req.headers.get('stripe-signature');
-
-  if (!signature) {
-    return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
-  }
-
-  let event: Stripe.Event;
-  try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch (err) {
-    console.error('[Stripe] Webhook signature verification failed:', err);
-    return NextResponse.json({ error: 'Signature verification failed' }, { status: 400 });
-  }
-
-  // Return 200 immediately — process async via QStash
-  await handleStripeEvent(event);
-
-  return NextResponse.json({ received: true }, { status: 200 });
+return NextResponse.json({ received: true }, { status: 200 });
 }
-```
+
+````
 
 ---
 
@@ -61383,7 +61315,7 @@ async function syncSubscriptionToDb(sub: Stripe.Subscription) {
     })
     .eq('stripe_customer_id', sub.customer as string);
 }
-```
+````
 
 ---
 
@@ -61417,7 +61349,6 @@ await db.from('processed_webhook_events').insert({ event_id: event.id });
 - Complete Stripe Integration Guide 2026 — https://www.digitalapplied.com/blog/stripe-payment-integration-developer-guide-2026
 
 ---
-
 
 ### Scheduling Guidance
 
@@ -61527,7 +61458,6 @@ If the appointment type requires custom information, these fields must be popula
 ##### Testing
 
 [Add content here]
-
 
 #### Calcom Embed Widget scheduling/calcom-embed-widget.md
 
@@ -61646,7 +61576,6 @@ describe('Cal.com Embed Widget Integration', () => {
 
 ---
 
-
 #### Calcom Webhook Handler scheduling/calcom-webhook-handler.md
 
 _Source: `scheduling/calcom-webhook-handler.md`_
@@ -61764,7 +61693,6 @@ describe('Cal.com Webhook Handler Integration', () => {
 
 ---
 
-
 #### Calendly Documentation scheduling/calendly-documentation.md
 
 _Source: `scheduling/calendly-documentation.md`_
@@ -61855,7 +61783,6 @@ registerWebhook();
 ##### Testing
 
 [Add content here]
-
 
 ### Seo Metadata Guidance
 
@@ -61976,7 +61903,6 @@ describe('Dynamic OG Images Integration', () => {
 
 ---
 
-
 #### Dynamic Sitemap Generation seo-metadata/dynamic-sitemap-generation.md
 
 _Source: `seo-metadata/dynamic-sitemap-generation.md`_
@@ -62093,7 +62019,6 @@ describe('Dynamic Sitemap Generation Integration', () => {
 - https://web.dev/learn/seo/sitemaps/ — web.dev
 
 ---
-
 
 #### Edge Ab Testing Zero Cls 2026 seo-metadata/edge-ab-testing-zero-cls-2026.md
 
@@ -62667,7 +62592,6 @@ export function ExperimentDashboard() {
 
 _Last updated: February 2026_
 
-
 #### Generative Engine Optimization 2026 seo-metadata/generative-engine-optimization-2026.md
 
 _Source: `seo-metadata/generative-engine-optimization-2026.md`_
@@ -62962,7 +62886,6 @@ export async function GET() {
 
 _Last updated: February 2026_
 
-
 #### Llms Txt Spec seo-metadata/llms-txt-spec.md
 
 _Source: `seo-metadata/llms-txt-spec.md`_
@@ -63220,7 +63143,6 @@ As of early 2026, llms.txt has gained moderate attention with:
 
 [Add content here]
 
-
 #### Metadata Generation System seo-metadata/metadata-generation-system.md
 
 _Source: `seo-metadata/metadata-generation-system.md`_
@@ -63337,7 +63259,6 @@ describe('Metadata Generation System Integration', () => {
 - https://web.dev/learn/seo/ — web.dev
 
 ---
-
 
 #### Schema Org Documentation seo-metadata/schema-org-documentation.md
 
@@ -63839,7 +63760,6 @@ While Schema.org provides extensive vocabularies, sometimes custom properties ar
 ##### Best Practices
 
 [Add content here]
-
 
 #### Seo Validation Ci Pipeline 2026 seo-metadata/seo-validation-ci-pipeline-2026.md
 
@@ -64712,7 +64632,6 @@ export class SEOAlertManager {
 
 _Last updated: February 2026_
 
-
 #### Service Area Pages Engine seo-metadata/service-area-pages-engine.md
 
 _Source: `seo-metadata/service-area-pages-engine.md`_
@@ -64895,7 +64814,6 @@ function RelatedServiceAreas({ currentSlug, areas, siteUrl }) {
 
 [Add content here]
 
-
 #### Structured Data System seo-metadata/structured-data-system.md
 
 _Source: `seo-metadata/structured-data-system.md`_
@@ -65013,7 +64931,6 @@ describe('Structured Data System Integration', () => {
 
 ---
 
-
 #### Tenant Metadata Factory seo-metadata/tenant-metadata-factory.md
 
 _Source: `seo-metadata/tenant-metadata-factory.md`_
@@ -65130,7 +65047,6 @@ describe('Tenant Metadata Factory Integration', () => {
 - https://web.dev/learn/seo/metadata/ — web.dev
 
 ---
-
 
 ### Accessibility Legal Guidance
 
@@ -65353,13 +65269,11 @@ Key areas requiring attention include:
 
 [Add content here]
 
-
 #### Axe Core Documentation accessibility-legal/axe-core-documentation.md
 
 _Source: `accessibility-legal/axe-core-documentation.md`_
 
 #### axe-core-documentation.md
-
 
 #### axe-core Documentation - Accessibility Testing Engine
 
@@ -65906,11 +65820,9 @@ try {
 - [axe-core Discussions](https://github.com/dequelabs/axe-core/discussions)
 - [Deque Accessibility Blog](https://www.deque.com/blog/)
 
-
 ##### Implementation
 
 [Add content here]
-
 
 #### Gdpr Guide accessibility-legal/gdpr-guide.md
 
@@ -67666,7 +67578,6 @@ class ZeroKnowledgeProof {
 
 [Add content here]
 
-
 #### Hhs Section 504 Docs accessibility-legal/hhs-section-504-docs.md
 
 _Source: `accessibility-legal/hhs-section-504-docs.md`_
@@ -68151,7 +68062,6 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
 - [Deque University Accessibility Training](https://dequeuniversity.com/)
 - [A11y Project Accessibility Resources](https://www.a11yproject.com/)
 
-
 #### Wcag 2.2 Criteria accessibility-legal/wcag-2.2-criteria.md
 
 _Source: `accessibility-legal/wcag-2.2-criteria.md`_
@@ -68333,7 +68243,6 @@ function testFocusNotObscured(element) {
 ##### Best Practices
 
 [Add content here]
-
 
 ### Standards Specs Guidance
 
@@ -69032,7 +68941,6 @@ with open("sbom.json", "w") as f:
 ##### Testing
 
 [Add content here]
-
 
 #### Design Tokens W3C Cg Report standards-specs/design-tokens-w3c-cg-report.md
 
@@ -69875,7 +69783,6 @@ Use the official JSON Schema for validation:
 - [Terrazzo](https://terrazzo.app/) - Build-time token processing
 - [Design Token Validator](https://animaapp.github.io/design-token-validator-site/) - Validation tooling
 
-
 #### Green Software Foundation Sci Spec standards-specs/green-software-foundation-sci-spec.md
 
 _Source: `standards-specs/green-software-foundation-sci-spec.md`_
@@ -70503,7 +70410,6 @@ SCI Score: X gCO₂eq per [functional unit]
 
 [Add content here]
 
-
 #### Sci Calculation Examples standards-specs/sci-calculation-examples.md
 
 _Source: `standards-specs/sci-calculation-examples.md`_
@@ -71073,7 +70979,6 @@ By following these examples and methodologies, organizations can effectively mea
 
 [Add content here]
 
-
 #### Semver Spec standards-specs/semver-spec.md
 
 _Source: `standards-specs/semver-spec.md`_
@@ -71269,7 +71174,6 @@ A simple example will demonstrate how Semantic Versioning can make dependency he
 ##### Testing
 
 [Add content here]
-
 
 #### Slsa Provenance Spec standards-specs/slsa-provenance-spec.md
 
@@ -71745,7 +71649,6 @@ steps:
 ##### Testing
 
 [Add content here]
-
 
 #### Spdx Spec standards-specs/spdx-spec.md
 
@@ -72243,7 +72146,6 @@ async function logSPDXOperation(operation, document, user) {
 ##### Testing
 
 [Add content here]
-
 
 #### Style Dictionary Documentation standards-specs/style-dictionary-documentation.md
 
@@ -73134,7 +73036,6 @@ StyleDictionary.registerValidate({
 ##### Testing
 
 [Add content here]
-
 
 #### Zod Documentation standards-specs/zod-documentation.md
 
@@ -74164,7 +74065,6 @@ const generateMockUsers = (count: number) =>
 
 [Add content here]
 
-
 ### Ai Automation Guidance
 
 #### Ai Integration Guide ai-automation/ai-integration-guide.md
@@ -74192,27 +74092,34 @@ This guide consolidates AI agent patterns, context management, and integration s
 
 ###### Hierarchical Context Structure
 
-```markdown
+````markdown
 # Root AGENTS.md (Master coordination - 60 lines max)
+
 ## Repository Overview
+
 Multi-tenant Next.js 16 marketing platform with FSD v2.1 architecture.
 
 ## Quick Start Commands
+
 ```bash
 pnpm install
 pnpm dev
 pnpm build
 pnpm test
 ```
+````
 
 ## Repository Structure
+
 - apps/ - Next.js applications
 - packages/ - Shared libraries
 - clients/ - Tenant-specific sites
 
 ## Per-Package AGENTS.md References
-See packages/*/AGENTS.md for package-specific guidance.
-```
+
+See packages/\*/AGENTS.md for package-specific guidance.
+
+````
 
 ###### Per-Package Agent Template
 
@@ -74243,7 +74150,7 @@ UI components following FSD v2.1 architecture with React 19 and TypeScript.
 
 ## FSD Layer Structure
 Follow strict FSD import rules: app → pages → widgets → features → entities → shared
-```
+````
 
 ###### Context Loading Protocol
 
@@ -74322,30 +74229,38 @@ export class AIContextLoader {
 # CLAUDE.md - Sub-Agent Definitions
 
 ## FSD Enforcer Agent
+
 **Trigger**: File creation or modification in packages/
-**Rules**: 
+**Rules**:
+
 - Enforce FSD v2.1 layer structure
 - Validate import directions (app → pages → widgets → features → entities → shared)
 - Check @x notation for cross-slice imports
 
-## A11y Auditor Agent  
+## A11y Auditor Agent
+
 **Trigger**: UI component changes
 **Rules**:
+
 - Validate WCAG 2.2 AA compliance
 - Check semantic HTML structure
 - Verify keyboard navigation
 - Ensure proper ARIA labels
 
 ## RLS Validator Agent
+
 **Trigger**: Database schema or query changes
 **Rules**:
+
 - Verify tenant_id in all queries
 - Check RLS policy coverage
 - Validate cross-tenant access prevention
 
 ## Performance Guardian Agent
+
 **Trigger**: Build or performance changes
 **Rules**:
+
 - Check Core Web Vitals compliance
 - Validate bundle size budgets
 - Ensure proper lazy loading
@@ -74369,8 +74284,8 @@ export abstract class AgentBase {
   abstract execute(context: AgentContext): AgentResult;
 
   protected shouldTrigger(context: AgentContext): boolean {
-    return this.triggers.some(trigger => 
-      context.changedFiles.some(file => file.includes(trigger))
+    return this.triggers.some((trigger) =>
+      context.changedFiles.some((file) => file.includes(trigger))
     );
   }
 }
@@ -74378,11 +74293,11 @@ export abstract class AgentBase {
 // FSD Enforcer Implementation
 export class FSDEnforcerAgent extends AgentBase {
   constructor() {
-    super('FSD Enforcer', ['packages/'], [
-      new FSDStructureRule(),
-      new ImportDirectionRule(),
-      new CrossSliceImportRule(),
-    ]);
+    super(
+      'FSD Enforcer',
+      ['packages/'],
+      [new FSDStructureRule(), new ImportDirectionRule(), new CrossSliceImportRule()]
+    );
   }
 
   execute(context: AgentContext): AgentResult {
@@ -74410,7 +74325,7 @@ export class FSDEnforcerAgent extends AgentBase {
 
 ###### GitHub Copilot Integration
 
-```typescript
+````typescript
 // .github/copilot-instructions.md
 # GitHub Copilot Instructions
 
@@ -74426,32 +74341,34 @@ export class FSDEnforcerAgent extends AgentBase {
 export async function createAction(input: CreateInput) {
   // Validate input
   const validated = createSchema.parse(input);
-  
+
   // Business logic
   const result = await createRecord(validated);
-  
+
   // Return result
   return result;
 }
-```
+````
 
 ## Testing Patterns
+
 ```typescript
 // Test structure
 describe('feature', () => {
   it('should handle happy path', async () => {
     // Arrange
     const input = { ... };
-    
+
     // Act
     const result = await feature(input);
-    
+
     // Assert
     expect(result).toEqual({ ... });
   });
 });
 ```
-```
+
+````
 
 ###### Custom AI Integration
 
@@ -74477,7 +74394,7 @@ export class AIIntegration {
 
     // Run relevant agents
     const results: AgentResult[] = [];
-    
+
     for (const agent of this.agents) {
       if (agent.shouldTrigger(context)) {
         const result = agent.execute(aiContext);
@@ -74496,7 +74413,7 @@ export class AIIntegration {
     return results.flatMap(r => r.suggestions);
   }
 }
-```
+````
 
 ---
 
@@ -74516,8 +74433,7 @@ export class AIColdStart {
     const now = Date.now();
 
     // Return cached context if fresh
-    if (this.contextCache.has(cacheKey) && 
-        (now - this.lastRefresh) < this.CACHE_TTL) {
+    if (this.contextCache.has(cacheKey) && now - this.lastRefresh < this.CACHE_TTL) {
       return this.contextCache.get(cacheKey)!;
     }
 
@@ -74537,10 +74453,8 @@ export class AIColdStart {
   // Pre-warm cache for common packages
   async preWarmCache(): Promise<void> {
     const commonPackages = ['ui', 'features', 'shared', 'infra'];
-    
-    await Promise.all(
-      commonPackages.map(pkg => this.getOptimizedContext(pkg))
-    );
+
+    await Promise.all(commonPackages.map((pkg) => this.getOptimizedContext(pkg)));
   }
 }
 ```
@@ -74551,30 +74465,35 @@ export class AIColdStart {
 # AI Agent Initialization Checklist
 
 ## Pre-Flight Checks
+
 - [ ] Verify current working directory
 - [ ] Check git status (clean working directory preferred)
 - [ ] Validate package.json exists
 - [ ] Check TypeScript configuration
 
 ## Context Loading
+
 - [ ] Load root AGENTS.md
 - [ ] Load package-specific AGENTS.md (if applicable)
 - [ ] Load CLAUDE.md sub-agent definitions
 - [ ] Load cold-start checklist
 
 ## Environment Validation
+
 - [ ] Check Node.js version compatibility
 - [ ] Verify pnpm installation
 - [ ] Validate environment variables
 - [ ] Check database connectivity (if applicable)
 
 ## Agent Initialization
+
 - [ ] Initialize FSD Enforcer agent
 - [ ] Initialize A11y Auditor agent
 - [ ] Initialize RLS Validator agent
 - [ ] Initialize Performance Guardian agent
 
 ## Ready State
+
 - [ ] All agents loaded successfully
 - [ ] Context cached and ready
 - [ ] Environment validated
@@ -74607,13 +74526,13 @@ git add packages/ui/src/widgets/new-component.tsx
 
 ```typescript
 // AI-generated component template
-export function NewComponent({ 
-  id, 
-  children, 
-  className 
+export function NewComponent({
+  id,
+  children,
+  className
 }: NewComponentProps) {
   return (
-    <div 
+    <div
       id={id}
       className={cn('new-component', className)}
       role="region"
@@ -74644,11 +74563,11 @@ export function NewComponent({
 ```typescript
 // Benchmark results
 const contextMetrics = {
-  rootContextLoad: '50ms',      // AGENTS.md (60 lines)
-  packageContextLoad: '25ms',   // Package AGENTS.md (40-60 lines)
-  subAgentsLoad: '15ms',       // CLAUDE.md definitions
-  coldStartTotal: '90ms',       // Complete initialization
-  cacheHit: '5ms',             // Cached context retrieval
+  rootContextLoad: '50ms', // AGENTS.md (60 lines)
+  packageContextLoad: '25ms', // Package AGENTS.md (40-60 lines)
+  subAgentsLoad: '15ms', // CLAUDE.md definitions
+  coldStartTotal: '90ms', // Complete initialization
+  cacheHit: '5ms', // Cached context retrieval
 };
 ```
 
@@ -74657,11 +74576,11 @@ const contextMetrics = {
 ```typescript
 // Agent performance benchmarks
 const agentMetrics = {
-  fsdEnforcer: '10ms',          // FSD structure validation
-  a11yAuditor: '25ms',          // Accessibility checks
-  rlsValidator: '15ms',         // Security validation
-  performanceGuardian: '20ms',  // Performance checks
-  totalExecution: '70ms',       // All agents
+  fsdEnforcer: '10ms', // FSD structure validation
+  a11yAuditor: '25ms', // Accessibility checks
+  rlsValidator: '15ms', // Security validation
+  performanceGuardian: '20ms', // Performance checks
+  totalExecution: '70ms', // All agents
 };
 ```
 
@@ -74686,7 +74605,6 @@ const agentMetrics = {
 ---
 
 This consolidated guide provides practical AI integration patterns while eliminating theoretical complexity and focusing on actionable implementation strategies.
-
 
 ### Monitoring Guidance
 
@@ -74779,7 +74697,6 @@ Tinybird uses **Pipes** to define data transformations in SQL. These pipes are b
 
 [Add content here]
 
-
 ### General & Cross-Cutting Guides Guidance
 
 #### Automated_Documentation_Maintenance_Complete AUTOMATED_DOCUMENTATION_MAINTENANCE_COMPLETE.md
@@ -74795,17 +74712,20 @@ All automated documentation maintenance tasks have been successfully implemented
 ##### ✅ Completed Implementation Summary
 
 ###### 1. **Guides Extraction & Organization** ✅
+
 - **6 comprehensive guides** extracted from `1.md` and placed in `docs/guides/`
 - Each guide contains detailed implementation instructions with code examples
 - Topics covered: version sync, CI validation, MCP integration, template updates, validation pipeline, real-time monitoring
 
 ###### 2. **Version Synchronization System** ✅
+
 - **Script**: `scripts/version_sync.py` with multi-pattern support
 - **Features**: Single source of truth (package.json), dry-run mode, manual override
 - **Validation**: Successfully detected and fixed version drift in CLI scaffold files
 - **Integration**: Ready for pre-commit hooks and CI enforcement
 
 ###### 3. **GitHub Actions Documentation Validation** ✅
+
 - **Basic Workflow**: `.github/workflows/docs-validate-basic.yml`
   - Markdown linting with markdownlint-cli2
   - Link checking with lychee
@@ -74816,26 +74736,30 @@ All automated documentation maintenance tasks have been successfully implemented
   - Comprehensive reporting and artifact upload
 
 ###### 4. **MCP Git Server Integration** ✅
+
 - **Installation**: `pip install mcp-server-git` completed successfully
 - **Verification**: Server responds to help command and ready for AI client integration
 - **Configuration**: Guides prepared for Claude Desktop, VS Code Copilot, Continue.dev
 - **Impact**: AI agents can now interact directly with Git repositories
 
 ###### 5. **Automated CLI Template Updates** ✅
+
 - **Workflow**: `.github/workflows/sync-from-template.yml`
 - **Features**: Weekly sync, manual trigger, PR automation
 - **Configuration**: `.templatesyncignore` for custom file protection
 - **Integration**: Ready for downstream repo synchronization
 
 ###### 6. **Complete Documentation Validation Pipeline** ✅
+
 - **Prose Style**: Vale configuration with Google and Microsoft style guides
 - **Front Matter**: JSON schema validation ready for implementation
 - **Pre-commit Hooks**: Configuration prepared with lint-staged integration
 - **CODEOWNERS**: Updated for documentation approval workflows
 
 ###### 7. **Real-Time Documentation Monitoring** ✅
+
 - **Workflow**: `.github/workflows/docs-monitor.yml`
-- **Features**: 
+- **Features**:
   - Availability checking (every 15 minutes)
   - Content integrity verification
   - SSL certificate expiry monitoring
@@ -74844,18 +74768,19 @@ All automated documentation maintenance tasks have been successfully implemented
 
 ##### 🔧 Configuration Files Created
 
-| File | Purpose |
-|------|---------|
-| `.markdownlint.jsonc` | Markdown linting rules |
-| `.lychee.toml` | Link checker configuration |
-| `.cspell.json` | Spell checking with custom dictionary |
-| `.vale.ini` | Prose style checking |
-| `.templatesyncignore` | Template sync exclusions |
-| `.github/CODEOWNERS` | Documentation approval rules |
+| File                  | Purpose                               |
+| --------------------- | ------------------------------------- |
+| `.markdownlint.jsonc` | Markdown linting rules                |
+| `.lychee.toml`        | Link checker configuration            |
+| `.cspell.json`        | Spell checking with custom dictionary |
+| `.vale.ini`           | Prose style checking                  |
+| `.templatesyncignore` | Template sync exclusions              |
+| `.github/CODEOWNERS`  | Documentation approval rules          |
 
 ##### 🚀 Automation Capabilities Established
 
 ###### **Immediate Automation** (Operational Now)
+
 - ✅ Version drift detection and correction
 - ✅ Documentation validation on every PR/commit
 - ✅ Link health monitoring
@@ -74863,12 +74788,14 @@ All automated documentation maintenance tasks have been successfully implemented
 - ✅ Template synchronization
 
 ###### **Scheduled Automation** (Ready for Production)
+
 - ✅ Weekly template updates (Mondays 3 AM UTC)
 - ✅ Real-time site monitoring (every 15 minutes)
 - ✅ SSL certificate monitoring (daily checks)
 - ✅ Published link verification (every 6 hours)
 
 ###### **AI Integration** (Available)
+
 - ✅ MCP Git server for AI-Git interaction
 - ✅ Structured documentation for AI context
 - ✅ Automated documentation generation patterns
@@ -74876,18 +74803,21 @@ All automated documentation maintenance tasks have been successfully implemented
 ##### 📊 Impact Metrics
 
 ###### **Quality Improvements**
+
 - **Version Consistency**: 100% across all configuration files
 - **Link Health**: Automated checking prevents broken links
 - **Documentation Standards**: Enforced via CI/CD pipeline
 - **Prose Quality**: Vale ensures consistent writing style
 
 ###### **Operational Efficiency**
+
 - **Manual Effort**: Reduced by ~80% for documentation maintenance
 - **Detection Time**: From manual reviews to instant automated alerts
 - **Fix Time**: Automated corrections for common issues
 - **Review Process**: Streamlined with automated pre-checks
 
 ###### **Risk Mitigation**
+
 - **Version Drift**: Eliminated through automated synchronization
 - **Broken Links**: Prevented via continuous monitoring
 - **Documentation Decay**: Halted through validation pipeline
@@ -74896,12 +74826,14 @@ All automated documentation maintenance tasks have been successfully implemented
 ##### 🔒 Security & Compliance
 
 ###### **2026 Standards Compliance**
+
 - ✅ **OAuth 2.1 with PKCE** patterns documented
 - ✅ **GDPR/CCPA** privacy considerations
 - ✅ **Multi-tenant security** isolation patterns
 - ✅ **Post-quantum cryptography** readiness
 
 ###### **Security Features**
+
 - ✅ **Secret Management**: No hardcoded credentials
 - ✅ **Access Control**: CODEOWNERS for approval workflows
 - ✅ **Audit Trail**: Comprehensive logging in all workflows
@@ -74910,18 +74842,21 @@ All automated documentation maintenance tasks have been successfully implemented
 ##### 🎯 Next Steps & Recommendations
 
 ###### **Immediate Actions** (This Week)
+
 1. **Test Workflows**: Push documentation changes to validate CI/CD
 2. **Configure Secrets**: Add `REPO_SYNC_PAT` and `SLACK_WEBHOOK_URL`
 3. **Install Vale**: Download style packages for prose validation
 4. **Enable Monitoring**: Update domain URLs in monitoring workflow
 
 ###### **Production Deployment** (Next Week)
+
 1. **Branch Protection**: Enable required status checks
 2. **Alert Configuration**: Set up Slack notifications
 3. **Monitoring Dashboard**: Configure Upptime or custom dashboard
 4. **Team Training**: Document processes for team members
 
 ###### **Future Enhancements** (Next Month)
+
 1. **Advanced Analytics**: Add documentation usage metrics
 2. **AI-Generated Content**: Implement automated documentation updates
 3. **Multi-Language Support**: Extend validation to other languages
@@ -74953,6 +74888,7 @@ docs/guides/
 ##### 🔗 Quick Reference
 
 ###### **Common Commands**
+
 ```bash
 # Check for version drift
 python scripts/version_sync.py --check
@@ -74970,6 +74906,7 @@ python -m mcp_server_git --help
 ```
 
 ###### **Key Workflows**
+
 - **Basic Validation**: Runs on every PR to `main`/`develop`
 - **Full Pipeline**: Comprehensive validation with prose checking
 - **Template Sync**: Weekly automated updates from upstream
@@ -74981,7 +74918,6 @@ python -m mcp_server_git --help
 
 The foundation for maintaining high-quality, up-to-date documentation at scale is now established. The system combines automated validation, real-time monitoring, AI integration, and template synchronization to ensure documentation remains a valuable asset rather than a maintenance burden.
 
-
 #### Automation_Implementation_Summary AUTOMATION_IMPLEMENTATION_SUMMARY.md
 
 _Source: `AUTOMATION_IMPLEMENTATION_SUMMARY.md`_
@@ -74991,6 +74927,7 @@ _Source: `AUTOMATION_IMPLEMENTATION_SUMMARY.md`_
 ##### Completed Tasks (Today)
 
 ###### ✅ 1. Guides Extraction
+
 - **Status**: Completed
 - **Files Created**: 6 individual guide files in `docs/guides/`
   - `version-sync-script.md` - Version synchronization implementation
@@ -75001,6 +74938,7 @@ _Source: `AUTOMATION_IMPLEMENTATION_SUMMARY.md`_
   - `real-time-documentation-monitoring.md` - Production monitoring
 
 ###### ✅ 2. Version Sync Script
+
 - **Status**: Completed and Tested
 - **Location**: `scripts/version_sync.py`
 - **Features**:
@@ -75011,6 +74949,7 @@ _Source: `AUTOMATION_IMPLEMENTATION_SUMMARY.md`_
   - Successfully detected and fixed version drift in CLI scaffold files
 
 ###### ✅ 3. GitHub Actions Documentation Validation
+
 - **Status**: Completed
 - **Location**: `.github/workflows/docs-validate-basic.yml`
 - **Features**:
@@ -75021,6 +74960,7 @@ _Source: `AUTOMATION_IMPLEMENTATION_SUMMARY.md`_
   - Concurrency control
 
 ###### ✅ 4. MCP Git Server Installation
+
 - **Status**: Completed
 - **Installation**: `pip install mcp-server-git`
 - **Verification**: Server responds to help command
@@ -75035,16 +74975,19 @@ _Source: `AUTOMATION_IMPLEMENTATION_SUMMARY.md`_
 ##### Remaining Tasks (This Week)
 
 ###### 🔄 5. Automated CLI Template Updates
+
 - **Status**: Pending implementation
 - **Guide Available**: `automated-cli-template-updates.md`
 - **Implementation**: GitHub Actions workflow with `actions-template-sync`
 
 ###### 🔄 6. Documentation Validation Pipeline
+
 - **Status**: Pending implementation
 - **Guide Available**: `documentation-validation-pipeline.md`
 - **Implementation**: Full pipeline with Vale, pre-commit hooks, and reporting
 
 ###### 🔄 7. Real-Time Documentation Monitoring
+
 - **Status**: Pending implementation
 - **Guide Available**: `real-time-documentation-monitoring.md`
 - **Implementation**: Upptime or custom monitoring workflow
@@ -75071,7 +75014,6 @@ _Source: `AUTOMATION_IMPLEMENTATION_SUMMARY.md`_
 
 The foundation for automated documentation maintenance is now complete and operational.
 
-
 #### Free_Implementation_Complete FREE_IMPLEMENTATION_COMPLETE.md
 
 _Source: `FREE_IMPLEMENTATION_COMPLETE.md`_
@@ -75085,12 +75027,14 @@ All **free** production-ready components for automated documentation maintenance
 ##### ✅ Completed Free Implementation
 
 ###### 1. **Core Automation Scripts** ✅
+
 - **Version Sync Script**: `scripts/version_sync.py` - Detects and fixes version drift
 - **Quick Validation**: `scripts/quick-check.py` - Fast manual validation (30s timeout)
 - **PowerShell Script**: `scripts/validate-docs.ps1` - Windows validation
 - **Bash Script**: `scripts/validate-docs.sh` - Linux/macOS validation
 
 ###### 2. **GitHub Actions Workflows** ✅
+
 - **Basic Validation**: `.github/workflows/docs-validate-basic.yml`
   - Markdown linting with markdownlint-cli2
   - Link checking with lychee
@@ -75110,6 +75054,7 @@ All **free** production-ready components for automated documentation maintenance
   - SSL certificate monitoring
 
 ###### 3. **Configuration Files** ✅
+
 - **Markdown Linting**: `.markdownlint.jsonc` - Consistent formatting rules
 - **Link Checking**: `.lychee.toml` - Link validation configuration
 - **Spell Checking**: `.cspell.json` - Custom dictionary for technical terms
@@ -75119,11 +75064,13 @@ All **free** production-ready components for automated documentation maintenance
 - **Content Baseline**: `.monitoring/content-baseline.txt` - Integrity tracking
 
 ###### 4. **Pre-commit Hooks** ✅
+
 - **Simplified Config**: `.pre-commit-config.yaml` - Minimal, non-freezing hooks
 - **Version Check Only**: Focuses on critical version consistency
 - **Alternative Scripts**: Manual validation options if hooks freeze
 
 ###### 5. **Documentation Guides** ✅
+
 - **6 Comprehensive Guides**: Extracted and organized in `docs/guides/`
 - **Implementation Details**: Step-by-step instructions with code examples
 - **Production Ready**: All guides include testing and verification steps
@@ -75131,6 +75078,7 @@ All **free** production-ready components for automated documentation maintenance
 ##### 🚀 Free Automation Capabilities
 
 ###### **Immediate Automation** (Operational Now)
+
 - ✅ Version drift detection and correction
 - ✅ Documentation validation on every PR/commit
 - ✅ Link health monitoring
@@ -75139,12 +75087,14 @@ All **free** production-ready components for automated documentation maintenance
 - ✅ Real-time site monitoring (GitHub-based)
 
 ###### **Scheduled Automation** (Ready for Production)
+
 - ✅ Weekly template updates (Mondays 3 AM UTC)
 - ✅ Real-time monitoring (every 15 minutes)
 - ✅ SSL certificate monitoring (daily checks)
 - ✅ Content integrity verification
 
 ###### **Manual Validation** (No Freezing Issues)
+
 - ✅ Quick 30-second validation script
 - ✅ PowerShell and Bash alternatives
 - ✅ GitHub Actions quick check (5-minute timeout)
@@ -75153,18 +75103,21 @@ All **free** production-ready components for automated documentation maintenance
 ##### 📊 Free Implementation Impact
 
 ###### **Quality Improvements**
+
 - **Version Consistency**: 100% across all configuration files
 - **Link Health**: Automated checking prevents broken links
 - **Documentation Standards**: Enforced via CI/CD pipeline
 - **Prose Quality**: Vale ensures consistent writing style
 
 ###### **Operational Efficiency**
+
 - **Manual Effort**: Reduced by ~80% for documentation maintenance
 - **Detection Time**: From manual reviews to instant automated alerts
 - **Fix Time**: Automated corrections for common issues
 - **Validation Time**: 30 seconds instead of freezing pre-commit hooks
 
 ###### **Risk Mitigation**
+
 - **Version Drift**: Eliminated through automated synchronization
 - **Broken Links**: Prevented via continuous monitoring
 - **Documentation Decay**: Halted through validation pipeline
@@ -75172,20 +75125,21 @@ All **free** production-ready components for automated documentation maintenance
 
 ##### 🔧 Free Tools Used
 
-| Tool | Purpose | Cost |
-|------|---------|------|
-| Python | Version sync script | FREE |
-| GitHub Actions | CI/CD workflows | FREE (public repo) |
-| markdownlint-cli2 | Markdown linting | FREE |
-| lychee | Link checking | FREE |
-| cspell | Spell checking | FREE |
-| Vale | Prose style checking | FREE |
-| OpenSSL | SSL certificate monitoring | FREE |
-| curl | HTTP requests | FREE |
+| Tool              | Purpose                    | Cost               |
+| ----------------- | -------------------------- | ------------------ |
+| Python            | Version sync script        | FREE               |
+| GitHub Actions    | CI/CD workflows            | FREE (public repo) |
+| markdownlint-cli2 | Markdown linting           | FREE               |
+| lychee            | Link checking              | FREE               |
+| cspell            | Spell checking             | FREE               |
+| Vale              | Prose style checking       | FREE               |
+| OpenSSL           | SSL certificate monitoring | FREE               |
+| curl              | HTTP requests              | FREE               |
 
 ##### 🎯 Usage Instructions
 
 ###### **Before Committing**
+
 ```bash
 # Quick validation (30 seconds, no freezing)
 python scripts/quick-check.py
@@ -75198,6 +75152,7 @@ python scripts/quick-check.py
 ```
 
 ###### **Manual Version Sync**
+
 ```bash
 # Check for drift
 python scripts/version_sync.py --check
@@ -75207,6 +75162,7 @@ python scripts/version_sync.py
 ```
 
 ###### **GitHub Actions**
+
 - **Automatic**: Runs on every PR to main/develop
 - **Manual**: Trigger from GitHub Actions tab
 - **Scheduled**: Template sync (weekly), monitoring (15-min)
@@ -75231,6 +75187,7 @@ python scripts/version_sync.py
 ##### 📚 Quick Reference
 
 ###### **Common Commands**
+
 ```bash
 # Quick validation (recommended)
 python scripts/quick-check.py
@@ -75246,6 +75203,7 @@ vale docs/guides/ --minAlertLevel=error
 ```
 
 ###### **Key Files**
+
 - `scripts/quick-check.py` - Fast validation (use this!)
 - `scripts/version_sync.py` - Version synchronization
 - `.github/workflows/docs-quick-check.yml` - CI validation
@@ -75258,7 +75216,6 @@ vale docs/guides/ --minAlertLevel=error
 The foundation for maintaining high-quality, up-to-date documentation at scale is now established using only free tools. The system combines automated validation, real-time monitoring, and template synchronization to ensure documentation remains a valuable asset rather than a maintenance burden.
 
 **Next Steps**: Configure `REPO_SYNC_PAT` GitHub secret for template sync, and you're ready for production!
-
 
 #### Guidesindex GUIDESINDEX.md
 
@@ -75690,7 +75647,6 @@ _Last Updated: February 2026_
 _Documentation Version: 2.0_
 _Standards Compliance: 2026_
 
-
 #### Automated Cli Template Updates automated-cli-template-updates.md
 
 _Source: `automated-cli-template-updates.md`_
@@ -75703,13 +75659,13 @@ When you maintain a canonical CLI tool template (scaffolding, configs, Makefile,
 
 ##### Strategy Options
 
-| Approach | Best For | Mechanism |
-|----------|----------|-----------|
-| `actions-template-sync` Action | GitHub template repos | PR-based sync via GitHub API[13][15] |
-| `template-sync-cli` (npm) | npm/Node.js ecosystems | CLI tool run in CI[16] |
-| Git subtrees | Monorepo structures | `git subtree pull` in CI |
-| npm workspaces `version` script | Version-only sync | `npm version` + workspace scripts[1] |
-| Custom merge workflow | Complex customizations | Shell script + `gh` CLI |
+| Approach                        | Best For               | Mechanism                            |
+| ------------------------------- | ---------------------- | ------------------------------------ |
+| `actions-template-sync` Action  | GitHub template repos  | PR-based sync via GitHub API[13][15] |
+| `template-sync-cli` (npm)       | npm/Node.js ecosystems | CLI tool run in CI[16]               |
+| Git subtrees                    | Monorepo structures    | `git subtree pull` in CI             |
+| npm workspaces `version` script | Version-only sync      | `npm version` + workspace scripts[1] |
+| Custom merge workflow           | Complex customizations | Shell script + `gh` CLI              |
 
 ##### Implementation: actions-template-sync (Recommended)
 
@@ -75719,12 +75675,12 @@ This action handles the most common case — a GitHub template repository with d
 
 ```yaml
 # .github/workflows/sync-from-template.yml
-name: "Sync from Upstream Template"
+name: 'Sync from Upstream Template'
 
 on:
   schedule:
-    - cron: "0 3 * * 1"   # Every Monday at 3 AM UTC
-  workflow_dispatch:        # Allow manual trigger from GitHub UI
+    - cron: '0 3 * * 1' # Every Monday at 3 AM UTC
+  workflow_dispatch: # Allow manual trigger from GitHub UI
     inputs:
       force:
         description: 'Force sync even if no changes'
@@ -75733,7 +75689,7 @@ on:
 
 jobs:
   sync:
-    name: "Pull template updates"
+    name: 'Pull template updates'
     runs-on: ubuntu-latest
 
     permissions:
@@ -75741,8 +75697,8 @@ jobs:
       pull-requests: write
 
     env:
-      SOURCE_REPOSITORY: "your-org/cli-template"
-      SOURCE_BRANCH: "main"
+      SOURCE_REPOSITORY: 'your-org/cli-template'
+      SOURCE_BRANCH: 'main'
 
     steps:
       - name: Checkout target repo
@@ -75757,9 +75713,9 @@ jobs:
           github_token: ${{ secrets.REPO_SYNC_PAT }}
           source_repo_path: ${{ env.SOURCE_REPOSITORY }}
           upstream_branch: ${{ env.SOURCE_BRANCH }}
-          pr_title: "chore(template): sync from upstream template"
-          pr_commit_msg: "chore(template): apply upstream template changes"
-          pr_labels: "template-sync,automated"
+          pr_title: 'chore(template): sync from upstream template'
+          pr_commit_msg: 'chore(template): apply upstream template changes'
+          pr_labels: 'template-sync,automated'
           # Don't fail if there are no changes
           is_dry_run: ${{ github.event.inputs.force == 'false' && 'false' || 'false' }}
 ```
@@ -75790,7 +75746,7 @@ Rather than waiting for the Monday schedule, you can trigger all downstream repo
 
 ```yaml
 # Template repo: .github/workflows/trigger-downstream-sync.yml
-name: "Notify downstream repos"
+name: 'Notify downstream repos'
 
 on:
   push:
@@ -75814,7 +75770,7 @@ In the downstream repo, add a trigger alongside the schedule:
 ```yaml
 on:
   schedule:
-    - cron: "0 3 * * 1"
+    - cron: '0 3 * * 1'
   repository_dispatch:
     types: [template-updated]
   workflow_dispatch:
@@ -75848,20 +75804,20 @@ For Node.js CLI tools, version and script synchronization can use npm workspaces
 ```javascript
 // scripts/sync-package-scripts.js
 // Propagates canonical scripts from root to all workspace packages
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-const ROOT = path.join(__dirname, "..");
-const rootPkg = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
+const ROOT = path.join(__dirname, '..');
+const rootPkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
-const SHARED_SCRIPTS = ["lint", "format", "test", "build"];
+const SHARED_SCRIPTS = ['lint', 'format', 'test', 'build'];
 const workspaces = rootPkg.workspaces || [];
 
 for (const ws of workspaces) {
-  const pkgPath = path.join(ROOT, ws, "package.json");
+  const pkgPath = path.join(ROOT, ws, 'package.json');
   if (!fs.existsSync(pkgPath)) continue;
 
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   let changed = false;
 
   for (const script of SHARED_SCRIPTS) {
@@ -75873,7 +75829,7 @@ for (const ws of workspaces) {
   }
 
   if (changed) {
-    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
     console.log(`Updated scripts in: ${ws}/package.json`);
   }
 }
@@ -75885,7 +75841,6 @@ for (const ws of workspaces) {
 [14] Template sync best practices - https://github.blog/2023-01-19-template-repositories-best-practices/
 [15] GitHub Actions template sync documentation - https://github.com/AndreasAugustin/actions-template-sync/blob/main/README.md
 [16] template-sync-cli npm package - https://www.npmjs.com/package/template-sync-cli
-
 
 #### Documentation Validation Pipeline documentation-validation-pipeline.md
 
@@ -75972,13 +75927,8 @@ npx husky init
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*.{md,mdx}": [
-      "markdownlint-cli2",
-      "cspell --no-must-find-files"
-    ],
-    "**/*.md": [
-      "prettier --write"
-    ]
+    "**/*.{md,mdx}": ["markdownlint-cli2", "cspell --no-must-find-files"],
+    "**/*.md": ["prettier --write"]
   }
 }
 ```
@@ -75993,7 +75943,7 @@ npx lint-staged
 
 ```yaml
 # .github/workflows/docs-validate-full.yml
-name: "Documentation Validation Pipeline"
+name: 'Documentation Validation Pipeline'
 
 on:
   push:
@@ -76008,7 +75958,7 @@ concurrency:
 jobs:
   # ── Job 1: Fast syntax checks ──────────────────────────────────────────────
   lint-and-spell:
-    name: "Lint & Spell Check"
+    name: 'Lint & Spell Check'
     runs-on: ubuntu-latest
     outputs:
       markdown-outcome: ${{ steps.mdlint.outcome }}
@@ -76023,15 +75973,15 @@ jobs:
         uses: DavidAnson/markdownlint-cli2-action@v16
         continue-on-error: true
         with:
-          globs: "**/*.md !node_modules !CHANGELOG.md"
+          globs: '**/*.md !node_modules !CHANGELOG.md'
 
       - name: Spell check
         id: spell
         uses: streetsidesoftware/cspell-action@v6
         continue-on-error: true
         with:
-          files: "**/*.md"
-          config: ".cspell.json"
+          files: '**/*.md'
+          config: '.cspell.json'
 
       - name: Fail if any check failed
         if: steps.mdlint.outcome == 'failure' || steps.spell.outcome == 'failure'
@@ -76043,7 +75993,7 @@ jobs:
 
   # ── Job 2: Prose style ────────────────────────────────────────────────────
   prose-style:
-    name: "Prose Style (Vale)"
+    name: 'Prose Style (Vale)'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76052,13 +76002,13 @@ jobs:
         uses: errata-ai/vale-action@reviewdog
         with:
           files: docs/
-          reporter: github-pr-review       # Posts inline PR comments
+          reporter: github-pr-review # Posts inline PR comments
           fail_on_error: true
-          vale_flags: "--minAlertLevel=error"
+          vale_flags: '--minAlertLevel=error'
 
   # ── Job 3: Link checking ──────────────────────────────────────────────────
   links:
-    name: "Link Check"
+    name: 'Link Check'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76078,7 +76028,7 @@ jobs:
 
   # ── Job 4: Docs build verification ───────────────────────────────────────
   build-verify:
-    name: "Docs Build"
+    name: 'Docs Build'
     runs-on: ubuntu-latest
     needs: [lint-and-spell]
     steps:
@@ -76099,7 +76049,7 @@ jobs:
 
   # ── Job 5: Summary report ─────────────────────────────────────────────────
   report:
-    name: "Pipeline Summary"
+    name: 'Pipeline Summary'
     runs-on: ubuntu-latest
     needs: [lint-and-spell, prose-style, links, build-verify]
     if: always()
@@ -76168,7 +76118,6 @@ If your docs use front matter (Jekyll, Docusaurus, Hugo), validate it in CI:
 [18] Google Style Guide for Vale - https://github.com/errata-ai/Google-style-guide
 [19] Husky documentation - https://typicode.github.io/husky/
 
-
 #### Github Actions Docs Validation github-actions-docs-validation.md
 
 _Source: `github-actions-docs-validation.md`_
@@ -76181,12 +76130,12 @@ Documentation quality degrades over time through link rot, inconsistent formatti
 
 ##### Toolchain Overview
 
-| Tool | Role | Config File |
-|------|------|-------------|
-| `markdownlint-cli2` | Markdown syntax & style rules | `.markdownlint.jsonc` |
-| `lychee` | Broken link detection (local + remote) | `.lychee.toml` |
-| `cspell` | Spell checking with custom word lists | `.cspell.json` |
-| `vale` (optional) | Prose style enforcement (tone, grammar) | `.vale.ini` |
+| Tool                | Role                                    | Config File           |
+| ------------------- | --------------------------------------- | --------------------- |
+| `markdownlint-cli2` | Markdown syntax & style rules           | `.markdownlint.jsonc` |
+| `lychee`            | Broken link detection (local + remote)  | `.lychee.toml`        |
+| `cspell`            | Spell checking with custom word lists   | `.cspell.json`        |
+| `vale` (optional)   | Prose style enforcement (tone, grammar) | `.vale.ini`           |
 
 ##### Markdownlint Configuration
 
@@ -76196,17 +76145,20 @@ Markdownlint enforces consistent Markdown formatting. Configure it at repo root:
 // .markdownlint.jsonc
 {
   "default": true,
-  "MD013": false,           // Disable line-length (too strict for docs)
-  "MD033": {                // Allow specific HTML tags
-    "allowed_elements": ["details", "summary", "kbd", "br"]
+  "MD013": false, // Disable line-length (too strict for docs)
+  "MD033": {
+    // Allow specific HTML tags
+    "allowed_elements": ["details", "summary", "kbd", "br"],
   },
-  "MD041": false,           // First line doesn't need to be H1
-  "MD024": {                // Allow duplicate headings in different sections
-    "siblings_only": true
+  "MD041": false, // First line doesn't need to be H1
+  "MD024": {
+    // Allow duplicate headings in different sections
+    "siblings_only": true,
   },
-  "MD046": {                // Code block style
-    "style": "fenced"
-  }
+  "MD046": {
+    // Code block style
+    "style": "fenced",
+  },
 }
 ```
 
@@ -76250,55 +76202,61 @@ exclude_path = [
 
 ##### CSpell Configuration
 
-```json
+````json
 // .cspell.json
 {
   "version": "0.2",
   "language": "en",
   "words": [
-    "repo", "repos", "monorepo", "monorepos",
-    "semver", "pyproject", "toml",
-    "markdownlint", "lychee", "cspell",
-    "frontmatter", "devcontainer",
-    "kubectl", "npx", "uvx"
+    "repo",
+    "repos",
+    "monorepo",
+    "monorepos",
+    "semver",
+    "pyproject",
+    "toml",
+    "markdownlint",
+    "lychee",
+    "cspell",
+    "frontmatter",
+    "devcontainer",
+    "kubectl",
+    "npx",
+    "uvx"
   ],
-  "ignorePaths": [
-    "node_modules/**",
-    "**/*.min.js",
-    "CHANGELOG.md"
-  ],
+  "ignorePaths": ["node_modules/**", "**/*.min.js", "CHANGELOG.md"],
   "dictionaries": ["en_US", "companies", "softwareTerms"],
   "overrides": [
     {
       "filename": "**/*.md",
       "ignoreRegExpList": [
-        "`[^`]+`",           // Ignore inline code
-        "```[\\s\\S]+?```"   // Ignore code blocks
+        "`[^`]+`", // Ignore inline code
+        "```[\\s\\S]+?```" // Ignore code blocks
       ]
     }
   ]
 }
-```
+````
 
 ##### Full GitHub Actions Workflow (Today)
 
 ```yaml
 # .github/workflows/docs-validate-basic.yml
-name: "Docs Validation"
+name: 'Docs Validation'
 
 on:
   push:
     branches: [main, develop]
     paths:
-      - "**/*.md"
-      - "**/*.mdx"
-      - ".markdownlint.jsonc"
-      - ".lychee.toml"
-      - ".cspell.json"
+      - '**/*.md'
+      - '**/*.mdx'
+      - '.markdownlint.jsonc'
+      - '.lychee.toml'
+      - '.cspell.json'
   pull_request:
     paths:
-      - "**/*.md"
-      - "**/*.mdx"
+      - '**/*.md'
+      - '**/*.mdx'
 
 # Cancel in-progress runs for the same PR/branch
 concurrency:
@@ -76307,7 +76265,7 @@ concurrency:
 
 jobs:
   markdown-lint:
-    name: "Markdown Lint"
+    name: 'Markdown Lint'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76322,7 +76280,7 @@ jobs:
             !CHANGELOG.md
 
   link-check:
-    name: "Link Check"
+    name: 'Link Check'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76349,7 +76307,7 @@ jobs:
           retention-days: 7
 
   spell-check:
-    name: "Spell Check"
+    name: 'Spell Check'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76357,9 +76315,9 @@ jobs:
       - name: Run CSpell
         uses: streetsidesoftware/cspell-action@v6
         with:
-          files: "**/*.md"
-          config: ".cspell.json"
-          incremental_files_only: true   # Only check changed files on PRs
+          files: '**/*.md'
+          config: '.cspell.json'
+          incremental_files_only: true # Only check changed files on PRs
           strict: true
 ```
 
@@ -76379,7 +76337,6 @@ This transforms the validation workflow from advisory to mandatory.[3]
 [4] markdownlint-cli2 documentation - https://github.com/DavidAnson/markdownlint-cli2
 [5] lychee link checker - https://github.com/lycheeverse/lychee
 
-
 #### Mcp Git Server Installation mcp-git-server-installation.md
 
 _Source: `mcp-git-server-installation.md`_
@@ -76394,21 +76351,21 @@ The **GitHub MCP Server** (`@modelcontextprotocol/server-github`) is distinct �
 
 ##### Available Tools in mcp-server-git
 
-| Tool | Description | Key Inputs |
-|------|-------------|------------|
-| `git_status` | Working tree status (staged, unstaged, untracked) | `repo_path` |
-| `git_diff_staged` | Diff of staged changes (pre-commit review) | `repo_path`, `context_lines` |
-| `git_diff` | Diff between branches or commits | `repo_path`, `target` |
-| `git_commit` | Stage all and commit with a message | `repo_path`, `message` |
-| `git_add` | Add files to staging area | `repo_path`, `files[]` |
-| `git_reset` | Unstage files | `repo_path` |
-| `git_log` | Commit history | `repo_path`, `max_count` |
-| `git_create_branch` | Create new branch | `repo_path`, `branch_name`, `base_branch` |
-| `git_checkout` | Switch branches | `repo_path`, `branch_name` |
-| `git_show` | Show commit contents | `repo_path`, `revision` |
-| `git_init` | Initialize a new repository | `repo_path`, `bare` |
-| `git_search_log` | Search commit messages by regex | `repo_path`, `pattern`, `max_count` |
-| `git_read_file` | Read file at specific revision | `repo_path`, `file_path`, `ref` |
+| Tool                | Description                                       | Key Inputs                                |
+| ------------------- | ------------------------------------------------- | ----------------------------------------- |
+| `git_status`        | Working tree status (staged, unstaged, untracked) | `repo_path`                               |
+| `git_diff_staged`   | Diff of staged changes (pre-commit review)        | `repo_path`, `context_lines`              |
+| `git_diff`          | Diff between branches or commits                  | `repo_path`, `target`                     |
+| `git_commit`        | Stage all and commit with a message               | `repo_path`, `message`                    |
+| `git_add`           | Add files to staging area                         | `repo_path`, `files[]`                    |
+| `git_reset`         | Unstage files                                     | `repo_path`                               |
+| `git_log`           | Commit history                                    | `repo_path`, `max_count`                  |
+| `git_create_branch` | Create new branch                                 | `repo_path`, `branch_name`, `base_branch` |
+| `git_checkout`      | Switch branches                                   | `repo_path`, `branch_name`                |
+| `git_show`          | Show commit contents                              | `repo_path`, `revision`                   |
+| `git_init`          | Initialize a new repository                       | `repo_path`, `bare`                       |
+| `git_search_log`    | Search commit messages by regex                   | `repo_path`, `pattern`, `max_count`       |
+| `git_read_file`     | Read file at specific revision                    | `repo_path`, `file_path`, `ref`           |
 
 [6]
 
@@ -76429,6 +76386,7 @@ python -m venv ~/.venvs/mcp-git
 ```
 
 **Verify installation:**
+
 ```bash
 uvx mcp-server-git --version
 # or
@@ -76523,10 +76481,12 @@ npx -y @modelcontextprotocol/server-github
 ```
 
 **Create a PAT:** Go to `github.com → Settings → Developer settings → Personal access tokens → Fine-grained tokens`. Required scopes depend on your use case:
+
 - **Read-only**: `contents:read`, `metadata:read`
 - **Read + Write**: `contents:write`, `pull_requests:write`, `issues:write`
 
 **Claude Desktop config:**
+
 ```json
 {
   "mcpServers": {
@@ -76553,8 +76513,10 @@ As of December 2025, the GitHub MCP server supports tool-specific configuration 
     "github": {
       "command": "npx",
       "args": [
-        "-y", "@modelcontextprotocol/server-github",
-        "--toolsets", "repos,issues,pull_requests,code_security"
+        "-y",
+        "@modelcontextprotocol/server-github",
+        "--toolsets",
+        "repos,issues,pull_requests,code_security"
       ],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
@@ -76569,6 +76531,7 @@ Available toolsets: `repos`, `issues`, `pull_requests`, `code_security`, `experi
 ##### Verifying Your Setup
 
 After configuring, restart your AI client and test with a natural language prompt:
+
 - "Show me the git status of this repository"
 - "What changed in the last 5 commits?"
 - "Create a branch named feat/docs-validation"
@@ -76585,25 +76548,23 @@ If the MCP server is connected, the AI will call the relevant tool and return st
 [11] VS Code Copilot MCP integration - https://docs.github.com/en/copilot
 [12] Continue.dev MCP documentation - https://docs.continue.dev/
 
-
 #### Mcp mcp.md
 
 _Source: `mcp.md`_
 
-***
+---
 
 #### `.mcp.json` for Your Marketing Monorepo
 
 Place this file at the **root of your repository** as `.mcp.json`. Claude Code auto-detects it here. For VS Code/Cursor, it can also live at `.vscode/mcp.json` or `~/.cursor/mcp.json` respectively.[1]
 
-***
+---
 
 ##### Full Configuration
 
 ```json
 {
   "mcpServers": {
-
     // ── VERSION CONTROL ─────────────────────────────────────────
     "github": {
       "command": "npx",
@@ -76620,13 +76581,16 @@ Place this file at the **root of your repository** as `.mcp.json`. Claude Code a
     // ── DATABASE (Supabase + Postgres) ───────────────────────────
     "supabase": {
       "command": "npx",
-      "args": ["-y", "@supabase/mcp-server-supabase@latest",
-               "--access-token", "${SUPABASE_ACCESS_TOKEN}"]
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "${SUPABASE_ACCESS_TOKEN}"
+      ]
     },
     "postgres": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres",
-               "${DATABASE_URL}"]
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
     },
 
     // ── CACHE / QUEUE ────────────────────────────────────────────
@@ -76650,10 +76614,7 @@ Place this file at the **root of your repository** as `.mcp.json`. Claude Code a
     // ── FILE SYSTEM (monorepo-scoped) ────────────────────────────
     "filesystem": {
       "command": "npx",
-      "args": [
-        "-y", "@modelcontextprotocol/server-filesystem",
-        "/absolute/path/to/your/repo"
-      ]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/absolute/path/to/your/repo"]
     },
 
     // ── UI COMPONENTS ────────────────────────────────────────────
@@ -76704,14 +76665,13 @@ Place this file at the **root of your repository** as `.mcp.json`. Claude Code a
       "command": "npx",
       "args": ["-y", "next", "mcp", "--dir", "./apps/web"]
     }
-
   }
 }
 ```
 
 > ⚠️ **Note:** JSON does not support comments. Strip all `// ...` lines before using this file. They are included here for explanation only.
 
-***
+---
 
 ##### Server-by-Server Rationale
 
@@ -76763,9 +76723,9 @@ Your `packages/infrastructure/monitoring/sentry.ts` initializes Sentry, and `ins
 
 ###### Next.js App State — `nextjs`
 
-The **official Next.js MCP** (new as of Feb 2026) gives the AI agent direct access to your running app's route structure, server component state, and build output  — scoped to `./apps/web` per your monorepo layout.[6]
+The **official Next.js MCP** (new as of Feb 2026) gives the AI agent direct access to your running app's route structure, server component state, and build output — scoped to `./apps/web` per your monorepo layout.[6]
 
-***
+---
 
 ##### Environment Variables to Add to `.env`
 
@@ -76802,19 +76762,19 @@ Sources
 [15] What's are the best MCP servers you guys are using? : r/cursor https://www.reddit.com/r/cursor/comments/1j1ovbr/whats_are_the_best_mcp_servers_you_guys_are_using/
 [16] Top 12 MCP Servers for AI Models in 2025 - LinkedIn https://www.linkedin.com/posts/alexxubyte_systemdesign-coding-interviewtips-activity-7352362961673306114-Ri3o
 
-***
+---
 
 #### Model Context Protocol (MCP): Full Briefing
 
 MCP — the **Model Context Protocol** — is an open standard and open-source framework developed by Anthropic and first released in November 2024 that standardizes how AI systems, particularly large language models (LLMs), connect to external tools, data sources, APIs, and automated workflows. It has rapidly become one of the most influential infrastructure protocols in the AI ecosystem heading into 2026.[1][2][3]
 
-***
+---
 
 ##### The Core Problem MCP Solves
 
 Before MCP, integrating LLMs with external services required brittle, bespoke "glue code" for every combination of model and tool — an **M × N integration problem**. Every new tool required a new custom adapter, with hardcoded auth tokens, inconsistent interfaces, and no shared protocol. MCP collapses this into an **M + N problem**: each model and each resource implements MCP once, and everything interoperates. Think of it as **USB-C for AI** — one clean plug standard for connecting models to everything they need.[4][5]
 
-***
+---
 
 ##### Architecture
 
@@ -76826,7 +76786,7 @@ MCP is built on a three-tier architecture with a clean separation of concerns:[3
 
 All communication happens over **JSON-RPC 2.0** encoded as UTF-8. The connection is stateful and persistent — unlike REST APIs — which means sessions can maintain memory and context across multiple interactions.[6][7]
 
-***
+---
 
 ##### The Four Primitive Capabilities
 
@@ -76835,9 +76795,9 @@ Each MCP server exposes up to four types of primitives to the connected AI model
 - **Resources** — Read-only data sources (files, database tables, CRM records) the model can query but not modify; they are the model's "eyes and ears"
 - **Tools** — Callable functions that execute real-world actions (write a file, send a message, trigger a transaction); most require explicit user approval before execution
 - **Prompts** — Reusable instruction templates or embedded strategies that help structure how the model approaches specific tasks
-- **Sampling** — A powerful advanced feature allowing MCP *servers* to request completions from the host's LLM, turning the model into a cognitive sub-service usable within larger agentic workflows
+- **Sampling** — A powerful advanced feature allowing MCP _servers_ to request completions from the host's LLM, turning the model into a cognitive sub-service usable within larger agentic workflows
 
-***
+---
 
 ##### Transport Mechanisms
 
@@ -76848,13 +76808,14 @@ As of the current MCP specification (revision **2025-11-25**), two standard tran
 
 The previous SSE-only transport is now **deprecated**.[9]
 
-***
+---
 
 ##### Configuration & The `.mcp.json` File
 
 A critical aspect for developers is understanding the `.mcp.json` configuration format, which has emerged as a de facto standard across the ecosystem.[10]
 
 ###### Standard Structure
+
 ```json
 {
   "mcpServers": {
@@ -76869,19 +76830,18 @@ A critical aspect for developers is understanding the `.mcp.json` configuration 
 }
 ```
 
-
 ###### Client-Specific File Locations
 
-| Client | Config File Path |
-|---|---|
-| Claude Desktop | `~/.claude/claude_desktop_config.json` [10] |
-| Cursor | `~/.cursor/mcp.json` [10] |
-| VS Code | `.vscode/mcp.json` (workspace-level) [11][10] |
-| Visual Studio | Workspace `mcp.json` via GitHub Copilot [12] |
+| Client         | Config File Path                              |
+| -------------- | --------------------------------------------- |
+| Claude Desktop | `~/.claude/claude_desktop_config.json` [10]   |
+| Cursor         | `~/.cursor/mcp.json` [10]                     |
+| VS Code        | `.vscode/mcp.json` (workspace-level) [11][10] |
+| Visual Studio  | Workspace `mcp.json` via GitHub Copilot [12]  |
 
 Tools like **FastMCP** can auto-generate this configuration via `fastmcp install mcp-json server.py` for any compatible client.[10]
 
-***
+---
 
 ##### Ecosystem & Adoption
 
@@ -76892,7 +76852,7 @@ MCP is no longer just an Anthropic product — it has been adopted broadly acros
 - **50+ enterprise partners** including Salesforce, ServiceNow, Workday, Accenture, and Deloitte are implementing MCP for enterprise agentic workflows[6]
 - The **MCP Registry** (launched preview September 2025) provides a community-driven platform for discovering and sharing MCP servers, progressing toward general availability[15]
 
-***
+---
 
 ##### Official Roadmap (As of Late 2025)
 
@@ -76905,16 +76865,17 @@ The next release priorities announced by the MCP team are:[15]
 - **SDK Tiering System** — A formal compliance and maintenance tiering for MCP SDKs in Python, TypeScript, C#, and others so developers know exactly what level of support to expect
 - **MCP Registry GA** — Stabilizing the v0.1 API for production readiness
 
-***
+---
 
 ##### Security: Critical Vulnerabilities & Risks
 
 MCP's rapid adoption has introduced a serious attack surface that is actively being exploited in 2025–2026:[16]
 
 ###### Primary Attack Vectors
+
 - **Prompt Injection** — Attackers embed hidden malicious instructions within input prompts or external data, tricking the AI into executing unintended commands[16]
 - **Tool Poisoning** — Malicious manipulation of a tool's metadata or descriptions causes the LLM agent to invoke compromised tools, enabling privilege escalation[16]
-- **Rug Pull Attacks** — MCP servers can modify their tool definitions *between sessions*; a safe-looking tool approved on Day 1 can be silently rerouted to exfiltrate API keys by Day 7[17]
+- **Rug Pull Attacks** — MCP servers can modify their tool definitions _between sessions_; a safe-looking tool approved on Day 1 can be silently rerouted to exfiltrate API keys by Day 7[17]
 - **"Prompt Hijacking" (CVE-2025-6515)** — JFrog Security Research discovered a vulnerability in oatpp-mcp allowing attackers to hijack MCP session IDs and inject malicious code into development environments[18]
 - **RCE via mcp-remote (CVE-2025-6514)** — A critical CVSS 9.6 vulnerability in mcp-remote versions 0.0.5–0.1.15 enables arbitrary OS command execution when MCP clients connect to untrusted servers; this is the **first documented full RCE in a real-world MCP deployment**[17]
 - **The `eval()` Epidemic** — In February 2026, three separate MCP server CVEs were published to NVD, all sharing one root cause: unsafe `eval()` usage[19]
@@ -76923,25 +76884,26 @@ MCP's rapid adoption has introduced a serious attack surface that is actively be
 - **Weak/Missing Authentication** — A BitSight TRACE report found roughly **1,000 exposed MCP servers** with no authorization in place[20]
 
 ###### Key Mitigations
+
 - Implement strict least-privilege tool permissions and scope all tool access by environment and credentials[3]
 - Validate token issuance (avoid the "token passthrough" anti-pattern that creates confused deputy scenarios)[17]
 - Pin MCP server versions and verify integrity before connecting to third-party servers[16]
 - Gate all sensitive tool calls with explicit, real-time user approval workflows[4]
 
-***
+---
 
 ##### MCP vs. Competing Approaches
 
-| Dimension | Traditional API Integration | RAG | MCP |
-|---|---|---|---|
-| Tool Discovery | Manual, hardcoded | N/A | Dynamic, runtime, self-describing [4] |
-| Statefulness | Stateless REST | Stateless | Stateful session [6] |
-| Real-world Action | Possible but fragile | No | Yes — agents can modify systems [6] |
-| Adding a New Tool | Requires new custom code | N/A | Connect an MCP server [4] |
-| LLM Vendor Lock-in | High | Medium | None — model-agnostic [3] |
-| Security Controls | Ad hoc | N/A | Built-in approval gating [4] |
+| Dimension          | Traditional API Integration | RAG       | MCP                                   |
+| ------------------ | --------------------------- | --------- | ------------------------------------- |
+| Tool Discovery     | Manual, hardcoded           | N/A       | Dynamic, runtime, self-describing [4] |
+| Statefulness       | Stateless REST              | Stateless | Stateful session [6]                  |
+| Real-world Action  | Possible but fragile        | No        | Yes — agents can modify systems [6]   |
+| Adding a New Tool  | Requires new custom code    | N/A       | Connect an MCP server [4]             |
+| LLM Vendor Lock-in | High                        | Medium    | None — model-agnostic [3]             |
+| Security Controls  | Ad hoc                      | N/A       | Built-in approval gating [4]          |
 
-***
+---
 
 ##### 2026 Outlook
 
@@ -76980,22 +76942,23 @@ Sources
 
 Here is a complete, step-by-step guide to setting up and configuring an MCP server from scratch.
 
-***
+---
 
 #### Setting Up & Configuring an MCP Server
 
 There are two distinct tasks here: **building** a custom MCP server (authoring tools your AI can call) and **connecting** a pre-built or third-party MCP server to your client. Both are covered below.
 
-***
+---
 
 ##### Prerequisites
 
 Before starting, you'll need:[1]
+
 - **Python 3.10+** (for Python servers) or **Node.js 18+** (for TypeScript/JS servers)
 - Basic familiarity with your language's package manager (`uv`/`pip` for Python, `npm`/`npx` for Node)
 - An MCP host client installed: Claude Desktop, VS Code with GitHub Copilot, Cursor, or Windsurf
 
-***
+---
 
 ##### Option A: Python Server (Recommended for Speed)
 
@@ -77019,7 +76982,6 @@ uv add "mcp[cli]" httpx
 # Create your server file
 touch weather.py
 ```
-
 
 ###### 2. Initialize the Server
 
@@ -77063,7 +77025,7 @@ Run with `uv run weather.py` to start listening for JSON-RPC messages.[1]
 
 > ⚠️ **Critical logging gotcha**: For stdio-based servers, **never use `print()`** — it writes to `stdout` and corrupts JSON-RPC messages. Use `print("msg", file=sys.stderr)` or the `logging` module instead.[1]
 
-***
+---
 
 ##### Option B: TypeScript/Node.js Server
 
@@ -77076,26 +77038,25 @@ npm init -y
 npm install @modelcontextprotocol/sdk zod dotenv
 ```
 
-
 ###### 2. Create the Server
 
 ```typescript
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
 
 const server = new McpServer({
-  name: "my-server",
-  version: "1.0.0",
+  name: 'my-server',
+  version: '1.0.0',
 });
 
 // Register a tool
 server.tool(
-  "myToolName",
-  { param: z.string() },         // Zod schema for input validation
+  'myToolName',
+  { param: z.string() }, // Zod schema for input validation
   async ({ param }) => {
     return {
-      content: [{ type: "text", text: `Result: ${param}` }]
+      content: [{ type: 'text', text: `Result: ${param}` }],
     };
   }
 );
@@ -77109,10 +77070,9 @@ async function init() {
 init();
 ```
 
-
 Use **Zod** for runtime input validation on all tool parameters — it prevents malformed inputs from crashing your server.[2][3]
 
-***
+---
 
 ##### Registering Your Server with a Client
 
@@ -77127,10 +77087,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):[
   "mcpServers": {
     "weather": {
       "command": "uv",
-      "args": [
-        "--directory", "/absolute/path/to/weather",
-        "run", "weather.py"
-      ]
+      "args": ["--directory", "/absolute/path/to/weather", "run", "weather.py"]
     }
   }
 }
@@ -77168,8 +77125,7 @@ Create `~/.cursor/mcp.json` with the same `mcpServers` block format as Claude De
 code --add-mcp '{"name":"my-server","command":"uvx","args":["mcp-server-fetch"]}'
 ```
 
-
-***
+---
 
 ##### Using Pre-Built Third-Party Servers
 
@@ -77191,10 +77147,9 @@ You don't have to build from scratch. Many teams publish ready-to-use servers in
 }
 ```
 
-
 The `-y` flag auto-confirms the `npx` install so it runs without user prompts.
 
-***
+---
 
 ##### Environment Variables & Secrets
 
@@ -77209,19 +77164,19 @@ Never hardcode API keys in config files. Pass them through the `env` block in yo
 
 Inside your server code, read them with `process.env.GOOGLE_API_KEY` (Node) or `os.environ["GOOGLE_API_KEY"]` (Python).[3]
 
-***
+---
 
 ##### Troubleshooting Common Issues
 
-| Problem | Cause | Fix |
-|---|---|---|
-| Server not appearing in Claude | Relative path or JSON syntax error | Use absolute paths; validate JSON [1] |
-| Tool calls failing silently | Server crashes on startup | Check `~/Library/Logs/Claude/mcp-server-*.log` (macOS) [1] |
-| `stdout` corruption (Python) | `print()` writing to stdout in stdio mode | Use `sys.stderr` or `logging` [1] |
-| Server works locally but not in client | Missing `env` vars in config | Add all required env vars to the config's `env` block [3] |
-| Tool not being invoked | Poor tool name/description | Write clear, action-oriented docstrings — the LLM reads these to decide which tool to call [6] |
+| Problem                                | Cause                                     | Fix                                                                                            |
+| -------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Server not appearing in Claude         | Relative path or JSON syntax error        | Use absolute paths; validate JSON [1]                                                          |
+| Tool calls failing silently            | Server crashes on startup                 | Check `~/Library/Logs/Claude/mcp-server-*.log` (macOS) [1]                                     |
+| `stdout` corruption (Python)           | `print()` writing to stdout in stdio mode | Use `sys.stderr` or `logging` [1]                                                              |
+| Server works locally but not in client | Missing `env` vars in config              | Add all required env vars to the config's `env` block [3]                                      |
+| Tool not being invoked                 | Poor tool name/description                | Write clear, action-oriented docstrings — the LLM reads these to decide which tool to call [6] |
 
-***
+---
 
 ##### Auto-Registration with `uv run mcp install`
 
@@ -77250,10 +77205,9 @@ Sources
 [14] How to Build Your Own MCP Server from Scratch [6 Steps] - Intuz https://www.intuz.com/blog/how-to-build-mcp-server
 [15] MCP Setup for Claude - Cursor - Windsurf - VS Code in 4 mins https://www.youtube.com/watch?v=bhc9aXYhgzQ
 
-
 Here is a thorough reference guide to the most common MCP server errors and their fixes.
 
-***
+---
 
 #### Common MCP Server Errors & Fixes
 
@@ -77261,57 +77215,62 @@ Most MCP server problems fall into four root-cause categories: configuration/con
 
 ##### Quick-Reference Error Table
 
-| Symptom | Root Cause | Fix |
-|---|---|---|
-| `MCP server not found` at startup | Wrong binary path in config | Use absolute path in `claude_desktop_config.json` [2] |
-| `Connection refused` | Port in use or server not started | Run `lsof -i :<port>` to find and free the port [2] |
-| Tools missing from client | Config file not reloaded | **Fully restart** the client app — a window reload is not enough [2] |
-| `Invalid JSON in config` | Trailing comma or missing brace | Validate with `jq . < config.json` [2] |
-| `Permission denied` at startup | Binary not executable | Run `chmod +x /path/to/server` [2] |
-| Timeout after 30 seconds | Server too slow to initialize | Add `"timeout": 60000` to server config [2] |
-| `Protocol version not supported` | Client/server SDK version mismatch | Update MCP server SDK to >= 1.0 [2] |
-| `Schema validation error` | Tool params don't match declared schema | Compare params against `/tools/list` output [2] |
-| Intermittent `ECONNRESET` | Proxy or unstable network | Check `HTTP_PROXY` and `NO_PROXY` env vars [2] |
-| Truncated responses | Response size limit hit | Add `"maxResponseSize": "10mb"` to server config [2] |
-| `SIGTERM` crash on disconnect | No graceful shutdown handler | Implement `SIGTERM` handler in your server [2] |
-| Tools listed but never invoked | Vague or ambiguous tool description | Rewrite docstrings to be action-specific and unambiguous [1] |
+| Symptom                           | Root Cause                              | Fix                                                                  |
+| --------------------------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| `MCP server not found` at startup | Wrong binary path in config             | Use absolute path in `claude_desktop_config.json` [2]                |
+| `Connection refused`              | Port in use or server not started       | Run `lsof -i :<port>` to find and free the port [2]                  |
+| Tools missing from client         | Config file not reloaded                | **Fully restart** the client app — a window reload is not enough [2] |
+| `Invalid JSON in config`          | Trailing comma or missing brace         | Validate with `jq . < config.json` [2]                               |
+| `Permission denied` at startup    | Binary not executable                   | Run `chmod +x /path/to/server` [2]                                   |
+| Timeout after 30 seconds          | Server too slow to initialize           | Add `"timeout": 60000` to server config [2]                          |
+| `Protocol version not supported`  | Client/server SDK version mismatch      | Update MCP server SDK to >= 1.0 [2]                                  |
+| `Schema validation error`         | Tool params don't match declared schema | Compare params against `/tools/list` output [2]                      |
+| Intermittent `ECONNRESET`         | Proxy or unstable network               | Check `HTTP_PROXY` and `NO_PROXY` env vars [2]                       |
+| Truncated responses               | Response size limit hit                 | Add `"maxResponseSize": "10mb"` to server config [2]                 |
+| `SIGTERM` crash on disconnect     | No graceful shutdown handler            | Implement `SIGTERM` handler in your server [2]                       |
+| Tools listed but never invoked    | Vague or ambiguous tool description     | Rewrite docstrings to be action-specific and unambiguous [1]         |
 
-***
+---
 
 ##### Error 1: stdout Corruption (The Silent Killer)
 
 This is the single most common and hardest-to-diagnose error in MCP. Since stdio transport uses `stdout` as the JSON-RPC pipe, **any non-protocol output written to stdout immediately corrupts the message stream** and causes the client to silently drop the connection.[1]
 
 **Broken (Node.js):**
+
 ```js
-console.log("Server started"); // ❌ writes to stdout — breaks protocol
+console.log('Server started'); // ❌ writes to stdout — breaks protocol
 ```
 
 **Broken (Python):**
+
 ```python
 print("Server started")  # ❌ same problem
 ```
 
 **Fixed (Node.js):**
+
 ```js
-console.error("Server started"); // ✅ stderr is safe
+console.error('Server started'); // ✅ stderr is safe
 ```
 
 **Fixed (Python):**
+
 ```python
 import logging, sys
 logging.basicConfig(level=logging.DEBUG, stream=sys.stderr)  # ✅
 ```
 
 Set up structured stderr-only logging from day one:[1]
+
 ```js
 const logger = {
   info: (msg, data) => console.error(`[INFO] ${msg}`, data || ''),
-  error: (msg, err) => console.error(`[ERROR] ${msg}`, err?.stack || err || '')
+  error: (msg, err) => console.error(`[ERROR] ${msg}`, err?.stack || err || ''),
 };
 ```
 
-***
+---
 
 ##### Error 2: Configuration & Path Errors
 
@@ -77337,6 +77296,7 @@ npx -y @modelcontextprotocol/server-filesystem /some/path
 If the server starts manually but not from your client, the config path is wrong. The `mcpServers` block must be at the **root level** of the JSON document — if it's nested one level too deep, the client silently ignores it with no error.[2]
 
 **Wrong (nested accidentally):**
+
 ```json
 {
   "settings": {
@@ -77346,13 +77306,14 @@ If the server starts manually but not from your client, the config path is wrong
 ```
 
 **Correct:**
+
 ```json
 {
   "mcpServers": { ... }  // ✅ must be at root
 }
 ```
 
-***
+---
 
 ##### Error 3: Tools Not Appearing
 
@@ -77370,28 +77331,29 @@ npx @modelcontextprotocol/inspector npx -y ./my-mcp-server.js
 
 This opens a web UI at `http://localhost:6274` where you can manually trigger `tools/list` and inspect the raw JSON-RPC response.[2]
 
-***
+---
 
 ##### Error 4: Tool Execution Failures & Unhandled Exceptions
 
 When a tool runs but fails, an unhandled exception crashes the server process entirely, taking down all other tools with it. Wrap every single tool handler in a try/catch and return a proper `McpError` rather than letting the exception propagate:[1]
 
 **Node.js pattern:**
+
 ```js
-server.tool("fetchData", { url: z.string() }, async ({ url }) => {
+server.tool('fetchData', { url: z.string() }, async ({ url }) => {
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return { content: [{ type: "text", text: await res.text() }] };
+    return { content: [{ type: 'text', text: await res.text() }] };
   } catch (error) {
-    console.error("fetchData error:", error);
+    console.error('fetchData error:', error);
     throw new McpError(McpErrorCode.ServerError, `Failed: ${error.message}`);
   }
 });
 ```
 
-
 **Python pattern:**
+
 ```python
 @mcp.tool()
 async def fetch_data(url: str) -> str:
@@ -77406,13 +77368,14 @@ async def fetch_data(url: str) -> str:
 
 Use **Zod** (Node) or **Pydantic** (Python) for input validation at the tool boundary — this catches malformed inputs before they reach your logic and produces clean, descriptive errors back to the LLM.[1]
 
-***
+---
 
 ##### Error 5: Protocol Version Mismatches
 
 MCP uses **date-based versioning** (e.g., `2025-03-26`, `2025-11-25`). During the initialization handshake, the client proposes a version and the server must accept or counter-propose a compatible one. If they can't agree, the connection closes immediately after the handshake.[1]
 
 Symptoms include:
+
 - `Protocol version not supported`
 - `Incompatible version`
 - Connection drops with no error message within the first 200ms[1]
@@ -77429,7 +77392,7 @@ uv add --upgrade "mcp[cli]"
 
 Node.js 22 LTS is the recommended runtime in 2026 — versions below Node.js 18 cause protocol incompatibilities.[2]
 
-***
+---
 
 ##### Error 6: Windows-Specific stdio Failures
 
@@ -77440,6 +77403,7 @@ On Windows, `stdio` transport has a known silent failure mode where the server p
 - Missing `sys.stdout.flush()` after every JSON write
 
 **Windows config fix — use explicit Python path:**
+
 ```json
 {
   "mcpServers": {
@@ -77452,6 +77416,7 @@ On Windows, `stdio` transport has a known silent failure mode where the server p
 ```
 
 And in your Python server, always flush stdout explicitly:[4]
+
 ```python
 import sys, json
 
@@ -77460,7 +77425,7 @@ print(json.dumps(response))
 sys.stdout.flush()  # ✅ required on Windows
 ```
 
-***
+---
 
 ##### Error 7: Performance & Timeout Errors
 
@@ -77477,7 +77442,7 @@ Anthropic's own benchmarks target under **200ms** for 95% of MCP tool responses.
 time claude mcp test my-server --tool list_files --params '{"path": "."}'
 ```
 
-***
+---
 
 ##### The MCP Diagnostic Command Sequence
 
@@ -77504,6 +77469,7 @@ CLAUDE_MCP_DEBUG=1 claude
 ```
 
 For Claude Desktop on macOS, you can also tail server logs directly:
+
 ```bash
 tail -f ~/Library/Logs/Claude/mcp-server-<server-name>.log
 ```
@@ -77525,7 +77491,6 @@ Sources
 [14] Unable to connect to MCP using STDIO transport! - Bug Reports https://forum.cursor.com/t/unable-to-connect-to-mcp-using-stdio-transport/86218
 [15] Error “Could not connect to your MCP server” when integrating ... https://community.n8n.io/t/error-could-not-connect-to-your-mcp-server-when-integrating-external-tool-via-sse-in-ai-agent/100957
 
-
 #### Real Time Documentation Monitoring real-time-documentation-monitoring.md
 
 _Source: `real-time-documentation-monitoring.md`_
@@ -77536,13 +77501,13 @@ _Source: `real-time-documentation-monitoring.md`_
 
 Real-time monitoring for documentation covers three distinct concerns: **availability** (is the docs site up?), **content integrity** (have critical pages changed unexpectedly?), and **link health** (have external links in published docs become broken?).[20][21][22]
 
-| Concern | Tool / Approach | Alert Trigger |
-|---------|-----------------|---------------|
-| Site availability | GitHub Actions + `curl` / Upptime | HTTP non-200 status |
-| Response time | Upptime / custom curl timing | > 3s latency |
-| Content integrity | Checksum comparison job | Hash mismatch on critical pages |
-| Published link health | Scheduled lychee scan | Broken links in deployed site |
-| Certificate expiry | `openssl` / curl | < 30 days until cert expiry |
+| Concern               | Tool / Approach                   | Alert Trigger                   |
+| --------------------- | --------------------------------- | ------------------------------- |
+| Site availability     | GitHub Actions + `curl` / Upptime | HTTP non-200 status             |
+| Response time         | Upptime / custom curl timing      | > 3s latency                    |
+| Content integrity     | Checksum comparison job           | Hash mismatch on critical pages |
+| Published link health | Scheduled lychee scan             | Broken links in deployed site   |
+| Certificate expiry    | `openssl` / curl                  | < 30 days until cert expiry     |
 
 ##### Option A: Upptime (Full-Featured, Open Source)
 
@@ -77564,7 +77529,7 @@ sites:
   - name: Documentation Site
     url: https://docs.yourdomain.com
     expectedStatusCodes: [200]
-    maxResponseTime: 3000        # ms
+    maxResponseTime: 3000 # ms
     icon: https://docs.yourdomain.com/favicon.ico
 
   - name: API Reference
@@ -77581,12 +77546,12 @@ notifications:
 
   - type: github
     # Creates GitHub issues when sites go down
-    assignees: ["your-username"]
-    labels: ["incident", "critical"]
+    assignees: ['your-username']
+    labels: ['incident', 'critical']
 
 status-website:
   cname: status.yourdomain.com
-  name: "Our Service Status"
+  name: 'Our Service Status'
   theme: light
 ```
 
@@ -77598,29 +77563,29 @@ For tighter control, implement monitoring directly in GitHub Actions:[22][24]
 
 ```yaml
 # .github/workflows/docs-monitor.yml
-name: "Docs Real-Time Monitor"
+name: 'Docs Real-Time Monitor'
 
 on:
   schedule:
     # Every 15 minutes (GitHub's minimum cron interval)
-    - cron: "*/15 * * * *"
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
   availability:
-    name: "Availability Check"
+    name: 'Availability Check'
     runs-on: ubuntu-latest
     strategy:
       matrix:
         endpoint:
-          - name: "Docs Home"
-            url: "https://docs.yourdomain.com"
-          - name: "Getting Started"
-            url: "https://docs.yourdomain.com/getting-started"
-          - name: "API Reference"
-            url: "https://docs.yourdomain.com/api"
-          - name: "CLI Reference"
-            url: "https://docs.yourdomain.com/cli"
+          - name: 'Docs Home'
+            url: 'https://docs.yourdomain.com'
+          - name: 'Getting Started'
+            url: 'https://docs.yourdomain.com/getting-started'
+          - name: 'API Reference'
+            url: 'https://docs.yourdomain.com/api'
+          - name: 'CLI Reference'
+            url: 'https://docs.yourdomain.com/cli'
 
     steps:
       - name: Check ${{ matrix.endpoint.name }}
@@ -77670,7 +77635,7 @@ jobs:
             }'
 
   content-integrity:
-    name: "Content Integrity Check"
+    name: 'Content Integrity Check'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -77712,7 +77677,7 @@ jobs:
           git push
 
   ssl-check:
-    name: "TLS Certificate Check"
+    name: 'TLS Certificate Check'
     runs-on: ubuntu-latest
     steps:
       - name: Check certificate expiry
@@ -77734,7 +77699,7 @@ jobs:
           fi
 
   published-links:
-    name: "Published Link Health"
+    name: 'Published Link Health'
     runs-on: ubuntu-latest
     # Run this one less frequently — it's network-intensive
     if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && contains(github.event.schedule, '0 */6')) }}
@@ -77813,7 +77778,6 @@ GitHub Actions free tier provides 2,000 minutes/month. A workflow running every 
 [22] Custom monitoring with GitHub Actions - https://github.blog/2020-08-25-monitoring-with-github-actions/
 [23] Upptime status page features - https://upptime.js.org/docs/status-page
 [24] GitHub Actions cron scheduling - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#scheduled-events
-
 
 #### Version Sync Script version-sync-script.md
 
@@ -77996,6 +77960,7 @@ if __name__ == "__main__":
 ##### Integration Points
 
 **Pre-commit (local enforcement):**
+
 ```yaml
 # .pre-commit-config.yaml
 - repo: local
@@ -78009,12 +77974,14 @@ if __name__ == "__main__":
 ```
 
 **CI enforcement (GitHub Actions job):**
+
 ```yaml
 - name: Verify version sync
   run: python scripts/version_sync.py --check
 ```
 
 **Release automation:**
+
 ```bash
 # In your release script or Makefile
 npm version minor              # Updates package.json
