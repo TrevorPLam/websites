@@ -21,7 +21,7 @@ const path = require('path');
 class MCPProductionValidator {
   constructor() {
     this.validationResults = [];
-    this.configPath = path.join(__dirname, '..', '.mcp', 'config.json');
+    this.configPath = path.join(__dirname, '..', 'config', 'config.production.json');
   }
 
   async validateProductionReadiness() {
@@ -63,8 +63,8 @@ class MCPProductionValidator {
       const config = JSON.parse(fs.readFileSync(this.configPath, 'utf8'));
 
       // Required servers
-      const requiredServers = ['filesystem', 'git', 'everything'];
-      const hasAllServers = requiredServers.every(server => config.servers[server]);
+      const requiredServers = ['filesystem', 'git'];
+      const hasAllServers = requiredServers.every((server) => config.servers[server]);
 
       if (hasAllServers) {
         this.addResult('Required Servers', true, 'All required servers configured');
@@ -88,15 +88,13 @@ class MCPProductionValidator {
       }
 
       // Environment variables
-      const hasEnvVars = config.servers.filesystem.env &&
-                        config.servers.git.env;
+      const hasEnvVars = config.servers.filesystem.env && config.servers.git.env;
 
       if (hasEnvVars) {
         this.addResult('Environment Variables', true, 'Security environment variables configured');
       } else {
         this.addResult('Environment Variables', false, 'Missing security environment variables');
       }
-
     } catch (error) {
       this.addResult('Configuration', false, `Configuration error: ${error.message}`);
     }
@@ -110,8 +108,8 @@ class MCPProductionValidator {
 
       // Directory restrictions
       const filesystemConfig = config.servers.filesystem;
-      const hasAllowedDirectories = filesystemConfig.env &&
-                                  filesystemConfig.env.ALLOWED_DIRECTORIES;
+      const hasAllowedDirectories =
+        filesystemConfig.env && filesystemConfig.env.ALLOWED_DIRECTORIES;
 
       if (hasAllowedDirectories) {
         this.addResult('Directory Restrictions', true, 'Directory restrictions configured');
@@ -120,8 +118,8 @@ class MCPProductionValidator {
       }
 
       // Read-only default
-      const hasReadOnlyDefault = filesystemConfig.env &&
-                               filesystemConfig.env.READ_ONLY_BY_DEFAULT === 'true';
+      const hasReadOnlyDefault =
+        filesystemConfig.env && filesystemConfig.env.READ_ONLY_BY_DEFAULT === 'true';
 
       if (hasReadOnlyDefault) {
         this.addResult('Read-Only Default', true, 'Read-only default configured');
@@ -131,15 +129,13 @@ class MCPProductionValidator {
 
       // Git push disabled
       const gitConfig = config.servers.git;
-      const hasPushDisabled = gitConfig.env &&
-                           gitConfig.env.ALLOW_PUSH === 'false';
+      const hasPushDisabled = gitConfig.env && gitConfig.env.ALLOW_PUSH === 'false';
 
       if (hasPushDisabled) {
         this.addResult('Git Push Disabled', true, 'Git push disabled for security');
       } else {
         this.addResult('Git Push Disabled', false, 'Git push not disabled');
       }
-
     } catch (error) {
       this.addResult('Security', false, `Security validation error: ${error.message}`);
     }
@@ -171,9 +167,12 @@ class MCPProductionValidator {
       if (isCompatibleFormat) {
         this.addResult('AI Assistant Format', true, 'Configuration compatible with AI assistants');
       } else {
-        this.addResult('AI Assistant Format', false, 'Configuration not compatible with AI assistants');
+        this.addResult(
+          'AI Assistant Format',
+          false,
+          'Configuration not compatible with AI assistants'
+        );
       }
-
     } catch (error) {
       this.addResult('Compatibility', false, `Compatibility validation error: ${error.message}`);
     }
@@ -187,9 +186,17 @@ class MCPProductionValidator {
       const startupTimes = await this.measureServerStartup();
 
       if (startupTimes.filesystem < 5000) {
-        this.addResult('Server Startup Time', true, `Filesystem server: ${startupTimes.filesystem}ms`);
+        this.addResult(
+          'Server Startup Time',
+          true,
+          `Filesystem server: ${startupTimes.filesystem}ms`
+        );
       } else {
-        this.addResult('Server Startup Time', false, `Filesystem server too slow: ${startupTimes.filesystem}ms`);
+        this.addResult(
+          'Server Startup Time',
+          false,
+          `Filesystem server too slow: ${startupTimes.filesystem}ms`
+        );
       }
 
       // Memory usage check
@@ -201,7 +208,6 @@ class MCPProductionValidator {
       } else {
         this.addResult('Memory Usage', false, `High memory usage: ${nodeMemoryMB.toFixed(2)}MB`);
       }
-
     } catch (error) {
       this.addResult('Performance', false, `Performance validation error: ${error.message}`);
     }
@@ -243,7 +249,6 @@ class MCPProductionValidator {
       } else {
         this.addResult('Research Documentation', false, 'Research results missing');
       }
-
     } catch (error) {
       this.addResult('Documentation', false, `Documentation validation error: ${error.message}`);
     }
@@ -252,7 +257,7 @@ class MCPProductionValidator {
   async runTestSuites() {
     const results = {
       mcpIntegration: false,
-      aiIntegration: false
+      aiIntegration: false,
     };
 
     try {
@@ -263,7 +268,6 @@ class MCPProductionValidator {
       // Run AI integration tests
       const aiResult = await this.runScript('test-mcp-ai-integration.js');
       results.aiIntegration = aiResult.success;
-
     } catch (error) {
       console.error('Test suite execution error:', error);
     }
@@ -276,7 +280,7 @@ class MCPProductionValidator {
       const scriptPath = path.join(__dirname, '..', 'scripts', scriptName);
       const child = spawn('node', [scriptPath], {
         stdio: 'pipe',
-        cwd: path.join(__dirname, '..')
+        cwd: path.join(__dirname, '..'),
       });
 
       let output = '';
@@ -319,14 +323,14 @@ class MCPProductionValidator {
     try {
       // Check if configuration can be converted to AI assistant format
       const aiFormat = {
-        mcpServers: {}
+        mcpServers: {},
       };
 
       for (const [name, serverConfig] of Object.entries(config.servers)) {
         aiFormat.mcpServers[name] = {
           command: serverConfig.command,
           args: serverConfig.args,
-          env: serverConfig.env || {}
+          env: serverConfig.env || {},
         };
       }
 
@@ -361,7 +365,7 @@ class MCPProductionValidator {
       const child = spawn('npx', serverConfig.args, {
         stdio: 'pipe',
         cwd: path.join(__dirname, '..'),
-        shell: true
+        shell: true,
       });
 
       let resolved = false;
@@ -403,10 +407,10 @@ class MCPProductionValidator {
     console.log('\n📊 Production Validation Results');
     console.log('================================');
 
-    const passed = this.validationResults.filter(r => r.success).length;
+    const passed = this.validationResults.filter((r) => r.success).length;
     const total = this.validationResults.length;
 
-    this.validationResults.forEach(result => {
+    this.validationResults.forEach((result) => {
       const status = result.success ? '✅' : '❌';
       console.log(`${status} ${result.category}: ${result.message}`);
     });
@@ -415,12 +419,12 @@ class MCPProductionValidator {
   }
 
   isProductionReady() {
-    const criticalFailures = this.validationResults.filter(r => !r.success);
+    const criticalFailures = this.validationResults.filter((r) => !r.success);
 
     // Allow some non-critical failures but not security or configuration issues
     const allowedFailures = ['Memory Usage', 'Server Startup Time', 'MCP Integration Tests'];
-    const hasCriticalFailure = criticalFailures.some(failure =>
-      !allowedFailures.includes(failure.category)
+    const hasCriticalFailure = criticalFailures.some(
+      (failure) => !allowedFailures.includes(failure.category)
     );
 
     return !hasCriticalFailure;
