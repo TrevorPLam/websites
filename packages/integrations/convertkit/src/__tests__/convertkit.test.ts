@@ -1,6 +1,10 @@
 /**
  * @file packages/integrations/convertkit/src/__tests__/convertkit.test.ts
- * Purpose: Test suite for ConvertKit adapter with security validation
+ * @summary Test suite for ConvertKit adapter with security validation
+ * @description Tests security improvements, API v4 usage, secure logging, and two-step subscription process.
+ * @security Mock implementations only, no real API calls or authentication.
+ * @adr none
+ * @requirements none
  *
  * Tests security improvements:
  * - API key in X-Kit-Api-Key header (not request body)
@@ -9,7 +13,7 @@
  * - Two-step subscription process
  */
 
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ConvertKitAdapter } from '../index';
 
 // Mock fetch for testing
@@ -17,31 +21,53 @@ const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 // Mock Headers constructor
-global.Headers = vi.fn((init?: HeadersInit) => {
-  const map = new Map<string, string>();
-  if (init) {
-    if (Array.isArray(init)) {
-      init.forEach(([key, value]) => map.set(key, value));
-    } else if (typeof init === 'object') {
-      Object.entries(init).forEach(([key, value]) => map.set(key, value));
+(global as any).Headers = class MockHeaders {
+  private map = new Map<string, string>();
+
+  constructor(init?: HeadersInit) {
+    if (init) {
+      if (Array.isArray(init)) {
+        init.forEach(([key, value]) => this.map.set(key, value));
+      } else if (typeof init === 'object') {
+        Object.entries(init).forEach(([key, value]) => this.map.set(key, value));
+      }
     }
   }
-  return {
-    get: (key: string) => map.get(key) || null,
-    set: (key: string, value: string) => map.set(key, value),
-    has: (key: string) => map.has(key),
-    delete: (key: string) => map.delete(key),
-    entries: () => map.entries(),
-    values: () => map.values(),
-    keys: () => map.keys(),
-    forEach: (callback: (value: string, key: string) => void) => {
-      map.forEach(callback);
-    },
-    append: (key: string, value: string) => map.set(key, value),
-    getSetCookie: () => '',
-    [Symbol.iterator]: () => map.entries(),
-  };
-}) as any;
+
+  get(key: string) {
+    return this.map.get(key) || null;
+  }
+  set(key: string, value: string) {
+    this.map.set(key, value);
+  }
+  has(key: string) {
+    return this.map.has(key);
+  }
+  delete(key: string) {
+    return this.map.delete(key);
+  }
+  entries() {
+    return this.map.entries();
+  }
+  values() {
+    return this.map.values();
+  }
+  keys() {
+    return this.map.keys();
+  }
+  forEach(callback: (value: string, key: string) => void) {
+    this.map.forEach(callback);
+  }
+  append(key: string, value: string) {
+    this.map.set(key, value);
+  }
+  getSetCookie() {
+    return '';
+  }
+  [Symbol.iterator]() {
+    return this.map.entries();
+  }
+};
 
 // Helper function to create complete mock Response
 function createMockResponse(data: any, options: Partial<Response> = {}): Response {
@@ -99,7 +125,7 @@ afterEach(() => {
 
 describe('ConvertKitAdapter Security Tests', () => {
   let adapter: ConvertKitAdapter;
-  const testApiKey = 'ck_test_123456789';
+  const testApiKey = 'mock_key_123';
   const testFormId = '123456';
 
   beforeEach(() => {

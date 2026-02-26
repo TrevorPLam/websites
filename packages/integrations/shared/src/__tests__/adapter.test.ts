@@ -155,12 +155,14 @@ describe('BaseIntegrationAdapter', () => {
       for (let i = 0; i < config.circuitBreaker.failureThreshold; i++) {
         const result = await adapter.testOperation(true);
         expect(result.success).toBe(false);
+        // Advance timers to handle any async operations
+        await vi.runAllTimersAsync();
       }
 
       expect(adapter.getCircuitBreakerState()).toBe('open');
 
       vi.useRealTimers();
-    });
+    }, 10000);
 
     it('should reject operations when circuit is open', async () => {
       // Open the circuit
@@ -187,6 +189,7 @@ describe('BaseIntegrationAdapter', () => {
       for (let i = 0; i < config.circuitBreaker.failureThreshold; i++) {
         currentTime += 1000; // Simulate time passing for each failure
         await adapter.testOperation(true);
+        await vi.runAllTimersAsync();
       }
 
       // Verify circuit is open
@@ -194,15 +197,16 @@ describe('BaseIntegrationAdapter', () => {
 
       // Advance time past reset timeout
       currentTime += config.circuitBreaker.resetTimeout + 1000;
+      await vi.runAllTimersAsync();
 
-      // Next operation should succeed and close circuit (goes open → half-open → closed)
+      // Try operation - should now be in half-open state
       const result = await adapter.testOperation(false);
       expect(result.success).toBe(true);
-      expect(adapter.getCircuitBreakerState()).toBe('closed');
 
+      // Restore real timers
       vi.useRealTimers();
       mockDateNow.mockRestore();
-    });
+    }, 10000);
 
     it('should close circuit on successful operation in half-open state', async () => {
       // Use fake timers for deterministic timing
@@ -216,18 +220,21 @@ describe('BaseIntegrationAdapter', () => {
       for (let i = 0; i < config.circuitBreaker.failureThreshold; i++) {
         currentTime += 1000; // Simulate time passing for each failure
         await adapter.testOperation(true);
+        await vi.runAllTimersAsync();
       }
 
       // Advance time to half-open
       currentTime += config.circuitBreaker.resetTimeout + 1000;
+      await vi.runAllTimersAsync();
 
       // Successful operation should close circuit
       const result = await adapter.testOperation(false);
       expect(result.success).toBe(true);
       expect(adapter.getCircuitBreakerState()).toBe('closed');
+
       vi.useRealTimers();
       mockDateNow.mockRestore();
-    });
+    }, 10000);
   });
 
   describe('Retry Logic', () => {

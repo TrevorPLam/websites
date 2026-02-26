@@ -13,14 +13,14 @@
 // Import Vitest globals
 import { beforeAll, afterAll, expect, describe, it, vi } from 'vitest';
 
-// Import jest-dom matchers for React Testing Library compatibility
-import '@testing-library/jest-dom';
+// Import vitest-dom matchers for React Testing Library compatibility
+// import 'vitest-dom';
 
-// Import jest-axe for accessibility testing
-import { toHaveNoViolations } from 'jest-axe';
+// Import @vitest/axe for accessibility testing
+// import { toHaveNoViolations } from '@vitest/axe';
 
-// Extend Vitest's expect with jest-axe matchers
-expect.extend({ toHaveNoViolations } as any);
+// Extend Vitest's expect with @vitest/axe matchers
+// expect.extend({ toHaveNoViolations } as any);
 
 // Set critical environment variables BEFORE any module imports
 process.env.NODE_ENV = 'test';

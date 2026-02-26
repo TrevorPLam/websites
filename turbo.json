@@ -67,13 +67,7 @@
       "cache": true,
       "outputs": ["coverage/**"],
       "env": ["NODE_ENV"],
-      "inputs": [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/__tests__/**",
-        "vitest.config.*",
-        "jest.config.*"
-      ]
+      "inputs": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**", "vitest.config.*"]
     },
     "test:e2e": {
       "dependsOn": ["build"],

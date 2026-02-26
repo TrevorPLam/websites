@@ -13,11 +13,11 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/jest-axe": "catalog:",
+    "@types/node": "catalog:",
     "typescript": "catalog:",
     "jsdom": "catalog:",
-    "@testing-library/jest-dom": "catalog:",
-    "jest-axe": "catalog:"
+    "vitest-dom": "catalog:",
+    "@vitest/axe": "catalog:"
   },
   "files": [
     "dist",

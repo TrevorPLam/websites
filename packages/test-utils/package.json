@@ -13,7 +13,7 @@
     "vitest": "catalog:",
     "msw": "catalog:",
     "@testing-library/react": "catalog:",
-    "@testing-library/jest-dom": "catalog:"
+    "vitest-dom": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

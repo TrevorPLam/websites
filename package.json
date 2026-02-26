@@ -119,7 +119,6 @@
     "@changesets/cli": "catalog:",
     "@next/bundle-analyzer": "catalog:",
     "@playwright/test": "catalog:",
-    "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",
     "@testing-library/user-event": "catalog:",
     "@types/node": "catalog:",
@@ -140,7 +139,8 @@
     "syncpack": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "vitest-dom": "catalog:"
   },
   "packageManager": "pnpm@10.29.2",
   "pnpm": {
