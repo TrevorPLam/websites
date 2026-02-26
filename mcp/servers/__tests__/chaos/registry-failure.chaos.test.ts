@@ -3,9 +3,12 @@
  * @summary Chaos engineering tests for MCP Registry failure scenarios
  * @version 1.0.0
  * @description Tests system resilience under various failure conditions
+ * @security Chaos testing only; validates failure handling and recovery.
+ * @adr none
+ * @requirements MCP-001, CHAOS-001
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMockTestEnvironment } from '../fixtures/mock-external-integrations';
 
 describe('Registry Failure Chaos Tests', () => {
@@ -15,7 +18,7 @@ describe('Registry Failure Chaos Tests', () => {
   beforeEach(() => {
     mockEnv = createMockTestEnvironment();
     faultInjector = new FaultInjector();
-    
+
     // Setup normal operation responses
     mockEnv.database.query.mockResolvedValue({
       rows: [{ id: 'skill-1', name: 'test-skill', version: '1.0.0' }],
@@ -79,10 +82,10 @@ describe('Registry Failure Chaos Tests', () => {
       );
 
       const results = await Promise.allSettled(requests);
-      
+
       // Some should succeed, some should fail
-      const successful = results.filter(r => r.status === 'fulfilled').length;
-      const failed = results.filter(r => r.status === 'rejected').length;
+      const successful = results.filter((r) => r.status === 'fulfilled').length;
+      const failed = results.filter((r) => r.status === 'rejected').length;
 
       expect(successful).toBe(5);
       expect(failed).toBe(5);
@@ -95,9 +98,7 @@ describe('Registry Failure Chaos Tests', () => {
         probability: 1.0,
       });
 
-      mockEnv.database.query.mockRejectedValueOnce(
-        new Error('SQL syntax error near "WHERE"')
-      );
+      mockEnv.database.query.mockRejectedValueOnce(new Error('SQL syntax error near "WHERE"'));
 
       try {
         await mockEnv.database.query('INVALID SQL QUERY');
@@ -113,9 +114,7 @@ describe('Registry Failure Chaos Tests', () => {
         probability: 1.0,
       });
 
-      mockEnv.database.query.mockRejectedValueOnce(
-        new Error('Deadlock detected')
-      );
+      mockEnv.database.query.mockRejectedValueOnce(new Error('Deadlock detected'));
 
       // Test retry logic
       let attempts = 0;
@@ -127,7 +126,7 @@ describe('Registry Failure Chaos Tests', () => {
           return await mockEnv.database.query('SELECT * FROM skills');
         } catch (error) {
           if (attempts < maxRetries && error.message.includes('Deadlock')) {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Backoff
+            await new Promise((resolve) => setTimeout(resolve, 100)); // Backoff
             return executeWithRetry();
           }
           throw error;
@@ -194,19 +193,19 @@ describe('Registry Failure Chaos Tests', () => {
       });
 
       mockEnv.redis.get.mockImplementationOnce(() => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => resolve('cached-value'), 5000);
         });
       });
 
       // Test timeout handling
       const startTime = performance.now();
-      
+
       const result = await executeWithTimeout(
         () => mockEnv.redis.get('skill:1'),
         1000 // 1 second timeout
       );
-      
+
       const duration = performance.now() - startTime;
 
       expect(duration).toBeLessThan(1500); // Should timeout quickly
@@ -223,7 +222,7 @@ describe('Registry Failure Chaos Tests', () => {
       });
 
       mockEnv.http.get.mockImplementationOnce(() => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           setTimeout(() => resolve({ data: null, status: 408 }), 100);
         });
       });
@@ -392,7 +391,7 @@ describe('Registry Failure Chaos Tests', () => {
 
       // Test fail-open behavior for rate limiting
       const isAllowed = await checkRateLimitWithFallback('user-123', 'skill:execute');
-      
+
       // Should allow request when rate limiter fails (fail-open)
       expect(isAllowed).toBe(true);
       expect(mockEnv.logger.warn).toHaveBeenCalledWith(
@@ -456,19 +455,19 @@ describe('Registry Failure Chaos Tests', () => {
       });
 
       const results = await Promise.all(operations);
-      
+
       // Analyze resilience
-      const successful = results.filter(r => r.source !== 'error').length;
-      const failed = results.filter(r => r.source === 'error').length;
+      const successful = results.filter((r) => r.source !== 'error').length;
+      const failed = results.filter((r) => r.source === 'error').length;
 
       // Should have some success despite failures
       expect(successful).toBeGreaterThan(50); // At least 50% success rate
       expect(failed).toBeLessThan(50); // Less than 50% failure rate
 
       // Verify fallback chain worked
-      const cacheHits = results.filter(r => r.source === 'cache').length;
-      const dbHits = results.filter(r => r.source === 'database').length;
-      const apiHits = results.filter(r => r.source === 'api').length;
+      const cacheHits = results.filter((r) => r.source === 'cache').length;
+      const dbHits = results.filter((r) => r.source === 'database').length;
+      const apiHits = results.filter((r) => r.source === 'api').length;
 
       expect(cacheHits + dbHits + apiHits).toBe(successful);
     });
@@ -513,7 +512,7 @@ describe('Registry Failure Chaos Tests', () => {
       const originalQuery = mockEnv.database.query;
       mockEnv.database.query.mockImplementation((sql, params) => {
         if (sql.includes('search') || sql.includes('analytics')) {
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             setTimeout(() => resolve({ rows: [] }), 2000); // Slower response
           });
         }
@@ -600,7 +599,7 @@ class CircuitBreaker {
   private onFailure() {
     this.failures++;
     this.lastFailureTime = Date.now();
-    
+
     if (this.failures >= this.options.failureThreshold) {
       this.state = 'open';
     }
@@ -651,13 +650,13 @@ async function executeWithExponentialBackoff<T>(
       return await operation();
     } catch (error) {
       lastError = error as Error;
-      
+
       if (attempt === options.maxRetries) {
         throw lastError;
       }
 
       const delay = options.baseDelay * Math.pow(2, attempt);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 

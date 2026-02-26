@@ -1,0 +1,303 @@
+name: Coverage Check
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**/*.ts'
+      - 'packages/**/*.tsx'
+      - 'apps/**/*.ts'
+      - 'apps/**/*.tsx'
+      - 'vitest.config.ts'
+      - 'turbo.json'
+  push:
+    branches: [main, develop]
+
+jobs:
+  coverage:
+    name: Test Coverage Analysis
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [22]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for coverage diff analysis
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build packages
+        run: pnpm build
+      
+      - name: Run tests with coverage
+        run: pnpm test:coverage
+      
+      - name: Enforce coverage thresholds
+        run: node scripts/testing/enforce-coverage.mjs --phase PHASE_1
+      
+      - name: Generate coverage diff
+        if: github.event_name == 'pull_request'
+        run: |
+          # Install coverage-diff tool
+          pnpm add -D coverage-diff @vitest/coverage-v8
+          
+          # Generate coverage diff against base branch
+          npx coverage-diff \
+            --base-branch ${{ github.base_ref }} \
+            --head-branch ${{ github.head_ref }} \
+            --coverage-dir ./coverage \
+            --output ./coverage/coverage-diff.json
+      
+      - name: Comment PR with coverage report
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            try {
+              // Read coverage summary
+              const coverageSummary = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json', 'utf8'));
+              const enforcementReport = JSON.parse(fs.readFileSync('./coverage/enforcement-report.json', 'utf8'));
+              
+              // Calculate coverage metrics
+              const total = coverageSummary.total;
+              const globalCoverage = {
+                branches: Math.round(total.branches.pct),
+                functions: Math.round(total.functions.pct),
+                lines: Math.round(total.lines.pct),
+                statements: Math.round(total.statements.pct),
+              };
+              
+              // Read coverage diff if available
+              let coverageDiff = null;
+              try {
+                coverageDiff = JSON.parse(fs.readFileSync('./coverage/coverage-diff.json', 'utf8'));
+              } catch (e) {
+                // Diff file might not exist
+              }
+              
+              // Build comment body
+              let comment = '## 📊 Test Coverage Report\n\n';
+              
+              // Status
+              const status = enforcementReport.status === 'PASS' ? '✅' : '❌';
+              comment += `**Status:** ${status} ${enforcementReport.phase}\n\n`;
+              
+              // Global coverage
+              comment += '### 🌍 Global Coverage\n\n';
+              comment += '| Metric | Coverage | Target | Status |\n';
+              comment += '|--------|----------|--------|--------|\n';
+              
+              const targets = { branches: 60, functions: 70, lines: 80, statements: 80 };
+              
+              for (const [metric, coverage] of Object.entries(globalCoverage)) {
+                const target = targets[metric];
+                const coverageStatus = coverage >= target ? '✅' : '❌';
+                comment += `| ${metric.charAt(0).toUpperCase() + metric.slice(1)} | ${coverage}% | ${target}% | ${coverageStatus} |\n`;
+              }
+              
+              // Critical path coverage
+              if (enforcementReport.criticalPathCoverage) {
+                comment += '\n### 🎯 Critical Path Coverage\n\n';
+                comment += '| Category | Coverage | Target | Status |\n';
+                comment += '|----------|----------|--------|--------|\n';
+                
+                const criticalTargets = enforcementReport.phase.includes('Phase 1') ? 
+                  { security: 95, payments: 90, multiTenant: 95, validation: 90 } :
+                  { security: 95, payments: 90, multiTenant: 95, validation: 90 };
+                
+                for (const [category, coverage] of Object.entries(enforcementReport.criticalPathCoverage)) {
+                  const target = criticalTargets[category] || 90;
+                  const coverageStatus = coverage.lines >= target ? '✅' : '❌';
+                  const icon = category === 'security' ? '🔒' : 
+                              category === 'payments' ? '💳' : 
+                              category === 'multiTenant' ? '🏢' : '✅';
+                  comment += `| ${icon} ${category.charAt(0).toUpperCase() + category.slice(1)} | ${coverage.lines}% | ${target}% | ${coverageStatus} |\n`;
+                }
+              }
+              
+              // Coverage diff
+              if (coverageDiff && coverageDiff.diff) {
+                comment += '\n### 📈 Coverage Changes\n\n';
+                comment += '| Metric | Before | After | Delta |\n';
+                comment += '|--------|--------|-------|-------|\n';
+                
+                for (const [metric, change] of Object.entries(coverageDiff.diff)) {
+                  const delta = change.after - change.before;
+                  const deltaStr = delta >= 0 ? `+${delta}%` : `${delta}%`;
+                  const deltaIcon = delta > 0 ? '📈' : delta < 0 ? '📉' : '➡️';
+                  comment += `| ${metric.charAt(0).toUpperCase() + metric.slice(1)} | ${change.before}% | ${change.after}% | ${deltaIcon} ${deltaStr} |\n`;
+                }
+              }
+              
+              // Violations
+              if (enforcementReport.violations && enforcementReport.violations.length > 0) {
+                comment += '\n### ❌ Coverage Violations\n\n';
+                for (const violation of enforcementReport.violations) {
+                  const context = violation.context === 'global' ? '' : ` (${violation.context})`;
+                  comment += `- **${violation.metric}**: ${violation.current}% < ${violation.threshold}%${context} (-${violation.gap}%)\n`;
+                }
+              }
+              
+              // Recommendations
+              if (enforcementReport.recommendations && enforcementReport.recommendations.length > 0) {
+                comment += '\n### 💡 Recommendations\n\n';
+                enforcementReport.recommendations.forEach(rec => {
+                  comment += `- ${rec}\n`;
+                });
+              }
+              
+              // Coverage badge info
+              comment += '\n### 📋 Coverage Badges\n\n';
+              comment += 'Coverage badges will be updated after merge to main branch.\n';
+              
+              // Footer
+              comment += '\n---\n';
+              comment += '*This report was generated automatically by the coverage check workflow.*\n';
+              
+              // Find existing comment
+              const { data: comments } = await github.rest.issues.listComments({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              });
+              
+              const existingComment = comments.find(comment => 
+                comment.body.includes('📊 Test Coverage Report') && 
+                comment.user.type === 'Bot'
+              );
+              
+              if (existingComment) {
+                // Update existing comment
+                await github.rest.issues.updateComment({
+                  comment_id: existingComment.id,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment,
+                });
+              } else {
+                // Create new comment
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment,
+                });
+              }
+              
+            } catch (error) {
+              console.error('Error generating coverage comment:', error);
+              
+              // Fallback comment
+              const fallbackComment = `## 📊 Test Coverage Report\n\n❌ Error generating detailed coverage report.\n\nPlease check the workflow logs for details.`;
+              
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: fallbackComment,
+              });
+            }
+      
+      - name: Upload coverage reports to Codecov
+        if: github.event_name == 'push'
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+      
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: coverage-reports-${{ matrix.node-version }}
+          path: |
+            coverage/
+            !coverage/tmp/
+          retention-days: 30
+      
+      - name: Coverage summary
+        if: always()
+        run: |
+          echo "## Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "./coverage/coverage-summary.json" ]; then
+            echo "### Global Coverage" >> $GITHUB_STEP_SUMMARY
+            node -e "
+              const coverage = JSON.parse(require('fs').readFileSync('./coverage/coverage-summary.json', 'utf8'));
+              const total = coverage.total;
+              console.log('| Metric | Coverage | Target | Status |');
+              console.log('|--------|----------|--------|--------|');
+              console.log(\`| Branches | \${Math.round(total.branches.pct)}% | 60% | \${total.branches.pct >= 60 ? '✅' : '❌'} |\`);
+              console.log(\`| Functions | \${Math.round(total.functions.pct)}% | 70% | \${total.functions.pct >= 70 ? '✅' : '❌'} |\`);
+              console.log(\`| Lines | \${Math.round(total.lines.pct)}% | 80% | \${total.lines.pct >= 80 ? '✅' : '❌'} |\`);
+              console.log(\`| Statements | \${Math.round(total.statements.pct)}% | 80% | \${total.statements.pct >= 80 ? '✅' : '❌'} |\`);
+            " >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "./coverage/enforcement-report.json" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Enforcement Status" >> $GITHUB_STEP_SUMMARY
+            node -e "
+              const report = JSON.parse(require('fs').readFileSync('./coverage/enforcement-report.json', 'utf8'));
+              console.log(\`**Status:** \${report.status === 'PASS' ? '✅ PASS' : '❌ FAIL'}\`);
+              console.log(\`**Phase:** \${report.phase}\`);
+              if (report.violations.length > 0) {
+                console.log('**Violations:** ' + report.violations.length);
+              }
+            " >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Check coverage gates
+        if: github.event_name == 'pull_request'
+        run: |
+          # Exit with error if coverage requirements not met
+          if [ -f "./coverage/enforcement-report.json" ]; then
+            status=$(node -e "
+              const report = JSON.parse(require('fs').readFileSync('./coverage/enforcement-report.json', 'utf8'));
+              console.log(report.status);
+            ")
+            
+            if [ "$status" != "PASS" ]; then
+              echo "❌ Coverage requirements not met - blocking PR"
+              echo "💡 Add tests to improve coverage before merging"
+              exit 1
+            else
+              echo "✅ Coverage requirements met - PR can proceed"
+            fi
+          else
+            echo "❌ Coverage enforcement report not found"
+            exit 1
+          fi

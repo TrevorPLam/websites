@@ -43,10 +43,10 @@ export default defineConfig({
       ],
       thresholds: {
         global: {
-          branches: 35,
-          functions: 35,
-          lines: 35,
-          statements: 35,
+          branches: 60, // Phase 1: Progressive rollout from 35%
+          functions: 70, // Phase 1: Progressive rollout from 35%
+          lines: 80, // Phase 1: Progressive rollout from 35%
+          statements: 80, // Phase 1: Progressive rollout from 35%
         },
       },
       cleanOnRerun: true,

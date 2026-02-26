@@ -1,127 +1,177 @@
 ---
-name: tenant-setup
+name: marketing
 description: |
-  **WORKFLOW SKILL** - Complete multi-tenant onboarding with security isolation.
-  USE FOR: "tenant setup", "client onboarding", "new tenant", "provision tenant".
-  DO NOT USE FOR: tenant configuration changes, billing updates.
-  INVOKES: multi-tenant, enterprise-auth, enterprise-security, github.
+  **WORKFLOW SKILL** - Comprehensive marketing tools and campaign management.
+  USE FOR: "SEO audit", "content publish", "campaign tracking", "marketing analytics".
+  DO NOT USE FOR: tenant setup, billing management, technical deployment.
+  INVOKES: analytics, content-management, seo-tools, campaign-automation.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'
 ---
 
-# Tenant Setup Workflow
+# Marketing Workflow
 
 ## Overview
 
-This Skill orchestrates secure multi-tenant provisioning with proper isolation, authentication, and compliance setup.
+This Skill provides comprehensive marketing tools including SEO auditing, content publishing, and campaign tracking for multi-tenant marketing websites.
 
 ## Prerequisites
 
-- Valid tenant information (name, domain, plan)
-- Authentication credentials
-- Compliance requirements identified
+- Access to analytics platforms
+- Content management system credentials
+- SEO tool API keys
+- Campaign tracking configuration
 
 ## Workflow Steps
 
-### 1. Tenant Identity Creation
+### 1. SEO Audit & Analysis
 
-**Action:** Create tenant identity and configuration
+**Action:** Perform comprehensive SEO audit
 
-- **Tool:** `multi-tenant` → `create-tenant`
-- **Purpose:** Establish tenant with unique ID and basic config
-- **Failure:** Abort with detailed validation errors
+- **Tool:** `seo-tools` → `run-seo-audit`
+- **Purpose:** Analyze site SEO performance and identify issues
+- **Failure:** Continue with partial audit, flag missing data
 
-### 2. Security Isolation Setup
+### 2. Content Optimization
 
-**Action:** Configure tenant-specific security boundaries
+**Action:** Optimize content for search engines
 
-- **Tool:** `enterprise-security` → `setup-tenant-isolation`
-- **Purpose:** Implement data isolation and access controls
-- **Failure:** Rollback tenant creation
+- **Tool:** `seo-tools` → `optimize-content`
+- **Purpose:** Improve content SEO score and readability
+- **Failure:** Use baseline optimization rules
 
-### 3. Authentication Configuration
+### 3. Content Publishing
 
-**Action:** Set up tenant-specific authentication
+**Action:** Publish optimized content across channels
 
-- **Tool:** `enterprise-auth` → `configure-tenant-auth`
-- **Purpose:** Configure SSO, OAuth, or tenant-specific auth
-- **Failure:** Continue with basic auth, flag for manual setup
+- **Tool:** `content-management` → `publish-content`
+- **Purpose:** Deploy content to website and distribution channels
+- **Failure:** Queue content for manual review
 
-### 4. Resource Provisioning
+### 4. Campaign Setup
 
-**Action:** Allocate tenant resources and quotas
+**Action:** Configure marketing campaign tracking
 
-- **Tool:** `multi-tenant` → `allocate-resources`
-- **Purpose:** Set up databases, storage, and compute resources
-- **Failure:** Partial provisioning with retry logic
+- **Tool:** `campaign-automation` → `setup-campaign`
+- **Purpose:** Set up tracking pixels, analytics, and attribution
+- **Failure:** Use default tracking configuration
 
-### 5. Compliance Validation
+### 5. Performance Monitoring
 
-**Action:** Verify compliance with tenant requirements
+**Action:** Monitor campaign and content performance
 
-- **Tool:** `enterprise-security` → `compliance-check`
-- **Purpose:** Ensure GDPR, HIPAA, or other compliance
-- **Failure:** Flag compliance issues, proceed with warnings
+- **Tool:** `analytics` → `track-performance`
+- **Purpose:** Real-time performance monitoring and alerting
+- **Failure:** Use cached performance data
 
-### 6. Repository Setup
+### 6. A/B Testing
 
-**Action:** Create tenant-specific repository structure
+**Action:** Set up A/B tests for content and campaigns
 
-- **Tool:** `github` → `create-tenant-repo`
-- **Purpose:** Set up tenant code repository and configurations
-- **Failure:** Use template repository, flag for manual setup
+- **Tool:** `campaign-automation` → `setup-ab-test`
+- **Purpose:** Optimize conversion rates through testing
+- **Failure:** Deploy with single variant
 
-### 7. Onboarding Documentation
+### 7. Reporting & Insights
 
-**Action:** Generate tenant-specific documentation
+**Action:** Generate comprehensive marketing reports
 
-- **Tool:** `multi-tenant` → `generate-onboarding-docs`
-- **Purpose:** Create setup guides and configuration docs
-- **Failure:** Provide generic documentation
+- **Tool:** `analytics` → `generate-report`
+- **Purpose:** Create performance reports and actionable insights
+- **Failure:** Provide basic performance summary
 
-## Security Requirements
+## Marketing Tools
 
-### Data Isolation
+### SEO Analysis
+- Technical SEO audit
+- Keyword performance tracking
+- Competitor analysis
+- Backlink monitoring
+- Content gap analysis
 
-- Separate database schemas
-- Row-level security policies
-- Tenant-specific encryption keys
-- Network segmentation
+### Content Management
+- Multi-channel publishing
+- Content calendar management
+- SEO optimization
+- Performance tracking
+- A/B testing integration
 
-### Access Control
+### Campaign Automation
+- Campaign setup and management
+- Multi-channel tracking
+- Attribution modeling
+- Conversion optimization
+- Budget management
 
-- Role-based permissions
-- Least-privilege access
-- Audit logging enabled
-- Session management
+### Analytics & Reporting
+- Real-time performance dashboards
+- Custom report generation
+- Trend analysis
+- ROI tracking
+- Predictive analytics
 
-### Compliance
+## Integration Capabilities
 
-- Data residency requirements
-- Privacy policy compliance
-- Security standards adherence
-- Documentation completeness
+### Search Engines
+- Google Search Console
+- Bing Webmaster Tools
+- Google Analytics 4
+- Google Tag Manager
+
+### Social Media
+- Meta Business Suite
+- LinkedIn Campaign Manager
+- Twitter Analytics
+- TikTok Business Center
+
+### Content Platforms
+- WordPress
+- Contentful
+- Sanity CMS
+- Storyblok
+
+### Email Marketing
+- Mailchimp
+- ConvertKit
+- Klaviyo
+- SendGrid
 
 ## Output Components
 
-- Tenant configuration file
-- Security credentials package
-- Resource allocation report
-- Compliance checklist
-- Onboarding documentation
-- Support contact information
+- SEO audit report with action items
+- Published content with performance tracking
+- Campaign configuration and tracking setup
+- Performance dashboards and reports
+- A/B test results and recommendations
+- Marketing calendar and content schedule
 
 ## MCP Server Dependencies
 
-- `multi-tenant`: Tenant management and resource allocation
-- `enterprise-auth`: Authentication and authorization setup
-- `enterprise-security`: Security isolation and compliance
-- `github`: Repository creation and configuration
+- `seo-tools`: SEO analysis and optimization
+- `content-management`: Content publishing and management
+- `campaign-automation`: Campaign setup and tracking
+- `analytics`: Performance monitoring and reporting
+
+## Security & Compliance
+
+### Data Privacy
+- GDPR compliance for tracking
+- CCPA compliance for data collection
+- Cookie consent management
+- Data anonymization for analytics
+
+### Brand Safety
+- Content moderation filters
+- Brand safety monitoring
+- Ad fraud detection
+- Compliance with advertising policies
 
 ## Notes
 
-- Supports multiple tenant tiers (basic, professional, enterprise)
-- Automated compliance checks for major frameworks
-- Customizable resource allocation per tenant plan
-- Integration with existing billing systems
+- Supports multi-tenant marketing campaigns
+- Automated SEO optimization recommendations
+- Real-time performance monitoring and alerting
+- Integration with major marketing platforms
+- Customizable reporting and dashboards
+- A/B testing for continuous optimization

@@ -3,23 +3,22 @@
  * @summary Contract validation tests for Skill Manifest schema
  * @version 1.0.0
  * @description Ensures skill manifests comply with schema and version compatibility
+ * @security No secrets handled; validates schema structure and data types only.
+ * @adr none
+ * @requirements MCP-001, CONTRACT-TEST-001
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import { 
-  SkillManifestSchema, 
-  SkillRegistryEntrySchema,
-  SkillExecutionRequestSchema,
-  SkillExecutionResponseSchema,
-  validateSkillManifest,
-  validateSkillRegistryEntry,
+import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  checkSchemaCompatibility,
   validateSkillExecutionRequest,
   validateSkillExecutionResponse,
-  checkSchemaCompatibility,
-  type SkillManifest,
-  type SkillRegistryEntry,
+  validateSkillManifest,
+  validateSkillRegistryEntry,
   type SkillExecutionRequest,
   type SkillExecutionResponse,
+  type SkillManifest,
+  type SkillRegistryEntry,
 } from '../fixtures/skill-manifest-schema';
 
 describe('Skill Manifest Contract Validation', () => {
@@ -47,8 +46,8 @@ describe('Skill Manifest Contract Validation', () => {
         platforms: ['linux', 'darwin', 'win32'],
       },
       dependencies: {
-        'lodash': '4.17.21',
-        'axios': '1.6.0',
+        lodash: '4.17.21',
+        axios: '1.6.0',
       },
       execution: {
         entryPoint: 'dist/index.js',
@@ -244,7 +243,7 @@ describe('Skill Manifest Contract Validation', () => {
   describe('Skill Manifest Validation', () => {
     it('should validate a correct skill manifest', () => {
       const result = validateSkillManifest(validSkillManifest);
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.name).toBe('test-skill');
@@ -259,10 +258,12 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillManifest(invalidManifest);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toContain('Skill name must contain only lowercase letters, numbers, and hyphens');
+        expect(result.error.issues[0].message).toContain(
+          'Skill name must contain only lowercase letters, numbers, and hyphens'
+        );
       }
     });
 
@@ -273,7 +274,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillManifest(invalidManifest);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Version must follow semantic versioning');
@@ -290,7 +291,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillManifest(invalidManifest);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Valid email is required');
@@ -307,7 +308,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillManifest(invalidManifest);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Timeout must be at least 1000ms');
@@ -321,7 +322,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillManifest(invalidManifest);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Maximum 10 tags allowed');
@@ -332,7 +333,7 @@ describe('Skill Manifest Contract Validation', () => {
   describe('Registry Entry Validation', () => {
     it('should validate a correct registry entry', () => {
       const result = validateSkillRegistryEntry(validRegistryEntry);
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.registryId).toBe('550e8400-e29b-41d4-a716-446655440001');
@@ -347,7 +348,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillRegistryEntry(invalidEntry);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Invalid uuid');
@@ -361,7 +362,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillRegistryEntry(invalidEntry);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Invalid datetime string');
@@ -372,7 +373,7 @@ describe('Skill Manifest Contract Validation', () => {
   describe('Execution Request Validation', () => {
     it('should validate a correct execution request', () => {
       const result = validateSkillExecutionRequest(validExecutionRequest);
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.skillId).toBe('550e8400-e29b-41d4-a716-446655440000');
@@ -387,7 +388,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillExecutionRequest(invalidRequest);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Invalid uuid');
@@ -404,7 +405,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillExecutionRequest(invalidRequest);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Invalid enum value');
@@ -415,7 +416,7 @@ describe('Skill Manifest Contract Validation', () => {
   describe('Execution Response Validation', () => {
     it('should validate a correct execution response', () => {
       const result = validateSkillExecutionResponse(validExecutionResponse);
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.status).toBe('success');
@@ -439,7 +440,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillExecutionResponse(errorResponse);
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.status).toBe('error');
@@ -457,10 +458,12 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillExecutionResponse(invalidResponse);
-      
+
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toContain('Number must be greater than or equal to 0');
+        expect(result.error.issues[0].message).toContain(
+          'Number must be greater than or equal to 0'
+        );
       }
     });
   });
@@ -514,10 +517,7 @@ describe('Skill Manifest Contract Validation', () => {
       expect(responseResult.success).toBe(true);
 
       // 5. Check version compatibility
-      const isCompatible = checkSchemaCompatibility(
-        validSkillManifest.version,
-        '1.0.0'
-      );
+      const isCompatible = checkSchemaCompatibility(validSkillManifest.version, '1.0.0');
       expect(isCompatible).toBe(true);
     });
 
@@ -532,7 +532,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillManifest(secureManifest);
-      
+
       // Should still validate (schema allows it), but security checks would fail
       expect(result.success).toBe(true);
       if (result.success) {
@@ -551,7 +551,7 @@ describe('Skill Manifest Contract Validation', () => {
       };
 
       const result = validateSkillManifest(multiTenantManifest);
-      
+
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.multiTenant.supported).toBe(false);

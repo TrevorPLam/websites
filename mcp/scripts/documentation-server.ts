@@ -2,10 +2,10 @@
 
 /**
  * Documentation MCP Server
- * 
+ *
  * Model Context Protocol server for documentation intelligence
  * Provides context streaming, search, and RAG capabilities
- * 
+ *
  * Part of 2026 Documentation Standards - Phase 2 Automation
  */
 
@@ -17,11 +17,10 @@ import {
   ListToolsRequestSchema,
   McpError,
 } from '@modelcontextprotocol/sdk/types.js';
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync } from 'fs';
 
 // Import RAG pipeline
-import { RAGPipeline } from '../rag/rag-pipeline.mjs';
+import { RAGPipeline } from '../scripts/rag/rag-pipeline.mjs';
 
 class DocumentationMCPServer {
   private server: Server;
@@ -232,10 +231,7 @@ class DocumentationMCPServer {
           case 'initialize_rag_pipeline':
             return await this.initializeRAGPipeline(args);
           default:
-            throw new McpError(
-              ErrorCode.MethodNotFound,
-              `Unknown tool: ${name}`
-            );
+            throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
       } catch (error) {
         console.error(`Error executing tool ${name}:`, error);
@@ -249,10 +245,10 @@ class DocumentationMCPServer {
 
   private async searchDocumentation(args: any) {
     await this.ensureRAGInitialized();
-    
+
     const { query, quadrant, maxResults = 5 } = args;
     const filters = quadrant ? { quadrant } : undefined;
-    
+
     const results = await this.ragPipeline.search(query, filters);
     const limitedResults = results.slice(0, maxResults);
 
@@ -260,20 +256,24 @@ class DocumentationMCPServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            query,
-            totalFound: results.length,
-            results: limitedResults.map(chunk => ({
-              id: chunk.id,
-              title: chunk.metadata.title,
-              file: chunk.metadata.file,
-              quadrant: chunk.metadata.quadrant,
-              section: chunk.metadata.section,
-              tags: chunk.metadata.tags,
-              wordCount: chunk.metadata.wordCount,
-              content: chunk.content.substring(0, 500) + '...',
-            })),
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              query,
+              totalFound: results.length,
+              results: limitedResults.map((chunk) => ({
+                id: chunk.id,
+                title: chunk.metadata.title,
+                file: chunk.metadata.file,
+                quadrant: chunk.metadata.quadrant,
+                section: chunk.metadata.section,
+                tags: chunk.metadata.tags,
+                wordCount: chunk.metadata.wordCount,
+                content: chunk.content.substring(0, 500) + '...',
+              })),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -281,10 +281,10 @@ class DocumentationMCPServer {
 
   private async askDocumentation(args: any) {
     await this.ensureRAGInitialized();
-    
+
     const { question, quadrant } = args;
     const filters = quadrant ? { quadrant } : undefined;
-    
+
     const relevantChunks = await this.ragPipeline.search(question, filters);
     const answer = await this.ragPipeline.generateAnswer(question, relevantChunks);
 
@@ -292,16 +292,20 @@ class DocumentationMCPServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            question,
-            answer,
-            sources: relevantChunks.map(chunk => ({
-              title: chunk.metadata.title,
-              file: chunk.metadata.file,
-              quadrant: chunk.metadata.quadrant,
-            })),
-            contextChunks: relevantChunks.length,
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              question,
+              answer,
+              sources: relevantChunks.map((chunk) => ({
+                title: chunk.metadata.title,
+                file: chunk.metadata.file,
+                quadrant: chunk.metadata.quadrant,
+              })),
+              contextChunks: relevantChunks.length,
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -309,29 +313,33 @@ class DocumentationMCPServer {
 
   private async getDocumentationStats(args: any) {
     await this.ensureRAGInitialized();
-    
+
     const { quadrant } = args;
     const allChunks = this.ragPipeline['chunks'];
-    
-    const filteredChunks = quadrant 
-      ? allChunks.filter(chunk => chunk.metadata.quadrant === quadrant)
+
+    const filteredChunks = quadrant
+      ? allChunks.filter((chunk) => chunk.metadata.quadrant === quadrant)
       : allChunks;
 
     const stats = {
-      totalDocuments: new Set(filteredChunks.map(chunk => chunk.metadata.file)).size,
+      totalDocuments: new Set(filteredChunks.map((chunk) => chunk.metadata.file)).size,
       totalChunks: filteredChunks.length,
       totalWords: filteredChunks.reduce((sum, chunk) => sum + chunk.metadata.wordCount, 0),
       totalCodeBlocks: filteredChunks.reduce((sum, chunk) => sum + chunk.metadata.codeBlocks, 0),
       totalLinks: filteredChunks.reduce((sum, chunk) => sum + chunk.metadata.links, 0),
       quadrants: {
-        tutorials: filteredChunks.filter(c => c.metadata.quadrant === 'tutorials').length,
-        'how-to': filteredChunks.filter(c => c.metadata.quadrant === 'how-to').length,
-        reference: filteredChunks.filter(c => c.metadata.quadrant === 'reference').length,
-        explanation: filteredChunks.filter(c => c.metadata.quadrant === 'explanation').length,
+        tutorials: filteredChunks.filter((c) => c.metadata.quadrant === 'tutorials').length,
+        'how-to': filteredChunks.filter((c) => c.metadata.quadrant === 'how-to').length,
+        reference: filteredChunks.filter((c) => c.metadata.quadrant === 'reference').length,
+        explanation: filteredChunks.filter((c) => c.metadata.quadrant === 'explanation').length,
       },
-      averageWordsPerChunk: filteredChunks.length > 0 
-        ? Math.round(filteredChunks.reduce((sum, chunk) => sum + chunk.metadata.wordCount, 0) / filteredChunks.length)
-        : 0,
+      averageWordsPerChunk:
+        filteredChunks.length > 0
+          ? Math.round(
+              filteredChunks.reduce((sum, chunk) => sum + chunk.metadata.wordCount, 0) /
+                filteredChunks.length
+            )
+          : 0,
     };
 
     return {
@@ -347,28 +355,32 @@ class DocumentationMCPServer {
   private async listDocumentationFiles(args: any) {
     const { quadrant, extension = '.md' } = args;
     const { glob } = await import('glob');
-    
+
     let pattern = `${this.docsDir}/**/*${extension}`;
     if (quadrant) {
       pattern = `${this.docsDir}/${quadrant}/**/*${extension}`;
     }
-    
+
     const files = await glob(pattern, {
-      ignore: ['**/node_modules/**', '**/.git/**', '**/dist/**']
+      ignore: ['**/node_modules/**', '**/.git/**', '**/dist/**'],
     });
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            files: files.map(file => ({
-              path: file,
-              name: file.split('/').pop(),
-              quadrant: this.determineQuadrant(file),
-            })),
-            total: files.length,
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              files: files.map((file) => ({
+                path: file,
+                name: file.split('/').pop(),
+                quadrant: this.determineQuadrant(file),
+              })),
+              total: files.length,
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -376,11 +388,11 @@ class DocumentationMCPServer {
 
   private async getDocumentationContent(args: any) {
     const { filePath, includeMetadata = true } = args;
-    
+
     if (!existsSync(filePath)) {
       throw new McpError(ErrorCode.InvalidRequest, `File not found: ${filePath}`);
     }
-    
+
     const content = readFileSync(filePath, 'utf-8');
     const metadata = includeMetadata ? this.extractFileMetadata(filePath, content) : undefined;
 
@@ -388,11 +400,15 @@ class DocumentationMCPServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            filePath,
-            content,
-            metadata,
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              filePath,
+              content,
+              metadata,
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -400,7 +416,7 @@ class DocumentationMCPServer {
 
   private async validateDocumentationLinks(args: any) {
     const { filePath, checkExternal = false } = args;
-    
+
     // Mock implementation - in production, use proper link validation
     const results = {
       internalLinks: {
@@ -428,12 +444,12 @@ class DocumentationMCPServer {
 
   private async analyzeDocumentationHealth(args: any) {
     await this.ensureRAGInitialized();
-    
+
     const { quadrant, includeSuggestions = true } = args;
     const allChunks = this.ragPipeline['chunks'];
-    
-    const filteredChunks = quadrant 
-      ? allChunks.filter(chunk => chunk.metadata.quadrant === quadrant)
+
+    const filteredChunks = quadrant
+      ? allChunks.filter((chunk) => chunk.metadata.quadrant === quadrant)
       : allChunks;
 
     const health = {
@@ -459,7 +475,7 @@ class DocumentationMCPServer {
 
   private async initializeRAGPipeline(args: any) {
     const { forceRebuild = false } = args;
-    
+
     if (forceRebuild || !existsSync(this.ragState)) {
       await this.ragPipeline.initialize();
       await this.ragPipeline.saveState(this.ragState);
@@ -471,11 +487,15 @@ class DocumentationMCPServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            message: 'RAG pipeline initialized successfully',
-            chunks: this.ragPipeline['chunks'].length,
-            stateFile: this.ragState,
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              message: 'RAG pipeline initialized successfully',
+              chunks: this.ragPipeline['chunks'].length,
+              stateFile: this.ragState,
+            },
+            null,
+            2
+          ),
         },
       ],
     };

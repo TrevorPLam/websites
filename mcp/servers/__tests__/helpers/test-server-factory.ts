@@ -2,14 +2,16 @@
  * @file test-server-factory.ts
  * @summary Factory for creating test MCP server instances
  * @security Test-only factory; no production deployments
+ * @adr none
+ * @requirements MCP-001, TEST-001
  */
 
-import { MultiTenantOrchestrator } from '../../src/multi-tenant-orchestrator';
+import { EnterpriseMCPMarketplace } from '../../src/enterprise-mcp-marketplace';
 import { EnterpriseRegistry } from '../../src/enterprise-registry';
 import { EnterpriseSecurityGateway } from '../../src/enterprise-security-gateway';
+import { MultiTenantOrchestrator } from '../../src/multi-tenant-orchestrator';
 import { ObservabilityMonitor } from '../../src/observability-monitor';
 import { SecureDeploymentManager } from '../../src/secure-deployment-manager';
-import { EnterpriseMCPMarketplace } from '../../src/enterprise-mcp-marketplace';
 import { createMockTestEnvironment } from '../fixtures/mock-external-integrations';
 
 /**
@@ -43,13 +45,13 @@ export const defaultTestConfig: TestServerConfig = {
  */
 export class TestServerFactory {
   private mockEnv = createMockTestEnvironment();
-  
+
   /**
    * Create a test Multi-Tenant Orchestrator
    */
   createOrchestrator(config: Partial<TestServerConfig> = {}): MultiTenantOrchestrator {
     const finalConfig = { ...defaultTestConfig, ...config };
-    
+
     return new MultiTenantOrchestrator({
       tenantId: finalConfig.tenantId,
       isolationLevel: finalConfig.isolationLevel,
@@ -60,13 +62,13 @@ export class TestServerFactory {
       tracer: this.mockEnv.tracer,
     });
   }
-  
+
   /**
    * Create a test Enterprise Registry
    */
   createRegistry(config: Partial<TestServerConfig> = {}): EnterpriseRegistry {
     const finalConfig = { ...defaultTestConfig, ...config };
-    
+
     return new EnterpriseRegistry({
       database: this.mockEnv.database,
       redis: this.mockEnv.redis,
@@ -76,13 +78,13 @@ export class TestServerFactory {
       enableSecurity: finalConfig.enableSecurity,
     });
   }
-  
+
   /**
    * Create a test Enterprise Security Gateway
    */
   createSecurityGateway(config: Partial<TestServerConfig> = {}): EnterpriseSecurityGateway {
     const finalConfig = { ...defaultTestConfig, ...config };
-    
+
     return new EnterpriseSecurityGateway({
       tenantId: finalConfig.tenantId,
       auth: this.mockEnv.auth,
@@ -93,13 +95,13 @@ export class TestServerFactory {
       enableZeroTrust: true,
     });
   }
-  
+
   /**
    * Create a test Observability Monitor
    */
   createObservabilityMonitor(config: Partial<TestServerConfig> = {}): ObservabilityMonitor {
     const finalConfig = { ...defaultTestConfig, ...config };
-    
+
     return new ObservabilityMonitor({
       tenantId: finalConfig.tenantId,
       metrics: this.mockEnv.metrics,
@@ -109,13 +111,13 @@ export class TestServerFactory {
       samplingRate: 0.1,
     });
   }
-  
+
   /**
    * Create a test Secure Deployment Manager
    */
   createDeploymentManager(config: Partial<TestServerConfig> = {}): SecureDeploymentManager {
     const finalConfig = { ...defaultTestConfig, ...config };
-    
+
     return new SecureDeploymentManager({
       tenantId: finalConfig.tenantId,
       aws: this.mockEnv.aws,
@@ -126,13 +128,13 @@ export class TestServerFactory {
       enableSecurity: finalConfig.enableSecurity,
     });
   }
-  
+
   /**
    * Create a test Enterprise MCP Marketplace
    */
   createMarketplace(config: Partial<TestServerConfig> = {}): EnterpriseMCPMarketplace {
     const finalConfig = { ...defaultTestConfig, ...config };
-    
+
     return new EnterpriseMCPMarketplace({
       database: this.mockEnv.database,
       registry: this.createRegistry(config),
@@ -143,13 +145,13 @@ export class TestServerFactory {
       enableMarketplace: finalConfig.enableMarketplace,
     });
   }
-  
+
   /**
    * Create a complete test server stack
    */
   createTestStack(config: Partial<TestServerConfig> = {}) {
     const finalConfig = { ...defaultTestConfig, ...config };
-    
+
     return {
       orchestrator: this.createOrchestrator(finalConfig),
       registry: this.createRegistry(finalConfig),
@@ -160,20 +162,20 @@ export class TestServerFactory {
       mockEnv: this.mockEnv,
     };
   }
-  
+
   /**
    * Get mock environment for direct access
    */
   getMockEnvironment() {
     return this.mockEnv;
   }
-  
+
   /**
    * Reset all mocks
    */
   resetMocks() {
     // Reset all mock implementations
-    Object.values(this.mockEnv).forEach(mock => {
+    Object.values(this.mockEnv).forEach((mock) => {
       if (mock && typeof mock === 'object' && 'clear' in mock) {
         (mock as any).clear();
       }

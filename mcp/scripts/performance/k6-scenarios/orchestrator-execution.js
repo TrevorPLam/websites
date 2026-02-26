@@ -3,11 +3,14 @@
  * @summary k6 performance test for MCP Orchestrator execution operations
  * @version 1.0.0
  * @description Load testing script for orchestrator skill execution
+ * @security Performance testing only; no production data accessed.
+ * @adr none
+ * @requirements MCP-001, PERF-001
  */
 
-import http from 'k6/http';
 import { check, sleep } from 'k6';
-import { Rate, Trend, Counter } from 'k6/metrics';
+import http from 'k6/http';
+import { Counter, Rate, Trend } from 'k6/metrics';
 
 // Custom metrics
 const executionErrorRate = new Rate('execution_errors');
@@ -18,19 +21,19 @@ const successfulExecutions = new Counter('successful_executions');
 // Test configuration
 export const options = {
   stages: [
-    { duration: '1m', target: 5 },   // Warm up
-    { duration: '3m', target: 20 },  // Moderate load
-    { duration: '2m', target: 50 },  // High load
+    { duration: '1m', target: 5 }, // Warm up
+    { duration: '3m', target: 20 }, // Moderate load
+    { duration: '2m', target: 50 }, // High load
     { duration: '5m', target: 100 }, // Peak load
     { duration: '2m', target: 200 }, // Stress test
     { duration: '3m', target: 100 }, // Cool down
-    { duration: '1m', target: 0 },   // Ramp down
+    { duration: '1m', target: 0 }, // Ramp down
   ],
   thresholds: {
     http_req_duration: ['p(95)<2000'], // 95% under 2s
-    http_req_failed: ['rate<0.15'],   // Error rate under 15%
+    http_req_failed: ['rate<0.15'], // Error rate under 15%
     execution_duration: ['p(95)<1500'], // Execution under 1.5s p95
-    execution_errors: ['rate<0.1'],   // Execution error rate under 10%
+    execution_errors: ['rate<0.1'], // Execution error rate under 10%
   },
 };
 
@@ -48,34 +51,33 @@ const TENANTS = ['tenant-1', 'tenant-2', 'tenant-3', 'tenant-4', 'tenant-5'];
 
 export function setup() {
   console.log('Setting up orchestrator performance test...');
-  
+
   // Verify orchestrator is ready
   const healthResponse = http.get(`${BASE_URL}/api/health`);
   check(healthResponse, {
     'orchestrator is healthy': (r) => r.status === 200,
   });
-  
+
   return { skills: SKILLS, tenants: TENANTS };
 }
 
-export default function(data) {
+export default function (data) {
   const skill = data.skills[Math.floor(Math.random() * data.skills.length)];
   const tenant = data.tenants[Math.floor(Math.random() * data.tenants.length)];
-  
+
   executeSkill(skill, tenant);
-  
+
   // Variable think time based on skill complexity
-  const thinkTime = skill.complexity === 'low' ? 0.5 : 
-                   skill.complexity === 'medium' ? 1 : 2;
+  const thinkTime = skill.complexity === 'low' ? 0.5 : skill.complexity === 'medium' ? 1 : 2;
   sleep(thinkTime);
 }
 
 function executeSkill(skill, tenant) {
   const payload = generateSkillPayload(skill);
   const startTime = Date.now();
-  
+
   concurrentExecutions.add(1);
-  
+
   const response = http.post(`${BASE_URL}/api/orchestrator/execute`, payload, {
     headers: {
       'Content-Type': 'application/json',
@@ -84,19 +86,19 @@ function executeSkill(skill, tenant) {
     },
     timeout: '30s',
   });
-  
+
   const duration = Date.now() - startTime;
   executionDuration.add(duration);
-  
+
   const success = check(response, {
     'execution started': (r) => r.status === 200 || r.status === 202,
     'execution has request ID': (r) => r.json('requestId') !== undefined,
     'execution within expected time': (r) => duration < skill.expectedDuration * 2,
   });
-  
+
   if (response.status === 200 || response.status === 202) {
     const requestId = response.json('requestId');
-    
+
     // Poll for completion if async
     if (response.status === 202) {
       pollExecutionCompletion(requestId, tenant, skill.expectedDuration * 3);
@@ -104,7 +106,7 @@ function executeSkill(skill, tenant) {
       successfulExecutions.add(1);
     }
   }
-  
+
   executionErrorRate.add(!success);
   concurrentExecutions.add(-1);
 }
@@ -112,17 +114,17 @@ function executeSkill(skill, tenant) {
 function pollExecutionCompletion(requestId, tenant, timeoutMs) {
   const startTime = Date.now();
   const pollInterval = 500; // 500ms polling interval
-  
+
   while (Date.now() - startTime < timeoutMs) {
     const response = http.get(`${BASE_URL}/api/orchestrator/execution/${requestId}`, {
       headers: {
         'X-Tenant-ID': tenant,
       },
     });
-    
+
     if (response.status === 200) {
       const status = response.json('status');
-      
+
       if (status === 'completed') {
         successfulExecutions.add(1);
         return true;
@@ -131,10 +133,10 @@ function pollExecutionCompletion(requestId, tenant, timeoutMs) {
         return false;
       }
     }
-    
+
     sleep(pollInterval / 1000);
   }
-  
+
   // Timeout
   executionErrorRate.add(1);
   return false;
@@ -147,7 +149,7 @@ function generateSkillPayload(skill) {
     priority: 'normal',
     timeout: skill.expectedDuration * 2,
   };
-  
+
   switch (skill.name) {
     case 'data-processor':
       return {
@@ -157,7 +159,7 @@ function generateSkillPayload(skill) {
           operation: 'aggregate',
         },
       };
-      
+
     case 'text-analyzer':
       return {
         ...basePayload,
@@ -166,7 +168,7 @@ function generateSkillPayload(skill) {
           analysis: ['sentiment', 'entities', 'keywords'],
         },
       };
-      
+
     case 'image-processor':
       return {
         ...basePayload,
@@ -176,7 +178,7 @@ function generateSkillPayload(skill) {
           quality: 80,
         },
       };
-      
+
     case 'api-integrator':
       return {
         ...basePayload,
@@ -188,7 +190,7 @@ function generateSkillPayload(skill) {
           timeout: 5000,
         },
       };
-      
+
     case 'report-generator':
       return {
         ...basePayload,
@@ -201,7 +203,7 @@ function generateSkillPayload(skill) {
           format: 'pdf',
         },
       };
-      
+
     default:
       return {
         ...basePayload,
