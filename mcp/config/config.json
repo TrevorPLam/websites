@@ -78,6 +78,15 @@
         "LOG_LEVEL": "debug",
         "NODE_ENV": "development"
       }
+    },
+    "enterprise-auth-gateway": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/enterprise-auth-gateway.ts"],
+      "env": {
+        "JWT_SECRET": "${JWT_SECRET}",
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
     }
   }
 }

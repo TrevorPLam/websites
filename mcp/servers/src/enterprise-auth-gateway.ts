@@ -1,16 +1,9 @@
-#!/usr/bin/env node
 /**
- * @file mcp-servers/src/enterprise-auth-gateway.ts
- * @summary MCP server implementation: enterprise-auth-gateway.
- * @description Enterprise MCP server providing enterprise auth gateway capabilities.
- * @security Enterprise-grade security with authentication, authorization, and audit logging.
- * @requirements MCP-standards, enterprise-security
- */
-
-/**
- * @file packages/mcp-servers/src/enterprise-auth-gateway.ts
+ * @file mcp/servers/src/enterprise-auth-gateway.ts
  * @summary Enterprise Authentication Gateway with OAuth 2.1, OIDC, and RBAC
  * @description Implements enterprise-grade authentication, authorization, and identity management
+ * @security Enterprise-grade security with authentication, authorization, and audit logging.
+ * @requirements MCP-standards, enterprise-security
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -34,6 +27,8 @@ interface User {
   lastLogin?: Date;
   createdAt: Date;
   updatedAt: Date;
+  passwordHash?: string;
+  mfaSecret?: string;
 }
 
 interface Role {
@@ -67,34 +62,6 @@ interface AuthToken {
 interface BlacklistedToken {
   token: string;
   expiresAt: Date;
-}
-
-interface AuthSession {
-  id: string;
-  userId: string;
-  tenantId: string;
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: Date;
-  createdAt: Date;
-  lastAccessed: Date;
-  ipAddress: string;
-  userAgent: string;
-}
-
-interface User {
-  id: string;
-  username: string;
-  email: string;
-  tenantId: string;
-  roles: string[];
-  permissions: string[];
-  status: 'active' | 'inactive' | 'suspended';
-  lastLogin?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  passwordHash?: string;
-  mfaSecret?: string;
 }
 
 interface AuthPolicy {
@@ -187,7 +154,7 @@ export class EnterpriseAuthGateway {
     // Initialize system permissions
     const systemPermissions: Permission[] = [
       {
-        id: 'perm-001',
+        id: 'mcp-access',
         name: 'mcp-access',
         resource: 'mcp',
         action: 'access',
@@ -195,7 +162,7 @@ export class EnterpriseAuthGateway {
         system: true,
       },
       {
-        id: 'perm-002',
+        id: 'mcp-admin',
         name: 'mcp-admin',
         resource: 'mcp',
         action: 'admin',
@@ -203,7 +170,7 @@ export class EnterpriseAuthGateway {
         system: true,
       },
       {
-        id: 'perm-003',
+        id: 'tenant-manage',
         name: 'tenant-manage',
         resource: 'tenant',
         action: 'manage',
@@ -211,7 +178,7 @@ export class EnterpriseAuthGateway {
         system: true,
       },
       {
-        id: 'perm-004',
+        id: 'user-manage',
         name: 'user-manage',
         resource: 'user',
         action: 'manage',
@@ -219,7 +186,7 @@ export class EnterpriseAuthGateway {
         system: true,
       },
       {
-        id: 'perm-005',
+        id: 'security-admin',
         name: 'security-admin',
         resource: 'security',
         action: 'admin',
@@ -245,7 +212,7 @@ export class EnterpriseAuthGateway {
         id: 'role-002',
         name: 'tenant-admin',
         description: 'Tenant administrator',
-        permissions: ['perm-001', 'perm-003', 'perm-004'],
+        permissions: ['mcp-access', 'tenant-manage', 'user-manage'],
         tenantId: 'system',
         system: true,
         createdAt: new Date(),
@@ -254,7 +221,7 @@ export class EnterpriseAuthGateway {
         id: 'role-003',
         name: 'mcp-user',
         description: 'MCP user with basic access',
-        permissions: ['perm-001'],
+        permissions: ['mcp-access'],
         tenantId: 'system',
         system: true,
         createdAt: new Date(),
@@ -879,29 +846,6 @@ export class EnterpriseAuthGateway {
     }
   }
 
-  private generateTokens(user: User): AuthToken {
-    const payload = {
-      userId: user.id,
-      username: user.username,
-      email: user.email,
-      tenantId: user.tenantId,
-      roles: user.roles,
-      permissions: user.permissions,
-    };
-
-    const accessToken = jwt.sign(payload, this.jwtSecret, { expiresIn: '1h' });
-    const refreshToken = jwt.sign({ userId: user.id }, this.jwtSecret, { expiresIn: '7d' });
-
-    return {
-      accessToken,
-      refreshToken,
-      tokenType: 'Bearer',
-      expiresIn: 3600, // 1 hour
-      scope: ['mcp-access'],
-      issuedAt: new Date(),
-    };
-  }
-
   private getPermissionsForRoles(roleIds: string[]): string[] {
     const permissions = new Set<string>();
 
@@ -915,8 +859,7 @@ export class EnterpriseAuthGateway {
     return Array.from(permissions);
   }
 
-  private blacklistToken(token: string): void {
-    // Decode token to get expiration time
+  private addToTokenBlacklist(token: string): void {
     try {
       const decoded = jwt.decode(token) as any;
       if (decoded && decoded.exp) {
@@ -954,10 +897,26 @@ export class EnterpriseAuthGateway {
     }
   }
 
+  // Periodic cleanup to prevent memory leaks
+  private startTokenCleanup(): void {
+    setInterval(
+      () => {
+        this.cleanupExpiredTokens();
+      },
+      60 * 60 * 1000
+    ); // Cleanup every hour
+  }
+
   private checkPermission(user: User, action: string, resource: string): boolean {
-    // Check if user has permission for the action on the resource
+    // Standardize permission format to handle both formats
     const requiredPermission = `${resource}:${action}`;
-    return user.permissions.includes(requiredPermission) || user.permissions.includes('mcp-admin');
+    const altPermission = `perm-${resource}-${action}`;
+
+    return (
+      user.permissions.includes(requiredPermission) ||
+      user.permissions.includes(altPermission) ||
+      user.permissions.includes('mcp-admin')
+    );
   }
 
   private async evaluateAuthPolicy(
