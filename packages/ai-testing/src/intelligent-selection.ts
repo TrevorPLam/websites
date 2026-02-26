@@ -149,7 +149,6 @@ export class IntelligentTestSelection {
       criticality: 0.1,
       complexity: 0.05,
       executionTime: 0.05,
-      ...this.config.weights,
     };
   }
 

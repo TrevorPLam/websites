@@ -305,7 +305,7 @@ export class AITestGenerationFramework {
    * Select the best pattern for a function
    */
   private selectBestPattern(functionInfo: FunctionInfo): TestPattern | null {
-    for (const [name, pattern] of this.patterns) {
+    for (const [name, pattern] of Array.from(this.patterns.entries())) {
       if (this.patternMatches(pattern, functionInfo)) {
         return pattern;
       }
@@ -669,7 +669,9 @@ describe('{{functionName}} Server Action', () => {
     let match;
 
     while ((match = importRegex.exec(sourceCode)) !== null) {
-      imports.push(match[1]);
+      if (match[1]) {
+        imports.push(match[1]);
+      }
     }
 
     return imports;
@@ -681,7 +683,9 @@ describe('{{functionName}} Server Action', () => {
     let match;
 
     while ((match = exportRegex.exec(sourceCode)) !== null) {
-      exports.push(match[1]);
+      if (match[1]) {
+        exports.push(match[1]);
+      }
     }
 
     return exports;
