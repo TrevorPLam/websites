@@ -9,19 +9,19 @@
 
 /**
  * MCP Apps Marketplace and Distribution Platform
- * 
+ *
  * Provides a comprehensive platform for discovering, distributing, and managing
  * MCP applications with enterprise-grade features and community engagement.
  */
 
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
   CallToolRequestSchema,
   ErrorCode,
   ListToolsRequestSchema,
   McpError,
-} from "@modelcontextprotocol/sdk/types.js";
+} from '@modelcontextprotocol/sdk/types.js';
 
 interface MCPApp {
   id: string;
@@ -36,7 +36,7 @@ interface MCPApp {
   repository: string;
   documentation: string;
   license: string;
-  pricing: "free" | "paid" | "freemium" | "enterprise";
+  pricing: 'free' | 'paid' | 'freemium' | 'enterprise';
   price?: number;
   currency?: string;
   screenshots: string[];
@@ -70,7 +70,7 @@ interface MCPApp {
 interface AppSubmission {
   id: string;
   appId: string;
-  status: "pending" | "reviewing" | "approved" | "rejected" | "published";
+  status: 'pending' | 'reviewing' | 'approved' | 'rejected' | 'published';
   submittedAt: Date;
   reviewedAt?: Date;
   reviewer?: string;
@@ -122,8 +122,8 @@ class MCPAppsMarketplace {
   constructor() {
     this.server = new Server(
       {
-        name: "mcp-apps-marketplace",
-        version: "1.0.0",
+        name: 'mcp-apps-marketplace',
+        version: '1.0.0',
       },
       {
         capabilities: {
@@ -140,218 +140,220 @@ class MCPAppsMarketplace {
     // Sample apps
     const apps: MCPApp[] = [
       {
-        id: "code-assistant-pro",
-        name: "Code Assistant Pro",
-        description: "Advanced code completion and refactoring assistant with multi-language support",
-        version: "2.1.0",
-        author: "DevTools Inc",
-        publisher: "DevTools Inc",
-        category: "Development",
-        tags: ["code-completion", "refactoring", "multi-language", "ide-integration"],
-        homepage: "https://codeassistant.dev",
-        repository: "https://github.com/devtools/code-assistant-pro",
-        documentation: "https://docs.codeassistant.dev",
-        license: "MIT",
-        pricing: "freemium",
+        id: 'code-assistant-pro',
+        name: 'Code Assistant Pro',
+        description:
+          'Advanced code completion and refactoring assistant with multi-language support',
+        version: '2.1.0',
+        author: 'DevTools Inc',
+        publisher: 'DevTools Inc',
+        category: 'Development',
+        tags: ['code-completion', 'refactoring', 'multi-language', 'ide-integration'],
+        homepage: 'https://codeassistant.dev',
+        repository: 'https://github.com/devtools/code-assistant-pro',
+        documentation: 'https://docs.codeassistant.dev',
+        license: 'MIT',
+        pricing: 'freemium',
         price: 29.99,
-        currency: "USD",
+        currency: 'USD',
         screenshots: [
-          "https://screenshots.codeassistant.dev/main.png",
-          "https://screenshots.codeassistant.dev/settings.png"
+          'https://screenshots.codeassistant.dev/main.png',
+          'https://screenshots.codeassistant.dev/settings.png',
         ],
         downloadCount: 45230,
         rating: 4.7,
         reviewCount: 342,
-        lastUpdated: new Date("2026-02-20"),
-        publishedAt: new Date("2025-06-15"),
+        lastUpdated: new Date('2026-02-20'),
+        publishedAt: new Date('2025-06-15'),
         verified: true,
         featured: true,
         trending: true,
         compatibility: {
-          mcpVersion: "1.0.0+",
-          platforms: ["VS Code", "Cursor", "Claude Desktop", "JetBrains"],
-          dependencies: ["@mcp/sdk", "typescript"]
+          mcpVersion: '1.0.0+',
+          platforms: ['VS Code', 'Cursor', 'Claude Desktop', 'JetBrains'],
+          dependencies: ['@mcp/sdk', 'typescript'],
         },
         security: {
           verified: true,
-          scanDate: new Date("2026-02-25"),
+          scanDate: new Date('2026-02-25'),
           vulnerabilities: 0,
-          signature: "sha256:abc123..."
+          signature: 'sha256:abc123...',
         },
         metrics: {
           installs: 45230,
           activeUsers: 12450,
           avgSessionDuration: 1800,
-          crashRate: 0.001
-        }
+          crashRate: 0.001,
+        },
       },
       {
-        id: "data-visualizer",
-        name: "Data Visualizer",
-        description: "Interactive data visualization and chart generation tool",
-        version: "1.5.2",
-        author: "DataViz Labs",
-        publisher: "DataViz Labs",
-        category: "Analytics",
-        tags: ["visualization", "charts", "analytics", "dashboard"],
-        homepage: "https://dataviz.app",
-        repository: "https://github.com/dataviz-labs/visualizer",
-        documentation: "https://docs.dataviz.app",
-        license: "Apache-2.0",
-        pricing: "free",
+        id: 'data-visualizer',
+        name: 'Data Visualizer',
+        description: 'Interactive data visualization and chart generation tool',
+        version: '1.5.2',
+        author: 'DataViz Labs',
+        publisher: 'DataViz Labs',
+        category: 'Analytics',
+        tags: ['visualization', 'charts', 'analytics', 'dashboard'],
+        homepage: 'https://dataviz.app',
+        repository: 'https://github.com/dataviz-labs/visualizer',
+        documentation: 'https://docs.dataviz.app',
+        license: 'Apache-2.0',
+        pricing: 'free',
         screenshots: [
-          "https://screenshots.dataviz.app/dashboard.png",
-          "https://screenshots.dataviz.app/charts.png"
+          'https://screenshots.dataviz.app/dashboard.png',
+          'https://screenshots.dataviz.app/charts.png',
         ],
         downloadCount: 28910,
         rating: 4.5,
         reviewCount: 189,
-        lastUpdated: new Date("2026-02-18"),
-        publishedAt: new Date("2025-03-20"),
+        lastUpdated: new Date('2026-02-18'),
+        publishedAt: new Date('2025-03-20'),
         verified: true,
         featured: false,
         trending: false,
         compatibility: {
-          mcpVersion: "1.0.0+",
-          platforms: ["Web", "Desktop", "Cloud"],
-          dependencies: ["d3.js", "chart.js"]
+          mcpVersion: '1.0.0+',
+          platforms: ['Web', 'Desktop', 'Cloud'],
+          dependencies: ['d3.js', 'chart.js'],
         },
         security: {
           verified: true,
-          scanDate: new Date("2026-02-24"),
+          scanDate: new Date('2026-02-24'),
           vulnerabilities: 0,
-          signature: "sha256:def456..."
+          signature: 'sha256:def456...',
         },
         metrics: {
           installs: 28910,
           activeUsers: 8920,
           avgSessionDuration: 1200,
-          crashRate: 0.002
-        }
+          crashRate: 0.002,
+        },
       },
       {
-        id: "workflow-automation",
-        name: "Workflow Automation",
-        description: "Automate complex workflows with visual builder and scheduling",
-        version: "3.0.1",
-        author: "Workflow Corp",
-        publisher: "Workflow Corp",
-        category: "Productivity",
-        tags: ["automation", "workflows", "scheduling", "integration"],
-        homepage: "https://workflow-automation.io",
-        repository: "https://github.com/workflow-corp/automation",
-        documentation: "https://docs.workflow-automation.io",
-        license: "Proprietary",
-        pricing: "enterprise",
+        id: 'workflow-automation',
+        name: 'Workflow Automation',
+        description: 'Automate complex workflows with visual builder and scheduling',
+        version: '3.0.1',
+        author: 'Workflow Corp',
+        publisher: 'Workflow Corp',
+        category: 'Productivity',
+        tags: ['automation', 'workflows', 'scheduling', 'integration'],
+        homepage: 'https://workflow-automation.io',
+        repository: 'https://github.com/workflow-corp/automation',
+        documentation: 'https://docs.workflow-automation.io',
+        license: 'Proprietary',
+        pricing: 'enterprise',
         price: 199.99,
-        currency: "USD",
+        currency: 'USD',
         screenshots: [
-          "https://screenshots.workflow.io/builder.png",
-          "https://screenshots.workflow.io/dashboard.png"
+          'https://screenshots.workflow.io/builder.png',
+          'https://screenshots.workflow.io/dashboard.png',
         ],
         downloadCount: 12450,
         rating: 4.8,
         reviewCount: 98,
-        lastUpdated: new Date("2026-02-22"),
-        publishedAt: new Date("2025-01-10"),
+        lastUpdated: new Date('2026-02-22'),
+        publishedAt: new Date('2025-01-10'),
         verified: true,
         featured: true,
         trending: true,
         compatibility: {
-          mcpVersion: "1.0.0+",
-          platforms: ["Enterprise", "Cloud", "On-premise"],
-          dependencies: ["@workflow/core", "redis", "postgresql"]
+          mcpVersion: '1.0.0+',
+          platforms: ['Enterprise', 'Cloud', 'On-premise'],
+          dependencies: ['@workflow/core', 'redis', 'postgresql'],
         },
         security: {
           verified: true,
-          scanDate: new Date("2026-02-25"),
+          scanDate: new Date('2026-02-25'),
           vulnerabilities: 0,
-          signature: "sha256:ghi789..."
+          signature: 'sha256:ghi789...',
         },
         metrics: {
           installs: 12450,
           activeUsers: 3210,
           avgSessionDuration: 2400,
-          crashRate: 0.0005
-        }
-      }
+          crashRate: 0.0005,
+        },
+      },
     ];
 
-    apps.forEach(app => this.apps.set(app.id, app));
+    apps.forEach((app) => this.apps.set(app.id, app));
 
     // Sample developers
     const developers: DeveloperAccount[] = [
       {
-        id: "devtools-inc",
-        name: "DevTools Inc",
-        email: "contact@devtools.com",
-        organization: "DevTools Inc",
-        website: "https://devtools.com",
+        id: 'devtools-inc',
+        name: 'DevTools Inc',
+        email: 'contact@devtools.com',
+        organization: 'DevTools Inc',
+        website: 'https://devtools.com',
         verified: true,
-        apps: ["code-assistant-pro"],
-        joinedAt: new Date("2025-01-15"),
+        apps: ['code-assistant-pro'],
+        joinedAt: new Date('2025-01-15'),
         stats: {
           totalDownloads: 45230,
           totalRevenue: 1356900,
           averageRating: 4.7,
-          activeApps: 1
-        }
+          activeApps: 1,
+        },
       },
       {
-        id: "dataviz-labs",
-        name: "DataViz Labs",
-        email: "info@dataviz.app",
-        organization: "DataViz Labs",
-        website: "https://dataviz.app",
+        id: 'dataviz-labs',
+        name: 'DataViz Labs',
+        email: 'info@dataviz.app',
+        organization: 'DataViz Labs',
+        website: 'https://dataviz.app',
         verified: true,
-        apps: ["data-visualizer"],
-        joinedAt: new Date("2025-02-20"),
+        apps: ['data-visualizer'],
+        joinedAt: new Date('2025-02-20'),
         stats: {
           totalDownloads: 28910,
           totalRevenue: 0,
           averageRating: 4.5,
-          activeApps: 1
-        }
-      }
+          activeApps: 1,
+        },
+      },
     ];
 
-    developers.forEach(dev => this.developers.set(dev.id, dev));
+    developers.forEach((dev) => this.developers.set(dev.id, dev));
 
     // Sample reviews
     const reviews: UserReview[] = [
       {
-        id: "review-1",
-        appId: "code-assistant-pro",
-        userId: "user-123",
-        username: "developer_jane",
+        id: 'review-1',
+        appId: 'code-assistant-pro',
+        userId: 'user-123',
+        username: 'developer_jane',
         rating: 5,
-        title: "Best code assistant I have used",
-        comment: "This tool has dramatically improved my coding productivity. The suggestions are accurate and the refactoring capabilities are top-notch.",
-        pros: ["Accurate suggestions", "Great refactoring", "Multi-language support"],
-        cons: ["Resource intensive", "Learning curve for advanced features"],
+        title: 'Best code assistant I have used',
+        comment:
+          'This tool has dramatically improved my coding productivity. The suggestions are accurate and the refactoring capabilities are top-notch.',
+        pros: ['Accurate suggestions', 'Great refactoring', 'Multi-language support'],
+        cons: ['Resource intensive', 'Learning curve for advanced features'],
         helpful: 42,
         verified: true,
-        createdAt: new Date("2026-02-15"),
-        updatedAt: new Date("2026-02-15")
+        createdAt: new Date('2026-02-15'),
+        updatedAt: new Date('2026-02-15'),
       },
       {
-        id: "review-2",
-        appId: "data-visualizer",
-        userId: "user-456",
-        username: "data_analyst",
+        id: 'review-2',
+        appId: 'data-visualizer',
+        userId: 'user-456',
+        username: 'data_analyst',
         rating: 4,
-        title: "Great visualization tool",
-        comment: "Excellent for creating quick visualizations. Would love to see more chart types.",
-        pros: ["Easy to use", "Beautiful charts", "Good performance"],
-        cons: ["Limited chart types", "Export options could be better"],
+        title: 'Great visualization tool',
+        comment: 'Excellent for creating quick visualizations. Would love to see more chart types.',
+        pros: ['Easy to use', 'Beautiful charts', 'Good performance'],
+        cons: ['Limited chart types', 'Export options could be better'],
         helpful: 28,
         verified: false,
-        createdAt: new Date("2026-02-10"),
-        updatedAt: new Date("2026-02-10")
-      }
+        createdAt: new Date('2026-02-10'),
+        updatedAt: new Date('2026-02-10'),
+      },
     ];
 
-    reviews.forEach(review => {
+    reviews.forEach((review) => {
       const appReviews = this.reviews.get(review.appId) || [];
       appReviews.push(review);
       this.reviews.set(review.appId, appReviews);
@@ -363,136 +365,151 @@ class MCPAppsMarketplace {
       return {
         tools: [
           {
-            name: "browse_apps",
-            description: "Browse the MCP apps marketplace with filters and search",
+            name: 'browse_apps',
+            description: 'Browse the MCP apps marketplace with filters and search',
             inputSchema: {
-              type: "object",
+              type: 'object',
               properties: {
-                category: { type: "string", description: "Filter by category" },
-                tags: { type: "array", items: { type: "string" }, description: "Filter by tags" },
-                pricing: { type: "string", enum: ["free", "paid", "freemium", "enterprise"] },
-                verified: { type: "boolean", description: "Show only verified apps" },
-                featured: { type: "boolean", description: "Show only featured apps" },
-                trending: { type: "boolean", description: "Show only trending apps" },
-                search: { type: "string", description: "Search term" },
-                sortBy: { type: "string", enum: ["name", "rating", "downloads", "updated", "published"] },
-                limit: { type: "number", description: "Maximum results to return" }
-              }
-            }
-          },
-          {
-            name: "get_app_details",
-            description: "Get detailed information about a specific app",
-            inputSchema: {
-              type: "object",
-              properties: {
-                appId: { type: "string", description: "App ID" },
-                includeReviews: { type: "boolean", description: "Include user reviews" },
-                includeMetrics: { type: "boolean", description: "Include usage metrics" }
+                category: { type: 'string', description: 'Filter by category' },
+                tags: { type: 'array', items: { type: 'string' }, description: 'Filter by tags' },
+                pricing: { type: 'string', enum: ['free', 'paid', 'freemium', 'enterprise'] },
+                verified: { type: 'boolean', description: 'Show only verified apps' },
+                featured: { type: 'boolean', description: 'Show only featured apps' },
+                trending: { type: 'boolean', description: 'Show only trending apps' },
+                search: { type: 'string', description: 'Search term' },
+                sortBy: {
+                  type: 'string',
+                  enum: ['name', 'rating', 'downloads', 'updated', 'published'],
+                },
+                limit: { type: 'number', description: 'Maximum results to return' },
               },
-              required: ["appId"]
-            }
+            },
           },
           {
-            name: "install_app",
-            description: "Install an MCP app",
+            name: 'get_app_details',
+            description: 'Get detailed information about a specific app',
             inputSchema: {
-              type: "object",
+              type: 'object',
               properties: {
-                appId: { type: "string", description: "App ID" },
-                version: { type: "string", description: "Specific version to install" },
-                config: { type: "object", description: "Installation configuration" },
-                autoUpdate: { type: "boolean", description: "Enable auto-updates" }
+                appId: { type: 'string', description: 'App ID' },
+                includeReviews: { type: 'boolean', description: 'Include user reviews' },
+                includeMetrics: { type: 'boolean', description: 'Include usage metrics' },
               },
-              required: ["appId"]
-            }
+              required: ['appId'],
+            },
           },
           {
-            name: "submit_app",
-            description: "Submit a new app to the marketplace",
+            name: 'install_app',
+            description: 'Install an MCP app',
             inputSchema: {
-              type: "object",
+              type: 'object',
               properties: {
-                name: { type: "string", description: "App name" },
-                description: { type: "string", description: "App description" },
-                version: { type: "string", description: "App version" },
-                category: { type: "string", description: "App category" },
-                tags: { type: "array", items: { type: "string" }, description: "App tags" },
-                homepage: { type: "string", description: "App homepage" },
-                repository: { type: "string", description: "Repository URL" },
-                documentation: { type: "string", description: "Documentation URL" },
-                license: { type: "string", description: "License" },
-                pricing: { type: "string", enum: ["free", "paid", "freemium", "enterprise"] },
-                price: { type: "number", description: "Price (if paid)" }
+                appId: { type: 'string', description: 'App ID' },
+                version: { type: 'string', description: 'Specific version to install' },
+                config: { type: 'object', description: 'Installation configuration' },
+                autoUpdate: { type: 'boolean', description: 'Enable auto-updates' },
               },
-              required: ["name", "description", "version", "category", "homepage", "repository", "license"]
-            }
+              required: ['appId'],
+            },
           },
           {
-            name: "review_app",
-            description: "Submit a review for an app",
+            name: 'submit_app',
+            description: 'Submit a new app to the marketplace',
             inputSchema: {
-              type: "object",
+              type: 'object',
               properties: {
-                appId: { type: "string", description: "App ID" },
-                rating: { type: "number", minimum: 1, maximum: 5, description: "Rating (1-5)" },
-                title: { type: "string", description: "Review title" },
-                comment: { type: "string", description: "Review comment" },
-                pros: { type: "array", items: { type: "string" }, description: "Pros" },
-                cons: { type: "array", items: { type: "string" }, description: "Cons" }
+                name: { type: 'string', description: 'App name' },
+                description: { type: 'string', description: 'App description' },
+                version: { type: 'string', description: 'App version' },
+                category: { type: 'string', description: 'App category' },
+                tags: { type: 'array', items: { type: 'string' }, description: 'App tags' },
+                homepage: { type: 'string', description: 'App homepage' },
+                repository: { type: 'string', description: 'Repository URL' },
+                documentation: { type: 'string', description: 'Documentation URL' },
+                license: { type: 'string', description: 'License' },
+                pricing: { type: 'string', enum: ['free', 'paid', 'freemium', 'enterprise'] },
+                price: { type: 'number', description: 'Price (if paid)' },
               },
-              required: ["appId", "rating", "title", "comment"]
-            }
+              required: [
+                'name',
+                'description',
+                'version',
+                'category',
+                'homepage',
+                'repository',
+                'license',
+              ],
+            },
           },
           {
-            name: "get_developer_profile",
-            description: "Get developer profile and stats",
+            name: 'review_app',
+            description: 'Submit a review for an app',
             inputSchema: {
-              type: "object",
+              type: 'object',
               properties: {
-                developerId: { type: "string", description: "Developer ID" },
-                includeApps: { type: "boolean", description: "Include developer apps" }
+                appId: { type: 'string', description: 'App ID' },
+                rating: { type: 'number', minimum: 1, maximum: 5, description: 'Rating (1-5)' },
+                title: { type: 'string', description: 'Review title' },
+                comment: { type: 'string', description: 'Review comment' },
+                pros: { type: 'array', items: { type: 'string' }, description: 'Pros' },
+                cons: { type: 'array', items: { type: 'string' }, description: 'Cons' },
               },
-              required: ["developerId"]
-            }
+              required: ['appId', 'rating', 'title', 'comment'],
+            },
           },
           {
-            name: "get_marketplace_stats",
-            description: "Get marketplace statistics and analytics",
+            name: 'get_developer_profile',
+            description: 'Get developer profile and stats',
             inputSchema: {
-              type: "object",
+              type: 'object',
               properties: {
-                includeTrends: { type: "boolean", description: "Include trend data" },
-                timeRange: { type: "string", enum: ["7d", "30d", "90d", "1y"], description: "Time range for trends" }
-              }
-            }
-          },
-          {
-            name: "manage_submission",
-            description: "Manage app submission status",
-            inputSchema: {
-              type: "object",
-              properties: {
-                submissionId: { type: "string", description: "Submission ID" },
-                action: { type: "string", enum: ["approve", "reject", "request_changes"] },
-                feedback: { type: "string", description: "Feedback for developer" }
+                developerId: { type: 'string', description: 'Developer ID' },
+                includeApps: { type: 'boolean', description: 'Include developer apps' },
               },
-              required: ["submissionId", "action"]
-            }
+              required: ['developerId'],
+            },
           },
           {
-            name: "security_scan",
-            description: "Perform security scan on an app",
+            name: 'get_marketplace_stats',
+            description: 'Get marketplace statistics and analytics',
             inputSchema: {
-              type: "object",
+              type: 'object',
               properties: {
-                appId: { type: "string", description: "App ID" },
-                scanLevel: { type: "string", enum: ["basic", "comprehensive", "deep"] }
+                includeTrends: { type: 'boolean', description: 'Include trend data' },
+                timeRange: {
+                  type: 'string',
+                  enum: ['7d', '30d', '90d', '1y'],
+                  description: 'Time range for trends',
+                },
               },
-              required: ["appId"]
-            }
-          }
-        ]
+            },
+          },
+          {
+            name: 'manage_submission',
+            description: 'Manage app submission status',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                submissionId: { type: 'string', description: 'Submission ID' },
+                action: { type: 'string', enum: ['approve', 'reject', 'request_changes'] },
+                feedback: { type: 'string', description: 'Feedback for developer' },
+              },
+              required: ['submissionId', 'action'],
+            },
+          },
+          {
+            name: 'security_scan',
+            description: 'Perform security scan on an app',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                appId: { type: 'string', description: 'App ID' },
+                scanLevel: { type: 'string', enum: ['basic', 'comprehensive', 'deep'] },
+              },
+              required: ['appId'],
+            },
+          },
+        ],
       };
     });
 
@@ -501,23 +518,23 @@ class MCPAppsMarketplace {
 
       try {
         switch (name) {
-          case "browse_apps":
+          case 'browse_apps':
             return await this.browseApps(args);
-          case "get_app_details":
+          case 'get_app_details':
             return await this.getAppDetails(args);
-          case "install_app":
+          case 'install_app':
             return await this.installApp(args);
-          case "submit_app":
+          case 'submit_app':
             return await this.submitApp(args);
-          case "review_app":
+          case 'review_app':
             return await this.reviewApp(args);
-          case "get_developer_profile":
+          case 'get_developer_profile':
             return await this.getDeveloperProfile(args);
-          case "get_marketplace_stats":
+          case 'get_marketplace_stats':
             return await this.getMarketplaceStats(args);
-          case "manage_submission":
+          case 'manage_submission':
             return await this.manageSubmission(args);
-          case "security_scan":
+          case 'security_scan':
             return await this.securityScan(args);
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
@@ -541,60 +558,59 @@ class MCPAppsMarketplace {
       featured,
       trending,
       search,
-      sortBy = "name",
-      limit = 50
+      sortBy = 'name',
+      limit = 50,
     } = args;
 
     let apps = Array.from(this.apps.values());
 
     // Apply filters
     if (category) {
-      apps = apps.filter(app => app.category === category);
+      apps = apps.filter((app) => app.category === category);
     }
 
     if (tags.length > 0) {
-      apps = apps.filter(app =>
-        tags.some(tag => app.tags.includes(tag))
-      );
+      apps = apps.filter((app) => tags.some((tag) => app.tags.includes(tag)));
     }
 
     if (pricing) {
-      apps = apps.filter(app => app.pricing === pricing);
+      apps = apps.filter((app) => app.pricing === pricing);
     }
 
     if (verified !== undefined) {
-      apps = apps.filter(app => app.verified === verified);
+      apps = apps.filter((app) => app.verified === verified);
     }
 
     if (featured !== undefined) {
-      apps = apps.filter(app => app.featured === featured);
+      apps = apps.filter((app) => app.featured === featured);
     }
 
     if (trending !== undefined) {
-      apps = apps.filter(app => app.trending === trending);
+      apps = apps.filter((app) => app.trending === trending);
     }
 
     if (search) {
       const searchLower = search.toLowerCase();
-      apps = apps.filter(app =>
-        app.name.toLowerCase().includes(searchLower) ||
-        app.description.toLowerCase().includes(searchLower) ||
-        app.tags.some(tag => tag.toLowerCase().includes(searchLower))
+      apps = apps.filter(
+        (app) =>
+          app.name.toLowerCase().includes(searchLower) ||
+          app.description.toLowerCase().includes(searchLower) ||
+          app.tags.some((tag) => tag.toLowerCase().includes(searchLower))
       );
     }
 
     // Apply sorting
     apps.sort((a, b) => {
       switch (sortBy) {
-        case "name":
+        case 'name':
           return a.name.localeCompare(b.name);
-        case "rating":
+        case 'rating':
           return b.rating - a.rating;
-        case "downloads":
+        case 'downloads':
           return b.downloadCount - a.downloadCount;
-        case "updated":
+        case 'updated':
           return b.lastUpdated.getTime() - a.lastUpdated.getTime();
-        case "published":
+        case 'published':
           return b.publishedAt.getTime() - a.publishedAt.getTime();
         default:
           return 0;
@@ -607,7 +623,7 @@ class MCPAppsMarketplace {
     return {
       success: true,
       data: {
-        apps: limitedApps.map(app => ({
+        apps: limitedApps.map((app) => ({
           id: app.id,
           name: app.name,
           description: app.description,
@@ -625,20 +641,20 @@ class MCPAppsMarketplace {
           trending: app.trending,
           lastUpdated: app.lastUpdated,
           tags: app.tags,
-          screenshots: app.screenshots.slice(0, 2) // First 2 screenshots
+          screenshots: app.screenshots.slice(0, 2), // First 2 screenshots
         })),
         total: apps.length,
         categories: this.getCategories(),
         filters: {
-          pricing: ["free", "paid", "freemium", "enterprise"],
-          tags: this.getAllTags()
+          pricing: ['free', 'paid', 'freemium', 'enterprise'],
+          tags: this.getAllTags(),
         },
         pagination: {
           limit,
           offset: 0,
-          hasMore: apps.length > limit
-        }
-      }
+          hasMore: apps.length > limit,
+        },
+      },
     };
   }
 
@@ -666,7 +682,7 @@ class MCPAppsMarketplace {
 
     return {
       success: true,
-      data: details
+      data: details,
     };
   }
 
@@ -684,26 +700,26 @@ class MCPAppsMarketplace {
       config,
       autoUpdate,
       installedAt: new Date(),
-      status: "installing",
+      status: 'installing',
       steps: [
-        "Downloading app package",
-        "Verifying integrity",
-        "Checking dependencies",
-        "Installing dependencies",
-        "Configuring app",
-        "Running post-install tests"
-      ]
+        'Downloading app package',
+        'Verifying integrity',
+        'Checking dependencies',
+        'Installing dependencies',
+        'Configuring app',
+        'Running post-install tests',
+      ],
     };
 
     // Simulate installation process
     setTimeout(() => {
-      installation.status = "completed";
+      installation.status = 'completed';
       installation.completedAt = new Date();
       installation.nextSteps = [
-        "Launch the app",
-        "Configure settings",
-        "Read documentation",
-        "Join community"
+        'Launch the app',
+        'Configure settings',
+        'Read documentation',
+        'Join community',
       ];
     }, 3000);
 
@@ -711,9 +727,9 @@ class MCPAppsMarketplace {
       success: true,
       data: {
         installation,
-        estimatedTime: "3-5 minutes",
-        message: `Installing ${app.name}...`
-      }
+        estimatedTime: '3-5 minutes',
+        message: `Installing ${app.name}...`,
+      },
     };
   }
 
@@ -721,20 +737,20 @@ class MCPAppsMarketplace {
     const submission = {
       id: `submission_${Date.now()}`,
       appId: `app_${Date.now()}`,
-      status: "pending" as const,
+      status: 'pending' as const,
       submittedAt: new Date(),
       app: args,
       reviewProcess: {
-        estimatedTime: "5-7 business days",
+        estimatedTime: '5-7 business days',
         steps: [
-          "Initial validation",
-          "Security scanning",
-          "Code review",
-          "Functionality testing",
-          "Documentation review",
-          "Final approval"
-        ]
-      }
+          'Initial validation',
+          'Security scanning',
+          'Code review',
+          'Functionality testing',
+          'Documentation review',
+          'Final approval',
+        ],
+      },
     };
 
     this.submissions.set(submission.id, submission);
@@ -743,14 +759,14 @@ class MCPAppsMarketplace {
       success: true,
       data: {
         submission,
-        message: "App submitted for review",
+        message: 'App submitted for review',
         nextSteps: [
-          "Wait for initial review",
-          "Respond to feedback",
-          "Address any issues",
-          "Await final approval"
-        ]
-      }
+          'Wait for initial review',
+          'Respond to feedback',
+          'Address any issues',
+          'Await final approval',
+        ],
+      },
     };
   }
 
@@ -766,7 +782,7 @@ class MCPAppsMarketplace {
       id: `review_${Date.now()}`,
       appId,
       userId: `user_${Date.now()}`,
-      username: "current_user",
+      username: 'current_user',
       rating,
       title,
       comment,
@@ -775,7 +791,7 @@ class MCPAppsMarketplace {
       helpful: 0,
       verified: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     const appReviews = this.reviews.get(appId) || [];
@@ -789,9 +805,9 @@ class MCPAppsMarketplace {
       success: true,
       data: {
         review,
-        message: "Review submitted successfully",
-        impact: "Thank you for your feedback!"
-      }
+        message: 'Review submitted successfully',
+        impact: 'Thank you for your feedback!',
+      },
     };
   }
 
@@ -806,7 +822,7 @@ class MCPAppsMarketplace {
     const profile: any = { ...developer };
 
     if (includeApps) {
-      profile.apps = developer.apps.map(appId => this.apps.get(appId)).filter(Boolean);
+      profile.apps = developer.apps.map((appId) => this.apps.get(appId)).filter(Boolean);
     }
 
     profile.reputation = this.calculateReputation(developer);
@@ -814,15 +830,15 @@ class MCPAppsMarketplace {
 
     return {
       success: true,
-      data: profile
+      data: profile,
     };
   }
 
   private async getMarketplaceStats(args: any): Promise<any> {
-    const { includeTrends = false, timeRange = "30d" } = args;
+    const { includeTrends = false, timeRange = '30d' } = args;
 
     const apps = Array.from(this.apps.values());
-    
+
     const stats = {
       totalApps: apps.length,
       totalDownloads: apps.reduce((sum, app) => sum + app.downloadCount, 0),
@@ -831,8 +847,8 @@ class MCPAppsMarketplace {
       categories: this.getCategoryStats(),
       pricingDistribution: this.getPricingStats(),
       topDevelopers: this.getTopDevelopers(),
-      trendingApps: apps.filter(app => app.trending).slice(0, 10),
-      featuredApps: apps.filter(app => app.featured).slice(0, 10)
+      trendingApps: apps.filter((app) => app.trending).slice(0, 10),
+      featuredApps: apps.filter((app) => app.featured).slice(0, 10),
     };
 
     if (includeTrends) {
@@ -841,7 +857,7 @@ class MCPAppsMarketplace {
 
     return {
       success: true,
-      data: stats
+      data: stats,
     };
   }
 
@@ -855,17 +871,17 @@ class MCPAppsMarketplace {
 
     submission.status = action as any;
     submission.reviewedAt = new Date();
-    submission.reviewer = "marketplace_admin";
-    
+    submission.reviewer = 'marketplace_admin';
+
     if (feedback) {
       submission.feedback = feedback;
     }
 
-    if (action === "rejected") {
-      submission.rejectionReason = feedback || "Submission does not meet marketplace standards";
+    if (action === 'rejected') {
+      submission.rejectionReason = feedback || 'Submission does not meet marketplace standards';
     }
 
-    if (action === "approved") {
+    if (action === 'approved') {
       submission.publicationDate = new Date();
       // Create the actual app
       const app: MCPApp = {
@@ -880,22 +896,22 @@ class MCPAppsMarketplace {
         featured: false,
         trending: false,
         compatibility: {
-          mcpVersion: "1.0.0+",
-          platforms: ["Web"],
-          dependencies: []
+          mcpVersion: '1.0.0+',
+          platforms: ['Web'],
+          dependencies: [],
         },
         security: {
           verified: false,
           scanDate: new Date(),
           vulnerabilities: 0,
-          signature: ""
+          signature: '',
         },
         metrics: {
           installs: 0,
           activeUsers: 0,
           avgSessionDuration: 0,
-          crashRate: 0
-        }
+          crashRate: 0,
+        },
       };
       this.apps.set(app.id, app);
     }
@@ -904,13 +920,13 @@ class MCPAppsMarketplace {
       success: true,
       data: {
         submission,
-        message: `Submission ${action} successfully`
-      }
+        message: `Submission ${action} successfully`,
+      },
     };
   }
 
   private async securityScan(args: any): Promise<any> {
-    const { appId, scanLevel = "basic" } = args;
+    const { appId, scanLevel = 'basic' } = args;
 
     const app = this.apps.get(appId);
     if (!app) {
@@ -921,45 +937,45 @@ class MCPAppsMarketplace {
       appId,
       scanLevel,
       startedAt: new Date(),
-      status: "scanning",
+      status: 'scanning',
       checks: [
-        "Code signature verification",
-        "Dependency vulnerability scan",
-        "Malware detection",
-        "Permission analysis",
-        "Data handling review"
-      ]
+        'Code signature verification',
+        'Dependency vulnerability scan',
+        'Malware detection',
+        'Permission analysis',
+        'Data handling review',
+      ],
     };
 
     // Simulate scanning process
     setTimeout(() => {
-      scan.status = "completed";
+      scan.status = 'completed';
       scan.completedAt = new Date();
       scan.results = {
         vulnerabilities: Math.floor(Math.random() * 3),
-        severity: "low",
+        severity: 'low',
         recommendations: [
-          "Update dependencies to latest versions",
-          "Implement input validation",
-          "Review data encryption practices"
+          'Update dependencies to latest versions',
+          'Implement input validation',
+          'Review data encryption practices',
         ],
-        passed: true
+        passed: true,
       };
     }, 5000);
 
     return {
       success: true,
-      data: scan
+      data: scan,
     };
   }
 
   // Helper methods
   private getCategories(): string[] {
-    return Array.from(new Set(Array.from(this.apps.values()).map(app => app.category)));
+    return Array.from(new Set(Array.from(this.apps.values()).map((app) => app.category)));
   }
 
   private getAllTags(): string[] {
-    const allTags = Array.from(this.apps.values()).flatMap(app => app.tags);
+    const allTags = Array.from(this.apps.values()).flatMap((app) => app.tags);
     return Array.from(new Set(allTags));
   }
 
@@ -983,19 +999,19 @@ class MCPAppsMarketplace {
     return Array.from(this.developers.values())
       .sort((a, b) => b.stats.totalDownloads - a.stats.totalDownloads)
       .slice(0, 10)
-      .map(dev => ({
+      .map((dev) => ({
         id: dev.id,
         name: dev.name,
         totalDownloads: dev.stats.totalDownloads,
         averageRating: dev.stats.averageRating,
-        activeApps: dev.stats.activeApps
+        activeApps: dev.stats.activeApps,
       }));
   }
 
   private updateAppRating(appId: string): void {
     const app = this.apps.get(appId);
     const reviews = this.reviews.get(appId);
-    
+
     if (app && reviews && reviews.length > 0) {
       const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
       app.rating = totalRating / reviews.length;
@@ -1006,39 +1022,44 @@ class MCPAppsMarketplace {
   private calculateReputation(developer: DeveloperAccount): any {
     return {
       score: Math.min(100, developer.stats.averageRating * 20 + developer.stats.activeApps * 5),
-      level: developer.stats.totalDownloads > 100000 ? "platinum" :
-             developer.stats.totalDownloads > 50000 ? "gold" :
-             developer.stats.totalDownloads > 10000 ? "silver" : "bronze",
-      badges: this.getBadges(developer)
+      level:
+        developer.stats.totalDownloads > 100000
+          ? 'platinum'
+          : developer.stats.totalDownloads > 50000
+            ? 'gold'
+            : developer.stats.totalDownloads > 10000
+              ? 'silver'
+              : 'bronze',
+      badges: this.getBadges(developer),
     };
   }
 
   private getBadges(developer: DeveloperAccount): string[] {
     const badges = [];
-    if (developer.verified) badges.push("verified");
-    if (developer.stats.totalDownloads > 100000) badges.push("top_developer");
-    if (developer.stats.averageRating >= 4.8) badges.push("excellent_quality");
-    if (developer.stats.activeApps >= 5) badges.push("prolific");
+    if (developer.verified) badges.push('verified');
+    if (developer.stats.totalDownloads > 100000) badges.push('top_developer');
+    if (developer.stats.averageRating >= 4.8) badges.push('excellent_quality');
+    if (developer.stats.activeApps >= 5) badges.push('prolific');
     return badges;
   }
 
   private getAchievements(developer: DeveloperAccount): any[] {
     return [
       {
-        id: "first_app",
-        name: "First App Published",
-        description: "Published your first app",
+        id: 'first_app',
+        name: 'First App Published',
+        description: 'Published your first app',
         earnedAt: developer.joinedAt,
-        icon: "🎉"
+        icon: '🎉',
       },
       {
-        id: "quality_focus",
-        name: "Quality Focus",
-        description: "Maintained 4.5+ average rating",
+        id: 'quality_focus',
+        name: 'Quality Focus',
+        description: 'Maintained 4.5+ average rating',
         earnedAt: developer.stats.averageRating >= 4.5 ? new Date() : null,
-        icon: "⭐"
-      }
-    ].filter(achievement => achievement.earnedAt);
+        icon: '⭐',
+      },
+    ].filter((achievement) => achievement.earnedAt);
   }
 
   private getDetailedMetrics(appId: string): any {
@@ -1056,14 +1077,14 @@ class MCPAppsMarketplace {
       performance: {
         startupTime: Math.random() * 2000 + 500,
         memoryUsage: Math.random() * 512 + 128,
-        cpuUsage: Math.random() * 0.3 + 0.1
+        cpuUsage: Math.random() * 0.3 + 0.1,
       },
       userSatisfaction: {
         rating: app.rating,
         wouldRecommend: 0.89,
         featureRequests: 23,
-        bugReports: 5
-      }
+        bugReports: 5,
+      },
     };
   }
 
@@ -1076,7 +1097,7 @@ class MCPAppsMarketplace {
       `3. Verify installation:`,
       `   mcp verify ${app.id}`,
       `4. Launch the app:`,
-      `   mcp start ${app.id}`
+      `   mcp start ${app.id}`,
     ];
   }
 
@@ -1086,11 +1107,11 @@ class MCPAppsMarketplace {
       supportedPlatforms: app.compatibility.platforms,
       requiredDependencies: app.compatibility.dependencies,
       systemRequirements: {
-        memory: "512MB minimum",
-        storage: "100MB minimum",
-        network: "Internet connection required"
+        memory: '512MB minimum',
+        storage: '100MB minimum',
+        network: 'Internet connection required',
       },
-      integrationNotes: "Works seamlessly with all major MCP clients"
+      integrationNotes: 'Works seamlessly with all major MCP clients',
     };
   }
 
@@ -1100,40 +1121,44 @@ class MCPAppsMarketplace {
       lastScanDate: app.security.scanDate,
       vulnerabilitiesFound: app.security.vulnerabilities,
       signatureVerified: !!app.security.signature,
-      securityRating: app.security.vulnerabilities === 0 ? "excellent" :
-                     app.security.vulnerabilities <= 2 ? "good" : "needs_attention",
+      securityRating:
+        app.security.vulnerabilities === 0
+          ? 'excellent'
+          : app.security.vulnerabilities <= 2
+            ? 'good'
+            : 'needs_attention',
       recommendations: [
-        "Keep app updated to latest version",
-        "Review permissions before installation",
-        "Report any security concerns"
-      ]
+        'Keep app updated to latest version',
+        'Review permissions before installation',
+        'Report any security concerns',
+      ],
     };
   }
 
   private generateTrends(timeRange: string): any {
-    const days = parseInt(timeRange.replace("d", ""));
+    const days = parseInt(timeRange.replace('d', ''));
     return {
       downloads: Array.from({ length: Math.min(days, 30) }, (_, i) => ({
-        date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-        downloads: Math.floor(Math.random() * 1000) + 500
+        date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        downloads: Math.floor(Math.random() * 1000) + 500,
       })).reverse(),
       submissions: Array.from({ length: 7 }, (_, i) => ({
         week: `Week ${i + 1}`,
-        submissions: Math.floor(Math.random() * 20) + 5
+        submissions: Math.floor(Math.random() * 20) + 5,
       })),
       categories: this.getCategoryStats(),
       security: {
         scansCompleted: Math.floor(Math.random() * 100) + 50,
         vulnerabilitiesFixed: Math.floor(Math.random() * 20) + 5,
-        averageScanTime: "2.5 minutes"
-      }
+        averageScanTime: '2.5 minutes',
+      },
     };
   }
 
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error("MCP Apps Marketplace server running on stdio");
+    console.error('MCP Apps Marketplace server running on stdio');
   }
 }
 
