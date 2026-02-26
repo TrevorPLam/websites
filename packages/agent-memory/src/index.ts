@@ -67,19 +67,28 @@ export interface ProcedureStep {
   conditions: string[];
   fallback?: string;
   timeout: number;
-  retryPolicy: { // 2026: Structured retry policies
+  retryPolicy: {
+    // 2026: Structured retry policies
     maxAttempts: number;
     backoffStrategy: 'exponential' | 'linear' | 'immediate';
     retryConditions: string[];
   };
-  monitoring?: { // 2026: Step-level monitoring
+  monitoring?: {
+    // 2026: Step-level monitoring
     metrics: string[];
     alerts: string[];
   };
   parallelizable: boolean; // 2026: Parallel execution support
 }
 
-// Enhanced Episodic Memory System with 2026 Best Practices
+/**
+ * Enhanced Episodic Memory System with 2026 Best Practices
+ *
+ * Manages time-ordered sequences of events with contextual information.
+ * Features vector indexing, consolidation pipeline, and access pattern tracking.
+ *
+ * @since 1.0.0
+ */
 export class EpisodicMemory {
   private episodes: Map<string, Episode> = new Map();
   private vectorIndex: Map<string, string[]> = new Map();
@@ -102,8 +111,8 @@ export class EpisodicMemory {
         ...episode.metadata,
         confidence: episode.metadata.confidence ?? 0.8, // 2026: Default confidence
         priority: episode.metadata.priority ?? 'medium',
-        consolidationCount: 0
-      }
+        consolidationCount: 0,
+      },
     };
 
     this.episodes.set(id, fullEpisode);
@@ -112,7 +121,7 @@ export class EpisodicMemory {
     const searchText = this.createSearchText(fullEpisode);
     const keywords = this.extractKeywords(searchText);
 
-    keywords.forEach(keyword => {
+    keywords.forEach((keyword) => {
       if (!this.vectorIndex.has(keyword)) {
         this.vectorIndex.set(keyword, []);
       }
@@ -136,9 +145,9 @@ export class EpisodicMemory {
     const episodeScores = new Map<string, number>();
 
     // Enhanced scoring with 2026 ranking algorithms
-    keywords.forEach(keyword => {
+    keywords.forEach((keyword) => {
       const episodeIds = this.vectorIndex.get(keyword) || [];
-      episodeIds.forEach(id => {
+      episodeIds.forEach((id) => {
         const currentScore = episodeScores.get(id) || 0;
         const episode = this.episodes.get(id)!;
 
@@ -195,7 +204,7 @@ export class EpisodicMemory {
     const searchText = this.createSearchText(episode);
     const keywords = this.extractKeywords(searchText);
 
-    keywords.forEach(keyword => {
+    keywords.forEach((keyword) => {
       const episodeIds = this.vectorIndex.get(keyword) || [];
       const index = episodeIds.indexOf(id);
       if (index > -1) {
@@ -216,21 +225,38 @@ export class EpisodicMemory {
       episode.outcome,
       ...Object.values(episode.context),
       ...episode.metadata.conditions,
-      ...episode.metadata.tags
-    ].join(' ').toLowerCase();
+      ...episode.metadata.tags,
+    ]
+      .join(' ')
+      .toLowerCase();
   }
 
   private extractKeywords(text: string): string[] {
     // Simple keyword extraction - in production, use proper NLP
     return text
       .split(/\s+/)
-      .filter(word => word.length > 2)
-      .filter(word => !this.isStopWord(word))
-      .map(word => word.toLowerCase());
+      .filter((word) => word.length > 2)
+      .filter((word) => !this.isStopWord(word))
+      .map((word) => word.toLowerCase());
   }
 
   private isStopWord(word: string): boolean {
-    const stopWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'];
+    const stopWords = [
+      'the',
+      'a',
+      'an',
+      'and',
+      'or',
+      'but',
+      'in',
+      'on',
+      'at',
+      'to',
+      'for',
+      'of',
+      'with',
+      'by',
+    ];
     return stopWords.includes(word);
   }
 
@@ -243,9 +269,12 @@ export class EpisodicMemory {
 
   private getPriorityBonus(priority: 'low' | 'medium' | 'high'): number {
     switch (priority) {
-      case 'high': return 0.5;
-      case 'medium': return 0.2;
-      case 'low': return 0;
+      case 'high':
+        return 0.5;
+      case 'medium':
+        return 0.2;
+      case 'low':
+        return 0;
     }
   }
 
@@ -269,7 +298,7 @@ export class EpisodicMemory {
 
     // Fill remaining slots with highest scored episodes
     while (selected.length < limit && selected.length < episodes.length) {
-      const nextEpisode = episodes.find(ep => !selected.includes(ep));
+      const nextEpisode = episodes.find((ep) => !selected.includes(ep));
       if (nextEpisode) selected.push(nextEpisode);
       else break;
     }
@@ -284,14 +313,21 @@ export class EpisodicMemory {
   async consolidateEpisodes(): Promise<void> {
     // Implementation for episode consolidation
     // This would identify patterns and create semantic knowledge
-    this.consolidationQueue.forEach(episode => {
+    this.consolidationQueue.forEach((episode) => {
       episode.metadata.consolidationCount++;
     });
     this.consolidationQueue = [];
   }
 }
 
-// Semantic Memory System
+/**
+ * Semantic Memory System for conceptual knowledge storage
+ *
+ * Manages abstract concepts, facts, and semantic relationships.
+ * Features vector indexing, confidence scoring, and relationship mapping.
+ *
+ * @since 1.0.0
+ */
 export class SemanticMemory {
   private knowledgeGraph: Map<string, SemanticKnowledge> = new Map();
   private entityIndex: Map<string, string[]> = new Map();
@@ -299,13 +335,13 @@ export class SemanticMemory {
   async storeKnowledge(knowledge: Omit<SemanticKnowledge, 'lastUpdated'>): Promise<void> {
     const fullKnowledge: SemanticKnowledge = {
       ...knowledge,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
 
     this.knowledgeGraph.set(knowledge.entity, fullKnowledge);
 
     // Update entity index
-    fullKnowledge.relationships.forEach(rel => {
+    fullKnowledge.relationships.forEach((rel) => {
       if (!this.entityIndex.has(rel.target)) {
         this.entityIndex.set(rel.target, []);
       }
@@ -317,7 +353,7 @@ export class SemanticMemory {
     const entities = this.extractEntities(query);
     const results: SemanticKnowledge[] = [];
 
-    entities.forEach(entity => {
+    entities.forEach((entity) => {
       const knowledge = this.knowledgeGraph.get(entity);
       if (knowledge) {
         results.push(knowledge);
@@ -341,7 +377,7 @@ export class SemanticMemory {
       const knowledge = this.knowledgeGraph.get(currentEntity);
       if (!knowledge) continue;
 
-      knowledge.relationships.forEach(rel => {
+      knowledge.relationships.forEach((rel) => {
         const adjustedScore = score * rel.confidence;
         const currentScore = related.get(rel.target) || 0;
 
@@ -371,7 +407,7 @@ export class SemanticMemory {
     this.knowledgeGraph.delete(entity);
 
     // Remove from entity index
-    knowledge.relationships.forEach(rel => {
+    knowledge.relationships.forEach((rel) => {
       const entities = this.entityIndex.get(rel.target);
       if (entities) {
         const index = entities.indexOf(entity);
@@ -390,15 +426,23 @@ export class SemanticMemory {
   private extractEntities(text: string): string[] {
     // Simple entity extraction - in production, use proper NER
     const entities = text.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b/g) || [];
-    return entities.map(entity => entity.toLowerCase());
+    return entities.map((entity) => entity.toLowerCase());
   }
 }
 
-// Procedural Memory System
+/**
+ * Procedural Memory System for skills and patterns storage
+ *
+ * Manages how-to knowledge, procedures, and learned patterns.
+ * Features skill indexing, performance tracking, and adaptive learning.
+ *
+ * @since 1.0.0
+ */
 export class ProceduralMemory {
   private procedures: Map<string, Procedure> = new Map();
   private triggerIndex: Map<string, string[]> = new Map();
-  private executionStats: Map<string, { count: number; totalTime: number; successCount: number }> = new Map();
+  private executionStats: Map<string, { count: number; totalTime: number; successCount: number }> =
+    new Map();
 
   async storeProcedure(procedure: Omit<Procedure, 'id' | 'lastExecuted'>): Promise<string> {
     const id = uuidv4();
@@ -407,7 +451,7 @@ export class ProceduralMemory {
     this.procedures.set(id, fullProcedure);
 
     // Update trigger index
-    procedure.triggers.forEach(trigger => {
+    procedure.triggers.forEach((trigger) => {
       if (!this.triggerIndex.has(trigger)) {
         this.triggerIndex.set(trigger, []);
       }
@@ -463,7 +507,7 @@ export class ProceduralMemory {
 
   async findProcedures(trigger: string): Promise<Procedure[]> {
     const procedureIds = this.triggerIndex.get(trigger) || [];
-    return procedureIds.map(id => this.procedures.get(id)!).filter(Boolean);
+    return procedureIds.map((id) => this.procedures.get(id)!).filter(Boolean);
   }
 
   async getProcedure(id: string): Promise<Procedure | null> {
@@ -487,7 +531,7 @@ export class ProceduralMemory {
     this.executionStats.delete(id);
 
     // Remove from trigger index
-    procedure.triggers.forEach(trigger => {
+    procedure.triggers.forEach((trigger) => {
       const procedureIds = this.triggerIndex.get(trigger);
       if (procedureIds) {
         const index = procedureIds.indexOf(id);
@@ -504,7 +548,7 @@ export class ProceduralMemory {
   }
 
   private evaluateConditions(conditions: string[], context: Record<string, any>): boolean {
-    return conditions.every(condition => {
+    return conditions.every((condition) => {
       // Simple condition evaluation - in production, use proper expression parser
       const [key, operator, value] = condition.split(/\s+/);
       const contextValue = context[key];
@@ -530,17 +574,24 @@ export class ProceduralMemory {
     // Simulate step execution
     const stepResult = {
       [`${step.action}_result`]: `Executed ${step.action} with parameters: ${JSON.stringify(step.parameters)}`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     // Simulate delay
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
+    await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
 
     return stepResult;
   }
 }
 
-// Unified Memory System
+/**
+ * Unified Memory System integrating all memory layers
+ *
+ * Coordinates between episodic, semantic, and procedural memory systems.
+ * Provides unified access, consolidation, and retrieval across all memory types.
+ *
+ * @since 1.0.0
+ */
 export class UnifiedMemorySystem {
   private episodic: EpisodicMemory;
   private semantic: SemanticMemory;
@@ -584,7 +635,10 @@ export class UnifiedMemorySystem {
   }
 
   // Advanced retrieval combining all memory types
-  async comprehensiveSearch(query: string, context: Record<string, any>): Promise<{
+  async comprehensiveSearch(
+    query: string,
+    context: Record<string, any>
+  ): Promise<{
     episodes: Episode[];
     knowledge: SemanticKnowledge[];
     procedures: Procedure[];
@@ -592,7 +646,7 @@ export class UnifiedMemorySystem {
     const [episodes, knowledge, procedures] = await Promise.all([
       this.retrieveEpisodes(query),
       this.queryKnowledge(query),
-      this.findProcedures(query)
+      this.findProcedures(query),
     ]);
 
     return { episodes, knowledge, procedures };
@@ -616,7 +670,7 @@ export class UnifiedMemorySystem {
     const actionOutcomes = new Map<string, { success: number; failure: number; total: number }>();
 
     // Analyze action-outcome patterns
-    episodes.forEach(episode => {
+    episodes.forEach((episode) => {
       const key = episode.action;
       if (!actionOutcomes.has(key)) {
         actionOutcomes.set(key, { success: 0, failure: 0, total: 0 });
@@ -635,24 +689,27 @@ export class UnifiedMemorySystem {
       if (stats.total >= 3 && successRate > 0.7) {
         patterns.push({
           entity: action,
-          relationships: [{
-            target: 'success',
-            type: 'related_to',
-            confidence: successRate,
-            strength: 0.8
-          }],
+          relationships: [
+            {
+              target: 'success',
+              type: 'related_to',
+              confidence: successRate,
+              strength: 0.8,
+            },
+          ],
           attributes: {
             successRate,
             totalExecutions: stats.total,
-            averageDuration: episodes
-              .filter(e => e.action === action)
-              .reduce((sum, e) => sum + e.metadata.duration, 0) / stats.total
+            averageDuration:
+              episodes
+                .filter((e) => e.action === action)
+                .reduce((sum, e) => sum + e.metadata.duration, 0) / stats.total,
           },
           source: 'episodic_consolidation',
           lastUpdated: new Date(),
           accessCount: 0,
           lastAccessed: new Date(),
-          verificationStatus: 'pending' as const
+          verificationStatus: 'pending' as const,
         });
       }
     });
