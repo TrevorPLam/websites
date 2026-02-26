@@ -72,6 +72,5 @@ The admin dashboard implements role-based access control (RBAC) with the followi
 ## Related Documentation
 
 - [Multi-tenant Architecture](../../docs/guides/multi-tenant/)
-- [Authentication System](../../packages/auth/README.md)
-- [Analytics Integration](../../packages/analytics/README.md)
-- [Billing System](../../packages/billing/README.md)
+- [Security Guide](../../SECURITY.md)
+- [Contributing Guide](../../CONTRIBUTING.md)

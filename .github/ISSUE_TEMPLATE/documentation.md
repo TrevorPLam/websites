@@ -54,5 +54,5 @@ assignees: ''
 **Checklist:**
 
 - [ ] I've searched existing issues to avoid duplicates
-- [ ] I've read the [Documentation Standards](docs/DOCUMENTATION_STANDARDS.md)
-- [ ] I've checked the [FAQ](docs/resources/faq.md) for similar questions
+- [ ] I've checked the [Platform Overview](README.md) for similar questions
+- [ ] I've verified this is documentation related (not code bug)

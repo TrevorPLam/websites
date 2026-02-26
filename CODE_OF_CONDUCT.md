@@ -30,7 +30,7 @@ This Code of Conduct applies within all project spaces and when an individual is
 
 ## Reporting
 
-To report unacceptable behavior, contact the maintainers at **conduct@marketing-monorepo.local**.
+To report unacceptable behavior, contact the maintainers at **conduct@your-domain.com**.
 All reports will be reviewed promptly and fairly.
 
 ## Enforcement Guidelines

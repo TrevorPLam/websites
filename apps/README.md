@@ -131,7 +131,7 @@ src/
 ### **Prerequisites**
 
 - Node.js ≥ 22.0.0
-- pnpm ≥ 9.0
+- pnpm ≥ 10.29.2
 - Environment variables configured
 
 ### **Development Commands**
@@ -333,9 +333,9 @@ pnpm deploy
 ### **Platform Documentation**
 
 - **[README.md](../README.md)** - Platform overview
-- **[DESIGN.md](../DESIGN.md)** - Architecture and design
-- **[CODEMAP.md](../CODEMAP.md)** - Code navigation
-- **[INDEX.md](../INDEX.md)** - Repository index
+- **[Security Guide](../SECURITY.md)** - Security policies
+- **[Contributing Guide](../CONTRIBUTING.md)** - Development guidelines
+- **[Architecture Guides](../docs/guides/architecture/)** - System architecture
 
 ---
 

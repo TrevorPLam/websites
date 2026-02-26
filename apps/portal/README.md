@@ -83,6 +83,6 @@ apps/portal/
 ## Related Documentation
 
 - [Multi-tenant Architecture](../../docs/guides/multi-tenant/)
-- [White-label Portal Architecture](../../docs/guides/white-label-portal-architecture.md)
-- [Client Portal Configuration](../../docs/guides/client-portal-configuration.md)
-- [Analytics Integration](../../packages/analytics/README.md)
+- [White-label Portal Architecture](../../docs/guides/architecture/white-label-portal-architecture.md)
+- [Client Portal Configuration](../../docs/guides/architecture/client-portal-configuration.md)
+- [Platform Documentation](../../README.md)

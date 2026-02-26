@@ -54,6 +54,6 @@ Site-specific configuration is managed through `site.config.ts` following the co
 
 ## Related Documentation
 
-- [Feature-Sliced Design Guide](../../docs/guides/architecture/feature-sliced-design-docs.md)
+- [Feature-Sliced Design Guide](../../docs/guides/best-practices/feature-sliced-design-docs.md)
 - [Multi-tenant Architecture](../../docs/guides/multi-tenant/)
-- [Marketing Components](../../packages/marketing-components/README.md)
+- [Platform Documentation](../../README.md)

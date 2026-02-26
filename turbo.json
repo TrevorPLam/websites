@@ -39,7 +39,8 @@
         "tsconfig.json",
         "next.config.*",
         "tailwind.config.*"
-      ]
+      ],
+      "passThroughEnv": ["NODE_OPTIONS", "VERCEL_*", "OTEL_*", "SENTRY_*"]
     },
     "typecheck": {
       "dependsOn": ["^build"],

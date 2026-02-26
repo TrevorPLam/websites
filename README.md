@@ -299,27 +299,24 @@ CALCOM_API_KEY=
 
 ```
 docs/
-├── README.md              # Documentation overview
 ├── frontmatter-schema.json # Schema for doc metadata
 ├── guides/                # How-to guides (165+ files)
 │   ├── accessibility/     # Accessibility compliance
 │   ├── ai-automation/     # AI integration patterns
 │   ├── architecture/      # System architecture
-│   ├── security/          # Security guidelines
 │   └── [15+ categories]
 ├── observability/         # Monitoring and alerting
 ├── operations/            # DevOps procedures
 ├── quality/               # Code quality standards
 ├── research/              # Research findings
-├── security/              # Security documentation
 ├── standards/             # Industry standards
 └── testing/               # Testing strategies
 ```
 
 ### Key Documentation
 
-- **[Documentation Overview](docs/README.md)**
-- **[Security Guidelines](docs/security/)**
+- **[Security Guidelines](SECURITY.md)**
+- **[Contributing Guide](CONTRIBUTING.md)**
 - **[Architecture Guides](docs/guides/architecture/)**
 - **[AI Integration](docs/guides/ai-automation/)**
 - **[Multi-Tenant Patterns](docs/guides/multi-tenant/)**
