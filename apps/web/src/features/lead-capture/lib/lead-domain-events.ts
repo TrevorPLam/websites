@@ -4,10 +4,11 @@
  * @description Event-driven architecture for lead state changes with audit trails.
  * @security All events include tenant context for multi-tenant isolation
  * @compliance GDPR/CCPA compliant event logging with data minimization
+ * @requirements TASK-006, domain-events, audit-trails
  */
 
-import { z } from 'zod'
-import type { Lead } from '@/entities/lead/model/lead.schema'
+import { z } from 'zod';
+import type { Lead } from '@/entities/lead/model/lead.schema';
 
 // Domain event base schema
 export const DomainEventSchema = z.object({
@@ -22,13 +23,13 @@ export const DomainEventSchema = z.object({
   causationId: z.string().uuid().optional(), // Event that caused this event
   timestamp: z.date(),
   data: z.record(z.unknown()),
-  metadata: z.record(z.unknown()).optional()
-})
+  metadata: z.record(z.unknown()).optional(),
+});
 
-export type DomainEvent = z.infer<typeof DomainEventSchema>
+export type DomainEvent = z.infer<typeof DomainEventSchema>;
 
 // Lead-specific event types
-export type LeadEventType = 
+export type LeadEventType =
   | 'LeadCreated'
   | 'LeadUpdated'
   | 'LeadQualified'
@@ -38,7 +39,7 @@ export type LeadEventType =
   | 'LeadScoreChanged'
   | 'LeadConsentUpdated'
   | 'LeadExported'
-  | 'LeadDeleted'
+  | 'LeadDeleted';
 
 // Lead created event
 export const LeadCreatedEventSchema = DomainEventSchema.extend({
@@ -47,13 +48,22 @@ export const LeadCreatedEventSchema = DomainEventSchema.extend({
     leadId: z.string().uuid(),
     email: z.string().email(),
     name: z.string(),
-    source: z.enum(['website', 'referral', 'direct', 'social', 'email', 'paid', 'organic', 'other']),
+    source: z.enum([
+      'website',
+      'referral',
+      'direct',
+      'social',
+      'email',
+      'paid',
+      'organic',
+      'other',
+    ]),
     tenantId: z.string().uuid(),
     sessionId: z.string().optional(),
     ipAddress: z.string().ip().optional(),
-    userAgent: z.string().optional()
-  })
-})
+    userAgent: z.string().optional(),
+  }),
+});
 
 // Lead updated event
 export const LeadUpdatedEventSchema = DomainEventSchema.extend({
@@ -61,9 +71,9 @@ export const LeadUpdatedEventSchema = DomainEventSchema.extend({
   data: z.object({
     leadId: z.string().uuid(),
     changes: z.record(z.unknown()),
-    previousValues: z.record(z.unknown()).optional()
-  })
-})
+    previousValues: z.record(z.unknown()).optional(),
+  }),
+});
 
 // Lead qualified event
 export const LeadQualifiedEventSchema = DomainEventSchema.extend({
@@ -71,9 +81,9 @@ export const LeadQualifiedEventSchema = DomainEventSchema.extend({
   data: z.object({
     leadId: z.string().uuid(),
     score: z.number().int().min(0).max(100),
-    qualificationReason: z.string().optional()
-  })
-})
+    qualificationReason: z.string().optional(),
+  }),
+});
 
 // Lead converted event
 export const LeadConvertedEventSchema = DomainEventSchema.extend({
@@ -82,9 +92,9 @@ export const LeadConvertedEventSchema = DomainEventSchema.extend({
     leadId: z.string().uuid(),
     conversionValue: z.number().optional(),
     conversionType: z.string().optional(),
-    convertedAt: z.date()
-  })
-})
+    convertedAt: z.date(),
+  }),
+});
 
 // Lead assigned event
 export const LeadAssignedEventSchema = DomainEventSchema.extend({
@@ -93,9 +103,9 @@ export const LeadAssignedEventSchema = DomainEventSchema.extend({
     leadId: z.string().uuid(),
     assigneeUserId: z.string().uuid(),
     assigneeRole: z.string().optional(),
-    previousAssigneeUserId: z.string().uuid().optional()
-  })
-})
+    previousAssigneeUserId: z.string().uuid().optional(),
+  }),
+});
 
 // Lead unassigned event
 export const LeadUnassignedEventSchema = DomainEventSchema.extend({
@@ -103,9 +113,9 @@ export const LeadUnassignedEventSchema = DomainEventSchema.extend({
   data: z.object({
     leadId: z.string().uuid(),
     previousAssigneeUserId: z.string().uuid(),
-    reason: z.string().optional()
-  })
-})
+    reason: z.string().optional(),
+  }),
+});
 
 // Lead score changed event
 export const LeadScoreChangedEventSchema = DomainEventSchema.extend({
@@ -114,9 +124,9 @@ export const LeadScoreChangedEventSchema = DomainEventSchema.extend({
     leadId: z.string().uuid(),
     previousScore: z.number().int().min(0).max(100),
     newScore: z.number().int().min(0).max(100),
-    scoringReason: z.string().optional()
-  })
-})
+    scoringReason: z.string().optional(),
+  }),
+});
 
 // Lead consent updated event
 export const LeadConsentUpdatedEventSchema = DomainEventSchema.extend({
@@ -128,9 +138,9 @@ export const LeadConsentUpdatedEventSchema = DomainEventSchema.extend({
     newConsent: z.boolean(),
     consentTimestamp: z.date(),
     ipAddress: z.string().ip().optional(),
-    userAgent: z.string().optional()
-  })
-})
+    userAgent: z.string().optional(),
+  }),
+});
 
 // Lead exported event
 export const LeadExportedEventSchema = DomainEventSchema.extend({
@@ -140,9 +150,9 @@ export const LeadExportedEventSchema = DomainEventSchema.extend({
     exportFormat: z.enum(['csv', 'json', 'pdf']),
     exportReason: z.string(),
     requestedBy: z.string().uuid(),
-    exportedAt: z.date()
-  })
-})
+    exportedAt: z.date(),
+  }),
+});
 
 // Lead deleted event (for GDPR compliance)
 export const LeadDeletedEventSchema = DomainEventSchema.extend({
@@ -152,12 +162,12 @@ export const LeadDeletedEventSchema = DomainEventSchema.extend({
     deletionReason: z.enum(['gdpr_request', 'data_cleanup', 'duplicate', 'error']),
     requestedBy: z.string().uuid(),
     deletedAt: z.date(),
-    anonymized: z.boolean().default(true)
-  })
-})
+    anonymized: z.boolean().default(true),
+  }),
+});
 
 // Event type union
-export type LeadDomainEvent = 
+export type LeadDomainEvent =
   | z.infer<typeof LeadCreatedEventSchema>
   | z.infer<typeof LeadUpdatedEventSchema>
   | z.infer<typeof LeadQualifiedEventSchema>
@@ -167,23 +177,23 @@ export type LeadDomainEvent =
   | z.infer<typeof LeadScoreChangedEventSchema>
   | z.infer<typeof LeadConsentUpdatedEventSchema>
   | z.infer<typeof LeadExportedEventSchema>
-  | z.infer<typeof LeadDeletedEventSchema>
+  | z.infer<typeof LeadDeletedEventSchema>;
 
 /**
  * Domain Event Publisher
  * Handles publishing domain events to various handlers
  */
 export class DomainEventPublisher {
-  private static instance: DomainEventPublisher
-  private eventHandlers: Map<string, Array<(event: DomainEvent) => Promise<void>>> = new Map()
+  private static instance: DomainEventPublisher;
+  private eventHandlers: Map<string, Array<(event: DomainEvent) => Promise<void>>> = new Map();
 
   private constructor() {}
 
   static getInstance(): DomainEventPublisher {
     if (!DomainEventPublisher.instance) {
-      DomainEventPublisher.instance = new DomainEventPublisher()
+      DomainEventPublisher.instance = new DomainEventPublisher();
     }
-    return DomainEventPublisher.instance
+    return DomainEventPublisher.instance;
   }
 
   /**
@@ -191,35 +201,35 @@ export class DomainEventPublisher {
    */
   registerHandler(eventType: string, handler: (event: DomainEvent) => Promise<void>): void {
     if (!this.eventHandlers.has(eventType)) {
-      this.eventHandlers.set(eventType, [])
+      this.eventHandlers.set(eventType, []);
     }
-    this.eventHandlers.get(eventType)!.push(handler)
+    this.eventHandlers.get(eventType)!.push(handler);
   }
 
   /**
    * Publish a domain event to all registered handlers
    */
   async publish(event: DomainEvent): Promise<void> {
-    const handlers = this.eventHandlers.get(event.eventType) || []
-    
+    const handlers = this.eventHandlers.get(event.eventType) || [];
+
     // Execute all handlers concurrently
     await Promise.allSettled(
-      handlers.map(handler => 
-        handler(event).catch(error => {
-          console.error(`Event handler failed for ${event.eventType}:`, error)
-          // TODO: Add proper error logging and monitoring
+      handlers.map((handler) =>
+        handler(event).catch((error) => {
+          console.error(`Event handler failed for ${event.eventType}:`, error);
+          // TODO(EVENTS-001): Add persistence layer for event storing and monitoring
         })
       )
-    )
+    );
   }
 
   /**
    * Publish multiple events in a transaction
    */
   async publishBatch(events: DomainEvent[]): Promise<void> {
-    // TODO: Implement transactional event publishing
+    // TODO(EVENTS-002): Implement actual event publishing
     for (const event of events) {
-      await this.publish(event)
+      await this.publish(event);
     }
   }
 }
@@ -255,9 +265,9 @@ export class DomainEventFactory {
         tenantId: lead.tenantId,
         sessionId: lead.sessionId,
         ipAddress: lead.ipAddress,
-        userAgent: lead.userAgent
-      }
-    }
+        userAgent: lead.userAgent,
+      },
+    };
   }
 
   /**
@@ -283,9 +293,9 @@ export class DomainEventFactory {
       data: {
         leadId: lead.id,
         changes,
-        previousValues
-      }
-    }
+        previousValues,
+      },
+    };
   }
 
   /**
@@ -311,9 +321,9 @@ export class DomainEventFactory {
       data: {
         leadId: lead.id,
         score,
-        qualificationReason
-      }
-    }
+        qualificationReason,
+      },
+    };
   }
 
   /**
@@ -340,9 +350,9 @@ export class DomainEventFactory {
         leadId: lead.id,
         conversionValue,
         conversionType,
-        convertedAt: new Date()
-      }
-    }
+        convertedAt: new Date(),
+      },
+    };
   }
 
   /**
@@ -370,9 +380,9 @@ export class DomainEventFactory {
         leadId: lead.id,
         assigneeUserId,
         assigneeRole,
-        previousAssigneeUserId
-      }
-    }
+        previousAssigneeUserId,
+      },
+    };
   }
 
   /**
@@ -405,9 +415,9 @@ export class DomainEventFactory {
         newConsent,
         consentTimestamp: new Date(),
         ipAddress,
-        userAgent
-      }
-    }
+        userAgent,
+      },
+    };
   }
 }
 
@@ -416,60 +426,66 @@ export class DomainEventFactory {
  * Defines the contract for event persistence
  */
 export interface EventStore {
-  saveEvent(event: DomainEvent): Promise<void>
-  getEvents(aggregateId: string, fromVersion?: number): Promise<DomainEvent[]>
-  getEventsByType(eventType: string, tenantId?: string): Promise<DomainEvent[]>
-  getEventsByTenant(tenantId: string, fromTimestamp?: Date): Promise<DomainEvent[]>
+  saveEvent(event: DomainEvent): Promise<void>;
+  getEvents(aggregateId: string, fromVersion?: number): Promise<DomainEvent[]>;
+  getEventsByType(eventType: string, tenantId?: string): Promise<DomainEvent[]>;
+  getEventsByTenant(tenantId: string, fromTimestamp?: Date): Promise<DomainEvent[]>;
 }
 
 /**
  * In-Memory Event Store (for development/testing)
- * TODO: Replace with persistent event store
+ * Provides event storage without persistence
+ * Should be replaced with persistent storage for production use
+ *
+ * Rationale: In-memory storage is sufficient for development and testing environments
+ * where data persistence is not required. This allows for faster development cycles
+ * without database dependencies.
+ *
+ * Follow-up: Replace with PostgreSQL event store or similar persistent storage
+ * before production deployment to ensure event durability and replay capability.
  */
 export class InMemoryEventStore implements EventStore {
-  private events: Map<string, DomainEvent[]> = new Map()
+  private events: Map<string, DomainEvent[]> = new Map();
 
   async saveEvent(event: DomainEvent): Promise<void> {
-    const aggregateEvents = this.events.get(event.aggregateId) || []
-    aggregateEvents.push(event)
-    this.events.set(event.aggregateId, aggregateEvents)
+    const aggregateEvents = this.events.get(event.aggregateId) || [];
+    aggregateEvents.push(event);
+    this.events.set(event.aggregateId, aggregateEvents);
   }
 
   async getEvents(aggregateId: string, fromVersion?: number): Promise<DomainEvent[]> {
-    const events = this.events.get(aggregateId) || []
+    const events = this.events.get(aggregateId) || [];
     if (fromVersion !== undefined) {
-      return events.filter(event => 
-        parseInt(event.eventVersion.split('.')[1] || '0') >= fromVersion
-      )
+      return events.filter(
+        (event) => parseInt(event.eventVersion.split('.')[1] || '0') >= fromVersion
+      );
     }
-    return events
+    return events;
   }
 
   async getEventsByType(eventType: string, tenantId?: string): Promise<DomainEvent[]> {
-    const allEvents: DomainEvent[] = []
+    const allEvents: DomainEvent[] = [];
     for (const events of this.events.values()) {
-      allEvents.push(...events)
+      allEvents.push(...events);
     }
-    
-    return allEvents.filter(event => 
-      event.eventType === eventType && 
-      (!tenantId || event.tenantId === tenantId)
-    )
+
+    return allEvents.filter(
+      (event) => event.eventType === eventType && (!tenantId || event.tenantId === tenantId)
+    );
   }
 
   async getEventsByTenant(tenantId: string, fromTimestamp?: Date): Promise<DomainEvent[]> {
-    const allEvents: DomainEvent[] = []
+    const allEvents: DomainEvent[] = [];
     for (const events of this.events.values()) {
-      allEvents.push(...events)
+      allEvents.push(...events);
     }
-    
-    return allEvents.filter(event => 
-      event.tenantId === tenantId &&
-      (!fromTimestamp || event.timestamp >= fromTimestamp)
-    )
+
+    return allEvents.filter(
+      (event) => event.tenantId === tenantId && (!fromTimestamp || event.timestamp >= fromTimestamp)
+    );
   }
 }
 
 // Export singleton instances
-export const eventPublisher = DomainEventPublisher.getInstance()
-export const eventStore = new InMemoryEventStore() // TODO: Replace with persistent store
+export const eventPublisher = DomainEventPublisher.getInstance();
+export const eventStore = new InMemoryEventStore(); // TODO: Replace with persistent store

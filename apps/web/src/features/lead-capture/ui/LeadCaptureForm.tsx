@@ -1,15 +1,17 @@
+/**
+ * @file apps/web/src/features/lead-capture/ui/LeadCaptureForm.tsx
+ * @summary Lead capture form component with optimistic UI.
+ * @description Optimized lead capture form with Core Web Vitals compliance.
+ * @security Form validation and secure submission via Server Actions
+ * @requirements TASK-006, optimistic-ui, form-validation
+ */
+
 'use client';
 
 import React, { useState, useTransition, useOptimistic } from 'react';
 import { Button } from '@/shared/ui/Button';
 import { createLeadAction } from '../api/lead-capture-server-actions';
 import type { CreateLeadRequest } from '../api/lead-capture-api';
-
-/**
- * @file apps/web/src/features/lead-capture/ui/LeadCaptureForm.tsx
- * @summary Lead capture form component.
- * @description Optimized lead capture form with Core Web Vitals compliance.
- */
 
 export interface LeadData {
   name: string;
@@ -34,40 +36,45 @@ export interface LeadCaptureFormProps {
   referrer?: string;
 }
 
+/**
+ * Lead capture form component with optimistic UI updates
+ * @param props - Component props including form fields and callbacks
+ * @returns Optimized lead capture form with Core Web Vitals compliance
+ */
 export function LeadCaptureForm({
   onSubmit,
   fields = { name: true, email: true, phone: false, company: false, message: false },
   className = '',
   tenantId,
   landingPage = typeof window !== 'undefined' ? window.location.href : '',
-  referrer = typeof document !== 'undefined' ? document.referrer : undefined
+  referrer = typeof document !== 'undefined' ? document.referrer : undefined,
 }: LeadCaptureFormProps) {
   const [formData, setFormData] = useState<LeadData>({
     name: '',
     email: '',
     phone: '',
     company: '',
-    message: ''
+    message: '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [optimisticLeads, addOptimisticLead] = useOptimistic(
-    [],
-    (state: any[], newLead: any) => [...state, newLead]
-  );
+  const [optimisticLeads, addOptimisticLead] = useOptimistic([], (state: any[], newLead: any) => [
+    ...state,
+    newLead,
+  ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     // Use startTransition for non-urgent state updates (INP optimization)
     startTransition(() => {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
 
       // Clear error for this field when user starts typing
       if (errors[name]) {
-        setErrors(prev => {
+        setErrors((prev) => {
           const newErrors = { ...prev };
           delete newErrors[name];
           return newErrors;
@@ -90,7 +97,11 @@ export function LeadCaptureForm({
       newErrors.email = 'Invalid email format';
     }
 
-    if (fields.phone && formData.phone && !/^\+?[1-9]\d{1,14}$/.test(formData.phone.replace(/\D/g, ''))) {
+    if (
+      fields.phone &&
+      formData.phone &&
+      !/^\+?[1-9]\d{1,14}$/.test(formData.phone.replace(/\D/g, ''))
+    ) {
       newErrors.phone = 'Invalid phone number format';
     }
 
@@ -115,7 +126,7 @@ export function LeadCaptureForm({
         tenantId,
         status: 'captured' as const,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       addOptimisticLead(optimisticLead);
@@ -132,8 +143,8 @@ export function LeadCaptureForm({
         referrer,
         consent: {
           marketing: false, // Default to false for GDPR compliance
-          processing: true // Required for data processing
-        }
+          processing: true, // Required for data processing
+        },
       };
 
       // Call Server Action
@@ -150,9 +161,10 @@ export function LeadCaptureForm({
         await onSubmit?.(formData);
       } else {
         // Handle server errors
-        const errorMessage = typeof result.error === 'string'
-          ? result.error
-          : result.error?.message || 'Failed to submit form. Please try again.';
+        const errorMessage =
+          typeof result.error === 'string'
+            ? result.error
+            : result.error?.message || 'Failed to submit form. Please try again.';
         setErrors({ submit: errorMessage });
       }
     } catch (error) {
@@ -167,10 +179,7 @@ export function LeadCaptureForm({
     <form onSubmit={handleSubmit} className={`space-y-4 ${className}`} noValidate>
       {fields.name && (
         <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
             Name *
           </label>
           <input
@@ -198,10 +207,7 @@ export function LeadCaptureForm({
 
       {fields.email && (
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email *
           </label>
           <input
@@ -229,10 +235,7 @@ export function LeadCaptureForm({
 
       {fields.phone && (
         <div>
-          <label
-            htmlFor="phone"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
             Phone
           </label>
           <input
@@ -259,10 +262,7 @@ export function LeadCaptureForm({
 
       {fields.company && (
         <div>
-          <label
-            htmlFor="company"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
             Company
           </label>
           <input
@@ -289,10 +289,7 @@ export function LeadCaptureForm({
 
       {fields.message && (
         <div>
-          <label
-            htmlFor="message"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
             Message
           </label>
           <textarea

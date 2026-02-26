@@ -1,8 +1,10 @@
 #!/usr/bin/env node
-
 /**
- * Standardize AGENTS.md files across all packages
- * 2026 enterprise agentic coding standards
+ * @file scripts/standardize-agent-docs.mjs
+ * @summary Standardizes agent documentation across the monorepo.
+ * @description Ensures consistent documentation format and structure.
+ * @security No security concerns - documentation only
+ * @requirements documentation-standards, agent-docs
  */
 
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
@@ -97,27 +99,27 @@ const PACKAGE_RULES = {
 - Use 'use client' directive only for interactive components
 - Follow Design System patterns and theming
 - Test with React Testing Library and jest-axe`,
-  
+
   'features': `- Export business logic, not UI components
 - Use repository pattern for data access
 - Include comprehensive error handling
 - Test with Vitest and mock repositories`,
-  
+
   'integrations': `- Provide both client and server export paths
 - Include proper error boundaries and retry logic
 - Use OAuth 2.1 patterns for authentication
 - Test integration with external services`,
-  
+
   'infra': `- Server-side utilities only (no client exports)
 - Include comprehensive logging and monitoring
 - Use zero-trust security patterns
 - Test with Node.js environment`,
-  
+
   'agent-*': `- Implement A2A protocol compliance
 - Provide MCP server integration
 - Include agent orchestration patterns
 - Test multi-agent communication`,
-  
+
   'default': `- Follow standard package export patterns
 - Include comprehensive TypeScript types
 - Maintain backward compatibility
@@ -149,56 +151,56 @@ function hasA2ASupport(packageName, packagePath) {
 
 function generatePackageAgents(packageName) {
   const packagePath = join(PACKAGES_DIR, packageName);
-  
+
   let content = PACKAGE_AGENTS_TEMPLATE.replace(/{{PACKAGE_NAME}}/g, packageName);
-  
+
   // Add MCP section if applicable
   if (hasMcpServers(packageName, packagePath)) {
-    const mcpSection = MCP_SECTION_TEMPLATE.replace('{{MCP_SERVERS}}', 
+    const mcpSection = MCP_SECTION_TEMPLATE.replace('{{MCP_SERVERS}}',
       `- Tool access server\n- Data retrieval server`);
     content = content.replace('{{MCP_SECTION}}', mcpSection);
   } else {
-    content = content.replace('{{MCP_SECTION}}', 
+    content = content.replace('{{MCP_SECTION}}',
       'This package does not provide MCP servers.');
   }
-  
+
   // Add A2A section if applicable
   if (hasA2ASupport(packageName, packagePath)) {
     const a2aSection = A2A_SECTION_TEMPLATE.replace('{{A2A_CAPABILITIES}}',
       `- Package-specific operations\n- External service integration`);
     content = content.replace('{{A2A_SECTION}}', a2aSection);
   } else {
-    content = content.replace('{{A2A_SECTION}}', 
+    content = content.replace('{{A2A_SECTION}}',
       'This package does not support A2A protocol.');
   }
-  
+
   // Add package-specific rules
   const rules = getPackageRules(packageName);
   content = content.replace('{{PACKAGE_RULES}}', rules);
-  
+
   return content;
 }
 
 function main() {
   console.log('🤖 Standardizing AGENTS.md files across packages...');
-  
+
   const packages = readdirSync(PACKAGES_DIR, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
-  
+
   let updatedCount = 0;
-  
+
   for (const packageName of packages) {
     const agentsPath = join(PACKAGES_DIR, packageName, 'AGENTS.md');
     const newContent = generatePackageAgents(packageName);
-    
+
     // Check if file exists and needs updating
     let shouldUpdate = true;
     if (existsSync(agentsPath)) {
       const existingContent = readFileSync(agentsPath, 'utf-8');
       shouldUpdate = existingContent !== newContent;
     }
-    
+
     if (shouldUpdate) {
       writeFileSync(agentsPath, newContent, 'utf-8');
       console.log(`✅ Updated ${packageName}/AGENTS.md`);
@@ -207,7 +209,7 @@ function main() {
       console.log(`⏭️  Skipped ${packageName}/AGENTS.md (no changes)`);
     }
   }
-  
+
   console.log(`\\n🎯 Complete! Updated ${updatedCount} package AGENTS.md files`);
   console.log('📚 All packages now follow 2026 enterprise agentic coding standards');
 }

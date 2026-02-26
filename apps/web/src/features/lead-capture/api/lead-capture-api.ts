@@ -4,61 +4,66 @@
  * @description API functions for lead capture with domain events and validation.
  * @security All API calls include tenant context validation
  * @compliance GDPR/CCPA compliant with consent tracking and audit trails
+ * @requirements TASK-006, GDPR-consent-tracking, multi-tenant-api
  */
 
-import { z } from 'zod'
-import { validateLeadCaptureData, extractAndValidateUTMParameters, formatPhoneNumber } from '../lib/lead-capture-validation'
-import { LeadEventPublisher } from '../lib/lead-event-handlers'
-import type { Lead } from '@/entities/lead/model/lead.schema'
+import { z } from 'zod';
+import {
+  validateLeadCaptureData,
+  extractAndValidateUTMParameters,
+  formatPhoneNumber,
+} from '../lib/lead-capture-validation';
+import { LeadEventPublisher } from '../lib/lead-event-handlers';
+import type { Lead } from '@/entities/lead/model/lead.schema';
 
 // API response types
 export interface ApiResponse<T = any> {
-  success: boolean
-  data?: T
-  error?: string
-  errors?: Record<string, string>
-  correlationId?: string
+  success: boolean;
+  data?: T;
+  error?: string;
+  errors?: Record<string, string>;
+  correlationId?: string;
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T> {
   pagination?: {
-    total: number
-    limit: number
-    offset: number
-    hasMore: boolean
-  }
+    total: number;
+    limit: number;
+    offset: number;
+    hasMore: boolean;
+  };
 }
 
 // Lead creation request type
 export interface CreateLeadRequest {
-  tenantId: string
-  email: string
-  name: string
-  phone?: string
-  company?: string
-  message?: string
-  landingPage: string
-  referrer?: string
+  tenantId: string;
+  email: string;
+  name: string;
+  phone?: string;
+  company?: string;
+  message?: string;
+  landingPage: string;
+  referrer?: string;
   consent?: {
-    marketing?: boolean
-    processing?: boolean
-  }
-  customFields?: Record<string, unknown>
+    marketing?: boolean;
+    processing?: boolean;
+  };
+  customFields?: Record<string, unknown>;
 }
 
 // Lead search request type
 export interface SearchLeadsRequest {
-  tenantId: string
-  status?: 'captured' | 'qualified' | 'converted'
-  source?: 'website' | 'referral' | 'direct' | 'social' | 'email' | 'paid' | 'organic' | 'other'
-  assigneeUserId?: string
-  dateFrom?: string
-  dateTo?: string
-  search?: string
-  limit?: number
-  offset?: number
-  sortBy?: 'createdAt' | 'updatedAt' | 'name' | 'email' | 'score'
-  sortOrder?: 'asc' | 'desc'
+  tenantId: string;
+  status?: 'captured' | 'qualified' | 'converted';
+  source?: 'website' | 'referral' | 'direct' | 'social' | 'email' | 'paid' | 'organic' | 'other';
+  assigneeUserId?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  search?: string;
+  limit?: number;
+  offset?: number;
+  sortBy?: 'createdAt' | 'updatedAt' | 'name' | 'email' | 'score';
+  sortOrder?: 'asc' | 'desc';
 }
 
 /**
@@ -67,14 +72,14 @@ export interface SearchLeadsRequest {
  * @returns Promise with API response containing created lead
  */
 export async function createLead(data: CreateLeadRequest): Promise<ApiResponse<Lead>> {
-  const correlationId = crypto.randomUUID()
+  const correlationId = crypto.randomUUID();
 
   try {
     // Extract UTM parameters from landing page
-    const utmParams = extractAndValidateUTMParameters(data.landingPage)
+    const utmParams = extractAndValidateUTMParameters(data.landingPage);
 
     // Format phone number if provided
-    const formattedPhone = data.phone ? formatPhoneNumber(data.phone) : undefined
+    const formattedPhone = data.phone ? formatPhoneNumber(data.phone) : undefined;
 
     // Prepare lead data with all required fields
     const leadData = {
@@ -85,50 +90,49 @@ export async function createLead(data: CreateLeadRequest): Promise<ApiResponse<L
       status: 'captured' as const,
       sessionId: correlationId,
       userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined,
-      ipAddress: undefined // Will be set by server
-    }
+      ipAddress: undefined, // Will be set by server
+    };
 
     // Validate lead data
-    const validation = validateLeadCaptureData(leadData)
+    const validation = validateLeadCaptureData(leadData);
     if (!validation.isValid || !validation.sanitizedData) {
       return {
         success: false,
         error: 'Validation failed',
         errors: validation.errors,
-        correlationId
-      }
+        correlationId,
+      };
     }
 
-    // TODO: Replace with actual database insertion
+    // TODO(TASK-001): Replace with actual database implementation
     // For now, create mock lead
     const createdLead: Lead = {
       id: crypto.randomUUID(),
       ...validation.sanitizedData,
       status: 'captured',
       createdAt: new Date(),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    };
 
     // Publish domain event
     await LeadEventPublisher.publishLeadCreated(
       createdLead,
       undefined, // userId (anonymous)
       correlationId
-    )
+    );
 
     return {
       success: true,
       data: createdLead,
-      correlationId
-    }
-
+      correlationId,
+    };
   } catch (error) {
-    console.error('Failed to create lead:', error)
+    console.error('Failed to create lead:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
-      correlationId
-    }
+      correlationId,
+    };
   }
 }
 
@@ -138,7 +142,7 @@ export async function createLead(data: CreateLeadRequest): Promise<ApiResponse<L
  * @returns Promise with paginated API response
  */
 export async function searchLeads(params: SearchLeadsRequest): Promise<PaginatedResponse<Lead[]>> {
-  const correlationId = crypto.randomUUID()
+  const correlationId = crypto.randomUUID();
 
   try {
     // Validate search parameters
@@ -153,10 +157,10 @@ export async function searchLeads(params: SearchLeadsRequest): Promise<Paginated
       limit: params.limit || 20,
       offset: params.offset || 0,
       sortBy: params.sortBy || 'createdAt',
-      sortOrder: params.sortOrder || 'desc'
-    }
+      sortOrder: params.sortOrder || 'desc',
+    };
 
-    // TODO: Replace with actual database search
+    // TODO(TASK-002): Implement actual database search
     // For now, return mock data
     const mockLeads: Lead[] = [
       {
@@ -167,7 +171,7 @@ export async function searchLeads(params: SearchLeadsRequest): Promise<Paginated
         status: 'captured',
         source: 'website',
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
         id: crypto.randomUUID(),
@@ -177,33 +181,34 @@ export async function searchLeads(params: SearchLeadsRequest): Promise<Paginated
         status: 'qualified',
         source: 'referral',
         createdAt: new Date(Date.now() - 86400000), // 1 day ago
-        updatedAt: new Date()
-      }
-    ]
+        updatedAt: new Date(),
+      },
+    ];
 
     // Apply filters (mock implementation)
-    let filteredLeads = mockLeads
+    let filteredLeads = mockLeads;
 
     if (validatedParams.status) {
-      filteredLeads = filteredLeads.filter(lead => lead.status === validatedParams.status)
+      filteredLeads = filteredLeads.filter((lead) => lead.status === validatedParams.status);
     }
 
     if (validatedParams.source) {
-      filteredLeads = filteredLeads.filter(lead => lead.source === validatedParams.source)
+      filteredLeads = filteredLeads.filter((lead) => lead.source === validatedParams.source);
     }
 
     if (validatedParams.search) {
-      const searchLower = validatedParams.search.toLowerCase()
-      filteredLeads = filteredLeads.filter(lead =>
-        lead.name.toLowerCase().includes(searchLower) ||
-        lead.email.toLowerCase().includes(searchLower)
-      )
+      const searchLower = validatedParams.search.toLowerCase();
+      filteredLeads = filteredLeads.filter(
+        (lead) =>
+          lead.name.toLowerCase().includes(searchLower) ||
+          lead.email.toLowerCase().includes(searchLower)
+      );
     }
 
     // Apply pagination
-    const startIndex = validatedParams.offset
-    const endIndex = startIndex + validatedParams.limit
-    const paginatedLeads = filteredLeads.slice(startIndex, endIndex)
+    const startIndex = validatedParams.offset;
+    const endIndex = startIndex + validatedParams.limit;
+    const paginatedLeads = filteredLeads.slice(startIndex, endIndex);
 
     return {
       success: true,
@@ -212,18 +217,17 @@ export async function searchLeads(params: SearchLeadsRequest): Promise<Paginated
         total: filteredLeads.length,
         limit: validatedParams.limit,
         offset: validatedParams.offset,
-        hasMore: endIndex < filteredLeads.length
+        hasMore: endIndex < filteredLeads.length,
       },
-      correlationId
-    }
-
+      correlationId,
+    };
   } catch (error) {
-    console.error('Failed to search leads:', error)
+    console.error('Failed to search leads:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
-      correlationId
-    }
+      correlationId,
+    };
   }
 }
 
@@ -234,20 +238,20 @@ export async function searchLeads(params: SearchLeadsRequest): Promise<Paginated
  * @returns Promise with API response containing lead data
  */
 export async function getLead(leadId: string, tenantId: string): Promise<ApiResponse<Lead>> {
-  const correlationId = crypto.randomUUID()
+  const correlationId = crypto.randomUUID();
 
   try {
     // Validate UUID format
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(leadId) || !uuidRegex.test(tenantId)) {
       return {
         success: false,
         error: 'Invalid ID format',
-        correlationId
-      }
+        correlationId,
+      };
     }
 
-    // TODO: Replace with actual database query
+    // TODO(DB-001): Replace with actual database query
     // For now, return mock data
     const lead: Lead = {
       id: leadId,
@@ -257,22 +261,21 @@ export async function getLead(leadId: string, tenantId: string): Promise<ApiResp
       status: 'captured',
       source: 'website',
       createdAt: new Date(),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    };
 
     return {
       success: true,
       data: lead,
-      correlationId
-    }
-
+      correlationId,
+    };
   } catch (error) {
-    console.error('Failed to get lead:', error)
+    console.error('Failed to get lead:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
-      correlationId
-    }
+      correlationId,
+    };
   }
 }
 
@@ -288,20 +291,20 @@ export async function updateLead(
   tenantId: string,
   updates: Partial<Omit<Lead, 'id' | 'tenantId' | 'createdAt' | 'updatedAt'>>
 ): Promise<ApiResponse<Lead>> {
-  const correlationId = crypto.randomUUID()
+  const correlationId = crypto.randomUUID();
 
   try {
     // Validate UUID format
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(leadId) || !uuidRegex.test(tenantId)) {
       return {
         success: false,
         error: 'Invalid ID format',
-        correlationId
-      }
+        correlationId,
+      };
     }
 
-    // TODO: Replace with actual database update
+    // TODO(DB-001): Replace with actual database update
     // For now, return mock updated data
     const updatedLead: Lead = {
       id: leadId,
@@ -312,25 +315,24 @@ export async function updateLead(
       source: updates.source || 'website',
       createdAt: new Date(Date.now() - 86400000), // 1 day ago
       updatedAt: new Date(),
-      ...updates
-    }
+      ...updates,
+    };
 
-    // TODO: Publish domain event for lead update
+    // TODO(EVENTS-001): Publish domain event for lead update
     // await LeadEventPublisher.publishLeadUpdated(...)
 
     return {
       success: true,
       data: updatedLead,
-      correlationId
-    }
-
+      correlationId,
+    };
   } catch (error) {
-    console.error('Failed to update lead:', error)
+    console.error('Failed to update lead:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
-      correlationId
-    }
+      correlationId,
+    };
   }
 }
 
@@ -348,28 +350,28 @@ export async function qualifyLead(
   score: number,
   qualificationReason?: string
 ): Promise<ApiResponse<Lead>> {
-  const correlationId = crypto.randomUUID()
+  const correlationId = crypto.randomUUID();
 
   try {
     // Validate inputs
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(leadId) || !uuidRegex.test(tenantId)) {
       return {
         success: false,
         error: 'Invalid ID format',
-        correlationId
-      }
+        correlationId,
+      };
     }
 
     if (score < 0 || score > 100) {
       return {
         success: false,
         error: 'Score must be between 0 and 100',
-        correlationId
-      }
+        correlationId,
+      };
     }
 
-    // TODO: Replace with actual database update
+    // TODO(DB-001): Replace with actual database update
     const qualifiedLead: Lead = {
       id: leadId,
       tenantId,
@@ -379,8 +381,8 @@ export async function qualifyLead(
       score,
       source: 'website',
       createdAt: new Date(Date.now() - 86400000),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    };
 
     // Publish domain event
     await LeadEventPublisher.publishLeadQualified(
@@ -389,21 +391,20 @@ export async function qualifyLead(
       qualificationReason,
       undefined, // userId
       correlationId
-    )
+    );
 
     return {
       success: true,
       data: qualifiedLead,
-      correlationId
-    }
-
+      correlationId,
+    };
   } catch (error) {
-    console.error('Failed to qualify lead:', error)
+    console.error('Failed to qualify lead:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
-      correlationId
-    }
+      correlationId,
+    };
   }
 }
 
@@ -421,20 +422,20 @@ export async function convertLead(
   conversionValue?: number,
   conversionType?: string
 ): Promise<ApiResponse<Lead>> {
-  const correlationId = crypto.randomUUID()
+  const correlationId = crypto.randomUUID();
 
   try {
     // Validate inputs
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(leadId) || !uuidRegex.test(tenantId)) {
       return {
         success: false,
         error: 'Invalid ID format',
-        correlationId
-      }
+        correlationId,
+      };
     }
 
-    // TODO: Replace with actual database update
+    // TODO(DB-001): Replace with actual database update
     const convertedLead: Lead = {
       id: leadId,
       tenantId,
@@ -444,8 +445,8 @@ export async function convertLead(
       source: 'website',
       createdAt: new Date(Date.now() - 86400000 * 2), // 2 days ago
       updatedAt: new Date(),
-      convertedAt: new Date()
-    }
+      convertedAt: new Date(),
+    };
 
     // Publish domain event
     await LeadEventPublisher.publishLeadConverted(
@@ -454,21 +455,20 @@ export async function convertLead(
       conversionType,
       undefined, // userId
       correlationId
-    )
+    );
 
     return {
       success: true,
       data: convertedLead,
-      correlationId
-    }
-
+      correlationId,
+    };
   } catch (error) {
-    console.error('Failed to convert lead:', error)
+    console.error('Failed to convert lead:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
-      correlationId
-    }
+      correlationId,
+    };
   }
 }
 
@@ -486,20 +486,20 @@ export async function assignLead(
   assigneeUserId: string,
   assigneeRole?: string
 ): Promise<ApiResponse<Lead>> {
-  const correlationId = crypto.randomUUID()
+  const correlationId = crypto.randomUUID();
 
   try {
     // Validate inputs
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(leadId) || !uuidRegex.test(tenantId) || !uuidRegex.test(assigneeUserId)) {
       return {
         success: false,
         error: 'Invalid ID format',
-        correlationId
-      }
+        correlationId,
+      };
     }
 
-    // TODO: Replace with actual database update
+    // TODO(DB-001): Replace with actual database update
     const assignedLead: Lead = {
       id: leadId,
       tenantId,
@@ -509,8 +509,8 @@ export async function assignLead(
       assigneeUserId,
       source: 'website',
       createdAt: new Date(Date.now() - 86400000),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    };
 
     // Publish domain event
     await LeadEventPublisher.publishLeadAssigned(
@@ -520,20 +520,19 @@ export async function assignLead(
       undefined, // previousAssigneeUserId
       undefined, // userId
       correlationId
-    )
+    );
 
     return {
       success: true,
       data: assignedLead,
-      correlationId
-    }
-
+      correlationId,
+    };
   } catch (error) {
-    console.error('Failed to assign lead:', error)
+    console.error('Failed to assign lead:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error occurred',
-      correlationId
-    }
+      correlationId,
+    };
   }
 }

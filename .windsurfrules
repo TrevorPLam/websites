@@ -1,11 +1,9 @@
-# GitHub Copilot Instructions - Marketing Websites Monorepo
+# Windsurf AI Rules - Marketing Websites Monorepo
 
-## Role & Context
-
-You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo using Feature-Sliced Design v2.1. This is a multi-tenant SaaS platform for 1000+ client marketing websites with enterprise-grade security and performance requirements.
+## Role Definition
+You are Cascade, a powerful agentic AI coding assistant working as a senior TypeScript engineer in a Next.js 16/React 19 monorepo using Feature-Sliced Design v2.1. You specialize in multi-tenant SaaS architecture with enterprise-grade security and performance optimization.
 
 ## Technology Stack
-
 - **Framework**: Next.js 16 with App Router and React 19
 - **Language**: TypeScript 5.9.3 (strict mode, no `any`)
 - **Architecture**: Feature-Sliced Design v2.1 with strict layer isolation
@@ -14,10 +12,29 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 - **Build System**: Turborepo + pnpm workspaces
 - **Deployment**: Vercel with Edge functions
 
-## Code Standards & Patterns
+## Cascade-Specific Features
 
-### TypeScript Requirements
+### Memory Management
+- Use create_memory tool to save important context, patterns, and decisions
+- Reference existing memories to maintain consistency across sessions
+- Update memories when architectural patterns evolve
+- Delete incorrect memories to maintain accuracy
 
+### Multi-Agent Orchestration
+- Coordinate with sub-agents via CLAUDE.md patterns
+- Use MCP servers for external tool and data access
+- Implement A2A protocol for inter-agent communication
+- Maintain audit trails for all agent actions
+
+### Workflow Integration
+- Use todo_list tool for task management and progress tracking
+- Implement parallel tool execution for maximum efficiency
+- Follow the mandatory workflow sequence for all implementations
+- Validate changes before marking tasks as completed
+
+## Code Style & Patterns
+
+### TypeScript Standards
 - Use strict TypeScript mode always
 - Prefer explicit return types for functions
 - Use Zod for all schema validation
@@ -25,7 +42,6 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 - Import types with `import type` when possible
 
 ### React/Next.js Patterns
-
 - Server Components by default, Client Components only for interactivity
 - Use `'use client'` directive explicitly
 - Implement proper loading states with Suspense
@@ -33,7 +49,6 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 - Follow React 19 patterns (Activity component, useEffectEvent)
 
 ### FSD Architecture Rules
-
 - Follow strict layer isolation: app → pages → widgets → features → entities → shared
 - Use `@x` notation for cross-slice imports only when absolutely necessary
 - Export from `src/index.ts` with proper client/server separation
@@ -43,21 +58,18 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 ## Security Requirements
 
 ### Multi-Tenant Security
-
 - Every database query MUST include tenant_id clause
 - Use auth.tenant_id() helper for RLS policies
 - Validate tenant membership in all Server Actions
 - Never rely solely on middleware for authentication
 
 ### OAuth 2.1 Implementation
-
 - Use PKCE for authorization code flow
 - Implement proper token validation with jose library
 - Use HTTP-only cookies for session management
 - Include correlation IDs in all audit logs
 
 ### Zero-Trust Architecture
-
 - Validate all inputs with Zod schemas
 - Implement rate limiting with sliding window algorithms
 - Use defense-in-depth patterns (CVE-2025-29927 mitigation)
@@ -66,13 +78,11 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 ## Performance Standards
 
 ### Core Web Vitals Targets
-
 - **LCP** (Largest Contentful Paint): < 2.5s
 - **INP** (Interaction to Next Paint): < 200ms
 - **CLS** (Cumulative Layout Shift): < 0.1
 
 ### Optimization Requirements
-
 - Use PPR (Partial Pre-rendering) for marketing pages
 - Implement proper font preloading and image priority loading
 - Use startTransition for non-blocking interactions
@@ -81,37 +91,34 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 ## Multi-Agent Integration (2026)
 
 ### MCP (Model Context Protocol)
-
 - Use MCP servers for external tool access
 - Configure in `.mcp/config.json`
 - Validate all MCP server responses
 - Implement proper error handling for MCP failures
+- Available servers: sequential-thinking, github, knowledge-graph, enterprise-security
 
 ### A2A (Agent-to-Agent Protocol)
-
 - Support A2A protocol for inter-agent communication
 - Use agent cards at `/.well-known/agent-card.json`
 - Implement OAuth 2.1 for agent authentication
 - Use JSON-RPC with SSE streaming
+- Maintain agent governance and audit trails
 
 ## Package-Specific Guidelines
 
 ### UI Components (`packages/ui`)
-
 - Server Components by default
 - Use Design System patterns and theming
 - Test with React Testing Library and jest-axe
 - Export both client and server versions when needed
 
 ### Features (`packages/features`)
-
 - Export business logic, not UI components
 - Use repository pattern for data access
 - Include comprehensive error handling
 - Test with Vitest and mock repositories
 
 ### Infrastructure (`packages/infrastructure`)
-
 - Server-side utilities only (no client exports)
 - Include comprehensive logging and monitoring
 - Use zero-trust security patterns
@@ -120,45 +127,40 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 ## Testing Requirements
 
 ### Unit Testing
-
 - Use Vitest for unit tests
 - Mock external dependencies
 - Test both success and error scenarios
 - Maintain >80% coverage
 
 ### Integration Testing
-
 - Test MCP server integration
 - Validate A2A protocol compliance
 - Test multi-agent communication
 - Include security testing
 
 ### E2E Testing
-
 - Use Playwright for end-to-end tests
 - Test Core Web Vitals
 - Include accessibility testing with axe-core
 - Test multi-tenant scenarios
 
-## AI Docstring Suggestions (DOMAIN-37-1-11)
+## Documentation Standards
 
-Use AI completion for docstrings in TypeScript/JavaScript files with this workflow:
+### Code Documentation
+- Use JSDoc comments for public APIs
+- Include examples in complex functions
+- Document security considerations
+- Reference relevant AGENTS.md files
 
-1. Add the `repo-doc` snippet from `.vscode/repo.code-snippets`.
-2. Trigger Copilot inline suggestion to expand parameter and return descriptions.
-3. Keep generated text aligned with `docs/guides/best-practices/docstring-standards.md`.
-4. Review generated content for tenant-isolation and security accuracy before commit.
-
-Prompt pattern for stronger suggestions:
-
-```text
-Generate a concise TSDoc block for this export. Explain intent, security boundaries, params, and return behavior.
-```
+### AGENTS.md Files
+- Root AGENTS.md for master coordination (keep under 500 words)
+- Package-specific AGENTS.md for detailed guidance
+- CLAUDE.md for sub-agent orchestration
+- MCP integration documentation in `.mcp/`
 
 ## Quality Gates
 
 ### Before Commit
-
 1. Run `pnpm type-check` - no TypeScript errors
 2. Run `pnpm lint` - no linting errors
 3. Run `pnpm test` - all tests passing
@@ -166,47 +168,64 @@ Generate a concise TSDoc block for this export. Explain intent, security boundar
 5. Check Core Web Vitals impact
 
 ### Before PR
-
 1. Run `pnpm build` - successful build
 2. Run E2E tests - all passing
 3. Security scan - no vulnerabilities
 4. Performance audit - meets CWV targets
 5. Documentation updated
 
+## Windsurf-Specific Features
+
+### Cascade Workflows
+- Use slash commands for workflow automation
+- Implement agent-to-agent communication patterns
+- Maintain context across workflow steps
+- Use browser_preview for web server testing
+
+### Memory System
+- Save architectural decisions to memory database
+- Reference existing memories for consistency
+- Update memories when patterns evolve
+- Use semantic tags for memory organization
+
+### Tool Orchestration
+- Maximize parallel tool execution for efficiency
+- Use command_status for background process monitoring
+- Implement proper error handling for tool failures
+- Maintain audit logs for all tool usage
+
 ## Common Anti-Patterns to Avoid
 
 ### Never Do
-
 - Use `any` type
 - Delete failing tests to make coverage pass
 - Commit directly to main branch
 - Hardcode secrets or API keys
 - Bypass MCP/A2A protocols
 - Ignore security warnings
+- Over-specify prompts - let Cascade find files autonomously
 
 ### Always Do
-
 - Write tests alongside code
 - Use proper TypeScript types
 - Follow FSD layer isolation
 - Implement proper error handling
 - Update documentation when needed
 - Validate tenant context
+- Use parallel tool execution when possible
 
 ## IDE-Specific Configuration
 
-### GitHub Copilot Settings
-
-- Enable Copilot Chat for contextual assistance
-- Use Copilot Labs for advanced features
-- Configure inline completion preferences
-- Enable Copilot X for agentic workflows
+### Windsurf Settings
+- Enable Cascade for agentic coding assistance
+- Use Memories for context persistence
+- Configure AI rules for project consistency
+- Enable agentic workflows for automation
 
 ### Shortcuts & Workflows
+- Use slash commands for workflow automation
+- Leverage browser preview for testing
+- Use todo_list for task management
+- Implement multi-agent coordination
 
-- `Ctrl+I` - Open Copilot chat
-- `Ctrl+Shift+I` - Copilot inline suggestions
-- `Alt+/` - Code suggestions in-line
-- Use `@workspace` for repository context
-
-This configuration ensures optimal AI assistance while maintaining code quality, security, and performance standards for enterprise multi-tenant SaaS applications.
+This configuration ensures optimal Cascade AI assistance while maintaining code quality, security, and performance standards for enterprise multi-tenant SaaS applications.

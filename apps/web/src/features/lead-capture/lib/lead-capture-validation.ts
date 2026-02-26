@@ -4,15 +4,16 @@
  * @description Complete validation functions for lead capture with multi-tenant security.
  * @security Validates tenant context and data integrity
  * @compliance GDPR/CCPA compliant validation with consent tracking
+ * @requirements TASK-006, GDPR-validation, input-sanitization
  */
 
-import { validateCreateLead, type CreateLeadData } from '@/entities/lead/model/lead.schema'
+import { validateCreateLead, type CreateLeadData } from '@/entities/lead/model/lead.schema';
 
 // Extended lead data type that includes server-side fields
 export type ExtendedLeadData = CreateLeadData & {
-  userAgent?: string
-  ipAddress?: string
-}
+  userAgent?: string;
+  ipAddress?: string;
+};
 
 /**
  * Validates lead capture form data with comprehensive error handling
@@ -22,13 +23,13 @@ export type ExtendedLeadData = CreateLeadData & {
 export function validateLeadCaptureData(data: unknown): {
   isValid: boolean;
   errors: Record<string, string>;
-  sanitizedData?: CreateLeadData
+  sanitizedData?: CreateLeadData;
 } {
-  const errors: Record<string, string> = {}
+  const errors: Record<string, string> = {};
 
   try {
     // Validate against comprehensive schema
-    const validatedData = validateCreateLead(data)
+    const validatedData = validateCreateLead(data);
 
     // Additional business logic validations
     if (validatedData.email && validatedData.email.toLowerCase() === validatedData.email) {
@@ -37,34 +38,34 @@ export function validateLeadCaptureData(data: unknown): {
 
     // Phone number format validation (if provided)
     if (validatedData.phone) {
-      const phoneRegex = /^\+?[1-9]\d{1,14}$/
+      const phoneRegex = /^\+?[1-9]\d{1,14}$/;
       if (!phoneRegex.test(validatedData.phone)) {
-        errors.phone = 'Phone number must be in E.164 format (e.g., +1234567890)'
+        errors.phone = 'Phone number must be in E.164 format (e.g., +1234567890)';
       }
     }
 
     // URL validation for landing page
     if (validatedData.landingPage) {
       try {
-        new URL(validatedData.landingPage)
+        new URL(validatedData.landingPage);
       } catch {
-        errors.landingPage = 'Invalid landing page URL format'
+        errors.landingPage = 'Invalid landing page URL format';
       }
     }
 
     // Referrer URL validation (if provided)
     if (validatedData.referrer) {
       try {
-        new URL(validatedData.referrer)
+        new URL(validatedData.referrer);
       } catch {
-        errors.referrer = 'Invalid referrer URL format'
+        errors.referrer = 'Invalid referrer URL format';
       }
     }
 
     // Consent validation for GDPR/CCPA compliance
     if (validatedData.consent) {
       if (!validatedData.consent.processing) {
-        errors.consent = 'Data processing consent is required'
+        errors.consent = 'Data processing consent is required';
       }
     }
 
@@ -72,46 +73,45 @@ export function validateLeadCaptureData(data: unknown): {
     if (Object.keys(errors).length > 0) {
       return {
         isValid: false,
-        errors
-      }
+        errors,
+      };
     }
 
     return {
       isValid: true,
       errors: {},
-      sanitizedData: validatedData
-    }
-
+      sanitizedData: validatedData,
+    };
   } catch (error) {
     // Handle Zod validation errors
     if (error instanceof Error) {
       if (error.name === 'CreateLeadValidationError') {
         // Parse the error message to extract field-level errors
-        const errorMessage = error.message
-        const fieldErrors = errorMessage.split(', ').map(err => {
-          const [field, ...messageParts] = err.split(': ')
+        const errorMessage = error.message;
+        const fieldErrors = errorMessage.split(', ').map((err) => {
+          const [field, ...messageParts] = err.split(': ');
           return {
             field: field.replace('Create lead validation failed: ', ''),
-            message: messageParts.join(': ')
-          }
-        })
+            message: messageParts.join(': '),
+          };
+        });
 
         fieldErrors.forEach(({ field, message }) => {
           if (field && message) {
-            errors[field] = message
+            errors[field] = message;
           }
-        })
+        });
       } else {
-        errors.general = error.message
+        errors.general = error.message;
       }
     } else {
-      errors.general = 'Unknown validation error occurred'
+      errors.general = 'Unknown validation error occurred';
     }
 
     return {
       isValid: false,
-      errors
-    }
+      errors,
+    };
   }
 }
 
@@ -122,14 +122,14 @@ export function validateLeadCaptureData(data: unknown): {
  * @throws {Error} If validation fails
  */
 export function sanitizeAndValidateLeadData(data: unknown): CreateLeadData {
-  const result = validateLeadCaptureData(data)
+  const result = validateLeadCaptureData(data);
 
   if (!result.isValid || !result.sanitizedData) {
-    const errorMessages = Object.values(result.errors).join('; ')
-    throw new Error(`Lead validation failed: ${errorMessages}`)
+    const errorMessages = Object.values(result.errors).join('; ');
+    throw new Error(`Lead validation failed: ${errorMessages}`);
   }
 
-  return result.sanitizedData
+  return result.sanitizedData;
 }
 
 /**
@@ -140,17 +140,17 @@ export function sanitizeAndValidateLeadData(data: unknown): CreateLeadData {
  */
 export function validateTenantContext(tenantId: string, userTenantId: string): boolean {
   if (!tenantId || !userTenantId) {
-    return false
+    return false;
   }
 
   // Validate UUID format
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(tenantId) || !uuidRegex.test(userTenantId)) {
-    return false
+    return false;
   }
 
   // Ensure tenant context matches (security check)
-  return tenantId === userTenantId
+  return tenantId === userTenantId;
 }
 
 /**
@@ -159,38 +159,38 @@ export function validateTenantContext(tenantId: string, userTenantId: string): b
  * @returns Sanitized UTM parameters object
  */
 export function extractAndValidateUTMParameters(url?: string): {
-  source?: string
-  medium?: string
-  campaign?: string
-  content?: string
-  term?: string
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  content?: string;
+  term?: string;
 } {
   if (!url) {
-    return {}
+    return {};
   }
 
   try {
-    const urlObj = new URL(url)
-    const params: Record<string, string | undefined> = {}
+    const urlObj = new URL(url);
+    const params: Record<string, string | undefined> = {};
 
-    params.source = urlObj.searchParams.get('utm_source') || undefined
-    params.medium = urlObj.searchParams.get('utm_medium') || undefined
-    params.campaign = urlObj.searchParams.get('utm_campaign') || undefined
-    params.content = urlObj.searchParams.get('utm_content') || undefined
-    params.term = urlObj.searchParams.get('utm_term') || undefined
+    params.source = urlObj.searchParams.get('utm_source') || undefined;
+    params.medium = urlObj.searchParams.get('utm_medium') || undefined;
+    params.campaign = urlObj.searchParams.get('utm_campaign') || undefined;
+    params.content = urlObj.searchParams.get('utm_content') || undefined;
+    params.term = urlObj.searchParams.get('utm_term') || undefined;
 
     // Sanitize UTM parameters
-    Object.keys(params).forEach(key => {
-      const value = params[key]
+    Object.keys(params).forEach((key) => {
+      const value = params[key];
       if (value) {
         // Remove any HTML tags and limit length
-        params[key] = value.replace(/<[^>]*>/g, '').substring(0, 100)
+        params[key] = value.replace(/<[^>]*>/g, '').substring(0, 100);
       }
-    })
+    });
 
-    return params
+    return params;
   } catch {
-    return {}
+    return {};
   }
 }
 
@@ -201,19 +201,19 @@ export function extractAndValidateUTMParameters(url?: string): {
  */
 export function formatPhoneNumber(phone?: string): string | null {
   if (!phone) {
-    return null
+    return null;
   }
 
   // Remove all non-digit characters
-  const digitsOnly = phone.replace(/\D/g, '')
+  const digitsOnly = phone.replace(/\D/g, '');
 
   // Basic validation for E.164 format
   if (digitsOnly.length < 10 || digitsOnly.length > 15) {
-    return null
+    return null;
   }
 
   // Format as E.164 (add + if not present)
-  return `+${digitsOnly}`
+  return `+${digitsOnly}`;
 }
 
 /**
@@ -223,18 +223,18 @@ export function formatPhoneNumber(phone?: string): string | null {
  */
 export function validateConsentData(consent: any): boolean {
   if (!consent || typeof consent !== 'object') {
-    return false
+    return false;
   }
 
   // Processing consent is required
   if (consent.processing !== true) {
-    return false
+    return false;
   }
 
   // Marketing consent should be explicitly set
   if (typeof consent.marketing !== 'boolean') {
-    return false
+    return false;
   }
 
-  return true
+  return true;
 }
