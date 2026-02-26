@@ -4,6 +4,7 @@
  * @file scripts/testing/test-coverage-enforcement.mjs
  * @summary Test script for coverage enforcement functionality
  * @security Test-only script; no runtime secrets accessed
+ * @requirements PROD-TEST-005
  */
 
 import { mkdirSync, writeFileSync } from 'fs';

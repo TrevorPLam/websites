@@ -1,6 +1,8 @@
 /**
- * Security utilities barrel export
- * Consolidated security modules for better tree-shaking and clearer API
+ * @file packages/infrastructure/src/security/index.ts
+ * @summary Security utilities barrel export
+ * @security Client-safe and server-only security utilities
+ * @requirements PROD-SEC-001
  */
 
 // Client-safe security utilities
