@@ -431,6 +431,7 @@ export class ObservabilityMonitor {
               ...alert,
               timestamp: new Date(),
               resolved: false,
+              metadata: alert.metadata || {},
             };
 
             this.alerts.push(newAlert);

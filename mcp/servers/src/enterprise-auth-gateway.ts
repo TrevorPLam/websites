@@ -154,6 +154,7 @@ export class EnterpriseAuthGateway {
   private userPasswordHashes: Map<string, string> = new Map();
   private userMfaSecrets: Map<string, string> = new Map();
   private parser = new Parser();
+  private cleanupInterval: NodeJS.Timeout | undefined;
 
   constructor() {
     this.server = new McpServer({
@@ -169,9 +170,17 @@ export class EnterpriseAuthGateway {
 
     this.initializeSystemData();
     this.setupAuthTools();
+    this.startTokenCleanup();
+  }
 
-    // Clean up expired tokens every hour
-    setInterval(() => this.cleanupExpiredTokens(), 60 * 60 * 1000);
+  private startTokenCleanup() {
+    // Clean up expired tokens every 15 minutes (more frequent than before)
+    this.cleanupInterval = setInterval(
+      () => {
+        this.cleanupExpiredTokens();
+      },
+      15 * 60 * 1000
+    );
   }
 
   private initializeSystemData() {
@@ -1001,10 +1010,43 @@ export class EnterpriseAuthGateway {
     await this.server.connect(transport);
     console.error('Enterprise Auth Gateway MCP Server running on stdio');
   }
+
+  async cleanup() {
+    // Clear cleanup interval
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+
+    // Clear all maps
+    this.users.clear();
+    this.roles.clear();
+    this.permissions.clear();
+    this.sessions.clear();
+    this.policies.clear();
+    this.tokenBlacklist.clear();
+    this.userPasswordHashes.clear();
+    this.userMfaSecrets.clear();
+
+    console.error('Enterprise Auth Gateway resources cleaned up');
+  }
 }
 
 // CLI execution
 if (import.meta.url === `file://${process.argv[1]}`) {
   const authGateway = new EnterpriseAuthGateway();
+
+  // Handle graceful shutdown
+  process.on('SIGINT', async () => {
+    console.error('\nShutting down Enterprise Auth Gateway...');
+    await authGateway.cleanup();
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', async () => {
+    console.error('\nShutting down Enterprise Auth Gateway...');
+    await authGateway.cleanup();
+    process.exit(0);
+  });
+
   authGateway.run().catch(console.error);
 }

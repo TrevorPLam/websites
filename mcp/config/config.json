@@ -66,7 +66,7 @@
     },
     "skillset": {
       "command": "npx",
-      "args": ["-y", "mcp-skillset"],
+      "args": ["tsx", "mcp/servers/src/skillset-server.ts"],
       "env": { "SKILLS_PATH": "skills", "LOG_LEVEL": "info" }
     },
     "documentation": {
