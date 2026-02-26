@@ -64,6 +64,19 @@ interface BlacklistedToken {
   expiresAt: Date;
 }
 
+interface AuthSession {
+  id: string;
+  userId: string;
+  tenantId: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: Date;
+  createdAt: Date;
+  lastAccessed: Date;
+  ipAddress: string;
+  userAgent: string;
+}
+
 interface AuthPolicy {
   id: string;
   name: string;
