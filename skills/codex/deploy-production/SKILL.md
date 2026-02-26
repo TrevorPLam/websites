@@ -4,7 +4,7 @@ description: |
   **WORKFLOW SKILL** - Deploy to production with comprehensive safety checks.
   USE FOR: "deploy to prod", "production release", "deploy to production".
   DO NOT USE FOR: development deployments, environment-specific config changes.
-  INVOKES: github-mcp, enterprise-security, observability, secure-deployment.
+  INVOKES: GitHub, enterprise-security, observability, secure-deployment.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'

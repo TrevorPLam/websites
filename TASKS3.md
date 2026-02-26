@@ -73,12 +73,15 @@
 
 ### S-07: Populate codex/ subdirectories
 
-- [ ] **Task**: Fill 4 empty codex/ subdirs
-- [ ] **Priority**: Critical - Codex agent capabilities limited
-- [ ] **Priority Order**:
-  - [ ] `skills/codex/tenant-setup/client-onboard.md` (maps to agency workflow)
-  - [ ] `skills/codex/code-review/`
-  - [ ] `skills/codex/` (other subdirs)
+- [x] **Task**: Fill 4 empty codex/ subdirs
+- [x] **Priority**: Critical - Codex agent capabilities limited
+- [x] **Priority Order**:
+  - [x] `skills/codex/tenant-setup/client-onboard.md` (maps to agency workflow)
+  - [x] `skills/codex/code-review/` (comprehensive review system)
+  - [x] `skills/codex/` (all subdirs fully populated)
+- [x] **Status**: COMPLETED - All codex subdirectories contain comprehensive content
+- [x] **Files Verified**: 26 markdown files across all codex subdirectories
+- [x] **MCP References Fixed**: Updated github-mcp → GitHub in SKILL.md files
 
 ---
 
@@ -277,10 +280,10 @@
 
 ### Progress Summary:
 
-- [x] **Critical Issues (6/7 completed)**: S-01, S-02, S-03, S-04, S-05, S-06 completed
+- [x] **Critical Issues (7/7 completed)**: S-01, S-02, S-03, S-04, S-05, S-06, S-07 completed
 - [ ] **High Issues (11)**: 0/11 completed
 - [ ] **Medium Issues (7)**: 0/7 completed
-- [ ] **Overall Progress**: 6/25 completed (24%)
+- [ ] **Overall Progress**: 7/25 completed (28%)
 
 ### Next Actions:
 
@@ -290,8 +293,8 @@
 4. ✅ S-04 (marketing domain skills) - COMPLETED
 5. ✅ S-05 (integration skills) - COMPLETED
 6. ✅ S-06 (populate claude subdirs) - COMPLETED
-7. ⏳ S-07 (populate codex subdirs) - NEXT PRIORITY
-8. ⏳ S-10/S-11 (MCP references) - PENDING
+7. ✅ S-07 (populate codex subdirs) - COMPLETED
+8. ⏳ S-10/S-11 (MCP references) - NEXT PRIORITY
 9. ⏳ S-13 to S-19 (documentation drift) - PENDING
 
 ---
