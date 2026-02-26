@@ -27,7 +27,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@testing-library/react": "^16.0.1",
-    "vitest-dom": "^0.1.1",
+    "@testing-library/vitest-dom": "^1.0.0",
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^9.9.1",
     "typescript": "^5.5.4",

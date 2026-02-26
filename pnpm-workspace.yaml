@@ -95,6 +95,7 @@ catalog:
   lucide-react: ^0.344.0
   madge: ^8.0.0
   markdownlint: ^0.40.0
+  markdownlint-cli: ^0.42.0
   msw: ^2.11.2
   next: 16.1.5
   'next-sanity': ^10.0.0
