@@ -3,6 +3,8 @@
  * Provides utilities for testing with environment variables in Vitest
  */
 
+import { afterEach, beforeEach } from 'vitest';
+
 /**
  * Runs a function with temporary environment variables
  * Automatically restores original environment after execution
@@ -45,7 +47,8 @@ export const mockProcessEnv = (env: Record<string, string | undefined>) => {
 };
 
 /**
- * Creates a beforeEach/afterAll pair for environment testing
+ * Creates a beforeEach/afterEach pair for environment testing
+ * Fixed: Use afterEach instead of afterAll to prevent env pollution between tests
  */
 export const setupEnvTests = (env: Record<string, string | undefined>) => {
   let originalEnv: typeof process.env;
@@ -55,7 +58,7 @@ export const setupEnvTests = (env: Record<string, string | undefined>) => {
     process.env = { ...originalEnv, ...env };
   });
 
-  afterAll(() => {
+  afterEach(() => {
     process.env = originalEnv;
   });
 };

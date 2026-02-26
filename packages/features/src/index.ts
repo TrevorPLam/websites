@@ -9,11 +9,20 @@
 import 'server-only';
 
 // Consolidated barrel exports (optimized for 2026 standards)
-export * from './core';
-export * from './content';
-export * from './business';
+/**
+ * @file packages/features/src/index.ts
+ * @summary Feature exports for business logic and domain operations.
+ * @description Provides centralized exports for all feature modules with client/server separation.
+ * @security Multi-tenant isolation enforced in all exported functions.
+ * @adr none
+ * @requirements ARCH-005-multi-tenant-isolation
+ */
+
 export * from './advanced';
-export * from './utilities';
+export * from './auth';
 export * from './blog';
+export * from './business';
+export * from './content';
 export * from './content-management';
 export * from './notification';
+export * from './utilities';

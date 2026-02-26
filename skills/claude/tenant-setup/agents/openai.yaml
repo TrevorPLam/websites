@@ -1,0 +1,35 @@
+interface:
+  display_name: "Tenant Setup"
+  short_description: "Secure multi-tenant onboarding with isolation"
+  icon_small: "./assets/tenant-icon.svg"
+  brand_color: "#7C3AED"
+  default_prompt: "Set up a new tenant with security isolation and compliance"
+
+policy:
+  allow_implicit_invocation: false  # Require explicit approval for tenant creation
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "multi-tenant"
+      description: "Tenant management and resource allocation"
+    - type: "mcp"
+      value: "enterprise-auth"
+      description: "Authentication and authorization setup"
+    - type: "mcp"
+      value: "enterprise-security"
+      description: "Security isolation and compliance"
+    - type: "mcp"
+      value: "github"
+      description: "Repository creation and configuration"
+
+permissions:
+  required:
+    - "tenant.create"
+    - "security.isolation.setup"
+    - "auth.tenant.configure"
+    - "resources.allocate"
+  optional:
+    - "compliance.validate"
+    - "repository.create"
+    - "billing.provision"

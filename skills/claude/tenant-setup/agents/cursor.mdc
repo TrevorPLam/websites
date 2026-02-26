@@ -1,0 +1,45 @@
+---
+description: 'When setting up new tenants or client onboarding'
+globs: '**/tenant/**'
+alwaysApply: false
+---
+
+# Tenant Setup Workflow
+
+Use MCP tools for secure tenant provisioning:
+
+1. **Tenant Identity Creation**: @multi-tenant create-tenant
+2. **Security Isolation Setup**: @enterprise-security setup-tenant-isolation
+3. **Authentication Configuration**: @enterprise-auth configure-tenant-auth
+4. **Resource Provisioning**: @multi-tenant allocate-resources
+5. **Compliance Validation**: @enterprise-security compliance-check
+6. **Repository Setup**: @github create-tenant-repo
+7. **Onboarding Documentation**: @multi-tenant generate-onboarding-docs
+
+## Security Requirements
+
+### Data Isolation
+- Separate database schemas
+- Row-level security policies
+- Tenant-specific encryption keys
+- Network segmentation
+
+### Access Control
+- Role-based permissions
+- Least-privilege access
+- Audit logging enabled
+- Session management
+
+### Compliance
+- Data residency requirements
+- Privacy policy compliance
+- Security standards adherence
+- Documentation completeness
+
+## Output Components
+- Tenant configuration file
+- Security credentials package
+- Resource allocation report
+- Compliance checklist
+- Onboarding documentation
+- Support contact information

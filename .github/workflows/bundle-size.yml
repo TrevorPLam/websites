@@ -4,8 +4,8 @@ on:
   pull_request:
     branches: [main, staging]
     paths:
-      - 'clients/testing-not-a-client/**'
       - 'packages/**'
+      - 'apps/**'
       - '.size-limit.json'
       - '.github/workflows/bundle-size.yml'
 
@@ -31,7 +31,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build with bundle analysis
-        run: pnpm --filter @clients/testing-not-a-client build
+        run: pnpm build
         env:
           ANALYZE: 'true'
           NODE_ENV: production

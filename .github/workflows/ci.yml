@@ -292,7 +292,7 @@ jobs:
 
       - name: Wait for application to be ready
         run: |
-          timeout 60 bash -c 'until curl -f http://localhost:3101/api/health; do sleep 2; done'
+          timeout 60 bash -c 'until curl -f http://localhost:3000/api/health; do sleep 2; done'
 
       - name: Run E2E tests (shard ${{ matrix.shard }})
         run: pnpm test:e2e --shard=${{ matrix.shard }} --reporter=json --reporter=html

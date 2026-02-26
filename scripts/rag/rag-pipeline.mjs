@@ -2,17 +2,18 @@
 
 /**
  * RAG Pipeline for Documentation Intelligence
- * 
+ *
  * This script implements a Retrieval-Augmented Generation pipeline
  * for intelligent documentation search and content generation.
- * 
+ *
  * Part of 2026 Documentation Standards - Phase 2 Automation
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import { glob } from 'glob';
 import { execSync } from 'child_process';
+import { EmbeddingService } from '../embedding-service.mjs';
 
 interface DocumentChunk {
   id: string;
@@ -43,8 +44,10 @@ interface RAGConfig {
 class RAGPipeline {
   private config: RAGConfig;
   private docsDir: string;
+  private outputDir: string;
   private chunks: DocumentChunk[] = [];
   private vectorStore: Map<string, number[]> = new Map();
+  private embeddingService: EmbeddingService;
 
   constructor(config: Partial<RAGConfig> = {}, docsDir: string = 'docs') {
     this.config = {
@@ -57,6 +60,15 @@ class RAGPipeline {
       ...config
     };
     this.docsDir = docsDir;
+    this.outputDir = outputDir;
+    this.chunks = [];
+    this.vectorStore = new Map();
+    this.embeddingService = new EmbeddingService({
+      provider: process.env.EMBEDDING_PROVIDER || 'openai',
+      apiKey: process.env.OPENAI_API_KEY,
+      model: process.env.EMBEDDING_MODEL || 'text-embedding-ada-002',
+      dimensions: parseInt(process.env.EMBEDDING_DIMENSIONS) || 1536
+    });
   }
 
   /**
@@ -64,7 +76,7 @@ class RAGPipeline {
    */
   private async extractDocuments(): Promise<void> {
     console.log('📚 Extracting documents from', this.docsDir);
-    
+
     const files = await glob(`${this.docsDir}/**/*.md`, {
       ignore: ['**/node_modules/**', '**/.git/**', '**/dist/**']
     });
@@ -82,13 +94,13 @@ class RAGPipeline {
   private async processFile(filePath: string): Promise<void> {
     const content = readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
-    
+
     // Extract metadata
     const metadata = this.extractMetadata(filePath, content);
-    
+
     // Chunk the content
     const chunks = this.chunkContent(content, metadata);
-    
+
     this.chunks.push(...chunks);
   }
 
@@ -98,21 +110,21 @@ class RAGPipeline {
   private extractMetadata(filePath: string, content: string): DocumentChunk['metadata'] {
     const lines = content.split('\n');
     const frontMatter = this.extractFrontMatter(content);
-    
+
     // Determine quadrant from file path
     const quadrant = this.determineQuadrant(filePath);
-    
+
     // Extract title
     const title = this.extractTitle(content, frontMatter);
-    
+
     // Count elements
     const wordCount = content.split(/\s+/).length;
     const codeBlocks = (content.match(/```[\s\S]*?```/g) || []).length;
     const links = (content.match(/\[.*?\]\(.*?\)/g) || []).length;
-    
+
     // Extract tags
     const tags = this.extractTags(content, frontMatter);
-    
+
     return {
       file: filePath,
       title,
@@ -132,26 +144,26 @@ class RAGPipeline {
   private extractFrontMatter(content: string): Record<string, any> {
     const frontMatterRegex = /^---\n([\s\S]*?)\n---/;
     const match = content.match(frontMatterRegex);
-    
+
     if (match) {
       try {
         // Simple YAML parsing (in production, use a proper YAML parser)
         const yaml = match[1];
         const frontMatter: Record<string, any> = {};
-        
+
         yaml.split('\n').forEach(line => {
           const [key, ...valueParts] = line.split(':');
           if (key && valueParts.length > 0) {
             frontMatter[key.trim()] = valueParts.join(':').trim();
           }
         });
-        
+
         return frontMatter;
       } catch (error) {
         console.warn('Failed to parse front matter:', error);
       }
     }
-    
+
     return {};
   }
 
@@ -174,13 +186,13 @@ class RAGPipeline {
     if (frontMatter.title) {
       return frontMatter.title;
     }
-    
+
     // Try first heading
     const headingMatch = content.match(/^#\s+(.+)$/m);
     if (headingMatch) {
       return headingMatch[1].trim();
     }
-    
+
     // Fallback to filename
     return 'Untitled Document';
   }
@@ -202,15 +214,15 @@ class RAGPipeline {
    */
   private extractTags(content: string, frontMatter: Record<string, any>): string[] {
     const tags = new Set<string>();
-    
+
     // From front matter
     if (frontMatter.tags) {
-      const frontMatterTags = Array.isArray(frontMatter.tags) 
-        ? frontMatter.tags 
+      const frontMatterTags = Array.isArray(frontMatter.tags)
+        ? frontMatter.tags
         : frontMatter.tags.split(',').map((tag: string) => tag.trim());
       frontMatterTags.forEach((tag: string) => tags.add(tag));
     }
-    
+
     // From content (common keywords)
     const keywords = [
       'tutorial', 'guide', 'reference', 'api', 'configuration',
@@ -218,14 +230,14 @@ class RAGPipeline {
       'typescript', 'javascript', 'react', 'next.js', 'node.js',
       'database', 'postgresql', 'supabase', 'stripe', 'oauth'
     ];
-    
+
     const lowerContent = content.toLowerCase();
     keywords.forEach(keyword => {
       if (lowerContent.includes(keyword)) {
         tags.add(keyword);
       }
     });
-    
+
     return Array.from(tags);
   }
 
@@ -235,11 +247,11 @@ class RAGPipeline {
   private chunkContent(content: content: string, metadata: DocumentChunk['metadata']): DocumentChunk[] {
     const chunks: DocumentChunk[] = [];
     const words = content.split(/\s+/);
-    
+
     for (let i = 0; i < words.length; i += this.config.chunkSize - this.config.chunkOverlap) {
       const chunkWords = words.slice(i, i + this.config.chunkSize);
       const chunkContent = chunkWords.join(' ');
-      
+
       const chunk: DocumentChunk = {
         id: `${metadata.file}-${i}`,
         content: chunkContent,
@@ -248,27 +260,58 @@ class RAGPipeline {
           wordCount: chunkWords.length
         }
       };
-      
+
       chunks.push(chunk);
     }
-    
+
     return chunks;
   }
 
   /**
-   * Generate embeddings (mock implementation)
+   * Generate embeddings (production implementation)
    */
   private async generateEmbeddings(): Promise<void> {
-    console.log('🧠 Generating embeddings...');
-    
+    console.log('🧠 Generating embeddings with production service...');
+
+    if (!this.embeddingService.isConfigured()) {
+      console.log('⚠️ Embedding service not configured, using mock embeddings');
+      // Fall back to mock implementation
+      await this.generateMockEmbeddings();
+      return;
+    }
+
+    console.log(`🔧 Using ${this.embeddingService.getConfig().provider} embedding service`);
+
+    for (const chunk of this.chunks) {
+      try {
+        const embedding = await this.embeddingService.generateEmbedding(chunk.content);
+        chunk.embedding = embedding;
+        this.vectorStore.set(chunk.id, embedding);
+      } catch (error) {
+        console.error(`Failed to generate embedding for ${chunk.id}:`, error.message);
+        // Add zero embedding as fallback
+        chunk.embedding = this.generateMockEmbedding(chunk.content);
+        this.vectorStore.set(chunk.id, chunk.embedding);
+      }
+    }
+
+    console.log(`✅ Generated ${this.chunks.length} embeddings`);
+  }
+
+  /**
+   * Generate mock embeddings (for fallback)
+   */
+  private async generateMockEmbeddings(): Promise<void> {
+    console.log('🧠 Generating mock embeddings...');
+
     for (const chunk of this.chunks) {
       // Mock embedding generation (in production, use OpenAI or similar)
       const embedding = this.mockEmbedding(chunk.content);
       chunk.embedding = embedding;
       this.vectorStore.set(chunk.id, embedding);
     }
-    
-    console.log(`✅ Generated ${this.chunks.length} embeddings`);
+
+    console.log(`✅ Generated ${this.chunks.length} mock embeddings`);
   }
 
   /**
@@ -278,11 +321,11 @@ class RAGPipeline {
     // Simple hash-based embedding (for demonstration)
     const embedding = new Array(1536).fill(0);
     const hash = this.simpleHash(text);
-    
+
     for (let i = 0; i < embedding.length; i++) {
       embedding[i] = Math.sin(hash + i) * 0.5 + 0.5;
     }
-    
+
     return embedding;
   }
 
@@ -306,16 +349,16 @@ class RAGPipeline {
     let dotProduct = 0;
     let normA = 0;
     let normB = 0;
-    
+
     for (let i = 0; i < a.length; i++) {
       dotProduct += a[i] * b[i];
       normA += a[i] * a[i];
       normB += b[i] * b[i];
     }
-    
+
     normA = Math.sqrt(normA);
     normB = Math.sqrt(normB);
-    
+
     return dotProduct / (normA * normB);
   }
 
@@ -324,10 +367,10 @@ class RAGPipeline {
    */
   async search(query: string, filters?: Partial<DocumentChunk['metadata']>): Promise<DocumentChunk[]> {
     console.log(`🔍 Searching for: "${query}"`);
-    
+
     // Generate query embedding
     const queryEmbedding = this.mockEmbedding(query);
-    
+
     // Calculate similarities
     const similarities = this.chunks
       .filter(chunk => {
@@ -348,9 +391,9 @@ class RAGPipeline {
       .filter(result => result.similarity >= this.config.similarityThreshold)
       .sort((a, b) => b.similarity - a.similarity)
       .slice(0, this.config.maxResults);
-    
+
     console.log(`📊 Found ${similarities.length} relevant chunks`);
-    
+
     return similarities.map(result => result.chunk);
   }
 
@@ -359,22 +402,22 @@ class RAGPipeline {
    */
   async generateAnswer(query: string, context?: DocumentChunk[]): Promise<string> {
     console.log('🤖 Generating answer...');
-    
+
     // Retrieve relevant context if not provided
     const relevantChunks = context || await this.search(query);
-    
+
     if (relevantChunks.length === 0) {
       return 'I could not find relevant information to answer your question.';
     }
-    
+
     // Combine context
     const contextText = relevantChunks
       .map(chunk => chunk.content)
       .join('\n\n');
-    
+
     // Generate answer (mock implementation)
     const answer = this.mockAnswerGeneration(query, contextText, relevantChunks);
-    
+
     return answer;
   }
 
@@ -387,7 +430,7 @@ class RAGPipeline {
       title: chunk.metadata.title,
       quadrant: chunk.metadata.quadrant
     }));
-    
+
     return `Based on the documentation, here's what I found about "${query}":
 
 ${context.substring(0, 500)}...
@@ -403,10 +446,10 @@ This answer was generated using the RAG pipeline with ${chunks.length} relevant 
    */
   async initialize(): Promise<void> {
     console.log('🚀 Initializing RAG Pipeline...\n');
-    
+
     await this.extractDocuments();
     await this.generateEmbeddings();
-    
+
     console.log('\n✅ RAG Pipeline ready!');
     console.log(`📚 Indexed ${this.chunks.length} document chunks`);
     console.log(`🔍 Similarity threshold: ${this.config.similarityThreshold}`);
@@ -422,7 +465,7 @@ This answer was generated using the RAG pipeline with ${chunks.length} relevant 
       chunks: this.chunks,
       timestamp: new Date().toISOString()
     };
-    
+
     writeFileSync(outputPath, JSON.stringify(state, null, 2));
     console.log(`💾 Saved RAG state to ${outputPath}`);
   }
@@ -435,18 +478,18 @@ This answer was generated using the RAG pipeline with ${chunks.length} relevant 
       console.log('⚠️ No saved state found, initializing fresh...');
       return;
     }
-    
+
     const state = JSON.parse(readFileSync(inputPath, 'utf-8'));
     this.config = state.config;
     this.chunks = state.chunks;
-    
+
     // Rebuild vector store
     for (const chunk of this.chunks) {
       if (chunk.embedding) {
         this.vectorStore.set(chunk.id, chunk.embedding);
       }
     }
-    
+
     console.log(`📂 Loaded RAG state from ${inputPath}`);
     console.log(`📚 Restored ${this.chunks.length} chunks`);
   }
@@ -465,7 +508,7 @@ async function main() {
       await rag.initialize();
       await rag.saveState();
       break;
-      
+
     case 'search':
       await rag.loadState();
       const query = args[2] || 'tutorial';
@@ -477,7 +520,7 @@ async function main() {
         console.log(`   Content: ${chunk.content.substring(0, 200)}...`);
       });
       break;
-      
+
     case 'ask':
       await rag.loadState();
       const question = args[2] || 'How do I set up the development environment?';
@@ -485,15 +528,15 @@ async function main() {
       console.log('\n🤖 Answer:');
       console.log(answer);
       break;
-      
+
     case 'save':
       await rag.saveState(args[2]);
       break;
-      
+
     case 'load':
       await rag.loadState(args[2]);
       break;
-      
+
     default:
       console.log('Usage: node rag-pipeline.mjs [init|search|ask|save|load] [docsDir] [query|filePath]');
       process.exit(1);

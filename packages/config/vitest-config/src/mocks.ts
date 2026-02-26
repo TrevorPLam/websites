@@ -86,25 +86,23 @@ export const createMockCookies = (): any => {
 };
 
 /**
- * Mocks Next.js headers module
+ * Mocks Next.js headers and cookies module
  */
 export const mockNextHeaders = (): any => {
   const mockHeaders = createMockHeaders();
+  const mockCookies = createMockCookies();
   vi.mock('next/headers', () => ({
     headers: vi.fn(() => mockHeaders),
+    cookies: vi.fn(() => mockCookies),
   }));
-  return mockHeaders;
+  return { headers: mockHeaders, cookies: mockCookies };
 };
 
 /**
- * Mocks Next.js cookies module
+ * Mocks Next.js cookies module (alias for mockNextHeaders)
  */
 export const mockNextCookies = (): any => {
-  const mockCookies = createMockCookies();
-  vi.mock('next/headers', () => ({
-    cookies: vi.fn(() => mockCookies),
-  }));
-  return mockCookies;
+  return mockNextHeaders();
 };
 
 /**

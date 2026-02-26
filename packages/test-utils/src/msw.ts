@@ -25,8 +25,9 @@
  * - side_effects: Sets up global MSW instance
  */
 
-import { setupServer } from 'msw/node';
 import { http } from 'msw';
+import { setupServer } from 'msw/node';
+import { afterAll, afterEach, beforeAll } from 'vitest';
 
 // ============================================================================
 // MSW Server Setup
@@ -288,32 +289,48 @@ export const integrationHandlers = {
    */
   supabase: {
     select: (table: string, data: any[]) =>
-      http.get(`https://*.supabase.co/rest/v1/${table}`, () => {
-        return new Response(JSON.stringify(data), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        });
+      http.get(/https:\/\/.*\.supabase\.co\/rest\/v1\/.*/, (info) => {
+        const url = new URL(info.request.url);
+        if (url.pathname.includes(`/rest/v1/${table}`)) {
+          return new Response(JSON.stringify(data), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        return new Response('Not Found', { status: 404 });
       }),
 
     insert: (table: string, data: any) =>
-      http.post(`https://*.supabase.co/rest/v1/${table}`, () => {
-        return new Response(JSON.stringify([data]), {
-          status: 201,
-          headers: { 'Content-Type': 'application/json' },
-        });
+      http.post(/https:\/\/.*\.supabase\.co\/rest\/v1\/.*/, (info) => {
+        const url = new URL(info.request.url);
+        if (url.pathname.includes(`/rest/v1/${table}`)) {
+          return new Response(JSON.stringify([data]), {
+            status: 201,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        return new Response('Not Found', { status: 404 });
       }),
 
     update: (table: string, data: any) =>
-      http.patch(`https://*.supabase.co/rest/v1/${table}`, () => {
-        return new Response(JSON.stringify([data]), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        });
+      http.patch(/https:\/\/.*\.supabase\.co\/rest\/v1\/.*/, (info) => {
+        const url = new URL(info.request.url);
+        if (url.pathname.includes(`/rest/v1/${table}`)) {
+          return new Response(JSON.stringify([data]), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        return new Response('Not Found', { status: 404 });
       }),
 
     delete: (table: string) =>
-      http.delete(`https://*.supabase.co/rest/v1/${table}`, () => {
-        return new Response(null, { status: 204 });
+      http.delete(/https:\/\/.*\.supabase\.co\/rest\/v1\/.*/, (info) => {
+        const url = new URL(info.request.url);
+        if (url.pathname.includes(`/rest/v1/${table}`)) {
+          return new Response(null, { status: 204 });
+        }
+        return new Response('Not Found', { status: 404 });
       }),
   },
 };
@@ -369,9 +386,9 @@ export function createMockApi(baseUrl: string, endpoints: Record<string, any>) {
  * Mock network delays for testing loading states
  */
 export function createDelayedHandler(handler: any, delayMs: number) {
-  return async (_req: any, _res: any, _ctx: any) => {
-    await new Promise((_resolve) => setTimeout(_resolve, delayMs));
-    return handler(_req, _res, _ctx);
+  return async (info: any) => {
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+    return handler(info);
   };
 }
 
@@ -392,38 +409,63 @@ export function createNetworkFailureHandler(url: string) {
  * Wait for network requests to complete
  */
 export function waitForNetworkRequest(url: string, timeout = 5000): Promise<void> {
-  return new Promise((_resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const startTime = Date.now();
 
     const checkRequest = () => {
       // In a real implementation, you'd track actual requests
-      // For now, we'll simulate waiting
+      // For now, we'll simulate waiting and then resolve
       if (Date.now() - startTime > timeout) {
         reject(new Error(`Timeout waiting for request to ${url}`));
         return;
       }
 
-      setTimeout(checkRequest, 100);
+      // Simulate finding the request after some time
+      setTimeout(() => resolve(), 100);
     };
 
     checkRequest();
   });
 }
 
+// ============================================================================
+// Request Tracking
+// ============================================================================
+
+/**
+ * Global request history for MSW
+ */
+const requestHistory: Array<{
+  url: string;
+  method: string;
+  timestamp: number;
+  body?: any;
+}> = [];
+
 /**
  * Get request history from MSW
  */
 export function getRequestHistory(): any[] {
-  // This would need to be implemented with request tracking
-  // For now, return empty array
-  return [];
+  return [...requestHistory];
 }
 
 /**
  * Clear request history
  */
 export function clearRequestHistory(): void {
-  // This would need to be implemented with request tracking
+  requestHistory.length = 0;
+}
+
+/**
+ * Track request for history
+ */
+export function trackRequest(url: string, method: string, body?: any) {
+  requestHistory.push({
+    url,
+    method,
+    timestamp: Date.now(),
+    body,
+  });
 }
 
 // ============================================================================

@@ -54,7 +54,43 @@
  * - updated: Initial creation with core utilities
  */
 
-import { vi, beforeEach, afterEach } from 'vitest';
+import { render } from '@testing-library/react';
+import { randomUUID } from 'node:crypto';
+import { vi } from 'vitest';
+
+// ============================================================================
+// Type Definitions
+// ============================================================================
+
+interface TestTenant {
+  id: string;
+  siteId: string;
+  name: string;
+  domain: string;
+}
+
+interface TestBooking {
+  id: string;
+  tenantId: string;
+  service: string;
+  startTime: string;
+  endTime: string;
+  customer: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  status: string;
+}
+
+interface TestUser {
+  id: string;
+  tenantId: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+}
 
 // ============================================================================
 // Timing Utilities - Eliminate Flaky Tests
@@ -63,6 +99,8 @@ import { vi, beforeEach, afterEach } from 'vitest';
 /**
  * Wrapper for deterministic timing in tests
  * Uses vi.useFakeTimers() to prevent actual delays
+ *
+ * NOTE: Manual setup required - no auto-injection to prevent side effects
  */
 export class TestTimer {
   private static isFake = false;
@@ -92,15 +130,6 @@ export class TestTimer {
   }
 }
 
-// Auto-cleanup for each test
-beforeEach(() => {
-  TestTimer.setup();
-});
-
-afterEach(() => {
-  TestTimer.teardown();
-});
-
 // ============================================================================
 // Test Factories - Consistent Test Data
 // ============================================================================
@@ -108,10 +137,10 @@ afterEach(() => {
 /**
  * Create a test tenant with valid UUID format
  */
-export function createTestTenant(overrides: any = {}) {
+export function createTestTenant(overrides: Partial<TestTenant> = {}) {
   return {
-    id: '550e8400-e29b-41d4-a716-446655440000',
-    siteId: 'test-site-001',
+    id: randomUUID(),
+    siteId: `test-site-${randomUUID().slice(0, 8)}`,
     name: 'Test Tenant',
     domain: 'test.example.com',
     ...overrides,
@@ -147,9 +176,9 @@ export function createMockAdapter<T>(mockData: T) {
 /**
  * Create test booking data
  */
-export function createTestBooking(overrides: any = {}) {
+export function createTestBooking(overrides: Partial<TestBooking> = {}) {
   return {
-    id: 'booking-001',
+    id: `booking-${randomUUID().slice(0, 8)}`,
     tenantId: createTestTenant().id,
     service: 'consultation',
     startTime: new Date().toISOString(),
@@ -167,9 +196,9 @@ export function createTestBooking(overrides: any = {}) {
 /**
  * Create test user data
  */
-export function createTestUser(overrides: any = {}) {
+export function createTestUser(overrides: Partial<TestUser> = {}) {
   return {
-    id: 'user-001',
+    id: `user-${randomUUID().slice(0, 8)}`,
     tenantId: createTestTenant().id,
     name: 'John Doe',
     email: 'john@example.com',
@@ -252,20 +281,13 @@ export function createMockLogger() {
 // ============================================================================
 
 /**
- * Custom render function with basic implementation
+ * Custom render function with proper React Testing Library integration
  */
-export function renderWithProviders(_ui: any, _options: any = {}) {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
-
-  return {
-    container,
-    rerender: () => {},
-    unmount: () => {
-      document.body.removeChild(container);
-    },
-    asFragment: () => document.createDocumentFragment(),
-  };
+export function renderWithProviders(ui: any, options: any = {}) {
+  return render(ui, {
+    // Add any custom providers here as needed
+    ...options,
+  });
 }
 
 /**
@@ -284,6 +306,7 @@ export function createTestContext(overrides: any = {}) {
 
 /**
  * Wait for async operations to complete with timeout
+ * Uses vi.useFakeTimers() if timers are faked, otherwise real setTimeout
  */
 export async function waitForAsync(
   callback: () => Promise<void> | void,
@@ -304,6 +327,7 @@ export async function waitForAsync(
           reject(error);
           return;
         }
+        // Use setTimeout with vi.advanceTimersByTimeAsync if timers are faked
         setTimeout(check, interval);
       }
     };

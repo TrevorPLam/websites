@@ -1,4 +1,13 @@
 /** @type {import('dependency-cruiser').IConfiguration} */
+/**
+ * @file .dependency-cruiser.js
+ * @summary Dependency cruiser configuration for detecting circular dependencies and import violations.
+ * @description Enforces architectural rules including FSD layer isolation and import path standards.
+ * @security none
+ * @adr none
+ * @requirements none
+ */
+
 module.exports = {
   forbidden: [
     {

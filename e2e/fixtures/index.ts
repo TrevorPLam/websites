@@ -1,15 +1,10 @@
 import { test as base, expect } from '@playwright/test';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? 'test-service-role-key'
-);
-
 interface CustomFixtures {
   tenantId: string;
   tenantDomain: string;
-  supabase: typeof supabaseAdmin;
+  supabase: ReturnType<typeof createClient>;
   leadCountBefore: number;
   submitContactForm: (options: {
     name: string;
@@ -24,22 +19,22 @@ export const test = base.extend<CustomFixtures>({
     await use(process.env.TEST_TENANT_ID ?? '');
   },
 
-  tenantDomain: async ({ tenantId }, use) => {
-    const { data } = await supabaseAdmin
-      .from('tenants')
-      .select('subdomain')
-      .eq('id', tenantId)
-      .single();
+  tenantDomain: async ({ tenantId, supabase }, use) => {
+    const { data } = await supabase.from('tenants').select('subdomain').eq('id', tenantId).single();
 
     await use(`${data?.subdomain}.localhost:3000`);
   },
 
   supabase: async ({}, use) => {
-    await use(supabaseAdmin);
+    const client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
+      process.env.SUPABASE_SERVICE_ROLE_KEY ?? 'test-service-role-key'
+    );
+    await use(client);
   },
 
-  leadCountBefore: async ({ tenantId }, use) => {
-    const { count } = await supabaseAdmin
+  leadCountBefore: async ({ tenantId, supabase }, use) => {
+    const { count } = await supabase
       .from('leads')
       .select('*', { count: 'exact', head: true })
       .eq('tenant_id', tenantId);

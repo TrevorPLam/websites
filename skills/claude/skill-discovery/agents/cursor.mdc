@@ -1,0 +1,46 @@
+---
+description: 'When discovering available skills and tools'
+globs: '**/*.md'
+alwaysApply: false
+---
+
+# Skill Discovery
+
+Use MCP tools for comprehensive skill discovery:
+
+1. **Skills Catalog**: @filesystem read-directory (.claude/skills/)
+2. **MCP Server Inventory**: @skillset list-mcp-servers
+3. **Capability Search**: @skillset search-capabilities
+4. **Skill Recommendations**: @skillset recommend-skills
+
+## Search Categories
+
+### Development Workflows
+- Code Review: Security analysis, quality checks, architecture review
+- Deployment: Production deployment, Azure deployment, infrastructure provisioning
+- Testing: Unit tests, integration tests, E2E testing
+- Multi-Tenant: Tenant setup, billing, rate limiting
+
+### Infrastructure & Operations
+- Database: SQLite access, query optimization, migrations
+- Security: Vulnerability scanning, compliance checks, audit logging
+- Monitoring: Performance metrics, health checks, observability
+- Authentication: OAuth 2.1, SAML 2.0, tenant isolation
+
+### External Integrations
+- Version Control: GitHub operations, repository management
+- Documentation: Web fetching, API documentation
+- Communication: Slack notifications, team coordination
+- Project Management: Linear/Jira integration, ticket management
+
+## Usage Patterns
+
+### Explicit Discovery
+- List all available skills
+- Search for deployment-related skills
+- List all MCP servers
+
+### Contextual Recommendations
+- Automatic skill suggestions based on current task
+- Interactive capability queries
+- Comparative skill analysis

@@ -1,0 +1,31 @@
+---
+description: 'When deploying applications to Azure using azd'
+globs: '**/azure/**'
+alwaysApply: false
+---
+
+# Azure Deployment Workflow
+
+Use MCP tools for Azure deployment:
+
+1. **Environment Validation**: @azure-mcp validate-config
+2. **Infrastructure Provisioning**: @azure-mcp azd-up
+3. **GitHub Integration**: @github-mcp update-deployment-status
+4. **Notification**: @slack-mcp post-message
+
+## Prerequisites
+- Azure CLI installed and authenticated
+- azd CLI installed
+- GitHub repository with azd configuration
+
+## Environment Variables Required
+- AZURE_SUBSCRIPTION_ID
+- AZURE_RESOURCE_GROUP
+- AZURE_LOCATION
+- SLACK_WEBHOOK_URL (optional)
+
+## Error Handling
+- Authentication Failures: Clear instructions for Azure CLI login
+- Provisioning Failures: Detailed Azure error logs with remediation steps
+- GitHub Sync Failures: Continue deployment, log for manual update
+- Notification Failures: Non-critical, deployment considered successful

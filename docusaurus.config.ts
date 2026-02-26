@@ -1,4 +1,13 @@
 import { themes } from 'prism-react-renderer';
+/**
+ * @file docusaurus.config.ts
+ * @summary Docusaurus configuration for comprehensive documentation site.
+ * @description Configures documentation structure, plugins, and theming for 2026 standards compliance.
+ * @security none
+ * @adr none
+ * @requirements docs/documentation-alignment-strategy.md
+ */
+
 import type { Config } from '@docusaurus/types';
 
 const config: Config = {
@@ -187,7 +196,8 @@ const config: Config = {
     },
     announcementBar: {
       id: '2026-standards',
-      content: '🚀 <strong>2026 Documentation Standards</strong> - Now featuring Diátaxis framework, AI optimization, and WCAG 2.2 AA compliance',
+      content:
+        '🚀 <strong>2026 Documentation Standards</strong> - Now featuring Diátaxis framework, AI optimization, and WCAG 2.2 AA compliance',
       backgroundColor: '#25c2a0',
       textColor: '#000',
       isCloseable: true,

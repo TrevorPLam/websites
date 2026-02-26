@@ -1,0 +1,26 @@
+interface:
+  display_name: "Skill Discovery"
+  short_description: "Discover and search available Skills and MCP servers"
+  icon_small: "./assets/discovery-icon.svg"
+  brand_color: "#8B5CF6"
+  default_prompt: "What skills and tools are available for this task?"
+
+policy:
+  allow_implicit_invocation: true  # Allow automatic skill recommendations
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "skillset"
+      description: "RAG-based skill discovery and recommendations"
+    - type: "mcp"
+      value: "filesystem"
+      description: "Directory scanning and skill metadata reading"
+
+permissions:
+  required:
+    - "filesystem.read"
+    - "skills.read"
+  optional:
+    - "skills.search"
+    - "mcp.list"

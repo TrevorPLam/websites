@@ -48,6 +48,26 @@ marketing-websites/
 ├── scripts/                # Automation scripts
 ├── tooling/                # Development tools
 ├── database/               # Database migrations
+├── agents/                 # AI Agent Framework
+│   ├── core/              # Context engineering
+│   ├── governance/        # Policy enforcement
+│   ├── memory/            # Memory systems
+│   ├── orchestration/     # Multi-agent coordination
+│   └── tools/             # Tool contracts
+├── mcp/                    # Model Context Protocol
+│   ├── servers/           # MCP server implementations
+│   ├── apps/              # MCP applications with UI
+│   ├── config/            # Configuration files
+│   ├── docs/              # Documentation
+│   └── scripts/           # Automation scripts
+├── skills/                 # Agent Skills definitions
+│   ├── core/              # Essential workflows
+│   ├── integration/       # Third-party integrations
+│   ├── domain/            # Business-specific
+│   ├── templates/         # Skill templates
+│   ├── codex/             # Claude Code skills
+│   └── claude/            # Claude skills
+└── MCP_INDEX.md            # MCP/Skills workspace index
 ├── supabase/               # Supabase configuration
 ├── e2e/                    # E2E tests
 └── tests/                  # Integration tests
@@ -239,16 +259,48 @@ packages:
 
 ### Key Packages
 
-| Package              | Purpose           | Exports                   |
-| -------------------- | ----------------- | ------------------------- |
-| `@repo/ui`           | UI components     | Reusable components & forms |
-| `@repo/features`     | Business features | 20+ feature modules       |
-| `@repo/infrastructure`| Infrastructure    | Auth, database, security  |
-| `@repo/entities`     | Data entities     | Lead, tenant entities     |
-| `@repo/shared`       | Shared utilities  | Types, helpers, constants |
-| `@repo/integrations` | Third-party       | Stripe, HubSpot, Cal.com  |
-| `@repo/multi-tenant` | Multi-tenancy     | Tenant resolution, billing |
-| `@repo/analytics`    | Analytics         | Performance monitoring    |
+| Package                     | Purpose             | Exports                       |
+| --------------------------- | ------------------- | ----------------------------- |
+| `@repo/ui`                  | UI components       | Reusable components & forms   |
+| `@repo/features`            | Business features   | 20+ feature modules           |
+| `@repo/infrastructure`      | Infrastructure      | Auth, database, security      |
+| `@repo/entities`            | Data entities       | Lead, tenant entities         |
+| `@repo/shared`              | Shared utilities    | Types, helpers, constants     |
+| `@repo/integrations`        | Third-party         | Stripe, HubSpot, Cal.com      |
+| `@repo/multi-tenant`        | Multi-tenancy       | Tenant resolution, billing    |
+| `@repo/analytics`           | Analytics           | Performance monitoring        |
+| `@repo/agent-core`          | Agent Core          | Context engineering           |
+| `@repo/agent-governance`    | Agent Governance    | Enterprise policy enforcement |
+| `@repo/agent-memory`        | Agent Memory        | Advanced memory systems       |
+| `@repo/agent-orchestration` | Agent Orchestration | Multi-agent coordination      |
+| `@repo/agent-tools`         | Agent Tools         | Tool contract system          |
+
+## 🤖 MCP/Skills Workspace
+
+This repository includes a comprehensive **Model Context Protocol (MCP)** and **Agent Skills** workspace for AI agent development:
+
+### MCP (Model Context Protocol)
+
+- **15 custom MCP servers** for enterprise-grade AI agent integration
+- **Enterprise security** with OAuth 2.1 and zero-trust architecture
+- **Multi-tenant support** with proper isolation and scaling
+- **Observability** with distributed tracing and monitoring
+
+### Agent Skills
+
+- **Workflow skills** for deployment, testing, and code review
+- **Integration skills** for GitHub, Azure, Slack, and other services
+- **Domain skills** for marketing, sales, and analytics workflows
+- **Skill templates** for rapid skill development
+
+### Quick Start
+
+- 📖 [MCP Index](MCP_INDEX.md) - Complete workspace navigation
+- 🚀 [Getting Started](mcp/docs/tutorials/getting-started.md) - MCP introduction
+- 📚 [Documentation](mcp/docs/) - Comprehensive guides and reference
+- 🛠️ [Setup Scripts](mcp/scripts/) - Automation and validation tools
+- 🤖 [Agent Framework](agents/README.md) - AI agent orchestration
+- 🎯 [Skills Guide](skills/README.md) - Agent skills and workflows
 
 ## 🚀 Deployment
 

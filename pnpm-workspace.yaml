@@ -11,6 +11,9 @@ packages:
   - 'clients/*'
   - 'tooling/*'
   - 'e2e/*'
+  - 'agents/*'
+  - 'mcp/*'
+  - 'skills/*'
 
 allowBuilds:
   - '@sentry/cli'

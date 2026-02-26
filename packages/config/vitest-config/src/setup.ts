@@ -11,13 +11,13 @@
  */
 
 // Import Vitest globals
-import { beforeAll, afterAll, expect, describe, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 // Import vitest-dom matchers for React Testing Library compatibility
-// import 'vitest-dom';
+import 'vitest-dom';
 
 // Import @chialab/vitest-axe for accessibility testing
-import { toHaveNoViolations } from '@chialab/vitest-axe';
+import toHaveNoViolations from '@chialab/vitest-axe';
 
 // Extend Vitest's expect with @chialab/vitest-axe matchers
 expect.extend({ toHaveNoViolations } as any);
@@ -78,4 +78,4 @@ afterAll(() => {
 });
 
 // Export globals for use in test files
-export { expect, beforeAll, afterAll, describe, it, vi };
+export { afterAll, beforeAll, describe, expect, it, vi };

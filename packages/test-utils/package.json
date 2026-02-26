@@ -9,15 +9,13 @@
     "dev": "tsc --watch",
     "test": "vitest run"
   },
-  "dependencies": {
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "catalog:",
     "vitest": "catalog:",
     "msw": "catalog:",
     "@testing-library/react": "catalog:",
     "vitest-dom": "catalog:"
-  },
-  "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "typescript": "catalog:"
   },
   "files": [
     "dist",

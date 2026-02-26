@@ -67,7 +67,15 @@
       "cache": true,
       "outputs": ["coverage/**"],
       "env": ["NODE_ENV"],
-      "inputs": ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**", "vitest.config.*"]
+      "inputs": [
+        "src/**",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__tests__/**",
+        "vitest.config.*",
+        "package.json",
+        "tsconfig.json"
+      ]
     },
     "test:e2e": {
       "dependsOn": ["build"],
