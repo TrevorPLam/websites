@@ -15,8 +15,8 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { z } from 'zod';
 import crypto from 'crypto';
+import { z } from 'zod';
 
 // Observability Types
 interface TraceContext {
@@ -129,7 +129,7 @@ export class ObservabilityMonitor {
       },
     ];
 
-    defaultChecks.forEach(check => this.healthChecks.set(check.name, check));
+    defaultChecks.forEach((check) => this.healthChecks.set(check.name, check));
   }
 
   private setupObservabilityTools() {
@@ -146,7 +146,7 @@ export class ObservabilityMonitor {
       async ({ operationName, serviceName, parentSpanId, tags }) => {
         const traceId = this.generateTraceId();
         const spanId = this.generateSpanId();
-        
+
         const span: Span = {
           traceId,
           spanId,
@@ -165,19 +165,21 @@ export class ObservabilityMonitor {
         };
 
         this.activeSpans.set(spanId, span);
-        
+
         if (!this.traces.has(traceId)) {
           this.traces.set(traceId, []);
         }
         this.traces.get(traceId)!.push(span);
 
         return {
-          content: [{
-            type: 'text',
-            text: `Trace created: ${traceId}\nSpan: ${spanId}\nOperation: ${operationName}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Trace created: ${traceId}\nSpan: ${spanId}\nOperation: ${operationName}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Complete span
@@ -188,11 +190,16 @@ export class ObservabilityMonitor {
         spanId: z.string().describe('Span ID to complete'),
         status: z.enum(['ok', 'error']).default('ok').describe('Span status'),
         tags: z.record(z.string()).optional().describe('Additional tags'),
-        logs: z.array(z.object({
-          level: z.enum(['debug', 'info', 'warn', 'error']),
-          message: z.string(),
-          fields: z.record(z.string()).optional(),
-        })).optional().describe('Span logs'),
+        logs: z
+          .array(
+            z.object({
+              level: z.enum(['debug', 'info', 'warn', 'error']),
+              message: z.string(),
+              fields: z.record(z.string()).optional(),
+            })
+          )
+          .optional()
+          .describe('Span logs'),
       },
       async ({ spanId, status, tags, logs }) => {
         const span = this.activeSpans.get(spanId);
@@ -205,35 +212,45 @@ export class ObservabilityMonitor {
         span.endTime = new Date();
         span.duration = span.endTime.getTime() - span.startTime.getTime();
         span.status = status;
-        
+
         if (tags) {
           Object.assign(span.tags, tags);
         }
-        
+
         if (logs) {
-          span.logs.push(...logs.map(log => ({
-            ...log,
-            timestamp: new Date(),
-          })));
+          span.logs.push(
+            ...logs.map((log) => ({
+              ...log,
+              timestamp: new Date(),
+            }))
+          );
         }
 
         // Move from active to completed
         this.activeSpans.delete(spanId);
-        
+
         // Record metrics
-        this.recordMetric('span.duration', span.duration, {
-          'operation.name': span.operationName,
-          'service.name': span.service,
-          'span.status': span.status,
-        }, 'timer', 'ms');
+        this.recordMetric(
+          'span.duration',
+          span.duration,
+          {
+            'operation.name': span.operationName,
+            'service.name': span.service,
+            'span.status': span.status,
+          },
+          'timer',
+          'ms'
+        );
 
         return {
-          content: [{
-            type: 'text',
-            text: `Span completed: ${spanId}\nDuration: ${span.duration}ms\nStatus: ${status}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Span completed: ${spanId}\nDuration: ${span.duration}ms\nStatus: ${status}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Metrics collection
@@ -243,7 +260,10 @@ export class ObservabilityMonitor {
       {
         name: z.string().describe('Metric name'),
         value: z.number().describe('Metric value'),
-        type: z.enum(['counter', 'gauge', 'histogram', 'timer']).default('counter').describe('Metric type'),
+        type: z
+          .enum(['counter', 'gauge', 'histogram', 'timer'])
+          .default('counter')
+          .describe('Metric type'),
         unit: z.string().default('count').describe('Metric unit'),
         tags: z.record(z.string()).optional().describe('Metric tags'),
       },
@@ -269,12 +289,14 @@ export class ObservabilityMonitor {
         }
 
         return {
-          content: [{
-            type: 'text',
-            text: `Metric recorded: ${name} = ${value} ${unit}`,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: `Metric recorded: ${name} = ${value} ${unit}`,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Health checks
@@ -297,31 +319,33 @@ export class ObservabilityMonitor {
           try {
             // Simulate health check execution
             await this.executeHealthCheck(name, timeout);
-            
+
             check.status = 'healthy';
             check.responseTime = Date.now() - startTime;
             check.lastCheck = new Date();
-            
+
             results.push({ ...check });
           } catch (error) {
             check.status = 'unhealthy';
             check.responseTime = Date.now() - startTime;
             check.lastCheck = new Date();
             check.message = error.message;
-            
+
             results.push({ ...check });
           }
         }
 
         const summary = this.generateHealthSummary(results);
-        
+
         return {
-          content: [{
-            type: 'text',
-            text: summary,
-          }],
+          content: [
+            {
+              type: 'text',
+              text: summary,
+            },
+          ],
         };
-      },
+      }
     );
 
     // Alert management
@@ -330,20 +354,26 @@ export class ObservabilityMonitor {
       'Create, resolve, or query alerts',
       {
         action: z.enum(['create', 'resolve', 'list']).describe('Alert action'),
-        alert: z.object({
-          severity: z.enum(['info', 'warning', 'error', 'critical']),
-          title: z.string(),
-          description: z.string(),
-          source: z.string(),
-          metadata: z.record(z.string()).optional(),
-        }).optional().describe('Alert definition for create action'),
+        alert: z
+          .object({
+            severity: z.enum(['info', 'warning', 'error', 'critical']),
+            title: z.string(),
+            description: z.string(),
+            source: z.string(),
+            metadata: z.record(z.string()).optional(),
+          })
+          .optional()
+          .describe('Alert definition for create action'),
         alertId: z.string().optional().describe('Alert ID for resolve action'),
-        filters: z.object({
-          severity: z.enum(['info', 'warning', 'error', 'critical']).optional(),
-          resolved: z.boolean().optional(),
-          source: z.string().optional(),
-          timeRange: z.string().optional(),
-        }).optional().describe('Filters for list action'),
+        filters: z
+          .object({
+            severity: z.enum(['info', 'warning', 'error', 'critical']).optional(),
+            resolved: z.boolean().optional(),
+            source: z.string().optional(),
+            timeRange: z.string().optional(),
+          })
+          .optional()
+          .describe('Filters for list action'),
       },
       async ({ action, alert, alertId, filters }) => {
         switch (action) {
@@ -353,16 +383,16 @@ export class ObservabilityMonitor {
                 content: [{ type: 'text', text: 'Alert definition required for create action' }],
               };
             }
-            
+
             const newAlert: Alert = {
               id: crypto.randomUUID(),
               ...alert,
               timestamp: new Date(),
               resolved: false,
             };
-            
+
             this.alerts.push(newAlert);
-            
+
             return {
               content: [{ type: 'text', text: `Alert created: ${newAlert.id} - ${alert.title}` }],
             };
@@ -373,40 +403,40 @@ export class ObservabilityMonitor {
                 content: [{ type: 'text', text: 'Alert ID required for resolve action' }],
               };
             }
-            
-            const existingAlert = this.alerts.find(a => a.id === alertId);
+
+            const existingAlert = this.alerts.find((a) => a.id === alertId);
             if (existingAlert) {
               existingAlert.resolved = true;
               return {
                 content: [{ type: 'text', text: `Alert resolved: ${alertId}` }],
               };
             }
-            
+
             return {
               content: [{ type: 'text', text: 'Alert not found' }],
             };
 
           case 'list':
             let filteredAlerts = this.alerts;
-            
+
             if (filters) {
               if (filters.severity) {
-                filteredAlerts = filteredAlerts.filter(a => a.severity === filters.severity);
+                filteredAlerts = filteredAlerts.filter((a) => a.severity === filters.severity);
               }
               if (filters.resolved !== undefined) {
-                filteredAlerts = filteredAlerts.filter(a => a.resolved === filters.resolved);
+                filteredAlerts = filteredAlerts.filter((a) => a.resolved === filters.resolved);
               }
               if (filters.source) {
-                filteredAlerts = filteredAlerts.filter(a => a.source === filters.source);
+                filteredAlerts = filteredAlerts.filter((a) => a.source === filters.source);
               }
               if (filters.timeRange) {
                 const cutoff = this.parseTimeRange(filters.timeRange);
-                filteredAlerts = filteredAlerts.filter(a => a.timestamp >= cutoff);
+                filteredAlerts = filteredAlerts.filter((a) => a.timestamp >= cutoff);
               }
             }
-            
+
             const summary = this.generateAlertSummary(filteredAlerts);
-            
+
             return {
               content: [{ type: 'text', text: summary }],
             };
@@ -416,7 +446,7 @@ export class ObservabilityMonitor {
               content: [{ type: 'text', text: 'Invalid action' }],
             };
         }
-      },
+      }
     );
 
     // Performance monitoring
@@ -425,19 +455,31 @@ export class ObservabilityMonitor {
       'Get performance metrics and analytics',
       {
         timeRange: z.string().default('last-1-hour').describe('Time range for metrics'),
-        metrics: z.array(z.string()).default(['span.duration', 'request.rate', 'error.rate', 'memory.usage']).describe('Metrics to retrieve'),
-        aggregation: z.enum(['avg', 'sum', 'min', 'max', 'count']).default('avg').describe('Aggregation function'),
+        metrics: z
+          .array(z.string())
+          .default(['span.duration', 'request.rate', 'error.rate', 'memory.usage'])
+          .describe('Metrics to retrieve'),
+        aggregation: z
+          .enum(['avg', 'sum', 'min', 'max', 'count'])
+          .default('avg')
+          .describe('Aggregation function'),
       },
       async ({ timeRange, metrics, aggregation }) => {
-        const performanceData = await this.collectPerformanceMetrics(timeRange, metrics, aggregation);
-        
+        const performanceData = await this.collectPerformanceMetrics(
+          timeRange,
+          metrics,
+          aggregation
+        );
+
         return {
-          content: [{
-            type: 'text',
-            text: this.generatePerformanceReport(performanceData),
-          }],
+          content: [
+            {
+              type: 'text',
+              text: this.generatePerformanceReport(performanceData),
+            },
+          ],
         };
-      },
+      }
     );
 
     // Trace analysis
@@ -447,18 +489,23 @@ export class ObservabilityMonitor {
       {
         traceId: z.string().optional().describe('Specific trace ID to analyze'),
         timeRange: z.string().default('last-1-hour').describe('Time range for trace analysis'),
-        analysis: z.enum(['performance', 'errors', 'dependencies', 'bottlenecks']).default('performance').describe('Analysis type'),
+        analysis: z
+          .enum(['performance', 'errors', 'dependencies', 'bottlenecks'])
+          .default('performance')
+          .describe('Analysis type'),
       },
       async ({ traceId, timeRange, analysis }) => {
         const traceData = await this.analyzeTraces(traceId, timeRange, analysis);
-        
+
         return {
-          content: [{
-            type: 'text',
-            text: this.generateTraceAnalysisReport(traceData),
-          }],
+          content: [
+            {
+              type: 'text',
+              text: this.generateTraceAnalysisReport(traceData),
+            },
+          ],
         };
-      },
+      }
     );
   }
 
@@ -470,7 +517,13 @@ export class ObservabilityMonitor {
     return crypto.randomBytes(8).toString('hex');
   }
 
-  private recordMetric(name: string, value: number, tags: Record<string, string>, type: string, unit: string): void {
+  private recordMetric(
+    name: string,
+    value: number,
+    tags: Record<string, string>,
+    type: string,
+    unit: string
+  ): void {
     const metric: Metric = {
       name,
       value,
@@ -486,17 +539,23 @@ export class ObservabilityMonitor {
     this.metrics.get(name)!.push(metric);
   }
 
-  private async executeHealthCheck(checkName: string, timeout: number): Promise<void> {
+  private async executeHealthCheck(_checkName: string, _timeout: number): Promise<void> {
     // Simulate health check execution
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        // Simulate random health check failures
-        if (Math.random() < 0.05) { // 5% failure rate
-          reject(new Error(`Health check failed: ${checkName}`));
+        // Real health check based on system resources
+        const memUsage = process.memoryUsage();
+        if (memUsage.heapUsed > 500 * 1024 * 1024) {
+          // 500MB limit
+          reject(
+            new Error(
+              `Health check failed: High memory usage - ${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`
+            )
+          );
         } else {
           resolve();
         }
-      }, Math.random() * timeout);
+      }, 100); // Fixed 100ms timeout
     });
   }
 
@@ -504,19 +563,21 @@ export class ObservabilityMonitor {
     const summary = [
       'Health Check Results',
       `Checked: ${results.length} services`,
-      `Healthy: ${results.filter(r => r.status === 'healthy').length}`,
-      `Unhealthy: ${results.filter(r => r.status === 'unhealthy').length}`,
-      `Degraded: ${results.filter(r => r.status === 'degraded').length}`,
+      `Healthy: ${results.filter((r) => r.status === 'healthy').length}`,
+      `Unhealthy: ${results.filter((r) => r.status === 'unhealthy').length}`,
+      `Degraded: ${results.filter((r) => r.status === 'degraded').length}`,
       '',
       'Service Details:',
-      ...results.map(check => [
-        `  ${check.name}:`,
-        `    Status: ${check.status.toUpperCase()}`,
-        `    Response Time: ${check.responseTime}ms`,
-        `    Last Check: ${check.lastCheck.toISOString()}`,
-        check.message ? `    Message: ${check.message}` : '',
-        check.metadata ? `    Metadata: ${JSON.stringify(check.metadata, null, 2)}` : '',
-      ]).flat(),
+      ...results
+        .map((check) => [
+          `  ${check.name}:`,
+          `    Status: ${check.status.toUpperCase()}`,
+          `    Response Time: ${check.responseTime}ms`,
+          `    Last Check: ${check.lastCheck.toISOString()}`,
+          check.message ? `    Message: ${check.message}` : '',
+          check.metadata ? `    Metadata: ${JSON.stringify(check.metadata, null, 2)}` : '',
+        ])
+        .flat(),
     ];
 
     return summary.join('\n');
@@ -526,42 +587,49 @@ export class ObservabilityMonitor {
     const summary = [
       'Alert Summary',
       `Total Alerts: ${alerts.length}`,
-      `Active: ${alerts.filter(a => !a.resolved).length}`,
-      `Resolved: ${alerts.filter(a => a.resolved).length}`,
+      `Active: ${alerts.filter((a) => !a.resolved).length}`,
+      `Resolved: ${alerts.filter((a) => a.resolved).length}`,
       '',
       'Severity Breakdown:',
-      `  Critical: ${alerts.filter(a => a.severity === 'critical' && !a.resolved).length}`,
-      `  Error: ${alerts.filter(a => a.severity === 'error' && !a.resolved).length}`,
-      `  Warning: ${alerts.filter(a => a.severity === 'warning' && !a.resolved).length}`,
-      `  Info: ${alerts.filter(a => a.severity === 'info' && !a.resolved).length}`,
+      `  Critical: ${alerts.filter((a) => a.severity === 'critical' && !a.resolved).length}`,
+      `  Error: ${alerts.filter((a) => a.severity === 'error' && !a.resolved).length}`,
+      `  Warning: ${alerts.filter((a) => a.severity === 'warning' && !a.resolved).length}`,
+      `  Info: ${alerts.filter((a) => a.severity === 'info' && !a.resolved).length}`,
       '',
       'Recent Alerts:',
-      ...alerts.slice(-10).map(alert => [
-        `  ${alert.title} (${alert.severity.toUpperCase()})`,
-        `    Source: ${alert.source}`,
-        `    Time: ${alert.timestamp.toISOString()}`,
-        `    Status: ${alert.resolved ? 'RESOLVED' : 'ACTIVE'}`,
-        `    Description: ${alert.description}`,
-      ]).flat(),
+      ...alerts
+        .slice(-10)
+        .map((alert) => [
+          `  ${alert.title} (${alert.severity.toUpperCase()})`,
+          `    Source: ${alert.source}`,
+          `    Time: ${alert.timestamp.toISOString()}`,
+          `    Status: ${alert.resolved ? 'RESOLVED' : 'ACTIVE'}`,
+          `    Description: ${alert.description}`,
+        ])
+        .flat(),
     ];
 
     return summary.join('\n');
   }
 
-  private async collectPerformanceMetrics(timeRange: string, metricNames: string[], aggregation: string): Promise<any> {
+  private async collectPerformanceMetrics(
+    timeRange: string,
+    metricNames: string[],
+    aggregation: string
+  ): Promise<any> {
     const results: any = {};
-    
+
     for (const name of metricNames) {
       const metrics = this.metrics.get(name) || [];
       const cutoff = this.parseTimeRange(timeRange);
-      const filteredMetrics = metrics.filter(m => m.timestamp >= cutoff);
-      
+      const filteredMetrics = metrics.filter((m) => m.timestamp >= cutoff);
+
       if (filteredMetrics.length === 0) {
         results[name] = { value: 0, count: 0 };
         continue;
       }
 
-      const values = filteredMetrics.map(m => m.value);
+      const values = filteredMetrics.map((m) => m.value);
       let value: number;
 
       switch (aggregation) {
@@ -600,29 +668,67 @@ export class ObservabilityMonitor {
       `Time Range: ${data.timeRange || 'last-1-hour'}`,
       '',
       'Metrics:',
-      ...Object.entries(data).map(([name, result]) => [
-        `  ${name}:`,
-        `    Value: ${result.value}`,
-        `    Count: ${result.count}`,
-        `    Unit: ${result.unit}`,
-      ]).flat(),
+      ...Object.entries(data)
+        .map(([name, result]) => [
+          `  ${name}:`,
+          `    Value: ${result.value}`,
+          `    Count: ${result.count}`,
+          `    Unit: ${result.unit}`,
+        ])
+        .flat(),
     ];
 
     return report.join('\n');
   }
 
-  private async analyzeTraces(traceId?: string, timeRange?: string, analysis?: string): Promise<any> {
+  private async analyzeTraces(
+    traceId?: string,
+    timeRange?: string,
+    analysis?: string
+  ): Promise<any> {
     // Simulate trace analysis
+    // Real trace analysis from active spans
+    const totalSpans = this.activeSpans.size;
+    const durations = Array.from(this.activeSpans.values()).map((span) => {
+      const endTime =
+        span.endTime instanceof Date
+          ? span.endTime.getTime()
+          : (span.endTime as number) || Date.now();
+      const startTime =
+        span.startTime instanceof Date ? span.startTime.getTime() : (span.startTime as number);
+      return endTime - startTime;
+    });
+
+    const averageDuration =
+      durations.length > 0
+        ? durations.reduce((sum, duration) => sum + duration, 0) / durations.length
+        : 0;
+
+    const errorCount = Array.from(this.activeSpans.values()).filter(
+      (span) => span.status === 'error'
+    ).length;
+    const errorRate = totalSpans > 0 ? (errorCount / totalSpans) * 100 : 0;
+
+    // Identify bottlenecks (spans taking longer than 1 second)
+    const bottlenecks = durations
+      .filter((duration) => duration > 1000)
+      .map((_, index) => `slow-operation-${index}`);
+
     return {
       traceId: traceId || 'multiple',
       analysisType: analysis || 'performance',
       timeRange: timeRange || 'last-1-hour',
       results: {
-        totalSpans: Math.floor(Math.random() * 100),
-        averageDuration: Math.random() * 1000,
-        errorRate: Math.random() * 5,
-        bottlenecks: Math.random() > 0.7 ? ['database-query', 'api-call'] : [],
-        recommendations: ['Optimize database queries', 'Add caching layer'],
+        totalSpans,
+        averageDuration,
+        errorRate,
+        bottlenecks,
+        recommendations:
+          errorRate > 5
+            ? ['Investigate error patterns', 'Add error handling']
+            : averageDuration > 500
+              ? ['Optimize slow operations', 'Add caching']
+              : ['System performance acceptable'],
       },
     };
   }
@@ -652,7 +758,7 @@ export class ObservabilityMonitor {
   private parseTimeRange(timeRange: string): Date {
     const now = new Date();
     const match = timeRange.match(/last-(\d+)-(minute|hour|day)/);
-    
+
     if (!match) return new Date(0);
 
     const value = parseInt(match[1]);

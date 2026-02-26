@@ -109,7 +109,7 @@
     "performance:baseline": "node scripts/performance/performance-alerts.mjs update-baseline",
     "performance:simulate": "node scripts/performance/performance-alerts.mjs simulate-alert",
     "performance:lighthouse": "lhci autorun",
-    "performance:size": "size-limit",
+    "performance:size": "node scripts/performance/bundle-size-check.mjs check",
     "health": "npx tsx scripts/health-check.ts",
     "doctor": "npx tsx scripts/doctor.ts",
     "ci:local": "npx tsx scripts/run-ci-local.ts",

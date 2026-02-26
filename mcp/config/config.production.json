@@ -93,6 +93,26 @@
         "LOG_LEVEL": "info",
         "NODE_ENV": "production"
       }
+    },
+    "advanced-agent-plugins": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/advanced-agent-plugins.ts"],
+      "env": { "LOG_LEVEL": "info", "NODE_ENV": "production" }
+    },
+    "ai-dlc-methodology": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/ai-dlc-methodology.ts"],
+      "env": { "LOG_LEVEL": "info", "NODE_ENV": "production" }
+    },
+    "enterprise-mcp-marketplace": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/enterprise-mcp-marketplace.ts"],
+      "env": { "LOG_LEVEL": "info", "NODE_ENV": "production" }
+    },
+    "mcp-apps-marketplace": {
+      "command": "npx",
+      "args": ["tsx", "mcp/servers/src/mcp-apps-marketplace.ts"],
+      "env": { "LOG_LEVEL": "info", "NODE_ENV": "production" }
     }
   }
 }

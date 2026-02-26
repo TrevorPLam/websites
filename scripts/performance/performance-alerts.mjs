@@ -301,13 +301,18 @@ class PerformanceAlerts {
 
 // CLI interface
 async function main() {
+  console.log('🚀 Performance Alerts System Starting...');
+
   const args = process.argv.slice(2);
   const command = args[0] || 'check';
+
+  console.log(`📋 Command: ${command}`);
 
   const alerts = new PerformanceAlerts();
 
   switch (command) {
     case 'check':
+      console.log('🔍 Checking performance metrics...');
       // Simulate current metrics (in real implementation, this would come from Lighthouse CI)
       const mockMetrics = {
         lcp: 2400,
@@ -330,6 +335,7 @@ async function main() {
       };
 
       const report = alerts.analyzePerformance(mockMetrics);
+      console.log('📊 Performance Report:');
       console.log(JSON.stringify(report, null, 2));
 
       if (report.status === 'alert') {
@@ -339,10 +345,25 @@ async function main() {
       break;
 
     case 'update-baseline':
+      console.log('📝 Updating performance baseline...');
       alerts.updateBaseline();
       break;
 
     case 'simulate-alert':
+      console.log('🧪 Simulating Performance Regression Alert...\n');
+      // Set baseline metrics for testing
+      alerts.baselineMetrics = {
+        lcp: 2500,
+        inp: 180,
+        cls: 0.1,
+        fcp: 1800,
+        tbt: 200,
+        speedIndex: 3400,
+        bundles: {
+          homepage: 92160,
+        },
+      };
+
       // Simulate a regression for testing
       const regressionMetrics = {
         lcp: 3200, // 28% increase
@@ -364,8 +385,7 @@ async function main() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(console.error);
-}
+// Run main function
+main().catch(console.error);
 
 export default PerformanceAlerts;
