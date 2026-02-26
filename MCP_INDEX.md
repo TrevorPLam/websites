@@ -4,19 +4,25 @@
 
 ### New to MCP?
 
-- [Getting Started](docs/mcp/tutorials/getting-started.md) - Introduction to MCP
-- [MCP Basics](docs/mcp/tutorials/mcp-basics.md) - Core concepts and terminology
-- [First Skill](docs/mcp/tutorials/first-skill.md) - Create your first skill
+- [Getting Started](docs/tutorials/mcp/getting-started.md) - Introduction to MCP
+- [MCP Basics](docs/tutorials/mcp/mcp-basics.md) - Core concepts and terminology
+- [First Skill](docs/tutorials/mcp/first-skill.md) - Create your first skill
 
 ### Setup & Configuration
 
-- [Configuration Reference](docs/mcp/reference/configuration-reference.md) - Complete configuration guide
-- [Environment Setup](docs/mcp/how-to/setup-configuration.md) - Development environment setup
+- [Configuration Reference](docs/reference/mcp/configuration-reference.md) - Complete configuration guide
+- [Environment Setup](docs/how-to/mcp/setup-configuration.md) - Development environment setup
 
 ## 📁 Workspace Structure
 
 ```
 marketing-websites/
+├── docs/                     # Unified Documentation (Diátaxis)
+│   ├── tutorials/mcp/       # MCP Learning-oriented content
+│   ├── how-to/mcp/          # MCP Task-oriented guides
+│   ├── reference/mcp/       # MCP Information-oriented content
+│   ├── explanation/mcp/     # MCP Understanding-oriented content
+│   └── guides-new/          # Domain-specific deep guides
 ├── mcp/                     # MCP Infrastructure
 │   ├── config/              # Configuration files
 │   │   └── config.json      # Main MCP server configuration
@@ -24,11 +30,6 @@ marketing-websites/
 │   │   └── src/             # Server source code
 │   ├── apps/                # MCP Applications with UI
 │   │   └── src/             # App source code
-│   ├── docs/                # MCP Documentation (Diátaxis)
-│   │   ├── tutorials/       # Learning-oriented
-│   │   ├── how-to/         # Task-oriented
-│   │   ├── reference/      # Information-oriented
-│   │   └── explanation/    # Understanding-oriented
 │   └── scripts/             # Automation Scripts
 ├── skills/                  # Skills Definition
 │   ├── core/               # Essential workflows

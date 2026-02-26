@@ -18,6 +18,20 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import crypto from 'crypto';
 import { z } from 'zod';
 
+// Plan-based resource allocation map
+const PLAN_ALLOCATIONS: Record<string, ResourceAllocation> = {
+  basic:        { cpu: 1,  memory: 1024,  storage: 5,   bandwidth: 50  },
+  professional: { cpu: 4,  memory: 8192,  storage: 50,  bandwidth: 500 },
+  enterprise:   { cpu: 16, memory: 32768, storage: 500, bandwidth: 5000 },
+};
+
+interface ResourceAllocation {
+  cpu: number;
+  memory: number;
+  storage: number;
+  bandwidth: number;
+}
+
 // Multi-Tenant Types
 interface Tenant {
   id: string;
@@ -132,40 +146,22 @@ export class MultiTenantOrchestrator {
     }
   }
 
+  private getTenantPlan(tenantId: string): string {
+    const tenant = this.tenants.get(tenantId);
+    return tenant?.plan || 'basic';
+  }
+
   private initializeResourcePools() {
-    // Initialize resource pools for different tenant tiers
-    this.resourcePools.set(
-      'basic',
-      new ResourcePool({
-        name: 'basic-pool',
-        cpu: 2,
-        memory: 4096,
-        storage: 10,
-        bandwidth: 100,
-      })
-    );
-
-    this.resourcePools.set(
-      'professional',
-      new ResourcePool({
-        name: 'professional-pool',
-        cpu: 4,
-        memory: 8192,
-        storage: 50,
-        bandwidth: 500,
-      })
-    );
-
-    this.resourcePools.set(
-      'enterprise',
-      new ResourcePool({
-        name: 'enterprise-pool',
-        cpu: 8,
-        memory: 16384,
-        storage: 200,
-        bandwidth: 2000,
-      })
-    );
+    // Initialize resource pools based on plan allocations
+    Object.entries(PLAN_ALLOCATIONS).forEach(([plan, allocation]) => {
+      this.resourcePools.set(
+        plan,
+        new ResourcePool({
+          name: `${plan}-pool`,
+          ...allocation,
+        })
+      );
+    });
   }
 
   private setupTenantManagementTools() {
@@ -215,7 +211,7 @@ export class MultiTenantOrchestrator {
           resourceQuotas: this.createResourceQuotas(tenant.limits),
           networkSegment: `segment-${tenantId}`,
           dataIsolation: plan === 'enterprise' ? 'strict' : 'logical',
-          encryptionKey: this.generateEncryptionKey(),
+          encryptionKey: this.deriveTenantKey(tenantId).toString('hex'),
         };
 
         this.tenants.set(tenantId, tenant);
@@ -231,7 +227,12 @@ export class MultiTenantOrchestrator {
           content: [
             {
               type: 'text',
-              text: `Tenant provisioned successfully: ${tenantId}\nDomain: ${domain}\nPlan: ${plan}\nNamespace: ${isolation.namespace}`,
+              text: JSON.stringify({
+                message: `Tenant provisioned successfully: ${tenantId}`,
+                domain: domain,
+                plan: plan,
+                namespace: isolation.namespace,
+              }),
             },
           ],
         };
@@ -260,7 +261,8 @@ export class MultiTenantOrchestrator {
         const tenant = this.tenants.get(tenantId);
         if (!tenant) {
           return {
-            content: [{ type: 'text', text: 'Tenant not found' }],
+            content: [{ type: 'text', text: JSON.stringify({ error: 'Tenant not found' }) }],
+            isError: true,
           };
         }
 
@@ -297,7 +299,9 @@ export class MultiTenantOrchestrator {
           content: [
             {
               type: 'text',
-              text: `Tenant ${tenantId} ${action} completed successfully`,
+              text: JSON.stringify({
+                message: `Tenant ${tenantId} ${action} completed successfully`,
+              }),
             },
           ],
         };
@@ -320,7 +324,8 @@ export class MultiTenantOrchestrator {
         const tenant = this.tenants.get(tenantId);
         if (!tenant) {
           return {
-            content: [{ type: 'text', text: 'Tenant not found' }],
+            content: [{ type: 'text', text: JSON.stringify({ error: 'Tenant not found' }) }],
+            isError: true,
           };
         }
 
@@ -334,156 +339,6 @@ export class MultiTenantOrchestrator {
             {
               type: 'text',
               text: report,
-            },
-          ],
-        };
-      }
-    );
-
-    // Tenant isolation management
-    this.server.tool(
-      'manage-tenant-isolation',
-      'Manage tenant isolation and security boundaries',
-      {
-        tenantId: z.string().describe('Tenant ID'),
-        action: z
-          .enum(['update-isolation', 'add-quota', 'remove-quota', 'update-segment'])
-          .describe('Isolation action'),
-        configuration: z
-          .object({
-            dataIsolation: z.enum(['strict', 'logical', 'shared']).optional(),
-            networkSegment: z.string().optional(),
-            quotas: z
-              .array(
-                z.object({
-                  resource: z.string(),
-                  allocated: z.number(),
-                  unit: z.string(),
-                })
-              )
-              .optional(),
-          })
-          .optional()
-          .describe('Isolation configuration'),
-      },
-      async ({ tenantId, action, configuration }) => {
-        const isolation = this.isolations.get(tenantId);
-        if (!isolation) {
-          return {
-            content: [{ type: 'text', text: 'Tenant isolation not found' }],
-          };
-        }
-
-        switch (action) {
-          case 'update-isolation':
-            if (configuration?.dataIsolation) {
-              isolation.dataIsolation = configuration.dataIsolation;
-            }
-            if (configuration?.networkSegment) {
-              isolation.networkSegment = configuration.networkSegment;
-            }
-            break;
-
-          case 'add-quota':
-            if (configuration?.quotas) {
-              configuration.quotas.forEach((quota) => {
-                const existingQuota = isolation.resourceQuotas.find(
-                  (q) => q.resource === quota.resource
-                );
-                if (existingQuota) {
-                  existingQuota.allocated = quota.allocated;
-                } else {
-                  isolation.resourceQuotas.push({
-                    ...quota,
-                    used: 0,
-                    enforceLimit: true,
-                  });
-                }
-              });
-            }
-            break;
-
-          case 'remove-quota':
-            if (configuration?.quotas) {
-              isolation.resourceQuotas = isolation.resourceQuotas.filter(
-                (q) => !configuration.quotas.some((rq) => rq.resource === q.resource)
-              );
-            }
-            break;
-
-          case 'update-segment':
-            if (configuration?.networkSegment) {
-              isolation.networkSegment = configuration.networkSegment;
-              await this.updateNetworkSegment(tenantId, configuration.networkSegment);
-            }
-            break;
-        }
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Tenant isolation ${action} completed for ${tenantId}`,
-            },
-          ],
-        };
-      }
-    );
-
-    // Multi-tenant analytics
-    this.server.tool(
-      'get-multi-tenant-analytics',
-      'Get analytics across all tenants',
-      {
-        timeRange: z.string().default('last-24-hours').describe('Time range for analytics'),
-        groupBy: z
-          .enum(['plan', 'status', 'domain'])
-          .default('plan')
-          .describe('Grouping dimension'),
-        metrics: z
-          .array(z.enum(['tenants', 'users', 'requests', 'errors', 'storage', 'agents']))
-          .default(['tenants', 'users', 'requests'])
-          .describe('Metrics to include'),
-      },
-      async ({ timeRange, groupBy, metrics }) => {
-        const analytics = await this.collectMultiTenantAnalytics(timeRange, groupBy, metrics);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: this.generateAnalyticsReport(analytics, groupBy, metrics),
-            },
-          ],
-        };
-      }
-    );
-
-    // Tenant compliance
-    this.server.tool(
-      'check-tenant-compliance',
-      'Check tenant compliance against frameworks',
-      {
-        tenantId: z.string().describe('Tenant ID'),
-        frameworks: z
-          .array(z.enum(['GDPR', 'HIPAA', 'SOC2', 'ISO27001', 'PCI-DSS']))
-          .describe('Compliance frameworks to check'),
-      },
-      async ({ tenantId, frameworks }) => {
-        const tenant = this.tenants.get(tenantId);
-        if (!tenant) {
-          return {
-            content: [{ type: 'text', text: 'Tenant not found' }],
-          };
-        }
-
-        const complianceResults = await this.checkCompliance(tenant, frameworks);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: this.generateComplianceReport(tenant, complianceResults),
             },
           ],
         };
@@ -557,8 +412,12 @@ export class MultiTenantOrchestrator {
     ];
   }
 
-  private generateEncryptionKey(): string {
-    return crypto.randomBytes(32).toString('hex');
+  private deriveTenantKey(tenantId: string): Buffer {
+    const masterKey = process.env.TENANT_MASTER_KEY;
+    if (!masterKey) {
+      throw new Error('TENANT_MASTER_KEY environment variable not set');
+    }
+    return crypto.createHmac('sha256', masterKey).update(tenantId).digest();
   }
 
   private async provisionTenantResources(tenantId: string, plan: string): Promise<void> {
@@ -567,13 +426,9 @@ export class MultiTenantOrchestrator {
       throw new Error(`Resource pool not found for plan: ${plan}`);
     }
 
-    // Allocate resources from pool
-    await pool.allocateResources(tenantId, {
-      cpu: 2,
-      memory: 2048,
-      storage: 10,
-      bandwidth: 100,
-    });
+    // Allocate resources from pool using plan-based allocation
+    const allocation = PLAN_ALLOCATIONS[plan] || PLAN_ALLOCATIONS.basic;
+    await pool.allocateResources(tenantId, allocation);
   }
 
   private async updateTenantResources(tenantId: string, newPlan: string): Promise<void> {
@@ -585,18 +440,33 @@ export class MultiTenantOrchestrator {
   }
 
   private async suspendTenantResources(tenantId: string): Promise<void> {
-    // Implement resource suspension logic
-    console.log(`Suspending resources for tenant: ${tenantId}`);
+    const pool = this.resourcePools.get(this.getTenantPlan(tenantId));
+    if (pool) {
+      pool.releaseResources(tenantId);
+    }
   }
 
   private async activateTenantResources(tenantId: string): Promise<void> {
-    // Implement resource activation logic
-    console.log(`Activating resources for tenant: ${tenantId}`);
+    const tenant = this.tenants.get(tenantId);
+    if (!tenant) {
+      throw new Error(`Tenant not found: ${tenantId}`);
+    }
+    
+    const pool = this.resourcePools.get(tenant.plan);
+    if (!pool) {
+      throw new Error(`Resource pool not found for plan: ${tenant.plan}`);
+    }
+
+    // Allocate resources using plan-based allocation
+    const allocation = PLAN_ALLOCATIONS[tenant.plan] || PLAN_ALLOCATIONS.basic;
+    await pool.allocateResources(tenantId, allocation);
   }
 
   private async deprovisionTenantResources(tenantId: string): Promise<void> {
-    // Implement resource deprovisioning logic
-    console.log(`Deprovisioning resources for tenant: ${tenantId}`);
+    const pool = this.resourcePools.get(this.getTenantPlan(tenantId));
+    if (pool) {
+      pool.releaseResources(tenantId);
+    }
   }
 
   private async collectTenantMetrics(
@@ -604,17 +474,53 @@ export class MultiTenantOrchestrator {
     timeRange: string,
     metrics: string[]
   ): Promise<any> {
-    // Real system metrics collection
-    const memUsage = process.memoryUsage();
-    const cpuUsage = process.cpuUsage();
-
+    const tenantMetrics = this.metrics.get(tenantId) || [];
+    
+    // Apply timeRange filter
+    const now = new Date();
+    let cutoffTime: Date;
+    
+    switch (timeRange) {
+      case 'last-1-hour':
+        cutoffTime = new Date(now.getTime() - 60 * 60 * 1000);
+        break;
+      case 'last-24-hours':
+        cutoffTime = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case 'last-7-days':
+        cutoffTime = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        cutoffTime = new Date(now.getTime() - 60 * 60 * 1000); // Default to 1 hour
+    }
+    
+    const filteredMetrics = tenantMetrics.filter(metric => metric.timestamp > cutoffTime);
+    
+    // Return real metrics from filtered data
+    if (filteredMetrics.length === 0) {
+      // Return current system metrics if no historical data
+      const memUsage = process.memoryUsage();
+      const cpuUsage = process.cpuUsage();
+      
+      return {
+        cpu: (cpuUsage.user + cpuUsage.system) / 1000000,
+        memory: (memUsage.heapUsed / memUsage.heapTotal) * 100,
+        storage: memUsage.rss / 1024 / 1024,
+        requests: 0,
+        errors: 0,
+        timestamp: new Date(),
+      };
+    }
+    
+    // Aggregate metrics from filtered data
+    const latest = filteredMetrics[filteredMetrics.length - 1];
     return {
-      cpu: (cpuUsage.user + cpuUsage.system) / 1000000, // Convert to percentage
-      memory: (memUsage.heapUsed / memUsage.heapTotal) * 100,
-      storage: memUsage.rss / 1024 / 1024, // MB
-      requests: Math.floor(Math.random() * 100), // Use reasonable defaults
-      errors: Math.random() * 5,
-      timestamp: new Date(),
+      cpu: latest.activeUsers,
+      memory: latest.responseTime,
+      storage: latest.storageUsed,
+      requests: latest.requestCount,
+      errors: latest.errorRate,
+      timestamp: latest.timestamp,
     };
   }
 
@@ -642,89 +548,6 @@ export class MultiTenantOrchestrator {
     return report.join('\n');
   }
 
-  private async updateNetworkSegment(tenantId: string, segment: string): Promise<void> {
-    // Implement network segment update logic
-    console.log(`Updating network segment for tenant ${tenantId}: ${segment}`);
-  }
-
-  private async collectMultiTenantAnalytics(
-    timeRange: string,
-    groupBy: string,
-    metrics: string[]
-  ): Promise<any> {
-    // Real analytics collection
-    const tenants = Array.from(this.tenants.values());
-    const memUsage = process.memoryUsage();
-
-    return {
-      totalTenants: tenants.length,
-      activeTenants: tenants.filter((t) => t.status === 'active').length,
-      totalUsers: tenants.reduce((sum, t) => sum + t.limits.maxUsers, 0),
-      totalRequests: tenants.length * 1000, // Estimate based on tenant count
-      averageResponseTime: (memUsage.rss / 1024 / 1024) * 10, // MB to ms estimate
-      errorRate:
-        tenants.length > 0
-          ? (tenants.filter((t) => t.status === 'suspended').length / tenants.length) * 100
-          : 0,
-      storageUsed: memUsage.rss / 1024 / 1024, // Actual memory usage in MB
-      agentCount: tenants.reduce((sum, t) => sum + t.limits.maxAgents, 0),
-    };
-  }
-
-  private generateAnalyticsReport(analytics: any, groupBy: string, metrics: string[]): string {
-    const report = [
-      'Multi-Tenant Analytics Report',
-      `Time Range: ${analytics.timeRange || 'last-24-hours'}`,
-      `Grouped By: ${groupBy}`,
-      '',
-      'Summary:',
-      `  Total Tenants: ${analytics.totalTenants}`,
-      `  Active Tenants: ${analytics.activeTenants}`,
-      `  Total Users: ${analytics.totalUsers}`,
-      `  Total Requests: ${analytics.totalRequests}`,
-      `  Average Response Time: ${analytics.averageResponseTime.toFixed(2)}ms`,
-      `  Error Rate: ${analytics.errorRate.toFixed(2)}%`,
-      `  Storage Used: ${analytics.storageUsed.toFixed(2)}GB`,
-      `  Agent Count: ${analytics.agentCount}`,
-    ];
-
-    return report.join('\n');
-  }
-
-  private async checkCompliance(tenant: Tenant, frameworks: string[]): Promise<any> {
-    // Real compliance checking based on tenant configuration
-    return frameworks.reduce((acc, framework) => {
-      const isCompliant = tenant.complianceFrameworks?.includes(framework) || false;
-      const hasIssues = tenant.status === 'suspended' || tenant.plan === 'basic';
-
-      acc[framework] = {
-        compliant: isCompliant && !hasIssues,
-        issues: hasIssues ? [`${framework} compliance issues detected`] : [],
-        lastChecked: new Date(),
-      };
-      return acc;
-    }, {} as any);
-  }
-
-  private generateComplianceReport(tenant: Tenant, results: any): string {
-    const report = [
-      `Compliance Report: ${tenant.name} (${tenant.id})`,
-      `Last Updated: ${new Date().toISOString()}`,
-      '',
-      'Framework Compliance:',
-      ...Object.entries(results)
-        .map(([framework, result]) => [
-          `  ${framework}:`,
-          `    Status: ${result.compliant ? 'COMPLIANT' : 'NON-COMPLIANT'}`,
-          `    Issues: ${result.issues.length > 0 ? result.issues.join(', ') : 'None'}`,
-          `    Last Checked: ${result.lastChecked}`,
-        ])
-        .flat(),
-    ];
-
-    return report.join('\n');
-  }
-
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
@@ -744,23 +567,6 @@ export class MultiTenantOrchestrator {
     this.resourcePools.clear();
   }
 }
-
-const orchestrator = new MultiTenantOrchestrator();
-
-// Handle graceful shutdown
-process.on('SIGINT', async () => {
-  console.error('\nShutting down Multi-Tenant Orchestrator...');
-  await orchestrator.cleanup();
-  process.exit(0);
-});
-
-process.on('SIGTERM', async () => {
-  console.error('\nShutting down Multi-Tenant Orchestrator...');
-  await orchestrator.cleanup();
-  process.exit(0);
-});
-
-orchestrator.run().catch(console.error);
 
 // Resource Pool Implementation
 class ResourcePool {
@@ -794,7 +600,7 @@ class ResourcePool {
     this.allocatedResources.set(tenantId, currentAllocation);
   }
 
-  deallocateResources(tenantId: string): void {
+  releaseResources(tenantId: string): void {
     this.allocatedResources.delete(tenantId);
   }
 
@@ -814,6 +620,23 @@ class ResourcePool {
     };
   }
 }
+
+const orchestrator = new MultiTenantOrchestrator();
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  console.error('\nShutting down Multi-Tenant Orchestrator...');
+  await orchestrator.cleanup();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.error('\nShutting down Multi-Tenant Orchestrator...');
+  await orchestrator.cleanup();
+  process.exit(0);
+});
+
+orchestrator.run().catch(console.error);
 
 // CLI execution
 if (import.meta.url === `file://${process.argv[1]}`) {

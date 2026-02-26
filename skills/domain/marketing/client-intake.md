@@ -4,7 +4,7 @@ description: |
   **CLIENT INTAKE WORKFLOW** - Automated client onboarding and data collection workflow.
   USE FOR: New client registration, initial data gathering, project setup.
   DO NOT USE FOR: Existing client updates, simple data entry.
-  INVOKES: [fetch-mcp, filesystem-mcp].
+  INVOKES: [fetch, filesystem, knowledge-graph].
 meta:
   version: '1.0.0'
   author: 'agency-system'
@@ -30,7 +30,8 @@ This Skill orchestrates the complete client onboarding process, from initial con
 
 **Action:** Validate and sanitize incoming client data from intake forms
 
-**Validation:** 
+**Validation:**
+
 - Required fields present (name, email, company, project type)
 - Email format validation
 - Company name uniqueness check
@@ -45,6 +46,7 @@ This Skill orchestrates the complete client onboarding process, from initial con
 **Action:** Search existing client database to prevent duplicate entries
 
 **Validation:**
+
 - Email address match check
 - Company name similarity check
 - Phone number match check
@@ -59,6 +61,7 @@ This Skill orchestrates the complete client onboarding process, from initial con
 **Action:** Create new client record in CRM system
 
 **Validation:**
+
 - Unique client ID generated
 - All required fields populated
 - Data integrity checks passed
@@ -73,6 +76,7 @@ This Skill orchestrates the complete client onboarding process, from initial con
 **Action:** Create initial project structure and assign project manager
 
 **Validation:**
+
 - Project ID generated
 - Project template applied
 - Team members assigned
@@ -87,6 +91,7 @@ This Skill orchestrates the complete client onboarding process, from initial con
 **Action:** Send automated welcome email and project kickoff information
 
 **Validation:**
+
 - Email delivery confirmation
 - Link tracking verification
 - Client portal access created
@@ -96,15 +101,31 @@ This Skill orchestrates the complete client onboarding process, from initial con
 
 **Expected Output:** Welcome email sent and client portal access confirmed
 
+### 6. Create Client Entity in Knowledge Graph
+
+**Action:** Create client entity in knowledge graph for relationship tracking and analytics
+
+**Validation:**
+
+- Client entity created with unique ID
+- Relationships established (client-to-projects, client-to-contacts)
+- Metadata populated for search and analytics
+- Entity persistence confirmed
+
+**MCP Server:** knowledge-graph (for entity creation and relationship management)
+
+**Expected Output:** Client entity created with relationships and metadata
+
 ## Error Handling
 
-| Step | Error | Recovery | Rollback? |
-|------|-------|----------|-----------|
-| Validation | Missing required fields | Request missing information | No |
-| Duplicate Check | Potential duplicate found | Flag for manual review | No |
-| Client Creation | API failure | Retry with exponential backoff | Yes |
-| Project Setup | Template failure | Use default template | Partial |
-| Email Send | Delivery failure | Queue for retry | No |
+| Step            | Error                     | Recovery                       | Rollback? |
+| --------------- | ------------------------- | ------------------------------ | --------- |
+| Validation      | Missing required fields   | Request missing information    | No        |
+| Duplicate Check | Potential duplicate found | Flag for manual review         | No        |
+| Client Creation | API failure               | Retry with exponential backoff | Yes       |
+| Project Setup   | Template failure          | Use default template           | Partial   |
+| Email Send      | Delivery failure          | Queue for retry                | No        |
+| Knowledge Graph | Entity creation failure   | Retry with fallback storage    | No        |
 
 ## Success Criteria
 
@@ -113,6 +134,8 @@ This Skill orchestrates the complete client onboarding process, from initial con
 - Project structure properly initialized
 - Welcome notification successfully delivered
 - Client portal access configured
+- Client entity created in knowledge graph with relationships
+- Metadata populated for analytics and search
 
 ## Environment Variables
 
@@ -141,12 +164,12 @@ skill invoke client-intake --name="Jane Smith" --email="jane@startup.io" --compa
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
+| Issue                     | Solution                                                |
+| ------------------------- | ------------------------------------------------------- |
 | Duplicate client detected | Review existing client records and merge if appropriate |
-| Project template missing | Verify template path and recreate default template |
-| Email delivery failure | Check email service credentials and retry |
-| API rate limiting | Implement backoff strategy and retry later |
+| Project template missing  | Verify template path and recreate default template      |
+| Email delivery failure    | Check email service credentials and retry               |
+| API rate limiting         | Implement backoff strategy and retry later              |
 
 ## Related Skills
 

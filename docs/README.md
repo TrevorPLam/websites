@@ -1,4 +1,20 @@
-# Marketing Websites Monorepo Documentation
+---
+title: 'Marketing Websites Monorepo Documentation'
+description: 'Enterprise-grade multi-tenant SaaS platform documentation with 2026 standards, Diátaxis framework, and comprehensive development guides'
+domain: 'development'
+type: 'explanation'
+layer: 'global'
+audience: ['developer', 'architect', 'business', 'non-technical']
+phase: 1
+complexity: 'beginner'
+freshness_review: '2026-05-26'
+validation_status: 'tested'
+related: ['docs/guides-new/', 'MCP_INDEX.md', 'README.md']
+last_updated: '2026-02-26'
+version: '1.0.0'
+tech_stack: ['Next.js 16', 'React 19', 'TypeScript', 'Supabase', 'Vercel']
+prerequisites: ['Basic development environment', 'Node.js 20+', 'pnpm package manager']
+---
 
 > Enterprise-grade multi-tenant SaaS platform for marketing websites with 2026 documentation standards
 
@@ -34,7 +50,7 @@ _Beginner-friendly setup and onboarding guides_
 _Learning-oriented, hands-on guides for skill development_
 
 - **[Frontend Development](./tutorials/frontend-development.md)**: React 19 & Next.js 16
-- **Backend Integration**: Database and API development
+- **[MCP Tutorials](./tutorials/mcp/)**: Model Context Protocol learning guides
 - **Testing Strategies**: Comprehensive testing approaches
 
 ### 🔧 [How-To Guides](./how-to/)
@@ -42,6 +58,7 @@ _Learning-oriented, hands-on guides for skill development_
 _Task-oriented, goal-focused problem-solving steps_
 
 - **[Common Tasks](./how-to/common-tasks/daily-workflow.md)**: Daily development workflow
+- **[MCP How-To](./how-to/mcp/)**: Model Context Protocol task guides
 - **[Troubleshooting](./how-to/troubleshooting/)**: Common issues and solutions
 - **Integration Guides**: Connect third-party services
 
@@ -50,6 +67,7 @@ _Task-oriented, goal-focused problem-solving steps_
 _Information-oriented technical descriptions and specifications_
 
 - **[API Reference](./reference/api-reference.md)**: Complete API documentation
+- **[MCP Reference](./reference/mcp/)**: Model Context Protocol specifications
 - **Configuration Reference**: All configuration options
 - **Error Codes**: Comprehensive error reference
 
@@ -58,6 +76,7 @@ _Information-oriented technical descriptions and specifications_
 _Understanding-oriented conceptual background and architecture decisions_
 
 - **Architecture Decisions**: ADRs and system design rationale
+- **[MCP Explanations](./explanation/mcp/)**: Model Context Protocol concepts
 - **Design Principles**: Core development philosophy
 - **Business Context**: Business model and compliance requirements
 

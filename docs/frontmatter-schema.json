@@ -1,1 +1,1 @@
-{"type": "object", "required": ["title", "description"], "properties": {"title": {"type": "string", "minLength": 5}, "description": {"type": "string", "minLength": 20}, "sidebar_position": {"type": "number"}, "tags": {"type": "array", "items": {"type": "string"}}, "last_updated": {"type": "string", "format": "date"}}}
+{"deprecated": true, "message": "This JSON schema is deprecated. Use docs/.config/frontmatter.schema.ts instead."}

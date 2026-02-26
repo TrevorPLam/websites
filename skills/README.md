@@ -8,6 +8,9 @@ Agent Skills Open Standard workflow definitions for AI agents, organized by cate
 
 ```
 skills/
+├── anthropic/               # Ecosystem: Anthropic MCP + Playwright + Docs
+├── trailofbits/             # Ecosystem: Security auditing tools
+├── connect/                 # Ecosystem: 1000+ integrations
 ├── core/                    # Essential workflows
 │   ├── deploy/           # Application deployment
 │   ├── discovery/        # Service discovery
@@ -19,8 +22,7 @@ skills/
 ├── domain/                  # Business-specific
 │   ├── marketing/        # Marketing workflows
 │   ├── platform/         # Platform operations
-│   ├── analytics/        # Data analysis
-│   └── sales/            # Sales processes
+│   └── analytics/        # Data analysis
 ├── templates/              # Reusable templates
 │   ├── workflow-skill.md  # Multi-step workflows
 │   └── integration-skill.md # Service integrations
@@ -29,6 +31,14 @@ skills/
 ```
 
 ## Skill Categories
+
+### Ecosystem Skills
+
+Third-party ecosystem integrations and tools:
+
+- **Anthropic** - MCP Builder + Playwright + Document Skills
+- **Trail of Bits** - Security auditing and vulnerability detection
+- **Connect** - 1000+ service integrations and APIs
 
 ### Core Skills
 
