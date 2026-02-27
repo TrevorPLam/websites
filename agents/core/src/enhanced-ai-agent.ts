@@ -1,3 +1,11 @@
+/**
+ * @file agents/core/src/enhanced-ai-agent.ts
+ * @summary Enhanced AI agent capabilities for enterprise orchestration and context management.
+ * @description Provides advanced agent orchestration, context management, and tool integration for 2026 enterprise standards.
+ * @security Multi-tenant context isolation with proper authentication and authorization boundaries.
+ * @adr docs/architecture/decisions/ADR-001-enhanced-ai-agents.md
+ * @requirements MCP-001, AI-ORCHESTRATION-001
+ */
 import { z } from 'zod';
 
 /**
@@ -19,8 +27,8 @@ export const AgentCapabilitySchema = z.object({
     maxConcurrency: z.number(),
     averageResponseTime: z.number(),
     successRate: z.number(),
-    errorRate: z.number()
-  })
+    errorRate: z.number(),
+  }),
 });
 
 export type AgentCapability = z.infer<typeof AgentCapabilitySchema>;
@@ -44,23 +52,23 @@ export class EnhancedAIAgent {
    */
   async executeTask(task: EnhancedAITask): Promise<AIResponse> {
     const startTime = Date.now();
-    
+
     try {
       // 1. Task analysis and planning
       const plan = await this.analyzeAndPlan(task);
-      
+
       // 2. Context gathering and enrichment
       const enrichedContext = await this.gatherContext(task, plan);
-      
+
       // 3. Tool orchestration and execution
       const results = await this.orchestrateTools(plan, enrichedContext);
-      
+
       // 4. Response generation and validation
       const response = await this.generateResponse(results, task);
-      
+
       // 5. Performance tracking
       this.trackPerformance(task, response, Date.now() - startTime);
-      
+
       return response;
     } catch (error) {
       return this.handleError(error, task);
@@ -75,14 +83,14 @@ export class EnhancedAIAgent {
     const subtasks = this.breakdownTask(task, analysis);
     const dependencies = this.identifyDependencies(subtasks);
     const resources = this.estimateResources(subtasks);
-    
+
     return {
       taskId: task.id,
       subtasks,
       dependencies,
       resources,
       estimatedDuration: this.estimateDuration(subtasks),
-      riskAssessment: this.assessRisks(subtasks, dependencies)
+      riskAssessment: this.assessRisks(subtasks, dependencies),
     };
   }
 
@@ -97,13 +105,13 @@ export class EnhancedAIAgent {
       domainKnowledge: await this.getDomainKnowledge(task.domain),
       userPreferences: await this.getUserPreferences(task.userId || 'anonymous'),
       systemState: await this.getSystemState(),
-      environmentalFactors: await this.getEnvironmentalFactors()
+      environmentalFactors: await this.getEnvironmentalFactors(),
     };
 
     // Enrich context with AI-powered insights
     context.insights = await this.generateContextInsights(context);
     context.recommendations = await this.generateRecommendations(context);
-    
+
     return context;
   }
 
@@ -113,22 +121,22 @@ export class EnhancedAIAgent {
   private async orchestrateTools(plan: TaskPlan, context: EnhancedContext): Promise<ToolResults> {
     const results: ToolResults = new Map();
     const executionGraph = this.buildExecutionGraph(plan.subtasks, plan.dependencies);
-    
+
     // Execute tasks in parallel where possible
     const parallelTasks = this.identifyParallelTasks(executionGraph);
     const sequentialTasks = this.identifySequentialTasks(executionGraph);
-    
+
     // Execute parallel tasks
     const parallelResults = await Promise.allSettled(
-      parallelTasks.map(task => this.executeSubtask(task, context))
+      parallelTasks.map((task) => this.executeSubtask(task, context))
     );
-    
+
     // Execute sequential tasks
     for (const task of sequentialTasks) {
       const result = await this.executeSubtask(task, context);
       results.set(task.id, result);
     }
-    
+
     // Process parallel results
     parallelResults.forEach((result, index) => {
       const task = parallelTasks[index];
@@ -138,7 +146,7 @@ export class EnhancedAIAgent {
         results.set(task.id, { error: result.reason, success: false });
       }
     });
-    
+
     return results;
   }
 
@@ -150,7 +158,7 @@ export class EnhancedAIAgent {
     const validatedResponse = await this.validateResponse(initialResponse, task);
     const refinedResponse = await this.refineResponse(validatedResponse, task);
     const finalResponse = await this.finalizeResponse(refinedResponse, task);
-    
+
     return {
       id: `response_${Date.now()}`,
       taskId: task.id,
@@ -162,8 +170,8 @@ export class EnhancedAIAgent {
         executionTime: finalResponse.executionTime,
         toolsUsed: finalResponse.toolsUsed,
         quality: finalResponse.quality,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
   }
 
@@ -173,7 +181,7 @@ export class EnhancedAIAgent {
   async executeMultiModalTask(task: MultiModalTask): Promise<MultiModalResponse> {
     const modalities = task.modalities || ['text'];
     const results: Map<string, any> = new Map();
-    
+
     // Process each modality
     for (const modality of modalities) {
       switch (modality) {
@@ -196,7 +204,7 @@ export class EnhancedAIAgent {
           console.warn(`Unsupported modality: ${modality}`);
       }
     }
-    
+
     // Synthesize multi-modal results
     return await this.synthesizeMultiModalResults(results, task);
   }
@@ -206,7 +214,7 @@ export class EnhancedAIAgent {
    */
   async performAdvancedReasoning(query: ReasoningQuery): Promise<ReasoningResponse> {
     const reasoningEngine = new AdvancedReasoningEngine();
-    
+
     return await reasoningEngine.reason({
       query,
       context: await this.getReasoningContext(query),
@@ -214,7 +222,7 @@ export class EnhancedAIAgent {
       objectives: query.objectives || [],
       availableKnowledge: await this.getAvailableKnowledge(),
       reasoningDepth: query.depth || 'medium',
-      outputFormat: query.outputFormat || 'structured'
+      outputFormat: query.outputFormat || 'structured',
     });
   }
 
@@ -223,13 +231,13 @@ export class EnhancedAIAgent {
    */
   async learnFromExperience(experience: LearningExperience): Promise<LearningResult> {
     const learningEngine = new AdaptiveLearningEngine();
-    
+
     return await learningEngine.process({
       experience,
       currentKnowledge: await this.getCurrentKnowledge(),
       learningGoals: experience.goals || [],
       adaptationStrategy: experience.strategy || 'incremental',
-      validationRequired: experience.validate !== false
+      validationRequired: experience.validate !== false,
     });
   }
 
@@ -239,10 +247,10 @@ export class EnhancedAIAgent {
   async collaborateWithAgents(collaboration: AgentCollaboration): Promise<CollaborationResult> {
     const collaborators = await this.findCollaborators(collaboration.requiredSkills);
     const collaborationPlan = await this.createCollaborationPlan(collaboration, collaborators);
-    
+
     // Execute collaborative tasks
     const results = await this.executeCollaborativeTasks(collaborationPlan);
-    
+
     // Synthesize collaborative results
     return await this.synthesizeCollaborativeResults(results, collaboration);
   }
@@ -254,21 +262,21 @@ export class EnhancedAIAgent {
     const currentPerformance = await this.assessPerformance();
     const optimizationTargets = await this.identifyOptimizationTargets(currentPerformance);
     const optimizations = await this.generateOptimizations(optimizationTargets);
-    
+
     const results: OptimizationResult = {
       beforePerformance: currentPerformance,
       optimizations,
       afterPerformance: await this.applyOptimizations(optimizations),
-      improvement: await this.calculateImprovement(currentPerformance, optimizations)
+      improvement: await this.calculateImprovement(currentPerformance, optimizations),
     };
-    
+
     return results;
   }
 
   // Private helper methods
   private initializeTools(): void {
     // Initialize agent tools based on capabilities
-    this.capabilities.tools.forEach(toolName => {
+    this.capabilities.tools.forEach((toolName) => {
       this.tools.set(toolName, this.getToolImplementation(toolName));
     });
   }
@@ -276,13 +284,13 @@ export class EnhancedAIAgent {
   private getToolImplementation(toolName: string): Function {
     // Return tool implementation based on name
     const toolMap: Record<string, Function> = {
-      'search': this.performSearch.bind(this),
-      'analysis': this.performAnalysis.bind(this),
-      'generation': this.performGeneration.bind(this),
-      'validation': this.performValidation.bind(this),
-      'optimization': this.performOptimization.bind(this)
+      search: this.performSearch.bind(this),
+      analysis: this.performAnalysis.bind(this),
+      generation: this.performGeneration.bind(this),
+      validation: this.performValidation.bind(this),
+      optimization: this.performOptimization.bind(this),
     };
-    
+
     return toolMap[toolName] || (() => Promise.resolve({ error: 'Tool not found' }));
   }
 
@@ -324,12 +332,16 @@ export class EnhancedAIAgent {
         toolsUsed: [],
         quality: 'error',
         timestamp: new Date().toISOString(),
-        error: error.message
-      }
+        error: error.message,
+      },
     };
   }
 
-  private trackPerformance(task: EnhancedAITask, response: AIResponse, executionTime: number): void {
+  private trackPerformance(
+    task: EnhancedAITask,
+    response: AIResponse,
+    executionTime: number
+  ): void {
     const key = `${task.type}_${task.domain}`;
     const current = this.performance.get(key) || 0;
     this.performance.set(key, (current + executionTime) / 2);
@@ -440,12 +452,15 @@ export class EnhancedAIAgent {
     return { modality: 'code', result: 'processed' };
   }
 
-  private async synthesizeMultiModalResults(results: Map<string, any>, task: MultiModalTask): Promise<MultiModalResponse> {
+  private async synthesizeMultiModalResults(
+    results: Map<string, any>,
+    task: MultiModalTask
+  ): Promise<MultiModalResponse> {
     return {
       taskId: task.id,
       results: Object.fromEntries(results),
       synthesis: 'completed',
-      confidence: 0.8
+      confidence: 0.8,
     };
   }
 
@@ -465,7 +480,10 @@ export class EnhancedAIAgent {
     return [];
   }
 
-  private async createCollaborationPlan(collaboration: AgentCollaboration, collaborators: any[]): Promise<any> {
+  private async createCollaborationPlan(
+    collaboration: AgentCollaboration,
+    collaborators: any[]
+  ): Promise<any> {
     return { plan: 'created', collaborators };
   }
 
@@ -473,12 +491,15 @@ export class EnhancedAIAgent {
     return { results: [], status: 'completed' };
   }
 
-  private async synthesizeCollaborativeResults(results: any, collaboration: AgentCollaboration): Promise<CollaborationResult> {
+  private async synthesizeCollaborativeResults(
+    results: any,
+    collaboration: AgentCollaboration
+  ): Promise<CollaborationResult> {
     return {
       collaborationId: collaboration.id,
       result: 'synthesized',
       participants: collaboration.participants,
-      outcome: 'success'
+      outcome: 'success',
     };
   }
 
@@ -628,7 +649,7 @@ class AdvancedReasoningEngine {
       result: 'reasoned',
       reasoning: 'logical deduction applied',
       confidence: 0.9,
-      steps: ['analyze', 'deduce', 'conclude']
+      steps: ['analyze', 'deduce', 'conclude'],
     };
   }
 }
@@ -640,7 +661,7 @@ class AdaptiveLearningEngine {
       experienceId: params.experience.id,
       learned: true,
       improvements: ['performance', 'accuracy'],
-      newKnowledge: { concepts: [], patterns: [] }
+      newKnowledge: { concepts: [], patterns: [] },
     };
   }
 }
