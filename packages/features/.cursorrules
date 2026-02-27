@@ -1,0 +1,288 @@
+# Features Layer - Cursor AI Rules
+
+## Layer Purpose
+Business use cases and application logic. Can use entities but NO UI components. Orchestrates domain operations.
+
+## Import Rules
+
+### ✅ ALLOWED IMPORTS
+- `@repo/entities` for domain entities and business logic
+- `@repo/shared` for shared types and utilities
+- `packages/infrastructure` for external service adapters
+- `packages/config` for configuration and port interfaces
+- Database repositories and data access layers
+- External service adapters (email, payments, etc.)
+
+### 🚫 FORBIDDEN IMPORTS
+- NEVER import React components or UI libraries
+- NEVER import from `@repo/ui`, `@repo/ui-*` packages
+- NEVER import from `packages/widgets`
+- NEVER import from `apps/` directories (except types)
+
+## Code Patterns
+
+### Feature Structure
+```typescript
+// ✅ CORRECT: Use case orchestration
+export class CreateLeadUseCase {
+  constructor(
+    private readonly leadRepository: LeadRepository,
+    private readonly emailService: EmailService,
+    private readonly analyticsService: AnalyticsService
+  ) {}
+
+  async execute(data: CreateLeadData): Promise<Result<Lead, Error>> {
+    // Validate input
+    const validation = CreateLeadSchema.safeParse(data);
+    if (!validation.success) {
+      return err(new Error('Invalid lead data'));
+    }
+
+    // Create entity
+    const leadResult = Lead.create(validation.data);
+    if (leadResult.isErr()) {
+      return leadResult;
+    }
+
+    const lead = leadResult.value;
+
+    // Save to database
+    const saveResult = await this.leadRepository.save(lead);
+    if (saveResult.isErr()) {
+      return saveResult;
+    }
+
+    // Send notifications
+    await this.emailService.sendLeadNotification(lead);
+    await this.analyticsService.trackLeadCreated(lead);
+
+    return ok(lead);
+  }
+}
+```
+
+### Server Actions Integration
+```typescript
+// ✅ CORRECT: Next.js Server Action
+'use server';
+
+import { createLeadUseCase } from '../use-cases/create-lead';
+import { getCurrentTenant } from '@repo/infrastructure/auth';
+
+export async function createLeadAction(data: CreateLeadData) {
+  const tenant = await getCurrentTenant();
+  if (!tenant) {
+    return { error: 'Unauthorized' };
+  }
+
+  const useCase = createLeadUseCase();
+  const result = await useCase.execute({ ...data, tenantId: tenant.id });
+
+  if (result.isErr()) {
+    return { error: result.error.message };
+  }
+
+  return { success: true, data: result.value };
+}
+```
+
+## File Organization
+
+### Use Case Structure
+```
+packages/features/src/
+├── lead-management/
+│   ├── use-cases/
+│   │   ├── create-lead.ts
+│   │   ├── update-lead.ts
+│   │   └── delete-lead.ts
+│   ├── repositories/
+│   │   ├── lead-repository.ts
+│   │   └── lead-repository.test.ts
+│   └── index.ts
+├── booking-system/
+│   ├── use-cases/
+│   ├── repositories/
+│   └── index.ts
+└── index.ts
+```
+
+### Export Structure
+```typescript
+// src/index.ts - Public API only
+export { CreateLeadUseCase } from './lead-management/use-cases/create-lead';
+export { UpdateLeadUseCase } from './lead-management/use-cases/update-lead';
+export { LeadRepository } from './lead-management/repositories/lead-repository';
+
+// Use case factories for dependency injection
+export const createLeadUseCase = () => new CreateLeadUseCase(
+  new LeadRepository(),
+  new EmailService(),
+  new AnalyticsService()
+);
+```
+
+## Data Access Patterns
+
+### Repository Pattern
+```typescript
+// ✅ CORRECT: Repository interface and implementation
+export interface LeadRepository {
+  save(lead: Lead): Promise<Result<Lead, Error>>;
+  findById(id: string, tenantId: string): Promise<Result<Lead | null, Error>>;
+  findByTenant(tenantId: string): Promise<Result<Lead[], Error>>;
+}
+
+export class SupabaseLeadRepository implements LeadRepository {
+  async save(lead: Lead): Promise<Result<Lead, Error>> {
+    // Database implementation with tenant isolation
+    const { data, error } = await supabase
+      .from('leads')
+      .insert({
+        id: lead.id,
+        email: lead.email,
+        tenant_id: lead.tenantId,
+        // ... other fields
+      })
+      .eq('tenant_id', lead.tenantId)
+      .single();
+
+    if (error) {
+      return err(new Error(`Failed to save lead: ${error.message}`));
+    }
+
+    return ok(lead);
+  }
+}
+```
+
+## Error Handling
+
+### Result Pattern
+```typescript
+// ✅ CORRECT: Consistent error handling
+export class BookingService {
+  async createBooking(data: BookingData): Promise<Result<Booking, Error>> {
+    try {
+      // Validate input
+      const validation = BookingSchema.safeParse(data);
+      if (!validation.success) {
+        return err(new Error(`Invalid booking data: ${validation.error.message}`));
+      }
+
+      // Business logic
+      const booking = Booking.create(validation.data);
+      if (booking.isErr()) {
+        return booking;
+      }
+
+      // Save to database
+      const saved = await this.bookingRepository.save(booking.value);
+      return saved;
+
+    } catch (error) {
+      return err(new Error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`));
+    }
+  }
+}
+```
+
+## Security Requirements
+
+### Tenant Isolation
+- ALL repository operations MUST include tenantId
+- Validate tenant membership before data access
+- Use RLS policies in database queries
+- Never allow cross-tenant data access
+
+### Input Validation
+- Validate ALL inputs with Zod schemas
+- Sanitize data to prevent injection attacks
+- Use parameterized queries for database operations
+- Implement rate limiting for expensive operations
+
+## Testing Requirements
+
+### Unit Tests
+- Test use cases with mock repositories
+- Test both success and error scenarios
+- Test tenant isolation logic
+- Use Vitest with fast execution
+
+### Integration Tests
+- Test repository implementations with real database
+- Test external service integrations
+- Test end-to-end use case flows
+- Use test database with proper cleanup
+
+```typescript
+describe('CreateLeadUseCase', () => {
+  let useCase: CreateLeadUseCase;
+  let mockLeadRepository: jest.Mocked<LeadRepository>;
+  let mockEmailService: jest.Mocked<EmailService>;
+
+  beforeEach(() => {
+    mockLeadRepository = createMockLeadRepository();
+    mockEmailService = createMockEmailService();
+    useCase = new CreateLeadUseCase(mockLeadRepository, mockEmailService);
+  });
+
+  it('should create lead successfully', async () => {
+    const data = validLeadData();
+    mockLeadRepository.save.mockResolvedValue(ok(mockLead()));
+
+    const result = await useCase.execute(data);
+
+    expect(result.isOk()).toBe(true);
+    expect(mockLeadRepository.save).toHaveBeenCalledWith(expect.any(Lead));
+    expect(mockEmailService.sendLeadNotification).toHaveBeenCalled();
+  });
+});
+```
+
+## Performance Guidelines
+
+### Database Operations
+- Use efficient queries with proper indexing
+- Implement connection pooling
+- Use pagination for large result sets
+- Cache frequently accessed data
+
+### Async Operations
+- Use Promise.all for parallel independent operations
+- Implement proper timeout handling
+- Use streaming for large data sets
+- Handle race conditions properly
+
+## Common Mistakes to Avoid
+
+### ❌ NEVER DO THIS
+```typescript
+// Importing UI components
+import { Button } from '@repo/ui';
+
+// Direct database access without repository
+import { supabase } from '@repo/infrastructure';
+
+// Business logic in UI
+export const createLead = async (data: any) => {
+  // This should be in a use case
+};
+```
+
+### ✅ ALWAYS DO THIS
+```typescript
+// Clean use case with dependency injection
+export class CreateLeadUseCase {
+  constructor(
+    private readonly leadRepository: LeadRepository,
+    private readonly emailService: EmailService
+  ) {}
+
+  async execute(data: CreateLeadData): Promise<Result<Lead, Error>> {
+    // Business logic orchestration
+  }
+}
+```
+
+This layer orchestrates business operations while maintaining clean architecture boundaries.

@@ -1,0 +1,500 @@
+# Services Layer - Cursor AI Rules
+
+## Layer Purpose
+Hexagonal adapters implementing port interfaces. External service integrations with clean architecture boundaries.
+
+## Architecture Pattern
+
+### Hexagonal Architecture
+- **Ports**: Interfaces in `packages/config/ports/` (contracts only)
+- **Adapters**: Implementations in `packages/services/[service]/adapters/`
+- **Factory**: Service selection and configuration
+- **Direction**: Dependencies point inward (app → ports ← adapters)
+
+## Import Rules
+
+### ✅ ALLOWED IMPORTS
+- Port interfaces from `packages/config/ports/`
+- External service SDKs and APIs
+- `@repo/shared` for shared types and utilities
+- Database clients for service-specific operations
+- HTTP clients and networking libraries
+
+### 🚫 FORBIDDEN IMPORTS
+- NEVER import from `apps/` directories
+- NEVER import from `packages/entities` (use ports instead)
+- NEVER import from `packages/features` (use ports instead)
+- NEVER import UI components or React libraries
+
+## Code Patterns
+
+### Port Interface Implementation
+```typescript
+// ✅ CORRECT: Adapter implementing port interface
+import { EmailPort } from '@repo/config/ports/email.port';
+import { Resend } from 'resend';
+
+export class ResendAdapter implements EmailPort {
+  constructor(private readonly resend: Resend) {}
+
+  async sendEmail(data: EmailData): Promise<Result<EmailSent, Error>> {
+    try {
+      const { data: result, error } = await this.resend.emails.send({
+        from: data.from,
+        to: data.to,
+        subject: data.subject,
+        html: data.html,
+        text: data.text
+      });
+
+      if (error) {
+        return err(new Error(`Resend API error: ${error.message}`));
+      }
+
+      return ok({
+        id: result.id,
+        messageId: result.id,
+        status: 'sent'
+      });
+    } catch (error) {
+      return err(new Error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`));
+    }
+  }
+
+  async getDeliveryStatus(messageId: string): Promise<Result<DeliveryStatus, Error>> {
+    try {
+      const { data: email, error } = await this.resend.emails.get(messageId);
+      
+      if (error) {
+        return err(new Error(`Failed to get status: ${error.message}`));
+      }
+
+      return ok({
+        messageId: email.id,
+        status: this.mapStatus(email.status),
+        deliveredAt: email.delivered_at ? new Date(email.delivered_at) : null
+      });
+    } catch (error) {
+      return err(new Error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`));
+    }
+  }
+
+  private mapStatus(status: string): DeliveryStatus['status'] {
+    switch (status) {
+      case 'sent': return 'sent';
+      case 'delivered': return 'delivered';
+      case 'bounced': return 'bounced';
+      case 'complained': return 'complained';
+      default: return 'pending';
+    }
+  }
+}
+```
+
+### Factory Pattern
+```typescript
+// ✅ CORRECT: Service factory with configuration
+import { EmailPort } from '@repo/config/ports/email.port';
+import { ResendAdapter } from './adapters/resend.adapter';
+import { NativeAdapter } from './adapters/native.adapter';
+import { z } from 'zod';
+
+const EmailConfigSchema = z.object({
+  provider: z.enum(['resend', 'native']),
+  apiKey: z.string().optional(),
+  fromEmail: z.string().email(),
+  replyToEmail: z.string().email().optional()
+});
+
+export type EmailConfig = z.infer<typeof EmailConfigSchema>;
+
+export class EmailServiceFactory {
+  static create(config: EmailConfig): EmailPort {
+    const validated = EmailConfigSchema.parse(config);
+
+    switch (validated.provider) {
+      case 'resend':
+        if (!validated.apiKey) {
+          throw new Error('Resend API key is required');
+        }
+        return new ResendAdapter(new Resend(validated.apiKey));
+
+      case 'native':
+        return new NativeAdapter({
+          fromEmail: validated.fromEmail,
+          replyToEmail: validated.replyToEmail
+        });
+
+      default:
+        throw new Error(`Unsupported email provider: ${validated.provider}`);
+    }
+  }
+}
+```
+
+### Configuration Management
+```typescript
+// ✅ CORRECT: Environment-based configuration
+export function createEmailService(): EmailPort {
+  const config = {
+    provider: process.env.EMAIL_PROVIDER || 'native',
+    apiKey: process.env.RESEND_API_KEY,
+    fromEmail: process.env.FROM_EMAIL || 'noreply@example.com',
+    replyToEmail: process.env.REPLY_TO_EMAIL
+  };
+
+  return EmailServiceFactory.create(config);
+}
+```
+
+## File Organization
+
+### Service Structure
+```
+packages/services/
+├── email/
+│   ├── adapters/
+│   │   ├── resend.adapter.ts
+│   │   ├── resend.adapter.test.ts
+│   │   ├── native.adapter.ts
+│   │   └── native.adapter.test.ts
+│   ├── factory.ts
+│   ├── types.ts
+│   ├── index.ts
+│   └── package.json
+├── payments/
+│   ├── adapters/
+│   │   ├── stripe.adapter.ts
+│   │   └── paypal.adapter.ts
+│   ├── factory.ts
+│   ├── types.ts
+│   └── index.ts
+├── analytics/
+│   ├── adapters/
+│   │   ├── google-analytics.adapter.ts
+│   │   └── tinybird.adapter.ts
+│   ├── factory.ts
+│   └── index.ts
+└── tests/
+    ├── contracts/
+    │   ├── email-service.contract.ts
+    │   └── payment-service.contract.ts
+    └── integration/
+        ├── email-integration.test.ts
+        └── payment-integration.test.ts
+```
+
+### Export Structure
+```typescript
+// packages/services/src/index.ts
+export { EmailServiceFactory } from './email/factory';
+export { PaymentServiceFactory } from './payments/factory';
+export { AnalyticsServiceFactory } from './analytics/factory';
+
+// Export adapters for testing
+export { ResendAdapter } from './email/adapters/resend.adapter';
+export { StripeAdapter } from './payments/adapters/stripe.adapter';
+```
+
+## Testing Requirements
+
+### Unit Tests
+```typescript
+// ✅ CORRECT: Adapter unit testing
+describe('ResendAdapter', () => {
+  let adapter: ResendAdapter;
+  let mockResend: jest.Mocked<Resend>;
+
+  beforeEach(() => {
+    mockResend = {
+      emails: {
+        send: jest.fn(),
+        get: jest.fn()
+      }
+    } as any;
+    
+    adapter = new ResendAdapter(mockResend);
+  });
+
+  it('should send email successfully', async () => {
+    const emailData: EmailData = {
+      from: 'test@example.com',
+      to: 'recipient@example.com',
+      subject: 'Test Subject',
+      html: '<p>Test HTML</p>',
+      text: 'Test text'
+    };
+
+    mockResend.emails.send.mockResolvedValue({
+      data: { id: 'email-123' },
+      error: null
+    });
+
+    const result = await adapter.sendEmail(emailData);
+
+    expect(result.isOk()).toBe(true);
+    expect(result.value).toEqual({
+      id: 'email-123',
+      messageId: 'email-123',
+      status: 'sent'
+    });
+  });
+
+  it('should handle API errors', async () => {
+    const emailData: EmailData = {
+      from: 'test@example.com',
+      to: 'invalid-email',
+      subject: 'Test Subject',
+      html: '<p>Test HTML</p>',
+      text: 'Test text'
+    };
+
+    mockResend.emails.send.mockResolvedValue({
+      data: null,
+      error: { message: 'Invalid email address' }
+    });
+
+    const result = await adapter.sendEmail(emailData);
+
+    expect(result.isErr()).toBe(true);
+    expect(result.error?.message).toContain('Resend API error');
+  });
+});
+```
+
+### Contract Testing
+```typescript
+// ✅ CORRECT: Contract testing for port compliance
+import { EmailPort } from '@repo/config/ports/email.port';
+import { ResendAdapter } from '../adapters/resend.adapter';
+
+describe('EmailPort Contract', () => {
+  let adapter: EmailPort;
+
+  beforeEach(() => {
+    adapter = new ResendAdapter(new Resend('test-key'));
+  });
+
+  it('should implement EmailPort interface correctly', () => {
+    expect(adapter.sendEmail).toBeDefined();
+    expect(adapter.getDeliveryStatus).toBeDefined();
+    expect(typeof adapter.sendEmail).toBe('function');
+    expect(typeof adapter.getDeliveryStatus).toBe('function');
+  });
+
+  it('should handle all required email operations', async () => {
+    const emailData: EmailData = {
+      from: 'test@example.com',
+      to: 'recipient@example.com',
+      subject: 'Test',
+      html: '<p>Test</p>',
+      text: 'Test'
+    };
+
+    // Test that adapter can handle all required operations
+    const sendResult = await adapter.sendEmail(emailData);
+    expect(sendResult).toBeDefined();
+
+    if (sendResult.isOk()) {
+      const statusResult = await adapter.getDeliveryStatus(sendResult.value.messageId);
+      expect(statusResult).toBeDefined();
+    }
+  });
+});
+```
+
+## Error Handling
+
+### Standardized Error Patterns
+```typescript
+// ✅ CORRECT: Consistent error handling
+export class StripeAdapter implements PaymentPort {
+  async createPaymentIntent(data: PaymentData): Promise<Result<PaymentIntent, Error>> {
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount: data.amount,
+        currency: data.currency,
+        customer: data.customerId,
+        metadata: data.metadata
+      });
+
+      return ok({
+        id: paymentIntent.id,
+        clientSecret: paymentIntent.client_secret!,
+        status: this.mapStatus(paymentIntent.status),
+        amount: paymentIntent.amount,
+        currency: paymentIntent.currency
+      });
+    } catch (error) {
+      if (error instanceof Stripe.errors.StripeError) {
+        return err(new Error(`Stripe API error: ${error.message}`));
+      }
+      return err(new Error(`Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`));
+    }
+  }
+
+  private mapStatus(status: string): PaymentStatus {
+    switch (status) {
+      case 'requires_payment_method': return 'requires_payment_method';
+      case 'requires_confirmation': return 'requires_confirmation';
+      case 'requires_action': return 'requires_action';
+      case 'processing': return 'processing';
+      case 'succeeded': return 'succeeded';
+      case 'canceled': return 'canceled';
+      default: return 'unknown';
+    }
+  }
+}
+```
+
+## Security Requirements
+
+### API Key Management
+```typescript
+// ✅ CORRECT: Secure API key handling
+export class SecureServiceAdapter {
+  constructor(private readonly apiKey: string) {
+    if (!apiKey || apiKey.length < 10) {
+      throw new Error('Valid API key is required');
+    }
+  }
+
+  private sanitizeForLogging(data: any): any {
+    // Remove sensitive data from logs
+    const sanitized = { ...data };
+    delete sanitized.apiKey;
+    delete sanitized.password;
+    delete sanitized.secret;
+    return sanitized;
+  }
+
+  async makeRequest(endpoint: string, data: any): Promise<any> {
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Service request failed:', {
+        endpoint,
+        data: this.sanitizeForLogging(data),
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+      throw error;
+    }
+  }
+}
+```
+
+## Performance Guidelines
+
+### Connection Pooling
+```typescript
+// ✅ CORRECT: Efficient resource management
+export class DatabaseAdapter {
+  private connectionPool: Connection[] = [];
+  private readonly maxPoolSize = 10;
+
+  async getConnection(): Promise<Connection> {
+    if (this.connectionPool.length > 0) {
+      return this.connectionPool.pop()!;
+    }
+
+    if (this.activeConnections < this.maxPoolSize) {
+      return await this.createConnection();
+    }
+
+    throw new Error('Connection pool exhausted');
+  }
+
+  releaseConnection(connection: Connection): void {
+    this.connectionPool.push(connection);
+  }
+}
+```
+
+### Caching Strategy
+```typescript
+// ✅ CORRECT: Service-level caching
+export class CachedAnalyticsAdapter implements AnalyticsPort {
+  private cache = new Map<string, { data: any; timestamp: number }>();
+  private readonly cacheTTL = 1000 * 60 * 5; // 5 minutes
+
+  constructor(private readonly adapter: AnalyticsPort) {}
+
+  async getMetrics(query: MetricsQuery): Promise<Result<Metrics, Error>> {
+    const cacheKey = JSON.stringify(query);
+    const cached = this.cache.get(cacheKey);
+
+    if (cached && Date.now() - cached.timestamp < this.cacheTTL) {
+      return ok(cached.data);
+    }
+
+    const result = await this.adapter.getMetrics(query);
+    
+    if (result.isOk()) {
+      this.cache.set(cacheKey, {
+        data: result.value,
+        timestamp: Date.now()
+      });
+    }
+
+    return result;
+  }
+}
+```
+
+## Common Mistakes to Avoid
+
+### ❌ NEVER DO THIS
+```typescript
+// Importing business logic directly
+import { Lead } from '@repo/entities/lead';
+
+// Importing UI components
+import { Button } from '@repo/ui';
+
+// Direct database access without abstraction
+import { supabase } from '@repo/infrastructure';
+
+// Hard-coded configuration
+export class Adapter {
+  constructor() {
+    this.apiKey = 'hardcoded-key'; // Security risk
+  }
+}
+```
+
+### ✅ ALWAYS DO THIS
+```typescript
+// Implement port interface
+import { EmailPort } from '@repo/config/ports/email.port';
+
+// Use factory pattern
+export class EmailServiceFactory {
+  static create(config: EmailConfig): EmailPort {
+    // Configuration-based instantiation
+  }
+}
+
+// Secure configuration handling
+export class Adapter {
+  constructor(private readonly config: AdapterConfig) {
+    if (!config.apiKey) {
+      throw new Error('API key is required');
+    }
+  }
+}
+```
+
+This layer implements clean architecture's hexagonal pattern, enabling external service swapping without touching business logic.

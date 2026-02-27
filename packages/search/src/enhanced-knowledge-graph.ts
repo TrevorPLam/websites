@@ -1,3 +1,11 @@
+/**
+ * @file packages/search/src/enhanced-knowledge-graph.ts
+ * @summary Enhanced knowledge graph with advanced relationship analysis and semantic discovery.
+ * @description Implements 2026 standards for semantic relationship discovery, graph analysis, and knowledge mapping.
+ * @security Tenant-isolated knowledge graphs with secure data processing and privacy compliance.
+ * @adr docs/architecture/decisions/ADR-006-knowledge-graph.md
+ * @requirements SEARCH-001, KNOWLEDGE-GRAPH-001
+ */
 import { z } from 'zod';
 
 /**

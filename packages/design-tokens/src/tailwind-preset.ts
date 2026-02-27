@@ -1,4 +1,12 @@
 /**
+ * @file packages/design-tokens/src/tailwind-preset.ts
+ * @summary Tailwind CSS preset mapping design tokens to utility classes for consistent theming.
+ * @description Maps design tokens to Tailwind utilities with theme integration and CSS custom properties.
+ * @security No sensitive data processing; read-only token mapping and CSS generation.
+ * @adr docs/architecture/decisions/ADR-004-design-tokens.md
+ * @requirements DESIGN-001, TAILWIND-001
+ */
+/**
  * Tailwind CSS Preset for Design Tokens
  * 
  * Maps design tokens to Tailwind CSS utility classes

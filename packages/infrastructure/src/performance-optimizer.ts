@@ -1,3 +1,11 @@
+/**
+ * @file packages/infrastructure/src/performance-optimizer.ts
+ * @summary Advanced performance optimization and scaling system with 2026 enterprise standards.
+ * @description Implements performance monitoring, optimization strategies, and scaling patterns for multi-tenant SaaS.
+ * @security Performance data isolation with tenant-scoped metrics and privacy-compliant monitoring.
+ * @adr docs/architecture/decisions/ADR-005-performance-optimization.md
+ * @requirements PERFORMANCE-001, SCALING-001
+ */
 import { z } from 'zod';
 
 /**

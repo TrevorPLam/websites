@@ -1,4 +1,12 @@
 /**
+ * @file packages/design-tokens/src/style-dictionary-transforms.ts
+ * @summary Custom Style Dictionary transforms for multi-platform design token conversion.
+ * @description Converts design tokens to CSS, SCSS, LESS, and other platform-specific formats with validation.
+ * @security No sensitive data processing; read-only token transformations.
+ * @adr docs/architecture/decisions/ADR-004-design-tokens.md
+ * @requirements DESIGN-001, TOKEN-TRANSFORM-001
+ */
+/**
  * Style Dictionary Transforms
  * 
  * Custom transforms for Style Dictionary to convert design tokens

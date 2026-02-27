@@ -1,0 +1,419 @@
+# Widgets Layer - Cursor AI Rules
+
+## Layer Purpose
+UI components that orchestrate features and entities. Can use features + entities but NO app router imports.
+
+## Import Rules
+
+### ✅ ALLOWED IMPORTS
+- `@repo/features` for business logic and use cases
+- `@repo/entities` for domain entities
+- `@repo/ui`, `@repo/ui-*` for UI primitives and components
+- `@repo/shared` for shared types and utilities
+- React hooks and context providers
+- Client-side libraries (animations, forms, etc.)
+
+### 🚫 FORBIDDEN IMPORTS
+- NEVER import from `apps/` directories
+- NEVER import Next.js app router components (`next/navigation`, `next/router`)
+- NEVER import server-side only utilities
+- NEVER import from database clients directly
+
+## Code Patterns
+
+### Widget Component Structure
+```typescript
+// ✅ CORRECT: Widget with feature integration
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Button } from '@repo/ui/components/button';
+import { Card } from '@repo/ui/components/card';
+import { useCreateLead } from '@repo/features/lead-management';
+import { Lead } from '@repo/entities/lead';
+import type { CreateLeadData } from '@repo/features/lead-management';
+
+export interface LeadCaptureWidgetProps {
+  tenantId: string;
+  onSuccess?: (lead: Lead) => void;
+}
+
+export function LeadCaptureWidget({ tenantId, onSuccess }: LeadCaptureWidgetProps) {
+  const [formData, setFormData] = useState<CreateLeadData>({
+    email: '',
+    name: '',
+    tenantId
+  });
+  
+  const createLead = useCreateLead();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const result = await createLead.mutateAsync(formData);
+    if (result.isOk() && onSuccess) {
+      onSuccess(result.value);
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-md">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium">
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            className="mt-1 block w-full rounded-md border-gray-300"
+          />
+        </div>
+        
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+            className="mt-1 block w-full rounded-md border-gray-300"
+          />
+        </div>
+        
+        <Button type="submit" disabled={createLead.isPending}>
+          {createLead.isPending ? 'Creating...' : 'Create Lead'}
+        </Button>
+      </form>
+    </Card>
+  );
+}
+```
+
+### React Query Integration
+```typescript
+// ✅ CORRECT: Data fetching with React Query
+'use client';
+
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getLeadsByTenant } from '@repo/features/lead-management';
+import { Lead } from '@repo/entities/lead';
+
+export function useLeads(tenantId: string) {
+  return useQuery({
+    queryKey: ['leads', tenantId],
+    queryFn: () => getLeadsByTenant(tenantId),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
+export function useCreateLead() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (data: CreateLeadData) => createLeadUseCase().execute(data),
+    onSuccess: (lead) => {
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+    },
+    onError: (error) => {
+      console.error('Failed to create lead:', error);
+    }
+  });
+}
+```
+
+## File Organization
+
+### Widget Structure
+```
+packages/widgets/src/
+├── lead-capture/
+│   ├── LeadCaptureWidget.tsx
+│   ├── LeadCaptureWidget.test.tsx
+│   ├── index.ts
+│   └── components/
+│       ├── LeadForm.tsx
+│       └── LeadSuccess.tsx
+├── booking-calendar/
+│   ├── BookingCalendarWidget.tsx
+│   ├── BookingCalendarWidget.test.tsx
+│   └── index.ts
+├── dashboard/
+│   ├── DashboardWidget.tsx
+│   ├── DashboardWidget.test.tsx
+│   └── index.ts
+└── index.ts
+```
+
+### Export Structure
+```typescript
+// src/index.ts - Public widget exports
+export { LeadCaptureWidget } from './lead-capture';
+export { BookingCalendarWidget } from './booking-calendar';
+export { DashboardWidget } from './dashboard';
+
+// Re-export commonly used components
+export { Card, Button, Input } from '@repo/ui/components';
+```
+
+## Component Patterns
+
+### Composition over Inheritance
+```typescript
+// ✅ CORRECT: Composable widget
+export function MarketingPage({ tenantId }: { tenantId: string }) {
+  return (
+    <div className="space-y-8">
+      <HeroWidget tenantId={tenantId} />
+      <LeadCaptureWidget tenantId={tenantId} />
+      <TestimonialsWidget tenantId={tenantId} />
+      <PricingWidget tenantId={tenantId} />
+    </div>
+  );
+}
+```
+
+### Error Boundaries
+```typescript
+// ✅ CORRECT: Error handling in widgets
+'use client';
+
+import { Component, ReactNode } from 'react';
+import { Card } from '@repo/ui/components/card';
+
+interface WidgetErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+export function WidgetErrorBoundary({ children, fallback }: WidgetErrorBoundaryProps) {
+  return (
+    <ErrorBoundary
+      fallback={
+        fallback || (
+          <Card className="p-4 border-red-200 bg-red-50">
+            <p className="text-red-800">Something went wrong. Please try again.</p>
+          </Card>
+        )
+      }
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
+```
+
+## State Management
+
+### Local State
+```typescript
+// ✅ CORRECT: Local component state
+export function SearchWidget({ tenantId }: { tenantId: string }) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+
+  const { data: results, isLoading } = useSearchLeads(tenantId, searchTerm);
+
+  return (
+    <div className="space-y-4">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search leads..."
+        className="w-full px-4 py-2 border rounded-md"
+      />
+      
+      {isLoading && <p>Searching...</p>}
+      {results && <LeadList leads={results} />}
+    </div>
+  );
+}
+```
+
+### Context Providers
+```typescript
+// ✅ CORRECT: Widget-specific context
+interface WidgetContextValue {
+  tenantId: string;
+  theme: 'light' | 'dark';
+  updateTheme: (theme: 'light' | 'dark') => void;
+}
+
+const WidgetContext = createContext<WidgetContextValue | null>(null);
+
+export function WidgetProvider({ 
+  children, 
+  tenantId 
+}: { 
+  children: ReactNode; 
+  tenantId: string; 
+}) {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  return (
+    <WidgetContext.Provider value={{ tenantId, theme, updateTheme: setTheme }}>
+      {children}
+    </WidgetContext.Provider>
+  );
+}
+
+export function useWidgetContext() {
+  const context = useContext(WidgetContext);
+  if (!context) {
+    throw new Error('useWidgetContext must be used within WidgetProvider');
+  }
+  return context;
+}
+```
+
+## Testing Requirements
+
+### Component Testing
+```typescript
+// ✅ CORRECT: Widget component testing
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LeadCaptureWidget } from './LeadCaptureWidget';
+
+const createTestQueryClient = () => new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+    mutations: { retry: false }
+  }
+});
+
+describe('LeadCaptureWidget', () => {
+  it('should create lead when form is submitted', async () => {
+    const queryClient = createTestQueryClient();
+    const mockCreateLead = jest.fn().mockResolvedValue(ok(mockLead()));
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <LeadCaptureWidget tenantId="test-tenant" />
+      </QueryClientProvider>
+    );
+
+    fireEvent.change(screen.getByLabelText(/name/i), {
+      target: { value: 'John Doe' }
+    });
+    fireEvent.change(screen.getByLabelText(/email/i), {
+      target: { value: 'john@example.com' }
+    });
+    fireEvent.click(screen.getByRole('button', { name: /create/i }));
+
+    await waitFor(() => {
+      expect(mockCreateLead).toHaveBeenCalledWith({
+        name: 'John Doe',
+        email: 'john@example.com',
+        tenantId: 'test-tenant'
+      });
+    });
+  });
+});
+```
+
+## Performance Guidelines
+
+### Code Splitting
+```typescript
+// ✅ CORRECT: Lazy loading for heavy widgets
+import { lazy } from 'react';
+
+const HeavyDashboardWidget = lazy(() => import('./HeavyDashboardWidget'));
+
+export function DashboardWrapper({ tenantId }: { tenantId: string }) {
+  return (
+    <Suspense fallback={<div>Loading dashboard...</div>}>
+      <HeavyDashboardWidget tenantId={tenantId} />
+    </Suspense>
+  );
+}
+```
+
+### Memoization
+```typescript
+// ✅ CORRECT: Memoize expensive computations
+import { memo, useMemo } from 'react';
+
+export const ExpensiveChartWidget = memo(({ data, tenantId }: Props) => {
+  const chartData = useMemo(() => {
+    return processChartData(data);
+  }, [data]);
+
+  return <Chart data={chartData} />;
+});
+```
+
+## Accessibility Requirements
+
+### ARIA Labels
+```typescript
+// ✅ CORRECT: Accessible widget
+export function AccessibleFormWidget({ tenantId }: { tenantId: string }) {
+  return (
+    <form aria-labelledby="form-title">
+      <h2 id="form-title">Lead Information</h2>
+      
+      <div>
+        <label htmlFor="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          aria-describedby="name-description"
+          aria-required="true"
+        />
+        <div id="name-description" className="sr-only">
+          Enter your full name for contact purposes
+        </div>
+      </div>
+      
+      <button type="submit" aria-label="Create lead">
+        Submit
+      </button>
+    </form>
+  );
+}
+```
+
+## Common Mistakes to Avoid
+
+### ❌ NEVER DO THIS
+```typescript
+// Importing app router components
+import { useRouter } from 'next/navigation';
+
+// Direct database access
+import { supabase } from '@repo/infrastructure';
+
+// Server-side code in client components
+export function Widget() {
+  // This should be in a feature or server action
+  const data = await fetch('/api/data');
+}
+```
+
+### ✅ ALWAYS DO THIS
+```typescript
+// Clean widget with feature integration
+'use client';
+
+import { useCreateLead } from '@repo/features/lead-management';
+import { Button } from '@repo/ui/components/button';
+
+export function LeadCaptureWidget({ tenantId }: { tenantId: string }) {
+  const createLead = useCreateLead();
+  
+  const handleSubmit = async () => {
+    await createLead.mutateAsync({ tenantId, ...data });
+  };
+  
+  return <Button onClick={handleSubmit}>Create Lead</Button>;
+}
+```
+
+This layer bridges UI and business logic while maintaining clean architecture boundaries.

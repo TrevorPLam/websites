@@ -1,0 +1,183 @@
+# Entities Layer - Cursor AI Rules
+
+## Layer Purpose
+Pure business logic and domain entities. NO external dependencies, NO UI components, NO database access.
+
+## Strict Constraints
+
+### 🚫 FORBIDDEN IMPORTS
+- NEVER import React or any UI libraries
+- NEVER import from `@repo/ui`, `@repo/ui-*` packages
+- NEVER import database clients (supabase, prisma, etc.)
+- NEVER import external APIs or services
+- NEVER import from `packages/features`, `packages/widgets`
+- NEVER import from `apps/` directories
+
+### ✅ ALLOWED IMPORTS
+- `@repo/shared` for shared types and utilities
+- `zod` for schema validation
+- Built-in TypeScript types and utilities
+- Date, crypto, and other native Node.js utilities
+
+## Code Patterns
+
+### Entity Structure
+```typescript
+// ✅ CORRECT: Pure entity with validation
+export class User {
+  constructor(
+    public readonly id: string,
+    public readonly email: string,
+    public readonly tenantId: string
+  ) {}
+
+  static create(data: unknown): Result<User, Error> {
+    const schema = z.object({
+      id: z.string().uuid(),
+      email: z.string().email(),
+      tenantId: z.string().uuid()
+    });
+    
+    const result = schema.safeParse(data);
+    return result.success 
+      ? ok(new User(result.data.id, result.data.email, result.data.tenantId))
+      : err(new Error('Invalid user data'));
+  }
+}
+```
+
+### Business Logic Only
+```typescript
+// ✅ CORRECT: Pure business logic
+export class Booking {
+  calculateTotalPrice(): number {
+    return this.basePrice * this.duration - this.discount;
+  }
+
+  canBeCancelled(): boolean {
+    const now = new Date();
+    const cutoff = new Date(this.startTime);
+    cutoff.setHours(cutoff.getHours() - 24);
+    return now < cutoff;
+  }
+}
+```
+
+## Validation Rules
+
+### Input Validation
+- ALL public methods must validate inputs with Zod schemas
+- Use Result<T, Error> pattern for error handling
+- Never throw exceptions - return error results
+
+### Type Safety
+- Use strict TypeScript typing
+- Prefer readonly properties for immutability
+- Use discriminated unions for state management
+
+## File Organization
+
+### Export Structure
+```typescript
+// src/index.ts - Public exports only
+export { User, type UserProps } from './user/User';
+export { Booking, type BookingProps } from './booking/Booking';
+export { Lead, type LeadProps } from './lead/Lead';
+
+// NO internal implementation details exported
+```
+
+### File Naming
+- Use PascalCase for entity classes: `User.ts`, `Booking.ts`
+- Use camelCase for utilities: `userHelpers.ts`
+- Group related entities in folders: `user/User.ts`, `user/userTypes.ts`
+
+## Testing Requirements
+
+### Unit Tests Only
+- Test pure functions and business logic
+- Mock NO external dependencies (there should be none)
+- Test both success and error scenarios
+- Use Vitest with fast execution
+
+### Test Structure
+```typescript
+describe('User Entity', () => {
+  it('should create valid user with correct data', () => {
+    const result = User.create({
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      email: 'test@example.com',
+      tenantId: '456e7890-e89b-12d3-a456-426614174000'
+    });
+    
+    expect(result.isOk()).toBe(true);
+    expect(result.value.email).toBe('test@example.com');
+  });
+
+  it('should return error for invalid email', () => {
+    const result = User.create({
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      email: 'invalid-email',
+      tenantId: '456e7890-e89b-12d3-a456-426614174000'
+    });
+    
+    expect(result.isErr()).toBe(true);
+  });
+});
+```
+
+## Security Considerations
+
+### Data Validation
+- Validate ALL input data with Zod schemas
+- Sanitize strings to prevent injection attacks
+- Use UUID validation for entity IDs
+- Validate tenant ID format and existence
+
+### Privacy
+- Never log sensitive personal information
+- Use data masking in error messages
+- Implement proper data classification
+
+## Performance Guidelines
+
+### Memory Efficiency
+- Use readonly properties where possible
+- Avoid unnecessary object creation
+- Use primitive types for performance-critical code
+
+### Computation
+- Keep business logic simple and fast
+- Avoid complex calculations in constructors
+- Use memoization for expensive operations
+
+## Common Mistakes to Avoid
+
+### ❌ NEVER DO THIS
+```typescript
+// Importing React in entity
+import React from 'react';
+
+// Database access in entity
+import { supabase } from '@repo/infrastructure';
+
+// UI components in entity
+import { Button } from '@repo/ui';
+
+// External API calls
+import fetch from 'node-fetch';
+```
+
+### ✅ ALWAYS DO THIS
+```typescript
+// Pure validation and business logic
+import { z } from 'zod';
+import { ok, err, type Result } from '@repo/shared';
+
+// Immutable entity design
+export class Entity {
+  constructor(public readonly id: string) {}
+}
+```
+
+This layer is the foundation of clean architecture - keep it pure, simple, and focused on business logic only.
