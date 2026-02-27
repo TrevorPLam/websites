@@ -1,17 +1,16 @@
 #!/usr/bin/env tsx
 
 /**
- * Environment Verification Script
- * 
- * Purpose: Pre-flight check for development environment
- * Validates all critical dependencies and configurations
- * 
- * Usage: pnpm verify
+ * @file scripts/verify-env.ts
+ * @summary Pre-flight check for development environment validation.
+ * @description Validates all critical dependencies and configurations before development.
+ * @security Handles environment variables; no secrets exposed in logs.
+ * @adr none
+ * @requirements INFRA-001
  */
 
 import { execSync } from 'child_process';
 import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
 
 interface ValidationResult {
   success: boolean;

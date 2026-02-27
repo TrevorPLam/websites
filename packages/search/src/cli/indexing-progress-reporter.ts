@@ -1,3 +1,12 @@
+/**
+ * @file packages/search/src/cli/indexing-progress-reporter.ts
+ * @summary Reports progress and statistics for search indexing operations.
+ * @description Tracks file processing, chunk generation, and indexing completion status.
+ * @security Reads file system and executes commands; no sensitive data exposure.
+ * @adr none
+ * @requirements SEARCH-001
+ */
+
 import { execSync } from "child_process";
 import { RepositorySearchService } from "../search-service";
 import * as fs from "fs";

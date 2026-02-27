@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * Semantic Chunking Script for 2026 Bimodal Documentation Standards
- * 
- * Splits large markdown files into 800-1200 token chunks while maintaining
- * semantic coherence and context for AI retrieval optimization.
+ * @file scripts/semantic-chunker.mjs
+ * @summary Splits large markdown files into 800-1200 token chunks for AI optimization.
+ * @description Maintains semantic coherence while splitting documentation for AI retrieval.
+ * @security Reads and writes files; processes content but no sensitive data exposure.
+ * @adr none
+ * @requirements AI-002
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'fs';

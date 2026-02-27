@@ -95,7 +95,7 @@ export class EnhancedAIAgent {
       plan,
       historicalData: await this.getHistoricalContext(task),
       domainKnowledge: await this.getDomainKnowledge(task.domain),
-      userPreferences: await this.getUserPreferences(task.userId),
+      userPreferences: await this.getUserPreferences(task.userId || 'anonymous'),
       systemState: await this.getSystemState(),
       environmentalFactors: await this.getEnvironmentalFactors()
     };

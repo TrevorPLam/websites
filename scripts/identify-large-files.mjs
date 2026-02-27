@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
 /**
- * Identify files exceeding 1200 tokens for semantic chunking
+ * @file scripts/identify-large-files.mjs
+ * @summary Identifies files exceeding 1200 tokens for semantic chunking.
+ * @description Scans repository for large files that need to be split for AI processing.
+ * @security Reads file system only; no sensitive data exposed.
+ * @adr none
+ * @requirements AI-001
  */
 
 import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, extname } from 'path';
+import { extname, join } from 'path';
 
 function countTokens(text) {
   // Simple token approximation (roughly 4 characters per token)

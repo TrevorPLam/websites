@@ -1,24 +1,16 @@
 #!/usr/bin/env tsx
 
 /**
- * Developer Onboarding & Environment Setup Script
- * 
- * Purpose: One-command setup for new developers
- * Target: 5-minute clone-to-running experience
- * 
- * Tasks:
- * - Environment validation with t3-env
- * - Dependency installation
- * - Database setup and seeding
- * - Environment variable validation
- * - Development server startup verification
- * 
- * Usage: pnpm setup
+ * @file scripts/setup-dev.ts
+ * @summary One-command setup for new developer onboarding.
+ * @description Automates environment validation, dependency installation, and database setup.
+ * @security Handles environment variables and executes system commands; validates inputs.
+ * @adr none
+ * @requirements INFRA-002
  */
 
 import { execSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
 import { createInterface } from 'readline';
 
 const rl = createInterface({

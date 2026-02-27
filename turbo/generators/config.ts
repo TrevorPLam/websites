@@ -67,6 +67,9 @@ function isValidClientName(value: string): true | string {
 }
 
 export default function registerGenerators(plop: PlopLike): void {
+  // Register FSD slice generator
+  registerFsdSliceGenerator(plop);
+
   plop.setGenerator('new-client', {
     description: 'Scaffold a client from clients/testing-not-a-client',
     prompts: [
