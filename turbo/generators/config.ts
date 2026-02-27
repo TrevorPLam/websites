@@ -1,9 +1,19 @@
 /**
  * @file turbo/generators/config.ts
+ * @summary Turbo generator configuration for FSD slice and client scaffolding.
+ * @description Registers generators for creating FSD-compliant slices and new client projects.
+ * @security No sensitive data handling; read-only template processing.
+ * @adr docs/architecture/decisions/ADR-003-turbo-generators.md
+ * @requirements TURBO-001, FSD-GENERATOR-001
+ */
+/**
+ * @file turbo/generators/config.ts
  * Task: [6.8a] turbo gen new-client
  *
  * Purpose: Register a `new-client` generator for `turbo gen`.
  */
+
+import registerFsdSliceGenerator from './fsd-slice/generator';
 
 type Prompt = {
   type: 'input' | 'list';

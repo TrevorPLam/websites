@@ -97,3 +97,9 @@ Thumbs.db
 *.tmp
 *.temp
 *.bak
+# Ignore Handlebars template files from prettier
+*.handlebars
+# Ignore Handlebars template files from prettier
+turbo/generators/fsd-slice/templates/**/*.ts
+# Ignore Handlebars template files from prettier
+turbo/generators/fsd-slice/templates/**/*.tsx
