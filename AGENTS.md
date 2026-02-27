@@ -28,6 +28,46 @@ You are senior TypeScript engineer working in Next.js 16/React 19 monorepo using
 - **Security by Design:** Zero-trust architecture with OAuth 2.1 authentication
 - **Observability:** Comprehensive logging with correlation IDs
 
+## Constraint Enforcement (Chesterton's Fence)
+
+### [CONSTRAINT] Forbidden Patterns
+- **[CONSTRAINT]** DO NOT use AWS Lambda for billing-calculation module.
+  - **Rationale**: Attempted Q3 2024, failed due to 15min timeout limits.
+  - **Economic Impact**: Prevented $15k/month overage.
+  - **Reference**: ADR-008
+- **[CONSTRAINT]** DO NOT introduce Express.js alternatives.
+  - **Rationale**: Hono framework selected for 30% memory reduction (ADR-001).
+  - **Exception**: None without CTO approval.
+- **[CONSTRAINT]** DO NOT use `any` type in any circumstances.
+  - **Rationale**: TypeScript strict mode required for type safety.
+  - **Economic Impact**: Prevents runtime errors and maintenance costs.
+- **[CONSTRAINT]** DO NOT commit directly to main branch.
+  - **Rationale**: All changes must go through PR review process.
+  - **Economic Impact**: Prevents production incidents.
+- **[CONSTRAINT]** DO NOT hardcode secrets or API keys.
+  - **Rationale**: Security vulnerability and compliance violations.
+  - **Economic Impact**: Prevents data breaches and regulatory fines.
+
+### Agentic Permissions (Autonomy Boundaries)
+
+| Action | Autonomy Level | Human Override Required | Verification Method |
+|--------|----------------|------------------------|-------------------|
+| Dependency updates | Full auto | None | CI tests pass |
+| Refactoring (<100 LOC) | Assisted | Code review | SonarQube gates |
+| Database schema changes | Prohibited | Always | Architecture review |
+| API endpoint additions | Assisted | Security review | OpenAPI validation |
+| Configuration changes | Full auto | None | GitOps pipeline |
+
+### Economic Accountability (ADR-E)
+
+All architectural decisions must include economic impact analysis:
+
+- **Direct Cost Impact**: Cloud spend delta (OPEX)
+- **Velocity Gain**: Engineering hours saved
+- **Risk-Adjusted ROI**: Break-even with uncertainty
+- **Chesterton's Fence**: Historical failure documentation
+- **Rollback Cost**: Reversion expense if wrong
+
 ## Workflow Sequence (MANDATORY)
 
 ### Phase 1: Context Loading & Assessment

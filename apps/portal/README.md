@@ -1,3 +1,51 @@
+---
+doc_id: "PORTAL-2026-APP-README"
+doc_version: "2.0.0"
+last_updated: "2026-02-27"
+next_review: "2026-05-27"
+document_owner: "portal-team@marketing-websites.com"
+
+# Bimodal Classification
+ai_readiness_score: 0.89
+human_ttv_seconds: 18
+bimodal_grade: "A"
+
+# Technical Context
+type: application
+language: typescript
+framework: nextjs
+runtime: node-22
+complexity: enterprise
+
+# Compliance & Governance
+compliance_frameworks:
+- "SOC2-Type-II"
+- "GDPR-Article-32"
+- "ISO-27001"
+- "EU-AI-Act-High-Risk"
+risk_classification: "medium-risk"
+data_governance: "PII-Encrypted"
+
+# AI Retrieval Optimization
+rag_optimization:
+  chunk_strategy: "recursive-headers"
+  chunk_size: 800
+  chunk_overlap: 120
+  late_chunking: true
+  embedding_model: "text-embedding-3-large"
+  hybrid_search: true
+
+# Executable Documentation
+executable_status: true
+ci_validation: true
+last_executed: "2026-02-27T13:45:00Z"
+
+# Maintenance & Quality
+maintenance_mode: "active"
+stale_threshold_days: 90
+audit_trail: "github-actions"
+---
+
 # apps/portal
 
 Client portal application for multi-tenant SaaS platform.
