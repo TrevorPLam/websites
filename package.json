@@ -87,6 +87,7 @@
     "test:integration:foundation": "node scripts/integration-test.mjs foundation",
     "test:integration:automation": "node scripts/integration-test.mjs automation",
     "test:integration:intelligence": "node scripts/integration-test.mjs intelligence",
+    "test:load": "k6 run scripts/performance/k6-golden-path.js",
     "deploy:setup": "node scripts/deployment-setup.mjs setup",
     "deploy:production": "./deploy/scripts/deploy.sh production",
     "deploy:staging": "./deploy/scripts/deploy.sh staging",
