@@ -1,4 +1,3 @@
-Here is the research-validated, enhanced version incorporating 2026 emerging patterns, verified claims, and critical infrastructure requirements.
 The Bimodal README: Human-Optimized, AI-Ready Documentation (February 2026)
 Executive Summary
 By early 2026, the humble README has transformed into retrieval infrastructure serving two distinct audiences: human developers scanning for value in under 30 seconds, and AI systems (RAG pipelines, coding agents, enterprise knowledge graphs) that index, chunk, and query this document thousands of times over its lifecycle .
