@@ -1,134 +1,38 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { SearchService } from "../search-service";
+import React, { useState, useEffect } from "react";
+import { RepositorySearchService } from "../search-service";
 import { SearchQuery, SearchResult } from "../types";
 
-interface SearchInterfaceProps {
-  initialQuery?: string;
-  onResults?: (results: SearchResult[]) => void;
-  className?: string;
-}
-
-interface SearchState {
-  query: string;
-  results: SearchResult[];
-  loading: boolean;
-  filters: SearchFilters;
-  options: SearchOptions;
-  error: string | null;
-  stats: {
-    totalSearches: number;
-    averageLatency: number;
-    successRate: number;
-    popularQueries: string[];
-  };
-}
-
-export const SearchInterface: React.FC<SearchInterfaceProps> = ({
-  initialQuery = "",
-  onResults,
-  className = ""
-}) => {
-  const [state, setState] = useState<SearchState>({
-    query: initialQuery,
-    results: [],
-    loading: false,
-    filters: {},
-    options: {
-      top: 10,
-      threshold: 0.5,
-      includeContext: false
-    },
-    error: null,
-    stats: {
-      totalSearches: 0,
-      averageLatency: 0,
-      successRate: 0,
-      popularQueries: []
-    }
+export const SearchInterface: React.FC = ({ className = "" }) => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useState<SearchFilters>({});
+  const [options, setOptions] = useState<SearchOptions>({
+    top: 10,
+    threshold: 0.5,
+    includeContext: false
   });
 
-  const searchService = new SearchService();
+  const searchService = new RepositorySearchService();
 
-  const handleSearch = useCallback(async (query: string, filters?: SearchFilters, options?: SearchOptions) => {
-    setState({ loading: true, error: null });
+  const handleSearch = async () => {
+    if (!query.trim()) return;
+    
+    setLoading(true);
     
     try {
-      const startTime = Date.now();
-      const results = await searchService.search({
+      const searchResults = await searchService.search({
         query,
         filters,
         options
       });
       
-      const duration = Date.now() - startTime;
-      
-      setState({
-        results,
-        loading: false,
-        error: null,
-        stats: {
-          totalSearches: state.stats.totalSearches + 1,
-          averageLatency: (state.stats.averageLatency * 0.8 + duration * 0.2) / (state.stats.totalSearches + 1),
-          successRate: 100, // All searches succeed in our implementation
-          popularQueries: updatePopularQueries(query, state.stats.popularQueries)
-        }
-      });
+      setResults(searchResults);
     } catch (error) {
-      setState({ loading: false, error: error.message });
+      console.error("Search error:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [searchService, filters, options]);
-
-  const updatePopularQueries = useCallback((query: string) => {
-    setState(prev => ({
-      ...prev,
-      stats: {
-        ...prev.stats,
-        popularQueries: updatePopularQueries(query, prev.stats.popularQueries)
-      }
-    });
-  }, []);
-
-  const updatePopularQueries = (query: string, current: string[]) => {
-    const index = current.indexOf(query);
-    if (index === -1) {
-      return [...current, query];
-    }
-    return [...current.slice(0, index), query];
-  };
-
-  const handleFilterChange = (filterType: string, value: string) => {
-    setState(prev => ({
-      ...prev,
-      filters: {
-        ...prev.filters,
-        [filterType]: value
-      }
-    }));
-  };
-
-  const handleOptionChange = (optionType: string, value: string) => {
-    setState(prev => ({
-      ...prev,
-      options: {
-        ...prev.options,
-        [optionType]: optionType === "top" ? parseInt(value) : prev.options[optionType]
-      }
-    }));
-  };
-
-  const handleContextToggle = () => {
-    setState(prev => ({
-      ...prev,
-      options: {
-        ...prev.options,
-        includeContext: !prev.options.includeContext
-      }
-    }));
-  };
-
-  const handleResultClick = (result: SearchResult) => {
-    // Handle result click for navigation
-    console.log("Navigate to:", result.filePath, ":", result.startLine);
   };
 
   return (
@@ -137,17 +41,17 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
         <div className="search-input-container">
           <input
             type="text"
-            value={state.query}
-            onChange={(e) => setState({ query: e.target.value })}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search repository..."
             className="search-input"
           />
           <button
-            onClick={() => handleSearch(state.query)}
-            disabled={state.loading}
+            onClick={handleSearch}
+            disabled={loading}
             className="search-button"
           >
-            {state.loading ? "Searching..." : "Search"}
+            {loading ? "Searching..." : "Search"}
           </button>
         </div>
         
@@ -156,15 +60,17 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
             <label htmlFor="fileTypeFilter">File Type:</label>
             <select
               id="fileTypeFilter"
-              value={state.filters.fileTypes?.[0] || ""}
-              onChange={(e) => handleFilterChange("fileTypes", e.target.value)}
+              value={filters.fileTypes?.[0] || ""}
+              onChange={(e) => setFilters({
+                ...filters,
+                fileTypes: e.target.value ? [e.target.value] : []
+              })}
               className="filter-select"
             >
               <option value="">All Types</option>
               <option value="*.ts">TypeScript</option>
               <option value="*.tsx">TypeScript React</option>
               <option value="*.js">JavaScript</option>
-              <option value="*.jsx">JavaScript React</option>
             </select>
           </div>
           
@@ -172,8 +78,11 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
             <label htmlFor="packageFilter">Packages:</label>
             <input
               type="text"
-              value={state.filters.packages?.join(", ") || ""}
-              onChange={(e) => handleFilterChange("packages", e.target.value)}
+              value={filters.packages?.join(", ") || ""}
+              onChange={(e) => setFilters({
+                ...filters,
+                packages: e.target.value ? e.target.value.split(",") : []
+              })}
               placeholder="Comma-separated packages"
               className="filter-input"
             />
@@ -183,8 +92,11 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
             <label htmlFor="typeFilter">Types:</label>
             <select
               id="typeFilter"
-              value={state.filters.types?.join(", ") || ""}
-              onChange={(e) => handleFilterChange("types", e.target.value)}
+              value={filters.types?.join(", ") || ""}
+              onChange={(e) => setFilters({
+                ...filters,
+                types: e.target.value ? e.target.value.split(",") : []
+              })}
               className="filter-select"
             >
               <option value="">All Types</option>
@@ -201,8 +113,11 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
             <label htmlFor="topResults">Results:</label>
             <input
               type="number"
-              value={state.options.top}
-              onChange={(e) => handleOptionChange("top", e.target.value)}
+              value={options.top}
+              onChange={(e) => setOptions({
+                ...options,
+                top: parseInt(e.target.value)
+              })}
               min="1"
               max="100"
               className="option-input"
@@ -213,8 +128,11 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
             <label htmlFor="threshold">Threshold:</label>
             <input
               type="number"
-              value={state.options.threshold}
-              onChange={(e) => handleOptionChange("threshold", e.target.value)}
+              value={options.threshold}
+              onChange={(e) => setOptions({
+                ...options,
+                threshold: parseFloat(e.target.value)
+              })}
               min="0"
               max="1"
               step="0.1"
@@ -226,43 +144,39 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
             <label htmlFor="includeContext">Context:</label>
             <input
               type="checkbox"
-              checked={state.options.includeContext}
-              onChange={handleContextToggle}
+              checked={options.includeContext}
+              onChange={(e) => setOptions({
+                ...options,
+                includeContext: e.target.checked
+              })}
               className="option-checkbox"
             />
           </div>
         </div>
       </div>
       
-      {state.error && (
-        <div className="error-message">
-          <h3>❌ Search Error</h3>
-          <p>{state.error}</p>
-        </div>
-      )}
-      
       <div className="search-results">
-        {state.loading && (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-            <p>Searching repository...</p>
-          </div>
+        {loading && (
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Searching repository...</p>
+        </div>
         )}
         
-        {!state.loading && state.results.length === 0 && state.query && (
+        {!loading && results.length === 0 && query && (
           <div className="no-results">
-            <p>No results found for "{state.query}"</p>
+            <p>No results found for "{query}"</p>
             <p>Try different keywords or adjust filters</p>
           </div>
         )}
         
-        {!state.loading && state.results.length > 0 && (
+        {!loading && results.length > 0 && (
           <div className="results-list">
-            {state.results.map((result, index) => (
+            {results.map((result, index) => (
               <div
                 key={result.id}
                 className="search-result"
-                onClick={() => handleResultClick(result)}
+                onClick={() => console.log("Navigate to:", result.filePath, ":", result.startLine)}
               >
                 <div className="result-header">
                   <h3>{result.filePath}</h3>
@@ -276,32 +190,11 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
                 <div className="result-content">
                   <pre>{result.snippet}</pre>
                 </div>
-                {state.options.includeContext && result.context && (
-                  <div className="result-context">
-                    {result.context.before && (
-                    <div className="context-section">
-                      <h4>Before:</h4>
-                      <pre>{result.context.before}</pre>
-                    </div>
-                  )}
-                  {result.context.after && (
-                    <div className="context-section">
-                      <h4>After:</h4>
-                      <pre>{result.context.after}</pre>
-                    </div>
-                  )}
-                </div>
               </div>
             ))}
-            
-            {state.results.length > 0 && (
-              <div className="results-summary">
-                <p>Found {state.results.length} results in {Date.now() - state.startTime}ms}</p>
-              </div>
-            )}
           </div>
-        </div>
-      );
+        )}
+      </div>
     </div>
   );
 };

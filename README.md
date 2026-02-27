@@ -1,3 +1,37 @@
+---
+name: marketing-websites-monorepo
+description: |
+  **MULTI-TENANT MARKETING PLATFORM** - Production-ready monorepo for 1000+ client websites.
+  USE FOR: Enterprise marketing websites, multi-tenant SaaS, scalable web platforms.
+  DO NOT USE FOR: Simple static sites - use Next.js standalone instead.
+  INVOKES: nextjs, react, typescript, supabase, vercel.
+meta:
+  version: "2.1.0"
+  author: "cascade-ai"
+  category: "monorepo"
+  architecture: "feature-sliced-design-v2.1"
+  framework: "nextjs-16"
+  language: "typescript"
+  database: "supabase"
+  deployment: "vercel"
+  multi_tenant: true
+  enterprise_ready: true
+  performance_optimized: true
+  security_compliant: true
+  ai_optimized: true
+  bimodal_documentation: true
+  human_ttv: "excellent"
+  ai_readiness: "optimized"
+rag_optimization: "enabled"
+compliance:
+  frameworks: ["fsd-v2.1", "nextjs-16", "react-19"]
+  security: ["oauth-2.1", "rls", "tenant-isolation"]
+  performance: ["core-web-vitals", "lcp-2.5s", "inp-200ms", "cls-0.1"]
+  accessibility: ["wcag-2.2-aa", "screen-reader"]
+  testing: ["unit", "integration", "e2e"]
+  documentation: ["bimodal", "ai-optimized", "semantic-chunking"]
+---
+
 # 🚀 Marketing Websites Monorepo
 
 > **Multi-tenant, multi-site Next.js 16 marketing platform with Feature-Sliced Design v2.1**

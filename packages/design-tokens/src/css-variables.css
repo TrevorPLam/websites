@@ -1,0 +1,520 @@
+/**
+ * Design Tokens CSS Variables
+ * 
+ * Generated from design tokens for use in CSS and CSS-in-JS
+ * All values use HSL format for optimal CSS custom property usage
+ */
+
+/* ==========================================================================
+   COLOR TOKENS
+   ========================================================================== */
+
+:root {
+  /* Base colors */
+  --color-white: 0 0% 100%;
+  --color-black: 0 0% 0%;
+  
+  /* Primary brand colors */
+  --color-primary-50: 174 85% 97%;
+  --color-primary-100: 174 85% 94%;
+  --color-primary-200: 174 85% 87%;
+  --color-primary-300: 174 85% 78%;
+  --color-primary-400: 174 85% 65%;
+  --color-primary-500: 174 85% 33%;
+  --color-primary-600: 174 85% 28%;
+  --color-primary-700: 174 85% 23%;
+  --color-primary-800: 174 85% 18%;
+  --color-primary-900: 174 85% 13%;
+  --color-primary-950: 174 85% 8%;
+  
+  /* Secondary brand colors */
+  --color-secondary-50: 220 20% 98%;
+  --color-secondary-100: 220 20% 95%;
+  --color-secondary-200: 220 20% 90%;
+  --color-secondary-300: 220 20% 82%;
+  --color-secondary-400: 220 20% 70%;
+  --color-secondary-500: 220 20% 14%;
+  --color-secondary-600: 220 20% 12%;
+  --color-secondary-700: 220 20% 10%;
+  --color-secondary-800: 220 20% 8%;
+  --color-secondary-900: 220 20% 6%;
+  --color-secondary-950: 220 20% 4%;
+  
+  /* Neutral colors */
+  --color-gray-50: 220 14% 98%;
+  --color-gray-100: 220 14% 96%;
+  --color-gray-200: 220 14% 92%;
+  --color-gray-300: 220 14% 88%;
+  --color-gray-400: 220 14% 78%;
+  --color-gray-500: 220 14% 66%;
+  --color-gray-600: 220 14% 55%;
+  --color-gray-700: 220 14% 46%;
+  --color-gray-800: 220 14% 39%;
+  --color-gray-900: 220 14% 33%;
+  --color-gray-950: 220 14% 26%;
+  
+  /* Success colors */
+  --color-success-50: 142 76% 96%;
+  --color-success-100: 142 76% 92%;
+  --color-success-200: 142 76% 84%;
+  --color-success-300: 142 76% 72%;
+  --color-success-400: 142 76% 58%;
+  --color-success-500: 142 76% 36%;
+  --color-success-600: 142 76% 31%;
+  --color-success-700: 142 76% 26%;
+  --color-success-800: 142 76% 21%;
+  --color-success-900: 142 76% 16%;
+  --color-success-950: 142 76% 11%;
+  
+  /* Warning colors */
+  --color-warning-50: 38 92% 96%;
+  --color-warning-100: 38 92% 92%;
+  --color-warning-200: 38 92% 84%;
+  --color-warning-300: 38 92% 72%;
+  --color-warning-400: 38 92% 58%;
+  --color-warning-500: 38 92% 36%;
+  --color-warning-600: 38 92% 31%;
+  --color-warning-700: 38 92% 26%;
+  --color-warning-800: 38 92% 21%;
+  --color-warning-900: 38 92% 16%;
+  --color-warning-950: 38 92% 11%;
+  
+  /* Error colors */
+  --color-error-50: 0 72% 96%;
+  --color-error-100: 0 72% 92%;
+  --color-error-200: 0 72% 84%;
+  --color-error-300: 0 72% 72%;
+  --color-error-400: 0 72% 58%;
+  --color-error-500: 0 72% 38%;
+  --color-error-600: 0 72% 33%;
+  --color-error-700: 0 72% 28%;
+  --color-error-800: 0 72% 23%;
+  --color-error-900: 0 72% 18%;
+  --color-error-950: 0 72% 13%;
+  
+  /* Info colors */
+  --color-info-50: 214 100% 97%;
+  --color-info-100: 214 100% 94%;
+  --color-info-200: 214 100% 87%;
+  --color-info-300: 214 100% 78%;
+  --color-info-400: 214 100% 65%;
+  --color-info-500: 214 100% 50%;
+  --color-info-600: 214 100% 45%;
+  --color-info-700: 214 100% 40%;
+  --color-info-800: 214 100% 35%;
+  --color-info-900: 214 100% 30%;
+  --color-info-950: 214 100% 25%;
+}
+
+/* ==========================================================================
+   SEMANTIC COLOR VARIABLES
+   ========================================================================== */
+
+:root {
+  /* Background colors */
+  --color-background: var(--color-white);
+  --color-foreground: var(--color-gray-900);
+  
+  /* Surface colors */
+  --color-surface: var(--color-gray-50);
+  --color-surface-variant: var(--color-gray-100);
+  --color-surface-highlight: var(--color-primary-50);
+  
+  /* Primary colors */
+  --color-primary: var(--color-primary-500);
+  --color-primary-foreground: var(--color-white);
+  --color-primary-hover: var(--color-primary-600);
+  --color-primary-active: var(--color-primary-700);
+  
+  /* Secondary colors */
+  --color-secondary: var(--color-secondary-500);
+  --color-secondary-foreground: var(--color-white);
+  --color-secondary-hover: var(--color-secondary-600);
+  --color-secondary-active: var(--color-secondary-700);
+  
+  /* Muted colors */
+  --color-muted: var(--color-gray-100);
+  --color-muted-foreground: var(--color-gray-500);
+  
+  /* Accent colors */
+  --color-accent: var(--color-primary-100);
+  --color-accent-foreground: var(--color-primary-900);
+  --color-accent-hover: var(--color-primary-200);
+  
+  /* Border colors */
+  --color-border: var(--color-gray-200);
+  --color-border-hover: var(--color-gray-300);
+  --color-border-focus: var(--color-primary-500);
+  
+  /* Input colors */
+  --color-input: var(--color-gray-100);
+  --color-input-foreground: var(--color-gray-900);
+  --color-input-border: var(--color-gray-300);
+  --color-input-border-focus: var(--color-primary-500);
+  
+  /* Ring colors */
+  --color-ring: var(--color-primary-500);
+  --color-ring-offset: var(--color-white);
+  
+  /* Status colors */
+  --color-success: var(--color-success-500);
+  --color-success-foreground: var(--color-white);
+  --color-warning: var(--color-warning-500);
+  --color-warning-foreground: var(--color-white);
+  --color-error: var(--color-error-500);
+  --color-error-foreground: var(--color-white);
+  --color-info: var(--color-info-500);
+  --color-info-foreground: var(--color-white);
+  
+  /* Text colors */
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-muted: var(--color-gray-500);
+  --color-text-disabled: var(--color-gray-400);
+  
+  /* Link colors */
+  --color-link: var(--color-primary-600);
+  --color-link-visited: var(--color-primary-700);
+  --color-link-hover: var(--color-primary-800);
+  --color-link-active: var(--color-primary-900);
+}
+
+/* ==========================================================================
+   TYPOGRAPHY TOKENS
+   ========================================================================== */
+
+:root {
+  /* Font families */
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-serif: 'Georgia', serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  --font-family-display: 'Inter Display', 'Inter', system-ui, sans-serif;
+  
+  /* Font sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6rem;
+  --font-size-9xl: 8rem;
+  
+  /* Line heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
+  /* Font weights */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+  
+  /* Letter spacing */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+}
+
+/* ==========================================================================
+   SPACING TOKENS
+   ========================================================================== */
+
+:root {
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0-5: 0.125rem;
+  --spacing-1: 0.25rem;
+  --spacing-1-5: 0.375rem;
+  --spacing-2: 0.5rem;
+  --spacing-2-5: 0.625rem;
+  --spacing-3: 0.75rem;
+  --spacing-3-5: 0.875rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-7: 1.75rem;
+  --spacing-8: 2rem;
+  --spacing-9: 2.25rem;
+  --spacing-10: 2.5rem;
+  --spacing-11: 2.75rem;
+  --spacing-12: 3rem;
+  --spacing-14: 3.5rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-28: 7rem;
+  --spacing-32: 8rem;
+  --spacing-36: 9rem;
+  --spacing-40: 10rem;
+  --spacing-44: 11rem;
+  --spacing-48: 12rem;
+  --spacing-52: 13rem;
+  --spacing-56: 14rem;
+  --spacing-60: 15rem;
+  --spacing-64: 16rem;
+  --spacing-72: 18rem;
+  --spacing-80: 20rem;
+  --spacing-96: 24rem;
+}
+
+/* ==========================================================================
+   BORDER RADIUS TOKENS
+   ========================================================================== */
+
+:root {
+  --border-radius-none: 0;
+  --border-radius-px: 1px;
+  --border-radius-sm: 0.125rem;
+  --border-radius-md: 0.25rem;
+  --border-radius-lg: 0.375rem;
+  --border-radius-xl: 0.5rem;
+  --border-radius-2xl: 0.75rem;
+  --border-radius-3xl: 1rem;
+  --border-radius-full: 9999px;
+}
+
+/* ==========================================================================
+   SHADOW TOKENS
+   ========================================================================== */
+
+:root {
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  
+  /* Colored shadows */
+  --shadow-primary: 0 4px 6px -1px rgb(174 85% 33% / 0.1), 0 2px 4px -2px rgb(174 85% 33% / 0.1);
+  --shadow-success: 0 4px 6px -1px rgb(142 76% 36% / 0.1), 0 2px 4px -2px rgb(142 76% 36% / 0.1);
+  --shadow-warning: 0 4px 6px -1px rgb(38 92% 36% / 0.1), 0 2px 4px -2px rgb(38 92% 36% / 0.1);
+  --shadow-error: 0 4px 6px -1px rgb(0 72% 38% / 0.1), 0 2px 4px -2px rgb(0 72% 38% / 0.1);
+}
+
+/* ==========================================================================
+   Z-INDEX TOKENS
+   ========================================================================== */
+
+:root {
+  --z-index-hide: -1;
+  --z-index-auto: auto;
+  --z-index-base: 0;
+  --z-index-docked: 10;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1100;
+  --z-index-banner: 1200;
+  --z-index-overlay: 1300;
+  --z-index-modal: 1400;
+  --z-index-popover: 1500;
+  --z-index-skip-link: 1600;
+  --z-index-toast: 1700;
+  --z-index-tooltip: 1800;
+}
+
+/* ==========================================================================
+   ANIMATION TOKENS
+   ========================================================================== */
+
+:root {
+  /* Animation durations */
+  --animation-duration-75: 75ms;
+  --animation-duration-100: 100ms;
+  --animation-duration-150: 150ms;
+  --animation-duration-200: 200ms;
+  --animation-duration-300: 300ms;
+  --animation-duration-500: 500ms;
+  --animation-duration-700: 700ms;
+  --animation-duration-1000: 1000ms;
+  
+  /* Animation timing functions */
+  --animation-ease-linear: linear;
+  --animation-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --animation-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --animation-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   BREAKPOINT TOKENS
+   ========================================================================== */
+
+:root {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* ==========================================================================
+   COMPONENT TOKENS
+   ========================================================================== */
+
+:root {
+  /* Button tokens */
+  --button-height-sm: 2rem;
+  --button-height-md: 2.5rem;
+  --button-height-lg: 3rem;
+  --button-height-xl: 3.5rem;
+  
+  --button-padding-sm: 0.5rem 1rem;
+  --button-padding-md: 0.75rem 1.5rem;
+  --button-padding-lg: 1rem 2rem;
+  --button-padding-xl: 1.25rem 2.5rem;
+  
+  --button-font-size-sm: 0.875rem;
+  --button-font-size-md: 1rem;
+  --button-font-size-lg: 1.125rem;
+  --button-font-size-xl: 1.25rem;
+  
+  --button-border-radius-sm: 0.375rem;
+  --button-border-radius-md: 0.5rem;
+  --button-border-radius-lg: 0.75rem;
+  --button-border-radius-xl: 1rem;
+  
+  /* Input tokens */
+  --input-height-sm: 2rem;
+  --input-height-md: 2.5rem;
+  --input-height-lg: 3rem;
+  
+  --input-padding-sm: 0.5rem 0.75rem;
+  --input-padding-md: 0.75rem 1rem;
+  --input-padding-lg: 1rem 1.25rem;
+  
+  --input-font-size-sm: 0.875rem;
+  --input-font-size-md: 1rem;
+  --input-font-size-lg: 1.125rem;
+  
+  --input-border-radius-sm: 0.375rem;
+  --input-border-radius-md: 0.5rem;
+  --input-border-radius-lg: 0.75rem;
+  
+  /* Card tokens */
+  --card-padding-sm: 1rem;
+  --card-padding-md: 1.5rem;
+  --card-padding-lg: 2rem;
+  
+  --card-border-radius-sm: 0.5rem;
+  --card-border-radius-md: 0.75rem;
+  --card-border-radius-lg: 1rem;
+  
+  /* Container tokens */
+  --container-max-width-sm: 36rem;
+  --container-max-width-md: 48rem;
+  --container-max-width-lg: 64rem;
+  --container-max-width-xl: 80rem;
+  --container-max-width-2xl: 96rem;
+  
+  --container-padding-sm: 1rem;
+  --container-padding-md: 2rem;
+  --container-padding-lg: 4rem;
+  --container-padding-xl: 6rem;
+  
+  /* Navigation tokens */
+  --navigation-height-sm: 3rem;
+  --navigation-height-md: 4rem;
+  --navigation-height-lg: 5rem;
+  
+  --navigation-padding-sm: 0 1rem;
+  --navigation-padding-md: 0 2rem;
+  --navigation-padding-lg: 0 4rem;
+}
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/* Background utilities */
+.bg-white { background-color: hsl(var(--color-white)); }
+.bg-black { background-color: hsl(var(--color-black)); }
+.bg-primary { background-color: hsl(var(--color-primary)); }
+.bg-secondary { background-color: hsl(var(--color-secondary)); }
+.bg-success { background-color: hsl(var(--color-success)); }
+.bg-warning { background-color: hsl(var(--color-warning)); }
+.bg-error { background-color: hsl(var(--color-error)); }
+.bg-info { background-color: hsl(var(--color-info)); }
+
+/* Text utilities */
+.text-white { color: hsl(var(--color-white)); }
+.text-black { color: hsl(var(--color-black)); }
+.text-primary { color: hsl(var(--color-primary)); }
+.text-secondary { color: hsl(var(--color-secondary)); }
+.text-success { color: hsl(var(--color-success)); }
+.text-warning { color: hsl(var(--color-warning)); }
+.text-error { color: hsl(var(--color-error)); }
+.text-info { color: hsl(var(--color-info)); }
+
+/* Border utilities */
+.border-primary { border-color: hsl(var(--color-primary)); }
+.border-secondary { border-color: hsl(var(--color-secondary)); }
+.border-success { border-color: hsl(var(--color-success)); }
+.border-warning { border-color: hsl(var(--color-warning)); }
+.border-error { border-color: hsl(var(--color-error)); }
+.border-info { border-color: hsl(var(--color-info)); }
+
+/* Shadow utilities */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow { box-shadow: var(--shadow); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+.shadow-2xl { box-shadow: var(--shadow-2xl); }
+.shadow-inner { box-shadow: var(--shadow-inner); }
+
+/* Spacing utilities */
+.p-0 { padding: var(--spacing-0); }
+.p-1 { padding: var(--spacing-1); }
+.p-2 { padding: var(--spacing-2); }
+.p-3 { padding: var(--spacing-3); }
+.p-4 { padding: var(--spacing-4); }
+.p-5 { padding: var(--spacing-5); }
+.p-6 { padding: var(--spacing-6); }
+.p-8 { padding: var(--spacing-8); }
+.p-10 { padding: var(--spacing-10); }
+.p-12 { padding: var(--spacing-12); }
+.p-16 { padding: var(--spacing-16); }
+.p-20 { padding: var(--spacing-20); }
+.p-24 { padding: var(--spacing-24); }
+
+.m-0 { margin: var(--spacing-0); }
+.m-1 { margin: var(--spacing-1); }
+.m-2 { margin: var(--spacing-2); }
+.m-3 { margin: var(--spacing-3); }
+.m-4 { margin: var(--spacing-4); }
+.m-5 { margin: var(--spacing-5); }
+.m-6 { margin: var(--spacing-6); }
+.m-8 { margin: var(--spacing-8); }
+.m-10 { margin: var(--spacing-10); }
+.m-12 { margin: var(--spacing-12); }
+.m-16 { margin: var(--spacing-16); }
+.m-20 { margin: var(--spacing-20); }
+.m-24 { margin: var(--spacing-24); }
+
+/* Border radius utilities */
+.rounded-none { border-radius: var(--border-radius-none); }
+.rounded-sm { border-radius: var(--border-radius-sm); }
+.rounded { border-radius: var(--border-radius-md); }
+.rounded-md { border-radius: var(--border-radius-lg); }
+.rounded-lg { border-radius: var(--border-radius-xl); }
+.rounded-xl { border-radius: var(--border-radius-2xl); }
+.rounded-2xl { border-radius: var(--border-radius-3xl); }
+.rounded-full { border-radius: var(--border-radius-full); }

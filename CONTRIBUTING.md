@@ -1,3 +1,35 @@
+---
+name: contributing-guide
+description: |
+  **CONTRIBUTION GUIDELINES** - Development workflow and contribution process.
+  USE FOR: Onboarding new developers, establishing development standards.
+  DO NOT USE FOR: Quick fixes - follow established patterns.
+  INVOKES: git, pnpm, typescript, nextjs.
+meta:
+  version: "1.0.0"
+  author: "cascade-ai"
+  category: "guidelines"
+  type: "contributing"
+  framework: "feature-sliced-design"
+  language: "typescript"
+  ai_optimized: true
+  bimodal_documentation: true
+  human_ttv: "good"
+  ai_readiness: "optimized"
+  rag_optimization: "enabled"
+compliance:
+  frameworks: ["fsd-v2.1", "nextjs-16", "react-19"]
+  security: ["oauth-2.1", "rls", "tenant-isolation"]
+  performance: ["core-web-vitals", "lcp-2.5s", "inp-200ms", "cls-0.1"]
+  accessibility: ["wcag-2.2-aa", "screen-reader"]
+  testing: ["unit", "integration", "e2e"]
+  documentation: ["bimodal", "ai-optimized"]
+workflow:
+  type: "development"
+  phases: ["branch", "develop", "test", "review", "merge"]
+  tools: ["git", "pnpm", "typescript", "nextjs"]
+---
+
 # Contributing Guide
 
 Thanks for contributing to the Marketing Monorepo.
