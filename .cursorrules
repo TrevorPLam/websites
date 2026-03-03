@@ -91,6 +91,15 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 
 ## Multi-Agent Integration (2026)
 
+### Multi-Agent Orchestration (MANDATORY)
+- Coordinate with other agents via A2A Protocol (JSON-RPC + SSE)
+- Load MCP server config from `mcp/config/config.json`
+- Every agent action requires a correlation ID (use `withCorrelation` from `mcp/servers/src/shared/middleware.ts`)
+- High-risk actions (deploy, schema change, delete) require an approval gate before execution
+- Use `@repo/agent-core` (`ContextEngineeringSystem`) for context budget management
+- Use `@repo/agent-governance` (`PolicyEngine`) to evaluate every action before execution
+- Use `@repo/agent-memory` (`EnterpriseMemorySystem`) for persistent cross-session context
+
 ### MCP (Model Context Protocol)
 - Use MCP servers for external tool access
 - Configure in `mcp/config/config.json`

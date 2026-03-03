@@ -203,7 +203,7 @@
     - [ ] Tool switching detection catches anomalous sequences
     - [ ] Failure rate alerting triggers correctly
 
-- [ ] **2-D: Implement agents/memory**
+- [x] **2-D: Implement agents/memory**
   - **Priority**: 🔴 High
   - **Effort**: 3 hours
   - **Issue**: `agents/memory/src/index.ts` is types-only, no logic
@@ -220,7 +220,7 @@
     - [ ] Retrieve returns top-N most relevant entries
     - [ ] Vector embeddings interface functional (if implemented)
 
-- [ ] **2-E: Wire agents/orchestration to Other Agent Packages**
+- [x] **2-E: Wire agents/orchestration to Other Agent Packages**
   - **Priority**: 🔴 High
   - **Effort**: 1 hour
   - **Issue**: `agents/orchestration/src/index.ts` has zero imports from other `agents/*` packages
@@ -268,7 +268,7 @@
     - [ ] Spans visible in tracing dashboard
     - [ ] Failed auth rejected before reaching target server
 
-- [ ] **3-B: Add Correlation IDs Across All Servers**
+- [x] **3-B: Add Correlation IDs Across All Servers**
   - **Priority**: 🟡 High
   - **Effort**: 2 hours
   - **Files**:
@@ -302,7 +302,7 @@
     - [ ] Timeout handling works (fails safe)
     - [ ] Audit trail records approver identity
 
-- [ ] **3-D: Fix .cursorrules Multi-Agent Gap**
+- [x] **3-D: Fix .cursorrules Multi-Agent Gap**
   - **Priority**: 🟡 Medium
   - **Effort**: 30 min
   - **Issue**: `.cursorrules` lacks multi-agent instructions present in `.windsurfrules`

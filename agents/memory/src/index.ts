@@ -7,6 +7,7 @@
  */
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 
 // Enhanced Memory System Types with 2026 Standards
 export interface Episode {
@@ -715,5 +716,114 @@ export class UnifiedMemorySystem {
     });
 
     return patterns;
+  }
+}
+
+// ─── Enterprise Memory System (2-D) ───────────────────────────────────────────
+
+/**
+ * A lightweight memory entry used by EnterpriseMemorySystem.
+ * Carries the actual content plus scoring metadata for ranked retrieval.
+ */
+export interface MemoryEntry {
+  /** Raw content to persist (e.g. intent string, object serialised as JSON). */
+  content: string;
+  /** Confidence that this entry is accurate/relevant (0–1). Default 0.8. */
+  confidence: number;
+  /** How relevant this entry is to the current task (0–1). Caller-supplied. */
+  relevanceScore: number;
+  /** ISO timestamp set automatically on store(). */
+  createdAt: Date;
+  /** Optional structured metadata for downstream filtering. */
+  metadata?: Record<string, unknown>;
+}
+
+/**
+ * A stored entry returned by retrieve() – includes the content-addressed `id`.
+ */
+export interface StoredMemoryEntry extends MemoryEntry {
+  /** SHA-256 content-addressed ID (hex, first 32 chars). */
+  id: string;
+}
+
+/** Number of milliseconds in one day (used for recency decay). */
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+/**
+ * Enterprise Memory System – production-ready store / retrieve with
+ * content-addressed IDs and multi-factor relevance scoring.
+ *
+ * Scoring formula used in retrieve():
+ *   score = recencyWeight(createdAt) × confidence × relevanceScore
+ *
+ * @example
+ * ```ts
+ * const mem = new EnterpriseMemorySystem();
+ * const id  = mem.store({ content: 'deploy intent', confidence: 0.9, relevanceScore: 1.0 });
+ * const top = mem.retrieve('deploy', 5);
+ * ```
+ */
+export class EnterpriseMemorySystem {
+  private _store: Map<string, StoredMemoryEntry> = new Map();
+
+  /**
+   * Persist a memory entry using content-addressed storage.
+   * Duplicate content (same SHA-256) will overwrite the existing entry so
+   * recency and scoring metadata stay current.
+   *
+   * @param entry - Entry to persist (createdAt is set automatically).
+   * @returns The content-addressed hex ID (first 32 chars of SHA-256).
+   */
+  store(entry: Omit<MemoryEntry, 'createdAt'>): string {
+    const id = this.hashContent(entry.content);
+    const stored: StoredMemoryEntry = {
+      ...entry,
+      id,
+      createdAt: new Date(),
+    };
+    this._store.set(id, stored);
+    return id;
+  }
+
+  /**
+   * Retrieve the top-N entries most relevant to `query`.
+   * Entries are scored by: recencyWeight × confidence × relevanceScore.
+   *
+   * @param query - Plain-text query used to keyword-match against content.
+   * @param limit - Maximum results to return (default 5).
+   * @returns Ranked array of stored entries, highest score first.
+   */
+  retrieve(query: string, limit = 5): StoredMemoryEntry[] {
+    const queryLower = query.toLowerCase();
+    const now = Date.now();
+
+    const scored = Array.from(this._store.values())
+      .filter((e) => e.content.toLowerCase().includes(queryLower) || queryLower === '')
+      .map((e) => {
+        const ageMs = now - e.createdAt.getTime();
+        const recencyWeight = Math.exp(-ageMs / MS_PER_DAY); // decays over days
+        const score = recencyWeight * e.confidence * e.relevanceScore;
+        return { entry: e, score };
+      })
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit);
+
+    return scored.map((s) => s.entry);
+  }
+
+  /**
+   * Remove all entries – useful for testing / isolation.
+   */
+  clear(): void {
+    this._store.clear();
+  }
+
+  /** @internal Returns number of stored entries. */
+  get size(): number {
+    return this._store.size;
+  }
+
+  private hashContent(content: string): string {
+    return crypto.createHash('sha256').update(content).digest('hex').slice(0, 32);
   }
 }
