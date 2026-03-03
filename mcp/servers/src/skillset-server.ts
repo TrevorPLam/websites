@@ -520,7 +520,7 @@ class SkillsetServer {
     // USE FOR phrase matches (e.g. USE FOR: "deploy to prod", "production release")
     const useForMatches = description.match(/use for:\s*"([^"]+)"/gi) ?? [];
     for (const match of useForMatches) {
-      const phrase = match.replace(/use for:\s*"/i, '').replace('"', '').toLowerCase();
+      const phrase = match.replace(/use for:\s*"/i, '').replace(/"/g, '').toLowerCase();
       if (queryLower.includes(phrase) || phrase.split(/[\s,]+/).some((w) => queryLower.includes(w)))
         score += 40;
     }
