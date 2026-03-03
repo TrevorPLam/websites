@@ -169,6 +169,7 @@ Tinybird Ingestion → Analytics/Metering Events
 - `scripts/setup-dev.ts`, `scripts/verify-env.ts`, and `scripts/seed.ts` are present.
 - Root `package.json` includes `setup` and `verify` scripts.
 - Setup/verify scripts now align with repository baseline (`Node.js >=22`, `.env.example` bootstrap, cross-platform socket-based port checks, and optional `SKIP_DB_SETUP`/`SKIP_VERIFY` automation flags).
+- `scripts/setup-dev.ts` now correctly returns stdout for command checks, unblocking prerequisite validation (`node --version`, `pnpm --version`) during setup.
 
 ```yaml
 id: TASK-DEV-001

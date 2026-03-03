@@ -39,6 +39,8 @@ function run(command: string, stdio: 'pipe' | 'inherit' = 'pipe'): string {
     execSync(command, { stdio });
     return '';
   }
+
+  return execSync(command, { encoding: 'utf8', stdio: 'pipe' }).trim();
 }
 
 function checkPrerequisites(): void {
