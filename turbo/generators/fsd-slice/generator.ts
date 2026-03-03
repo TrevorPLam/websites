@@ -89,40 +89,89 @@ export default function registerFsdSliceGenerator(plop: PlopLike): void {
       },
     ],
     actions: [
-      // Generate shared layer
+      // Generate shared layer (source files only)
       {
         type: 'addMany',
         destination: 'packages/shared/src/{{selectedSlice}}',
         base: 'turbo/generators/fsd-slice/templates/shared',
         templateFiles: 'turbo/generators/fsd-slice/templates/shared/**',
+        globOptions: { ignore: ['**/__tests__/**'] },
         when: (answers) => answers?.layers?.includes('shared'),
         abortOnFail: true,
       },
-      // Generate entities layer
+      // Generate shared layer test files
+      {
+        type: 'addMany',
+        destination: 'packages/shared/src/{{selectedSlice}}/__tests__',
+        base: 'turbo/generators/fsd-slice/templates/shared/__tests__',
+        templateFiles: 'turbo/generators/fsd-slice/templates/shared/__tests__/**',
+        when: (answers) => answers?.layers?.includes('shared') && answers?.withTests === true,
+        abortOnFail: true,
+      },
+      // Generate entities layer (source files only)
       {
         type: 'addMany',
         destination: 'packages/entities/src/{{selectedSlice}}',
         base: 'turbo/generators/fsd-slice/templates/entities',
         templateFiles: 'turbo/generators/fsd-slice/templates/entities/**',
+        globOptions: { ignore: ['**/__tests__/**'] },
         when: (answers) => answers?.layers?.includes('entities'),
         abortOnFail: true,
       },
-      // Generate features layer
+      // Generate entities layer test files
+      {
+        type: 'addMany',
+        destination: 'packages/entities/src/{{selectedSlice}}/__tests__',
+        base: 'turbo/generators/fsd-slice/templates/entities/__tests__',
+        templateFiles: 'turbo/generators/fsd-slice/templates/entities/__tests__/**',
+        when: (answers) => answers?.layers?.includes('entities') && answers?.withTests === true,
+        abortOnFail: true,
+      },
+      // Generate features layer (source files only)
       {
         type: 'addMany',
         destination: 'packages/features/src/{{selectedSlice}}',
         base: 'turbo/generators/fsd-slice/templates/features',
         templateFiles: 'turbo/generators/fsd-slice/templates/features/**',
+        globOptions: { ignore: ['**/__tests__/**'] },
         when: (answers) => answers?.layers?.includes('features'),
         abortOnFail: true,
       },
-      // Generate widgets layer
+      // Generate features layer test files
+      {
+        type: 'addMany',
+        destination: 'packages/features/src/{{selectedSlice}}/__tests__',
+        base: 'turbo/generators/fsd-slice/templates/features/__tests__',
+        templateFiles: 'turbo/generators/fsd-slice/templates/features/__tests__/**',
+        when: (answers) => answers?.layers?.includes('features') && answers?.withTests === true,
+        abortOnFail: true,
+      },
+      // Generate widgets layer (source files only)
       {
         type: 'addMany',
         destination: 'packages/widgets/src/{{selectedSlice}}',
         base: 'turbo/generators/fsd-slice/templates/widgets',
         templateFiles: 'turbo/generators/fsd-slice/templates/widgets/**',
+        globOptions: { ignore: ['**/__tests__/**', '**/stories/**'] },
         when: (answers) => answers?.layers?.includes('widgets'),
+        abortOnFail: true,
+      },
+      // Generate widgets layer test files
+      {
+        type: 'addMany',
+        destination: 'packages/widgets/src/{{selectedSlice}}/__tests__',
+        base: 'turbo/generators/fsd-slice/templates/widgets/__tests__',
+        templateFiles: 'turbo/generators/fsd-slice/templates/widgets/__tests__/**',
+        when: (answers) => answers?.layers?.includes('widgets') && answers?.withTests === true,
+        abortOnFail: true,
+      },
+      // Generate widgets layer Storybook stories
+      {
+        type: 'addMany',
+        destination: 'packages/widgets/src/{{selectedSlice}}/stories',
+        base: 'turbo/generators/fsd-slice/templates/widgets/stories',
+        templateFiles: 'turbo/generators/fsd-slice/templates/widgets/stories/**',
+        when: (answers) => answers?.layers?.includes('widgets') && answers?.withStories === true,
         abortOnFail: true,
       },
       // Update package exports

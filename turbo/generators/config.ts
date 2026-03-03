@@ -16,11 +16,11 @@
 import registerFsdSliceGenerator from './fsd-slice/generator';
 
 type Prompt = {
-  type: 'input' | 'list';
+  type: 'input' | 'list' | 'checkbox' | 'confirm';
   name: string;
   message: string;
-  choices?: string[];
-  default?: string;
+  choices?: Array<string | { name: string; value: string }>;
+  default?: string | boolean | string[];
   validate?: (value: string) => true | string;
 };
 
@@ -32,6 +32,7 @@ type Action =
       templateFiles: string;
       globOptions?: { dot?: boolean; ignore?: string[] };
       abortOnFail?: boolean;
+      when?: (answers: Record<string, unknown>) => boolean;
     }
   | {
       type: 'modify';
@@ -39,6 +40,7 @@ type Action =
       pattern: RegExp;
       template: string;
       abortOnFail?: boolean;
+      when?: (answers: Record<string, unknown>) => boolean;
     };
 
 type Generator = {
@@ -47,7 +49,7 @@ type Generator = {
   actions: Action[];
 };
 
-type PlopLike = {
+export type PlopLike = {
   setGenerator: (name: string, generator: Generator) => void;
 };
 

@@ -362,7 +362,7 @@ export class PuppeteerOrchestrator {
   }
 
   private generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+    return crypto.randomUUID();
   }
 
   // Agent Communication Protocol (ACP) Server
@@ -501,7 +501,7 @@ export class AgentClient {
   }
 
   private generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+    return crypto.randomUUID();
   }
 }
 
