@@ -1,7 +1,7 @@
 /**
  * @file apps/web/next.config.ts
  * @summary Next.js 16.1.5 configuration for the web application.
- * @description Configuration with PPR enabled, React Compiler, and Next.js 16 optimizations.
+ * @description Configuration with PPR enabled, dynamicIO for "use cache" function-level caching, and Next.js 16 optimizations.
  * @security None - Configuration file only
  * @requirements README.md technology stack compliance
  */
@@ -10,9 +10,10 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   output: 'standalone',
   experimental: {
-    // PPR and React Compiler require Next.js 16 canary
-    // ppr: true, // Enable Partial Prerendering (Next.js 16)
-    // reactCompiler: true, // Enable React Compiler (Next.js 16)
+    // PPR enables static pre-rendering with dynamic streaming via Suspense boundaries
+    ppr: true,
+    // dynamicIO enables "use cache" directive for function-level data caching
+    dynamicIO: true,
   },
   images: {
     remotePatterns: [
