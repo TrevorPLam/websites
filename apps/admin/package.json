@@ -14,6 +14,8 @@
   "dependencies": {
     "@repo/ui": "workspace:*",
     "@repo/types": "workspace:*",
+    "@repo/core-engine": "workspace:*",
+    "@measured/puck": "^0.15.0",
     "@tanstack/react-query": "^5.56.2",
     "next": "16.1.5",
     "react": "19.0.0",

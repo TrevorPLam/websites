@@ -1,11 +1,13 @@
-// Core Engine - Page Builder Foundation
-// Exports Puck configuration, renderer, and core components
+/**
+ * @file packages/core-engine/src/index.ts
+ * @summary Public API for the core-engine package.
+ * @description Exports Puck editor configuration, component registry, theme bridge,
+ *   and shared type definitions for the JSON-driven page builder.
+ * @requirements TASK-PUCK-001
+ */
 
-export * from './config';
 export * from './puck';
-export * from './renderer';
 
-// Re-export commonly used types
+// Re-export core types
 export type { PageData, ComponentData } from './types';
 export type { PuckConfig } from './puck/config';
-export type { ComponentRendererProps } from './renderer/ComponentRenderer';

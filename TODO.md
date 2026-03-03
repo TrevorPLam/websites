@@ -244,8 +244,8 @@ next_steps:
   - Ready for additional generator types (service-port, puck-component)
 ```
 
-#### TASK-RULES-001: Cursor Rules for Architectural Enforcement ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Impact:** Prevents AI agents from violating FSD/Hexagonal boundaries
+#### TASK-RULES-001: Cursor Rules for Architectural Enforcement ⭐ CRITICAL ✅ COMPLETED
+**Status:** ✅ COMPLETED | **Impact:** Prevents AI agents from violating FSD/Hexagonal boundaries | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-RULES-001
@@ -267,8 +267,8 @@ rules_summary:
 
 ### 🌊 WAVE 1: The "Infinite" UI Engine (JSON-Driven Rendering)
 
-#### TASK-PUCK-001: Puck Editor Integration with Token Integration ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Goal:** JSON-driven page editing with multi-tenant safety
+#### TASK-PUCK-001: Puck Editor Integration with Token Integration ⭐ CRITICAL ✅ COMPLETED
+**Status:** ✅ COMPLETED | **Goal:** JSON-driven page editing with multi-tenant safety | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-PUCK-001
@@ -692,8 +692,8 @@ testing:
 | **TASK-DEV-001** | Developer Onboarding Automation | `scripts/setup-dev.ts`, `.env.example` | ✅ COMPLETED - One-command setup with t3-env validation, Supabase start, database seed |
 | **TASK-DS-001** | Design Tokens Package | `packages/design-tokens/` with Style Dictionary | ✅ COMPLETED - Single source of truth feeding Tailwind v4 (HSL), Puck (hex), CSS variables |
 | **TASK-GEN-001** | Turborepo Generators | `turbo/generators/` with FSD/Hexagonal/Puck templates | ✅ COMPLETED - Generate 15+ files per command with correct @x imports and tests |
-| **TASK-RULES-001** | AI Coding Rules (.cursorrules) | Layer-specific `.cursorrules` files | Enforce FSD import flow, prevent circular dependencies, guide AI agents |
-| **TASK-PUCK-001** | Puck Editor Integration | `packages/core-engine/puck/`, editor routes | JSON-driven editing with token integration, tenant isolation, RLS |
+| **TASK-RULES-001** | AI Coding Rules (.cursorrules) | Layer-specific `.cursorrules` files | ✅ COMPLETED - Layer-specific rules for entities (pure logic), features (use cases), widgets (UI), services (hexagonal adapters) |
+| **TASK-PUCK-001** | Puck Editor Integration | `packages/core-engine/puck/`, editor routes | ✅ COMPLETED - JSON-driven editing with token integration, tenant isolation, RLS via site_layouts table |
 | **TASK-PPR-001** | Next.js 16 PPR Enablement | `next.config.ts`, `CacheComponent.tsx` | Sub-100ms loads via "use cache" directive and streaming hydration |
 
 ### 🔴 P1: High Priority (Enterprise Readiness) - Execute Week 2
@@ -1075,11 +1075,11 @@ grep -q "ppr: true" apps/web/next.config.ts 2 >/dev/null && echo "✅ PPR enable
 grep -q "catalog:" pnpm-workspace.yaml 2 >/dev/null && echo "✅ Catalogs configured" || echo "🔴 MISSING: pnpm catalogs"
 
 # 2. Execute P0 tasks sequentially
-pnpm setup  # TASK-DEV-001: Developer onboarding
-pnpm turbo gen fsd-slice --name design-system  # TASK-GEN-001: Create first generator
-# Create .cursorrules files per TASK-RULES-001 specification
-pnpm add @measured/puck @measured/puck-plugin-heading-analyzer  # TASK-PUCK-001
-# Update next.config.ts with experimental.ppr: true  # TASK-PPR-001
+pnpm setup  # TASK-DEV-001: ✅ COMPLETED - Developer onboarding
+pnpm turbo gen fsd-slice --name design-system  # TASK-GEN-001: ✅ COMPLETED - Create first generator
+# TASK-RULES-001: ✅ COMPLETED - .cursorrules files created for all FSD layers
+# TASK-PUCK-001: ✅ COMPLETED - Puck editor integrated with design tokens + RLS migration
+# Update next.config.ts with experimental.ppr: true  # TASK-PPR-001 ← NEXT TASK
 # Configure pnpm catalogs for dependency management  # TASK-CATALOG-001
 
 # 3. Execute critical production tasks
