@@ -1,240 +1,268 @@
 {
-    "servers": {
-        "filesystem": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-filesystem",
-                "${REPO_PATH:-.}"
-            ],
-            "env": {
-                "ALLOWED_DIRECTORIES": "${REPO_PATH:-.}",
-                "READ_ONLY_BY_DEFAULT": "true"
-            }
-        },
-        "git": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-git",
-                "${REPO_PATH:-.}"
-            ],
-            "env": {
-                "GIT_REPO_PATH": "${REPO_PATH:-.}",
-                "ALLOW_PUSH": "false"
-            }
-        },
-        "sequential-thinking": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/sequential-thinking-fixed.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "github": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/github-server.ts"
-            ],
-            "env": {
-                "GITHUB_TOKEN": "${GITHUB_TOKEN}",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "knowledge-graph": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/knowledge-graph-memory-fixed.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "observability": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/observability-monitor.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "secure-deployment": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/secure-deployment-manager.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "enterprise-registry": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-registry.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "sqlite": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "mcp-server-sqlite"
-            ],
-            "env": {
-                "DB_PATH": "./data/local.db",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "fetch": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "mcp-server-fetch"
-            ],
-            "env": {
-                "ALLOWED_DOMAINS": "github.com,api.github.com,docs.github.com,azure.com,management.azure.com,registry.npmjs.org",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "azure-mcp": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@azure/mcp@2.0.0-beta.22"
-            ],
-            "env": {
-                "AZURE_TOKEN": "${AZURE_TOKEN}",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "ticketer": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "mcp-ticketer"
-            ],
-            "env": {
-                "LINEAR_TOKEN": "${LINEAR_TOKEN}",
-                "JIRA_TOKEN": "${JIRA_TOKEN}",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "skillset": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/skillset-server.ts"
-            ],
-            "env": {
-                "SKILLS_PATH": "skills",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "documentation": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/scripts/documentation-server.ts"
-            ],
-            "env": {
-                "DOCS_DIR": "docs",
-                "RAG_STATE": "rag-state.json",
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "advanced-agent-plugins": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/advanced-agent-plugins.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "ai-dlc-methodology": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/ai-dlc-methodology.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "enterprise-mcp-marketplace": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-mcp-marketplace.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "mcp-apps-marketplace": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/mcp-apps-marketplace.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "enterprise-security-gateway": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-security-gateway.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "multi-tenant-orchestrator": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/multi-tenant-orchestrator.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        },
-        "enterprise-auth-gateway": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-auth-gateway.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "info",
-                "NODE_ENV": "production"
-            }
-        }
+  "servers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${REPO_PATH:-.}"
+      ],
+      "env": {
+        "ALLOWED_DIRECTORIES": "${REPO_PATH:-.}",
+        "READ_ONLY_BY_DEFAULT": "true"
+      }
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "${REPO_PATH:-.}"
+      ],
+      "env": {
+        "GIT_REPO_PATH": "${REPO_PATH:-.}",
+        "ALLOW_PUSH": "false"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/sequential-thinking-fixed.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/github-server.ts"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "knowledge-graph": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/knowledge-graph-memory-fixed.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "observability": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/observability-monitor.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "secure-deployment": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/secure-deployment-manager.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "enterprise-registry": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-registry.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-server-sqlite"
+      ],
+      "env": {
+        "DB_PATH": "./data/local.db",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-server-fetch"
+      ],
+      "env": {
+        "ALLOWED_DOMAINS": "github.com,api.github.com,docs.github.com,azure.com,management.azure.com,registry.npmjs.org",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "azure-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure/mcp@2.0.0-beta.22"
+      ],
+      "env": {
+        "AZURE_TOKEN": "${AZURE_TOKEN}",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "ticketer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-ticketer"
+      ],
+      "env": {
+        "LINEAR_TOKEN": "${LINEAR_TOKEN}",
+        "JIRA_TOKEN": "${JIRA_TOKEN}",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "skillset": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/skillset-server.ts"
+      ],
+      "env": {
+        "SKILLS_PATH": "skills",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "documentation": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/scripts/documentation-server.ts"
+      ],
+      "env": {
+        "DOCS_DIR": "docs",
+        "RAG_STATE": "rag-state.json",
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "advanced-agent-plugins": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/advanced-agent-plugins.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "ai-dlc-methodology": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/ai-dlc-methodology.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "enterprise-mcp-marketplace": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-mcp-marketplace.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "mcp-apps-marketplace": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/mcp-apps-marketplace.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "enterprise-security-gateway": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-security-gateway.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "multi-tenant-orchestrator": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/multi-tenant-orchestrator.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "enterprise-auth-gateway": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-auth-gateway.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "info",
+        "NODE_ENV": "production"
+      }
+    },
+    "marketing-analytics": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/marketing-analytics.ts"
+      ]
+    },
+    "content-management": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/content-management.ts"
+      ]
+    },
+    "seo-tools": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/seo-tools.ts"
+      ]
+    },
+    "campaign-automation": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/campaign-automation.ts"
+      ]
     }
+  }
 }
