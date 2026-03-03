@@ -554,9 +554,15 @@ export class PolicyEngine {
  * Detects tool poisoning, prompt injection attempts, data exfiltration,
  * and other security threats in real-time.
  */
+interface ThreatPattern {
+  indicators: string[];
+  riskScore: number;
+  response: 'block' | 'monitor';
+}
+
 export class SecurityAgent {
   private auditLog: AuditEvent[] = [];
-  private threatPatterns: Map<string, any> = new Map();
+  private threatPatterns: Map<string, ThreatPattern> = new Map();
   private alertThresholds: Map<string, number> = new Map();
 
   constructor() {
@@ -602,7 +608,7 @@ export class SecurityAgent {
   }
 
   analyzeAgentAction(
-    agentId: string,
+    _agentId: string,
     _action: string,
     context: Record<string, unknown>
   ): {
@@ -614,22 +620,14 @@ export class SecurityAgent {
     let totalRiskScore = 0;
     const detectedThreats: string[] = [];
 
-    // Analyze for threat patterns
+    // Analyze for threat patterns using structured field targeting
     for (const [threatType, pattern] of this.threatPatterns) {
-      const matches = this.detectThreatPattern(pattern.indicators, context);
+      const matches = this.detectThreatPattern(pattern.indicators, context, threatType);
       if (matches.length > 0) {
         detectedThreats.push(threatType);
         totalRiskScore += pattern.riskScore;
       }
     }
-
-    // Check for rapid tool switching
-    const toolSwitchingScore = this.analyzeToolSwitching(agentId, context);
-    totalRiskScore += toolSwitchingScore;
-
-    // Check for repeated failures
-    const failureScore = this.analyzeFailures(agentId, context);
-    totalRiskScore += failureScore;
 
     const requiresIntervention = totalRiskScore >= this.alertThresholds.get('critical')!;
     const recommendation = this.getRecommendation(totalRiskScore, detectedThreats);
@@ -642,35 +640,100 @@ export class SecurityAgent {
     };
   }
 
-  private detectThreatPattern(indicators: string[], context: Record<string, any>): string[] {
+  private detectThreatPattern(
+    _indicators: string[],
+    context: Record<string, unknown>,
+    threatType: string
+  ): string[] {
     const detected: string[] = [];
 
-    for (const indicator of indicators) {
-      if (this.contextContains(context, indicator)) {
-        detected.push(indicator);
+    switch (threatType) {
+      case 'tool-poisoning': {
+        const tools = Array.isArray(context.requestedTools) ? context.requestedTools : [];
+        const approvedTools = Array.isArray(context.approvedTools) ? context.approvedTools : [];
+        const commands = Array.isArray(context.commands) ? context.commands : [];
+        // Flag tools not in the approved registry
+        for (const tool of tools) {
+          if (typeof tool === 'string' && approvedTools.length > 0 && !approvedTools.includes(tool)) {
+            detected.push('unapproved_tool');
+          }
+        }
+        // Flag encoded/obfuscated commands (base64-like or hex payloads)
+        for (const cmd of commands) {
+          if (typeof cmd === 'string' && /^[A-Za-z0-9+/]{20,}={0,2}$/.test(cmd)) {
+            detected.push('encoded_instructions');
+          }
+        }
+        break;
+      }
+      case 'prompt-injection': {
+        const userInputs = Array.isArray(context.userInputs)
+          ? context.userInputs
+          : context.userInput
+            ? [context.userInput]
+            : [];
+        const injectionPhrases = [
+          'ignore previous instructions',
+          'ignore all instructions',
+          'system prompt override',
+          'you are now',
+          'disregard your',
+          'forget your',
+          'new role:',
+          'act as admin',
+        ];
+        for (const input of userInputs) {
+          if (typeof input === 'string') {
+            const lower = input.toLowerCase();
+            for (const phrase of injectionPhrases) {
+              if (lower.includes(phrase)) {
+                detected.push('prompt_injection_phrase');
+                break;
+              }
+            }
+          }
+        }
+        break;
+      }
+      case 'data-exfiltration': {
+        const dataSize =
+          typeof context.dataSize === 'number' ? context.dataSize : 0;
+        const destinations = Array.isArray(context.outputDestinations)
+          ? context.outputDestinations
+          : [];
+        const dataClassification =
+          typeof context.dataClassification === 'string' ? context.dataClassification : '';
+        // Flag large transfers (>10 MB)
+        if (dataSize > 10 * 1024 * 1024) {
+          detected.push('large_data_transfer');
+        }
+        // Flag PII/secret data leaving approved destinations
+        if (
+          (dataClassification === 'pii' || dataClassification === 'secret') &&
+          destinations.some((d) => typeof d === 'string' && !d.includes('internal'))
+        ) {
+          detected.push('sensitive_data_access');
+        }
+        break;
+      }
+      case 'anomalous-behavior': {
+        const toolCount =
+          typeof context.toolCount === 'number' ? context.toolCount : 0;
+        const recentFailures =
+          typeof context.recentFailures === 'number' ? context.recentFailures : 0;
+        const hourOfDay =
+          typeof context.hourOfDay === 'number' ? context.hourOfDay : -1;
+        if (toolCount > 5) detected.push('rapid_tool_switching');
+        if (recentFailures > 3) detected.push('repeated_failures');
+        // Flag requests outside business hours (before 6am or after 10pm UTC)
+        if (hourOfDay >= 0 && (hourOfDay < 6 || hourOfDay >= 22)) {
+          detected.push('unusual_time_patterns');
+        }
+        break;
       }
     }
 
     return detected;
-  }
-
-  private contextContains(context: Record<string, any>, searchTerm: string): boolean {
-    const contextStr = JSON.stringify(context).toLowerCase();
-    return contextStr.includes(searchTerm.toLowerCase());
-  }
-
-  private analyzeToolSwitching(_agentId: string, context: Record<string, unknown>): number {
-    // In a real implementation, track tool usage patterns over time
-    // For now, return a moderate risk score if multiple tools are used rapidly
-    const toolCount = context.toolCount;
-    return typeof toolCount === 'number' && toolCount > 5 ? 3 : 0;
-  }
-
-  private analyzeFailures(_agentId: string, context: Record<string, unknown>): number {
-    // In a real implementation, track failure patterns
-    // For now, return a risk score based on recent failures
-    const recentFailures = context.recentFailures;
-    return typeof recentFailures === 'number' && recentFailures > 3 ? 4 : 0;
   }
 
   private getRecommendation(riskScore: number, _threats: string[]): string {

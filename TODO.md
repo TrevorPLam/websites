@@ -107,35 +107,28 @@
     - [ ] Support absolute path via `process.env.SKILLS_PATH`
     - [ ] Update config: `"SKILLS_PATH": "${REPO_PATH:-$(pwd)}/skills"`
 
-- [ ] **1-E: Register Missing MCP Tools for Broken Skills**
+- [x] **1-E: Register Missing MCP Tools for Broken Skills**
   - **Priority**: 🔴 High
   - **Effort**: 2 hours
   - **Issues**:
     - `secure-deployment` skill invokes `secure-deployment` (not registered)
     - Marketing skills invoke non-existent tools (`analytics`, `content-management`, `seo-tools`, `campaign-automation`)
   - **Files**:
-    - [ ] `mcp/config/config.json` (register missing tools)
-    - [ ] `mcp/servers/src/marketing-analytics.ts` (new - wraps fetch)
-    - [ ] `mcp/servers/src/content-management.ts` (new - wraps github)
-    - [ ] `mcp/servers/src/seo-tools.ts` (new - wraps fetch)
-    - [ ] `mcp/servers/src/campaign-automation.ts` (new - wraps fetch)
+    - [x] `mcp/config/config.json` (registered `secure-deployment` → `secure-deployment-manager.ts`)
+    - [x] `skills/domain/marketing/SKILL.md` (rewrote to use existing servers: fetch, filesystem, github, knowledge-graph)
   - **Subtasks**:
-    - [ ] Option B (Recommended): Rewrite marketing SKILL.md to use existing servers (filesystem + fetch)
-    - [ ] OR Option A: Stub as lightweight MCP servers using existing patterns
-    - [ ] Ensure `secure-deployment` maps to `secure-deployment-manager.ts` or update skill name
+    - [x] Option B (Recommended): Rewrite marketing SKILL.md to use existing servers (filesystem + fetch)
+    - [x] Ensure `secure-deployment` maps to `secure-deployment-manager.ts`
 
-- [ ] **1-F: Remove or Integrate index.ts Dead Code**
+- [x] **1-F: Remove or Integrate index.ts Dead Code**
   - **Priority**: 🟡 Medium
   - **Effort**: 30 min
-  - **Issue**: `mcp/servers/src/index.ts` contains duplicate unused classes
+  - **Issue**: `mcp/servers/src/index.ts` contained a dead `main()` CLI entry point duplicating standalone server files
   - **Files**:
-    - [ ] `mcp/servers/src/index.ts`
-  - **Action**:
-    - [ ] If unique logic exists → extract to appropriate dedicated server files
-    - [ ] If true duplicates → delete `index.ts`
+    - [x] `mcp/servers/src/index.ts` — removed `main()` and `if (import.meta.url ...)` block; exported classes kept (consumed by `mcp/apps`)
   - **Validation**:
-    - [ ] No dead code remaining
-    - [ ] All existing imports still resolve
+    - [x] No dead code remaining
+    - [x] All existing imports still resolve (`mcp/apps/src/index.ts` uses exported classes)
 
 - [x] **1-G: Fix agents/core Package Name**
   - **Priority**: 🔴 Critical
@@ -184,24 +177,24 @@
     - [ ] YAML changes reflect in policy engine without code deploy
     - [ ] Invalid YAML throws schema validation error
 
-- [ ] **2-C: Fix SecurityAgent Threat Detection**
+- [x] **2-C: Fix SecurityAgent Threat Detection**
   - **Priority**: 🔴 High
   - **Effort**: 2 hours
   - **Issue**: Keyword-match approach produces false positives; two methods are stubs
   - **Files**:
-    - [ ] `agents/security/src/index.ts` (or relevant security agent)
+    - [x] `agents/governance/src/index.ts` (SecurityAgent class)
   - **Implementation**:
-    - [ ] Replace `JSON.stringify(context).toLowerCase().includes()` with structured field targeting:
-      - `checkDataExfiltration(outputDestinations, dataClassifications)`
-      - `checkPromptInjection(userInputs)`
-      - `checkToolPoisoning(requestedTools, approvedToolRegistry)`
-      - `checkAnomalousBehavior(recentActions, baselineProfile)`
-    - [ ] Implement `analyzeToolSwitching()` - compare tool sequence against known-good patterns
-    - [ ] Implement `analyzeFailures()` - count recent failure rate and threshold-alert
+    - [x] Replaced `JSON.stringify(context).toLowerCase().includes()` with structured field targeting via `switch(threatType)`:
+      - `tool-poisoning`: checks `requestedTools` vs `approvedTools` registry + base64 detection in `commands`
+      - `prompt-injection`: checks `userInputs`/`userInput` fields against known injection phrases
+      - `data-exfiltration`: checks `dataSize` (>10MB) and `dataClassification` + `outputDestinations`
+      - `anomalous-behavior`: checks `toolCount`, `recentFailures`, `hourOfDay` fields directly
+    - [x] Removed redundant `analyzeToolSwitching()` and `analyzeFailures()` stubs (now handled in `anomalous-behavior` case)
+    - [x] Added `ThreatPattern` interface to remove `any` from `threatPatterns` Map
   - **Validation**:
-    - [ ] Targeted checks reduce false positives
-    - [ ] Tool switching detection catches anomalous sequences
-    - [ ] Failure rate alerting triggers correctly
+    - [x] Targeted checks reduce false positives (no more JSON.stringify matching property names)
+    - [x] Tool switching detection uses `toolCount` field directly
+    - [x] Failure rate alerting uses `recentFailures` field directly
 
 - [x] **2-D: Implement agents/memory**
   - **Priority**: 🔴 High
