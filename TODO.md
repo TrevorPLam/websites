@@ -35,7 +35,7 @@
     - [ ] Update job steps: `jq empty .mcp/config.json` → `jq empty mcp/config/config.json`
     - [ ] Update job steps: `.claude/skills/*/SKILL.md` → `skills/*/SKILL.md`
 
-- [ ] **0-C: Fix MCP App Build Failure**
+- [x] **0-C: Fix MCP App Build Failure**
   - **Priority**: 🔴 Critical
   - **Effort**: 30 min
   - **Issue**: `mcp/apps/src/index.ts` imports `@repo/mcp-servers` which doesn't exist
@@ -56,7 +56,7 @@
 ### PHASE 1 — STRUCTURAL INTEGRITY (Days 2–4, ~8 hours)
 *Make the existing system actually work end-to-end*
 
-- [ ] **1-A: Register agents/* in pnpm workspace**
+- [x] **1-A: Register agents/* in pnpm workspace**
   - **Priority**: 🔴 Critical
   - **Effort**: 1 hour
   - **Issue**: 5 agent packages are invisible to Turborepo
@@ -70,7 +70,7 @@
     - [ ] `agents/*` packages recognized in dependency graph
     - [ ] Cross-package imports resolve (`@repo/agent-core` etc.)
 
-- [ ] **1-B: Fix enterprise-security Name Mismatch**
+- [x] **1-B: Fix enterprise-security Name Mismatch**
   - **Priority**: 🔴 Critical
   - **Effort**: 30 min
   - **Issue**: `deploy-production` skill invokes `enterprise-security` but config registers it as `enterprise-security-gateway`
@@ -137,7 +137,7 @@
     - [ ] No dead code remaining
     - [ ] All existing imports still resolve
 
-- [ ] **1-G: Fix agents/core Package Name**
+- [x] **1-G: Fix agents/core Package Name**
   - **Priority**: 🔴 Critical
   - **Effort**: 30 min
   - **Issue**: `agents/core/src/index.ts` declares `@repo/context-engineering` but docs use `@repo/agent-core`
@@ -153,7 +153,7 @@
 ### PHASE 2 — HARDEN THE AGENT LAYER (Days 5–7, ~10 hours)
 *Elevate stubs to production-grade implementations*
 
-- [ ] **2-A: Replace Math.random() Stubs in advanced-agent-plugins**
+- [x] **2-A: Replace Math.random() Stubs in advanced-agent-plugins**
   - **Priority**: 🔴 High
   - **Effort**: 2 hours
   - **Files**:

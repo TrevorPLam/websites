@@ -14,7 +14,7 @@ dependencies:
       value: "github"
       description: "PR analysis and file changes"
     - type: "mcp"
-      value: "enterprise-security"
+      value: "enterprise-security-gateway"
       description: "Security vulnerability scanning"
     - type: "mcp"
       value: "sequential-thinking"

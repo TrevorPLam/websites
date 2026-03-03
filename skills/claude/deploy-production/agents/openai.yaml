@@ -14,7 +14,7 @@ dependencies:
       value: "github"
       description: "Repository status and branch management"
     - type: "mcp"
-      value: "enterprise-security"
+      value: "enterprise-security-gateway"
       description: "Security scanning and compliance"
     - type: "mcp"
       value: "observability"
