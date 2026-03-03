@@ -6,13 +6,34 @@
  * @requirements TASK-PPR-001
  */
 
-export {
-  CacheComponent,
-  fetchWithCache,
-  CACHE_LIFE_SECONDS,
-} from './CacheComponent';
+export { CacheComponent, fetchWithCache, CACHE_LIFE_SECONDS } from './CacheComponent';
 
 export type { CacheComponentProps, CacheLifePreset } from './CacheComponent';
 
 export { ComponentRenderer } from './ComponentRenderer';
 export type { ComponentRendererProps } from './ComponentRenderer';
+
+export {
+  RenderingDecisionMatrix,
+  getOptimalRenderingMode,
+  analyzeRenderingDecision,
+} from './rendering-decision-matrix';
+export type {
+  RenderingMode,
+  ContentCharacteristics,
+  PerformanceRequirements,
+  RenderingDecision,
+} from './rendering-decision-matrix';
+
+export {
+  TenantPageCache,
+  TenantComponentCache,
+  TenantAnalyticsCache,
+  HierarchicalTenantCache,
+  StaleWhileRevalidateCache,
+  BurstTolerantCache,
+  CacheInvalidationUtils,
+  CacheMetrics,
+} from './per-tenant-cache-patterns';
+
+export { MarketingPageTemplate, generateMetadata } from './ppr-marketing-template';

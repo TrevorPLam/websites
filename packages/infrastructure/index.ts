@@ -125,5 +125,11 @@ export * from './src/config.ts';
 // NOTE: Encryption exports - security utilities and token management.
 export * from './security/encryption.ts';
 
+// [TRACE:BLOCK=packages.infra.exports.edge]
+// [FEAT:EDGE]
+// NOTE: Edge Runtime exports - tenant resolution, Edge Config integration, and middleware utilities.
+export * from './edge/tenant-resolver.ts';
+export * from './edge/config.ts';
+
 // Package version constant
 export const INFRA_PACKAGE_VERSION = '1.0.0';

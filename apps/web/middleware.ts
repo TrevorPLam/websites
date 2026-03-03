@@ -1,0 +1,120 @@
+/**
+ * @file apps/web/middleware.ts
+ * @summary Vercel Edge Middleware for multi-tenant SaaS platform
+ * @description Global edge middleware handling tenant resolution, custom domains, wildcard routing, and security headers for 1,000+ tenants
+ * @security Enterprise-grade tenant isolation and security headers
+ * @requirements TASK-EDGE-001: Global Edge Middleware with Vercel Platforms
+ * @performance <10ms tenant resolution, <1ms header injection
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { get } from '@vercel/edge-config';
+import { resolveTenant } from '@repo/infrastructure/edge/tenant-resolver';
+
+/**
+ * Edge middleware for multi-tenant SaaS platform
+ * Handles tenant resolution, custom domains, and security
+ */
+export async function middleware(request: NextRequest): Promise<NextResponse> {
+  const startTime = Date.now();
+  const { pathname, hostname } = request.nextUrl;
+
+  // Skip middleware for static assets and API routes (performance optimization)
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/api/') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname.includes('.')
+  ) {
+    return NextResponse.next();
+  }
+
+  try {
+    // Resolve tenant from hostname or path
+    const tenant = await resolveTenant(hostname, pathname);
+
+    if (!tenant) {
+      // No tenant found - serve 404 or redirect to marketing page
+      return new NextResponse('Tenant not found', { status: 404 });
+    }
+
+    // Create response with tenant context
+    const response = NextResponse.next();
+
+    // Add tenant context to headers for downstream processing
+    response.headers.set('x-tenant-id', tenant.id);
+    response.headers.set('x-tenant-slug', tenant.slug);
+    response.headers.set('x-tenant-domain', tenant.domain || hostname);
+
+    // Add security headers
+    addSecurityHeaders(response);
+
+    // Add performance headers
+    response.headers.set('x-middleware-time', `${Date.now() - startTime}ms`);
+    response.headers.set('x-edge-location', 'global');
+
+    // Rewrite URL for tenant-specific routing if needed
+    if (tenant.rewritePath) {
+      const url = request.nextUrl.clone();
+      url.pathname = tenant.rewritePath;
+      return NextResponse.rewrite(url, response);
+    }
+
+    return response;
+  } catch (error) {
+    console.error('Middleware error:', error);
+
+    // Fallback response with minimal security headers
+    const response = new NextResponse('Internal server error', { status: 500 });
+    addSecurityHeaders(response);
+    return response;
+  }
+}
+
+/**
+ * Add enterprise-grade security headers
+ */
+function addSecurityHeaders(response: NextResponse): void {
+  // Security headers for multi-tenant environment
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+
+  // Content Security Policy for marketing sites
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.googletagmanager.com",
+    "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
+    "font-src 'self' fonts.gstatic.com",
+    "img-src 'self' data: https: *.googleusercontent.com *.githubusercontent.com",
+    "connect-src 'self' *.supabase.co *.vercel-edge-functions.com",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join('; ');
+
+  response.headers.set('Content-Security-Policy', csp);
+
+  // HSTS for custom domains
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+}
+
+/**
+ * Export configuration for Vercel Edge Runtime
+ */
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public files with extensions
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.).*)',
+  ],
+  runtime: 'edge',
+  regions: 'all', // Global edge deployment
+};
