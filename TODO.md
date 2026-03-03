@@ -694,7 +694,7 @@ testing:
 | **TASK-GEN-001** | Turborepo Generators | `turbo/generators/` with FSD/Hexagonal/Puck templates | ✅ COMPLETED - Generate 15+ files per command with correct @x imports and tests |
 | **TASK-RULES-001** | AI Coding Rules (.cursorrules) | Layer-specific `.cursorrules` files | ✅ COMPLETED - Layer-specific rules for entities (pure logic), features (use cases), widgets (UI), services (hexagonal adapters) |
 | **TASK-PUCK-001** | Puck Editor Integration | `packages/core-engine/puck/`, editor routes | ✅ COMPLETED - JSON-driven editing with token integration, tenant isolation, RLS via site_layouts table |
-| **TASK-PPR-001** | Next.js 16 PPR Enablement | `next.config.ts`, `CacheComponent.tsx` | Sub-100ms loads via "use cache" directive and streaming hydration |
+| **TASK-PPR-001** | Next.js 16 PPR Enablement | `next.config.ts`, `CacheComponent.tsx` | ✅ COMPLETED - PPR + dynamicIO enabled in next.config.ts; CacheComponent (Suspense boundary) and fetchWithCache ("use cache" + cacheTag + cacheLife) added to packages/core-engine/src/renderer/ |
 
 ### 🔴 P1: High Priority (Enterprise Readiness) - Execute Week 2
 
@@ -1079,8 +1079,8 @@ pnpm setup  # TASK-DEV-001: ✅ COMPLETED - Developer onboarding
 pnpm turbo gen fsd-slice --name design-system  # TASK-GEN-001: ✅ COMPLETED - Create first generator
 # TASK-RULES-001: ✅ COMPLETED - .cursorrules files created for all FSD layers
 # TASK-PUCK-001: ✅ COMPLETED - Puck editor integrated with design tokens + RLS migration
-# Update next.config.ts with experimental.ppr: true  # TASK-PPR-001 ← NEXT TASK
-# Configure pnpm catalogs for dependency management  # TASK-CATALOG-001
+# TASK-PPR-001: ✅ COMPLETED - PPR + dynamicIO enabled; CacheComponent + fetchWithCache added to packages/core-engine/src/renderer/
+# Configure pnpm catalogs for dependency management  # TASK-CATALOG-001 ← NEXT TASK
 
 # 3. Execute critical production tasks
 # Implement webhook idempotency layer  # PROD-002
@@ -1168,4 +1168,4 @@ TASK-EDGE-001 (Middleware) + TASK-FINAL-001 (FSD Completion) + TASK-FINAL-002 (V
 **Last Updated:** February 28, 2026  
 **Source Files:** GOAL.md, GOAL_UPDATED.md, TODO.md, OLDTODO.md, 1.md  
 **Information Preservation:** 100% (All content from all 5 files preserved with compatibility notes)  
-**Status:** P0 Tasks 2/6 Completed (33% Progress)
+**Status:** P0 Tasks 3/6 Completed (50% Progress)
