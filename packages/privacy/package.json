@@ -2,7 +2,7 @@
   "name": "@repo/privacy",
   "version": "0.1.0",
   "private": true,
-  "description": "GDPR privacy tooling for consent and erasure workflows",
+  "description": "GDPR privacy tooling for consent, erasure, audit trails, and data classification",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -17,6 +17,18 @@
     "./erasure": {
       "types": "./dist/erasure.d.ts",
       "default": "./dist/erasure.js"
+    },
+    "./audit": {
+      "types": "./dist/audit/trail-logger.d.ts",
+      "default": "./dist/audit/trail-logger.js"
+    },
+    "./data-export": {
+      "types": "./dist/gdpr/data-export.d.ts",
+      "default": "./dist/gdpr/data-export.js"
+    },
+    "./data-classification": {
+      "types": "./dist/privacy-util/data-classification.d.ts",
+      "default": "./dist/privacy-util/data-classification.js"
     }
   },
   "scripts": {
