@@ -1,16 +1,3 @@
----
-name: mcp-build
-description: |
-  **MCP BUILDER WORKFLOW** - Build and deploy Model Context Protocol servers.
-  USE FOR: MCP server development, deployment automation.
-  DO NOT USE FOR: Simple API calls, basic file operations.
-  INVOKES: [filesystem, fetch].
-meta:
-  version: '1.0.0'
-  author: 'anthropic-ecosystem'
-  category: 'development'
----
-
 # MCP Builder Workflow
 
 ## Overview

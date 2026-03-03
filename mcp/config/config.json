@@ -1,263 +1,309 @@
 {
-    "servers": {
-        "filesystem": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-filesystem",
-                "${REPO_PATH:-.}"
-            ],
-            "env": {
-                "ALLOWED_DIRECTORIES": "${REPO_PATH:-.}",
-                "READ_ONLY_BY_DEFAULT": "true"
-            }
-        },
-        "git": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-git",
-                "${REPO_PATH:-.}"
-            ],
-            "env": {
-                "GIT_REPO_PATH": "${REPO_PATH:-.}",
-                "ALLOW_PUSH": "false"
-            }
-        },
-        "everything": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-everything"
-            ],
-            "env": {
-                "LOG_LEVEL": "info"
-            }
-        },
-        "sequential-thinking": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/sequential-thinking-fixed.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "github": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/github-server.ts"
-            ],
-            "env": {
-                "GITHUB_TOKEN": "${GITHUB_TOKEN}",
-                "LOG_LEVEL": "debug"
-            }
-        },
-        "knowledge-graph": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/knowledge-graph-memory-fixed.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "observability": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/observability-monitor.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "enterprise-registry": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-registry.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "sqlite": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "mcp-server-sqlite"
-            ],
-            "env": {
-                "DB_PATH": "./data/local.db",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "fetch": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "mcp-server-fetch"
-            ],
-            "env": {
-                "ALLOWED_DOMAINS": "github.com,api.github.com,docs.github.com,azure.com,management.azure.com,registry.npmjs.org",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "azure-mcp": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@azure/mcp@2.0.0-beta.22"
-            ],
-            "env": {
-                "AZURE_TOKEN": "${AZURE_TOKEN}",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "ticketer": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "mcp-ticketer"
-            ],
-            "env": {
-                "LINEAR_TOKEN": "${LINEAR_TOKEN}",
-                "JIRA_TOKEN": "${JIRA_TOKEN}",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "skillset": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/skillset-server.ts"
-            ],
-            "env": {
-                "SKILLS_PATH": "skills",
-                "LOG_LEVEL": "info"
-            }
-        },
-        "documentation": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/scripts/documentation-server.ts"
-            ],
-            "env": {
-                "DOCS_DIR": "docs",
-                "RAG_STATE": "rag-state.json",
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "enterprise-auth-gateway": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-auth-gateway.ts"
-            ],
-            "env": {
-                "JWT_SECRET": "${JWT_SECRET}",
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "advanced-agent-plugins": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/advanced-agent-plugins.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "ai-dlc-methodology": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/ai-dlc-methodology.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "enterprise-mcp-marketplace": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-mcp-marketplace.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "mcp-apps-marketplace": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/mcp-apps-marketplace.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "secure-deployment": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/secure-deployment-manager.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "multi-tenant-orchestrator": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/multi-tenant-orchestrator.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        },
-        "mcp-gateway": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/gateway/src/index.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development",
-                "RATE_LIMIT_RPM": "120"
-            }
-        },
-        "enterprise-security-gateway": {
-            "command": "npx",
-            "args": [
-                "tsx",
-                "mcp/servers/src/enterprise-security-gateway.ts"
-            ],
-            "env": {
-                "LOG_LEVEL": "debug",
-                "NODE_ENV": "development"
-            }
-        }
+  "servers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${REPO_PATH:-.}"
+      ],
+      "env": {
+        "ALLOWED_DIRECTORIES": "${REPO_PATH:-.}",
+        "READ_ONLY_BY_DEFAULT": "true"
+      }
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "${REPO_PATH:-.}"
+      ],
+      "env": {
+        "GIT_REPO_PATH": "${REPO_PATH:-.}",
+        "ALLOW_PUSH": "false"
+      }
+    },
+    "everything": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-everything"
+      ],
+      "env": {
+        "LOG_LEVEL": "info"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/sequential-thinking-fixed.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/github-server.ts"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+        "LOG_LEVEL": "debug"
+      }
+    },
+    "knowledge-graph": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/knowledge-graph-memory-fixed.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "observability": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/observability-monitor.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "enterprise-registry": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-registry.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-server-sqlite"
+      ],
+      "env": {
+        "DB_PATH": "./data/local.db",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-server-fetch"
+      ],
+      "env": {
+        "ALLOWED_DOMAINS": "github.com,api.github.com,docs.github.com,azure.com,management.azure.com,registry.npmjs.org",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "azure-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@azure/mcp@2.0.0-beta.22"
+      ],
+      "env": {
+        "AZURE_TOKEN": "${AZURE_TOKEN}",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "ticketer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-ticketer"
+      ],
+      "env": {
+        "LINEAR_TOKEN": "${LINEAR_TOKEN}",
+        "JIRA_TOKEN": "${JIRA_TOKEN}",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "skillset": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/skillset-server.ts"
+      ],
+      "env": {
+        "SKILLS_PATH": "skills",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "documentation": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/scripts/documentation-server.ts"
+      ],
+      "env": {
+        "DOCS_DIR": "docs",
+        "RAG_STATE": "rag-state.json",
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "enterprise-auth-gateway": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-auth-gateway.ts"
+      ],
+      "env": {
+        "JWT_SECRET": "${JWT_SECRET}",
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "advanced-agent-plugins": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/advanced-agent-plugins.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "ai-dlc-methodology": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/ai-dlc-methodology.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "enterprise-mcp-marketplace": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-mcp-marketplace.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "mcp-apps-marketplace": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/mcp-apps-marketplace.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "secure-deployment": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/secure-deployment-manager.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "multi-tenant-orchestrator": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/multi-tenant-orchestrator.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "mcp-gateway": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/gateway/src/index.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development",
+        "RATE_LIMIT_RPM": "120"
+      }
+    },
+    "enterprise-security-gateway": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/enterprise-security-gateway.ts"
+      ],
+      "env": {
+        "LOG_LEVEL": "debug",
+        "NODE_ENV": "development"
+      }
+    },
+    "marketing-analytics": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/marketing-analytics.ts"
+      ],
+      "env": {
+        "TINYBIRD_API_KEY": "${TINYBIRD_API_KEY:-}",
+        "TINYBIRD_BASE_URL": "${TINYBIRD_BASE_URL:-https://api.tinybird.co/v0}",
+        "GA4_API_KEY": "${GA4_API_KEY:-}",
+        "GA4_PROPERTY_ID": "${GA4_PROPERTY_ID:-}"
+      }
+    },
+    "content-management": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/content-management.ts"
+      ],
+      "env": {
+        "CONTENT_ROOT": "${CONTENT_ROOT:-content}"
+      }
+    },
+    "seo-tools": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/seo-tools.ts"
+      ],
+      "env": {
+        "SEO_API_KEY": "${SEO_API_KEY:-}",
+        "SEO_API_BASE_URL": "${SEO_API_BASE_URL:-https://api.example.com/seo}",
+        "GOOGLE_SEARCH_CONSOLE_TOKEN": "${GOOGLE_SEARCH_CONSOLE_TOKEN:-}"
+      }
+    },
+    "campaign-automation": {
+      "command": "npx",
+      "args": [
+        "tsx",
+        "mcp/servers/src/campaign-automation.ts"
+      ],
+      "env": {
+        "CAMPAIGN_API_KEY": "${CAMPAIGN_API_KEY:-}",
+        "CAMPAIGN_API_BASE_URL": "${CAMPAIGN_API_BASE_URL:-https://api.example.com/campaigns}"
+      }
     }
+  }
 }
