@@ -578,9 +578,6 @@ export class ProceduralMemory {
       timestamp: new Date().toISOString(),
     };
 
-    // Simulate delay
-    await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
-
     return stepResult;
   }
 }
