@@ -75,7 +75,7 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 - **MCP provides WHAT (external access)**
 - Use 2-3 skills maximum for optimal context efficiency
 - Progressive disclosure patterns (~30-50 tokens idle)
-- Skills located in `.claude/skills/` (source of truth)
+- Skills located in `skills/` (source of truth)
 
 ### MCP Server Access
 - Use @mcp-server-name for external tool access
@@ -93,7 +93,7 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 
 ### MCP (Model Context Protocol)
 - Use MCP servers for external tool access
-- Configure in `.mcp/config.json`
+- Configure in `mcp/config/config.json`
 - Validate all MCP server responses
 - Implement proper error handling for MCP failures
 
@@ -155,7 +155,7 @@ You are a senior TypeScript engineer working in a Next.js 16/React 19 monorepo u
 - Root AGENTS.md for master coordination (keep under 500 words)
 - Package-specific AGENTS.md for detailed guidance
 - CLAUDE.md for sub-agent orchestration
-- MCP integration documentation in `.mcp/`
+- MCP integration documentation in `mcp/config/`
 
 ## Quality Gates
 

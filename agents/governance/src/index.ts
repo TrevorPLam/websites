@@ -5,6 +5,8 @@
  * @security Policy enforcement with zero-trust architecture and comprehensive audit logging.
  * @requirements 2026-agentic-coding, governance, security, policy-as-code
  */
+import * as fs from 'fs';
+import * as path from 'path';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -84,8 +86,153 @@ export class PolicyEngine {
     this.loadDefaultPolicies();
   }
 
+  /**
+   * Load policies from `policy/ai-agent-policy.yaml` relative to the repository root.
+   * Returns an empty array and logs a warning if the file is missing or invalid.
+   */
+  private loadYamlPolicies(): Policy[] {
+    const candidates = [
+      path.resolve(process.cwd(), 'policy', 'ai-agent-policy.yaml'),
+      path.resolve(__dirname, '..', '..', '..', '..', 'policy', 'ai-agent-policy.yaml'),
+    ];
+
+    let rawYaml: string | undefined;
+    for (const candidate of candidates) {
+      try {
+        rawYaml = fs.readFileSync(candidate, 'utf-8');
+        break;
+      } catch {
+        // try next candidate
+      }
+    }
+
+    if (!rawYaml) {
+      console.warn('[PolicyEngine] policy/ai-agent-policy.yaml not found; using hardcoded defaults only');
+      return [];
+    }
+
+    try {
+      const parsed = this.parseAiAgentPolicyYaml(rawYaml);
+      const policy = PolicySchema.parse(parsed);
+      return [policy];
+    } catch (err) {
+      console.error('[PolicyEngine] Failed to parse policy/ai-agent-policy.yaml:', err);
+      return [];
+    }
+  }
+
+  /**
+   * Minimal parser for the `policy/ai-agent-policy.yaml` format.
+   * Maps the simple rule structure to the full Policy schema.
+   */
+  private parseAiAgentPolicyYaml(yaml: string): unknown {
+    const lines = yaml.split('\n');
+    let name = 'ai-agent-policy';
+    const rules: Array<{ id: string; when: Record<string, string>; action: string }> = [];
+
+    let currentRule: { id?: string; when?: Record<string, string>; action?: string } | null = null;
+    let inRules = false;
+    let inWhen = false;
+
+    for (const rawLine of lines) {
+      const line = rawLine.trimEnd();
+      const trimmed = line.trimStart();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+
+      const indent = line.length - trimmed.length;
+
+      if (trimmed.startsWith('name:')) {
+        name = trimmed.slice('name:'.length).trim();
+        continue;
+      }
+      if (trimmed === 'rules:') {
+        inRules = true;
+        continue;
+      }
+      if (!inRules) continue;
+
+      if (indent === 2 && trimmed.startsWith('- ')) {
+        if (currentRule?.id && currentRule?.action) {
+          rules.push({
+            id: currentRule.id,
+            when: currentRule.when ?? {},
+            action: currentRule.action,
+          });
+        }
+        currentRule = { id: trimmed.slice(2).replace(/^id:\s*/, '') };
+        inWhen = false;
+        continue;
+      }
+      if (!currentRule) continue;
+
+      const kv = trimmed;
+      if (kv.startsWith('id:')) {
+        currentRule.id = kv.slice('id:'.length).trim();
+        inWhen = false;
+      } else if (kv === 'when:') {
+        currentRule.when = {};
+        inWhen = true;
+      } else if (kv.startsWith('action:')) {
+        currentRule.action = kv.slice('action:'.length).trim();
+        inWhen = false;
+      } else if (inWhen && kv.includes(':')) {
+        const [k, ...rest] = kv.split(':');
+        if (!currentRule.when) currentRule.when = {};
+        currentRule.when[k.trim()] = rest.join(':').trim();
+      }
+    }
+
+    // Flush the last rule
+    if (currentRule?.id && currentRule?.action) {
+      rules.push({
+        id: currentRule.id,
+        when: currentRule.when ?? {},
+        action: currentRule.action,
+      });
+    }
+
+    // Map to Policy schema rules; identity mappings are explicit for documentation purposes
+    const actionTypeMap: Record<string, 'allow' | 'deny' | 'require_approval' | 'limit' | 'audit'> = {
+      require_human_approval: 'require_approval',
+      deny_without_explicit_allowlist: 'deny',
+      deny: 'deny',
+      allow: 'allow',
+      audit: 'audit',
+      limit: 'limit',
+    };
+
+    const policyRules = rules.map((r, i) => ({
+      id: r.id,
+      type: actionTypeMap[r.action] ?? 'audit',
+      target: Object.keys(r.when)[0] ?? 'action',
+      condition: r.when,
+      action: r.action,
+      priority: 10 - i,
+      enabled: true,
+    }));
+
+    return {
+      id: name,
+      name,
+      description: `Loaded from policy/ai-agent-policy.yaml`,
+      version: '1.0.0',
+      environment: 'production',
+      enabled: true,
+      rules: policyRules,
+      compliance: ['GDPR', 'SOC2'],
+      lastUpdated: new Date(),
+      author: 'system',
+    };
+  }
+
   private loadDefaultPolicies(): void {
-    // Production Security Policies
+    // Attempt to load policies from policy/ai-agent-policy.yaml first
+    const yamlPolicies = this.loadYamlPolicies();
+    if (yamlPolicies.length > 0) {
+      yamlPolicies.forEach((policy) => this.policies.set(policy.id, policy));
+    }
+
+    // Production Security Policies (hardcoded defaults; these use different IDs than YAML policies so they do not conflict)
     const productionPolicies: Policy[] = [
       {
         id: 'prod-tool-access',

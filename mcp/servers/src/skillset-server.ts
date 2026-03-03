@@ -19,7 +19,7 @@ import {
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-const SKILLS_PATH = process.env.SKILLS_PATH || 'skills';
+const SKILLS_PATH = process.env.SKILLS_PATH || path.resolve(process.cwd(), 'skills');
 
 class SkillsetServer {
   private server: Server;

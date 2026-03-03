@@ -122,15 +122,19 @@ export class EnterpriseAuthGateway {
 
   private createSessionStore(): SessionStore {
     if (process.env.REDIS_URL) {
-      // Redis-backed session store
-      this.redisClient = createClient({ url: process.env.REDIS_URL });
-      this.redisClient.connect().catch(console.error);
+      // Redis-backed session store — use a closure-captured local variable so the
+      // object literal methods access the client without `this` binding issues
+      const redisClient = createClient({ url: process.env.REDIS_URL });
+      this.redisClient = redisClient;
+      redisClient.on('error', (err) => {
+        console.warn('[enterprise-auth-gateway] Redis session store error:', err);
+      });
+      redisClient.connect().catch(console.error);
 
       return {
         async get(id: string): Promise<AuthSession | null> {
-          if (!this.redisClient) return null;
           try {
-            const raw = await this.redisClient.get(`mcp:auth:session:${id}`);
+            const raw = await redisClient.get(`mcp:auth:session:${id}`);
             return raw ? JSON.parse(raw) : null;
           } catch (error) {
             console.error('Redis session get error:', error);
@@ -139,9 +143,8 @@ export class EnterpriseAuthGateway {
         },
 
         async set(id: string, session: AuthSession, ttlSeconds = 3600): Promise<void> {
-          if (!this.redisClient) return;
           try {
-            await this.redisClient.setEx(
+            await redisClient.setEx(
               `mcp:auth:session:${id}`,
               ttlSeconds,
               JSON.stringify(session)
@@ -152,27 +155,29 @@ export class EnterpriseAuthGateway {
         },
 
         async delete(id: string): Promise<void> {
-          if (!this.redisClient) return;
           try {
-            await this.redisClient.del(`mcp:auth:session:${id}`);
+            await redisClient.del(`mcp:auth:session:${id}`);
           } catch (error) {
             console.error('Redis session delete error:', error);
           }
         },
       };
     } else {
-      // In-memory session store
+      // In-memory session store (not suitable for production multi-instance deployments;
+      // TTL is also not enforced in this fallback)
+      console.warn('[enterprise-auth-gateway] REDIS_URL not set, using in-memory session store');
+      const sessions: Map<string, AuthSession> = new Map();
       return {
         async get(id: string): Promise<AuthSession | null> {
-          return this.sessions.get(id) || null;
+          return sessions.get(id) ?? null;
         },
 
-        async set(id: string, session: AuthSession, ttlSeconds = 3600): Promise<void> {
-          this.sessions.set(id, session);
+        async set(id: string, session: AuthSession, _ttlSeconds = 3600): Promise<void> {
+          sessions.set(id, session);
         },
 
         async delete(id: string): Promise<void> {
-          this.sessions.delete(id);
+          sessions.delete(id);
         },
       };
     }
@@ -180,15 +185,20 @@ export class EnterpriseAuthGateway {
 
   private createTokenBlacklistStore(): TokenBlacklistStore {
     if (process.env.REDIS_URL) {
-      // Redis-backed token blacklist
-      this.redisClient = createClient({ url: process.env.REDIS_URL });
-      this.redisClient.connect().catch(console.error);
+      // Reuse the existing Redis client created by createSessionStore when available
+      const redisClient = this.redisClient ?? createClient({ url: process.env.REDIS_URL });
+      if (!this.redisClient) {
+        this.redisClient = redisClient;
+        redisClient.on('error', (err) => {
+          console.warn('[enterprise-auth-gateway] Redis blacklist store error:', err);
+        });
+        redisClient.connect().catch(console.error);
+      }
 
       return {
         async isBlacklisted(token: string): Promise<boolean> {
-          if (!this.redisClient) return false;
           try {
-            const result = await this.redisClient.get(`mcp:auth:blacklist:${token}`);
+            const result = await redisClient.get(`mcp:auth:blacklist:${token}`);
             return result === 'blacklisted';
           } catch (error) {
             console.error('Redis blacklist check error:', error);
@@ -197,36 +207,37 @@ export class EnterpriseAuthGateway {
         },
 
         async add(token: string, ttlSeconds = 86400): Promise<void> {
-          if (!this.redisClient) return;
           try {
-            await this.redisClient.setEx(`mcp:auth:blacklist:${token}`, ttlSeconds, 'blacklisted');
+            await redisClient.setEx(`mcp:auth:blacklist:${token}`, ttlSeconds, 'blacklisted');
           } catch (error) {
             console.error('Redis blacklist add error:', error);
           }
         },
 
         async remove(token: string): Promise<void> {
-          if (!this.redisClient) return;
           try {
-            await this.redisClient.del(`mcp:auth:blacklist:${token}`);
+            await redisClient.del(`mcp:auth:blacklist:${token}`);
           } catch (error) {
             console.error('Redis blacklist remove error:', error);
           }
         },
       };
     } else {
-      // In-memory token blacklist
+      // In-memory token blacklist (not suitable for production multi-instance deployments;
+      // TTL is also not enforced in this fallback)
+      console.warn('[enterprise-auth-gateway] REDIS_URL not set, using in-memory token blacklist');
+      const tokenBlacklist: Map<string, boolean> = new Map();
       return {
         async isBlacklisted(token: string): Promise<boolean> {
-          return this.tokenBlacklist.has(token);
+          return tokenBlacklist.has(token);
         },
 
-        async add(token: string, ttlSeconds = 86400): Promise<void> {
-          this.tokenBlacklist.set(token, true);
+        async add(token: string, _ttlSeconds = 86400): Promise<void> {
+          tokenBlacklist.set(token, true);
         },
 
         async remove(token: string): Promise<void> {
-          this.tokenBlacklist.delete(token);
+          tokenBlacklist.delete(token);
         },
       };
     }
