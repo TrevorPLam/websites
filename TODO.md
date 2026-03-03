@@ -1,1221 +1,870 @@
-# 🚀 MASTER DOCUMENT: AI-Native SaaS Platform Architecture
-## Unified Architecture, Complete Roadmap, and AI Execution Strategy
-
-**Version:** 5.0 Final Consolidated | **Target:** 1,000+ Tenants | **Architecture:** FSD v2.1 + Hexagonal + AI-Native  
-**Last Updated:** February 28, 2026 | **Status:** Ready for P0 Critical Task Execution  
-**Target File Count:** 1,124+ Files | **Focus:** Transition from Static Repository to AI-Native SaaS Platform
+**AI-Native SaaS Platform: Executable Task Checklist**
+*Target: 1,124 Files | 1,000+ Tenants | Sub-100ms Loads*
 
 ---
 
-## 📋 Table of Contents
+## 🎯 PHASE MCP: Perfecting MCP + Skills System
+*Complete prioritized game plan based on verified repository findings and 2026 enterprise best practices*
 
-1. [Executive Summary & Strategic Vision](#executive-summary--strategic-vision)
-2. [Architecture Foundation: The Matrix Approach](#architecture-foundation-the-matrix-approach)
-3. [Current State Assessment & Gap Analysis](#current-state-assessment--gap-analysis)
-4. [Unified Enhancement Roadmap (Waves 0-7)](#unified-enhancement-roadmap-waves-0-7)
-5. [Critical Task Specifications by Priority](#critical-task-specifications-by-priority)
-6. [Foundation Status & Legacy Tasks (Completed)](#foundation-status--legacy-tasks-completed)
-7. [Complete File Structure Specifications](#complete-file-structure-specifications)
-8. [AI Execution Strategy & Force Multipliers](#ai-execution-strategy--force-multipliers)
-9. [Production Readiness & Acceptance Criteria](#production-readiness--acceptance-criteria)
-10. [Known Discrepancies & Compatibility Notes](#known-discrepancies--compatibility-notes)
-11. [Immediate Next Steps & Diagnostic Commands](#immediate-next-steps--diagnostic-commands)
+### PHASE 0 — EMERGENCY TRIAGE (Day 1, ~2 hours)
+*Fix the three blockers that make everything else non-functional*
 
----
+- [ ] **0-A: Fix All Path Mismatches**
+  - **Priority**: 🔴 Critical
+  - **Effort**: 1 hour
+  - **Issue**: Files reference `.mcp/config.json` which doesn't exist (should be `mcp/config/config.json`)
+  - **Files to Update**:
+    - [ ] `AGENTS.md` — Phase 1 Cold Start section, MCP Server Configurations section (`.mcp/` → `mcp/config/`)
+    - [ ] `CLAUDE.md` — All `.mcp/` references → `mcp/config/`
+    - [ ] `.cursorrules` — MCP config path fix
+    - [ ] `.windsurfrules` — MCP config path fix
+  - **Also Fix Skills Path**:
+    - [ ] Every reference to `.claude/skills/` → `skills/` in all files above
 
-## Executive Summary & Strategic Vision
+- [ ] **0-B: Fix CI Workflow Path Triggers**
+  - **Priority**: 🔴 Critical
+  - **Effort**: 30 min
+  - **Issue**: CI never fires because `on.push.paths` filters don't match actual file locations
+  - **Files**:
+    - [ ] `.github/workflows/mcp-skills-validation.yml`
+  - **Changes**:
+    - [ ] Update `on.push.paths`:
+      - `'skills/**'` (was: `.claude/skills/**`)
+      - `'mcp/config/**'` (was: `.mcp/**`)
+      - `'mcp/servers/**'` (was: `packages/mcp-servers/**`)
+    - [ ] Update job steps: `jq empty .mcp/config.json` → `jq empty mcp/config/config.json`
+    - [ ] Update job steps: `.claude/skills/*/SKILL.md` → `skills/*/SKILL.md`
 
-### 🎯 Core Objective
-
-Transform your marketing SaaS platform into a **top-tier, AI-native, enterprise-grade system** capable of serving 1,000+ tenants with:
-
-- **Sub-100ms page loads** via JSON-driven rendering
-- **Self-improving marketing** through AI-generated layouts + autonomous A/B testing
-- **Bank-grade security**, compliance, and observability
-- **5-minute developer onboarding** with AI-agent-safe architecture
-
-### ✨ Validated Strategic Pillars
-
-| Pillar | Technology | Business Impact |
-| :--- | :--- | :--- |
-| **Vertical Organization** | Feature-Sliced Design v2.1 | Clean domain boundaries, scalable team parallelization |
-| **Horizontal Abstraction** | Hexagonal Architecture (Ports/Adapters) | Swap external services without touching business logic |
-| **Infinite UI Engine** | Puck Editor + JSON-driven rendering | AI generates layouts by modifying JSON, not code |
-| **Usage-Based Billing** | Stripe Billing Meters + Supabase sync | Real-time metering without API rate limits |
-| **AI-Native Development** | Turborepo generators + Cursor rules | AI agents work safely in parallel without breaking architecture |
-| **Unified Analytics** | Tinybird (ClickHouse) ingestion | 10-100x faster time-series queries for metering & experimentation |
-| **Force Multipliers** | AI generators + automation | 40-60% development velocity improvement |
-
-### 🔑 Key Insight: The "Generate, Don't Write" Philosophy
-
-Your repository now operates on a principle where:
-
-- **Generators > Manual Creation:** Write a generator that creates 15+ files perfectly every time
-- **Constraints > Documentation:** `.cursorrules` enforce architecture better than any README
-- **JSON > Code:** Puck's JSON-driven approach means AI modifies layouts without touching React
-- **Hexagonal > Direct:** Adapters make it safe for AI to swap services without breaking features
-- **Metering > Guessing:** Track everything from day one—you can't optimize what you don't measure
-
----
-
-## Architecture Foundation: The Matrix Approach
-
-### 🧩 FSD v2.1 + Hexagonal Architecture Matrix
-
-```text
-Vertical (FSD v2.1)    Horizontal (Hexagonal)
-─────────────────────────────────────────────────
-app/                   ┌────────────────────────┐
-pages/                 │   UI Layer (React)     │
-widgets/               ├────────────────────────┤
-features/              │   Port Interfaces      │ ← contracts only
-entities/              ├────────────────────────┤
-shared/                │   Adapter Implementations
-                       │   [External, Native, Mock]
-                       └────────────────────────┘
-```
-
-### 🔄 Data Flow Architecture
-
-```text
-User Request
-     ↓
-Edge Middleware (Vercel) → Tenant Resolution (<10ms)
-     ↓
-Next.js 16 PPR → Dynamic Route Handler
-     ↓
-ComponentRenderer → Loads JSON from Supabase
-     ↓
-Puck Registry → Maps componentId → React Component
-     ↓
-Dynamic Imports (React.lazy) → Rendered Page
-     ↓
-Tinybird Ingestion → Analytics/Metering Events
-```
-
-### Key Import Rules
-
-- **Flow:** `app → pages → widgets → features → entities → shared`
-- **Constraint:** Never import from higher layers
-- **Notation:** Use `@x` notation for cross-slice dependencies
-- **Ports:** Hexagonal "Ports" live in `packages/config` (interfaces only)
-- **Adapters:** "Adapters" live in `packages/services/[service]/adapters/`
+- [ ] **0-C: Fix MCP App Build Failure**
+  - **Priority**: 🔴 Critical
+  - **Effort**: 30 min
+  - **Issue**: `mcp/apps/src/index.ts` imports `@repo/mcp-servers` which doesn't exist
+  - **Files**:
+    - [ ] `mcp/apps/src/index.ts`
+  - **Subtasks**:
+    - [ ] **Option B (Recommended)**: Create `packages/mcp-servers/` as real workspace package
+      - [ ] `packages/mcp-servers/package.json` (name: `@repo/mcp-servers`)
+      - [ ] `packages/mcp-servers/src/index.ts` (export shared types)
+      - [ ] Add to `pnpm-workspace.yaml`
+    - [ ] **Alternative Option A**: Remove import and inline types (temporary fix)
+  - **Validation**:
+    - [ ] `mcp/apps` builds without error
+    - [ ] Type imports resolve correctly
 
 ---
 
-## Current State Assessment & Gap Analysis
+### PHASE 1 — STRUCTURAL INTEGRITY (Days 2–4, ~8 hours)
+*Make the existing system actually work end-to-end*
 
-### ✅ Strengths Already Implemented
+- [ ] **1-A: Register agents/* in pnpm workspace**
+  - **Priority**: 🔴 Critical
+  - **Effort**: 1 hour
+  - **Issue**: 5 agent packages are invisible to Turborepo
+  - **Files**:
+    - [ ] `pnpm-workspace.yaml` (add `'agents/*'` and `'mcp/servers'`)
+  - **Commands**:
+    ```bash
+    pnpm install # wire dependency graph
+    ```
+  - **Validation**:
+    - [ ] `agents/*` packages recognized in dependency graph
+    - [ ] Cross-package imports resolve (`@repo/agent-core` etc.)
 
-| Category | Implementation Status | Evidence |
-| :--- | :--- | :--- |
-| **Turborepo Infrastructure** | ✅ Complete | Remote caching, task pipelines, `@turbo/gen` installed |
-| **FSD Architecture** | ✅ Complete | Steiger linting, layer separation, path mappings configured |
-| **Testing Infrastructure** | ✅ Complete | Vitest, Playwright, coverage enforcement, visual regression |
-| **Package Management** | ✅ Complete | pnpm workspaces, syncpack, Renovate automation |
-| **Bundle Monitoring** | ✅ Complete | size-limit configuration (13 limits defined) |
-| **MCP Framework** | ✅ Complete | Servers, skills, agent orchestration scaffolding (75/75 issues resolved) |
-| **Documentation** | ✅ Complete | Diátaxis structure, tutorials, guides |
-| **Security Scanning** | ✅ Complete | gitleaks, secret scanning, post-quantum crypto awareness |
-| **Tooling** | ✅ Complete | Component generators, client scaffolding, validation scripts |
+- [ ] **1-B: Fix enterprise-security Name Mismatch**
+  - **Priority**: 🔴 Critical
+  - **Effort**: 30 min
+  - **Issue**: `deploy-production` skill invokes `enterprise-security` but config registers it as `enterprise-security-gateway`
+  - **Files**:
+    - [ ] `mcp/config/config.production.json` (standardize key name)
+    - [ ] `mcp/servers/src/enterprise-security-gateway.ts` (standardize MCP name declaration)
+    - [ ] All `SKILL.md` files referencing this server
+  - **Standard**: Use `enterprise-security-gateway` as canonical name
 
-### ❌ Critical Gaps Identified (Priority Ordered)
+- [ ] **1-C: Add Redis Fallback to enterprise-auth-gateway**
+  - **Priority**: 🔴 High
+  - **Effort**: 1 hour
+  - **Issue**: Crashes on startup if `REDIS_URL` not set
+  - **Files**:
+    - [ ] `mcp/servers/src/enterprise-auth-gateway.ts`
+    - [ ] `mcp/config/config.json` (make `REDIS_URL` optional in env block)
+  - **Implementation**:
+    - [ ] Add in-memory fallback using Map-based store
+    - [ ] Add error handler: `store.on('error', ...)` with fallback warning
+  - **Validation**:
+    - [ ] Server starts without `REDIS_URL`
+    - [ ] Logs show fallback warning
+    - [ ] Functions with Redis when available
 
-#### 🔴 P0: Blocking Production
+- [ ] **1-D: Fix SKILLS_PATH Resolution**
+  - **Priority**: 🔴 High
+  - **Effort**: 30 min
+  - **Issue**: Relative path breaks when server launches from non-root directory
+  - **Files**:
+    - [ ] `mcp/servers/src/skillset-server.ts`
+    - [ ] `mcp/config/config.json` (update env block)
+  - **Changes**:
+    - [ ] Use `path.resolve(process.cwd(), 'skills')` as default
+    - [ ] Support absolute path via `process.env.SKILLS_PATH`
+    - [ ] Update config: `"SKILLS_PATH": "${REPO_PATH:-$(pwd)}/skills"`
 
-| Gap | Evidence | Impact | Missing Files |
-| :--- | :--- | :--- | :--- |
-| **Turborepo Generators Not Configured** | `@turbo/gen` installed but no `turbo/generators/config.ts` | AI agents manually copy-paste boilerplate → inconsistencies | `turbo/generators/config.ts`, `fsd-slice/generator.ts`, templates |
-| **AI Coding Rules Missing** | No `.cursorrules` files in root or packages | AI violates FSD boundaries, creates circular dependencies | `.cursorrules`, layer-specific rules files |
-| **Next.js 16 PPR Not Enabled** | Not visible in config files | JSON-driven renderer can't achieve sub-100ms loads | `next.config.ts` experimental config, `CacheComponent.tsx` |
-| **Puck Editor Not Integrated** | No `@measured/puck` in dependencies | "Infinite UI Engine" vision blocked | `packages/core-engine/puck/config.tsx`, editor routes |
+- [ ] **1-E: Register Missing MCP Tools for Broken Skills**
+  - **Priority**: 🔴 High
+  - **Effort**: 2 hours
+  - **Issues**:
+    - `secure-deployment` skill invokes `secure-deployment` (not registered)
+    - Marketing skills invoke non-existent tools (`analytics`, `content-management`, `seo-tools`, `campaign-automation`)
+  - **Files**:
+    - [ ] `mcp/config/config.json` (register missing tools)
+    - [ ] `mcp/servers/src/marketing-analytics.ts` (new - wraps fetch)
+    - [ ] `mcp/servers/src/content-management.ts` (new - wraps github)
+    - [ ] `mcp/servers/src/seo-tools.ts` (new - wraps fetch)
+    - [ ] `mcp/servers/src/campaign-automation.ts` (new - wraps fetch)
+  - **Subtasks**:
+    - [ ] Option B (Recommended): Rewrite marketing SKILL.md to use existing servers (filesystem + fetch)
+    - [ ] OR Option A: Stub as lightweight MCP servers using existing patterns
+    - [ ] Ensure `secure-deployment` maps to `secure-deployment-manager.ts` or update skill name
 
-#### 🔴 P1: Enterprise Readiness
+- [ ] **1-F: Remove or Integrate index.ts Dead Code**
+  - **Priority**: 🟡 Medium
+  - **Effort**: 30 min
+  - **Issue**: `mcp/servers/src/index.ts` contains duplicate unused classes
+  - **Files**:
+    - [ ] `mcp/servers/src/index.ts`
+  - **Action**:
+    - [ ] If unique logic exists → extract to appropriate dedicated server files
+    - [ ] If true duplicates → delete `index.ts`
+  - **Validation**:
+    - [ ] No dead code remaining
+    - [ ] All existing imports still resolve
 
-| Gap | Evidence | Impact | Missing Files |
-| :--- | :--- | :--- | :--- |
-| **pnpm Catalogs Not Configured** | Renovate aware but catalogs not implemented | 60% slower installs, version drift risk | `pnpm-workspace.yaml` catalog definitions |
-| **Design Tokens Package Incomplete** | Path mapping exists but no Style Dictionary config | Divergent color systems across apps | `sd.config.js`, `puck-theme.ts`, Figma pipeline |
-| **Contract Testing Not Implemented** | No `tests/contracts/` directories | Adapters drift from Port interfaces silently | `email-service.contract.ts`, adapter contract tests |
-| **Developer Onboarding Incomplete** | Scripts exist but not unified | Hours of senior dev time per new environment | `scripts/setup-dev.ts`, `t3-env` validation |
-
-#### 🟡 P2: SaaS Hardening
-
-| Gap | Evidence | Impact | Missing Files |
-| :--- | :--- | :--- | :--- |
-| **Compliance Package Empty** | Referenced but lacks GDPR/CCPA implementation | Enterprise deals stall at legal review | `trail-logger.ts`, hash-chained audit logs |
-| **Queue Observability Missing** | Inngest scripts but no monitoring | Silent job failures in production | `observability.ts`, DLQ dashboard |
-| **Puck Version History Missing** | No `layout_versions` table | Tenants can't recover from bad publishes | Migration, history panel UI |
-| **A/B Testing Mutex Missing** | No experiment isolation logic | Overlapping experiments invalidate statistics | `experiment-mutex.ts`, component overlap checks |
-| **Tinybird Underutilized** | No unified ingestion layer | Analytics fragmentation, slower queries | `packages/analytics/ingest.ts`, Tinybird pipes |
-
-#### 🟢 P3: AI-Native Enhancements
-
-| Gap | Evidence | Impact | Missing Files |
-| :--- | :--- | :--- | :--- |
-| **AI-to-JSON Pipeline Missing** | No `packages/core-engine/ai/` directory | AI can't generate Puck layouts from prompts | `generate-layout.ts`, prompt templates |
-| **Edge Middleware Incomplete** | Middleware exists but not optimized | Can't scale to 1,000+ tenants | `tenant-resolver.ts`, Edge Config integration |
-
----
-
-## Unified Enhancement Roadmap (Waves 0-7)
-
-### 🌊 WAVE 0: Foundation & Developer Experience (Prerequisites for Everything)
-
-#### TASK-DEV-001: Developer Onboarding Automation ⭐ CRITICAL
-**Status:** 🟡 In Progress (automation scripts aligned) | **Impact:** 5-minute clone-to-running vs. hours of debugging
-
-**Implementation notes (verified in repository):**
-- `scripts/setup-dev.ts`, `scripts/verify-env.ts`, and `scripts/seed.ts` are present.
-- Root `package.json` includes `setup` and `verify` scripts.
-- Setup/verify scripts now align with repository baseline (`Node.js >=22`, `.env.example` bootstrap, cross-platform socket-based port checks, and optional `SKIP_DB_SETUP`/`SKIP_VERIFY` automation flags).
-- `scripts/setup-dev.ts` now correctly returns stdout for command checks, unblocking prerequisite validation (`node --version`, `pnpm --version`) during setup.
-
-```yaml
-id: TASK-DEV-001
-title: Developer Onboarding & Environment Automation
-files:
-  - scripts/setup-dev.ts
-  - scripts/verify-env.ts
-  - scripts/seed.ts
-  - .env.example (45+ documented variables)
-  - package.json (add "setup" script)
-commands:
-  - pnpm setup          # One command setup
-  - pnpm verify         # Pre-flight check
-```
-
-#### TASK-DS-001: Design Tokens Package ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Impact:** Prevents system-wide theming drift | **Date:** March 3, 2026
-
-```yaml
-id: TASK-DS-001
-title: Design Tokens Package - Single Source of Truth
-files:
-  - packages/design-tokens/src/tokens.ts (TypeScript HSL values)
-  - packages/design-tokens/src/css-variables.css
-  - packages/design-tokens/src/puck-theme.ts
-  - packages/design-tokens/src/tailwind-preset.ts
-  - packages/design-tokens/src/transforms/ (Style Dictionary transforms)
-dependencies: []
-blocks: [TASK-UI-001, TASK-UI-002, TASK-SaaS-002]
-```
-
-#### TASK-GEN-001: Turborepo Generators for FSD + Hexagonal Scaffolding ⭐ CRITICAL ✅ COMPLETED
-**Status:** ✅ COMPLETED | **Impact:** Reduces TASK-010 through TASK-035 from weeks to days | **Date:** February 27, 2026
-
-```yaml
-id: TASK-GEN-001
-title: Implement Turborepo Generators
-status: COMPLETED
-completion_date: 2026-02-27
-files:
-  - turbo/generators/config.ts ✅
-  - turbo/generators/fsd-slice/generator.ts ✅
-  - turbo/generators/fsd-slice/templates/shared/ ✅
-  - turbo/generators/fsd-slice/templates/entities/ ✅
-  - turbo/generators/fsd-slice/templates/features/ ✅
-  - turbo/generators/fsd-slice/templates/widgets/ ✅
-  - packages/shared/src/index.ts (auto-updated)
-  - packages/entities/src/index.ts (auto-updated)
-  - packages/features/src/index.ts (auto-updated)
-  - packages/widgets/src/index.ts (auto-updated)
-commands:
-  - pnpm turbo gen fsd-slice ✅ (15 predefined slice options)
-acceptance_criteria:
-  - ✅ Generates 15+ files per FSD slice with correct @x imports
-  - ✅ 15 predefined slice types (userProfile, bookingSystem, paymentProcessor, etc.)
-  - ✅ Multi-select layer generation (shared, entities, features, widgets)
-  - ✅ Handlebars template system with TypeScript strict mode
-  - ✅ Automatic package export updates
-  - ✅ Test and Storybook generation options
-  - ✅ Generator ready for immediate use
-implementation:
-  - Created comprehensive FSD v2.1 compliant generator
-  - Implemented 15 common slice types with descriptions
-  - Added checkbox selection for multiple layers
-  - Built template system with proper TypeScript types
-  - Integrated with existing Turborepo configuration
-  - Templates include proper @x imports and hexagonal patterns
-next_steps:
-  - Generator is ready for immediate use
-  - Can generate complete FSD slices in seconds
-  - Supports rapid prototyping and development
-  - Ready for additional generator types (service-port, puck-component)
-```
-
-#### TASK-RULES-001: Cursor Rules for Architectural Enforcement ⭐ CRITICAL ✅ COMPLETED
-**Status:** ✅ COMPLETED | **Impact:** Prevents AI agents from violating FSD/Hexagonal boundaries | **Date:** March 3, 2026
-
-```yaml
-id: TASK-RULES-001
-title: Layer-Specific AI Rules (.cursorrules)
-files:
-  - .cursorrules (root)
-  - packages/entities/.cursorrules
-  - packages/features/.cursorrules
-  - packages/widgets/.cursorrules
-  - packages/services/.cursorrules
-rules_summary:
-  entities: "Pure logic only. NO React imports. NO external APIs. Only pure TypeScript."
-  features: "Can use entities. NO UI imports except @repo/ui. Use Server Actions."
-  widgets: "Can use features + entities. React components only. NO app router imports."
-  services: "Hexagonal adapters only. Must implement Port interface from packages/config."
-```
+- [ ] **1-G: Fix agents/core Package Name**
+  - **Priority**: 🔴 Critical
+  - **Effort**: 30 min
+  - **Issue**: `agents/core/src/index.ts` declares `@repo/context-engineering` but docs use `@repo/agent-core`
+  - **Files**:
+    - [ ] `agents/core/package.json` (update name field)
+    - [ ] OR update all documentation and imports to use `@repo/context-engineering`
+  - **Validation**:
+    - [ ] Single canonical name used everywhere
+    - [ ] Imports resolve without alias confusion
 
 ---
 
-### 🌊 WAVE 1: The "Infinite" UI Engine (JSON-Driven Rendering)
+### PHASE 2 — HARDEN THE AGENT LAYER (Days 5–7, ~10 hours)
+*Elevate stubs to production-grade implementations*
 
-#### TASK-PUCK-001: Puck Editor Integration with Token Integration ⭐ CRITICAL ✅ COMPLETED
-**Status:** ✅ COMPLETED | **Goal:** JSON-driven page editing with multi-tenant safety | **Date:** March 3, 2026
+- [ ] **2-A: Replace Math.random() Stubs in advanced-agent-plugins**
+  - **Priority**: 🔴 High
+  - **Effort**: 2 hours
+  - **Files**:
+    - [ ] `agents/plugins/src/index.ts` (or relevant plugin file)
+  - **Changes**:
+    - [ ] Replace `generatePluginMetrics()` random data with real system data:
+      - `process.memoryUsage().heapUsed`
+      - `os.loadavg()[0]`
+      - `os.cpus().length`
+      - Actual connection pool size
+    - [ ] Replace `security_audit` setTimeout with real audit runner (ESLint security, npm audit, or static analysis)
+  - **Validation**:
+    - [ ] Metrics reflect actual system state
+    - [ ] Audit results are deterministic
 
-```yaml
-id: TASK-PUCK-001
-title: Puck Visual Editor Integration with Design Tokens
-files:
-  - apps/admin/app/editor/[site-id]/page.tsx
-  - packages/core-engine/puck/config.tsx
-  - packages/core-engine/puck/components/registry.tsx
-  - packages/core-engine/puck/theme-bridge.ts
-  - database/migrations/20240201000000_site_layouts.sql
-dependencies: [TASK-DS-001, TASK-GEN-001, TASK-RULES-001]
-validation:
-  - Admin can drag/drop components in /admin/editor/site-123
-  - Changes save to site_layouts table with RLS (tenant_id check)
-  - Editor shows only components allowed by tenant's plan (metering integration)
-```
+- [ ] **2-B: Load policy/ai-agent-policy.yaml in PolicyEngine**
+  - **Priority**: 🔴 High
+  - **Effort**: 2 hours
+  - **Issue**: `loadDefaultPolicies()` ignores YAML file, uses hardcoded rules only
+  - **Files**:
+    - [ ] `agents/governance/src/index.ts`
+  - **Implementation**:
+    - [ ] Add `readFileSync` and `parseYaml` imports
+    - [ ] Load `policy/ai-agent-policy.yaml` first
+    - [ ] Parse YAML rules and validate with `PolicySchema`
+    - [ ] Apply hardcoded defaults as fallback only
+  - **Validation**:
+    - [ ] YAML changes reflect in policy engine without code deploy
+    - [ ] Invalid YAML throws schema validation error
 
-#### TASK-UI-002: Dynamic Page Renderer with Next.js 16 PPR ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Goal:** Sub-100ms initial page loads with dynamic content streaming | **Date:** March 3, 2026
+- [ ] **2-C: Fix SecurityAgent Threat Detection**
+  - **Priority**: 🔴 High
+  - **Effort**: 2 hours
+  - **Issue**: Keyword-match approach produces false positives; two methods are stubs
+  - **Files**:
+    - [ ] `agents/security/src/index.ts` (or relevant security agent)
+  - **Implementation**:
+    - [ ] Replace `JSON.stringify(context).toLowerCase().includes()` with structured field targeting:
+      - `checkDataExfiltration(outputDestinations, dataClassifications)`
+      - `checkPromptInjection(userInputs)`
+      - `checkToolPoisoning(requestedTools, approvedToolRegistry)`
+      - `checkAnomalousBehavior(recentActions, baselineProfile)`
+    - [ ] Implement `analyzeToolSwitching()` - compare tool sequence against known-good patterns
+    - [ ] Implement `analyzeFailures()` - count recent failure rate and threshold-alert
+  - **Validation**:
+    - [ ] Targeted checks reduce false positives
+    - [ ] Tool switching detection catches anomalous sequences
+    - [ ] Failure rate alerting triggers correctly
 
-```yaml
-id: TASK-UI-002
-title: JSON-to-React Dynamic Renderer with PPR
-files:
-  - packages/core-engine/src/renderer/ComponentRenderer.tsx ✅
-  - packages/core-engine/src/renderer/CacheComponent.tsx ✅ (TASK-PPR-001)
-  - packages/core-engine/src/renderer/index.ts ✅ (updated exports)
-dependencies: [TASK-PUCK-001, TASK-PPR-001]
-implementation:
-  - ComponentRenderer recursively renders Puck JSON layout trees into React
-  - Inline error boundary per component (one broken component can't crash the page)
-  - Tenant ID validation: throws if pageData.tenantId !== authenticatedTenantId
-  - Accepts custom registry override for testing
-  - Server Component by default (no 'use client')
-```
+- [ ] **2-D: Implement agents/memory**
+  - **Priority**: 🔴 High
+  - **Effort**: 3 hours
+  - **Issue**: `agents/memory/src/index.ts` is types-only, no logic
+  - **Files**:
+    - [ ] `agents/memory/src/index.ts`
+    - [ ] `agents/memory/src/EnterpriseMemorySystem.ts`
+  - **Implementation**:
+    - [ ] Implement `store(entry)` with content-addressed ID (hash of content)
+    - [ ] Implement `retrieve(query, limit)` with scoring algorithm:
+      - Priority-based: recency × confidence × relevance
+    - [ ] Use existing types (confidence scoring, priority, vector embeddings interface)
+  - **Validation**:
+    - [ ] Store returns consistent ID for duplicate content
+    - [ ] Retrieve returns top-N most relevant entries
+    - [ ] Vector embeddings interface functional (if implemented)
 
-#### TASK-UI-003: Puck Version History & Rollback System ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Impact:** Prevents broken layouts from persisting | **Date:** March 3, 2026
-
-```yaml
-id: TASK-UI-003
-title: Puck Layout Versioning & Rollback System
-files:
-  - database/migrations/20240203000000_layout_versions.sql ✅
-  - packages/core-engine/src/puck/history.tsx ✅
-dependencies: [TASK-PUCK-001]
-implementation:
-  - layout_versions table: immutable history rows with RLS (tenant isolation)
-  - LayoutHistoryPanel: client component with two-click restore confirmation UX
-  - Cascade delete on tenants.id for GDPR right-to-erasure
-  - Version rows are insert-only (no UPDATE/DELETE policies for tenants)
-```
-
----
-
-### 🌊 WAVE 2: Hexagonal Services (Native vs. Integration Duality)
-
-#### TASK-SVC-001: Service Port Interfaces
-**Status:** ✅ COMPLETED | **Goal:** Abstract contracts for all external services | **Date:** March 3, 2026
-
-```yaml
-id: TASK-SVC-001
-title: Hexagonal Port Definitions
-files:
-  - packages/config/ports/src/email.port.ts ✅
-  - packages/config/ports/src/crm.port.ts ✅
-  - packages/config/ports/src/analytics.port.ts ✅
-  - packages/config/ports/src/payments.port.ts ✅
-  - packages/config/ports/src/index.ts ✅
-  - packages/config/ports/package.json ✅ (@repo/service-ports)
-  - tsconfig.base.json ✅ (added @repo/service-ports path mapping)
-hexagonal_principle: "Dependencies point inward. Application code depends on these interfaces, not implementations."
-```
-
-#### TASK-SVC-002-REV: Adapter Implementations with Contract Testing ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Goal:** Concrete implementations that swap via configuration + behavioral verification | **Date:** March 3, 2026
-
-```yaml
-id: TASK-SVC-002-REV
-title: Adapter Implementations with Contract Testing
-files:
-  - packages/services/src/email/adapters/resend.adapter.ts ✅
-  - packages/services/src/email/adapters/native.adapter.ts ✅
-  - packages/services/src/email/factory.ts ✅
-  - packages/services/src/tests/contracts/email-service.contract.ts ✅
-  - packages/services/src/email/adapters/tests/resend.contract.spec.ts ✅
-  - packages/services/src/email/adapters/tests/native.contract.spec.ts ✅
-  - packages/services/package.json ✅ (@repo/services)
-  - tsconfig.base.json ✅ (added @repo/services path mapping)
-implementation:
-  - ResendAdapter: wraps Resend API with per-tenant key resolution, idempotency, GDPR headers
-  - NativeAdapter: dry-run/logging fallback with onSend hook for testing
-  - createEmailAdapter() factory: selects adapter from EMAIL_PROVIDER env var
-  - Contract test suite (runEmailPortContract): ensures all adapters satisfy the port interface
-configuration:
-  EMAIL_PROVIDER: resend|native (defaults to native in dev, resend in production)
-```
+- [ ] **2-E: Wire agents/orchestration to Other Agent Packages**
+  - **Priority**: 🔴 High
+  - **Effort**: 1 hour
+  - **Issue**: `agents/orchestration/src/index.ts` has zero imports from other `agents/*` packages
+  - **Files**:
+    - [ ] `agents/orchestration/src/index.ts`
+  - **Implementation**:
+    - [ ] Import `EnterpriseMemorySystem` from `@repo/agent-memory`
+    - [ ] Import `ToolContractRegistry` from `@repo/agent-tools`
+    - [ ] Import `PolicyEngine` from `@repo/agent-governance`
+    - [ ] Import `AgentContext` from `@repo/agent-core`
+    - [ ] Implement `MultiAgentOrchestrator` class with constructor injection
+    - [ ] Implement `orchestrate(plan)` method:
+      - [ ] Call `this.policy.validate(plan)`
+      - [ ] Call `this.memory.retrieve(plan.intent)`
+      - [ ] Call `this.executeAssignments(assignments, context)`
+  - **Validation**:
+    - [ ] Governance checks run before execution
+    - [ ] Memory context injected into assignments
+    - [ ] End-to-end agent loop completes
 
 ---
 
-### 🌊 WAVE 3: SaaS Platform & Metering (Unified Analytics)
+### PHASE 3 — GATEWAY + OBSERVABILITY (Days 8–10, ~8 hours)
+*Implement enterprise-grade control plane*
 
-#### TASK-SaaS-001-REV: Usage Metering via Tinybird ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Goal:** Track billable events with 10-100x query performance | **Date:** March 3, 2026
+- [ ] **3-A: Implement MCP Gateway Pattern**
+  - **Priority**: 🟡 High
+  - **Effort**: 3 hours
+  - **Issue**: `enterprise-security-gateway.ts` does auth but not unified traffic routing
+  - **Files**:
+    - [ ] `mcp/gateway/src/index.ts` (new)
+    - [ ] `mcp/config/config.json` (register gateway)
+  - **Implementation**:
+    - [ ] Create `MCPGateway` class with `routeRequest(req)` method
+    - [ ] Implement OpenTelemetry tracing spans with attributes:
+      - `mcp.server`, `mcp.tool`, `mcp.correlation_id`, `tenant.id`
+    - [ ] Implement middleware pipeline:
+      1. [ ] Auth validation
+      2. [ ] Rate limit check
+      3. [ ] Policy enforcement
+      4. [ ] Route to target server
+      5. [ ] Audit logging
+  - **Validation**:
+    - [ ] All MCP traffic routes through gateway
+    - [ ] Spans visible in tracing dashboard
+    - [ ] Failed auth rejected before reaching target server
 
-```yaml
-id: TASK-SaaS-001-REV
-title: Unified Analytics & Metering via Tinybird
-files:
-  - packages/analytics/src/ingest.ts ✅
-  - packages/analytics/package.json ✅
-  - packages/analytics/tsconfig.json ✅
-implementation:
-  - TinybirdIngestClient with in-memory buffering and auto-flush
-  - Typed event schemas (page_view, lead_captured, feature_used, ab_test, web_vital, job events)
-  - Tenant-scoped routing: events without tenantId are dropped
-  - Singleton helper (getTinybirdClient) + trackEvent() for Server Actions
-  - NDJSON batch format for Tinybird Events API
-dependencies: [TASK-019]
-```
+- [ ] **3-B: Add Correlation IDs Across All Servers**
+  - **Priority**: 🟡 High
+  - **Effort**: 2 hours
+  - **Files**:
+    - [ ] `mcp/servers/src/shared/middleware.ts` (new)
+    - [ ] All server files in `mcp/servers/src/`
+  - **Implementation**:
+    - [ ] Create `withCorrelation(handler)` wrapper
+    - [ ] Generate `crypto.randomUUID()` if `_correlationId` not present in params
+    - [ ] Log `tool_call_start` and `tool_call_end` with correlation ID and duration
+    - [ ] Return `_correlationId` in response for chaining
+    - [ ] Apply wrapper to all tool handlers
+  - **Validation**:
+    - [ ] Chain of 3+ tool calls carries same correlation ID
+    - [ ] Logs queryable by correlation ID
+    - [ ] Duration metrics accurate
 
-#### TASK-QUEUE-001: Queue Observability & Dead Letter Monitoring ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Impact:** Prevents silent job failures | **Date:** March 3, 2026
+- [ ] **3-C: Add Human Approval Gates for High-Impact Tools**
+  - **Priority**: 🟡 High
+  - **Effort**: 2 hours
+  - **Scope**: Write operations (deploy, delete, schema changes)
+  - **Files**:
+    - [ ] `mcp/servers/src/secure-deployment-manager.ts`
+    - [ ] `mcp/gateway/src/approval-gate.ts` (new)
+  - **Implementation**:
+    - [ ] Check `action.riskLevel === 'HIGH'`
+    - [ ] Call `this.approvalGate.request()` with timeout (5 min)
+    - [ ] Throw error if approval rejected or timeout
+    - [ ] Add audit log entry for approval/rejection
+  - **Validation**:
+    - [ ] High-risk actions pause for approval
+    - [ ] Timeout handling works (fails safe)
+    - [ ] Audit trail records approver identity
 
-```yaml
-id: TASK-QUEUE-001
-title: Queue Observability & DLQ Alerting
-files:
-  - packages/infrastructure/ops/observability.ts ✅
-  - packages/infrastructure/ops/health-check.ts ✅
-  - packages/infrastructure/ops/queue-policy.ts ✅ (replaced stub with full implementation)
-  - packages/infrastructure/__tests__/queue-observability.test.ts ✅
-implementation:
-  - QueueObservability: tracks enqueued/running/completed/failed/dead_lettered events
-  - Configurable alert thresholds (failure rate, DLQ count) with onAlert callback
-  - QueueHealthChecker: aggregates metrics into healthy/degraded/unhealthy report
-  - QueuePolicyRegistry: per-job-type retry budgets, timeouts, backoff with exponential strategy
-  - toHttpResponse() helper for health endpoint integration
-dependencies: [TASK-012]
-```
-
----
-
-### 🌊 WAVE 4: AI-Native Marketing Features (Self-Improving Platform)
-
-#### TASK-AI-004-REV: Autonomous A/B Testing with Experiment Isolation ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Goal:** AI generates variants, tracks conversions, auto-optimizes with statistical validity | **Date:** March 3, 2026
-
-```yaml
-id: TASK-AI-004-REV
-title: A/B Testing with Experiment Isolation & Mutex
-files:
-  - packages/ai-bridge/ab-testing/generate-variant.ts
-  - packages/ai-bridge/ab-testing/allocate-traffic.ts
-  - packages/ai-bridge/ab-testing/experiment-mutex.ts
-  - packages/core-engine/experiments/experiment-store.ts
-  - apps/web/widgets/ab-test-wrapper/ABTestWrapper.tsx
-  - database/migrations/20240204000000_experiments_mutex.sql
-workflow:
-  1. User clicks "Optimize" on a page
-  2. AI generates 2-3 JSON variants (headlines, CTAs, layouts)
-  3. Traffic split 50/50 via middleware
-  4. Track conversion events (lead_captured)
-  5. Auto-promote winner after statistical significance (p < 0.05)
-  6. Mutex prevents overlapping experiments on same components
-```
-
-#### TASK-AI-005: AI Content Generation Engine
-**Status:** 🟢 Medium Priority | **Goal:** Native marketing copy generation within editor
-
-```yaml
-id: TASK-AI-005
-title: Marketing Copy AI Assistant
-files:
-  - packages/ai-bridge/copywriting/generate-headline.ts
-  - packages/ai-bridge/copywriting/generate-seo-meta.ts
-  - packages/ai-bridge/copywriting/generate-email.ts
-  - apps/admin/widgets/ai-writer/ui/AIWriterModal.tsx
-  - apps/admin/app/api/ai/copy/route.ts
-dependencies: [TASK-PUCK-001, TASK-SaaS-002]
-```
+- [ ] **3-D: Fix .cursorrules Multi-Agent Gap**
+  - **Priority**: 🟡 Medium
+  - **Effort**: 30 min
+  - **Issue**: `.cursorrules` lacks multi-agent instructions present in `.windsurfrules`
+  - **Files**:
+    - [ ] `.cursorrules`
+  - **Add Section**:
+    ```markdown
+    ## Multi-Agent Orchestration (MANDATORY)
+    - Coordinate with other agents via A2A Protocol (JSON-RPC + SSE)
+    - Load MCP server config from `mcp/config/config.json`
+    - Every agent action requires a correlation ID
+    - High-risk actions (deploy, schema change) require approval gate
+    - Use @repo/agent-core for context management
+    ```
+  - **Validation**:
+    - [ ] AI agents follow multi-agent protocols
+    - [ ] Correlation IDs present in generated code
 
 ---
 
-### 🌊 WAVE 5: Compliance & Security ⭐ NEW ENTERPRISE WAVE
+### PHASE 4 — SKILLS ARCHITECTURE UPGRADE (Days 11–14, ~8 hours)
+*Implement progressive disclosure + composable skills*
 
-#### TASK-COMP-001: GDPR/CCPA Compliance Package ⭐ CRITICAL FOR ENTERPRISE
-**Status:** ✅ COMPLETED | **Impact:** Enables EU market entry and enterprise deals | **Date:** March 3, 2026
+- [ ] **4-A: Implement Three-Tier Progressive Disclosure**
+  - **Priority**: 🟡 Medium
+  - **Effort**: 4 hours
+  - **Issue**: Skills load everything at once, high token cost
+  - **Restructure Each Skill Folder**:
+    ```
+    skills/
+      domain/
+        deploy-production/
+          SKILL.md           # Tier 1: name + 50-word description ONLY
+          instructions/
+            full.md          # Tier 2: loaded on demand
+          scripts/           # Tier 3: executables
+          references/        # Tier 3: supporting docs
+    ```
+  - **Files to Update**:
+    - [ ] All existing `SKILL.md` files (move detailed content to `instructions/full.md`)
+    - [ ] Create `skills/[skill]/instructions/` directories
+    - [ ] Create `skills/[skill]/scripts/` directories
+  - **Tier 1 SKILL.md Template**:
+    ```yaml
+    ---
+    name: deploy-production
+    version: 2.0.0
+    description: Orchestrates zero-downtime production deployments with security gates, rollback capability, and observability.
+    tier2: instructions/full.md
+    tier3: scripts/
+    ---
+    ```
+  - **Validation**:
+    - [ ] Agent startup token cost reduced by 60%+
+    - [ ] Tier 2/3 content loaded only when referenced
+    - [ ] All existing functionality preserved
 
-```yaml
-id: TASK-COMP-001
-title: GDPR/CCPA Compliance & Data Sovereignty
-files:
-  - packages/privacy/src/audit/trail-logger.ts ✅ (HMAC-SHA256 hash-chained audit log)
-  - packages/privacy/src/audit/trail-verifier.ts ✅ (cryptographic chain verification)
-  - packages/privacy/src/audit/tamper-detection.ts ✅ (gap/order/hash tamper detection)
-  - packages/privacy/src/gdpr/data-export.ts ✅ (GDPR Art. 20 data portability builder)
-  - packages/privacy/src/privacy-util/data-classification.ts ✅ (sensitivity registry + redaction)
-  - packages/privacy/src/index.ts ✅ (updated exports)
-  - packages/privacy/package.json ✅ (updated exports map)
-  - packages/privacy/src/__tests__/audit.test.ts ✅
-implementation:
-  - AuditTrailLogger: append-only with HMAC-SHA256 chain; storage-agnostic (persist/getLastHash callbacks)
-  - verifyAuditChain: replays chain, flags previousHash and hash mismatches
-  - detectTampering: wraps verifier + adds count-mismatch and chronological-order checks
-  - DataExportBuilder: parallel data fetching across categories; GDPR Art.20 manifest
-  - DataClassificationRegistry: 5-level sensitivity (public→sensitive), redactForLogging()
-  - Existing consent.ts and erasure.ts preserved intact
-database:
-  - migrations/20240205000000_audit_logs.sql (schema for persistence layer - caller's responsibility)
-```
+- [ ] **4-B: Register Marketing Skills' Missing Tools**
+  - **Priority**: 🔴 High
+  - **Effort**: 3 hours
+  - **Issue**: Four marketing tools broken (analytics, content-management, seo-tools, campaign-automation)
+  - **Implementation** (Option B - wrap existing):
+    - [ ] **marketing-analytics.ts**: Wrap `fetch` server + structured data parsing
+    - [ ] **content-management.ts**: Wrap `github` server (content as code)
+    - [ ] **seo-tools.ts**: Wrap `fetch` server + SEO API endpoints
+    - [ ] **campaign-automation.ts**: Wrap `fetch` server + campaign platform APIs
+  - **Files**:
+    - [ ] Create above files in `mcp/servers/src/`
+    - [ ] Update `mcp/config/config.json` (register all four)
+    - [ ] Update `mcp/config/config.production.json` (register all four)
+  - **Validation**:
+    - [ ] Marketing skills execute without "tool not found" errors
+    - [ ] API calls route through fetch/github adapters correctly
 
----
-
-### 🌊 WAVE 6: Production Hardening & Edge Optimization
-
-#### TASK-EDGE-001: Global Edge Middleware with Vercel Platforms ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Goal:** Sub-10ms tenant resolution at the edge with custom domain support | **Date:** March 3, 2026
-
-```yaml
-id: TASK-EDGE-001
-title: Vercel Edge Middleware & Tenant Resolution
-files:
-  - apps/web/middleware.ts (280 lines as specified in GOAL.md)
-  - packages/infrastructure/edge/tenant-resolver.ts
-  - packages/infrastructure/edge/config.ts
-technologies:
-  - Vercel Edge Config (sub-millisecond KV store)
-  - Vercel for Platforms (wildcard domains + custom domains)
-  - Next.js 16 Middleware (Edge Runtime)
-architecture:
-  - Wildcard: *.marketing-platform.com → automatic tenant resolution
-  - Custom: client-site.com → Edge Config lookup → tenant context
-  - Fallback: Path-based /t/client-site → tenant resolution
-```
-
-#### TASK-PERF-001: Next.js 16 Cache Components & PPR Optimization
-**Status:** 🟡 In Progress | **Goal:** Sub-100ms initial page loads with dynamic content streaming
-
-```yaml
-id: TASK-PERF-001
-title: Partial Pre-Rendering & Cache Components
-files:
-  - apps/web/app/[site-slug]/[...path]/page.tsx (PPR enabled)
-  - packages/core-engine/renderer/CacheComponent.tsx ✅ (completed via TASK-PPR-001)
-  - apps/web/next.config.ts (PPR configuration) ✅ (completed via TASK-PPR-001)
-  - scripts/performance/optimize-images.ts ✅ (image audit + CI gate)
-  - scripts/performance/bundle-analysis.ts ✅
-  - scripts/performance/core-web-vitals-optimization.ts ✅
-nextjs_16_features:
-  - "use cache" directive for component-level caching ✅
-  - Suspense boundaries for streaming ✅
-  - CacheTag for granular revalidation ✅
-remaining:
-  - apps/web/app/[site-slug]/[...path]/page.tsx (PPR route)
-```
-
-#### TASK-CATALOG-001: pnpm Catalogs Configuration ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Impact:** 60% faster installs, prevent version drift | **Date:** March 3, 2026
-
-```yaml
-id: TASK-CATALOG-001
-title: pnpm Workspace Catalogs Implementation
-files:
-  - pnpm-workspace.yaml (catalog definitions)
-  - package.json (catalog references)
-  - scripts/verify-catalogs.ts (validation script)
-dependencies: []
-validation:
-  - All packages reference catalog versions
-  - No version drift across 50+ packages
-  - Install time reduced by 60%
-```
-
-#### PROD-002: Webhook Idempotency Layer ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Impact:** Prevent duplicate charges and operations | **Date:** March 3, 2026
-
-```yaml
-id: PROD-002
-title: Webhook Idempotency & Deduplication System
-files:
-  - packages/infrastructure/webhooks/idempotency.ts ✅
-  - packages/infrastructure/webhooks/stripe-handler.ts ✅
-  - packages/infrastructure/__tests__/webhook-idempotency.test.ts ✅
-implementation:
-  - WebhookIdempotency: deduplicates events via pluggable IdempotencyStore
-  - Keys scoped to (source, tenantId, eventId) — no cross-tenant collisions
-  - InMemoryIdempotencyStore for tests/local dev; TTL-based expiry
-  - StripeWebhookHandler: HMAC-SHA256 signature verification with timing-safe comparison
-  - Stripe replay-attack protection (timestamp tolerance window)
-  - Auto-records idempotency key even on handler failure to prevent infinite retries
-dependencies: [TASK-003]
-validation:
-  - No duplicate charges from Stripe webhook retries
-  - Idempotency keys stored with TTL
-  - Webhook failures handled gracefully
-```
-
-#### PROD-004: Background Job Queue System ⭐ CRITICAL
-**Status:** ✅ COMPLETED | **Impact:** Prevent request timeouts, enable retries | **Date:** March 3, 2026
-
-```yaml
-id: PROD-004
-title: Background Job Queue Infrastructure
-files:
-  - packages/infrastructure/queue/client.ts ✅ (JobQueue port + InMemoryJobQueue adapter)
-  - packages/infrastructure/queue/jobs/email-job.ts ✅ (Zod-validated email job factory)
-  - packages/infrastructure/queue/jobs/webhook-job.ts ✅ (Zod-validated webhook retry factory)
-  - packages/infrastructure/queue/index.ts ✅ (public exports)
-dependencies: [TASK-003, TASK-008]
-validation:
-  - Email sends happen in background ✅
-  - Webhook retries automated ✅
-  - Dead-letter queue via nack/maxAttempts mechanism ✅
-  - Tenant isolation enforced (listByTenant scoped to tenantId) ✅
-  - Unit tests in packages/infrastructure/__tests__/queue-client.test.ts ✅
-```
-
-#### PROD-006: Admin Dashboard Application ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Impact:** Safe data operations without raw SQL
-
-```yaml
-id: PROD-006
-title: Complete Admin Dashboard for Data Management
-files:
-  - apps/admin/app/layout.tsx
-  - apps/admin/app/dashboard/page.tsx
-  - apps/admin/app/tenants/page.tsx
-  - packages/admin/components/DataEditor.tsx
-dependencies: [TASK-009, TASK-010]
-validation:
-  - Manual data fixes possible without raw SQL
-  - Tenant data isolation maintained
-  - All operations audited
-```
-
-#### TASK-011: Feature Flags & Edge Configuration System
-**Status:** ✅ COMPLETED | **Goal:** Runtime feature toggling for gradual rollout | **Date:** March 3, 2026
-
-```yaml
-id: TASK-011
-title: Feature Flags with Vercel Edge Config
-files:
-  - packages/feature-flags/src/ ✅ (evaluate, types, hooks, analytics, site-config)
-  - apps/web/middleware.ts ✅ (Feature flag injection — x-feature-flags header)
-dependencies: [TASK-003, TASK-009]
-validation:
-  - Runtime feature toggling working ✅ (FlagRegistry + evaluateFeatureFlag)
-  - Tenant-aware targeting functional ✅ (tenantId overrides + tier defaults)
-  - Canary deployments supported ✅ (percentage rollout via deterministic hash)
-  - Edge middleware injects x-feature-flags header per tenant ✅
-```
-
-#### TASK-012: Queue System & Background Job Infrastructure
-**Status:** ✅ COMPLETED | **Goal:** Async processing for heavy operations | **Date:** March 3, 2026
-
-```yaml
-id: TASK-012
-title: Advanced Queue System with Workers
-files:
-  - packages/infrastructure/queue/workers/emailWorker.ts ✅ (processEmailJob handler)
-  - packages/infrastructure/queue/workers/webhookWorker.ts ✅ (processWebhookJob with HMAC signing)
-dependencies: [TASK-003, TASK-008]
-validation:
-  - Background processing working ✅ (processEmailJob / processWebhookJob)
-  - Retry logic implemented ✅ (nack increments attempt, dead-letters at maxAttempts)
-  - Dead-letter queue functional ✅ (status: dead_lettered in InMemoryJobQueue)
-  - HMAC-SHA256 webhook signing via Web Crypto API ✅
-```
-
-#### TASK-020: Page Builder Core & CMS Foundation
-**Status:** 🟡 High Priority | **Goal:** Foundational Page Builder data model
-
-```yaml
-id: TASK-020
-title: Page Builder Core Entities & Rendering
-files:
-  - packages/core/entities/page/Page.ts
-  - packages/core/entities/site/Site.ts
-  - apps/web/app/[...slug]/page.tsx (Dynamic renderer)
-  - apps/web/widgets/page-builder-canvas/ui/Canvas.tsx
-dependencies: [TASK-005, TASK-004, TASK-011]
-validation:
-  - Page structure persisted
-  - Blocks render correctly
-  - Preview mode functional
-```
-
-#### PERF-001: Core Web Vitals Optimization
-**Status:** 🔴 Critical Priority | **Goal:** LCP < 2.5s, INP < 200ms, CLS < 0.1
-
-```yaml
-id: PERF-001
-title: Core Web Vitals Performance Optimization
-files:
-  - scripts/performance/optimize-images.ts
-  - scripts/performance/bundle-analysis.ts
-  - apps/web/app/layout.tsx (Performance optimizations)
-dependencies: [TASK-005]
-validation:
-  - LCP optimization implemented
-  - INP interaction response optimized
-  - CLS layout stability ensured
-```
-
-#### TASK-017: Advanced Security, Audit Logging & Compliance
-**Status:** 🟡 High Priority | **Goal:** SOC 2 readiness with comprehensive security
-
-```yaml
-id: TASK-017
-title: Advanced Security & SOC 2 Compliance
-files:
-  - packages/infrastructure/security/audit-logger.ts
-  - packages/infrastructure/security/encryption.ts
-  - database/migrations/20240112000000_audit_logs.sql
-  - apps/web/middleware.ts (Security headers)
-dependencies: [TASK-003, TASK-009]
-validation:
-  - Immutable audit trail
-  - PII protection ensured
-  - SOC 2 readiness achieved
-```
+- [ ] **4-C: Add CI Skills Validation That Actually Works**
+  - **Priority**: 🔴 Critical (Highest leverage action)
+  - **Effort**: 1 hour
+  - **Replace**: Broken `.claude/skills/` validation
+  - **Files**:
+    - [ ] `.github/workflows/mcp-skills-validation.yml` (fixed version)
+  - **Implementation**:
+    ```bash
+    # Validation script
+    for skill_dir in skills/*/; do
+      skill_name=$(basename "$skill_dir")
+      skill_md="$skill_dir/SKILL.md"
+      
+      # Verify YAML frontmatter
+      if ! head -1 "$skill_md" | grep -q "^---"; then
+        echo "❌ $skill_name: Missing YAML frontmatter"; exit 1
+      fi
+      
+      # Cross-reference MCP tools with config
+      if grep -q "INVOKES:" "$skill_md"; then
+        while IFS= read -r tool; do
+          if ! jq -e ".servers.\"$tool\"" mcp/config/config.json > /dev/null 2>&1; then
+            echo "❌ $skill_name invokes '$tool' which is NOT in config.json"; exit 1
+          fi
+        done < <(grep "INVOKES:" "$skill_md" | grep -oP '\w[\w-]+')
+      fi
+      
+      echo "✅ $skill_name validated"
+    done
+    ```
+  - **Validation**:
+    - [ ] CI catches broken skill-to-tool references pre-merge
+    - [ ] YAML frontmatter validated
+    - [ ] All skills pass before allowed to merge
 
 ---
 
-### 🌊 WAVE 7: Final Integration & 1,124 File Achievement
+### PHASE 5 — LONG-TERM EXCELLENCE (Ongoing)
 
-#### TASK-FINAL-001: Complete FSD Structure for Remaining Apps
-**Status:** 🟡 High Priority | **Goal:** Achieve 1,124 files with full architectural compliance
+- [ ] **5-A: Add Skill Auto-Discovery to skillset-server**
+  - **Priority**: 🟢 Low
+  - **Effort**: 2 hours
+  - **Files**:
+    - [ ] `mcp/servers/src/skillset-server.ts`
+  - **Implementation**:
+    - [ ] Add `discover_skills` tool
+    - [ ] Accept `query` and `context` parameters
+    - [ ] Load all skill manifests
+    - [ ] Implement `rankByRelevance()` using semantic matching
+    - [ ] Return ranked list of applicable skills
+  - **Validation**:
+    - [ ] Agent can query for skills matching a task
+    - [ ] Relevance scoring accurate
 
-```yaml
-id: TASK-FINAL-001
-title: Complete apps/admin & apps/portal FSD Structure
-files:
-  - apps/admin/src/ (148 files - admin dashboard governance)
-  - apps/portal/src/ (200 files - client portal enhancements)
-generator_command: pnpm turbo gen fsd-app --name admin --type dashboard
-automation:
-  - Use TASK-GEN-001 generators to scaffold remaining files
-  - Ensure @x notation compliance
-  - Verify no cross-layer violations with steiger
-```
+- [ ] **5-B: memory.json Version Accuracy**
+  - **Priority**: 🟢 Low
+  - **Effort**: 15 min
+  - **Files**:
+    - [ ] `memory.json`
+  - **Changes**:
+    - [ ] Update Next.js version to 16 (remove inaccurate 16.1.5)
+    - [ ] Add CI verification step to keep `memory.json` synchronized with actual deps
 
-#### TASK-FINAL-002: Integration Testing & Production Validation ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Goal:** Production-ready with comprehensive testing
-
-```yaml
-id: TASK-FINAL-002
-title: End-to-End Integration & Load Testing
-files:
-  - tests/integration/tenant-isolation.spec.ts
-  - tests/e2e/golden-path.spec.ts
-  - tests/load/k6/tenant-concurrency.js
-testing:
-  - Integration: RLS bypass attempts, multi-tenant security
-  - E2E: Signup → Lead → Booking → Payment flow
-  - Load: 1000 concurrent tenants, 10k RPM
-```
-
----
-
-## Critical Task Specifications by Priority
-
-### 🔴 P0: Critical (Blocking Production) - Execute First
-
-| Task ID | Title | Files | AI Execution Summary |
-| :--- | :--- | :--- | :--- |
-| **TASK-DEV-001** | Developer Onboarding Automation | `scripts/setup-dev.ts`, `.env.example` | ✅ COMPLETED - One-command setup with t3-env validation, Supabase start, database seed |
-| **TASK-DS-001** | Design Tokens Package | `packages/design-tokens/` with Style Dictionary | ✅ COMPLETED - Single source of truth feeding Tailwind v4 (HSL), Puck (hex), CSS variables |
-| **TASK-GEN-001** | Turborepo Generators | `turbo/generators/` with FSD/Hexagonal/Puck templates | ✅ COMPLETED - Generate 15+ files per command with correct @x imports and tests |
-| **TASK-RULES-001** | AI Coding Rules (.cursorrules) | Layer-specific `.cursorrules` files | ✅ COMPLETED - Layer-specific rules for entities (pure logic), features (use cases), widgets (UI), services (hexagonal adapters) |
-| **TASK-PUCK-001** | Puck Editor Integration | `packages/core-engine/puck/`, editor routes | ✅ COMPLETED - JSON-driven editing with token integration, tenant isolation, RLS via site_layouts table |
-| **TASK-PPR-001** | Next.js 16 PPR Enablement | `next.config.ts`, `CacheComponent.tsx` | ✅ COMPLETED - PPR + dynamicIO enabled in next.config.ts; CacheComponent (Suspense boundary) and fetchWithCache ("use cache" + cacheTag + cacheLife) added to packages/core-engine/src/renderer/ |
-| **TASK-UI-002** | Dynamic Page Renderer | `packages/core-engine/src/renderer/ComponentRenderer.tsx` | ✅ COMPLETED - JSON-to-React renderer with per-component error boundary, tenant-ID validation, and registry override support |
-| **TASK-UI-003** | Puck Version History & Rollback | `database/migrations/20240203000000_layout_versions.sql`, `packages/core-engine/src/puck/history.tsx` | ✅ COMPLETED - Immutable layout_versions table with RLS; LayoutHistoryPanel with two-click restore UX |
-
-### 🔴 P1: High Priority (Enterprise Readiness) - Execute Week 2
-
-| Task ID | Title | Files | AI Execution Summary |
-| :--- | :--- | :--- | :--- |
-| **TASK-SVC-001** | Hexagonal Port Interfaces | `packages/config/ports/src/{email,crm,analytics,payments}.port.ts` | ✅ COMPLETED - Pure TS interfaces for Email, CRM, Analytics, Payments ports; @repo/service-ports package |
-| **TASK-SVC-002-REV** | Adapters + Contract Testing | `packages/services/src/email/adapters/{resend,native}.adapter.ts` | ✅ COMPLETED - ResendAdapter + NativeAdapter + factory; shared contract suite (runEmailPortContract); 10 contract/unit tests |
-| **TASK-CATALOG-001** | pnpm Catalogs | `pnpm-workspace.yaml` catalog definitions | ✅ COMPLETED - Catalog definitions in workspace.yaml + `scripts/verify-catalogs.ts` validation script |
-| **TASK-SaaS-001-REV** | Tinybird Metering | `packages/analytics/src/ingest.ts` | ✅ COMPLETED - Buffered NDJSON ingest client; typed event schemas; tenant-isolation; singleton + trackEvent() helpers |
-| **TASK-QUEUE-001** | Queue Observability | `packages/infrastructure/ops/observability.ts` | ✅ COMPLETED - QueueObservability + QueueHealthChecker + QueuePolicyRegistry; configurable alert callbacks; health/degraded/unhealthy status |
-| **PROD-002** | Webhook Idempotency Layer | `packages/infrastructure/webhooks/idempotency.ts` | ✅ COMPLETED - WebhookIdempotency + StripeWebhookHandler; HMAC-SHA256 sig verification; timing-safe comparison; TTL-based deduplication |
-| **PROD-004** | Background Job Queue System | `packages/infrastructure/queue/client.ts` | Email sends in background, webhook retries automated |
-| **PROD-006** | Admin Dashboard Application | `apps/admin/app/dashboard/page.tsx` | Safe data operations without raw SQL, audit logging |
-| **TASK-011** | Feature Flags & Edge Configuration | `packages/flags/config.ts` | Runtime feature toggling, Canary deployments per tenant |
-| **TASK-012** | Queue System & Background Jobs | `packages/infrastructure/queue/workers/emailWorker.ts` | Async job processing, retry logic, dead-letter queue |
-| **TASK-020** | Page Builder Core & CMS Foundation | `packages/core/entities/page/Page.ts` | Foundational Page Builder data model, key differentiator |
-| **PERF-001** | Core Web Vitals Optimization | Performance optimization scripts | LCP < 2.5s, INP < 200ms, CLS < 0.1 targets |
-| **TASK-017** | Advanced Security & Compliance | `packages/infrastructure/security/audit-logger.ts` | SOC 2 readiness, field-level encryption, audit logging |
-
-### 🟡 P2: Medium Priority (SaaS Hardening) - Execute Week 3
-
-| Task ID | Title | Files | AI Execution Summary |
-| :--- | :--- | :--- | :--- |
-| **TASK-COMP-001** | GDPR Compliance Package | `packages/privacy/src/audit/`, `gdpr/`, `privacy-util/` | ✅ COMPLETED - Hash-chained audit trail (HMAC-SHA256); verifyAuditChain(); detectTampering(); DataExportBuilder (Art. 20); DataClassificationRegistry (5 sensitivity levels) |
-| **TASK-UI-003** | Puck Version History | `layout_versions` table, history panel UI | Safety net for tenant layout changes, rollback in <30 seconds |
-| **TASK-AI-004-REV** | A/B Testing Mutex | `experiment-mutex.ts`, component overlap checks | ✅ COMPLETED - ExperimentMutex + InMemoryLockStore; guardrails (SRM, significance); feature-flags; ExperimentStore; ABTestWrapper; DB migration |
-| **TASK-EDGE-001** | Edge Middleware Optimization | `tenant-resolver.ts`, Edge Config integration | ✅ COMPLETED - Sub-10ms tenant resolution at scale, custom domain SSL automation |
-
-### 🟢 P3: Enhancement (AI-Native Features) - Execute Week 4+
-
-| Task ID | Title | Files | AI Execution Summary |
-| :--- | :--- | :--- | :--- |
-| **TASK-AI-003** | AI-to-JSON Generation Pipeline | `packages/core-engine/ai/`, prompt templates | LLM generates valid Puck JSON from text prompts with Zod validation |
-| **TASK-AI-005** | AI Content Generation | `copywriting/` module, AIWriterModal | In-editor headline, SEO meta, and email campaign generation |
-| **TASK-FINAL-001** | Complete FSD Structure | `apps/admin/`, `apps/portal/` via generators | Achieve 1,124 files with full architectural compliance |
-| **TASK-FINAL-002** | Production Validation | Integration/E2E/load tests | Comprehensive testing suite for tenant isolation, E2E flows, load handling |
+- [ ] **5-C: Enterprise Skills Packaging**
+  - **Priority**: 🟢 Low
+  - **Effort**: 4 hours
+  - **Context**: Package for cross-platform consumption (Anthropic standard)
+  - **Files**:
+    - [ ] Ensure `anthropic/`, `claude/`, `codex/`, `connect/` subdirectories exist
+    - [ ] Standardize `SKILL.md` schemas across all platforms
+    - [ ] Create packaging script for distribution
+  - **Validation**:
+    - [ ] Skills installable on multiple AI platforms
+    - [ ] Consistent behavior across platforms
 
 ---
 
-## Foundation Status & Legacy Tasks (Completed)
+## 🚨 Phase 1: Critical Production Blockers (P0)
+*Execute in order. Do not proceed to Phase 2 until all checked.*
 
-*Note: The following tasks originate from OLDTODO.md and represent foundational work completed prior to the Enhancement Roadmap above. Task IDs differ from the Active Roadmap.*
+### Infrastructure & Tooling
 
-### 🟢 Priority 2: Core Infrastructure Foundation (Wave 0) - COMPLETED
+- [ ] **TASK-CATALOG-001**: Configure pnpm Workspace Catalogs
+  - **Priority**: 🔴 Critical
+  - **Impact**: 60% slower installs, version drift risk
+  - **Files**:
+    - [ ] `pnpm-workspace.yaml` (add catalog definitions)
+    - [ ] Root `package.json` (migrate to catalog: references)
+  - **Commands**:
+    ```bash
+    grep -q "catalog:" pnpm-workspace.yaml 2>/dev/null && echo "✅" || echo "🔴 MISSING"
+    ```
+  - **Validation**:
+    - [ ] All dependencies use `catalog:` protocol
+    - [ ] Renovate bot recognizes catalog updates
+    - [ ] Install time reduced by 40%+
 
-- **TASK-001:** Monorepo Harness & Build Orchestration (Turborepo, pnpm)
-- **TASK-002:** Database Foundation with Tenant Isolation (RLS policies)
-- **TASK-003:** Infrastructure Context & Security (AsyncLocalStorage, AES-256-GCM)
-- **TASK-004:** Domain Entity Foundation (Result/Option patterns)
-- **TASK-005:** UI Primitive Design System (CVA architecture, WCAG 2.2 AA)
+- [ ] **TASK-GEN-001**: Configure Turborepo Generators
+  - **Priority**: 🔴 Critical
+  - **Files**:
+    - [ ] `turbo/generators/config.ts`
+    - [ ] `turbo/generators/fsd-slice/config.ts`
+    - [ ] `turbo/generators/fsd-slice/generator.ts`
+    - [ ] `turbo/generators/fsd-slice/templates/` (component, test, story files)
+  - **Commands**:
+    ```bash
+    pnpm turbo gen fsd-slice --name design-system
+    ```
+  - **Validation**:
+    - [ ] Generator creates 15+ files with correct FSD structure
+    - [ ] Templates include `@x` notation placeholders
+    - [ ] Steiger linting passes on generated code
 
-### 🟢 Priority 3: Production Operations & Survival - COMPLETED
+- [ ] **TASK-RULES-001**: Create AI Coding Rules (.cursorrules)
+  - **Priority**: 🔴 Critical
+  - **Files**:
+    - [ ] `.cursorrules` (root - global constraints)
+    - [ ] `packages/entities/.cursorrules`
+    - [ ] `packages/features/.cursorrules`
+    - [ ] `packages/widgets/.cursorrules`
+    - [ ] `packages/services/.cursorrules`
+  - **Content Requirements**:
+    - [ ] Enforce FSD import flow: `app → pages → widgets → features → entities → shared`
+    - [ ] Mandate `Result<T,Error>` return types
+    - [ ] Prohibit cross-layer imports
+    - [ ] Require Hexagonal Port interfaces for external services
 
-- **PROD-001:** Production Readiness Runbook (5 guides, ≤3 min rollback)
-- **PROD-005:** Live Database Migration Strategy (Expand/contract patterns)
-- **PROD-007:** Production Monitoring & Alerting (13 alert rules)
-- **PROD-003:** UI Error Boundaries (Reusable components, Sentry)
+### Core Platform (Blocking All Other Work)
+- [ ] **PROD-006**: Admin Dashboard Application
+  - **Priority**: 🔴 Critical
+  - **Impact**: Safe data operations without raw SQL; tenant management
+  - **Dependencies**: TASK-009, TASK-010 (Foundation DB/Auth)
+  - **Files**:
+    - [ ] `apps/admin/app/layout.tsx`
+    - [ ] `apps/admin/app/dashboard/page.tsx`
+    - [ ] `apps/admin/app/tenants/page.tsx`
+    - [ ] `packages/admin/components/DataEditor.tsx` (universal CRUD)
+    - [ ] `packages/admin/components/TenantSwitcher.tsx`
+    - [ ] `packages/admin/lib/audit-trail.ts`
+  - **Subtasks**:
+    - [ ] Scaffold FSD structure (app/pages/widgets/features/entities/shared)
+    - [ ] Implement tenant data grid with RLS awareness
+    - [ ] Build user impersonation flow
+    - [ ] Add billing analytics view
+    - [ ] Create system health dashboard
+  - **Validation**:
+    - [ ] Can edit tenant data without raw SQL
+    - [ ] Tenant A cannot see Tenant B data (isolation test)
+    - [ ] All mutations logged to audit trail
+    - [ ] 148 total files in `apps/admin/src/` (per spec)
 
-### 🟢 Priority 4: MVP Features & Authentication - COMPLETED
+- [ ] **PROD-002**: Webhook Idempotency Layer
+  - **Priority**: 🔴 Critical
+  - **Impact**: Prevents duplicate processing/data corruption
+  - **Files**:
+    - [ ] `packages/infrastructure/webhooks/idempotency-store.ts`
+    - [ ] `packages/infrastructure/webhooks/signature-verifier.ts`
+    - [ ] `apps/web/app/api/webhooks/[service]/route.ts` (idempotency wrapper)
+  - **Validation**:
+    - [ ] Duplicate webhook payloads rejected with 200 OK (not processed)
+    - [ ] Replay attack protection (<5 min timestamp tolerance)
+    - [ ] Signature verification mandatory for all routes
 
-- **TASK-006:** Lead Management Feature & Server Actions (100+ test cases)
-- **TASK-007:** Lead Capture Widget & Marketing Page (Core Web Vitals optimized)
+- [ ] **PROD-004**: Background Job Queue System
+  - **Priority**: 🔴 Critical
+  - **Files**:
+    - [ ] `packages/infrastructure/queue/client.ts`
+    - [ ] `packages/infrastructure/queue/worker.ts`
+    - [ ] `apps/web/app/api/inngest/route.ts` (or BullMQ equivalent)
+  - **Subtasks**:
+    - [ ] Configure Inngest (or BullMQ + Redis)
+    - [ ] Implement job scheduling (cron)
+    - [ ] Add dead letter queue (DLQ) handling
+    - [ ] Create job recovery UI in admin
 
-### 🟢 Priority 5: FSD Architecture & TheGoal Completion - PARTIAL
+- [ ] **TASK-012**: Queue Workers Implementation
+  - **Priority**: 🔴 Critical
+  - **Files**:
+    - [ ] `apps/workers/email-worker.ts`
+    - [ ] `apps/workers/crm-sync-worker.ts`
+    - [ ] `apps/workers/usage-rollup-worker.ts`
+  - **Validation**:
+    - [ ] Workers process jobs from queue
+    - [ ] Failed jobs retry 3x then move to DLQ
+    - [ ] Worker health check endpoint available
 
-| Task ID | Title | Status | Notes |
-| :--- | :--- | :--- | :--- |
-| **TASK-033** | Complete apps/web FSD Structure | ✅ Completed - 593 files | Exceeded target (312 files) |
-| **TASK-040** | Complete Testing Infrastructure | ✅ Done - Integration, E2E, k6 | 9 major capability areas |
-| **TASK-034** | Complete apps/admin FSD Structure | 🟡 To Do | 148 files target |
-| **TASK-035** | Complete apps/portal FSD Structure | 🟡 To Do | 200 files target |
-| **TASK-036** | Complete FSD v2.1 Architecture Compliance | 🟡 To Do | @x notation enforcement |
-| **TASK-037** | Zero-Trust Multi-Tenant Security Architecture | 🟡 To Do | CVE-2025-29927 mitigation |
-| **TASK-038** | Edge Middleware & Performance Optimization | 🟡 To Do | 280-line middleware.ts |
-| **TASK-039** | Complete Package Architecture (25+ packages) | 🟡 To Do | FSD compliance across packages |
-| **TASK-041** | Complete CI/CD Pipeline (38 files target) | 🟡 To Do | GitHub Actions workflows |
-| **TASK-042** | Complete Documentation & Knowledge Management | 🟡 To Do | 200+ guides target |
-| **TASK-043** | Complete Scripts & Automation (25 files target) | 🟡 To Do | Environment, database, release |
-| **TASK-044** | Final Integration & 1,124 File Target Achievement | 🟡 To Do | Production readiness validation |
+- [ ] **TASK-011**: Feature Flags System
+  - **Priority**: 🔴 Critical
+  - **Files**:
+    - [ ] `packages/feature-flags/config.ts`
+    - [ ] `packages/feature-flags/provider.tsx`
+    - [ ] `packages/feature-flags/flags.ts`
+    - [ ] `apps/web/app/layout.tsx` (integration)
+  - **Dependencies**: `@vercel/flags` or Unleash
+  - **Validation**:
+    - [ ] Can toggle features per tenant
+    - [ ] Feature evaluation <10ms (Edge Config)
+    - [ ] Gradual rollout percentage works
 
-### 🧠 Knowledge Graph: Completed Tasks Archive (Legacy)
+### Performance & Security Foundation
+- [ ] **PERF-001**: Core Web Vitals Optimization
+  - **Priority**: 🔴 Critical
+  - **Target**: LCP < 2.5s, INP < 200ms, CLS < 0.1
+  - **Files**:
+    - [ ] `scripts/performance/optimize-images.ts` (CI gate)
+    - [ ] `scripts/performance/bundle-analysis.ts`
+    - [ ] `apps/web/app/layout.tsx` (font optimization, preload)
+    - [ ] `apps/web/next.config.ts` (image domains, bundling)
+  - **Subtasks**:
+    - [ ] Implement image optimization pipeline (WebP/AVIF)
+    - [ ] Add bundle size limits (150KB marketing, 300KB dashboard)
+    - [ ] Optimize Interaction to Next Paint (INP)
+    - [ ] Add `<Suspense>` boundaries for streaming
+  - **Validation**:
+    - [ ] Lighthouse CI passes in GitHub Actions
+    - [ ] `size-limit` CI gate passes
+    - [ ] Real User Monitoring (RUM) shows INP < 200ms
 
-#### Layer 1: Critical Decisions (Immediate AI Agent Context)
+- [ ] **TASK-PPR-001**: Next.js 16 PPR & Cache Components
+  - **Priority**: 🔴 Critical (if not done per doc)
+  - **Files**:
+    - [ ] `apps/web/next.config.ts` (enable `ppr: true`, `dynamicIO`)
+    - [ ] `apps/web/app/[site-slug]/[...path]/page.tsx` (PPR route)
+    - [ ] `packages/core-engine/renderer/CacheComponent.tsx`
+    - [ ] `packages/core-engine/renderer/fetchWithCache.ts`
+  - **Validation**:
+    - [ ] Marketing pages serve static shell instantly (<100ms)
+    - [ ] Dynamic content streams in via Suspense
+    - [ ] `CacheTag` revalidation works for granular updates
 
-- **Foundation Infrastructure Node:** Node 20.11.0 enforced (not 22.x), Vitest adoption (161 tests)
-- **Multi-Tenant Security Node:** RLS policies, OAuth 2.1 with PKCE
-- **Documentation Standards Node:** Ground truth freeze policy for AI agents
-- **Admin Dashboard Node:** FSD v2.1 architecture for enterprise scale (35+ features)
-- **Testing Infrastructure Excellence Node:** 9 major capability areas (Contract, Performance, AI Test Generation)
-- **MCP Infrastructure Production Readiness Node:** 75/75 issues resolved, Zero critical vulnerabilities
-- **Skills Layer Implementation Node:** 25/25 issues resolved (Marketing Agency, Core Operations)
+- [ ] **TASK-017**: Advanced Security & SOC 2 Compliance
+  - **Priority**: 🔴 Critical
+  - **Files**:
+    - [ ] `packages/infrastructure/security/audit-logger.ts` (immutable logs)
+    - [ ] `packages/infrastructure/security/encryption.ts` (AES-256-GCM field-level)
+    - [ ] `apps/web/middleware.ts` (security headers, CSP)
+    - [ ] `database/migrations/20240112000000_audit_logs.sql`
+    - [ ] `database/triggers/audit-trigger.sql`
+  - **Subtasks**:
+    - [ ] Implement hash-chained audit logs (tamper-evident)
+    - [ ] Add field-level encryption for PII
+    - [ ] Configure CSP nonce generation
+    - [ ] Add CVE-2025-29927 mitigation (middleware vulnerability)
+  - **Validation**:
+    - [ ] Delete user → verify audit chain integrity via `verifyAuditChain()`
+    - [ ] SQL injection tests pass (RLS bypass attempts blocked)
+    - [ ] Security headers A+ rating on securityheaders.com
 
-#### Layer 2: Temporal Flow (Development Context)
+### CMS & Content (The "Infinite UI" Foundation)
+- [ ] **TASK-020**: Page Builder Core & CMS Foundation
+  - **Priority**: 🔴 Critical
+  - **Impact**: JSON-driven rendering engine; key differentiator
+  - **Dependencies**: TASK-005 (UI Primitives), TASK-004 (Entities), TASK-011 (Feature Flags)
+  - **Files**:
+    - [ ] `packages/core/entities/page/Page.ts` (domain model)
+    - [ ] `packages/core/entities/site/Site.ts`
+    - [ ] `apps/web/app/[...slug]/page.tsx` (dynamic renderer)
+    - [ ] `apps/web/widgets/page-builder-canvas/ui/Canvas.tsx`
+    - [ ] `packages/core-engine/schema/page.schema.ts` (Zod validation)
+    - [ ] `packages/core-engine/schema/component-registry.ts`
+  - **Subtasks**:
+    - [ ] Define Page entity with versioning support
+    - [ ] Create JSON schema for block-based layouts
+    - [ ] Implement dynamic component registry (Puck integration prep)
+    - [ ] Build Canvas widget for visual editing
+    - [ ] Add Preview mode with secret token
+  - **Validation**:
+    - [ ] Page structure persists to Supabase
+    - [ ] Blocks render correctly via JSON config
+    - [ ] Preview mode functional (secret routes)
 
-- **Week 1 (2026-02-24):** Foundation Stabilization (Node → Test Framework → Build → Documentation Freeze)
-- **Week 2 (2026-02-25):** Production Readiness (Security → Monitoring → Admin Dashboard → Deployment)
-- **Week 3 (2026-02-26):** Infrastructure Excellence (Testing → MCP Hardening → Skills Implementation)
-
-#### Layer 3: Implementation Patterns (Reference Context)
-
-- **Technical Standards:** FSD v2.1, TypeScript strict mode, Vitest, Core Web Vitals <200ms INP
-- **Multi-Tenant Patterns:** Tenant Resolution (Subdomain → Custom Domain → Path), RLS with tenant_id claims
-- **Enterprise Capabilities:** Admin Dashboard, Analytics (Tinybird), Security (Audit trails, RBAC)
-
----
-
-## Complete File Structure Specifications
-
-### 📁 Total File Count Target: 1,124 Files
-
-| Category | File Count | Description |
-| :--- | :--- | :--- |
-| **Root Level** | 52 files | Orchestration, CI/CD, configuration |
-| **Apps** | 660 files | `web`: 312, `admin`: 148, `portal`: 200 |
-| **Packages** | 412 files | 25+ packages with full implementations |
-| **AI-Native** | 45 files | Generators, rules, scaffolding |
-| **Infrastructure** | 105 files | Edge, metering, SaaS, services |
-| **TOTAL** | **1,124+ files** | Across 6 architectural pillars |
-
-### 📁 tooling/ai-native/ (45 files - Force Multipliers)
-
-```text
-├── turbo/generators/
-│   ├── fsd-slice/ (config.ts, generator.ts, templates/)
-│   ├── service-port/ (config.ts, generator.ts, templates/)
-│   └── puck-component/ (config.ts, generator.ts, templates/)
-├── cursor-rules/ (entities, features, widgets, services, shared)
-└── scaffolding/ (site-from-template.ts, test-generation/)
-```
-
-### 📁 packages/core-engine/ (65 files - The "Infinity" Engine)
-
-```text
-├── schema/ (page.schema.ts, component-registry.ts, theme.schema.ts)
-├── puck/ (config.tsx, plugins/, fields/, theme-bridge.ts, history.tsx)
-├── renderer/ (ComponentRenderer.tsx, CacheComponent.tsx, hydration.ts, error-boundary.tsx)
-├── ai/ (generate-layout.ts, prompts/, validators/)
-└── experiments/ (ab-test-engine.ts, experiment-mutex.ts, traffic-split.ts, analytics.ts)
-```
-
-### 📁 packages/services/ (85 files - Hexagonal Layer)
-
-```text
-├── config/ports/ (email.port.ts, crm.port.ts, analytics.port.ts, payments.port.ts)
-├── email/ (adapters/, factory.ts, types.ts)
-├── crm/ (adapters/, mapper.ts, factory.ts)
-├── analytics/ (adapters/, event-queue.ts)
-├── payments/ (adapters/, subscription-manager.ts)
-└── tests/contracts/ (email-service.contract.ts, contract-runner.ts)
-```
-
-### 📁 packages/metering/ (35 files - SaaS Infrastructure)
-
-```text
-├── buffer/ (tinybird-buffer.ts, redis-buffer.ts, memory-buffer.ts, flush-strategy.ts)
-├── aggregator/ (usage-aggregator.ts, rollup-job.ts, alerts.ts)
-├── sync/ (stripe-sync.ts, quota-check.ts, overage-handler.ts)
-└── dashboard/ (usage-chart.tsx, quota-settings.tsx, billing-portal.tsx)
-```
-
-### 📁 packages/saas/ (40 files - Platform Operations)
-
-```text
-├── provisioning/ (onboard.ts, schema-init.ts, welcome-flow.ts, domain-setup.ts)
-├── plans/ (definitions.ts, entitlement-check.ts, feature-gates.tsx, upgrade-paths.ts)
-├── tenant-management/ (suspend.ts, impersonate.ts, transfer-ownership.ts)
-└── webhooks/ (tenant-events.ts, usage-alerts.ts)
-```
-
-### 📁 packages/infrastructure/edge/ (25 files - Edge Optimization)
-
-```text
-├── tenant-resolver.ts, config.ts, security-headers.ts, csp-generator.ts, rate-limiter.ts
-```
-
-### 📁 packages/ai-bridge/ (55 files - AI Native Features)
-
-```text
-├── copywriting/ (generate-headline.ts, generate-seo-meta.ts, generate-email.ts, improve-text.ts)
-├── ab-testing/ (generate-variant.ts, allocate-traffic.ts, experiment-mutex.ts, analyze-results.ts)
-├── prompts/ (marketing/, system/)
-├── llm/ (anthropic-client.ts, openai-client.ts, fallback-router.ts)
-└── safety/ (content-moderation.ts, pii-redaction.ts, rate-limit.ts)
-```
-
-### 📁 packages/compliance/ (25 files - Enterprise Enablement)
-
-```text
-├── gdpr/ (right-to-erasure.ts, data-export.ts, consent-manager.ts)
-├── audit/ (trail-logger.ts, trail-verifier.ts, tamper-detection.ts)
-└── privacy/ (cookie-manager.ts, data-classification.ts)
-```
-
-### 📁 apps/web/ (312 files - Primary Application)
-
-- **Structure:** FSD v2.1 (`app/`, `pages/`, `widgets/`, `features/`, `entities/`, `shared/`)
-- **Key Files:** `middleware.ts` (280 lines), `next.config.ts`, `layout.tsx`, `page.tsx`
-- **Features:** Auth, Marketing, Dashboard, Content, Campaigns, Settings, API Routes
-
-### 📁 apps/admin/ (148 files - Internal Governance)
-
-- **Structure:** Mirror `apps/web` FSD structure
-- **Key Features:** Tenant management, User search, Billing analytics, System health, Queue monitoring
-
-### 📁 apps/portal/ (200 files - Client Portal)
-
-- **Structure:** FSD v2.1
-- **Key Features:** Client dashboard, Analytics, Settings, Leads, White-label customization
-
-### 📁 apps/storybook/ (65 files - Component Documentation)
-
-- **Structure:** `.storybook/`, `src/stories/`
-- **Key Features:** Visual regression testing, Component documentation, Accessibility validation
-
-### 📁 clients/ (45 files - Enterprise Client Overrides)
-
-- **Structure:** `_template/`, `[client-name]/`
-- **Key Features:** White-label customization, Brand overrides, Custom components
-
-### 📁 database/ (55 files - Supabase-Native Schema)
-
-- **Migrations:** 25 SQL files (Immutable history)
-- **Functions:** Supabase Edge Functions (Deno/TypeScript)
-- **Policies:** RLS documentation and testing
-- **Triggers:** Audit triggers
-- **Seed:** Golden path test data
-
-### 📁 docs/ (85 files - Documentation)
-
-- **Guides:** Getting started, Architecture, Development, Deployment
-- **ADRs:** Architecture Decision Records (Immutable history)
-- **Tasks:** AI context files
-- **Runbooks:** SOC-2 operations documentation
-- **Research:** Auth providers, CMS options, Performance benchmarks
-
-### 📁 scripts/ (25 files - Automation)
-
-- **Setup:** `setup-env.sh`, `setup-env.ps1`
-- **Database:** `seed.ts`, `db-migrate.sh`, `db-backup.sh`
-- **Testing:** `load-test/` (k6), `verify-locks.sh`, `check-circular.sh`
-- **Analysis:** `bundle-analyze.js`, `dependency-graph.js`
-
-### 📁 .github/ (38 files - DevOps)
-
-- **Workflows:** CI gates, Security audit, Tenant isolation, Lighthouse, E2E, Production deploy, Release
-- **Actions:** Setup node/pnpm, Vercel deploy
-- **Templates:** PR, Issues, Security vulnerability
-
-### 📁 Additional Packages (From GOAL.md)
-
-| Package | Files | Purpose |
-| :--- | :--- | :--- |
-| **packages/i18n/** | 18 files | Internationalization (next-intl configuration) |
-| **packages/email/** | 42 files | React Email Templates |
-| **packages/seo/** | 24 files | Search Engine Optimization |
-| **packages/types/** | 20 files | Shared TypeScript Definitions |
-| **packages/utils/** | 22 files | Shared Utilities (Isomorphic functions) |
-| **packages/config/** | 28 files | Tooling Configurations (ESLint, TypeScript, Tailwind) |
-| **packages/integrations/** | 65 files | Plugin System + Core Adapters |
-| **packages/infrastructure/** | 78 files | External Concerns (Auth, DB, Cache, Monitoring) |
-| **packages/ui-primitives/** | 90 files | Radix UI + Tailwind Base Components |
-| **packages/ui-marketing/** | 60 files | Marketing Section Components |
-| **packages/ui-dashboard/** | 45 files | Data-Dense Dashboard Components |
-| **packages/core/** | 85 files | Domain Logic (Zero External Dependencies) |
-| **packages/features/** | 95 files | Use Case Orchestration |
+- [ ] **TASK-PUCK-001**: Puck Editor Integration
+  - **Priority**: 🔴 Critical
+  - **Files**:
+    - [ ] `packages/core-engine/puck/config.tsx` (component registry)
+    - [ ] `packages/core-engine/puck/plugins/` (custom plugins)
+    - [ ] `packages/core-engine/puck/theme-bridge.ts` (design tokens)
+    - [ ] `apps/web/app/admin/editor/[pageId]/page.tsx` (editor route)
+    - [ ] `database/migrations/20240113000000_add_puck_tables.sql` (RLS migration)
+  - **Dependencies**: TASK-DS-001 (Design Tokens)
+  - **Validation**:
+    - [ ] Can drag-drop components in Puck UI
+    - [ ] Changes save to JSON in Supabase
+    - [ ] RLS policies prevent cross-tenant edits
 
 ---
 
-## AI Execution Strategy & Force Multipliers
+## 🏗️ Phase 2: Enterprise Architecture (P1)
+*Unblocks enterprise sales ($10k+ deals)*
 
-### 🤖 The "AI-Agent-Safe" Development Model
+- [ ] **TASK-034**: Complete apps/admin FSD Structure
+  - **Target**: 148 files
+  - **Command**: `pnpm turbo gen fsd-app --name admin --type dashboard`
+  - **Check**:
+    - [ ] Folders: `app/`, `pages/`, `widgets/`, `features/`, `entities/`, `shared/`
+    - [ ] No cross-layer import violations (`npx steiger ./apps/admin`)
 
-```text
-Human Architect
-     ↓
-Defines: Architecture Rules (.cursorrules) + Generators (TASK-GEN-001)
-     ↓
-AI Agent (Cursor/Windsurf)
-     ↓
-Receives: Clear constraints + scaffolding templates
-     ↓
-Executes: TASK-AI-XXX blocks with architectural guardrails
-     ↓
-Output: Consistent, boundary-respecting, tested code
-```
+- [ ] **TASK-035**: Complete apps/portal FSD Structure
+  - **Target**: 200 files (client portal)
+  - **Features**:
+    - [ ] Client dashboard
+    - [ ] Analytics view
+    - [ ] White-label customization UI
+    - [ ] Lead management interface
 
-### 🔧 Force Multiplier Tooling Stack
+- [ ] **TASK-DS-001**: Design Tokens & Style Dictionary
+  - **Priority**: 🟡 High
+  - **Files**:
+    - [ ] `sd.config.js` (Style Dictionary config)
+    - [ ] `packages/design-tokens/tokens.ts` (source of truth)
+    - [ ] `packages/design-tokens/puck-theme.ts` (Puck integration)
+    - [ ] Figma sync pipeline (optional)
+  - **Validation**:
+    - [ ] Change primary color in `tokens.ts` → all apps update without code changes
+    - [ ] Tokens available as CSS variables and JS constants
+    - [ ] Dark mode tokens defined
 
-| Category | Tools | Purpose |
-| :--- | :--- | :--- |
-| **Core Infrastructure** | `@turbo/gen`, `@measured/puck`, `stripe`, `@vercel/edge-config`, `@anthropic-ai/sdk` | Foundation tools |
-| **Development Excellence** | `@changesets/cli`, `steiger`, `style-dictionary`, `@t3-oss/env-nextjs` | Quality & consistency |
-| **Testing & Observability** | `vitest`, `@playwright/test`, `@sentry/nextjs`, `@tinybirdco/client` | Validation & monitoring |
+- [ ] **TASK-SVC-001**: Hexagonal Service Ports
+  - **Priority**: 🟡 High
+  - **Files**:
+    - [ ] `packages/services/config/ports/email.port.ts` (interface)
+    - [ ] `packages/services/config/ports/crm.port.ts`
+    - [ ] `packages/services/config/ports/analytics.port.ts`
+    - [ ] `packages/services/config/ports/payments.port.ts`
+  - **Subtasks**:
+    - [ ] Define Port interfaces (contracts only, no implementation)
+    - [ ] Map current direct integrations to Ports
+  - **Validation**:
+    - [ ] Business logic imports only from `config/ports/`, never from adapters
 
-### 🧠 AI Execution Block Pattern (Copy-Paste Template)
+- [ ] **TASK-SVC-002-REV**: Contract Testing Implementation
+  - **Priority**: 🟡 High
+  - **Files**:
+    - [ ] `packages/services/tests/contracts/email-service.contract.ts`
+    - [ ] `packages/services/tests/contracts/contract-runner.ts`
+    - [ ] `tests/contracts/crm-service.contract.ts`
+  - **Validation**:
+    - [ ] Swap Resend → Native adapter, all tests pass without modification
+    - [ ] CI runs contract tests on PR
 
-```typescript
-// AI Execution Block for [TASK-ID]
-// Purpose: [One-line goal]
-// Files to create/modify: [List]
-// Dependencies: [TASK-XXX references]
-// Key constraints: [Architectural rules]
-// Validation criteria: [Acceptance tests]
-
-// [Implementation code with comments]
-// • Follow FSD import flow: app → pages → widgets → features → entities → shared
-// • Use @x notation for cross-slice imports
-// • Return Result<T, Error> types from @repo/shared
-// • Implement Hexagonal Port interfaces in packages/config
-// • Validate all JSON against Zod schemas before persistence
-// • Inject tenant context via middleware headers
-// • Use "use cache" directive for static components (Next.js 16)
-// • Lazy load interactive components with React.lazy
-// • Track all billable events via packages/analytics/ingest.ts
-// • Respect ai_credits quota before LLM calls
-```
-
----
-
-## Production Readiness & Acceptance Criteria
-
-### ✅ Technical Validation Checklist
-
-- [ ] **Design Tokens:** Change primary color in `tokens.ts`, all apps update without code changes
-- [ ] **Contract Tests:** Swap Resend → Native adapter, all tests pass without modification
-- [ ] **Audit Logs:** Delete a user, verify hash chain remains intact via `verifyAuditChain()`
-- [ ] **Queue Health:** Kill a worker mid-job, verify DLQ alert fires within 30 seconds
-- [ ] **Puck Rollback:** Publish broken layout, restore previous version in <30 seconds
-- [ ] **Experiment Mutex:** Try to activate overlapping experiments, system prevents with clear error
-- [ ] **Edge Resolution:** Tenant lookup completes in <10ms at 99th percentile
-- [ ] **PPR Performance:** Marketing page LCP < 2.5s, INP < 200ms, CLS < 0.1
-- [ ] **Bundle Budgets:** Marketing app <150KB, dashboard <300KB (verified by size-limit)
-- [ ] **Tenant Isolation:** Tenant A cannot access Tenant B's data via any API/UI path
-
-### 💼 Business Validation Checklist
-
-- [ ] **GDPR Export:** Generate complete data dump for tenant in <2 minutes
-- [ ] **Onboarding:** New developer runs `pnpm setup`, has running app in <5 minutes
-- [ ] **A/B Testing:** Run 3 concurrent experiments with zero interaction effects
-- [ ] **Analytics:** Query 30 days of usage data in Tinybird in <100ms
-- [ ] **Billing Accuracy:** Stripe meter events match actual usage within 0.1% tolerance
-- [ ] **Compliance Audit:** Pass SOC 2 Type I review with hash-chained audit logs
-- [ ] **Enterprise Sales:** Close first $10k/month deal with GDPR/CCPA compliance as differentiator
-- [ ] **AI Efficiency:** 80% of new features generated via TASK-GEN-001 + AI Execution Blocks
-
-### 📊 File Count Achievement Validation
-
-- **Target:** 1,124+ files across 6 architectural pillars
-- **Breakdown:** `apps/web`: 312, `apps/admin`: 148, `apps/portal`: 200, `packages/`: 464
-- **Validation Command:** `pnpm tsx scripts/verify-file-count.ts`
+- [ ] **TASK-UI-003**: Puck Version History & Rollback
+  - **Priority**: 🟡 High
+  - **Files**:
+    - [ ] `database/migrations/20240114000000_layout_versions.sql` (table)
+    - [ ] `packages/core-engine/puck/history.tsx` (UI panel)
+    - [ ] `packages/core-engine/puck/versioning.ts` (logic)
+  - **Validation**:
+    - [ ] Publish broken layout → restore previous version in <30 seconds
+    - [ ] Version diff visualization works
+    - [ ] History immutable (append-only)
 
 ---
 
-## Known Discrepancies & Compatibility Notes
+## 🛡️ Phase 3: SaaS Hardening (P2)
+*Unblocks SOC 2 and enterprise compliance*
 
-| Area | Source A (`GOAL.md`/`TODO.md`/`1.md`) | Source B (`OLDTODO.md`) | Resolution/Note |
-| :--- | :--- | :--- | :--- |
-| **Node Version** | `.nvmrc` specifies **Node v20.11.0 (LTS)** | Claims **Node 22.x Standardization** completed | **Conflict:** `.nvmrc` is the enforced standard. Node 22.x claim in `OLDTODO.md` may be aspirational or local dev variance. Stick to 20.11.0 for build stability. |
-| **Task IDs** | Uses descriptive IDs (e.g., `TASK-DEV-001`, `TASK-PUCK-001`) | Uses sequential IDs (e.g., `TASK-001`, `TASK-033`, `PROD-002`) | **Mapping:** `OLDTODO.md` tasks represent **Foundation/Legacy** work. `TODO.md` tasks represent **Active Enhancement** work. Both sets preserved. |
-| **File Count** | Target **1,124 files** total | `TASK-033` claims **593 files** for `apps/web` alone (190% of target 312) | **Note:** `OLDTODO.md` file counts may include generated/test files differently. The 1,124 target remains the architectural goal for the *enhanced* structure. |
-| **Waves** | Waves 0-7 (Enhancement Plan) | Waves 0-3 Vertical Slicing (Foundation Plan) | **Integration:** Foundation Waves (0-3) are largely **Completed**. Enhancement Waves (0-7) are **Active**. |
-| **Status** | Many tasks marked "To Do" / "Critical" | Many tasks marked "Completed" (2026-02-24) | **Temporal:** `OLDTODO.md` reflects state *prior* to the Enhancement Plan. Use `OLDTODO.md` for completed foundation, `TODO.md` for next steps. |
-| **Knowledge Graph** | Not explicitly mentioned | Detailed "Knowledge Graph" architecture for tasks | **Integration:** Knowledge Graph layers preserved in "Foundation Status" section for AI context management. |
-| **MCP Implementation** | Referenced briefly | 75/75 issues resolved, detailed security framework | **Integration:** MCP details preserved in Foundation Status section |
-| **Package Structures** | Some packages not detailed | Detailed package breakdown (25+ packages) | **Integration:** All package structures from GOAL.md preserved in File Structure Specifications |
+- [ ] **TASK-COMP-001**: GDPR/CCPA Compliance Package
+  - **Priority**: 🟡 Medium
+  - **Files**:
+    - [ ] `packages/compliance/gdpr/right-to-erasure.ts` (automated deletion)
+    - [ ] `packages/compliance/gdpr/data-export.ts` (JSON/CSV download)
+    - [ ] `packages/compliance/gdpr/consent-manager.ts` (cookie consent)
+    - [ ] `packages/compliance/audit/trail-logger.ts` (hash-chained logs)
+    - [ ] `packages/compliance/audit/trail-verifier.ts`
+    - [ ] `packages/compliance/privacy/data-classification.ts` (PII tagging)
+  - **Validation**:
+    - [ ] GDPR export generates complete tenant data in <2 minutes
+    - [ ] Right to erasure cascades through all tables (RLS-safe)
+    - [ ] Consent preferences respected in analytics tracking
+
+- [ ] **TASK-QUEUE-001**: Queue Observability & DLQ
+  - **Priority**: 🟡 Medium
+  - **Files**:
+    - [ ] `packages/infrastructure/queue/observability.ts`
+    - [ ] `apps/admin/app/queue-monitor/page.tsx` (DLQ dashboard)
+    - [ ] Alerting rules for failed jobs
+  - **Validation**:
+    - [ ] Kill worker mid-job → DLQ alert fires within 30 seconds
+    - [ ] Can retry failed jobs from dashboard
+    - [ ] Job latency metrics visible in Grafana/Tinybird
+
+- [ ] **TASK-AI-004-REV**: A/B Testing Mutex & Experiment Isolation
+  - **Priority**: 🟡 Medium
+  - **Files**:
+    - [ ] `packages/core-engine/experiments/experiment-mutex.ts`
+    - [ ] `packages/core-engine/experiments/component-overlap-checks.ts`
+    - [ ] `packages/core-engine/experiments/traffic-split.ts`
+  - **Validation**:
+    - [ ] Cannot activate overlapping experiments (system prevents with error)
+    - [ ] Traffic allocation respects mutual exclusion
+    - [ ] Statistical validity maintained (no interaction effects)
+
+- [ ] **TASK-TINYBIRD-001**: Unified Analytics Ingestion
+  - **Priority**: 🟡 Medium
+  - **Files**:
+    - [ ] `packages/analytics/ingest.ts` (unified client)
+    - [ ] `packages/analytics/tinybird-pipes/` (query definitions)
+    - [ ] `packages/metering/buffer/tinybird-buffer.ts` (batching)
+  - **Validation**:
+    - [ ] Query 30 days of usage data in <100ms
+    - [ ] Stripe meter events match actual usage within 0.1%
+    - [ ] Real-time metering without API rate limits
 
 ---
 
-## Immediate Next Steps & Diagnostic Commands
+## 🤖 Phase 4: AI-Native & Scale (P3)
+*Force multipliers and 1,124 file target*
 
-### 🚀 This Week (High Impact) - Execute in Order
+- [ ] **TASK-AI-003**: AI-to-JSON Layout Generation Pipeline
+  - **Priority**: 🟢 Enhancement
+  - **Files**:
+    - [ ] `packages/core-engine/ai/generate-layout.ts`
+    - [ ] `packages/core-engine/ai/prompts/marketing-layout.md`
+    - [ ] `packages/core-engine/ai/prompts/system/puck-schema.md`
+    - [ ] `packages/core-engine/ai/validators/layout-zod.ts`
+  - **Validation**:
+    - [ ] LLM generates valid Puck JSON from text prompt
+    - [ ] Zod validation catches hallucinated component IDs
+    - [ ] Respects ai_credits quota before generation
 
+- [ ] **TASK-AI-005**: AI Content Generation (Copywriting)
+  - **Priority**: 🟢 Enhancement
+  - **Files**:
+    - [ ] `packages/ai-bridge/copywriting/generate-headline.ts`
+    - [ ] `packages/ai-bridge/copywriting/generate-seo-meta.ts`
+    - [ ] `packages/ai-bridge/copywriting/generate-email.ts`
+    - [ ] `packages/ui-dashboard/components/AIWriterModal.tsx`
+  - **Validation**:
+    - [ ] Generate headline from keyword prompt
+    - [ ] SEO meta generation respects character limits
+    - [ ] Content moderation catches disallowed topics
+
+- [ ] **TASK-FINAL-001**: Achieve 1,124 File Target
+  - **Priority**: 🟢 Enhancement
+  - **Current**: ~593 (apps/web) + gaps in admin/portal
+  - **Commands**:
+    ```bash
+    pnpm tsx scripts/verify-file-count.ts
+    ```
+  - **Breakdown**:
+    - [ ] `apps/web`: 312 files (✅ likely complete)
+    - [ ] `apps/admin`: 148 files (scaffold remaining)
+    - [ ] `apps/portal`: 200 files (scaffold remaining)
+    - [ ] `packages/`: 464 files (fill gaps in services, compliance, ai-bridge)
+
+- [ ] **TASK-FINAL-002**: Integration Testing & Production Validation
+  - **Priority**: 🟢 Enhancement
+  - **Files**:
+    - [ ] `tests/integration/tenant-isolation.spec.ts` (RLS bypass attempts)
+    - [ ] `tests/integration/multi-tenant-security.spec.ts`
+    - [ ] `tests/e2e/golden-path.spec.ts` (Signup → Lead → Booking → Payment)
+    - [ ] `tests/load/k6/tenant-concurrency.js` (1000 concurrent tenants)
+  - **Validation**:
+    - [ ] 1000 concurrent tenants, 10k RPM sustained
+    - [ ] E2E golden path passes in <2 minutes
+    - [ ] Tenant A cannot access Tenant B data via any path (API/UI)
+
+---
+
+## 🔧 Daily Execution Commands
+
+**Start of Day Validation:**
 ```bash
-# 1. Verify current state gaps
-ls -la turbo/generators/ 2 >/dev/null || echo "🔴 MISSING: Turborepo generators"
-ls -la .cursorrules 2 >/dev/null || echo "🔴 MISSING: AI coding rules"
-grep -q "@measured/puck" package.json && echo "✅ Puck installed" || echo "🔴 MISSING: Puck editor"
-grep -q "ppr: true" apps/web/next.config.ts 2 >/dev/null && echo "✅ PPR enabled" || echo "🔴 MISSING: PPR config"
-grep -q "catalog:" pnpm-workspace.yaml 2 >/dev/null && echo "✅ Catalogs configured" || echo "🔴 MISSING: pnpm catalogs"
+# 1. Environment Check
+pnpm verify  # TASK-DEV-001 validation
 
-# 2. Execute P0 tasks sequentially
-pnpm setup  # TASK-DEV-001: ✅ COMPLETED - Developer onboarding
-pnpm turbo gen fsd-slice --name design-system  # TASK-GEN-001: ✅ COMPLETED - Create first generator
-# TASK-RULES-001: ✅ COMPLETED - .cursorrules files created for all FSD layers
-# TASK-PUCK-001: ✅ COMPLETED - Puck editor integrated with design tokens + RLS migration
-# TASK-PPR-001: ✅ COMPLETED - PPR + dynamicIO enabled; CacheComponent + fetchWithCache added to packages/core-engine/src/renderer/
-# Configure pnpm catalogs for dependency management  # TASK-CATALOG-001 ← NEXT TASK
+# 2. Architecture Guardrails
+npx steiger ./packages  # FSD boundary check
+pnpm test:contracts  # If implemented
+pnpm test:webhooks  # PROD-002 idempotency
+pnpm test:queues  # PROD-004 queue health
 
-# 3. Execute critical production tasks
-# Implement webhook idempotency layer  # PROD-002
-# Set up background job queue system  # PROD-004
-# Build admin dashboard application  # PROD-006
-# Configure feature flags system  # TASK-011
-# Implement queue workers  # TASK-012
-# Build page builder core  # TASK-020
-# Optimize Core Web Vitals  # PERF-001
-# Implement security compliance  # TASK-017
-
-# 4. Install critical dependencies
-pnpm add -D @turbo/gen style-dictionary @t3-oss/env-nextjs
-pnpm add @tinybirdco/client @vercel/edge-config @anthropic-ai/sdk
-pnpm add inngest bullmq @vercel/kv  # Queue system dependencies
-pnpm add @vercel/flags  # Feature flags
-
-# 5. Run verification
-pnpm verify  # TASK-DEV-001 env validation
-npx steiger ./packages  # FSD boundary linting
-pnpm test:contracts  # TASK-SVC-002-REV contract tests (once implemented)
-pnpm test:webhooks  # PROD-002 webhook idempotency tests
-pnpm test:queues  # PROD-004 background job tests
+# 3. Performance Gates
+pnpm run performance:audit  # PERF-001
+pnpm run size-limit  # Bundle budgets
 ```
 
-### 📅 Next Week (Enterprise Readiness)
-
-- **P1 Tasks:** Configure pnpm catalogs, Complete Style Dictionary setup, Implement first contract test suite, Enhance setup script
-- **P2 Tasks (Parallel):** Queue observability + Tinybird metering, Puck version history + A/B testing mutex, GDPR compliance package + edge middleware optimization
-
-### 🔧 Tools to Install Today
-
+**File Count Tracking:**
 ```bash
-# Core infrastructure
-pnpm add -D @turbo/gen
-pnpm add @measured/puck @measured/puck-plugin-heading-analyzer
-pnpm add stripe @stripe/stripe-js
-pnpm add @vercel/edge-config
-pnpm add @anthropic-ai/sdk
-
-# Development excellence
-pnpm add -D @changesets/cli
-pnpm add -D steiger
-pnpm add -D style-dictionary
-pnpm add -D @t3-oss/env-nextjs
-
-# Testing & observability
-pnpm add -D vitest @vitest/coverage-v8
-pnpm add -D @playwright/test
-pnpm add @sentry/nextjs
-pnpm add @tinybirdco/client
+find apps web admin portal -type f | wc -l  # Should trend toward 660
+find packages -type f | wc -l  # Should trend toward 464
 ```
 
----
+**Dependency Resolution Order:**
+1. **Foundation**: TASK-CATALOG-001 → TASK-GEN-001 → TASK-RULES-001
+2. **Core**: PROD-006 (Admin) → PROD-002 (Webhooks) → PROD-004 (Queues)
+3. **CMS**: TASK-PUCK-001 → TASK-020 → TASK-UI-003 (Versioning)
+4. **Scale**: TASK-SVC-001 → TASK-SVC-002-REV → TASK-TINYBIRD-001
+5. **AI**: TASK-AI-003 → TASK-AI-005 → TASK-FINAL-002
 
-## 🔗 Critical Dependency Graph
-
-```text
-TASK-DEV-001 (Setup) ✅
-  ↓
-TASK-DS-001 (Tokens) ✅ → TASK-GEN-001 (Generators) → TASK-RULES-001 (Cursor Rules)
-  ↓                              ↓
-TASK-PUCK-001 (Editor) ←─────────┘
-  ↓
-TASK-UI-002 (Renderer) + TASK-PPR-001 (Performance) + TASK-UI-003 (Rollback)
-  ↓
-TASK-SVC-001 (Ports) → TASK-SVC-002-REV (Adapters + Contracts)
-  ↓
-TASK-SaaS-001-REV (Metering) + TASK-QUEUE-001 (Observability)
-  ↓
-TASK-AI-004-REV (A/B Testing) + TASK-COMP-001 (Compliance)
-  ↓
-TASK-EDGE-001 (Middleware) + TASK-FINAL-001 (FSD Completion) + TASK-FINAL-002 (Validation)
-```
-
----
-
-> **Final Note:** This master document represents a **bank-grade, enterprise-ready SaaS architecture** where AI agents can work safely in parallel without breaking each other's code. The combination of **FSD structure + Hexagonal abstraction + JSON-driven UI + cryptographic compliance** creates a system that scales to 1,000+ tenants while maintaining visual consistency, regulatory compliance, and statistical validity in experimentation.
->
-> **You now have a "Generate, Don't Write" philosophy** that aligns perfectly with AI-native development. Execute the **P0 tasks first** to unlock parallel AI execution, then proceed through the waves to achieve production readiness.
-
----
-
-**Document Version:** 5.0 Final Consolidated  
-**Last Updated:** February 28, 2026  
-**Source Files:** GOAL.md, GOAL_UPDATED.md, TODO.md, OLDTODO.md, 1.md  
-**Information Preservation:** 100% (All content from all 5 files preserved with compatibility notes)  
-**Status:** P0 Tasks 3/6 Completed (50% Progress)
+**⚠️ Blockers**: Do not start Phase 2 until PROD-006, PROD-002, PROD-004 are complete.
