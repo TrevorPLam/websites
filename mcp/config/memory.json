@@ -3,7 +3,7 @@
     "project_context": "Marketing Websites Monorepo - Multi-tenant SaaS platform with Next.js 16, React 19, TypeScript, Supabase, and feature-sliced design architecture",
     "key_patterns": {
       "architecture": "Feature-Sliced Design (FSD) v2.1 with app → pages → widgets → features → entities → shared layers",
-      "tech_stack": "Next.js 16.1.5, React 19.0.0, TypeScript 5.9.3, Tailwind CSS v4, Turborepo 2.8.10, pnpm 10.29.2",
+      "tech_stack": "Next.js 16, React 19.0.0, TypeScript 5.9.3, Tailwind CSS v4, Turborepo 2.8.10, pnpm 10.29.2",
       "database": "Supabase (PostgreSQL + Realtime) with Row Level Security for multi-tenant isolation",
       "deployment": "Vercel with edge functions and ISR patterns"
     },
