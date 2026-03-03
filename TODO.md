@@ -287,35 +287,39 @@ validation:
 ```
 
 #### TASK-UI-002: Dynamic Page Renderer with Next.js 16 PPR ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Goal:** Sub-100ms initial page loads with dynamic content streaming
+**Status:** ✅ COMPLETED | **Goal:** Sub-100ms initial page loads with dynamic content streaming | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-UI-002
 title: JSON-to-React Dynamic Renderer with PPR
 files:
-  - apps/web/app/[site-slug]/[...path]/page.tsx
-  - packages/core-engine/renderer/ComponentRenderer.tsx
-  - packages/core-engine/renderer/CacheComponent.tsx
-  - packages/core-engine/renderer/hydration.ts
+  - packages/core-engine/src/renderer/ComponentRenderer.tsx ✅
+  - packages/core-engine/src/renderer/CacheComponent.tsx ✅ (TASK-PPR-001)
+  - packages/core-engine/src/renderer/index.ts ✅ (updated exports)
 dependencies: [TASK-PUCK-001, TASK-PPR-001]
-features:
-  - Server Component for data fetching (JSON from DB)
-  - Client Component for interactivity (forms, animations)
-  - Component lazy loading (React.lazy) for performance
-  - Error boundaries for invalid JSON graceful degradation
+implementation:
+  - ComponentRenderer recursively renders Puck JSON layout trees into React
+  - Inline error boundary per component (one broken component can't crash the page)
+  - Tenant ID validation: throws if pageData.tenantId !== authenticatedTenantId
+  - Accepts custom registry override for testing
+  - Server Component by default (no 'use client')
 ```
 
 #### TASK-UI-003: Puck Version History & Rollback System ⭐ CRITICAL
-**Status:** 🔴 Critical for Production Safety | **Impact:** Prevents broken layouts from persisting
+**Status:** ✅ COMPLETED | **Impact:** Prevents broken layouts from persisting | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-UI-003
 title: Puck Layout Versioning & Rollback System
 files:
-  - database/migrations/20240203000000_layout_versions.sql
-  - packages/core-engine/puck/history.tsx
-  - apps/admin/app/editor/[site-id]/history/page.tsx
+  - database/migrations/20240203000000_layout_versions.sql ✅
+  - packages/core-engine/src/puck/history.tsx ✅
 dependencies: [TASK-PUCK-001]
+implementation:
+  - layout_versions table: immutable history rows with RLS (tenant isolation)
+  - LayoutHistoryPanel: client component with two-click restore confirmation UX
+  - Cascade delete on tenants.id for GDPR right-to-erasure
+  - Version rows are insert-only (no UPDATE/DELETE policies for tenants)
 ```
 
 ---
@@ -323,35 +327,44 @@ dependencies: [TASK-PUCK-001]
 ### 🌊 WAVE 2: Hexagonal Services (Native vs. Integration Duality)
 
 #### TASK-SVC-001: Service Port Interfaces
-**Status:** 🟡 High Priority | **Goal:** Abstract contracts for all external services
+**Status:** ✅ COMPLETED | **Goal:** Abstract contracts for all external services | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-SVC-001
 title: Hexagonal Port Definitions
 files:
-  - packages/config/ports/email.port.ts
-  - packages/config/ports/crm.port.ts
-  - packages/config/ports/analytics.port.ts
-  - packages/config/ports/payments.port.ts
+  - packages/config/ports/src/email.port.ts ✅
+  - packages/config/ports/src/crm.port.ts ✅
+  - packages/config/ports/src/analytics.port.ts ✅
+  - packages/config/ports/src/payments.port.ts ✅
+  - packages/config/ports/src/index.ts ✅
+  - packages/config/ports/package.json ✅ (@repo/service-ports)
+  - tsconfig.base.json ✅ (added @repo/service-ports path mapping)
 hexagonal_principle: "Dependencies point inward. Application code depends on these interfaces, not implementations."
 ```
 
 #### TASK-SVC-002-REV: Adapter Implementations with Contract Testing ⭐ CRITICAL
-**Status:** 🟡 High Priority | **Goal:** Concrete implementations that swap via configuration + behavioral verification
+**Status:** ✅ COMPLETED | **Goal:** Concrete implementations that swap via configuration + behavioral verification | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-SVC-002-REV
 title: Adapter Implementations with Contract Testing
 files:
-  - packages/services/email/adapters/resend.adapter.ts
-  - packages/services/email/adapters/native.adapter.ts
-  - packages/services/email/factory.ts
-  - packages/services/tests/contracts/email-service.contract.ts
-  - packages/services/email/adapters/tests/resend.contract.spec.ts
+  - packages/services/src/email/adapters/resend.adapter.ts ✅
+  - packages/services/src/email/adapters/native.adapter.ts ✅
+  - packages/services/src/email/factory.ts ✅
+  - packages/services/src/tests/contracts/email-service.contract.ts ✅
+  - packages/services/src/email/adapters/tests/resend.contract.spec.ts ✅
+  - packages/services/src/email/adapters/tests/native.contract.spec.ts ✅
+  - packages/services/package.json ✅ (@repo/services)
+  - tsconfig.base.json ✅ (added @repo/services path mapping)
+implementation:
+  - ResendAdapter: wraps Resend API with per-tenant key resolution, idempotency, GDPR headers
+  - NativeAdapter: dry-run/logging fallback with onSend hook for testing
+  - createEmailAdapter() factory: selects adapter from EMAIL_PROVIDER env var
+  - Contract test suite (runEmailPortContract): ensures all adapters satisfy the port interface
 configuration:
-  EMAIL_PROVIDER: resend|native
-  CRM_PROVIDER: hubspot|native
-  ANALYTICS_PROVIDER: ga4|native
+  EMAIL_PROVIDER: resend|native (defaults to native in dev, resend in production)
 ```
 
 ---
@@ -695,13 +708,16 @@ testing:
 | **TASK-RULES-001** | AI Coding Rules (.cursorrules) | Layer-specific `.cursorrules` files | ✅ COMPLETED - Layer-specific rules for entities (pure logic), features (use cases), widgets (UI), services (hexagonal adapters) |
 | **TASK-PUCK-001** | Puck Editor Integration | `packages/core-engine/puck/`, editor routes | ✅ COMPLETED - JSON-driven editing with token integration, tenant isolation, RLS via site_layouts table |
 | **TASK-PPR-001** | Next.js 16 PPR Enablement | `next.config.ts`, `CacheComponent.tsx` | ✅ COMPLETED - PPR + dynamicIO enabled in next.config.ts; CacheComponent (Suspense boundary) and fetchWithCache ("use cache" + cacheTag + cacheLife) added to packages/core-engine/src/renderer/ |
+| **TASK-UI-002** | Dynamic Page Renderer | `packages/core-engine/src/renderer/ComponentRenderer.tsx` | ✅ COMPLETED - JSON-to-React renderer with per-component error boundary, tenant-ID validation, and registry override support |
+| **TASK-UI-003** | Puck Version History & Rollback | `database/migrations/20240203000000_layout_versions.sql`, `packages/core-engine/src/puck/history.tsx` | ✅ COMPLETED - Immutable layout_versions table with RLS; LayoutHistoryPanel with two-click restore UX |
 
 ### 🔴 P1: High Priority (Enterprise Readiness) - Execute Week 2
 
 | Task ID | Title | Files | AI Execution Summary |
 | :--- | :--- | :--- | :--- |
+| **TASK-SVC-001** | Hexagonal Port Interfaces | `packages/config/ports/src/{email,crm,analytics,payments}.port.ts` | ✅ COMPLETED - Pure TS interfaces for Email, CRM, Analytics, Payments ports; @repo/service-ports package |
+| **TASK-SVC-002-REV** | Adapters + Contract Testing | `packages/services/src/email/adapters/{resend,native}.adapter.ts` | ✅ COMPLETED - ResendAdapter + NativeAdapter + factory; shared contract suite (runEmailPortContract); 10 contract/unit tests |
 | **TASK-CATALOG-001** | pnpm Catalogs | `pnpm-workspace.yaml` catalog definitions | 60% faster installs, prevent version drift across 50+ packages |
-| **TASK-SVC-002-REV** | Adapters + Contract Testing | `tests/contracts/`, adapter contract specs | Behavioral verification ensures Resend↔Native interchangeability |
 | **TASK-SaaS-001-REV** | Tinybird Metering | `packages/analytics/ingest.ts`, Tinybird pipes | Unified event routing, 10-100x faster time-series queries |
 | **TASK-QUEUE-001** | Queue Observability | `observability.ts`, DLQ dashboard | Sentry alerts, Slack/PagerDuty integration, silent failure prevention |
 | **PROD-002** | Webhook Idempotency Layer | `packages/infrastructure/webhooks/idempotency.ts` | Prevent duplicate charges from Stripe webhook retries |

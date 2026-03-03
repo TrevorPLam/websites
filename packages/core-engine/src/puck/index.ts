@@ -26,3 +26,6 @@ export { puckPlugins, getEnabledPlugins } from './plugins/index';
 
 export { buildPuckCssVars, getPuckEditorStyles, puckTypography, puckTheme } from './theme-bridge';
 export type { PuckTypography } from './theme-bridge';
+
+export { LayoutHistoryPanel } from './history';
+export type { LayoutHistoryPanelProps, LayoutVersion } from './history';

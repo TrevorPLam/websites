@@ -13,3 +13,6 @@ export {
 } from './CacheComponent';
 
 export type { CacheComponentProps, CacheLifePreset } from './CacheComponent';
+
+export { ComponentRenderer } from './ComponentRenderer';
+export type { ComponentRendererProps } from './ComponentRenderer';

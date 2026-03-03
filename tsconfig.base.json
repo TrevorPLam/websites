@@ -71,7 +71,11 @@
       "@repo/auth": ["packages/auth/src/index.ts"],
       "@repo/auth/*": ["packages/auth/src/*"],
       "@repo/test-utils": ["packages/test-utils/src/index.ts"],
-      "@repo/test-utils/*": ["packages/test-utils/src/*"]
+      "@repo/test-utils/*": ["packages/test-utils/src/*"],
+      "@repo/service-ports": ["packages/config/ports/src/index.ts"],
+      "@repo/service-ports/*": ["packages/config/ports/src/*"],
+      "@repo/services": ["packages/services/src/index.ts"],
+      "@repo/services/*": ["packages/services/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build", ".next"]
