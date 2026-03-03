@@ -11,16 +11,7 @@
 
 import { execSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { createInterface } from 'readline';
-
-const rl = createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-function question(query: string): Promise<string> {
-  return new Promise(resolve => rl.question(query, resolve));
-}
+import { randomBytes } from 'crypto';
 
 function log(message: string, type: 'info' | 'success' | 'error' | 'warning' = 'info') {
   const colors = {
@@ -32,10 +23,6 @@ function log(message: string, type: 'info' | 'success' | 'error' | 'warning' = '
   console.log(`${colors[type]}${message}\x1b[0m`);
 }
 
-function step(step: number, total: number, description: string) {
-  log(`[${step}/${total}] ${description}`, 'info');
-}
-
 async function checkPrerequisites() {
   log('Checking prerequisites...', 'info');
   
@@ -44,8 +31,8 @@ async function checkPrerequisites() {
     const nodeVersion = execSync('node --version', { encoding: 'utf8' }).trim();
     const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0]);
     
-    if (majorVersion < 20) {
-      throw new Error(`Node.js 20+ required. Found: ${nodeVersion}`);
+    if (majorVersion < 22) {
+      throw new Error(`Node.js 22+ required. Found: ${nodeVersion}`);
     }
     
     log(`✓ Node.js ${nodeVersion}`, 'success');
@@ -81,15 +68,17 @@ async function checkPrerequisites() {
 async function setupEnvironment() {
   log('Setting up environment...', 'info');
   
-  // Copy .env.template to .env.local if it doesn't exist
+  // Copy .env.example/.env.template to .env.local if it doesn't exist
   if (!existsSync('.env.local')) {
-    if (existsSync('.env.template')) {
-      log('Creating .env.local from template...', 'info');
+    const sourceEnvFile = existsSync('.env.example') ? '.env.example' : existsSync('.env.template') ? '.env.template' : null;
+
+    if (sourceEnvFile) {
+      log(`Creating .env.local from ${sourceEnvFile}...`, 'info');
       
-      let envContent = readFileSync('.env.template', 'utf8');
+      let envContent = readFileSync(sourceEnvFile, 'utf8');
       
       // Generate random secrets for development
-      const randomSecret = () => Math.random().toString(36).substring(2, 42);
+      const randomSecret = () => randomBytes(32).toString('hex');
       
       envContent = envContent
         .replace(/NEXTAUTH_SECRET=.*/, `NEXTAUTH_SECRET=${randomSecret()}`)
@@ -100,7 +89,7 @@ async function setupEnvironment() {
       writeFileSync('.env.local', envContent);
       log('✓ .env.local created with development defaults', 'success');
     } else {
-      log('⚠ No .env.template found. Creating minimal .env.local...', 'warning');
+      log('⚠ No .env.example or .env.template found. Creating minimal .env.local...', 'warning');
       
       const minimalEnv = `# Development Environment Variables
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -287,15 +276,13 @@ async function main() {
   } catch (error) {
     log(`\n❌ Setup failed: ${error}`, 'error');
     log('\nTroubleshooting:', 'info');
-    log('1. Ensure Node.js 20+ is installed', 'info');
+    log('1. Ensure Node.js 22+ is installed', 'info');
     log('2. Ensure pnpm is installed: npm install -g pnpm', 'info');
     log('3. Check .env.local configuration', 'info');
     log('4. Try running individual steps manually', 'info');
     log('5. Check the documentation for detailed setup instructions', 'info');
     
     process.exit(1);
-  } finally {
-    rl.close();
   }
 }
 

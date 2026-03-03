@@ -163,7 +163,12 @@ Tinybird Ingestion → Analytics/Metering Events
 ### 🌊 WAVE 0: Foundation & Developer Experience (Prerequisites for Everything)
 
 #### TASK-DEV-001: Developer Onboarding Automation ⭐ CRITICAL
-**Status:** 🔴 Must Complete First | **Impact:** 5-minute clone-to-running vs. hours of debugging
+**Status:** 🟡 In Progress (automation scripts aligned) | **Impact:** 5-minute clone-to-running vs. hours of debugging
+
+**Implementation notes (verified in repository):**
+- `scripts/setup-dev.ts`, `scripts/verify-env.ts`, and `scripts/seed.ts` are present.
+- Root `package.json` includes `setup` and `verify` scripts.
+- Setup/verify scripts now align with repository baseline (`Node.js >=22`, `.env.example` bootstrap, Linux port checks).
 
 ```yaml
 id: TASK-DEV-001

@@ -33,11 +33,11 @@ function checkNodeVersion(): ValidationResult {
     const nodeVersion = execSync('node --version', { encoding: 'utf8' }).trim();
     const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0]);
     
-    if (majorVersion < 20) {
+    if (majorVersion < 22) {
       return {
         success: false,
-        message: `Node.js 20+ required. Found: ${nodeVersion}`,
-        details: 'Please install Node.js 20 LTS or later'
+        message: `Node.js 22+ required. Found: ${nodeVersion}`,
+        details: 'Please install Node.js 22 LTS or later'
       };
     }
     
@@ -50,7 +50,7 @@ function checkNodeVersion(): ValidationResult {
     return {
       success: false,
       message: 'Node.js not found',
-      details: 'Please install Node.js 20 LTS or later'
+      details: 'Please install Node.js 22 LTS or later'
     };
   }
 }
@@ -201,7 +201,7 @@ function checkDatabase(): ValidationResult {
 
 function checkTypeScript(): ValidationResult {
   try {
-    execSync('pnpm type-check', { encoding: 'utf8', stdio: 'pipe' });
+    execSync('pnpm check:types', { encoding: 'utf8', stdio: 'pipe' });
     return {
       success: true,
       message: 'TypeScript compilation',
@@ -211,7 +211,7 @@ function checkTypeScript(): ValidationResult {
     return {
       success: false,
       message: 'TypeScript errors found',
-      details: 'Run: pnpm type-check for details'
+      details: 'Run: pnpm check:types for details'
     };
   }
 }
@@ -281,8 +281,8 @@ function checkPortAvailability(): ValidationResult {
   try {
     for (const port of ports) {
       // Simple check - try to bind to the port
-      const result = execSync(`netstat -an | findstr :${port}`, { encoding: 'utf8' });
-      if (result.includes(`LISTENING`)) {
+      const result = execSync(`lsof -iTCP:${port} -sTCP:LISTEN -n -P`, { encoding: 'utf8', stdio: 'pipe' });
+      if (result.trim().length > 0) {
         return {
           success: false,
           message: `Port ${port} in use`,
