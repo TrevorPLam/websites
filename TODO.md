@@ -9,7 +9,7 @@
 ### PHASE 0 — EMERGENCY TRIAGE (Day 1, ~2 hours)
 *Fix the three blockers that make everything else non-functional*
 
-- [ ] **0-A: Fix All Path Mismatches**
+- [x] **0-A: Fix All Path Mismatches**
   - **Priority**: 🔴 Critical
   - **Effort**: 1 hour
   - **Issue**: Files reference `.mcp/config.json` which doesn't exist (should be `mcp/config/config.json`)
@@ -21,7 +21,7 @@
   - **Also Fix Skills Path**:
     - [ ] Every reference to `.claude/skills/` → `skills/` in all files above
 
-- [ ] **0-B: Fix CI Workflow Path Triggers**
+- [x] **0-B: Fix CI Workflow Path Triggers**
   - **Priority**: 🔴 Critical
   - **Effort**: 30 min
   - **Issue**: CI never fires because `on.push.paths` filters don't match actual file locations
@@ -80,7 +80,7 @@
     - [ ] All `SKILL.md` files referencing this server
   - **Standard**: Use `enterprise-security-gateway` as canonical name
 
-- [ ] **1-C: Add Redis Fallback to enterprise-auth-gateway**
+- [x] **1-C: Add Redis Fallback to enterprise-auth-gateway**
   - **Priority**: 🔴 High
   - **Effort**: 1 hour
   - **Issue**: Crashes on startup if `REDIS_URL` not set
@@ -95,7 +95,7 @@
     - [ ] Logs show fallback warning
     - [ ] Functions with Redis when available
 
-- [ ] **1-D: Fix SKILLS_PATH Resolution**
+- [x] **1-D: Fix SKILLS_PATH Resolution**
   - **Priority**: 🔴 High
   - **Effort**: 30 min
   - **Issue**: Relative path breaks when server launches from non-root directory
@@ -169,7 +169,7 @@
     - [ ] Metrics reflect actual system state
     - [ ] Audit results are deterministic
 
-- [ ] **2-B: Load policy/ai-agent-policy.yaml in PolicyEngine**
+- [x] **2-B: Load policy/ai-agent-policy.yaml in PolicyEngine**
   - **Priority**: 🔴 High
   - **Effort**: 2 hours
   - **Issue**: `loadDefaultPolicies()` ignores YAML file, uses hardcoded rules only

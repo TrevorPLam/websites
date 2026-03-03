@@ -92,7 +92,7 @@ You are Cascade, a powerful agentic AI coding assistant working as a senior Type
 
 ### MCP (Model Context Protocol)
 - Use MCP servers for external tool access
-- Configure in `.mcp/config.json`
+- Configure in `mcp/config/config.json`
 - Validate all MCP server responses
 - Implement proper error handling for MCP failures
 - Available servers: sequential-thinking, github, knowledge-graph, enterprise-security
@@ -156,7 +156,7 @@ You are Cascade, a powerful agentic AI coding assistant working as a senior Type
 - Root AGENTS.md for master coordination (keep under 500 words)
 - Package-specific AGENTS.md for detailed guidance
 - CLAUDE.md for sub-agent orchestration
-- MCP integration documentation in `.mcp/`
+- MCP integration documentation in `mcp/config/`
 
 ## Quality Gates
 

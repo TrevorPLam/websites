@@ -75,7 +75,7 @@ All architectural decisions must include economic impact analysis:
 2. Read relevant scoped `AGENTS.md` files (for target packages)
 3. Read the active domain task file(s) in `docs/plan`
 4. Check current branch and uncommitted changes
-5. **NEW:** Load MCP server configurations from `.mcp/` if relevant
+5. **NEW:** Load MCP server configurations from `mcp/config/` if relevant
 
 ### Phase 2: Implementation Framework
 1. Run code_health_review BEFORE touching any file
@@ -164,11 +164,11 @@ For package-specific instructions, see:
 
 ### MCP Server Configurations
 
-MCP servers are configured in `.mcp/config.json`. Available servers:
+MCP servers are configured in `mcp/config/config.json`. Available servers:
 - **sequential-thinking:** Advanced reasoning and analysis
 - **knowledge-graph:** Memory and context management
 - **github:** Repository integration and management
-- See `.mcp/README.md` for complete server documentation
+- See `mcp/config/` for complete server documentation
 
 ### A2A Protocol Integration
 

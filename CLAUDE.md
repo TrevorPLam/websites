@@ -64,7 +64,7 @@
 ### Agent Lifecycle Management
 
 #### Phase 1: Initialization
-- Load agent configuration from `.mcp/config.json`
+- Load agent configuration from `mcp/config/config.json`
 - Register capabilities in central agent registry
 - Establish OAuth 2.1 credentials for A2A communication
 
@@ -119,4 +119,4 @@
 - **[README.md](README.md)** - Project overview
 - **[TODO.md](TODO.md)** - Task tracking
 - **[ANALYSIS.md](ANALYSIS.md)** - Repository analysis
-- **[.mcp/README.md](.mcp/README.md)** - MCP server documentation
+- **[mcp/config/](mcp/config/)** - MCP server documentation
