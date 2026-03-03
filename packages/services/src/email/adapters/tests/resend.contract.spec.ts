@@ -25,7 +25,7 @@ vi.mock('resend', () => ({
 
 runEmailPortContract(() => {
   mockSend.mockResolvedValue({ data: { id: `resend-${Math.random()}` }, error: null });
-  return new ResendAdapter({ apiKey: 'test-key' });
+  return new ResendAdapter({ apiKey: 'test-key', defaultFromAddress: 'test@example.com' });
 });
 
 // ─── ResendAdapter-specific tests ────────────────────────────────────────────
@@ -36,7 +36,7 @@ describe('ResendAdapter (specific behaviour)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockSend.mockResolvedValue({ data: { id: 'resend-msg-001' }, error: null });
-    adapter = new ResendAdapter({ apiKey: 'test-key' });
+    adapter = new ResendAdapter({ apiKey: 'test-key', defaultFromAddress: 'sender@example.com' });
   });
 
   it('throws EmailSendError when the provider returns an error', async () => {
@@ -60,7 +60,10 @@ describe('ResendAdapter (specific behaviour)', () => {
 
   it('constructs the adapter with a resolveApiKey function', async () => {
     const resolveApiKey = vi.fn().mockResolvedValue('resolved-key');
-    const adapterWithResolver = new ResendAdapter({ resolveApiKey });
+    const adapterWithResolver = new ResendAdapter({
+      resolveApiKey,
+      defaultFromAddress: 'sender@example.com',
+    });
 
     const result = await adapterWithResolver.send(buildSendRequest());
 
@@ -71,6 +74,13 @@ describe('ResendAdapter (specific behaviour)', () => {
   it('throws if neither apiKey nor resolveApiKey is provided', () => {
     expect(() => new ResendAdapter({})).toThrow(
       'ResendAdapter requires either `apiKey` or `resolveApiKey`',
+    );
+  });
+
+  it('throws EmailSendError when no from-address is configured', async () => {
+    const adapterNoFrom = new ResendAdapter({ apiKey: 'test-key' });
+    await expect(adapterNoFrom.send(buildSendRequest())).rejects.toThrow(
+      EmailSendError,
     );
   });
 

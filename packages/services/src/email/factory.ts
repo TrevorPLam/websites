@@ -46,6 +46,9 @@ export interface CreateEmailAdapterOptions {
   native?: NativeAdapterOptions;
 }
 
+/** Valid email provider values. */
+const VALID_PROVIDERS: ReadonlySet<EmailProvider> = new Set(['resend', 'native']);
+
 /**
  * Creates and returns the configured email adapter.
  *
@@ -56,10 +59,18 @@ export interface CreateEmailAdapterOptions {
 export function createEmailAdapter(
   options: CreateEmailAdapterOptions = {},
 ): EmailPort {
-  const provider: EmailProvider =
-    (options.provider as EmailProvider | undefined) ??
-    (process.env['EMAIL_PROVIDER'] as EmailProvider | undefined) ??
+  const rawProvider: string =
+    options.provider ??
+    process.env['EMAIL_PROVIDER'] ??
     (process.env['NODE_ENV'] === 'production' ? 'resend' : 'native');
+
+  if (!VALID_PROVIDERS.has(rawProvider as EmailProvider)) {
+    throw new Error(
+      `Unknown EMAIL_PROVIDER "${rawProvider}". Valid values: ${[...VALID_PROVIDERS].join(', ')}.`,
+    );
+  }
+
+  const provider = rawProvider as EmailProvider;
 
   switch (provider) {
     case 'resend': {

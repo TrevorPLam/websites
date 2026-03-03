@@ -136,8 +136,17 @@ export class ResendAdapter implements EmailPort {
       ? request.to.map((e) => e.toLowerCase())
       : [request.to.toLowerCase()];
 
+    const fromAddress = request.from ?? this.options.defaultFromAddress;
+    if (!fromAddress) {
+      throw new EmailSendError(
+        'No from-address configured. Set ResendAdapterOptions.defaultFromAddress or pass request.from.',
+        request.emailType,
+        request.tenantId,
+      );
+    }
+
     const payload: ResendEmailPayload = {
-      from: request.from ?? this.options.defaultFromAddress ?? `noreply@${request.tenantId}.example.com`,
+      from: fromAddress,
       to: recipients,
       subject: request.subject,
       html: request.html,
@@ -177,7 +186,7 @@ export class ResendAdapter implements EmailPort {
 
     const { data, error } = await client.emails.send(payload);
 
-    if (error ?? !data) {
+    if (error || !data) {
       throw new EmailSendError(
         error?.message ?? 'Unknown Resend error',
         request.emailType,

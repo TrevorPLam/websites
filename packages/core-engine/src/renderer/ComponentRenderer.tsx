@@ -128,6 +128,9 @@ function mergeProps(
 
 // ─── Component renderer ──────────────────────────────────────────────────────
 
+/** Maximum recursion depth for nested components. Protects against malformed JSON. */
+const MAX_COMPONENT_DEPTH = 32;
+
 /**
  * Recursively renders a single {@link ComponentData} node from the page JSON.
  */
@@ -137,9 +140,9 @@ function renderComponent(
   unknownFallback: ReactNode,
   depth = 0,
 ): ReactElement | null {
-  if (depth > 32) {
+  if (depth > MAX_COMPONENT_DEPTH) {
     // Guard against runaway recursion from malformed JSON.
-    console.warn('[ComponentRenderer] Max render depth (32) exceeded. Halting recursion.');
+    console.warn(`[ComponentRenderer] Max render depth (${MAX_COMPONENT_DEPTH}) exceeded. Halting recursion.`);
     return null;
   }
 
