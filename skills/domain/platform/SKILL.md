@@ -4,7 +4,7 @@ description: |
   **WORKFLOW SKILL** - Complete multi-tenant onboarding with security isolation.
   USE FOR: "tenant setup", "client onboarding", "new tenant", "provision tenant".
   DO NOT USE FOR: tenant configuration changes, billing updates.
-  INVOKES: multi-tenant, enterprise-auth, enterprise-security, github.
+  INVOKES: multi-tenant, enterprise-auth, enterprise-security-gateway, github.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'
@@ -36,7 +36,7 @@ This Skill orchestrates secure multi-tenant provisioning with proper isolation, 
 
 **Action:** Configure tenant-specific security boundaries
 
-- **Tool:** `enterprise-security` → `setup-tenant-isolation`
+- **Tool:** `enterprise-security-gateway` → `setup-tenant-isolation`
 - **Purpose:** Implement data isolation and access controls
 - **Failure:** Rollback tenant creation
 
@@ -60,7 +60,7 @@ This Skill orchestrates secure multi-tenant provisioning with proper isolation, 
 
 **Action:** Verify compliance with tenant requirements
 
-- **Tool:** `enterprise-security` → `compliance-check`
+- **Tool:** `enterprise-security-gateway` → `compliance-check`
 - **Purpose:** Ensure GDPR, HIPAA, or other compliance
 - **Failure:** Flag compliance issues, proceed with warnings
 
@@ -116,7 +116,7 @@ This Skill orchestrates secure multi-tenant provisioning with proper isolation, 
 
 - `multi-tenant`: Tenant management and resource allocation
 - `enterprise-auth`: Authentication and authorization setup
-- `enterprise-security`: Security isolation and compliance
+- `enterprise-security-gateway`: Security isolation and compliance
 - `github`: Repository creation and configuration
 
 ## Notes

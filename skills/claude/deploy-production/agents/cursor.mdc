@@ -9,7 +9,7 @@ alwaysApply: false
 Use MCP tools for secure deployment:
 
 1. **Pre-Deployment Validation**: @github get-repo-status
-2. **Security Assessment**: @enterprise-security security-scan
+2. **Security Assessment**: @enterprise-security-gateway security-scan
 3. **Observability Baseline**: @observability capture-baseline
 4. **Deployment Execution**: @secure-deployment deploy-production
 5. **Post-Deployment Verification**: @observability health-check

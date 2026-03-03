@@ -4,7 +4,7 @@ description: |
   **WORKFLOW SKILL** - Deploy to production with comprehensive safety checks.
   USE FOR: "deploy to prod", "production release", "deploy to production".
   DO NOT USE FOR: development deployments, environment-specific config changes.
-  INVOKES: github, enterprise-security, observability, secure-deployment.
+  INVOKES: github, enterprise-security-gateway, observability, secure-deployment.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'
@@ -37,7 +37,7 @@ This Skill orchestrates a secure production deployment using enterprise MCP serv
 
 **Action:** Run comprehensive security analysis
 
-- **Tool:** `enterprise-security` → `security-scan`
+- **Tool:** `enterprise-security-gateway` → `security-scan`
 - **Purpose:** Check for vulnerabilities, dependency issues, and compliance
 - **Failure:** Block deployment and generate security report
 
@@ -81,7 +81,7 @@ This Skill orchestrates a secure production deployment using enterprise MCP serv
 ## MCP Server Dependencies
 
 - `github`: Repository status and branch management
-- `enterprise-security`: Security scanning and compliance
+- `enterprise-security-gateway`: Security scanning and compliance
 - `observability`: System monitoring and health checks
 - `secure-deployment`: Deployment orchestration and rollback
 
