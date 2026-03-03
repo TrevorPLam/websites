@@ -239,7 +239,7 @@
 ### PHASE 3 — GATEWAY + OBSERVABILITY (Days 8–10, ~8 hours)
 *Implement enterprise-grade control plane*
 
-- [ ] **3-A: Implement MCP Gateway Pattern**
+- [x] **3-A: Implement MCP Gateway Pattern**
   - **Priority**: 🟡 High
   - **Effort**: 3 hours
   - **Issue**: `enterprise-security-gateway.ts` does auth but not unified traffic routing
@@ -278,7 +278,7 @@
     - [ ] Logs queryable by correlation ID
     - [ ] Duration metrics accurate
 
-- [ ] **3-C: Add Human Approval Gates for High-Impact Tools**
+- [x] **3-C: Add Human Approval Gates for High-Impact Tools**
   - **Priority**: 🟡 High
   - **Effort**: 2 hours
   - **Scope**: Write operations (deploy, delete, schema changes)
@@ -370,7 +370,7 @@
     - [ ] Marketing skills execute without "tool not found" errors
     - [ ] API calls route through fetch/github adapters correctly
 
-- [ ] **4-C: Add CI Skills Validation That Actually Works**
+- [x] **4-C: Add CI Skills Validation That Actually Works**
   - **Priority**: 🔴 Critical (Highest leverage action)
   - **Effort**: 1 hour
   - **Replace**: Broken `.claude/skills/` validation

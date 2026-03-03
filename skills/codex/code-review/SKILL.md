@@ -4,7 +4,7 @@ description: |
   **WORKFLOW SKILL** - Comprehensive code review with security analysis.
   USE FOR: "code review", "pr review", "security review", "quality check".
   DO NOT USE FOR: automated linting, simple syntax checks.
-  INVOKES: GitHub, enterprise-security-gateway, sequential-thinking.
+  INVOKES: github, enterprise-security-gateway, sequential-thinking.
 meta:
   version: '1.0.0'
   author: 'cascade-ai'

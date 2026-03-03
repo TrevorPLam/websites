@@ -64,37 +64,54 @@ jobs:
       - name: Validate Skills structure
         run: |
           echo "Validating Skills structure..."
-          for skill in skills/*/; do
-            if [ -d "$skill" ]; then
-              skill_name=$(basename "$skill")
-              echo "Validating skill: $skill_name"
-              
-              # Check required files
-              if [ ! -f "$skill/SKILL.md" ]; then
-                echo "❌ $skill_name: Missing SKILL.md"
-                exit 1
-              fi
-              
-              # Validate YAML frontmatter
-              if ! grep -q "^---" "$skill/SKILL.md"; then
-                echo "❌ $skill_name: SKILL.md missing YAML frontmatter"
-                exit 1
-              fi
-              
-              # Check required fields
-              if ! grep -q "name:" "$skill/SKILL.md"; then
-                echo "❌ $skill_name: SKILL.md missing name field"
-                exit 1
-              fi
-              
-              if ! grep -q "description:" "$skill/SKILL.md"; then
-                echo "❌ $skill_name: SKILL.md missing description field"
-                exit 1
-              fi
-              
-              echo "✅ $skill_name: Structure valid"
+          failed=0
+          while IFS= read -r skill_md; do
+            skill_dir=$(dirname "$skill_md")
+            skill_name=$(basename "$skill_dir")
+            echo "Validating skill: $skill_name ($skill_md)"
+
+            # Validate YAML frontmatter (must begin with ---)
+            if ! head -1 "$skill_md" | grep -q "^---"; then
+              echo "❌ $skill_name: SKILL.md missing YAML frontmatter"
+              failed=1
+              continue
             fi
-          done
+
+            # Check required fields
+            if ! grep -q "^name:" "$skill_md"; then
+              echo "❌ $skill_name: SKILL.md missing name field"
+              failed=1
+              continue
+            fi
+
+            if ! grep -q "description:" "$skill_md"; then
+              echo "❌ $skill_name: SKILL.md missing description field"
+              failed=1
+              continue
+            fi
+
+            # Cross-reference INVOKES against mcp/config/config.json
+            if grep -q "INVOKES:" "$skill_md"; then
+              invokes_line=$(grep "INVOKES:" "$skill_md" | head -1)
+              # Strip "INVOKES:" prefix and trailing punctuation/whitespace, split by comma+space
+              tools=$(echo "$invokes_line" | sed 's/.*INVOKES:[[:space:]]*//' | sed 's/[[:space:],.]*$//') 
+              IFS=', ' read -ra tool_list <<< "$tools"
+              for tool in "${tool_list[@]}"; do
+                tool=$(echo "$tool" | tr -d '[:space:]')
+                [ -z "$tool" ] && continue
+                if ! jq -e ".servers.\"$tool\"" mcp/config/config.json > /dev/null 2>&1; then
+                  echo "❌ $skill_name: invokes '$tool' which is NOT registered in mcp/config/config.json"
+                  failed=1
+                fi
+              done
+            fi
+
+            echo "✅ $skill_name: Structure valid"
+          done < <(find skills -name "SKILL.md" | sort)
+
+          if [ "$failed" -eq 1 ]; then
+            exit 1
+          fi
       
       - name: Validate MCP configuration
         run: |
