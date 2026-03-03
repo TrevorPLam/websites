@@ -22,6 +22,7 @@
     "prepare": "husky || true",
     "setup": "npx tsx scripts/setup-dev.ts",
     "verify": "npx tsx scripts/verify-env.ts",
+    "verify:catalogs": "npx tsx scripts/verify-catalogs.ts",
     "changeset": "changeset",
     "dev": "turbo run dev",
     "build": "pnpm validate:turbo-cache-env && turbo run build",
