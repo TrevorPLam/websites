@@ -4,9 +4,9 @@ description: |
   **WORKFLOW SKILL** - Comprehensive marketing tools and campaign management.
   USE FOR: "SEO audit", "content publish", "campaign tracking", "marketing analytics".
   DO NOT USE FOR: tenant setup, billing management, technical deployment.
-  INVOKES: analytics, content-management, seo-tools, campaign-automation.
+  INVOKES: fetch, filesystem, github, knowledge-graph.
 meta:
-  version: '1.0.0'
+  version: '1.1.0'
   author: 'cascade-ai'
 ---
 
@@ -18,68 +18,74 @@ This Skill provides comprehensive marketing tools including SEO auditing, conten
 
 ## Prerequisites
 
-- Access to analytics platforms
-- Content management system credentials
-- SEO tool API keys
+- Access to analytics platforms (Tinybird, Google Analytics)
+- Content stored in repository or filesystem
+- External SEO/analytics API keys set in environment
 - Campaign tracking configuration
 
 ## Workflow Steps
 
 ### 1. SEO Audit & Analysis
 
-**Action:** Perform comprehensive SEO audit
+**Action:** Perform comprehensive SEO audit via external API
 
-- **Tool:** `seo-tools` → `run-seo-audit`
+- **Tool:** `fetch` → `fetch` (GET `https://api.example.com/seo/audit?site={url}`)
 - **Purpose:** Analyze site SEO performance and identify issues
 - **Failure:** Continue with partial audit, flag missing data
 
 ### 2. Content Optimization
 
-**Action:** Optimize content for search engines
+**Action:** Read existing content and produce optimized version
 
-- **Tool:** `seo-tools` → `optimize-content`
+- **Tool:** `filesystem` → `read_file` (read current page content)
+- **Tool:** `fetch` → `fetch` (POST to content optimization endpoint)
 - **Purpose:** Improve content SEO score and readability
 - **Failure:** Use baseline optimization rules
 
 ### 3. Content Publishing
 
-**Action:** Publish optimized content across channels
+**Action:** Write optimized content back to repository
 
-- **Tool:** `content-management` → `publish-content`
+- **Tool:** `filesystem` → `write_file` (persist updated content)
+- **Tool:** `github` → `create-commit` (commit and push changes)
 - **Purpose:** Deploy content to website and distribution channels
 - **Failure:** Queue content for manual review
 
 ### 4. Campaign Setup
 
-**Action:** Configure marketing campaign tracking
+**Action:** Configure marketing campaign tracking configuration file
 
-- **Tool:** `campaign-automation` → `setup-campaign`
+- **Tool:** `filesystem` → `write_file` (write campaign config JSON)
+- **Tool:** `fetch` → `fetch` (POST campaign setup to analytics endpoint)
 - **Purpose:** Set up tracking pixels, analytics, and attribution
 - **Failure:** Use default tracking configuration
 
 ### 5. Performance Monitoring
 
-**Action:** Monitor campaign and content performance
+**Action:** Monitor campaign and content performance via analytics API
 
-- **Tool:** `analytics` → `track-performance`
+- **Tool:** `fetch` → `fetch` (GET analytics dashboard endpoint)
+- **Tool:** `knowledge-graph` → `create_entities` (cache performance data locally)
 - **Purpose:** Real-time performance monitoring and alerting
-- **Failure:** Use cached performance data
+- **Failure:** Use cached performance data from knowledge-graph
 
 ### 6. A/B Testing
 
-**Action:** Set up A/B tests for content and campaigns
+**Action:** Read A/B test configuration and update variant weights
 
-- **Tool:** `campaign-automation` → `setup-ab-test`
+- **Tool:** `filesystem` → `read_file` (read experiment config)
+- **Tool:** `filesystem` → `write_file` (write updated variant weights)
 - **Purpose:** Optimize conversion rates through testing
 - **Failure:** Deploy with single variant
 
 ### 7. Reporting & Insights
 
-**Action:** Generate comprehensive marketing reports
+**Action:** Generate comprehensive marketing reports from analytics API
 
-- **Tool:** `analytics` → `generate-report`
+- **Tool:** `fetch` → `fetch` (GET reporting endpoint, e.g. Tinybird pipe)
+- **Tool:** `filesystem` → `write_file` (write report to `reports/marketing/`)
 - **Purpose:** Create performance reports and actionable insights
-- **Failure:** Provide basic performance summary
+- **Failure:** Provide basic performance summary from cached data
 
 ## Marketing Tools
 
@@ -148,10 +154,10 @@ This Skill provides comprehensive marketing tools including SEO auditing, conten
 
 ## MCP Server Dependencies
 
-- `seo-tools`: SEO analysis and optimization
-- `content-management`: Content publishing and management
-- `campaign-automation`: Campaign setup and tracking
-- `analytics`: Performance monitoring and reporting
+- `fetch`: HTTP requests to SEO, analytics, and campaign APIs
+- `filesystem`: Read/write content files and reports
+- `github`: Commit and publish content changes
+- `knowledge-graph`: Cache and retrieve performance data locally
 
 ## Security & Compliance
 

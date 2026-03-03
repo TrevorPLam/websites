@@ -491,29 +491,4 @@ export class DatabaseMCPServer {
   }
 }
 
-// Main entry point
-async function main() {
-  const serverType = process.argv[2];
 
-  switch (serverType) {
-    case 'github':
-      const githubServer = new GitHubMCPServer();
-      await githubServer.run();
-      break;
-    case 'filesystem':
-      const fsServer = new FileSystemMCPServer();
-      await fsServer.run();
-      break;
-    case 'database':
-      const dbServer = new DatabaseMCPServer();
-      await dbServer.run();
-      break;
-    default:
-      console.error('Usage: npm start [github|filesystem|database]');
-      process.exit(1);
-  }
-}
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(console.error);
-}
