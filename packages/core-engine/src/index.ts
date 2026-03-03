@@ -8,9 +8,9 @@
 
 export * from './puck';
 
-// PPR cache utilities (TASK-PPR-001)
-export { CacheComponent, fetchWithCache, CACHE_LIFE_SECONDS } from './renderer';
-export type { CacheComponentProps, CacheLifePreset } from './renderer';
+// PPR cache utilities (TASK-PPR-001) and dynamic renderer (TASK-UI-002)
+export { CacheComponent, fetchWithCache, CACHE_LIFE_SECONDS, ComponentRenderer } from './renderer';
+export type { CacheComponentProps, CacheLifePreset, ComponentRendererProps } from './renderer';
 
 // Re-export core types
 export type { PageData, ComponentData } from './types';
