@@ -1,1 +1,32 @@
-/**\n * @file apps/admin/next.config.ts\n * @summary Next.js 16 configuration for admin dashboard with PPR and React Compiler.\n * @description Enables experimental features, image optimization, and workspace package transpilation.\n * @security none\n * @adr none\n * @requirements TASK-034\n */\n\n/** @type {import("next").NextConfig} */\nconst config = {\n  experimental: {\n    ppr: true,\n    reactCompiler: true,\n    turbo: {\n      loaders: {\n        ".svg": ["@svgr/webpack"],\n      },\n    },\n  },\n  images: {\n    remotePatterns: [\n      {\n        protocol: "https",\n        hostname: "**",\n      },\n    ],\n  },\n  transpilePackages: ["@repo/ui", "@repo/types"],\n};\n\nexport default config;
+/**
+ * @file apps/admin/next.config.ts
+ * @summary Next.js 16 configuration for admin dashboard with PPR and React Compiler.
+ * @description Enables experimental features, image optimization, and workspace package transpilation.
+ * @security none
+ * @adr none
+ * @requirements TASK-034
+ */
+
+/** @type {import("next").NextConfig} */
+const config = {
+  experimental: {
+    ppr: true,
+    reactCompiler: true,
+    turbo: {
+      loaders: {
+        ".svg": ["@svgr/webpack"],
+      },
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+  transpilePackages: ["@repo/ui", "@repo/types", "@repo/core-engine"],
+};
+
+export default config;
