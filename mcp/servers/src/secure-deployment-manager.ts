@@ -17,6 +17,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import crypto from 'crypto';
+import { approvalGate } from '../../gateway/src/approval-gate.js';
 
 // Secure Deployment Types
 interface DeploymentEnvironment {
@@ -400,6 +401,9 @@ export class SecureDeploymentManager {
         dryRun: z.boolean().default(false).describe('Perform dry run without actual deployment'),
       },
       async ({ templateId, environmentId, parameters, dryRun }) => {
+        // Generate a single correlation ID for this entire handler invocation
+        // so the approval gate and execution share the same trace.
+        const correlationId = crypto.randomUUID();
         const template = this.templates.get(templateId);
         if (!template) {
           return {
@@ -431,6 +435,23 @@ export class SecureDeploymentManager {
               type: 'text',
               text: `Dry run deployment plan:\n\n${this.formatDeploymentPlan(deploymentPlan)}`,
             }],
+          };
+        }
+
+        // High-impact action: require human approval before executing
+        try {
+          await approvalGate.request({
+            correlationId,
+            tenantId: environment.id,
+            server: 'secure-deployment',
+            tool: 'deploy-secure-infrastructure',
+            description: `Deploy template '${template.name}' (${template.id}) to environment '${environment.name}' (${environment.type})`,
+            riskLevel: 'HIGH',
+          });
+        } catch (err: unknown) {
+          const reason = err instanceof Error ? err.message : String(err);
+          return {
+            content: [{ type: 'text', text: `Deployment blocked: ${reason}` }],
           };
         }
 

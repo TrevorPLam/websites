@@ -224,6 +224,40 @@
                 "LOG_LEVEL": "debug",
                 "NODE_ENV": "development"
             }
+        },
+        "multi-tenant-orchestrator": {
+            "command": "npx",
+            "args": [
+                "tsx",
+                "mcp/servers/src/multi-tenant-orchestrator.ts"
+            ],
+            "env": {
+                "LOG_LEVEL": "debug",
+                "NODE_ENV": "development"
+            }
+        },
+        "mcp-gateway": {
+            "command": "npx",
+            "args": [
+                "tsx",
+                "mcp/gateway/src/index.ts"
+            ],
+            "env": {
+                "LOG_LEVEL": "debug",
+                "NODE_ENV": "development",
+                "RATE_LIMIT_RPM": "120"
+            }
+        },
+        "enterprise-security-gateway": {
+            "command": "npx",
+            "args": [
+                "tsx",
+                "mcp/servers/src/enterprise-security-gateway.ts"
+            ],
+            "env": {
+                "LOG_LEVEL": "debug",
+                "NODE_ENV": "development"
+            }
         }
     }
 }
