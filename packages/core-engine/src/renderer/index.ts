@@ -3,6 +3,7 @@
  * @summary Public barrel export for the renderer module.
  * @description Aggregates PPR cache utilities and streaming boundary helpers
  *   for the JSON-driven page rendering pipeline.
+ * @security none
  * @requirements TASK-PPR-001
  */
 

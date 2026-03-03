@@ -2,6 +2,7 @@
  * @file scripts/validate-edge-middleware.ts
  * @summary Validation script for TASK-EDGE-001 edge middleware implementation
  * @description Validates middleware configuration, imports, and basic functionality
+ * @security none
  * @requirements TASK-EDGE-001: Global Edge Middleware with Vercel Platforms
  * @usage pnpm tsx scripts/validate-edge-middleware.ts
  */

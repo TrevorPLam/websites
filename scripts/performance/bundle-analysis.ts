@@ -3,6 +3,7 @@
  * @summary Bundle Size Analysis and Budget Enforcement
  * @description Analyzes JavaScript bundle sizes, enforces size budgets, and provides optimization recommendations.
  *   Integrates with size-limit for automated CI checks and performance monitoring.
+ * @security none
  * @requirements TASK-PERF-001: Next.js 16 Cache Components & PPR Optimization
  * @usage pnpm tsx scripts/performance/bundle-analysis.ts
  */

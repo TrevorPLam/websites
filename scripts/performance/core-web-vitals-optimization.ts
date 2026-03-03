@@ -3,6 +3,7 @@
  * @summary Core Web Vitals Optimization Script for Next.js 16
  * @description Analyzes and optimizes Core Web Vitals (LCP, INP, CLS) across the application.
  *   Provides automated recommendations and implements fixes for common performance issues.
+ * @security none
  * @requirements TASK-PERF-001: Next.js 16 Cache Components & PPR Optimization
  * @usage pnpm tsx scripts/performance/core-web-vitals-optimization.ts
  */

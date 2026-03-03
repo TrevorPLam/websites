@@ -2,6 +2,7 @@
  * @file packages/infrastructure/__tests__/edge-middleware.test.ts
  * @summary Integration tests for Vercel Edge middleware and tenant resolution
  * @description Tests tenant resolution, custom domains, wildcard routing, and security headers
+ * @security none
  * @requirements TASK-EDGE-001: Global Edge Middleware with Vercel Platforms
  * @testing Integration tests for edge middleware functionality
  */

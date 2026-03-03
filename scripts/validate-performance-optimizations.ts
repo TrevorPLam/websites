@@ -3,6 +3,7 @@
  * @summary Validation script for TASK-PERF-001 Next.js 16 Performance Optimizations
  * @description Validates all TASK-PERF-001 implementations: cache components, PPR patterns,
  *   Core Web Vitals optimization, bundle analysis, and Lighthouse CI configuration.
+ * @security none
  * @requirements TASK-PERF-001: Next.js 16 Cache Components & PPR Optimization
  * @usage pnpm tsx scripts/validate-performance-optimizations.ts
  */
