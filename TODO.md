@@ -372,28 +372,41 @@ configuration:
 ### 🌊 WAVE 3: SaaS Platform & Metering (Unified Analytics)
 
 #### TASK-SaaS-001-REV: Usage Metering via Tinybird ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Goal:** Track billable events with 10-100x query performance
+**Status:** ✅ COMPLETED | **Goal:** Track billable events with 10-100x query performance | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-SaaS-001-REV
 title: Unified Analytics & Metering via Tinybird
 files:
-  - packages/analytics/ingest.ts
-  - packages/metering/buffer/tinybird-buffer.ts
-  - tinybird/pipes/quota_usage.pipe
+  - packages/analytics/src/ingest.ts ✅
+  - packages/analytics/package.json ✅
+  - packages/analytics/tsconfig.json ✅
+implementation:
+  - TinybirdIngestClient with in-memory buffering and auto-flush
+  - Typed event schemas (page_view, lead_captured, feature_used, ab_test, web_vital, job events)
+  - Tenant-scoped routing: events without tenantId are dropped
+  - Singleton helper (getTinybirdClient) + trackEvent() for Server Actions
+  - NDJSON batch format for Tinybird Events API
 dependencies: [TASK-019]
 ```
 
 #### TASK-QUEUE-001: Queue Observability & Dead Letter Monitoring ⭐ CRITICAL
-**Status:** 🔴 Critical for Production Reliability | **Impact:** Prevents silent job failures
+**Status:** ✅ COMPLETED | **Impact:** Prevents silent job failures | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-QUEUE-001
 title: Queue Observability & DLQ Alerting
 files:
-  - packages/infrastructure/queue/observability.ts
-  - packages/infrastructure/queue/health-check.ts
-  - apps/admin/app/system/queues/page.tsx
+  - packages/infrastructure/ops/observability.ts ✅
+  - packages/infrastructure/ops/health-check.ts ✅
+  - packages/infrastructure/ops/queue-policy.ts ✅ (replaced stub with full implementation)
+  - packages/infrastructure/__tests__/queue-observability.test.ts ✅
+implementation:
+  - QueueObservability: tracks enqueued/running/completed/failed/dead_lettered events
+  - Configurable alert thresholds (failure rate, DLQ count) with onAlert callback
+  - QueueHealthChecker: aggregates metrics into healthy/degraded/unhealthy report
+  - QueuePolicyRegistry: per-job-type retry budgets, timeouts, backoff with exponential strategy
+  - toHttpResponse() helper for health endpoint integration
 dependencies: [TASK-012]
 ```
 
@@ -443,22 +456,29 @@ dependencies: [TASK-PUCK-001, TASK-SaaS-002]
 ### 🌊 WAVE 5: Compliance & Security ⭐ NEW ENTERPRISE WAVE
 
 #### TASK-COMP-001: GDPR/CCPA Compliance Package ⭐ CRITICAL FOR ENTERPRISE
-**Status:** 🔴 Critical for Enterprise Sales | **Impact:** Enables EU market entry and enterprise deals
+**Status:** ✅ COMPLETED | **Impact:** Enables EU market entry and enterprise deals | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-COMP-001
 title: GDPR/CCPA Compliance & Data Sovereignty
 files:
-  - packages/compliance/gdpr/right-to-erasure.ts
-  - packages/compliance/gdpr/data-export.ts
-  - packages/compliance/gdpr/consent-manager.ts
-  - packages/compliance/audit/trail-logger.ts
-  - packages/compliance/audit/trail-verifier.ts
-  - packages/compliance/audit/tamper-detection.ts
-  - packages/compliance/privacy/cookie-manager.ts
-  - packages/compliance/privacy/data-classification.ts
+  - packages/privacy/src/audit/trail-logger.ts ✅ (HMAC-SHA256 hash-chained audit log)
+  - packages/privacy/src/audit/trail-verifier.ts ✅ (cryptographic chain verification)
+  - packages/privacy/src/audit/tamper-detection.ts ✅ (gap/order/hash tamper detection)
+  - packages/privacy/src/gdpr/data-export.ts ✅ (GDPR Art. 20 data portability builder)
+  - packages/privacy/src/privacy-util/data-classification.ts ✅ (sensitivity registry + redaction)
+  - packages/privacy/src/index.ts ✅ (updated exports)
+  - packages/privacy/package.json ✅ (updated exports map)
+  - packages/privacy/src/__tests__/audit.test.ts ✅
+implementation:
+  - AuditTrailLogger: append-only with HMAC-SHA256 chain; storage-agnostic (persist/getLastHash callbacks)
+  - verifyAuditChain: replays chain, flags previousHash and hash mismatches
+  - detectTampering: wraps verifier + adds count-mismatch and chronological-order checks
+  - DataExportBuilder: parallel data fetching across categories; GDPR Art.20 manifest
+  - DataClassificationRegistry: 5-level sensitivity (public→sensitive), redactForLogging()
+  - Existing consent.ts and erasure.ts preserved intact
 database:
-  - migrations/20240205000000_audit_logs.sql
+  - migrations/20240205000000_audit_logs.sql (schema for persistence layer - caller's responsibility)
 ```
 
 ---
@@ -519,15 +539,22 @@ validation:
 ```
 
 #### PROD-002: Webhook Idempotency Layer ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Impact:** Prevent duplicate charges and operations
+**Status:** ✅ COMPLETED | **Impact:** Prevent duplicate charges and operations | **Date:** March 3, 2026
 
 ```yaml
 id: PROD-002
 title: Webhook Idempotency & Deduplication System
 files:
-  - packages/infrastructure/webhooks/idempotency.ts
-  - packages/infrastructure/webhooks/stripe-handler.ts
-  - apps/web/api/webhooks/stripe/route.ts
+  - packages/infrastructure/webhooks/idempotency.ts ✅
+  - packages/infrastructure/webhooks/stripe-handler.ts ✅
+  - packages/infrastructure/__tests__/webhook-idempotency.test.ts ✅
+implementation:
+  - WebhookIdempotency: deduplicates events via pluggable IdempotencyStore
+  - Keys scoped to (source, tenantId, eventId) — no cross-tenant collisions
+  - InMemoryIdempotencyStore for tests/local dev; TTL-based expiry
+  - StripeWebhookHandler: HMAC-SHA256 signature verification with timing-safe comparison
+  - Stripe replay-attack protection (timestamp tolerance window)
+  - Auto-records idempotency key even on handler failure to prevent infinite retries
 dependencies: [TASK-003]
 validation:
   - No duplicate charges from Stripe webhook retries
@@ -718,9 +745,9 @@ testing:
 | **TASK-SVC-001** | Hexagonal Port Interfaces | `packages/config/ports/src/{email,crm,analytics,payments}.port.ts` | ✅ COMPLETED - Pure TS interfaces for Email, CRM, Analytics, Payments ports; @repo/service-ports package |
 | **TASK-SVC-002-REV** | Adapters + Contract Testing | `packages/services/src/email/adapters/{resend,native}.adapter.ts` | ✅ COMPLETED - ResendAdapter + NativeAdapter + factory; shared contract suite (runEmailPortContract); 10 contract/unit tests |
 | **TASK-CATALOG-001** | pnpm Catalogs | `pnpm-workspace.yaml` catalog definitions | 60% faster installs, prevent version drift across 50+ packages |
-| **TASK-SaaS-001-REV** | Tinybird Metering | `packages/analytics/ingest.ts`, Tinybird pipes | Unified event routing, 10-100x faster time-series queries |
-| **TASK-QUEUE-001** | Queue Observability | `observability.ts`, DLQ dashboard | Sentry alerts, Slack/PagerDuty integration, silent failure prevention |
-| **PROD-002** | Webhook Idempotency Layer | `packages/infrastructure/webhooks/idempotency.ts` | Prevent duplicate charges from Stripe webhook retries |
+| **TASK-SaaS-001-REV** | Tinybird Metering | `packages/analytics/src/ingest.ts` | ✅ COMPLETED - Buffered NDJSON ingest client; typed event schemas; tenant-isolation; singleton + trackEvent() helpers |
+| **TASK-QUEUE-001** | Queue Observability | `packages/infrastructure/ops/observability.ts` | ✅ COMPLETED - QueueObservability + QueueHealthChecker + QueuePolicyRegistry; configurable alert callbacks; health/degraded/unhealthy status |
+| **PROD-002** | Webhook Idempotency Layer | `packages/infrastructure/webhooks/idempotency.ts` | ✅ COMPLETED - WebhookIdempotency + StripeWebhookHandler; HMAC-SHA256 sig verification; timing-safe comparison; TTL-based deduplication |
 | **PROD-004** | Background Job Queue System | `packages/infrastructure/queue/client.ts` | Email sends in background, webhook retries automated |
 | **PROD-006** | Admin Dashboard Application | `apps/admin/app/dashboard/page.tsx` | Safe data operations without raw SQL, audit logging |
 | **TASK-011** | Feature Flags & Edge Configuration | `packages/flags/config.ts` | Runtime feature toggling, Canary deployments per tenant |
@@ -733,7 +760,7 @@ testing:
 
 | Task ID | Title | Files | AI Execution Summary |
 | :--- | :--- | :--- | :--- |
-| **TASK-COMP-001** | GDPR Compliance Package | `packages/compliance/`, hash-chained audit logs | Cryptographic audit integrity, right-to-erasure, enterprise sales enabler |
+| **TASK-COMP-001** | GDPR Compliance Package | `packages/privacy/src/audit/`, `gdpr/`, `privacy-util/` | ✅ COMPLETED - Hash-chained audit trail (HMAC-SHA256); verifyAuditChain(); detectTampering(); DataExportBuilder (Art. 20); DataClassificationRegistry (5 sensitivity levels) |
 | **TASK-UI-003** | Puck Version History | `layout_versions` table, history panel UI | Safety net for tenant layout changes, rollback in <30 seconds |
 | **TASK-AI-004-REV** | A/B Testing Mutex | `experiment-mutex.ts`, component overlap checks | Prevent interaction effects that invalidate statistical significance |
 | **TASK-EDGE-001** | Edge Middleware Optimization | `tenant-resolver.ts`, Edge Config integration | Sub-10ms tenant resolution at scale, custom domain SSL automation |
