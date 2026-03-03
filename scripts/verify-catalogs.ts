@@ -112,13 +112,13 @@ function parseWorkspaceYaml(content: string): WorkspaceYaml {
 type LogLevel = 'info' | 'success' | 'warn' | 'error';
 
 function log(message: string, level: LogLevel = 'info'): void {
-  const colours: Record<LogLevel, string> = {
+  const colors: Record<LogLevel, string> = {
     info: '\x1b[36m',
     success: '\x1b[32m',
     warn: '\x1b[33m',
     error: '\x1b[31m',
   };
-  console.log(`${colours[level]}${message}\x1b[0m`);
+  console.log(`${colors[level]}${message}\x1b[0m`);
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────

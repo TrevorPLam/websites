@@ -121,7 +121,11 @@ function resolveVariant(experimentId: string, forceVariant?: string): string {
     const assignments = JSON.parse(meta.content) as Record<string, unknown>;
     const variant = assignments[experimentId];
     return typeof variant === 'string' ? variant : 'control';
-  } catch {
+  } catch (err) {
+    // Log parse errors in development to aid debugging assignment resolution issues
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[ABTestWrapper] Failed to parse ab-assignments meta tag:', err);
+    }
     return 'control';
   }
 }

@@ -244,7 +244,7 @@ export function runGuardrails(
   let blockReason: string | undefined;
 
   if (srm.srmDetected) {
-    blockReason = `Sample ratio mismatch detected (χ²=${srm.chiSquared.toFixed(2)}, p=${srm.pValue.toFixed(4)}). Fix instrumentation before concluding.`;
+    blockReason = `Sample ratio mismatch detected (chi-sq=${srm.chiSquared.toFixed(2)}, p=${srm.pValue.toFixed(4)}). Fix instrumentation before concluding.`;
   } else if (totalImpressions < minRequired) {
     blockReason = `Insufficient sample size: ${totalImpressions} impressions collected, ${minRequired} required (${minSampleSize} per variant).`;
   } else if (!significance.significant) {

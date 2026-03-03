@@ -208,7 +208,7 @@ describe('runGuardrails', () => {
     ];
     const result = runGuardrails(stats, { control: 50, variant_b: 50 }, 0.05, 100);
     expect(result.canConclude).toBe(false);
-    expect(result.blockReason).toContain('Sample ratio mismatch');
+    expect(result.blockReason).toContain('chi-sq=');
   });
 
   it('allows conclusion when experiment is significant and balanced', () => {

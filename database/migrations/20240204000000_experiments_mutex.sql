@@ -20,7 +20,8 @@ create table if not exists app_public.experiments (
     check (status in ('draft', 'active', 'paused', 'concluded')),
   winner_variant  text,
   -- Statistical significance threshold (default 0.05 = 95% confidence)
-  significance_threshold numeric(5, 4) not null default 0.0500,
+  significance_threshold numeric(5, 4) not null default 0.0500
+    check (significance_threshold >= 0.0001 and significance_threshold <= 0.2000),
   -- Minimum sample size before auto-promote can fire
   min_sample_size integer       not null default 100,
   started_at      timestamptz,
