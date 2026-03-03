@@ -125,7 +125,9 @@ export class MarketingAnalyticsServer {
       },
       async ({ tenantId, period }) => {
         if (GA4_TOKEN && GA4_PROPERTY) {
-          // Prefer GA4 when available
+          // Prefer GA4 when available.
+          // `customEvent:tenant_id` is GA4's standard format for custom event parameters
+          // (prefix `customEvent:` + parameter name). See GA4 Data API docs.
           const url = `https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY}:runReport`;
           const body = JSON.stringify({
             dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],

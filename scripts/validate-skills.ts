@@ -41,6 +41,10 @@ interface ValidationResult {
 /**
  * Extract YAML frontmatter from a SKILL.md file.
  * Returns a key/value record; values are raw strings (not deeply parsed).
+ *
+ * NOTE: This is a lightweight line-by-line parser suitable for the flat
+ * SKILL.md frontmatter schema. It does not support deeply-nested YAML objects
+ * or arrays. Use a full YAML parser (e.g. js-yaml) if nested structures are needed.
  */
 function parseFrontmatter(content: string): Record<string, string> {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
@@ -142,7 +146,8 @@ function validateSkillDir(
   if (!fm['name']) issues.push('Missing required frontmatter field: name');
   if (!fm['description']) issues.push('Missing required frontmatter field: description');
 
-  // Check SKILL.md has NO prose body (tier-1 = frontmatter only)
+  // Check SKILL.md has NO prose body (tier-1 = frontmatter only).
+  // Allow up to 10 chars of trailing whitespace/newlines but flag any real prose content.
   const bodyAfterFrontmatter = content.replace(/^---[\s\S]*?---\s*/, '').trim();
   if (bodyAfterFrontmatter.length > 10) {
     issues.push(

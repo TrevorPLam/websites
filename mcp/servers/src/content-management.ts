@@ -20,11 +20,21 @@ const execFileAsync = promisify(execFile);
 
 const CONTENT_ROOT = process.env.CONTENT_ROOT ?? path.resolve(process.cwd(), 'content');
 
-/** Resolve and validate that the target path stays within CONTENT_ROOT. */
-function safePath(relativePath: string): string {
+/** Resolve and validate that the target path stays within CONTENT_ROOT, rejecting symlinks. */
+async function safePath(relativePath: string): Promise<string> {
   const resolved = path.resolve(CONTENT_ROOT, relativePath);
   if (!resolved.startsWith(CONTENT_ROOT + path.sep) && resolved !== CONTENT_ROOT) {
     throw new Error(`Path traversal detected: '${relativePath}'`);
+  }
+  // Resolve symlinks and re-validate to prevent symlink-escape attacks
+  try {
+    const real = await fs.realpath(resolved);
+    if (!real.startsWith(CONTENT_ROOT + path.sep) && real !== CONTENT_ROOT) {
+      throw new Error(`Symlink escape detected: '${relativePath}' resolves outside CONTENT_ROOT`);
+    }
+  } catch (err) {
+    // realpath fails if the path does not yet exist (e.g. for create operations) – that is fine.
+    if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
   }
   return resolved;
 }
@@ -54,14 +64,14 @@ export class ContentManagementServer {
         pattern: z.string().optional().describe('Glob-style extension filter, e.g. "*.md"'),
       },
       async ({ directory, pattern }) => {
-        const dir = safePath(directory ?? '');
+        const dir = await safePath(directory ?? '');
         let entries: string[];
         try {
           const files = await fs.readdir(dir, { withFileTypes: true });
           entries = files
             .filter((f) => !f.isDirectory())
             .map((f) => f.name)
-            .filter((name) => !pattern || name.endsWith(pattern.replace('*', '')));
+            .filter((name) => !pattern || name.endsWith(pattern.replaceAll('*', '')));
         } catch {
           return { content: [{ type: 'text', text: `Directory not found: ${directory}` }] };
         }
@@ -77,7 +87,7 @@ export class ContentManagementServer {
         filePath: z.string().describe('Relative path to the content file within CONTENT_ROOT'),
       },
       async ({ filePath }) => {
-        const absPath = safePath(filePath);
+        const absPath = await safePath(filePath);
         let text: string;
         try {
           text = await fs.readFile(absPath, 'utf-8');
@@ -97,7 +107,7 @@ export class ContentManagementServer {
         content: z.string().describe('File content (markdown, JSON, etc.)'),
       },
       async ({ filePath, content }) => {
-        const absPath = safePath(filePath);
+        const absPath = await safePath(filePath);
         // Fail-safe: do not overwrite
         try {
           await fs.access(absPath);
@@ -120,7 +130,7 @@ export class ContentManagementServer {
         content: z.string().describe('New file content'),
       },
       async ({ filePath, content }) => {
-        const absPath = safePath(filePath);
+        const absPath = await safePath(filePath);
         await fs.mkdir(path.dirname(absPath), { recursive: true });
         await fs.writeFile(absPath, content, 'utf-8');
         return { content: [{ type: 'text', text: `Updated: ${filePath}` }] };
@@ -146,21 +156,29 @@ export class ContentManagementServer {
       },
       async ({ files, commitMessage, authorName, authorEmail }) => {
         const cwd = process.cwd();
-        const absPaths = files.map((f) => safePath(f));
+        const absPaths = await Promise.all(files.map((f) => safePath(f)));
 
-        // Stage
-        await execFileAsync('git', ['add', ...absPaths], { cwd });
+        // Stage files
+        try {
+          await execFileAsync('git', ['add', ...absPaths], { cwd });
+        } catch (err) {
+          throw new Error(`Failed to stage files for commit: ${(err as Error).message}`);
+        }
 
-        // Commit
-        await execFileAsync(
-          'git',
-          [
-            '-c', `user.name=${authorName}`,
-            '-c', `user.email=${authorEmail}`,
-            'commit', '-m', commitMessage,
-          ],
-          { cwd }
-        );
+        // Create commit
+        try {
+          await execFileAsync(
+            'git',
+            [
+              '-c', `user.name=${authorName}`,
+              '-c', `user.email=${authorEmail}`,
+              'commit', '-m', commitMessage,
+            ],
+            { cwd }
+          );
+        } catch (err) {
+          throw new Error(`Failed to create commit: ${(err as Error).message}`);
+        }
 
         // Push (best-effort)
         let pushMsg = '';

@@ -38,7 +38,9 @@ async function apiFetch(
   return res.json();
 }
 
-// In-memory store for when the API is not configured (dev/test mode)
+// In-memory store for when the API is not configured (dev/test mode).
+// ⚠ NOTE: Data is intentionally non-persistent and will be lost on server restart.
+//   Configure CAMPAIGN_API_KEY + CAMPAIGN_API_BASE_URL to use a real backend.
 interface Campaign {
   id: string;
   tenantId: string;

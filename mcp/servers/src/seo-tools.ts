@@ -36,6 +36,18 @@ async function apiFetch(
   return res.json();
 }
 
+/** Extract a meta attribute value that accepts either attribute-order in the tag. */
+function extractMetaContent(html: string, attrName: string): string {
+  // Handle both attribute orderings: name/property first or content first
+  const pattern = new RegExp(
+    `<meta[^>]+(?:name|property)=["']${attrName}["'][^>]+content=["']([^"']*)["']` +
+    `|<meta[^>]+content=["']([^"']*)["'][^>]+(?:name|property)=["']${attrName}["']`,
+    'i'
+  );
+  const m = pattern.exec(html);
+  return (m?.[1] ?? m?.[2] ?? '').trim();
+}
+
 export class SeoToolsServer {
   private server: McpServer;
 
@@ -95,14 +107,13 @@ export class SeoToolsServer {
         }
         const html = await res.text();
 
-        // Extract relevant tags via simple regex (no DOM parser dependency)
+        // Extract relevant tags using the helper
         const extract = (re: RegExp): string => re.exec(html)?.[1]?.trim() ?? '';
 
         const title = extract(/<title>([^<]*)<\/title>/i);
-        const description = extract(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["']/i)
-          || extract(/<meta[^>]+content=["']([^"']*)["'][^>]+name=["']description["']/i);
-        const ogTitle = extract(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']*)["']/i);
-        const ogDescription = extract(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']*)["']/i);
+        const description = extractMetaContent(html, 'description');
+        const ogTitle = extractMetaContent(html, 'og:title');
+        const ogDescription = extractMetaContent(html, 'og:description');
         const canonical = extract(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']*)["']/i);
 
         const report = {
