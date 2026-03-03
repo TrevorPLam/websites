@@ -14,3 +14,12 @@ export type { CacheComponentProps, CacheLifePreset, ComponentRendererProps } fro
 
 // Re-export core types
 export type { PageData, ComponentData } from './types';
+
+// Experiment store (TASK-AI-004-REV)
+export { ExperimentStore } from './experiments/experiment-store';
+export type {
+  Experiment,
+  ExperimentVariant,
+  ExperimentStatus,
+  CreateExperimentInput,
+} from './experiments/experiment-store';

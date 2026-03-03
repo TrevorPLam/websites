@@ -186,7 +186,7 @@ commands:
 ```
 
 #### TASK-DS-001: Design Tokens Package ⭐ CRITICAL
-**Status:** 🔴 Must Complete Before UI Tasks | **Impact:** Prevents system-wide theming drift
+**Status:** ✅ COMPLETED | **Impact:** Prevents system-wide theming drift | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-DS-001
@@ -415,7 +415,7 @@ dependencies: [TASK-012]
 ### 🌊 WAVE 4: AI-Native Marketing Features (Self-Improving Platform)
 
 #### TASK-AI-004-REV: Autonomous A/B Testing with Experiment Isolation ⭐ CRITICAL
-**Status:** 🟡 High Priority | **Goal:** AI generates variants, tracks conversions, auto-optimizes with statistical validity
+**Status:** ✅ COMPLETED | **Goal:** AI generates variants, tracks conversions, auto-optimizes with statistical validity | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-AI-004-REV
@@ -486,7 +486,7 @@ database:
 ### 🌊 WAVE 6: Production Hardening & Edge Optimization
 
 #### TASK-EDGE-001: Global Edge Middleware with Vercel Platforms ⭐ CRITICAL
-**Status:** 🔴 Critical Priority | **Goal:** Sub-10ms tenant resolution at the edge with custom domain support
+**Status:** ✅ COMPLETED | **Goal:** Sub-10ms tenant resolution at the edge with custom domain support | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-EDGE-001
@@ -522,7 +522,7 @@ nextjs_16_features:
 ```
 
 #### TASK-CATALOG-001: pnpm Catalogs Configuration ⭐ CRITICAL
-**Status:** 🟡 High Priority | **Impact:** 60% faster installs, prevent version drift
+**Status:** ✅ COMPLETED | **Impact:** 60% faster installs, prevent version drift | **Date:** March 3, 2026
 
 ```yaml
 id: TASK-CATALOG-001
@@ -744,7 +744,7 @@ testing:
 | :--- | :--- | :--- | :--- |
 | **TASK-SVC-001** | Hexagonal Port Interfaces | `packages/config/ports/src/{email,crm,analytics,payments}.port.ts` | ✅ COMPLETED - Pure TS interfaces for Email, CRM, Analytics, Payments ports; @repo/service-ports package |
 | **TASK-SVC-002-REV** | Adapters + Contract Testing | `packages/services/src/email/adapters/{resend,native}.adapter.ts` | ✅ COMPLETED - ResendAdapter + NativeAdapter + factory; shared contract suite (runEmailPortContract); 10 contract/unit tests |
-| **TASK-CATALOG-001** | pnpm Catalogs | `pnpm-workspace.yaml` catalog definitions | 60% faster installs, prevent version drift across 50+ packages |
+| **TASK-CATALOG-001** | pnpm Catalogs | `pnpm-workspace.yaml` catalog definitions | ✅ COMPLETED - Catalog definitions in workspace.yaml + `scripts/verify-catalogs.ts` validation script |
 | **TASK-SaaS-001-REV** | Tinybird Metering | `packages/analytics/src/ingest.ts` | ✅ COMPLETED - Buffered NDJSON ingest client; typed event schemas; tenant-isolation; singleton + trackEvent() helpers |
 | **TASK-QUEUE-001** | Queue Observability | `packages/infrastructure/ops/observability.ts` | ✅ COMPLETED - QueueObservability + QueueHealthChecker + QueuePolicyRegistry; configurable alert callbacks; health/degraded/unhealthy status |
 | **PROD-002** | Webhook Idempotency Layer | `packages/infrastructure/webhooks/idempotency.ts` | ✅ COMPLETED - WebhookIdempotency + StripeWebhookHandler; HMAC-SHA256 sig verification; timing-safe comparison; TTL-based deduplication |
@@ -762,8 +762,8 @@ testing:
 | :--- | :--- | :--- | :--- |
 | **TASK-COMP-001** | GDPR Compliance Package | `packages/privacy/src/audit/`, `gdpr/`, `privacy-util/` | ✅ COMPLETED - Hash-chained audit trail (HMAC-SHA256); verifyAuditChain(); detectTampering(); DataExportBuilder (Art. 20); DataClassificationRegistry (5 sensitivity levels) |
 | **TASK-UI-003** | Puck Version History | `layout_versions` table, history panel UI | Safety net for tenant layout changes, rollback in <30 seconds |
-| **TASK-AI-004-REV** | A/B Testing Mutex | `experiment-mutex.ts`, component overlap checks | Prevent interaction effects that invalidate statistical significance |
-| **TASK-EDGE-001** | Edge Middleware Optimization | `tenant-resolver.ts`, Edge Config integration | Sub-10ms tenant resolution at scale, custom domain SSL automation |
+| **TASK-AI-004-REV** | A/B Testing Mutex | `experiment-mutex.ts`, component overlap checks | ✅ COMPLETED - ExperimentMutex + InMemoryLockStore; guardrails (SRM, significance); feature-flags; ExperimentStore; ABTestWrapper; DB migration |
+| **TASK-EDGE-001** | Edge Middleware Optimization | `tenant-resolver.ts`, Edge Config integration | ✅ COMPLETED - Sub-10ms tenant resolution at scale, custom domain SSL automation |
 
 ### 🟢 P3: Enhancement (AI-Native Features) - Execute Week 4+
 
