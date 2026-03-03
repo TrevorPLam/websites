@@ -35,7 +35,10 @@ function errorMessage(error: unknown): string {
 }
 
 function run(command: string, stdio: 'pipe' | 'inherit' = 'pipe'): string {
-  return execSync(command, { encoding: 'utf8', stdio }).trim();
+  if (stdio === 'inherit') {
+    execSync(command, { stdio });
+    return '';
+  }
 }
 
 function checkPrerequisites(): void {
