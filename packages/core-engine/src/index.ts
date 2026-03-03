@@ -10,4 +10,3 @@ export * from './puck';
 
 // Re-export core types
 export type { PageData, ComponentData } from './types';
-export type { PuckConfig } from './puck/config';
