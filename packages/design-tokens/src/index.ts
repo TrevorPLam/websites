@@ -6,11 +6,32 @@
  */
 
 // Core design tokens
-export { designTokens, semanticColors } from './tokens';
-export type { DesignTokens, SemanticColors } from './tokens';
-
-// CSS variables
-export * from './css-variables';
+export {
+  designTokens,
+  semanticColors,
+  colorTokens,
+  typographyTokens,
+  spacingTokens,
+  borderRadiusTokens,
+  shadowTokens,
+  zIndexTokens,
+  animationTokens,
+  componentTokens,
+  breakpointTokens,
+} from './tokens';
+export type {
+  DesignTokens,
+  SemanticColors,
+  ColorTokens,
+  TypographyTokens,
+  SpacingTokens,
+  BorderRadiusTokens,
+  ShadowTokens,
+  ZIndexTokens,
+  AnimationTokens,
+  ComponentTokens,
+  BreakpointTokens,
+} from './tokens';
 
 // Puck theme configuration
 export { puckComponentCategories, puckTheme } from './puck-theme';
@@ -23,14 +44,3 @@ export type { TailwindPreset } from './tailwind-preset';
 // Style Dictionary transforms
 export { styleDictionaryTransforms } from './style-dictionary-transforms';
 export type { StyleDictionaryTransforms } from './style-dictionary-transforms';
-
-// Re-export commonly used utilities
-export const colors = designTokens.colors;
-export const typography = designTokens.typography;
-export const spacing = designTokens.spacing;
-export const borderRadius = designTokens.borderRadius;
-export const shadows = designTokens.shadows;
-export const zIndex = designTokens.zIndex;
-export const animation = designTokens.animation;
-export const breakpoints = designTokens.breakpoints;
-export const components = designTokens.components;

@@ -8,19 +8,30 @@
  */
 /**
  * Style Dictionary Transforms
- * 
+ *
  * Custom transforms for Style Dictionary to convert design tokens
  * to various platform-specific formats (CSS, SCSS, LESS, etc.)
  */
 
-import { Transform } from 'style-dictionary/types';
+interface DesignToken {
+  path: string[];
+  type?: string;
+  value?: unknown;
+}
+
+interface Transform {
+  name: string;
+  type: string;
+  matcher?: (token: DesignToken) => boolean;
+  transformer: (token: DesignToken) => unknown;
+}
 
 // HSL color transform
 export const hslColorTransform: Transform = {
   name: 'color/hsl',
   type: 'value',
-  matcher: (token) => token.type === 'color',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'color',
+  transformer: (token: DesignToken) => {
     const value = token.value;
     if (typeof value === 'string' && value.match(/^\d+\s+\d+%\s+\d+%$/)) {
       return `hsl(${value})`;
@@ -33,8 +44,8 @@ export const hslColorTransform: Transform = {
 export const hslColorAlphaTransform: Transform = {
   name: 'color/hslAlpha',
   type: 'value',
-  matcher: (token) => token.type === 'color',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'color',
+  transformer: (token: DesignToken) => {
     const value = token.value;
     if (typeof value === 'string' && value.match(/^\d+\s+\d+%\s+\d+%$/)) {
       return `hsl(${value} / <alpha>)`;
@@ -48,7 +59,7 @@ export const cssVariableTransform: Transform = {
   name: 'name/cssVariable',
   type: 'name',
   matcher: () => true,
-  transformer: (token) => {
+  transformer: (token: DesignToken) => {
     const path = token.path.join('-');
     return `--${path}`;
   },
@@ -58,8 +69,8 @@ export const cssVariableTransform: Transform = {
 export const cssVariableReferenceTransform: Transform = {
   name: 'cssVariableReference',
   type: 'value',
-  matcher: (token) => token.type === 'color' || token.type === 'dimension',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'color' || token.type === 'dimension',
+  transformer: (token: DesignToken) => {
     const path = token.path.join('-');
     return `var(--${path})`;
   },
@@ -69,16 +80,19 @@ export const cssVariableReferenceTransform: Transform = {
 export const typographyTransform: Transform = {
   name: 'typography/css',
   type: 'value',
-  matcher: (token) => token.type === 'typography',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'typography',
+  transformer: (token: DesignToken) => {
     const value = token.value;
-    if (typeof value === 'object') {
-      const fontFamily = value.fontFamily?.join(', ') || 'inherit';
-      const fontSize = value.fontSize || '1rem';
-      const fontWeight = value.fontWeight || 'normal';
-      const lineHeight = value.lineHeight || 'normal';
-      const letterSpacing = value.letterSpacing || 'normal';
-      
+    if (typeof value === 'object' && value !== null) {
+      const v = value as Record<string, unknown>;
+      const fontFamily = Array.isArray(v.fontFamily)
+        ? (v.fontFamily as string[]).join(', ')
+        : 'inherit';
+      const fontSize = (v.fontSize as string) || '1rem';
+      const fontWeight = (v.fontWeight as string) || 'normal';
+      const lineHeight = (v.lineHeight as string) || 'normal';
+      const letterSpacing = (v.letterSpacing as string) || 'normal';
+
       return {
         fontFamily,
         fontSize,
@@ -95,23 +109,30 @@ export const typographyTransform: Transform = {
 export const shadowTransform: Transform = {
   name: 'shadow/css',
   type: 'value',
-  matcher: (token) => token.type === 'shadow',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'shadow',
+  transformer: (token: DesignToken) => {
     const value = token.value;
     if (typeof value === 'string') {
       return value;
     }
-    if (typeof value === 'object' && value.x !== undefined) {
-      const { x, y, blur, spread, color, inset } = value;
+    if (typeof value === 'object' && value !== null && 'x' in value) {
+      const v = value as {
+        x?: number;
+        y?: number;
+        blur?: number;
+        spread?: number;
+        color?: string;
+        inset?: boolean;
+      };
       const shadowParts = [
-        inset ? 'inset' : '',
-        `${x}px`,
-        `${y}px`,
-        `${blur}px`,
-        `${spread}px`,
-        color || 'transparent',
+        v.inset ? 'inset' : '',
+        `${v.x ?? 0}px`,
+        `${v.y ?? 0}px`,
+        `${v.blur ?? 0}px`,
+        `${v.spread ?? 0}px`,
+        v.color ?? 'transparent',
       ].filter(Boolean);
-      
+
       return shadowParts.join(' ');
     }
     return value;
@@ -122,8 +143,8 @@ export const shadowTransform: Transform = {
 export const borderRadiusTransform: Transform = {
   name: 'borderRadius/css',
   type: 'value',
-  matcher: (token) => token.type === 'borderRadius',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'borderRadius',
+  transformer: (token: DesignToken) => {
     const value = token.value;
     if (typeof value === 'string' && value === 'full') {
       return '9999px';
@@ -136,8 +157,8 @@ export const borderRadiusTransform: Transform = {
 export const spacingTransform: Transform = {
   name: 'spacing/css',
   type: 'value',
-  matcher: (token) => token.type === 'dimension',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'dimension',
+  transformer: (token: DesignToken) => {
     const value = token.value;
     if (typeof value === 'number') {
       return `${value}px`;
@@ -161,12 +182,17 @@ export const spacingTransform: Transform = {
 export const fontSizeClampTransform: Transform = {
   name: 'fontSize/clamp',
   type: 'value',
-  matcher: (token) => token.type === 'fontSize',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'fontSize',
+  transformer: (token: DesignToken) => {
     const value = token.value;
-    if (typeof value === 'object' && value.clamp) {
-      const { min, preferred, max } = value.clamp;
-      return `clamp(${min}, ${preferred}, ${max})`;
+    if (
+      typeof value === 'object' &&
+      value !== null &&
+      'clamp' in value &&
+      typeof (value as { clamp?: unknown }).clamp === 'object'
+    ) {
+      const clamp = (value as { clamp: { min?: string; preferred?: string; max?: string } }).clamp;
+      return `clamp(${clamp.min ?? '0'}, ${clamp.preferred ?? '1rem'}, ${clamp.max ?? '100%'})`;
     }
     return value;
   },
@@ -176,15 +202,28 @@ export const fontSizeClampTransform: Transform = {
 export const responsiveSpacingTransform: Transform = {
   name: 'spacing/responsive',
   type: 'value',
-  matcher: (token) => token.type === 'dimension' && token.value?.responsive,
-  transformer: (token) => {
+  matcher: (token: DesignToken) =>
+    token.type === 'dimension' &&
+    typeof token.value === 'object' &&
+    token.value !== null &&
+    'responsive' in token.value,
+  transformer: (token: DesignToken) => {
     const value = token.value;
-    if (typeof value === 'object' && value.responsive) {
-      const { mobile, tablet, desktop } = value.responsive;
+    if (
+      typeof value === 'object' &&
+      value !== null &&
+      'responsive' in value &&
+      typeof (value as { responsive?: unknown }).responsive === 'object'
+    ) {
+      const responsive = (
+        value as {
+          responsive: { mobile?: string; tablet?: string; desktop?: string };
+        }
+      ).responsive;
       return {
-        mobile,
-        tablet,
-        desktop,
+        mobile: responsive.mobile,
+        tablet: responsive.tablet,
+        desktop: responsive.desktop,
       };
     }
     return value;
@@ -196,13 +235,12 @@ export const scssMapTransform: Transform = {
   name: 'scss/map',
   type: 'value',
   matcher: () => true,
-  transformer: (token) => {
+  transformer: (token: DesignToken) => {
     const value = token.value;
-    if (typeof value === 'object' && !Array.isArray(value)) {
-      // Convert object to SCSS map format
-      const entries = Object.entries(value).map(([key, val]) => {
-        return `  '${key}': ${JSON.stringify(val)}`;
-      });
+    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      const entries = Object.entries(value as Record<string, unknown>).map(
+        ([key, val]) => `  '${key}': ${JSON.stringify(val)}`
+      );
       return `(\n${entries.join(',\n')}\n)`;
     }
     return value;
@@ -214,7 +252,7 @@ export const lessVariableTransform: Transform = {
   name: 'less/variable',
   type: 'name',
   matcher: () => true,
-  transformer: (token) => {
+  transformer: (token: DesignToken) => {
     const path = token.path.join('-');
     return `@${path}`;
   },
@@ -224,8 +262,8 @@ export const lessVariableTransform: Transform = {
 export const lessVariableReferenceTransform: Transform = {
   name: 'lessVariableReference',
   type: 'value',
-  matcher: (token) => token.type === 'color' || token.type === 'dimension',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'color' || token.type === 'dimension',
+  transformer: (token: DesignToken) => {
     const path = token.path.join('-');
     return `@${path}`;
   },
@@ -247,10 +285,10 @@ export const jsConstantTransform: Transform = {
   name: 'js/constant',
   type: 'name',
   matcher: () => true,
-  transformer: (token) => {
-    const path = token.path.map(part => {
+  transformer: (token: DesignToken) => {
+    const path = token.path.map((part: string) => {
       // Convert kebab-case to camelCase
-      return part.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+      return part.replace(/-([a-z])/g, (_: string, letter: string) => letter.toUpperCase());
     });
     return path.join('');
   },
@@ -260,16 +298,14 @@ export const jsConstantTransform: Transform = {
 export const androidXmlTransform: Transform = {
   name: 'android/xml',
   type: 'value',
-  matcher: (token) => token.type === 'color' || token.type === 'dimension',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'color' || token.type === 'dimension',
+  transformer: (token: DesignToken) => {
     const value = token.value;
     if (token.type === 'color') {
       if (typeof value === 'string' && value.match(/^\d+\s+\d+%\s+\d+%$/)) {
-        // Convert HSL to Android color format
-        const [h, s, l] = value.split(' ').map(Number);
-        // Convert HSL to RGB (simplified)
-        const rgb = hslToRgb(h, s / 100, l / 100);
-        return `#${rgb.map(x => x.toString(16).padStart(2, '0')).join('')}`;
+        const [h, s, l] = parseHslString(value);
+        const rgb = hslToRgb(h, s, l);
+        return `#${rgb.map((x) => x.toString(16).padStart(2, '0')).join('')}`;
       }
       return value;
     }
@@ -290,14 +326,13 @@ export const androidXmlTransform: Transform = {
 export const iosSwiftTransform: Transform = {
   name: 'ios/swift',
   type: 'value',
-  matcher: (token) => token.type === 'color' || token.type === 'dimension',
-  transformer: (token) => {
+  matcher: (token: DesignToken) => token.type === 'color' || token.type === 'dimension',
+  transformer: (token: DesignToken) => {
     const value = token.value;
     if (token.type === 'color') {
       if (typeof value === 'string' && value.match(/^\d+\s+\d+%\s+\d+%$/)) {
-        // Convert HSL to UIColor
-        const [h, s, l] = value.split(' ').map(Number);
-        const rgb = hslToRgb(h, s / 100, l / 100);
+        const [h, s, l] = parseHslString(value);
+        const rgb = hslToRgb(h, s, l);
         return `UIColor(red: ${rgb[0] / 255}, green: ${rgb[1] / 255}, blue: ${rgb[2] / 255}, alpha: 1.0)`;
       }
       return value;
@@ -315,33 +350,52 @@ export const iosSwiftTransform: Transform = {
   },
 };
 
+// Parse "H S% L%" string to [h, s/100, l/100]
+function parseHslString(value: string): [number, number, number] {
+  const parts = value.split(' ');
+  const h = Number(parts[0]) || 0;
+  const s = (Number(parts[1]?.replace('%', '')) || 0) / 100;
+  const l = (Number(parts[2]?.replace('%', '')) || 0) / 100;
+  return [h, s, l];
+}
+
 // Helper function to convert HSL to RGB
 function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = l - c / 2;
-  
-  let r = 0, g = 0, b = 0;
-  
+
+  let r = 0,
+    g = 0,
+    b = 0;
+
   if (h >= 0 && h < 60) {
-    r = c; g = x; b = 0;
+    r = c;
+    g = x;
+    b = 0;
   } else if (h >= 60 && h < 120) {
-    r = x; g = c; b = 0;
+    r = x;
+    g = c;
+    b = 0;
   } else if (h >= 120 && h < 180) {
-    r = 0; g = c; b = x;
+    r = 0;
+    g = c;
+    b = x;
   } else if (h >= 180 && h < 240) {
-    r = 0; g = x; b = c;
+    r = 0;
+    g = x;
+    b = c;
   } else if (h >= 240 && h < 300) {
-    r = x; g = 0; b = c;
+    r = x;
+    g = 0;
+    b = c;
   } else if (h >= 300 && h < 360) {
-    r = c; g = 0; b = x;
+    r = c;
+    g = 0;
+    b = x;
   }
-  
-  return [
-    Math.round((r + m) * 255),
-    Math.round((g + m) * 255),
-    Math.round((b + m) * 255),
-  ];
+
+  return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
 }
 
 // Export all transforms as an object
@@ -349,14 +403,14 @@ export const styleDictionaryTransforms = {
   // Color transforms
   'color/hsl': hslColorTransform,
   'color/hslAlpha': hslColorAlphaTransform,
-  
+
   // Name transforms
   'name/cssVariable': cssVariableTransform,
   'name/lessVariable': lessVariableTransform,
   'name/jsConstant': jsConstantTransform,
-  
+
   // Value transforms
-  'cssVariableReference': cssVariableReferenceTransform,
+  cssVariableReference: cssVariableReferenceTransform,
   'typography/css': typographyTransform,
   'shadow/css': shadowTransform,
   'borderRadius/css': borderRadiusTransform,
@@ -364,7 +418,7 @@ export const styleDictionaryTransforms = {
   'fontSize/clamp': fontSizeClampTransform,
   'spacing/responsive': responsiveSpacingTransform,
   'scss/map': scssMapTransform,
-  'lessVariableReference': lessVariableReferenceTransform,
+  lessVariableReference: lessVariableReferenceTransform,
   'js/object': jsObjectTransform,
   'android/xml': androidXmlTransform,
   'ios/swift': iosSwiftTransform,

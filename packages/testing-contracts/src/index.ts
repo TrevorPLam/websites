@@ -24,7 +24,7 @@ export const ContractRequestSchema = z.object({
   method: z.enum(['GET', 'POST', 'PUT', 'DELETE', 'PATCH']),
   path: z.string(),
   headers: z.record(z.string()).optional(),
-  body: z.any().optional(),
+  body: z.unknown().optional(),
   query: z.record(z.string()).optional(),
 });
 
@@ -33,7 +33,7 @@ export type ContractRequest = z.infer<typeof ContractRequestSchema>;
 export const ContractResponseSchema = z.object({
   status: z.number(),
   headers: z.record(z.string()).optional(),
-  body: z.any().optional(),
+  body: z.unknown().optional(),
 });
 
 export type ContractResponse = z.infer<typeof ContractResponseSchema>;
@@ -86,6 +86,8 @@ export class ContractTestingFramework {
   addInteraction(interaction: ContractInteraction): void {
     const validatedInteraction = ContractInteractionSchema.parse(interaction);
 
+    // Pact addInteraction expects body: AnyTemplate (pact-core); our schema uses z.unknown().
+    // JSON-serializable values are valid at runtime. Suppress type mismatch for third-party API.
     this.pact.addInteraction({
       state: validatedInteraction.description,
       uponReceiving: validatedInteraction.description,
@@ -93,13 +95,15 @@ export class ContractTestingFramework {
         method: validatedInteraction.request.method,
         path: validatedInteraction.request.path,
         headers: validatedInteraction.request.headers,
-        body: validatedInteraction.request.body,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Pact AnyTemplate vs z.unknown()
+        body: validatedInteraction.request.body as any,
         query: validatedInteraction.request.query,
       },
       willRespondWith: {
         status: validatedInteraction.response.status,
         headers: validatedInteraction.response.headers,
-        body: validatedInteraction.response.body,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Pact AnyTemplate vs z.unknown()
+        body: validatedInteraction.response.body as any,
       },
     });
   }
@@ -169,7 +173,7 @@ export const ContractTestingUtils = {
   /**
    * Generate mock response for common patterns
    */
-  generateMockResponse(status: number, data?: any): ContractResponse {
+  generateMockResponse(status: number, data?: unknown): ContractResponse {
     return {
       status,
       body: data,
@@ -198,7 +202,7 @@ export const ContractTestingUtils = {
   /**
    * Generate success response
    */
-  generateSuccessResponse(data: any, status: number = 200): ContractResponse {
+  generateSuccessResponse(data: unknown, status: number = 200): ContractResponse {
     return {
       status,
       body: {
@@ -212,12 +216,3 @@ export const ContractTestingUtils = {
     };
   },
 };
-
-// Export types and schemas for external use
-export {
-  ContractConfigSchema,
-  ContractInteractionSchema,
-  ContractRequestSchema,
-  ContractResponseSchema,
-};
-export type { ContractConfig, ContractInteraction, ContractRequest, ContractResponse };

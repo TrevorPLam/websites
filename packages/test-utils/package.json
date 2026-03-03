@@ -15,7 +15,7 @@
     "vitest": "catalog:",
     "msw": "catalog:",
     "@testing-library/react": "catalog:",
-    "@testing-library/vitest-dom": "catalog:"
+    "@testing-library/jest-dom": "catalog:"
   },
   "files": [
     "dist",

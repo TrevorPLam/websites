@@ -9,6 +9,7 @@
  */
 
 const required = ['TURBO_REMOTE_CACHE_SIGNATURE_KEY'];
+const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
 
 const missing = required.filter((name) => {
   const value = process.env[name];
@@ -16,11 +17,17 @@ const missing = required.filter((name) => {
 });
 
 if (missing.length > 0) {
-  console.error('[validate-turbo-cache-env] Missing required environment variables:');
-  for (const variable of missing) {
-    console.error(` - ${variable}`);
+  if (isCI) {
+    console.error('[validate-turbo-cache-env] Missing required environment variables:');
+    for (const variable of missing) {
+      console.error(` - ${variable}`);
+    }
+    process.exit(1);
   }
-  process.exit(1);
+  console.warn(
+    '[validate-turbo-cache-env] TURBO_REMOTE_CACHE_SIGNATURE_KEY not set. Remote cache signing disabled. Set in CI for production.',
+  );
+  process.exit(0);
 }
 
 console.log('[validate-turbo-cache-env] Turbo remote cache signature key is configured.');

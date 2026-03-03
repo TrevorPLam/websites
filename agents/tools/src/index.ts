@@ -163,7 +163,7 @@ export class ToolRegistry {
     return input;
   }
 
-  private checkCapabilities(agentId: string, requiredCapabilities: string[]): boolean {
+  private checkCapabilities(_agentId: string, _requiredCapabilities: string[]): boolean {
     // In a real implementation, check agent capabilities against required ones
     // For now, we'll assume all agents have all capabilities
     return true;

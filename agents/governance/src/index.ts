@@ -15,6 +15,7 @@ export const PolicySchema = z.object({
   description: z.string(),
   version: z.string(),
   environment: z.enum(['development', 'staging', 'production']),
+  enabled: z.boolean().default(true),
   rules: z.array(
     z.object({
       id: z.string(),
@@ -92,6 +93,7 @@ export class PolicyEngine {
         description: 'Controls which tools agents can access in production',
         version: '1.0.0',
         environment: 'production',
+        enabled: true,
         rules: [
           {
             id: 'allow-safe-tools',
@@ -131,6 +133,7 @@ export class PolicyEngine {
         description: 'Controls data access patterns in production',
         version: '1.0.0',
         environment: 'production',
+        enabled: true,
         rules: [
           {
             id: 'limit-data-volume',
@@ -165,6 +168,7 @@ export class PolicyEngine {
         description: 'Permissive tool access for development',
         version: '1.0.0',
         environment: 'development',
+        enabled: true,
         rules: [
           {
             id: 'allow-most-tools',
@@ -298,14 +302,14 @@ export class PolicyEngine {
       return true;
     }
     if (condition.sensitivity && Array.isArray(condition.sensitivity)) {
-      return condition.sensitivity.some((s) => context.sensitivity?.includes(s));
+      return condition.sensitivity.some((s: string) => context.sensitivity?.includes(s));
     }
     return true;
   }
 
-  private exceedsLimit(limit: string, context: Record<string, any>): boolean {
+  private exceedsLimit(limit: string, context: Record<string, unknown>): boolean {
     // Simple limit checking
-    if (limit === '100MB' && context.size) {
+    if (limit === '100MB' && typeof context.size === 'string') {
       return this.parseSize(context.size) > 100 * 1024 * 1024;
     }
     return false;
@@ -314,12 +318,12 @@ export class PolicyEngine {
   private parseSize(sizeStr: string): number {
     // Parse size strings like "10MB", "1GB"
     const match = sizeStr.match(/^(\d+(?:\.\d+)?)\s*(KB|MB|GB|TB)$/i);
-    if (!match) return 0;
+    const unit = match?.[2];
+    if (!match || !unit) return 0;
 
-    const value = parseFloat(match[1]);
-    const unit = match[2].toUpperCase();
+    const value = parseFloat(match[1] ?? '0');
 
-    switch (unit) {
+    switch (unit.toUpperCase()) {
       case 'KB':
         return value * 1024;
       case 'MB':
@@ -452,8 +456,8 @@ export class SecurityAgent {
 
   analyzeAgentAction(
     agentId: string,
-    action: string,
-    context: Record<string, any>
+    _action: string,
+    context: Record<string, unknown>
   ): {
     riskScore: number;
     threats: string[];
@@ -508,19 +512,21 @@ export class SecurityAgent {
     return contextStr.includes(searchTerm.toLowerCase());
   }
 
-  private analyzeToolSwitching(agentId: string, context: Record<string, any>): number {
+  private analyzeToolSwitching(_agentId: string, context: Record<string, unknown>): number {
     // In a real implementation, track tool usage patterns over time
     // For now, return a moderate risk score if multiple tools are used rapidly
-    return context.toolCount > 5 ? 3 : 0;
+    const toolCount = context.toolCount;
+    return typeof toolCount === 'number' && toolCount > 5 ? 3 : 0;
   }
 
-  private analyzeFailures(agentId: string, context: Record<string, any>): number {
+  private analyzeFailures(_agentId: string, context: Record<string, unknown>): number {
     // In a real implementation, track failure patterns
     // For now, return a risk score based on recent failures
-    return context.recentFailures > 3 ? 4 : 0;
+    const recentFailures = context.recentFailures;
+    return typeof recentFailures === 'number' && recentFailures > 3 ? 4 : 0;
   }
 
-  private getRecommendation(riskScore: number, threats: string[]): string {
+  private getRecommendation(riskScore: number, _threats: string[]): string {
     if (riskScore >= 8) {
       return 'CRITICAL: Immediate intervention required. Block agent action and escalate to security team.';
     } else if (riskScore >= 6) {
@@ -623,7 +629,7 @@ export class BlastRadiusController {
 
   assessBlastRadius(
     action: string,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
     environment: string
   ): BlastRadiusAssessment {
     const criticality = this.assessCriticality(action, context, environment);
@@ -644,7 +650,7 @@ export class BlastRadiusController {
 
   private assessCriticality(
     action: string,
-    context: Record<string, any>,
+    _context: Record<string, unknown>,
     environment: string
   ): 'low' | 'medium' | 'high' | 'critical' {
     if (environment === 'production') {
@@ -708,6 +714,3 @@ export class BlastRadiusController {
     };
   }
 }
-
-// Export main classes
-export { PolicyEngine, SecurityAgent, BlastRadiusController };

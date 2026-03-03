@@ -1,0 +1,1 @@
+{"name": "@repo/core-engine", "version": "0.1.0", "dependencies": {"@puckeditor/core": "^0.15.0", "@puckeditor/plugin-heading-analyzer": "^0.15.0", "@repo/shared": "workspace:*", "@repo/ui": "workspace:*", "react": "^19.0.0", "react-dom": "^19.0.0", "zod": "^3.22.4"}}

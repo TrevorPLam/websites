@@ -1,10 +1,16 @@
-import { Plugin } from '@measured/puck';
-import { headingAnalyzer } from '@measured/puck-plugin-heading-analyzer';
+/**
+ * @file packages/core-engine/src/puck/plugins/index.ts
+ * @summary Puck editor plugin exports and configuration.
+ * @description Provides plugin definitions and configuration options for Puck editor functionality.
+ * @security Plugin configurations; no sensitive data stored.
+ * @adr none
+ * @requirements DOMAIN-3 / core-engine-implementation
+ */
+import { Plugin } from '@puckeditor/core';
+import { headingAnalyzer } from '@puckeditor/plugin-heading-analyzer';
 
 // Built-in plugins for Puck editor
-export const puckPlugins: Plugin[] = [
-  headingAnalyzer(),
-];
+export const puckPlugins: Plugin[] = [headingAnalyzer()];
 
 // Plugin configuration options
 export const pluginConfig = {
@@ -19,7 +25,10 @@ export const pluginConfig = {
   },
 };
 
-// Helper function to get enabled plugins
+/**
+ * Get enabled plugins based on configuration settings.
+ * @returns Array of enabled Puck plugins.
+ */
 export function getEnabledPlugins(): Plugin[] {
   return puckPlugins.filter((plugin, index) => {
     const pluginName = Object.keys(pluginConfig)[index];
