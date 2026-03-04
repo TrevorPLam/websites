@@ -109,3 +109,37 @@ export function withCorrelation<P extends ToolParams>(
     }
   };
 }
+
+/**
+ * Emit a structured `tool_call_start` or `tool_call_end` log line to stderr
+ * (MCP log channel — keeps stdout clean for JSON-RPC transport).
+ *
+ * @param event         - `'tool_call_start'` or `'tool_call_end'`.
+ * @param tool          - Human-readable tool name.
+ * @param correlationId - UUID that ties start/end log lines together.
+ * @param extra         - Optional additional fields (durationMs, isError, error).
+ */
+export function logMcpTool(
+  event: 'tool_call_start' | 'tool_call_end',
+  tool: string,
+  correlationId: string,
+  extra?: Record<string, unknown>
+): void {
+  process.stderr.write(
+    JSON.stringify({ event, tool, correlationId, timestamp: new Date().toISOString(), ...extra }) + '\n'
+  );
+}
+
+/**
+ * Extract an existing correlation ID from raw tool params, or generate a new UUID.
+ *
+ * Reads `params['_correlationId']`; falls back to `crypto.randomUUID()`.
+ *
+ * @param params - Raw params object from a McpServer tool handler.
+ * @returns A non-empty correlation ID string.
+ */
+export function resolveCorrelationId(params: Record<string, unknown>): string {
+  return typeof params['_correlationId'] === 'string' && params['_correlationId'].length > 0
+    ? params['_correlationId']
+    : crypto.randomUUID();
+}

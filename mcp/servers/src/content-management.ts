@@ -15,6 +15,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import { logMcpTool, resolveCorrelationId } from './shared/middleware.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -62,20 +63,31 @@ export class ContentManagementServer {
           .default('')
           .describe('Relative path inside CONTENT_ROOT (empty = root)'),
         pattern: z.string().optional().describe('Glob-style extension filter, e.g. "*.md"'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ directory, pattern }) => {
-        const dir = await safePath(directory ?? '');
-        let entries: string[];
+      async ({ directory, pattern, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'list_content', cid);
         try {
-          const files = await fs.readdir(dir, { withFileTypes: true });
-          entries = files
-            .filter((f) => !f.isDirectory())
-            .map((f) => f.name)
-            .filter((name) => !pattern || name.endsWith(pattern.replaceAll('*', '')));
-        } catch {
-          return { content: [{ type: 'text', text: `Directory not found: ${directory}` }] };
+          const dir = await safePath(directory ?? '');
+          let entries: string[];
+          try {
+            const files = await fs.readdir(dir, { withFileTypes: true });
+            entries = files
+              .filter((f) => !f.isDirectory())
+              .map((f) => f.name)
+              .filter((name) => !pattern || name.endsWith(pattern.replaceAll('*', '')));
+          } catch {
+            logMcpTool('tool_call_end', 'list_content', cid, { durationMs: Date.now() - t0 });
+            return { content: [{ type: 'text', text: `Directory not found: ${directory}` }], _correlationId: cid };
+          }
+          logMcpTool('tool_call_end', 'list_content', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: entries.join('\n') }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'list_content', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        return { content: [{ type: 'text', text: entries.join('\n') }] };
       }
     );
 
@@ -85,16 +97,27 @@ export class ContentManagementServer {
       'Read the full text of a content file.',
       {
         filePath: z.string().describe('Relative path to the content file within CONTENT_ROOT'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ filePath }) => {
-        const absPath = await safePath(filePath);
-        let text: string;
+      async ({ filePath, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'get_content', cid);
         try {
-          text = await fs.readFile(absPath, 'utf-8');
-        } catch {
-          return { content: [{ type: 'text', text: `File not found: ${filePath}` }] };
+          const absPath = await safePath(filePath);
+          let text: string;
+          try {
+            text = await fs.readFile(absPath, 'utf-8');
+          } catch {
+            logMcpTool('tool_call_end', 'get_content', cid, { durationMs: Date.now() - t0 });
+            return { content: [{ type: 'text', text: `File not found: ${filePath}` }], _correlationId: cid };
+          }
+          logMcpTool('tool_call_end', 'get_content', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'get_content', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        return { content: [{ type: 'text', text }] };
       }
     );
 
@@ -105,19 +128,30 @@ export class ContentManagementServer {
       {
         filePath: z.string().describe('Relative path within CONTENT_ROOT'),
         content: z.string().describe('File content (markdown, JSON, etc.)'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ filePath, content }) => {
-        const absPath = await safePath(filePath);
-        // Fail-safe: do not overwrite
+      async ({ filePath, content, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'create_content', cid);
         try {
-          await fs.access(absPath);
-          return { content: [{ type: 'text', text: `File already exists: ${filePath}. Use update_content to modify.` }] };
-        } catch {
-          // expected – file does not exist, proceed
+          const absPath = await safePath(filePath);
+          // Fail-safe: do not overwrite
+          try {
+            await fs.access(absPath);
+            logMcpTool('tool_call_end', 'create_content', cid, { durationMs: Date.now() - t0 });
+            return { content: [{ type: 'text', text: `File already exists: ${filePath}. Use update_content to modify.` }], _correlationId: cid };
+          } catch {
+            // expected – file does not exist, proceed
+          }
+          await fs.mkdir(path.dirname(absPath), { recursive: true });
+          await fs.writeFile(absPath, content, 'utf-8');
+          logMcpTool('tool_call_end', 'create_content', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: `Created: ${filePath}` }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'create_content', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        await fs.mkdir(path.dirname(absPath), { recursive: true });
-        await fs.writeFile(absPath, content, 'utf-8');
-        return { content: [{ type: 'text', text: `Created: ${filePath}` }] };
       }
     );
 
@@ -128,12 +162,22 @@ export class ContentManagementServer {
       {
         filePath: z.string().describe('Relative path within CONTENT_ROOT'),
         content: z.string().describe('New file content'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ filePath, content }) => {
-        const absPath = await safePath(filePath);
-        await fs.mkdir(path.dirname(absPath), { recursive: true });
-        await fs.writeFile(absPath, content, 'utf-8');
-        return { content: [{ type: 'text', text: `Updated: ${filePath}` }] };
+      async ({ filePath, content, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'update_content', cid);
+        try {
+          const absPath = await safePath(filePath);
+          await fs.mkdir(path.dirname(absPath), { recursive: true });
+          await fs.writeFile(absPath, content, 'utf-8');
+          logMcpTool('tool_call_end', 'update_content', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: `Updated: ${filePath}` }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'update_content', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
+        }
       }
     );
 
@@ -153,43 +197,53 @@ export class ContentManagementServer {
           .optional()
           .default('content-bot@marketing-platform.example')
           .describe('Git author email'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ files, commitMessage, authorName, authorEmail }) => {
-        const cwd = process.cwd();
-        const absPaths = await Promise.all(files.map((f) => safePath(f)));
-
-        // Stage files
+      async ({ files, commitMessage, authorName, authorEmail, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'publish_content', cid);
         try {
-          await execFileAsync('git', ['add', ...absPaths], { cwd });
-        } catch (err) {
-          throw new Error(`Failed to stage files for commit: ${(err as Error).message}`);
-        }
+          const cwd = process.cwd();
+          const absPaths = await Promise.all(files.map((f) => safePath(f)));
 
-        // Create commit
-        try {
-          await execFileAsync(
-            'git',
-            [
-              '-c', `user.name=${authorName}`,
-              '-c', `user.email=${authorEmail}`,
-              'commit', '-m', commitMessage,
-            ],
-            { cwd }
-          );
-        } catch (err) {
-          throw new Error(`Failed to create commit: ${(err as Error).message}`);
-        }
+          // Stage files
+          try {
+            await execFileAsync('git', ['add', ...absPaths], { cwd });
+          } catch (err) {
+            throw new Error(`Failed to stage files for commit: ${err instanceof Error ? err.message : String(err)}`);
+          }
 
-        // Push (best-effort)
-        let pushMsg = '';
-        try {
-          const { stdout } = await execFileAsync('git', ['push'], { cwd });
-          pushMsg = stdout.trim() || 'Pushed successfully.';
-        } catch (err) {
-          pushMsg = `Push failed (may need manual push): ${(err as Error).message}`;
-        }
+          // Create commit
+          try {
+            await execFileAsync(
+              'git',
+              [
+                '-c', `user.name=${authorName}`,
+                '-c', `user.email=${authorEmail}`,
+                'commit', '-m', commitMessage,
+              ],
+              { cwd }
+            );
+          } catch (err) {
+            throw new Error(`Failed to create commit: ${err instanceof Error ? err.message : String(err)}`);
+          }
 
-        return { content: [{ type: 'text', text: `Committed '${commitMessage}'. ${pushMsg}` }] };
+          // Push (best-effort)
+          let pushMsg = '';
+          try {
+            const { stdout } = await execFileAsync('git', ['push'], { cwd });
+            pushMsg = stdout.trim() || 'Pushed successfully.';
+          } catch (err) {
+            pushMsg = `Push failed (may need manual push): ${err instanceof Error ? err.message : String(err)}`;
+          }
+
+          logMcpTool('tool_call_end', 'publish_content', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: `Committed '${commitMessage}'. ${pushMsg}` }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'publish_content', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
+        }
       }
     );
   }

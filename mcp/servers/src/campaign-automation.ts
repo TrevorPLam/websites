@@ -12,6 +12,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import crypto from 'crypto';
+import { logMcpTool, resolveCorrelationId } from './shared/middleware.js';
 
 const CAMPAIGN_API_BASE = process.env.CAMPAIGN_API_BASE_URL ?? 'https://api.example.com/campaigns';
 const CAMPAIGN_API_KEY = process.env.CAMPAIGN_API_KEY ?? '';
@@ -83,31 +84,44 @@ export class CampaignAutomationServer {
         startDate: z.string().optional().describe('Start date in YYYY-MM-DD format'),
         endDate: z.string().optional().describe('End date in YYYY-MM-DD format'),
         metadata: z.record(z.unknown()).optional().describe('Additional campaign properties'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ tenantId, name, channel, budget, startDate, endDate, metadata = {} }) => {
-        if (CAMPAIGN_API_KEY) {
-          const data = await apiFetch(`${CAMPAIGN_API_BASE}`, {
-            method: 'POST',
-            body: JSON.stringify({ tenantId, name, channel, budget, startDate, endDate, metadata }),
-          });
-          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      async ({ tenantId, name, channel, budget, startDate, endDate, metadata = {}, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'create_campaign', cid);
+        try {
+          let result: { content: Array<{ type: string; text: string }> };
+          if (CAMPAIGN_API_KEY) {
+            const data = await apiFetch(`${CAMPAIGN_API_BASE}`, {
+              method: 'POST',
+              body: JSON.stringify({ tenantId, name, channel, budget, startDate, endDate, metadata }),
+            });
+            result = { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+          } else {
+            // Fallback: in-memory store
+            const campaign: Campaign = {
+              id: crypto.randomUUID(),
+              tenantId,
+              name,
+              channel,
+              status: 'draft',
+              startDate,
+              endDate,
+              budget,
+              metadata,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+            localStore.set(campaign.id, campaign);
+            result = { content: [{ type: 'text', text: JSON.stringify(campaign, null, 2) }] };
+          }
+          logMcpTool('tool_call_end', 'create_campaign', cid, { durationMs: Date.now() - t0 });
+          return { ...result, _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'create_campaign', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        // Fallback: in-memory store
-        const campaign: Campaign = {
-          id: crypto.randomUUID(),
-          tenantId,
-          name,
-          channel,
-          status: 'draft',
-          startDate,
-          endDate,
-          budget,
-          metadata,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        localStore.set(campaign.id, campaign);
-        return { content: [{ type: 'text', text: JSON.stringify(campaign, null, 2) }] };
       }
     );
 
@@ -117,17 +131,31 @@ export class CampaignAutomationServer {
       'Retrieve the current status and metadata for a campaign.',
       {
         campaignId: z.string().describe('Campaign identifier'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ campaignId }) => {
-        if (CAMPAIGN_API_KEY) {
-          const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}`);
-          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      async ({ campaignId, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'get_campaign_status', cid);
+        try {
+          let result: { content: Array<{ type: string; text: string }> };
+          if (CAMPAIGN_API_KEY) {
+            const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}`);
+            result = { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+          } else {
+            const campaign = localStore.get(campaignId);
+            if (!campaign) {
+              result = { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
+            } else {
+              result = { content: [{ type: 'text', text: JSON.stringify(campaign, null, 2) }] };
+            }
+          }
+          logMcpTool('tool_call_end', 'get_campaign_status', cid, { durationMs: Date.now() - t0 });
+          return { ...result, _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'get_campaign_status', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        const campaign = localStore.get(campaignId);
-        if (!campaign) {
-          return { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
-        }
-        return { content: [{ type: 'text', text: JSON.stringify(campaign, null, 2) }] };
       }
     );
 
@@ -146,22 +174,36 @@ export class CampaignAutomationServer {
             metadata: z.record(z.unknown()).optional(),
           })
           .describe('Fields to update'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ campaignId, updates }) => {
-        if (CAMPAIGN_API_KEY) {
-          const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}`, {
-            method: 'PATCH',
-            body: JSON.stringify(updates),
-          });
-          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      async ({ campaignId, updates, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'update_campaign', cid);
+        try {
+          let result: { content: Array<{ type: string; text: string }> };
+          if (CAMPAIGN_API_KEY) {
+            const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}`, {
+              method: 'PATCH',
+              body: JSON.stringify(updates),
+            });
+            result = { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+          } else {
+            const campaign = localStore.get(campaignId);
+            if (!campaign) {
+              result = { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
+            } else {
+              Object.assign(campaign, updates, { updatedAt: new Date().toISOString() });
+              localStore.set(campaignId, campaign);
+              result = { content: [{ type: 'text', text: JSON.stringify(campaign, null, 2) }] };
+            }
+          }
+          logMcpTool('tool_call_end', 'update_campaign', cid, { durationMs: Date.now() - t0 });
+          return { ...result, _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'update_campaign', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        const campaign = localStore.get(campaignId);
-        if (!campaign) {
-          return { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
-        }
-        Object.assign(campaign, updates, { updatedAt: new Date().toISOString() });
-        localStore.set(campaignId, campaign);
-        return { content: [{ type: 'text', text: JSON.stringify(campaign, null, 2) }] };
       }
     );
 
@@ -172,29 +214,43 @@ export class CampaignAutomationServer {
       {
         campaignId: z.string().describe('Campaign identifier'),
         reason: z.string().optional().describe('Optional reason for pausing'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ campaignId, reason }) => {
-        if (CAMPAIGN_API_KEY) {
-          const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}/pause`, {
-            method: 'POST',
-            body: JSON.stringify({ reason }),
-          });
-          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      async ({ campaignId, reason, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'pause_campaign', cid);
+        try {
+          let result: { content: Array<{ type: string; text: string }> };
+          if (CAMPAIGN_API_KEY) {
+            const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}/pause`, {
+              method: 'POST',
+              body: JSON.stringify({ reason }),
+            });
+            result = { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+          } else {
+            const campaign = localStore.get(campaignId);
+            if (!campaign) {
+              result = { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
+            } else {
+              campaign.status = 'paused';
+              campaign.updatedAt = new Date().toISOString();
+              result = {
+                content: [
+                  {
+                    type: 'text',
+                    text: `Campaign '${campaign.name}' paused.${reason ? ` Reason: ${reason}` : ''}`,
+                  },
+                ],
+              };
+            }
+          }
+          logMcpTool('tool_call_end', 'pause_campaign', cid, { durationMs: Date.now() - t0 });
+          return { ...result, _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'pause_campaign', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        const campaign = localStore.get(campaignId);
-        if (!campaign) {
-          return { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
-        }
-        campaign.status = 'paused';
-        campaign.updatedAt = new Date().toISOString();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Campaign '${campaign.name}' paused.${reason ? ` Reason: ${reason}` : ''}`,
-            },
-          ],
-        };
       }
     );
 
@@ -206,30 +262,44 @@ export class CampaignAutomationServer {
         campaignId: z.string().describe('Campaign identifier'),
         startDate: z.string().describe('Scheduled start date in YYYY-MM-DD format'),
         startTime: z.string().optional().default('09:00').describe('Scheduled start time in HH:MM format (UTC)'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ campaignId, startDate, startTime }) => {
-        if (CAMPAIGN_API_KEY) {
-          const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}/schedule`, {
-            method: 'POST',
-            body: JSON.stringify({ startDate, startTime }),
-          });
-          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+      async ({ campaignId, startDate, startTime, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'schedule_campaign', cid);
+        try {
+          let result: { content: Array<{ type: string; text: string }> };
+          if (CAMPAIGN_API_KEY) {
+            const data = await apiFetch(`${CAMPAIGN_API_BASE}/${encodeURIComponent(campaignId)}/schedule`, {
+              method: 'POST',
+              body: JSON.stringify({ startDate, startTime }),
+            });
+            result = { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+          } else {
+            const campaign = localStore.get(campaignId);
+            if (!campaign) {
+              result = { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
+            } else {
+              campaign.status = 'scheduled';
+              campaign.startDate = startDate;
+              campaign.updatedAt = new Date().toISOString();
+              result = {
+                content: [
+                  {
+                    type: 'text',
+                    text: `Campaign '${campaign.name}' scheduled for ${startDate} at ${startTime} UTC.`,
+                  },
+                ],
+              };
+            }
+          }
+          logMcpTool('tool_call_end', 'schedule_campaign', cid, { durationMs: Date.now() - t0 });
+          return { ...result, _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'schedule_campaign', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        const campaign = localStore.get(campaignId);
-        if (!campaign) {
-          return { content: [{ type: 'text', text: `Campaign '${campaignId}' not found.` }] };
-        }
-        campaign.status = 'scheduled';
-        campaign.startDate = startDate;
-        campaign.updatedAt = new Date().toISOString();
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Campaign '${campaign.name}' scheduled for ${startDate} at ${startTime} UTC.`,
-            },
-          ],
-        };
       }
     );
   }

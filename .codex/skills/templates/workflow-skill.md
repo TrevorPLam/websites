@@ -4,7 +4,7 @@ description: |
   **WORKFLOW SKILL TEMPLATE** - Template for creating workflow-based skills.
   USE FOR: Multi-step processes, automation workflows.
   DO NOT USE FOR: Simple single-action tasks.
-  INVOKES: [list-mcp-servers-needed].
+  INVOKES: [filesystem, fetch, github].
 meta:
   version: '1.0.0'
   author: 'your-name'
@@ -22,6 +22,7 @@ This Skill orchestrates [brief description of the workflow].
 - [List prerequisites]
 - [Required tools/credentials]
 - [Environment setup]
+- API endpoint: `api.[SERVICE_NAME].com` # REPLACE THIS
 
 ## Workflow Steps
 
@@ -73,19 +74,43 @@ OPTIONAL_VAR=default_value
 
 ## Usage Examples
 
-```bash
-# Basic usage
-skill invoke [skill-name] --param=value
+### Agent Invocation Patterns
 
-# Advanced usage
-skill invoke [skill-name] --param=value --option=advanced
+**For Claude/Windsurf:**
+
+```text
+Claude, execute the [skill-name] workflow with the following parameters:
+- param: value
+- option: advanced
 ```
+
+**For Cursor/Claude Code:**
+
+```text
+Execute skill [skill-name] with:
+--param=value
+--option=advanced
+```
+
+**Direct MCP Tool Usage:**
+
+```text
+Use the skillset MCP server to invoke [skill-name] with specified parameters.
+```
+
+## Error Handling
+
+| Step     | Error          | Recovery          | Rollback? |
+| -------- | -------------- | ----------------- | --------- |
+| [Step 1] | [Common error] | [Recovery action] | [Yes/No]  |
+| [Step 2] | [Common error] | [Recovery action] | [Yes/No]  |
+| [Step 3] | [Common error] | [Recovery action] | [Yes/No]  |
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| [Common issue] | [Solution] |
+| Issue           | Solution   |
+| --------------- | ---------- |
+| [Common issue]  | [Solution] |
 | [Another issue] | [Solution] |
 
 ## Related Skills
@@ -98,3 +123,10 @@ skill invoke [skill-name] --param=value --option=advanced
 - [Relevant documentation]
 - [API references]
 - [External resources]
+
+## Changelog
+
+| Version | Date         | Change                  |
+| ------- | ------------ | ----------------------- |
+| 1.0.0   | [YYYY-MM-DD] | Initial implementation  |
+| [Next]  | [YYYY-MM-DD] | [Description of change] |
