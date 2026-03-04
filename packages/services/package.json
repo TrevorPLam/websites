@@ -8,7 +8,9 @@
   "exports": {
     ".": "./src/index.ts",
     "./email": "./src/email/index.ts",
-    "./email/factory": "./src/email/factory.ts"
+    "./email/factory": "./src/email/factory.ts",
+    "./crm": "./src/crm/index.ts",
+    "./crm/factory": "./src/crm/factory.ts"
   },
   "scripts": {
     "type-check": "tsc --noEmit",

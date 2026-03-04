@@ -67,6 +67,7 @@ export default defineConfig({
             'packages/page-templates/**/*.test.ts',
             'packages/feature-flags/**/*.test.ts',
             'tooling/validation/**/*.test.ts',
+            'packages/services/**/*.spec.ts',
           ],
           exclude: [
             '**/node_modules/**',
