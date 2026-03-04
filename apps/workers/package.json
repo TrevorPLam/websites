@@ -1,0 +1,20 @@
+{
+  "name": "@apps/workers",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Background worker processes for the SaaS platform job queue.",
+  "scripts": {
+    "email-worker": "tsx email-worker.ts",
+    "crm-sync-worker": "tsx crm-sync-worker.ts",
+    "usage-rollup-worker": "tsx usage-rollup-worker.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/infrastructure": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}
