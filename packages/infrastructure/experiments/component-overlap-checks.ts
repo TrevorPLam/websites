@@ -177,8 +177,8 @@ export async function acquireAllSlots(
  * Release all component slots held by an experiment (e.g. when concluding).
  */
 export async function releaseAllSlots(
-  candidate: Omit<ExperimentCandidate, 'componentKeys'> & { componentKeys: string[] },
-  mutex: ExperimentMutex
+  candidate: ExperimentCandidate,
+  mutex: ExperimentMutex,
 ): Promise<void> {
   await Promise.all(
     candidate.componentKeys.map((componentKey) =>
@@ -186,7 +186,7 @@ export async function releaseAllSlots(
         componentKey,
         experimentId: candidate.experimentId,
         tenantId: candidate.tenantId,
-      })
-    )
+      }),
+    ),
   );
 }

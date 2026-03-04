@@ -19,6 +19,7 @@
  */
 
 import { z } from 'zod';
+import { createHash } from 'node:crypto';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -186,7 +187,6 @@ export class DataClassifier {
       } else if (strategy === 'mask') {
         result[key] = '[REDACTED]';
       } else if (strategy === 'hash') {
-        const { createHash } = require('node:crypto') as typeof import('node:crypto');
         result[key] = createHash('sha256')
           .update(String(value ?? ''))
           .digest('hex');

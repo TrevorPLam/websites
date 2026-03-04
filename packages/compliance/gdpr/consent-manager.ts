@@ -18,6 +18,7 @@
  */
 
 import { z } from 'zod';
+import { randomUUID } from 'node:crypto';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -144,8 +145,6 @@ export class ConsentManager {
    */
   async record(input: ConsentRecordInput): Promise<ConsentRecord> {
     const validated = ConsentRecordInputSchema.parse(input);
-    const { randomUUID } = await import('node:crypto');
-
     const record: ConsentRecord = {
       id: randomUUID(),
       ...validated,

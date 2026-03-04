@@ -43,6 +43,15 @@ function isSupportedService(value: string): value is SupportedService {
  */
 const idempotencyStore = new InMemoryIdempotencyStore();
 
+// Warn in production so that operators know to swap in a persistent store.
+if (process.env.NODE_ENV === 'production' && !process.env.WEBHOOK_IDEMPOTENCY_STORE) {
+  console.warn(
+    '[webhook] Using in-memory idempotency store. ' +
+      'Set WEBHOOK_IDEMPOTENCY_STORE=redis and configure UPSTASH_REDIS_REST_URL ' +
+      'for multi-instance production deployments.',
+  );
+}
+
 // ─── Stripe handler singleton ─────────────────────────────────────────────────
 
 function getStripeHandler(): StripeWebhookHandler {

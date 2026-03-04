@@ -16,6 +16,7 @@
  */
 
 import { z } from 'zod';
+import { createHash } from 'node:crypto';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -106,7 +107,6 @@ export class DataExport {
   }): Promise<ExportBundle> {
     const { tenantId, userId, format = 'json' } = params;
     const exportedAt = new Date().toISOString();
-    const { createHash } = await import('node:crypto');
     const userIdHash = createHash('sha256').update(userId).digest('hex');
 
     const domainResults = await Promise.allSettled(
