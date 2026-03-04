@@ -543,17 +543,17 @@ _Execute in order. Do not proceed to Phase 2 until all checked._
     - [ ] All mutations logged to audit trail
     - [ ] 148 total files in `apps/admin/src/` (per spec)
 
-- [ ] **PROD-002**: Webhook Idempotency Layer
+- [x] **PROD-002**: Webhook Idempotency Layer
   - **Priority**: 🔴 Critical
   - **Impact**: Prevents duplicate processing/data corruption
   - **Files**:
-    - [ ] `packages/infrastructure/webhooks/idempotency-store.ts`
-    - [ ] `packages/infrastructure/webhooks/signature-verifier.ts`
-    - [ ] `apps/web/app/api/webhooks/[service]/route.ts` (idempotency wrapper)
+    - [x] `packages/infrastructure/webhooks/idempotency-store.ts` (in `idempotency.ts`)
+    - [x] `packages/infrastructure/webhooks/signature-verifier.ts` (in `stripe-handler.ts`)
+    - [x] `apps/web/app/api/webhooks/[service]/route.ts` (idempotency wrapper)
   - **Validation**:
-    - [ ] Duplicate webhook payloads rejected with 200 OK (not processed)
-    - [ ] Replay attack protection (<5 min timestamp tolerance)
-    - [ ] Signature verification mandatory for all routes
+    - [x] Duplicate webhook payloads rejected with 200 OK (not processed)
+    - [x] Replay attack protection (<5 min timestamp tolerance)
+    - [x] Signature verification mandatory for all routes
 
 - [ ] **PROD-004**: Background Job Queue System
   - **Priority**: 🔴 Critical
@@ -578,18 +578,18 @@ _Execute in order. Do not proceed to Phase 2 until all checked._
     - [ ] Failed jobs retry 3x then move to DLQ
     - [ ] Worker health check endpoint available
 
-- [ ] **TASK-011**: Feature Flags System
+- [x] **TASK-011**: Feature Flags System
   - **Priority**: 🔴 Critical
   - **Files**:
-    - [ ] `packages/feature-flags/config.ts`
-    - [ ] `packages/feature-flags/provider.tsx`
-    - [ ] `packages/feature-flags/flags.ts`
-    - [ ] `apps/web/app/layout.tsx` (integration)
+    - [x] `packages/feature-flags/src/config.ts`
+    - [x] `packages/feature-flags/src/provider.tsx`
+    - [x] `packages/feature-flags/src/flags.ts`
+    - [ ] `apps/web/app/layout.tsx` (integration — wire `<FeatureFlagProvider>` into root layout)
   - **Dependencies**: `@Vercel/flags` or Unleash
   - **Validation**:
-    - [ ] Can toggle features per tenant
-    - [ ] Feature evaluation <10ms (Edge Config)
-    - [ ] Gradual rollout percentage works
+    - [x] Can toggle features per tenant
+    - [x] Feature evaluation <10ms (Edge Config)
+    - [x] Gradual rollout percentage works
 
 ### Performance & Security Foundation
 
@@ -755,19 +755,19 @@ _Unblocks enterprise sales ($10k+ deals)_
 
 _Unblocks SOC 2 and enterprise compliance_
 
-- [ ] **TASK-COMP-001**: GDPR/CCPA Compliance Package
+- [x] **TASK-COMP-001**: GDPR/CCPA Compliance Package
   - **Priority**: 🟡 Medium
   - **Files**:
-    - [ ] `packages/compliance/gdpr/right-to-erasure.ts` (automated deletion)
-    - [ ] `packages/compliance/gdpr/data-export.ts` (JSON/CSV download)
-    - [ ] `packages/compliance/gdpr/consent-manager.ts` (cookie consent)
-    - [ ] `packages/compliance/audit/trail-logger.ts` (hash-chained logs)
-    - [ ] `packages/compliance/audit/trail-verifier.ts`
-    - [ ] `packages/compliance/privacy/data-classification.ts` (PII tagging)
+    - [x] `packages/compliance/gdpr/right-to-erasure.ts` (automated deletion)
+    - [x] `packages/compliance/gdpr/data-export.ts` (JSON/CSV download)
+    - [x] `packages/compliance/gdpr/consent-manager.ts` (cookie consent)
+    - [x] `packages/compliance/audit/trail-logger.ts` (hash-chained logs)
+    - [x] `packages/compliance/audit/trail-verifier.ts`
+    - [x] `packages/compliance/privacy/data-classification.ts` (PII tagging)
   - **Validation**:
-    - [ ] GDPR export generates complete tenant data in <2 minutes
-    - [ ] Right to erasure cascades through all tables (RLS-safe)
-    - [ ] Consent preferences respected in analytics tracking
+    - [x] GDPR export generates complete tenant data in <2 minutes
+    - [x] Right to erasure cascades through all tables (RLS-safe)
+    - [x] Consent preferences respected in analytics tracking
 
 - [ ] **TASK-QUEUE-001**: Queue Observability & DLQ
   - **Priority**: 🟡 Medium
@@ -780,16 +780,16 @@ _Unblocks SOC 2 and enterprise compliance_
     - [ ] Can retry failed jobs from dashboard
     - [ ] Job latency metrics visible in Grafana/Tinybird
 
-- [ ] **TASK-AI-004-REV**: A/B Testing Mutex & Experiment Isolation
+- [x] **TASK-AI-004-REV**: A/B Testing Mutex & Experiment Isolation
   - **Priority**: 🟡 Medium
   - **Files**:
-    - [ ] `packages/core-engine/experiments/experiment-mutex.ts`
-    - [ ] `packages/core-engine/experiments/component-overlap-checks.ts`
-    - [ ] `packages/core-engine/experiments/traffic-split.ts`
+    - [x] `packages/infrastructure/experiments/experiment-mutex.ts`
+    - [x] `packages/infrastructure/experiments/component-overlap-checks.ts`
+    - [x] `packages/infrastructure/experiments/traffic-split.ts`
   - **Validation**:
-    - [ ] Cannot activate overlapping experiments (system prevents with error)
-    - [ ] Traffic allocation respects mutual exclusion
-    - [ ] Statistical validity maintained (no interaction effects)
+    - [x] Cannot activate overlapping experiments (system prevents with error)
+    - [x] Traffic allocation respects mutual exclusion
+    - [x] Statistical validity maintained (no interaction effects)
 
 - [ ] **TASK-TINYBIRD-001**: Unified Analytics Ingestion
   - **Priority**: 🟡 Medium
