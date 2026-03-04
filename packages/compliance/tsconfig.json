@@ -1,0 +1,9 @@
+{
+  "extends": "../config/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "noEmit": true
+  },
+  "include": ["src/**/*", "gdpr/**/*", "audit/**/*", "privacy/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@repo/compliance",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GDPR/CCPA compliance utilities: right-to-erasure, data export, consent management, tamper-evident audit trail, and PII data classification.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./gdpr": "./gdpr/index.ts",
+    "./audit": "./audit/index.ts",
+    "./privacy": "./privacy/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src gdpr audit privacy",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "eslint": "catalog:"
+  }
+}

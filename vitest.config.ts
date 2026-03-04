@@ -68,6 +68,7 @@ export default defineConfig({
             'packages/feature-flags/**/*.test.ts',
             'tooling/validation/**/*.test.ts',
             'packages/services/**/*.spec.ts',
+            'packages/compliance/**/__tests__/**/*.test.ts',
           ],
           exclude: [
             '**/node_modules/**',
