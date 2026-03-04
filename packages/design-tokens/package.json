@@ -10,10 +10,12 @@
   },
   "scripts": {
     "build": "tsc --noEmit",
-    "generate": "node ../../scripts/generate-design-tokens.mjs"
+    "generate": "node ../../scripts/generate-design-tokens.mjs",
+    "build:tokens": "style-dictionary build --config ../../sd.config.js"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "style-dictionary": "^4.3.0",
     "typescript": "catalog:"
   }
 }

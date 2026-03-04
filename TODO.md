@@ -1,13 +1,17 @@
+<!-- markdownlint-disable MD043 -->
+
 **AI-Native SaaS Platform: Executable Task Checklist**
-*Target: 1,124 Files | 1,000+ Tenants | Sub-100ms Loads*
+_Target: 1,124 Files | 1,000+ Tenants | Sub-100ms Loads_
 
 ---
 
 ## 🎯 PHASE MCP: Perfecting MCP + Skills System
-*Complete prioritized game plan based on verified repository findings and 2026 enterprise best practices*
+
+_Complete prioritized game plan based on verified repository findings and 2026 enterprise best practices_
 
 ### PHASE 0 — EMERGENCY TRIAGE (Day 1, ~2 hours)
-*Fix the three blockers that make everything else non-functional*
+
+_Fix the three blockers that make everything else non-functional_
 
 - [x] **0-A: Fix All Path Mismatches**
   - **Priority**: 🔴 Critical
@@ -26,7 +30,7 @@
   - **Effort**: 30 min
   - **Issue**: CI never fires because `on.push.paths` filters don't match actual file locations
   - **Files**:
-    - [ ] `.github/workflows/mcp-skills-validation.yml`
+    - [ ] `.GitHub/workflows/mcp-skills-validation.yml`
   - **Changes**:
     - [ ] Update `on.push.paths`:
       - `'skills/**'` (was: `.claude/skills/**`)
@@ -54,18 +58,21 @@
 ---
 
 ### PHASE 1 — STRUCTURAL INTEGRITY (Days 2–4, ~8 hours)
-*Make the existing system actually work end-to-end*
 
-- [x] **1-A: Register agents/* in pnpm workspace**
+_Make the existing system actually work end-to-end_
+
+- [x] **1-A: Register agents/\* in pnpm workspace**
   - **Priority**: 🔴 Critical
   - **Effort**: 1 hour
   - **Issue**: 5 agent packages are invisible to Turborepo
   - **Files**:
     - [ ] `pnpm-workspace.yaml` (add `'agents/*'` and `'mcp/servers'`)
   - **Commands**:
+
     ```bash
     pnpm install # wire dependency graph
     ```
+
   - **Validation**:
     - [ ] `agents/*` packages recognized in dependency graph
     - [ ] Cross-package imports resolve (`@repo/agent-core` etc.)
@@ -115,7 +122,7 @@
     - Marketing skills invoke non-existent tools (`analytics`, `content-management`, `seo-tools`, `campaign-automation`)
   - **Files**:
     - [x] `mcp/config/config.json` (registered `secure-deployment` → `secure-deployment-manager.ts`)
-    - [x] `skills/domain/marketing/SKILL.md` (rewrote to use existing servers: fetch, filesystem, github, knowledge-graph)
+    - [x] `skills/domain/marketing/SKILL.md` (rewrote to use existing servers: fetch, filesystem, GitHub, knowledge-graph)
   - **Subtasks**:
     - [x] Option B (Recommended): Rewrite marketing SKILL.md to use existing servers (filesystem + fetch)
     - [x] Ensure `secure-deployment` maps to `secure-deployment-manager.ts`
@@ -125,7 +132,8 @@
   - **Effort**: 30 min
   - **Issue**: `mcp/servers/src/index.ts` contained a dead `main()` CLI entry point duplicating standalone server files
   - **Files**:
-    - [x] `mcp/servers/src/index.ts` — removed `main()` and `if (import.meta.url ...)` block; exported classes kept (consumed by `mcp/apps`)
+    - [x] `mcp/servers/src/index.ts` — removed `main()` and `if (import.meta.url ...)` block;
+          exported classes kept (consumed by `mcp/apps`)
   - **Validation**:
     - [x] No dead code remaining
     - [x] All existing imports still resolve (`mcp/apps/src/index.ts` uses exported classes)
@@ -143,13 +151,15 @@
 ---
 
 ### PHASE 2 — HARDEN THE AGENT LAYER (Days 5–7, ~10 hours)
-*Elevate stubs to production-grade implementations*
+
+_Elevate stubs to production-grade implementations_
 
 - [x] **2-A: Replace Math.random() Stubs in advanced-agent-plugins**
   - **Priority**: 🔴 High
   - **Effort**: 2 hours
   - **Files**:
-    - [x] `agents/orchestration/src/parallel-orchestrator.ts` (replaced random processingTime and random success; renamed `simulateAgentExecution` → `executeAgentStep`)
+    - [x] `agents/orchestration/src/parallel-orchestrator.ts` (replaced random processingTime and
+          random success; renamed `simulateAgentExecution` → `executeAgentStep`)
     - [x] `agents/orchestration/src/index.ts` (generateId → crypto.randomUUID())
     - [x] `agents/memory/src/index.ts` (removed simulated delay)
   - **Changes**:
@@ -186,7 +196,8 @@
       - `prompt-injection`: checks `userInputs`/`userInput` fields against known injection phrases
       - `data-exfiltration`: checks `dataSize` (>10MB) and `dataClassification` + `outputDestinations`
       - `anomalous-behavior`: checks `toolCount`, `recentFailures`, `hourOfDay` fields directly
-    - [x] Removed redundant `analyzeToolSwitching()` and `analyzeFailures()` stubs (now handled in `anomalous-behavior` case)
+    - [x] Removed redundant `analyzeToolSwitching()` and `analyzeFailures()` stubs
+          (now handled in `anomalous-behavior` case)
     - [x] Added `ThreatPattern` interface to remove `any` from `threatPatterns` Map
   - **Validation**:
     - [x] Targeted checks reduce false positives (no more JSON.stringify matching property names)
@@ -229,7 +240,8 @@
 ---
 
 ### PHASE 3 — GATEWAY + OBSERVABILITY (Days 8–10, ~8 hours)
-*Implement enterprise-grade control plane*
+
+_Implement enterprise-grade control plane_
 
 - [x] **3-A: Implement MCP Gateway Pattern**
   - **Priority**: 🟡 High
@@ -264,7 +276,10 @@
     - [x] Generate `crypto.randomUUID()` if `_correlationId` not present in params
     - [x] Log `tool_call_start` and `tool_call_end` with correlation ID and duration
     - [x] Return `_correlationId` in response for chaining
-    - [x] Apply inline correlation instrumentation to all McpServer tool handlers (marketing-analytics, content-management, seo-tools, campaign-automation); `logMcpTool` and `resolveCorrelationId` exported from `mcp/servers/src/shared/middleware.ts`
+    - [x] Apply inline correlation instrumentation to all McpServer tool handlers
+          (marketing-analytics, content-management, seo-tools, campaign-automation);
+          `logMcpTool` and `resolveCorrelationId` exported from
+          `mcp/servers/src/shared/middleware.ts`
   - **Validation**:
     - [x] Chain of 3+ tool calls carries same correlation ID
     - [x] Logs queryable by correlation ID
@@ -294,14 +309,17 @@
   - **Files**:
     - [x] `.cursorrules`
   - **Add Section**:
+
     ```markdown
     ## Multi-Agent Orchestration (MANDATORY)
+
     - Coordinate with other agents via A2A Protocol (JSON-RPC + SSE)
     - Load MCP server config from `mcp/config/config.json`
     - Every agent action requires a correlation ID
     - High-risk actions (deploy, schema change) require approval gate
     - Use @repo/agent-core for context management
     ```
+
   - **Validation**:
     - [x] AI agents follow multi-agent protocols
     - [x] Correlation IDs present in generated code
@@ -309,14 +327,16 @@
 ---
 
 ### PHASE 4 — SKILLS ARCHITECTURE UPGRADE (Days 11–14, ~8 hours)
-*Implement progressive disclosure + composable skills*
+
+_Implement progressive disclosure + composable skills_
 
 - [x] **4-A: Implement Three-Tier Progressive Disclosure**
   - **Priority**: 🟡 Medium
   - **Effort**: 4 hours
   - **Issue**: Skills load everything at once, high token cost
   - **Restructure Each Skill Folder**:
-    ```
+
+    ```text
     skills/
       domain/
         deploy-production/
@@ -326,11 +346,13 @@
           scripts/           # Tier 3: executables
           references/        # Tier 3: supporting docs
     ```
+
   - **Files to Update**:
     - [x] All existing `SKILL.md` files (move detailed content to `instructions/full.md`)
     - [x] Create `skills/[skill]/instructions/` directories
     - [x] Create `skills/[skill]/references/` directories (scripts/ skipped — no executables yet)
   - **Tier 1 SKILL.md Template**:
+
     ```yaml
     ---
     name: deploy-production
@@ -340,6 +362,7 @@
     tier3: scripts/
     ---
     ```
+
   - **Validation**:
     - [x] Agent startup token cost reduced by 60%+ (tier 1 is frontmatter only)
     - [x] Tier 2/3 content loaded only when referenced via `get_skill_instructions`
@@ -351,7 +374,7 @@
   - **Issue**: Four marketing tools broken (analytics, content-management, seo-tools, campaign-automation)
   - **Implementation** (Option B - wrap existing):
     - [x] **marketing-analytics.ts**: Wrap `fetch` server + structured data parsing (Tinybird/GA4)
-    - [x] **content-management.ts**: Wrap `github` server (content as code via filesystem + git)
+    - [x] **content-management.ts**: Wrap `GitHub` server (content as code via filesystem + git)
     - [x] **seo-tools.ts**: Wrap `fetch` server + SEO API endpoints
     - [x] **campaign-automation.ts**: Wrap `fetch` server + campaign platform APIs
   - **Files**:
@@ -367,19 +390,20 @@
   - **Effort**: 1 hour
   - **Replace**: Broken `.claude/skills/` validation
   - **Files**:
-    - [x] `.github/workflows/mcp-skills-validation.yml` (fixed version)
+    - [x] `.GitHub/workflows/mcp-skills-validation.yml` (fixed version)
   - **Implementation**:
+
     ```bash
     # Validation script
     for skill_dir in skills/*/; do
       skill_name=$(basename "$skill_dir")
       skill_md="$skill_dir/SKILL.md"
-      
+
       # Verify YAML frontmatter
       if ! head -1 "$skill_md" | grep -q "^---"; then
         echo "❌ $skill_name: Missing YAML frontmatter"; exit 1
       fi
-      
+
       # Cross-reference MCP tools with config
       if grep -q "INVOKES:" "$skill_md"; then
         while IFS= read -r tool; do
@@ -388,10 +412,11 @@
           fi
         done < <(grep "INVOKES:" "$skill_md" | grep -oP '\w[\w-]+')
       fi
-      
+
       echo "✅ $skill_name validated"
     done
     ```
+
   - **Validation**:
     - [x] CI catches broken skill-to-tool references pre-merge
     - [x] YAML frontmatter validated
@@ -440,7 +465,8 @@
 ---
 
 ## 🚨 Phase 1: Critical Production Blockers (P0)
-*Execute in order. Do not proceed to Phase 2 until all checked.*
+
+_Execute in order. Do not proceed to Phase 2 until all checked._
 
 ### Infrastructure & Tooling
 
@@ -451,9 +477,11 @@
     - [x] `pnpm-workspace.yaml` (add catalog definitions)
     - [x] Root `package.json` (migrate to catalog: references)
   - **Commands**:
+
     ```bash
     grep -q "catalog:" pnpm-workspace.yaml 2>/dev/null && echo "✅" || echo "🔴 MISSING"
     ```
+
   - **Validation**:
     - [x] All dependencies use `catalog:` protocol
     - [ ] Renovate bot recognizes catalog updates
@@ -466,9 +494,11 @@
     - [x] `turbo/generators/fsd-slice/generator.ts`
     - [x] `turbo/generators/fsd-slice/templates/` (component, test, story files)
   - **Commands**:
+
     ```bash
     pnpm turbo gen fsd-slice --name design-system
     ```
+
   - **Validation**:
     - [x] Generator creates 15+ files with correct FSD structure (all 4 layers × source + test + story)
     - [x] Templates include `@x` notation placeholders
@@ -489,6 +519,7 @@
     - [x] Require Hexagonal Port interfaces for external services
 
 ### Core Platform (Blocking All Other Work)
+
 - [ ] **PROD-006**: Admin Dashboard Application
   - **Priority**: 🔴 Critical
   - **Impact**: Safe data operations without raw SQL; tenant management
@@ -554,13 +585,14 @@
     - [ ] `packages/feature-flags/provider.tsx`
     - [ ] `packages/feature-flags/flags.ts`
     - [ ] `apps/web/app/layout.tsx` (integration)
-  - **Dependencies**: `@vercel/flags` or Unleash
+  - **Dependencies**: `@Vercel/flags` or Unleash
   - **Validation**:
     - [ ] Can toggle features per tenant
     - [ ] Feature evaluation <10ms (Edge Config)
     - [ ] Gradual rollout percentage works
 
 ### Performance & Security Foundation
+
 - [ ] **PERF-001**: Core Web Vitals Optimization
   - **Priority**: 🔴 Critical
   - **Target**: LCP < 2.5s, INP < 200ms, CLS < 0.1
@@ -610,6 +642,7 @@
     - [ ] Security headers A+ rating on securityheaders.com
 
 ### CMS & Content (The "Infinite UI" Foundation)
+
 - [ ] **TASK-020**: Page Builder Core & CMS Foundation
   - **Priority**: 🔴 Critical
   - **Impact**: JSON-driven rendering engine; key differentiator
@@ -649,7 +682,8 @@
 ---
 
 ## 🏗️ Phase 2: Enterprise Architecture (P1)
-*Unblocks enterprise sales ($10k+ deals)*
+
+_Unblocks enterprise sales ($10k+ deals)_
 
 - [ ] **TASK-034**: Complete apps/admin FSD Structure
   - **Target**: 148 files
@@ -666,40 +700,43 @@
     - [ ] White-label customization UI
     - [ ] Lead management interface
 
-- [ ] **TASK-DS-001**: Design Tokens & Style Dictionary
+- [x] **TASK-DS-001**: Design Tokens & Style Dictionary
   - **Priority**: 🟡 High
   - **Files**:
-    - [ ] `sd.config.js` (Style Dictionary config)
-    - [ ] `packages/design-tokens/tokens.ts` (source of truth)
-    - [ ] `packages/design-tokens/puck-theme.ts` (Puck integration)
+    - [x] `sd.config.js` (Style Dictionary config)
+    - [x] `packages/design-tokens/tokens.ts` (source of truth)
+    - [x] `packages/design-tokens/puck-theme.ts` (Puck integration)
     - [ ] Figma sync pipeline (optional)
   - **Validation**:
-    - [ ] Change primary color in `tokens.ts` → all apps update without code changes
-    - [ ] Tokens available as CSS variables and JS constants
-    - [ ] Dark mode tokens defined
+    - [x] Change primary color in `tokens.ts` → all apps update without code changes
+    - [x] Tokens available as CSS variables and JS constants (`pnpm build:tokens`)
+    - [x] Dark mode tokens defined (`packages/design-tokens/tokens/tokens.json` → `color.dark.*`)
 
-- [ ] **TASK-SVC-001**: Hexagonal Service Ports
+- [x] **TASK-SVC-001**: Hexagonal Service Ports
   - **Priority**: 🟡 High
   - **Files**:
-    - [ ] `packages/services/config/ports/email.port.ts` (interface)
-    - [ ] `packages/services/config/ports/crm.port.ts`
-    - [ ] `packages/services/config/ports/analytics.port.ts`
-    - [ ] `packages/services/config/ports/payments.port.ts`
+    - [x] `packages/config/ports/src/email.port.ts` (interface)
+    - [x] `packages/config/ports/src/crm.port.ts`
+    - [x] `packages/config/ports/src/analytics.port.ts`
+    - [x] `packages/config/ports/src/payments.port.ts`
+    - [x] `packages/services/src/crm/adapters/in-memory.adapter.ts`
+    - [x] `packages/services/src/crm/factory.ts`
   - **Subtasks**:
-    - [ ] Define Port interfaces (contracts only, no implementation)
-    - [ ] Map current direct integrations to Ports
+    - [x] Define Port interfaces (contracts only, no implementation)
+    - [x] Map current direct integrations to Ports
   - **Validation**:
-    - [ ] Business logic imports only from `config/ports/`, never from adapters
+    - [x] Business logic imports only from `config/ports/`, never from adapters
 
-- [ ] **TASK-SVC-002-REV**: Contract Testing Implementation
+- [x] **TASK-SVC-002-REV**: Contract Testing Implementation
   - **Priority**: 🟡 High
   - **Files**:
-    - [ ] `packages/services/tests/contracts/email-service.contract.ts`
-    - [ ] `packages/services/tests/contracts/contract-runner.ts`
-    - [ ] `tests/contracts/crm-service.contract.ts`
+    - [x] `packages/services/src/tests/contracts/email-service.contract.ts`
+    - [x] `packages/services/src/tests/contracts/contract-runner.ts`
+    - [x] `packages/services/src/tests/contracts/crm-service.contract.ts`
+    - [x] `packages/services/src/crm/adapters/tests/in-memory.contract.spec.ts`
   - **Validation**:
-    - [ ] Swap Resend → Native adapter, all tests pass without modification
-    - [ ] CI runs contract tests on PR
+    - [x] Swap Resend → Native adapter, all tests pass without modification
+    - [x] CI runs contract tests on PR (`packages/services/**/*.spec.ts` added to vitest config)
 
 - [ ] **TASK-UI-003**: Puck Version History & Rollback
   - **Priority**: 🟡 High
@@ -715,7 +752,8 @@
 ---
 
 ## 🛡️ Phase 3: SaaS Hardening (P2)
-*Unblocks SOC 2 and enterprise compliance*
+
+_Unblocks SOC 2 and enterprise compliance_
 
 - [ ] **TASK-COMP-001**: GDPR/CCPA Compliance Package
   - **Priority**: 🟡 Medium
@@ -767,7 +805,8 @@
 ---
 
 ## 🤖 Phase 4: AI-Native & Scale (P3)
-*Force multipliers and 1,124 file target*
+
+_Force multipliers and 1,124 file target_
 
 - [ ] **TASK-AI-003**: AI-to-JSON Layout Generation Pipeline
   - **Priority**: 🟢 Enhancement
@@ -797,9 +836,11 @@
   - **Priority**: 🟢 Enhancement
   - **Current**: ~593 (apps/web) + gaps in admin/portal
   - **Commands**:
+
     ```bash
     pnpm tsx scripts/verify-file-count.ts
     ```
+
   - **Breakdown**:
     - [ ] `apps/web`: 312 files (✅ likely complete)
     - [ ] `apps/admin`: 148 files (scaffold remaining)
@@ -823,6 +864,7 @@
 ## 🔧 Daily Execution Commands
 
 **Start of Day Validation:**
+
 ```bash
 # 1. Environment Check
 pnpm verify  # TASK-DEV-001 validation
@@ -839,12 +881,14 @@ pnpm run size-limit  # Bundle budgets
 ```
 
 **File Count Tracking:**
+
 ```bash
 find apps web admin portal -type f | wc -l  # Should trend toward 660
 find packages -type f | wc -l  # Should trend toward 464
 ```
 
 **Dependency Resolution Order:**
+
 1. **Foundation**: TASK-CATALOG-001 → TASK-GEN-001 → TASK-RULES-001
 2. **Core**: PROD-006 (Admin) → PROD-002 (Webhooks) → PROD-004 (Queues)
 3. **CMS**: TASK-PUCK-001 → TASK-020 → TASK-UI-003 (Versioning)
