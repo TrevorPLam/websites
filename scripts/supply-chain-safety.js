@@ -12,9 +12,9 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const SKILLS_DIR = '.claude/skills';
-const TRUSTED_MANIFEST = '.mcp/trusted-manifest.json';
-const SAFETY_REPORT = '.mcp/supply-chain-safety.json';
+const SKILLS_DIR = 'skills';
+const TRUSTED_MANIFEST = 'mcp/trusted-manifest.json';
+const SAFETY_REPORT = 'mcp/supply-chain-safety.json';
 
 function loadTrustedManifest() {
   if (fs.existsSync(TRUSTED_MANIFEST)) {

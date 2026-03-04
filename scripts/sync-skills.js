@@ -11,7 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SKILLS_DIR = '.claude/skills';
+const SKILLS_DIR = 'skills';
 const TARGETS = [
   { name: 'windsurf', path: '.windsurf/skills' },
   { name: 'codex', path: '.codex/skills' },

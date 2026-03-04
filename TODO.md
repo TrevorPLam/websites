@@ -236,63 +236,63 @@
   - **Effort**: 3 hours
   - **Issue**: `enterprise-security-gateway.ts` does auth but not unified traffic routing
   - **Files**:
-    - [ ] `mcp/gateway/src/index.ts` (new)
-    - [ ] `mcp/config/config.json` (register gateway)
+    - [x] `mcp/gateway/src/index.ts` (new)
+    - [x] `mcp/config/config.json` (register gateway)
   - **Implementation**:
-    - [ ] Create `MCPGateway` class with `routeRequest(req)` method
-    - [ ] Implement OpenTelemetry tracing spans with attributes:
+    - [x] Create `MCPGateway` class with `routeRequest(req)` method
+    - [x] Implement OpenTelemetry tracing spans with attributes:
       - `mcp.server`, `mcp.tool`, `mcp.correlation_id`, `tenant.id`
-    - [ ] Implement middleware pipeline:
-      1. [ ] Auth validation
-      2. [ ] Rate limit check
-      3. [ ] Policy enforcement
-      4. [ ] Route to target server
-      5. [ ] Audit logging
+    - [x] Implement middleware pipeline:
+      1. [x] Auth validation
+      2. [x] Rate limit check
+      3. [x] Policy enforcement
+      4. [x] Route to target server
+      5. [x] Audit logging
   - **Validation**:
-    - [ ] All MCP traffic routes through gateway
-    - [ ] Spans visible in tracing dashboard
-    - [ ] Failed auth rejected before reaching target server
+    - [x] All MCP traffic routes through gateway
+    - [x] Spans visible in tracing dashboard
+    - [x] Failed auth rejected before reaching target server
 
 - [x] **3-B: Add Correlation IDs Across All Servers**
   - **Priority**: 🟡 High
   - **Effort**: 2 hours
   - **Files**:
-    - [ ] `mcp/servers/src/shared/middleware.ts` (new)
-    - [ ] All server files in `mcp/servers/src/`
+    - [x] `mcp/servers/src/shared/middleware.ts` (new)
+    - [x] All server files in `mcp/servers/src/`
   - **Implementation**:
-    - [ ] Create `withCorrelation(handler)` wrapper
-    - [ ] Generate `crypto.randomUUID()` if `_correlationId` not present in params
-    - [ ] Log `tool_call_start` and `tool_call_end` with correlation ID and duration
-    - [ ] Return `_correlationId` in response for chaining
-    - [ ] Apply wrapper to all tool handlers
+    - [x] Create `withCorrelation(handler)` wrapper
+    - [x] Generate `crypto.randomUUID()` if `_correlationId` not present in params
+    - [x] Log `tool_call_start` and `tool_call_end` with correlation ID and duration
+    - [x] Return `_correlationId` in response for chaining
+    - [x] Apply inline correlation instrumentation to all McpServer tool handlers (marketing-analytics, content-management, seo-tools, campaign-automation); `logMcpTool` and `resolveCorrelationId` exported from `mcp/servers/src/shared/middleware.ts`
   - **Validation**:
-    - [ ] Chain of 3+ tool calls carries same correlation ID
-    - [ ] Logs queryable by correlation ID
-    - [ ] Duration metrics accurate
+    - [x] Chain of 3+ tool calls carries same correlation ID
+    - [x] Logs queryable by correlation ID
+    - [x] Duration metrics accurate
 
 - [x] **3-C: Add Human Approval Gates for High-Impact Tools**
   - **Priority**: 🟡 High
   - **Effort**: 2 hours
   - **Scope**: Write operations (deploy, delete, schema changes)
   - **Files**:
-    - [ ] `mcp/servers/src/secure-deployment-manager.ts`
-    - [ ] `mcp/gateway/src/approval-gate.ts` (new)
+    - [x] `mcp/servers/src/secure-deployment-manager.ts`
+    - [x] `mcp/gateway/src/approval-gate.ts` (new)
   - **Implementation**:
-    - [ ] Check `action.riskLevel === 'HIGH'`
-    - [ ] Call `this.approvalGate.request()` with timeout (5 min)
-    - [ ] Throw error if approval rejected or timeout
-    - [ ] Add audit log entry for approval/rejection
+    - [x] Check `action.riskLevel === 'HIGH'`
+    - [x] Call `this.approvalGate.request()` with timeout (5 min)
+    - [x] Throw error if approval rejected or timeout
+    - [x] Add audit log entry for approval/rejection
   - **Validation**:
-    - [ ] High-risk actions pause for approval
-    - [ ] Timeout handling works (fails safe)
-    - [ ] Audit trail records approver identity
+    - [x] High-risk actions pause for approval
+    - [x] Timeout handling works (fails safe)
+    - [x] Audit trail records approver identity
 
 - [x] **3-D: Fix .cursorrules Multi-Agent Gap**
   - **Priority**: 🟡 Medium
   - **Effort**: 30 min
   - **Issue**: `.cursorrules` lacks multi-agent instructions present in `.windsurfrules`
   - **Files**:
-    - [ ] `.cursorrules`
+    - [x] `.cursorrules`
   - **Add Section**:
     ```markdown
     ## Multi-Agent Orchestration (MANDATORY)
@@ -303,8 +303,8 @@
     - Use @repo/agent-core for context management
     ```
   - **Validation**:
-    - [ ] AI agents follow multi-agent protocols
-    - [ ] Correlation IDs present in generated code
+    - [x] AI agents follow multi-agent protocols
+    - [x] Correlation IDs present in generated code
 
 ---
 
@@ -367,7 +367,7 @@
   - **Effort**: 1 hour
   - **Replace**: Broken `.claude/skills/` validation
   - **Files**:
-    - [ ] `.github/workflows/mcp-skills-validation.yml` (fixed version)
+    - [x] `.github/workflows/mcp-skills-validation.yml` (fixed version)
   - **Implementation**:
     ```bash
     # Validation script
@@ -393,9 +393,9 @@
     done
     ```
   - **Validation**:
-    - [ ] CI catches broken skill-to-tool references pre-merge
-    - [ ] YAML frontmatter validated
-    - [ ] All skills pass before allowed to merge
+    - [x] CI catches broken skill-to-tool references pre-merge
+    - [x] YAML frontmatter validated
+    - [x] All skills pass before allowed to merge
 
 ---
 

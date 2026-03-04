@@ -12,9 +12,9 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const SKILLS_DIR = '.claude/skills';
-const MCP_CONFIG = '.mcp/config.json';
-const SECURITY_REPORT = '.mcp/security-audit.json';
+const SKILLS_DIR = 'skills';
+const MCP_CONFIG = 'mcp/config/config.json';
+const SECURITY_REPORT = 'mcp/security-audit.json';
 
 function calculateFileHash(filePath) {
   try {

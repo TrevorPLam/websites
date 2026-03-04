@@ -11,6 +11,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
+import { logMcpTool, resolveCorrelationId } from './shared/middleware.js';
 
 const SEO_API_BASE = process.env.SEO_API_BASE_URL ?? 'https://api.example.com/seo';
 const SEO_API_KEY = process.env.SEO_API_KEY ?? '';
@@ -70,21 +71,33 @@ export class SeoToolsServer {
           .enum(['shallow', 'full'])
           .default('shallow')
           .describe('Audit depth: shallow = meta/headers only; full = crawl + content analysis'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ siteUrl, depth }) => {
-        if (!SEO_API_KEY) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'SEO_API_KEY is not configured. Set it in your environment to enable SEO audits.',
-              },
-            ],
-          };
+      async ({ siteUrl, depth, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'audit_site_seo', cid);
+        try {
+          if (!SEO_API_KEY) {
+            logMcpTool('tool_call_end', 'audit_site_seo', cid, { durationMs: Date.now() - t0 });
+            return {
+              content: [
+                {
+                  type: 'text',
+                  text: 'SEO_API_KEY is not configured. Set it in your environment to enable SEO audits.',
+                },
+              ],
+              _correlationId: cid,
+            };
+          }
+          const url = `${SEO_API_BASE}/audit?site=${encodeURIComponent(siteUrl)}&depth=${depth}`;
+          const data = await apiFetch(url, SEO_API_KEY);
+          logMcpTool('tool_call_end', 'audit_site_seo', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'audit_site_seo', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        const url = `${SEO_API_BASE}/audit?site=${encodeURIComponent(siteUrl)}&depth=${depth}`;
-        const data = await apiFetch(url, SEO_API_KEY);
-        return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
       }
     );
 
@@ -94,48 +107,60 @@ export class SeoToolsServer {
       'Fetch a page and validate its meta tags (title, description, OG, canonical).',
       {
         pageUrl: z.string().url().describe('URL of the page to inspect'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ pageUrl }) => {
-        // Fetch the page HTML directly (no API key required)
-        const res = await fetch(pageUrl, {
-          headers: { 'User-Agent': 'SEO-Tools-MCP/1.0 (meta-tag-checker)' },
-        });
-        if (!res.ok) {
-          return {
-            content: [{ type: 'text', text: `Failed to fetch ${pageUrl}: HTTP ${res.status}` }],
+      async ({ pageUrl, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'check_meta_tags', cid);
+        try {
+          // Fetch the page HTML directly (no API key required)
+          const res = await fetch(pageUrl, {
+            headers: { 'User-Agent': 'SEO-Tools-MCP/1.0 (meta-tag-checker)' },
+          });
+          if (!res.ok) {
+            logMcpTool('tool_call_end', 'check_meta_tags', cid, { durationMs: Date.now() - t0 });
+            return {
+              content: [{ type: 'text', text: `Failed to fetch ${pageUrl}: HTTP ${res.status}` }],
+              _correlationId: cid,
+            };
+          }
+          const html = await res.text();
+
+          // Extract relevant tags using the helper
+          const extract = (re: RegExp): string => re.exec(html)?.[1]?.trim() ?? '';
+
+          const title = extract(/<title>([^<]*)<\/title>/i);
+          const description = extractMetaContent(html, 'description');
+          const ogTitle = extractMetaContent(html, 'og:title');
+          const ogDescription = extractMetaContent(html, 'og:description');
+          const canonical = extract(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']*)["']/i);
+
+          const report = {
+            url: pageUrl,
+            title: title || null,
+            titleLength: title.length,
+            description: description || null,
+            descriptionLength: description.length,
+            ogTitle: ogTitle || null,
+            ogDescription: ogDescription || null,
+            canonical: canonical || null,
+            issues: [] as string[],
           };
+
+          if (!title) report.issues.push('Missing <title> tag');
+          if (title.length > 60) report.issues.push(`Title too long (${title.length} chars; recommend ≤60)`);
+          if (!description) report.issues.push('Missing meta description');
+          if (description.length > 160)
+            report.issues.push(`Meta description too long (${description.length} chars; recommend ≤160)`);
+          if (!canonical) report.issues.push('Missing canonical link');
+
+          logMcpTool('tool_call_end', 'check_meta_tags', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: JSON.stringify(report, null, 2) }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'check_meta_tags', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        const html = await res.text();
-
-        // Extract relevant tags using the helper
-        const extract = (re: RegExp): string => re.exec(html)?.[1]?.trim() ?? '';
-
-        const title = extract(/<title>([^<]*)<\/title>/i);
-        const description = extractMetaContent(html, 'description');
-        const ogTitle = extractMetaContent(html, 'og:title');
-        const ogDescription = extractMetaContent(html, 'og:description');
-        const canonical = extract(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']*)["']/i);
-
-        const report = {
-          url: pageUrl,
-          title: title || null,
-          titleLength: title.length,
-          description: description || null,
-          descriptionLength: description.length,
-          ogTitle: ogTitle || null,
-          ogDescription: ogDescription || null,
-          canonical: canonical || null,
-          issues: [] as string[],
-        };
-
-        if (!title) report.issues.push('Missing <title> tag');
-        if (title.length > 60) report.issues.push(`Title too long (${title.length} chars; recommend ≤60)`);
-        if (!description) report.issues.push('Missing meta description');
-        if (description.length > 160)
-          report.issues.push(`Meta description too long (${description.length} chars; recommend ≤160)`);
-        if (!canonical) report.issues.push('Missing canonical link');
-
-        return { content: [{ type: 'text', text: JSON.stringify(report, null, 2) }] };
       }
     );
 
@@ -148,37 +173,44 @@ export class SeoToolsServer {
         query: z.string().optional().describe('Filter by specific keyword query (optional)'),
         startDate: z.string().describe('Start date in YYYY-MM-DD format'),
         endDate: z.string().describe('End date in YYYY-MM-DD format'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ siteUrl, query, startDate, endDate }) => {
-        if (!GSC_TOKEN) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'GOOGLE_SEARCH_CONSOLE_TOKEN is not configured.',
-              },
-            ],
+      async ({ siteUrl, query, startDate, endDate, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'get_search_rankings', cid);
+        try {
+          if (!GSC_TOKEN) {
+            logMcpTool('tool_call_end', 'get_search_rankings', cid, { durationMs: Date.now() - t0 });
+            return {
+              content: [{ type: 'text', text: 'GOOGLE_SEARCH_CONSOLE_TOKEN is not configured.' }],
+              _correlationId: cid,
+            };
+          }
+
+          const body: Record<string, unknown> = {
+            startDate,
+            endDate,
+            dimensions: ['query', 'page'],
+            rowLimit: 100,
           };
-        }
+          if (query) {
+            body.dimensionFilterGroups = [
+              { filters: [{ dimension: 'query', operator: 'contains', expression: query }] },
+            ];
+          }
 
-        const body: Record<string, unknown> = {
-          startDate,
-          endDate,
-          dimensions: ['query', 'page'],
-          rowLimit: 100,
-        };
-        if (query) {
-          body.dimensionFilterGroups = [
-            { filters: [{ dimension: 'query', operator: 'contains', expression: query }] },
-          ];
+          const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`;
+          const data = await apiFetch(url, GSC_TOKEN, {
+            method: 'POST',
+            body: JSON.stringify(body),
+          });
+          logMcpTool('tool_call_end', 'get_search_rankings', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'get_search_rankings', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-
-        const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`;
-        const data = await apiFetch(url, GSC_TOKEN, {
-          method: 'POST',
-          body: JSON.stringify(body),
-        });
-        return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
       }
     );
 
@@ -189,21 +221,28 @@ export class SeoToolsServer {
       {
         siteUrl: z.string().url().describe('Public site URL'),
         includeImages: z.boolean().optional().default(false).describe('Include image sitemap entries'),
+        _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ siteUrl, includeImages }) => {
-        if (!SEO_API_KEY) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: 'SEO_API_KEY is not configured. Set it to enable sitemap generation.',
-              },
-            ],
-          };
+      async ({ siteUrl, includeImages, _correlationId, ...rest }) => {
+        const cid = resolveCorrelationId({ _correlationId, ...rest });
+        const t0 = Date.now();
+        logMcpTool('tool_call_start', 'generate_sitemap', cid);
+        try {
+          if (!SEO_API_KEY) {
+            logMcpTool('tool_call_end', 'generate_sitemap', cid, { durationMs: Date.now() - t0 });
+            return {
+              content: [{ type: 'text', text: 'SEO_API_KEY is not configured. Set it to enable sitemap generation.' }],
+              _correlationId: cid,
+            };
+          }
+          const url = `${SEO_API_BASE}/sitemap?site=${encodeURIComponent(siteUrl)}&include_images=${includeImages}`;
+          const data = await apiFetch(url, SEO_API_KEY);
+          logMcpTool('tool_call_end', 'generate_sitemap', cid, { durationMs: Date.now() - t0 });
+          return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }], _correlationId: cid };
+        } catch (err) {
+          logMcpTool('tool_call_end', 'generate_sitemap', cid, { durationMs: Date.now() - t0, isError: true, error: err instanceof Error ? err.message : String(err) });
+          throw err;
         }
-        const url = `${SEO_API_BASE}/sitemap?site=${encodeURIComponent(siteUrl)}&include_images=${includeImages}`;
-        const data = await apiFetch(url, SEO_API_KEY);
-        return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
       }
     );
   }
