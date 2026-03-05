@@ -23,7 +23,7 @@
     "setup": "npx tsx scripts/setup-dev.ts",
     "verify": "npx tsx scripts/verify-env.ts",
     "verify:catalogs": "npx tsx scripts/verify-catalogs.ts",
-    "validate:skills": "echo 'Skill validation not yet implemented' && exit 0",
+    "validate:skills": "npx tsx scripts/validate-skills.ts",
     "changeset": "changeset",
     "dev": "turbo run dev",
     "build": "pnpm validate:turbo-cache-env && turbo run build",

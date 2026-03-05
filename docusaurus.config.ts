@@ -288,6 +288,7 @@ const config: Config = {
   },
 
   customFields: {
+    githubRepo: 'TrevorPLam/websites',
     diátaxisFramework: {
       tutorials: {
         description: 'Learning-oriented, hands-on guides for beginners',

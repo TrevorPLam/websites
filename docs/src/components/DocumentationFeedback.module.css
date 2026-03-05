@@ -1,0 +1,110 @@
+/* DocumentationFeedback component styles */
+
+.feedback {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0 0 var(--ifm-card-border-radius) var(--ifm-card-border-radius);
+}
+
+.question {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-800);
+  margin-bottom: 0.75rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btnPositive,
+.btnNegative {
+  padding: 0.4rem 1rem;
+  border-radius: var(--ifm-button-border-radius);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btnPositive:hover {
+  background: var(--ifm-color-success-lightest);
+  border-color: var(--ifm-color-success);
+}
+
+.btnNegative:hover {
+  background: var(--ifm-color-danger-lightest);
+  border-color: var(--ifm-color-danger);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-button-border-radius);
+  font-family: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px var(--ifm-color-primary-lighter);
+}
+
+.formActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnSubmit {
+  padding: 0.4rem 1rem;
+  background: var(--ifm-color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--ifm-button-border-radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.btnSubmit:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+.btnCancel {
+  padding: 0.4rem 1rem;
+  background: transparent;
+  color: var(--ifm-color-emphasis-600);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-button-border-radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.btnCancel:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.thankYou {
+  color: var(--ifm-color-success);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
