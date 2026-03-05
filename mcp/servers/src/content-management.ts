@@ -5,7 +5,9 @@
  * @description Content-as-code workflow using filesystem and Git operations.
  *   Enables AI agents to read, write, and publish website content via local files and Git commits.
  * @security Paths are validated to stay within CONTENT_ROOT; no symlink traversal.
- * @requirements TODO.md 4-B, MCP-standards
+ *   Write and publish operations require a valid tenant UUID (5-A hardening).
+ *   Rate limited to 30 writes per minute per tenant to prevent abuse.
+ * @requirements TODO.md 4-B, MCP-standards, 5-A
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -15,11 +17,14 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
-import { logMcpTool, resolveCorrelationId } from './shared/middleware.js';
+import { assertTenantId, createRateLimiter, logMcpTool, rateLimitExceededResponse, resolveCorrelationId } from './shared/middleware.js';
 
 const execFileAsync = promisify(execFile);
 
 const CONTENT_ROOT = process.env.CONTENT_ROOT ?? path.resolve(process.cwd(), 'content');
+
+/** Per-tenant rate limiter: 30 write/publish operations per minute. */
+const contentWriteRateLimiter = createRateLimiter({ maxCalls: 30, windowMs: 60_000 });
 
 /** Resolve and validate that the target path stays within CONTENT_ROOT, rejecting symlinks. */
 async function safePath(relativePath: string): Promise<string> {
@@ -128,24 +133,32 @@ export class ContentManagementServer {
       {
         filePath: z.string().describe('Relative path within CONTENT_ROOT'),
         content: z.string().describe('File content (markdown, JSON, etc.)'),
+        tenantId: z.string().uuid().describe('Tenant UUID (required for audit trail and isolation)'),
         _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ filePath, content, _correlationId, ...rest }) => {
+      async ({ filePath, content, tenantId, _correlationId, ...rest }) => {
         const cid = resolveCorrelationId({ _correlationId, ...rest });
         const t0 = Date.now();
-        logMcpTool('tool_call_start', 'create_content', cid);
+        logMcpTool('tool_call_start', 'create_content', cid, { tenantId });
         try {
-          const absPath = await safePath(filePath);
-          // Fail-safe: do not overwrite
-          try {
-            await fs.access(absPath);
-            logMcpTool('tool_call_end', 'create_content', cid, { durationMs: Date.now() - t0 });
-            return { content: [{ type: 'text', text: `File already exists: ${filePath}. Use update_content to modify.` }], _correlationId: cid };
-          } catch {
-            // expected – file does not exist, proceed
+          assertTenantId(tenantId);
+          if (!contentWriteRateLimiter.checkLimit(tenantId)) {
+            logMcpTool('tool_call_end', 'create_content', cid, { durationMs: Date.now() - t0, rateLimited: true });
+            return rateLimitExceededResponse(cid);
           }
-          await fs.mkdir(path.dirname(absPath), { recursive: true });
-          await fs.writeFile(absPath, content, 'utf-8');
+          const absPath = await safePath(filePath);
+          // Use O_EXCL flag to atomically fail if the file already exists,
+          // avoiding the TOCTOU race that would occur with access() + writeFile().
+          try {
+            await fs.mkdir(path.dirname(absPath), { recursive: true });
+            await fs.writeFile(absPath, content, { encoding: 'utf-8', flag: 'wx' });
+          } catch (err) {
+            if ((err as NodeJS.ErrnoException).code === 'EEXIST') {
+              logMcpTool('tool_call_end', 'create_content', cid, { durationMs: Date.now() - t0 });
+              return { content: [{ type: 'text', text: `File already exists: ${filePath}. Use update_content to modify.` }], _correlationId: cid };
+            }
+            throw err;
+          }
           logMcpTool('tool_call_end', 'create_content', cid, { durationMs: Date.now() - t0 });
           return { content: [{ type: 'text', text: `Created: ${filePath}` }], _correlationId: cid };
         } catch (err) {
@@ -162,13 +175,19 @@ export class ContentManagementServer {
       {
         filePath: z.string().describe('Relative path within CONTENT_ROOT'),
         content: z.string().describe('New file content'),
+        tenantId: z.string().uuid().describe('Tenant UUID (required for audit trail and isolation)'),
         _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ filePath, content, _correlationId, ...rest }) => {
+      async ({ filePath, content, tenantId, _correlationId, ...rest }) => {
         const cid = resolveCorrelationId({ _correlationId, ...rest });
         const t0 = Date.now();
-        logMcpTool('tool_call_start', 'update_content', cid);
+        logMcpTool('tool_call_start', 'update_content', cid, { tenantId });
         try {
+          assertTenantId(tenantId);
+          if (!contentWriteRateLimiter.checkLimit(tenantId)) {
+            logMcpTool('tool_call_end', 'update_content', cid, { durationMs: Date.now() - t0, rateLimited: true });
+            return rateLimitExceededResponse(cid);
+          }
           const absPath = await safePath(filePath);
           await fs.mkdir(path.dirname(absPath), { recursive: true });
           await fs.writeFile(absPath, content, 'utf-8');
@@ -190,6 +209,7 @@ export class ContentManagementServer {
           .array(z.string())
           .describe('Relative paths within CONTENT_ROOT to include in the commit'),
         commitMessage: z.string().describe('Git commit message'),
+        tenantId: z.string().uuid().describe('Tenant UUID (required for audit trail)'),
         authorName: z.string().optional().default('Content Bot').describe('Git author name'),
         authorEmail: z
           .string()
@@ -199,11 +219,16 @@ export class ContentManagementServer {
           .describe('Git author email'),
         _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ files, commitMessage, authorName, authorEmail, _correlationId, ...rest }) => {
+      async ({ files, commitMessage, tenantId, authorName, authorEmail, _correlationId, ...rest }) => {
         const cid = resolveCorrelationId({ _correlationId, ...rest });
         const t0 = Date.now();
-        logMcpTool('tool_call_start', 'publish_content', cid);
+        logMcpTool('tool_call_start', 'publish_content', cid, { tenantId });
         try {
+          assertTenantId(tenantId);
+          if (!contentWriteRateLimiter.checkLimit(tenantId)) {
+            logMcpTool('tool_call_end', 'publish_content', cid, { durationMs: Date.now() - t0, rateLimited: true });
+            return rateLimitExceededResponse(cid);
+          }
           const cwd = process.cwd();
           const absPaths = await Promise.all(files.map((f) => safePath(f)));
 

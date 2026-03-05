@@ -5,17 +5,21 @@
  * @description SEO auditing and analysis tools backed by configurable SEO APIs.
  *   Wraps the `fetch` primitive with structured SEO-specific operations for AI agents.
  * @security API keys read from environment only; no keys are logged or returned in tool output.
- * @requirements TODO.md 4-B, MCP-standards
+ *   Tenant-scoped tools validate tenantId as a UUID v4 (5-A hardening).
+ * @requirements TODO.md 4-B, MCP-standards, 5-A
  */
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
-import { logMcpTool, resolveCorrelationId } from './shared/middleware.js';
+import { assertTenantId, createRateLimiter, logMcpTool, rateLimitExceededResponse, resolveCorrelationId } from './shared/middleware.js';
 
 const SEO_API_BASE = process.env.SEO_API_BASE_URL ?? 'https://api.example.com/seo';
 const SEO_API_KEY = process.env.SEO_API_KEY ?? '';
 const GSC_TOKEN = process.env.GOOGLE_SEARCH_CONSOLE_TOKEN ?? '';
+
+/** Per-tenant rate limiter: 60 SEO API calls per minute. */
+const seoRateLimiter = createRateLimiter({ maxCalls: 60, windowMs: 60_000 });
 
 /** Authenticated fetch wrapper. */
 async function apiFetch(
@@ -67,17 +71,23 @@ export class SeoToolsServer {
       'Run a comprehensive technical SEO audit for a site URL and return a structured report.',
       {
         siteUrl: z.string().url().describe('Public URL of the site to audit'),
+        tenantId: z.string().uuid().describe('Tenant UUID (required for multi-tenant isolation and rate limiting)'),
         depth: z
           .enum(['shallow', 'full'])
           .default('shallow')
           .describe('Audit depth: shallow = meta/headers only; full = crawl + content analysis'),
         _correlationId: z.string().optional().describe('Correlation ID for request chaining'),
       },
-      async ({ siteUrl, depth, _correlationId, ...rest }) => {
+      async ({ siteUrl, tenantId, depth, _correlationId, ...rest }) => {
         const cid = resolveCorrelationId({ _correlationId, ...rest });
         const t0 = Date.now();
-        logMcpTool('tool_call_start', 'audit_site_seo', cid);
+        logMcpTool('tool_call_start', 'audit_site_seo', cid, { tenantId });
         try {
+          assertTenantId(tenantId);
+          if (!seoRateLimiter.checkLimit(tenantId)) {
+            logMcpTool('tool_call_end', 'audit_site_seo', cid, { durationMs: Date.now() - t0, rateLimited: true });
+            return rateLimitExceededResponse(cid);
+          }
           if (!SEO_API_KEY) {
             logMcpTool('tool_call_end', 'audit_site_seo', cid, { durationMs: Date.now() - t0 });
             return {
@@ -90,7 +100,7 @@ export class SeoToolsServer {
               _correlationId: cid,
             };
           }
-          const url = `${SEO_API_BASE}/audit?site=${encodeURIComponent(siteUrl)}&depth=${depth}`;
+          const url = `${SEO_API_BASE}/audit?site=${encodeURIComponent(siteUrl)}&depth=${depth}&tenant_id=${encodeURIComponent(tenantId)}`;
           const data = await apiFetch(url, SEO_API_KEY);
           logMcpTool('tool_call_end', 'audit_site_seo', cid, { durationMs: Date.now() - t0 });
           return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }], _correlationId: cid };

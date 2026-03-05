@@ -146,6 +146,7 @@
     "docs:formats": "node scripts/docs/verify-doc-formats.js",
     "docs:build": "node scripts/docs/build-docs-site.js",
     "verify:secrets": "node scripts/verify-staged-secrets.js",
+    "verify:memory-json": "node scripts/verify-memory-json.js",
     "lint:security": "npx @semgrep/cli semgrep --config .semgrep/security-rules.yml --error",
     "ai:log-composite": "node scripts/ai/log-composite-identity-action.mjs",
     "ai:validate-policy": "node scripts/ai/validate-ai-policy.mjs",

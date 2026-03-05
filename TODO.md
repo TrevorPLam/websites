@@ -448,7 +448,7 @@ _Implement progressive disclosure + composable skills_
     - [x] `memory.json`
   - **Changes**:
     - [x] Updated Next.js version to 16 (removed inaccurate `16.1.5` pin)
-    - [ ] Add CI verification step to keep `memory.json` synchronized with actual deps
+    - [x] Add CI verification step to keep `memory.json` synchronized with actual deps
 
 - [x] **5-C: Enterprise Skills Packaging**
   - **Priority**: 🟢 Low
